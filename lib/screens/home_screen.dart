@@ -2,6 +2,7 @@ import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/account_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/services/networking.dart';
+import 'package:anonaddy/widgets/account_info_card.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
       subscription = data['data']['subscription'];
       lastUpdated = data['data']['updated_at'];
     });
-    print(id);
   }
 
   Future createNewAlias({String description}) async {
@@ -51,97 +51,45 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: kBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: kAppBarColor,
-          // title: Image.asset('assets/images/logo-dark.svg'),
-          leading: IconButton(
-              icon: Icon(Icons.account_circle, color: Colors.white),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AccountScreen()));
-              }),
-          actions: [
-            IconButton(
-                icon: Icon(Icons.settings, color: Colors.white),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SettingsScreen()));
-                }),
-          ],
-        ),
+        appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(),
         body: Container(
           padding: EdgeInsets.all(15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          '$username'.toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Divider(
-                          height: 25,
-                          indent: size.width * 0.3,
-                          endIndent: size.width * 0.3,
-                          color: kAppBarColor,
-                          thickness: 1),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('ID:',
-                              style: Theme.of(context).textTheme.bodyText1),
-                          Text(
-                            '$id',
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: size.height * 0.01),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Subscription:',
-                              style: Theme.of(context).textTheme.bodyText1),
-                          Text(
-                            '$subscription'.toUpperCase(),
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: size.height * 0.01),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Bandwidth:',
-                              style: Theme.of(context).textTheme.bodyText1),
-                          Text(
-                            '${bandwidth.round()} MB / ${bandwidthLimit.round()} MB',
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+              AccountInfoCard(
+                username: username,
+                id: id,
+                subscription: subscription,
+                bandwidth: bandwidth,
+                bandwidthLimit: bandwidthLimit,
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      backgroundColor: kAppBarColor,
+      // title: Image.asset('assets/images/logo-dark.svg'),
+      leading: IconButton(
+          icon: Icon(Icons.account_circle, color: Colors.white),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AccountScreen()));
+          }),
+      actions: [
+        IconButton(
+            icon: Icon(Icons.settings, color: Colors.white),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsScreen()));
+            }),
+      ],
     );
   }
 
