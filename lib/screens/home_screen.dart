@@ -142,17 +142,91 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   FloatingActionButton buildFloatingActionButton() {
+    Size size = MediaQuery.of(context).size;
+    String descriptionInput;
+
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
-        // createNewAlias(description: 'From FAB');
         showModalBottomSheet(
             context: context,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
             builder: (context) {
-              return Container(
-                height: 200,
-                width: 200,
-                color: Colors.red,
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Divider(
+                          thickness: 2,
+                          color: kAppBarColor,
+                          indent: size.width * 0.35,
+                          endIndent: size.width * 0.35,
+                        ),
+                        Text(
+                          'Generate Alias',
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ],
+                    ),
+                    TextField(
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        hintText: 'Description (optional)',
+                      ),
+                      onChanged: (input) {
+                        descriptionInput = input;
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Domain:',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        Text(
+                          'anonaddy.me',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Format:',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        Text(
+                          'UUID',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                      ],
+                    ),
+                    RaisedButton(
+                      padding: EdgeInsets.all(15),
+                      child: Text(
+                        'Generate New Alias',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      onPressed: () {
+                        createNewAlias(description: '$descriptionInput');
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                ),
               );
             });
       },
