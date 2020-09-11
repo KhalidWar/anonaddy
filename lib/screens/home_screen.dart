@@ -5,23 +5,22 @@ import 'package:anonaddy/services/networking.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key key, this.accountData}) : super(key: key);
+
+  final accountData;
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   String baseURL = 'https://app.anonaddy.com/api/v1';
-  String accountDetailsURL = 'account-details';
   String aliases = 'aliases';
   String id, username, subscription, lastUpdated;
   double bandwidth, bandwidthLimit;
   int usernameCount;
 
-  Future getAccountDetails() async {
-    Networking networking = Networking('$baseURL/$accountDetailsURL');
-    var data = await networking.getData();
-    print(data);
-
+  void updateUI(dynamic data) {
     setState(() {
       id = data['data']['id'];
       username = data['data']['username'];
@@ -31,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       subscription = data['data']['subscription'];
       lastUpdated = data['data']['updated_at'];
     });
-    return data;
+    print(id);
   }
 
   Future createNewAlias({String description}) async {
@@ -43,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getAccountDetails();
+    updateUI(widget.accountData);
   }
 
   @override
@@ -139,10 +138,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              // RaisedButton(
-              //   child: Text('CLICK ME!!'),
-              //   onPressed: () {},
-              // ),
             ],
           ),
         ),

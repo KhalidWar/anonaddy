@@ -1,5 +1,6 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/home_screen.dart';
+import 'package:anonaddy/services/networking.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -9,13 +10,17 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  Future nextScreen() async {
-    await Future.delayed(Duration(seconds: 2));
+  String baseURL = 'https://app.anonaddy.com/api/v1';
+  String accountDetailsURL = 'account-details';
+
+  Future getAccountDetails() async {
+    Networking networking = Networking('$baseURL/$accountDetailsURL');
+    var accountData = await networking.getData();
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HomeScreen(),
+        builder: (context) => HomeScreen(accountData: accountData),
       ),
     );
   }
@@ -23,7 +28,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    nextScreen();
+    getAccountDetails();
   }
 
   @override
