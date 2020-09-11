@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'AnonAddy',
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      darkTheme: darkTheme,
+      // darkTheme: darkTheme,
       home: HomeScreen(),
     );
   }

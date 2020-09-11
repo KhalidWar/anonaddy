@@ -10,11 +10,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String baseURL = 'https://app.anonaddy.com/api/v1';
   String accountDetailsURL = 'account-details';
-  String id, username, subscription;
+  String id, username, subscription, lastUpdated;
   double bandwidth, bandwidthLimit;
   int usernameCount;
 
-  Future accountDetails() async {
+  Future getAccountDetails() async {
     Networking networking = Networking('$baseURL/$accountDetailsURL');
     var data = await networking.getData();
     print(data);
@@ -26,20 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
       bandwidthLimit = data['data']['bandwidth_limit'] / 1024000;
       usernameCount = data['data']['username_count'];
       subscription = data['data']['subscription'];
+      lastUpdated = data['data']['updated_at'];
     });
-
-    print(id);
-    print(username);
-    print(bandwidth);
-    print(usernameCount);
-
     return data;
   }
 
   @override
   void initState() {
     super.initState();
-    accountDetails();
+    getAccountDetails();
   }
 
   @override
@@ -52,18 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: kAppBarColor,
           // title: Image.asset('assets/images/logo-dark.svg'),
           leading: IconButton(
-            icon: Icon(
-              Icons.account_circle,
-              color: Colors.white,
-            ),
+            icon: Icon(Icons.account_circle, color: Colors.white),
             onPressed: () {},
           ),
           actions: [
             IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.white,
-                ),
+                icon: Icon(Icons.settings, color: Colors.white),
                 onPressed: () {})
           ],
         ),
@@ -89,26 +78,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           '$username'.toUpperCase(),
                           style: Theme.of(context)
                               .textTheme
-                              .headline5
+                              .headline6
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(height: size.height * 0.05),
-                      Column(
+                      Divider(
+                          height: 25,
+                          indent: size.width * 0.3,
+                          endIndent: size.width * 0.3,
+                          color: kAppBarColor,
+                          thickness: 1),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'ID:',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(color: Colors.grey),
-                          ),
+                          Text('ID:',
+                              style: Theme.of(context).textTheme.bodyText1),
                           Text(
                             '$id',
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ],
                       ),
@@ -116,16 +104,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Text('Subscription:',
+                              style: Theme.of(context).textTheme.bodyText1),
                           Text(
-                            'Subscription:',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(color: Colors.grey),
-                          ),
-                          Text(
-                            '$subscription',
-                            style: Theme.of(context).textTheme.headline6,
+                            '$subscription'.toUpperCase(),
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ],
                       ),
@@ -133,16 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Bandwidth:',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(color: Colors.grey),
-                          ),
+                          Text('Bandwidth:',
+                              style: Theme.of(context).textTheme.bodyText1),
                           Text(
                             '${bandwidth.round()} MB / ${bandwidthLimit.round()} MB',
-                            style: Theme.of(context).textTheme.headline6,
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ],
                       ),

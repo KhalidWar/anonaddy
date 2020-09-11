@@ -37,7 +37,7 @@ Check out [Flutter's official guide](https://flutter.dev/docs/get-started/instal
 
 ### Steps
 - Clone this repo to your machine: `https://github.com/KhalidWar/anonaddy.git`
-- Create confidential.dart file under "utilities"
+- Create confidential.dart file under /lib/ directory
 - Generate your own [Access Token](https://app.anonaddy.com/settings) under API section.
 - Add a "bearerToken" const with your own access token string (e.g. const bearerToken = 'acccess_token_here';).
 - Run on Emulator or physical device
