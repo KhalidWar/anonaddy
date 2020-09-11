@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/utilities/confidential.dart';
+import 'package:anonaddy/confidential.dart';
 import 'package:http/http.dart' as http;
 
 class Networking {
