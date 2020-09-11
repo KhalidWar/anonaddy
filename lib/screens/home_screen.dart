@@ -1,4 +1,6 @@
 import 'package:anonaddy/constants.dart';
+import 'package:anonaddy/screens/account_screen.dart';
+import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/services/networking.dart';
 import 'package:flutter/material.dart';
 
@@ -54,13 +56,20 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: kAppBarColor,
           // title: Image.asset('assets/images/logo-dark.svg'),
           leading: IconButton(
-            icon: Icon(Icons.account_circle, color: Colors.white),
-            onPressed: () {},
-          ),
+              icon: Icon(Icons.account_circle, color: Colors.white),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AccountScreen()));
+              }),
           actions: [
             IconButton(
                 icon: Icon(Icons.settings, color: Colors.white),
-                onPressed: () {})
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SettingsScreen()));
+                }),
           ],
         ),
         floatingActionButton: buildFloatingActionButton(),
