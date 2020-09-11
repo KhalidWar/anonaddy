@@ -32,7 +32,7 @@
 /build/
 
 # Confidential files
-/lib/confidential.dart
+lib/confidential.dart
 
 # Web related
 lib/generated_plugin_registrant.dart
