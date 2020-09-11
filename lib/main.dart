@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/loading_screen.dart';
+import 'package:anonaddy/screens/login_screen.dart';
 import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       // darkTheme: darkTheme,
-      home: LoadingScreen(),
+      home: LoginScreen(),
     );
   }
 }
