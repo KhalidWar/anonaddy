@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String baseURL = 'https://app.anonaddy.com/api/v1';
   String accountDetailsURL = 'account-details';
+  String aliases = 'aliases';
   String id, username, subscription, lastUpdated;
   double bandwidth, bandwidthLimit;
   int usernameCount;
@@ -28,6 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
       subscription = data['data']['subscription'];
       lastUpdated = data['data']['updated_at'];
     });
+    return data;
+  }
+
+  Future createNewAlias({String description}) async {
+    Networking networking = Networking('$baseURL/$aliases');
+    var data = await networking.postData(description: description);
     return data;
   }
 
@@ -56,12 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {})
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            //todo POST to create Aliases
-          },
-        ),
+        floatingActionButton: buildFloatingActionButton(),
         body: Container(
           padding: EdgeInsets.all(15.0),
           child: Column(
@@ -136,6 +138,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  FloatingActionButton buildFloatingActionButton() {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        // createNewAlias(description: 'From FAB');
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                height: 200,
+                width: 200,
+                color: Colors.red,
+              );
+            });
+      },
     );
   }
 }

@@ -8,17 +8,36 @@ class Networking {
 
   final String url;
 
+  Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    "Authorization": "Bearer $bearerToken",
+    "Accept": "application/json",
+  };
+
   Future getData() async {
     http.Response response = await http.get(
       Uri.encodeFull(url),
-      headers: {
-        'Authorization': 'Bearer $bearerToken',
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "Accept": "application/json",
-      },
+      headers: headers,
     );
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      return data;
+    } else {
+      print(response.statusCode);
+    }
+  }
 
+  Future postData({String description}) async {
+    http.Response response = await http.post(
+      Uri.encodeFull(url),
+      headers: headers,
+      body: json.encode({
+        "domain": "anonaddy.me",
+        "format": "uuid",
+        "description": "$description",
+      }),
+    );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       return data;
