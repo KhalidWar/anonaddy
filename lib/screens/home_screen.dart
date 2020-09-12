@@ -6,9 +6,11 @@ import 'package:anonaddy/widgets/account_info_card.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key, this.accountData}) : super(key: key);
+  const HomeScreen({Key key, this.accountData, this.aliasesData})
+      : super(key: key);
 
   final accountData;
+  final aliasesData;
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -17,19 +19,26 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String baseURL = 'https://app.anonaddy.com/api/v1';
   String aliases = 'aliases';
-  String id, username, subscription, lastUpdated;
+  String id,
+      username,
+      subscription,
+      lastUpdated,
+      email,
+      createdAt,
+      emailDescription;
   double bandwidth, bandwidthLimit;
   int usernameCount;
+  bool isActive;
 
-  void updateUI(dynamic data) {
+  void updateUI(dynamic accountData) {
     setState(() {
-      id = data['data']['id'];
-      username = data['data']['username'];
-      bandwidth = data['data']['bandwidth'] / 1024000;
-      bandwidthLimit = data['data']['bandwidth_limit'] / 1024000;
-      usernameCount = data['data']['username_count'];
-      subscription = data['data']['subscription'];
-      lastUpdated = data['data']['updated_at'];
+      id = accountData['data']['id'];
+      username = accountData['data']['username'];
+      bandwidth = accountData['data']['bandwidth'] / 1024000;
+      bandwidthLimit = accountData['data']['bandwidth_limit'] / 1024000;
+      usernameCount = accountData['data']['username_count'];
+      subscription = accountData['data']['subscription'];
+      lastUpdated = accountData['data']['updated_at'];
     });
   }
 
@@ -43,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     updateUI(widget.accountData);
+    print(widget.aliasesData['data'].length);
   }
 
   @override
@@ -64,6 +74,69 @@ class _HomeScreenState extends State<HomeScreen> {
                 subscription: subscription,
                 bandwidth: bandwidth,
                 bandwidthLimit: bandwidthLimit,
+              ),
+              SizedBox(height: size.height * 0.01),
+              Card(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Text(
+                          'Aliases'.toUpperCase(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Divider(
+                        height: 25,
+                        indent: size.width * 0.3,
+                        endIndent: size.width * 0.3,
+                        color: kAppBarColor,
+                        thickness: 1,
+                      ),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.aliasesData['data'].length,
+                          itemBuilder: (context, index) {
+                            email = widget.aliasesData['data'][index]['email'];
+                            createdAt =
+                                widget.aliasesData['data'][index]['created_at'];
+                            isActive =
+                                widget.aliasesData['data'][index]['active'];
+                            emailDescription = widget.aliasesData['data'][index]
+                                ['description'];
+                            return Column(
+                              children: [
+                                ListTile(
+                                  dense: true,
+                                  title: Text('$email'),
+                                  subtitle: Text('$emailDescription'),
+                                  leading: Icon(
+                                    isActive ? Icons.check : Icons.block,
+                                    color: isActive ? Colors.green : Colors.red,
+                                  ),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () {},
+                                  ),
+                                  onTap: () {
+                                    //todo copy email to clipboard onTap
+                                  },
+                                ),
+                                Divider(
+                                  thickness: 2,
+                                  indent: size.width * 0.1,
+                                  endIndent: size.width * 0.1,
+                                ),
+                              ],
+                            );
+                          }),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -174,6 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       onPressed: () {
                         createNewAlias(description: '$descriptionInput');
+                        updateUI(widget.accountData);
                         Navigator.pop(context);
                       },
                     )

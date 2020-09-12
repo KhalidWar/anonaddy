@@ -2,7 +2,6 @@ import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/services/networking.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -12,17 +11,24 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   String baseURL = 'https://app.anonaddy.com/api/v1';
   String accountDetailsURL = 'account-details';
+  String aliases = 'aliases';
 
   Future getAccountDetails() async {
-    Networking networking = Networking('$baseURL/$accountDetailsURL');
-    var accountData = await networking.getData();
+    Networking accountDetails = Networking('$baseURL/$accountDetailsURL');
+    var accountData = await accountDetails.getData();
+
+    Networking aliasesDetails = Networking('$baseURL/$aliases');
+    var aliasesData = await aliasesDetails.getData();
 
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomeScreen(accountData: accountData),
-      ),
-    );
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(
+            accountData: accountData,
+            aliasesData: aliasesData,
+            // aliasList: aliasesList,
+          ),
+        ));
   }
 
   @override
@@ -43,7 +49,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset('assets/images/logo.svg'),
+              // SvgPicture.asset('assets/images/logo.svg'),
               SizedBox(height: size.height * 0.03),
               Container(
                 height: size.height * 0.1,
@@ -59,4 +65,28 @@ class _LoadingScreenState extends State<LoadingScreen> {
       ),
     );
   }
+}
+
+class Alias {
+  Alias(
+    this.email,
+    this.id,
+    this.domain,
+    this.isActive,
+    this.description,
+    this.emailsForwarded,
+    this.emailsSent,
+    this.emailsReplied,
+    this.createdAt,
+  );
+
+  final String email,
+      id,
+      domain,
+      description,
+      emailsForwarded,
+      emailsSent,
+      emailsReplied,
+      createdAt,
+      isActive;
 }
