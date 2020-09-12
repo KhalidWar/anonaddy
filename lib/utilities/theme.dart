@@ -5,9 +5,9 @@ ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: Colors.white,
   primaryColorLight: Colors.white,
-  primaryColorDark: Color(0xffefefef),
+  primaryColorDark: kBackgroundColor,
   scaffoldBackgroundColor: Colors.white,
-  toggleableActiveColor: Colors.red,
+  toggleableActiveColor: kAccentColor,
   accentColor: kAccentColor,
   buttonTheme: buttonThemeData,
   cardTheme: cardTheme,
@@ -28,8 +28,8 @@ ThemeData darkTheme = ThemeData(
 );
 
 ButtonThemeData buttonThemeData = ButtonThemeData(
-  splashColor: Colors.red,
-  highlightColor: Colors.red,
+  splashColor: kAccentColor,
+  highlightColor: kAccentColor,
   shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(10))),
 );

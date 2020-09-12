@@ -19,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String baseURL = 'https://app.anonaddy.com/api/v1';
   String aliases = 'aliases';
+  String activeAliasURL = 'active-aliases';
   String id,
       username,
       subscription,
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       emailDescription;
   double bandwidth, bandwidthLimit;
   int usernameCount, aliasesCount;
-  bool isActive;
+  bool isAliasActive;
 
   void updateUI(dynamic accountData) {
     setState(() {
@@ -46,6 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Future createNewAlias({String description}) async {
     Networking networking = Networking('$baseURL/$aliases');
     var data = await networking.postData(description: description);
+    return data;
+  }
+
+  Future deactivateAlias({String id}) async {
+    Networking networking = Networking('$baseURL/$activeAliasURL/$id');
+    var data = await networking.toggleAliasActive();
     return data;
   }
 
@@ -106,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   widget.aliasesData['data'][index]['email'];
                               createdAt = widget.aliasesData['data'][index]
                                   ['created_at'];
-                              isActive =
+                              isAliasActive =
                                   widget.aliasesData['data'][index]['active'];
                               emailDescription = widget.aliasesData['data']
                                   [index]['description'];
@@ -122,11 +129,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Theme.of(context).textTheme.bodyText1,
                                     ),
                                     subtitle: Text('$emailDescription'),
-                                    leading: Icon(
-                                        isActive ? Icons.check : Icons.block,
-                                        color: isActive
-                                            ? Colors.green
-                                            : Colors.red),
+                                    leading: Switch(
+                                      value: isAliasActive,
+                                      onChanged: (toggle) {
+                                        setState(() {
+                                          deactivateAlias(
+                                              id: widget.aliasesData['data']
+                                                  [index]['id']);
+                                          toggle = isAliasActive;
+                                        });
+                                      },
+                                    ),
                                     trailing: IconButton(
                                       icon: Icon(Icons.edit),
                                       onPressed: () {},

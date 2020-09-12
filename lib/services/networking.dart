@@ -21,8 +21,7 @@ class Networking {
       headers: headers,
     );
     if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      return data;
+      return jsonDecode(response.body);
     } else {
       print(response.statusCode);
     }
@@ -41,6 +40,18 @@ class Networking {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       return data;
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  Future toggleAliasActive() async {
+    http.Response response = await http.delete(
+      Uri.encodeFull(url),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
     } else {
       print(response.statusCode);
     }
