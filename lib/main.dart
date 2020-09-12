@@ -1,6 +1,8 @@
-import 'package:anonaddy/screens/loading_screen.dart';
+import 'package:anonaddy/provider/account_data.dart';
+import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +16,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: LoadingScreen(),
+      home: ChangeNotifierProvider<AccountData>(
+        create: (context) => AccountData(),
+        child: HomeScreen(),
+      ),
     );
   }
 }
