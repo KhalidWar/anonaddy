@@ -247,7 +247,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       onPressed: () {
                         createNewAlias(description: '$descriptionInput');
-                        updateUI(widget.accountData);
                         Navigator.pop(context);
                       },
                     )

@@ -26,7 +26,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
           builder: (context) => HomeScreen(
             accountData: accountData,
             aliasesData: aliasesData,
-            // aliasList: aliasesList,
           ),
         ));
   }
@@ -49,7 +48,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // SvgPicture.asset('assets/images/logo.svg'),
+              SvgPicture.asset('assets/images/logo.svg'),
               SizedBox(height: size.height * 0.03),
               Container(
                 height: size.height * 0.1,
@@ -65,28 +64,4 @@ class _LoadingScreenState extends State<LoadingScreen> {
       ),
     );
   }
-}
-
-class Alias {
-  Alias(
-    this.email,
-    this.id,
-    this.domain,
-    this.isActive,
-    this.description,
-    this.emailsForwarded,
-    this.emailsSent,
-    this.emailsReplied,
-    this.createdAt,
-  );
-
-  final String email,
-      id,
-      domain,
-      description,
-      emailsForwarded,
-      emailsSent,
-      emailsReplied,
-      createdAt,
-      isActive;
 }
