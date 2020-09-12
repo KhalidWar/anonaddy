@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       createdAt,
       emailDescription;
   double bandwidth, bandwidthLimit;
-  int usernameCount;
+  int usernameCount, aliasesCount;
   bool isActive;
 
   void updateUI(dynamic accountData) {
@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       usernameCount = accountData['data']['username_count'];
       subscription = accountData['data']['subscription'];
       lastUpdated = accountData['data']['updated_at'];
+      aliasesCount = widget.aliasesData['data'].length;
     });
   }
 
@@ -52,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     updateUI(widget.accountData);
-    print(widget.aliasesData['data'].length);
   }
 
   @override
@@ -63,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: kBackgroundColor,
         appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(),
-        body: Container(
-          padding: EdgeInsets.all(15.0),
+        body: Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -74,21 +74,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 subscription: subscription,
                 bandwidth: bandwidth,
                 bandwidthLimit: bandwidthLimit,
+                aliasesCount: aliasesCount,
               ),
-              SizedBox(height: size.height * 0.01),
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(top: 10),
                   child: Column(
                     children: [
-                      Center(
-                        child: Text(
-                          'Aliases'.toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
+                      Text(
+                        'Aliases'.toUpperCase(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
                       Divider(
                         height: 25,
@@ -97,43 +95,55 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: kAppBarColor,
                         thickness: 1,
                       ),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: widget.aliasesData['data'].length,
-                          itemBuilder: (context, index) {
-                            email = widget.aliasesData['data'][index]['email'];
-                            createdAt =
-                                widget.aliasesData['data'][index]['created_at'];
-                            isActive =
-                                widget.aliasesData['data'][index]['active'];
-                            emailDescription = widget.aliasesData['data'][index]
-                                ['description'];
-                            return Column(
-                              children: [
-                                ListTile(
-                                  dense: true,
-                                  title: Text('$email'),
-                                  subtitle: Text('$emailDescription'),
-                                  leading: Icon(
-                                    isActive ? Icons.check : Icons.block,
-                                    color: isActive ? Colors.green : Colors.red,
+                      Container(
+                        height: size.height * 0.6,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemCount: widget.aliasesData['data'].length,
+                            itemBuilder: (context, index) {
+                              email =
+                                  widget.aliasesData['data'][index]['email'];
+                              createdAt = widget.aliasesData['data'][index]
+                                  ['created_at'];
+                              isActive =
+                                  widget.aliasesData['data'][index]['active'];
+                              emailDescription = widget.aliasesData['data']
+                                  [index]['description'];
+                              return Column(
+                                children: [
+                                  ListTile(
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 15),
+                                    dense: true,
+                                    title: Text(
+                                      '$email',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    subtitle: Text('$emailDescription'),
+                                    leading: Icon(
+                                        isActive ? Icons.check : Icons.block,
+                                        color: isActive
+                                            ? Colors.green
+                                            : Colors.red),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () {},
+                                    ),
+                                    onTap: () {
+                                      //todo copy email to clipboard onTap
+                                    },
                                   ),
-                                  trailing: IconButton(
-                                    icon: Icon(Icons.edit),
-                                    onPressed: () {},
+                                  Divider(
+                                    thickness: 1,
+                                    indent: size.width * 0.1,
+                                    endIndent: size.width * 0.1,
                                   ),
-                                  onTap: () {
-                                    //todo copy email to clipboard onTap
-                                  },
-                                ),
-                                Divider(
-                                  thickness: 2,
-                                  indent: size.width * 0.1,
-                                  endIndent: size.width * 0.1,
-                                ),
-                              ],
-                            );
-                          }),
+                                ],
+                              );
+                            }),
+                      ),
                     ],
                   ),
                 ),

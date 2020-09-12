@@ -10,13 +10,12 @@ class AccountInfoCard extends StatelessWidget {
     @required this.subscription,
     @required this.bandwidth,
     @required this.bandwidthLimit,
+    this.aliasesCount,
   }) : super(key: key);
 
-  final String username;
-  final String id;
-  final String subscription;
-  final double bandwidth;
-  final double bandwidthLimit;
+  final String username, id, subscription;
+  final double bandwidth, bandwidthLimit;
+  final int aliasesCount;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +72,17 @@ class AccountInfoCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyText1),
                 Text(
                   '${bandwidth.round()} MB / ${bandwidthLimit.round()} MB',
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Aliases:', style: Theme.of(context).textTheme.bodyText1),
+                Text(
+                  '$aliasesCount',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ],
