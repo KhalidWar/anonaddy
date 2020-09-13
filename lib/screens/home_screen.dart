@@ -5,6 +5,7 @@ import 'package:anonaddy/screens/account_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/widgets/account_info_card.dart';
 import 'package:anonaddy/widgets/aliases_list_tile.dart';
+import 'package:anonaddy/widgets/create_alias_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: kBackgroundColor,
         appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(),
@@ -138,94 +140,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   FloatingActionButton buildFloatingActionButton() {
-    Size size = MediaQuery.of(context).size;
-    String descriptionInput;
-
+    String textFieldInput;
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
-        showModalBottomSheet(
+        showDialog(
             context: context,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-            ),
             builder: (context) {
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Divider(
-                          thickness: 2,
-                          color: kAppBarColor,
-                          indent: size.width * 0.35,
-                          endIndent: size.width * 0.35,
-                        ),
-                        Text(
-                          'Generate Alias',
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                      ],
-                    ),
-                    TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        hintText: 'Description (optional)',
-                      ),
-                      onChanged: (input) {
-                        descriptionInput = input;
-                      },
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          'Domain:',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        Text(
-                          'anonaddy.me',
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          'Format:',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        Text(
-                          'UUID',
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                      ],
-                    ),
-                    RaisedButton(
-                      padding: EdgeInsets.all(15),
-                      child: Text(
-                        'Generate New Alias',
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                      onPressed: () {
-                        // createNewAlias(description: '$descriptionInput');
-                        setState(() {
-                          // aliasesCount++;
-                        });
-                        Navigator.pop(context);
-                      },
-                    )
-                  ],
-                ),
+              return CreateAliasDialog(
+                format: 'UUID',
+                domain: 'anonaddy.me',
+                textFieldOnChanged: (input) {
+                  textFieldInput = input;
+                },
+                buttonOnPress: () {
+                  AliasesData().createNewAlias(description: textFieldInput);
+                  Navigator.pop(context);
+                },
               );
             });
       },

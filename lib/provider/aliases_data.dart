@@ -28,27 +28,17 @@ class AliasesData with ChangeNotifier {
         createdAt: createdAt,
         isAliasActive: isAliasActive,
       ));
-      // print(createdAt);
+      print('_aliasesData ACCESSED!!!');
     }
-
     notifyListeners();
   }
 
-  // void transferData({int index}) {
-  //   var _aliasesData = getAliasesDetails();
-  //   email = _aliasesData['data'][index]['email'];
-  //   createdAt = _aliasesData['data'][index]['created_at'];
-  //   isAliasActive = _aliasesData['data'][index]['active'];
-  //   emailDescription = _aliasesData['data'][index]['description'];
-  //
-  //   print(email);
-  // }
-
-  // Future createNewAlias({String description}) async {
-  //   Networking networking = Networking('$baseURL/$aliases');
-  //   var data = await networking.postData(description: description);
-  //   return data;
-  // }
+  Future createNewAlias({String description}) async {
+    Networking networking = Networking('$baseURL/$aliases');
+    var data = await networking.postData(description: description);
+    notifyListeners();
+    return data;
+  }
 
   // Future deactivateAlias({String id}) async {
   // Networking networking = Networking('$baseURL/$activeAliasURL/$id');

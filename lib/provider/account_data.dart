@@ -1,5 +1,4 @@
 import 'package:anonaddy/services/networking.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 class AccountData with ChangeNotifier {
@@ -29,7 +28,7 @@ class AccountData with ChangeNotifier {
     subscription = _accountData['data']['subscription'];
     lastUpdated = _accountData['data']['updated_at'];
 
-    print('_accountData ACCESSED!!!');
+    // print('_accountData ACCESSED!!!');
     notifyListeners();
   }
 }
