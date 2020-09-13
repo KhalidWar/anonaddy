@@ -34,84 +34,78 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: buildFloatingActionButton(),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child: FutureBuilder(
-            builder: (context, snapshot) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FutureBuilder(
-                    future: accountData.getAccountData(),
-                    builder: (context, snapshot) {
-                      return Consumer<AccountData>(
-                        builder: (context, accountData, child) {
-                          return AccountInfoCard(
-                            username: accountData.username,
-                            id: accountData.id,
-                            subscription: accountData.subscription,
-                            bandwidth: accountData.bandwidth,
-                            bandwidthLimit: accountData.bandwidthLimit,
-                          );
-                        },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FutureBuilder(
+                future: accountData.getAccountData(),
+                builder: (context, snapshot) {
+                  return Consumer<AccountData>(
+                    builder: (context, accountData, child) {
+                      return AccountInfoCard(
+                        username: accountData.username,
+                        id: accountData.id,
+                        subscription: accountData.subscription,
+                        bandwidth: accountData.bandwidth,
+                        bandwidthLimit: accountData.bandwidthLimit,
                       );
                     },
-                  ),
-                  Card(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Aliases'.toUpperCase(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          Divider(
-                            height: 25,
-                            indent: size.width * 0.3,
-                            endIndent: size.width * 0.3,
-                            color: kAppBarColor,
-                            thickness: 1,
-                          ),
-                          Container(
-                            height: size.height * 0.6,
-                            child: FutureBuilder(
-                              future: aliasesData.getAliasesDetails(),
-                              builder: (context, snapshot) {
-                                return Consumer<AliasesData>(
-                                  builder: (context, aliasesData, child) {
-                                    return ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: ScrollPhysics(),
-                                      itemCount: aliasesData.aliasList.length,
-                                      itemBuilder: (context, index) {
-                                        return AliasesListTile(
-                                          email: aliasesData
-                                              .aliasList[index].email,
-                                          emailDescription: aliasesData
-                                              .aliasList[index]
-                                              .emailDescription,
-                                          switchOnPress: (toggle) {},
-                                          switchValue: aliasesData
-                                              .aliasList[index].isAliasActive,
-                                          listTileOnPress: () {},
-                                          editOnPress: () {},
-                                        );
-                                      },
+                  );
+                },
+              ),
+              Card(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Aliases'.toUpperCase(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Divider(
+                        height: 25,
+                        indent: size.width * 0.3,
+                        endIndent: size.width * 0.3,
+                        color: kAppBarColor,
+                        thickness: 1,
+                      ),
+                      Container(
+                        height: size.height * 0.6,
+                        child: FutureBuilder(
+                          future: aliasesData.getAliasesDetails(),
+                          builder: (context, snapshot) {
+                            return Consumer<AliasesData>(
+                              builder: (context, aliasesData, child) {
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
+                                  itemCount: aliasesData.aliasList.length,
+                                  itemBuilder: (context, index) {
+                                    return AliasesListTile(
+                                      email: aliasesData.aliasList[index].email,
+                                      emailDescription: aliasesData
+                                          .aliasList[index].emailDescription,
+                                      switchOnPress: (toggle) {},
+                                      switchValue: aliasesData
+                                          .aliasList[index].isAliasActive,
+                                      listTileOnPress: () {},
+                                      editOnPress: () {},
                                     );
                                   },
                                 );
                               },
-                            ),
-                          ),
-                        ],
+                            );
+                          },
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              );
-            },
+                ),
+              ),
+            ],
           ),
         ),
       ),

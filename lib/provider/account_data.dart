@@ -28,7 +28,7 @@ class AccountData with ChangeNotifier {
     subscription = _accountData['data']['subscription'];
     lastUpdated = _accountData['data']['updated_at'];
 
-    // print('_accountData ACCESSED!!!');
+    print('_accountData ACCESSED!!!');
     notifyListeners();
   }
 }

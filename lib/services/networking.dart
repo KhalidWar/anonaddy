@@ -23,7 +23,7 @@ class Networking {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      print(response.statusCode);
+      print('Networking getData ${response.statusCode}');
     }
   }
 
@@ -39,6 +39,7 @@ class Networking {
     );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      print('Networking postData ${response.statusCode}');
       return data;
     } else {
       print(response.statusCode);
