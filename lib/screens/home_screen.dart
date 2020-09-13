@@ -56,52 +56,64 @@ class _HomeScreenState extends State<HomeScreen> {
               Card(
                 child: Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Aliases'.toUpperCase(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Divider(
-                        height: 25,
-                        indent: size.width * 0.3,
-                        endIndent: size.width * 0.3,
-                        color: kAppBarColor,
-                        thickness: 1,
-                      ),
-                      Container(
-                        height: size.height * 0.6,
-                        child: FutureBuilder(
-                          future: aliasesData.getAliasesDetails(),
-                          builder: (context, snapshot) {
-                            return Consumer<AliasesData>(
-                              builder: (context, aliasesData, child) {
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: ScrollPhysics(),
-                                  itemCount: aliasesData.aliasList.length,
-                                  itemBuilder: (context, index) {
-                                    return AliasesListTile(
-                                      email: aliasesData.aliasList[index].email,
-                                      emailDescription: aliasesData
-                                          .aliasList[index].emailDescription,
-                                      switchOnPress: (toggle) {},
-                                      switchValue: aliasesData
-                                          .aliasList[index].isAliasActive,
-                                      listTileOnPress: () {},
-                                      editOnPress: () {},
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Aliases'.toUpperCase(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            Column(
+                              children: [
+                                Text('Aliases'),
+                                Text('${aliasesData.aliasList.length} / 20'),
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        Divider(
+                          thickness: 1,
+                          color: kAppBarColor,
+                        ),
+                        Container(
+                          height: size.height * 0.6,
+                          child: FutureBuilder(
+                            future: aliasesData.getAliasesDetails(),
+                            builder: (context, snapshot) {
+                              return Consumer<AliasesData>(
+                                builder: (context, aliasesData, child) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: ScrollPhysics(),
+                                    itemCount: aliasesData.aliasList.length,
+                                    itemBuilder: (context, index) {
+                                      return AliasesListTile(
+                                        email:
+                                            aliasesData.aliasList[index].email,
+                                        emailDescription: aliasesData
+                                            .aliasList[index].emailDescription,
+                                        switchOnPress: (toggle) {},
+                                        switchValue: aliasesData
+                                            .aliasList[index].isAliasActive,
+                                        listTileOnPress: () {},
+                                        editOnPress: () {},
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
