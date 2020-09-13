@@ -15,20 +15,21 @@ class AccountData with ChangeNotifier {
       emailDescription;
   double bandwidth = 0;
   double bandwidthLimit = 0;
-  int usernameCount;
+  int usernameCount = 0;
 
   Future getAccountData() async {
     Networking accountDetails = Networking('$baseURL/$accountDetailsURL');
-    var accountData = await accountDetails.getData();
+    var _accountData = await accountDetails.getData();
 
-    id = accountData['data']['id'];
-    username = accountData['data']['username'];
-    bandwidth = accountData['data']['bandwidth'] / 1024000;
-    bandwidthLimit = accountData['data']['bandwidth_limit'] / 1024000;
-    usernameCount = accountData['data']['username_count'];
-    subscription = accountData['data']['subscription'];
-    lastUpdated = accountData['data']['updated_at'];
+    id = _accountData['data']['id'];
+    username = _accountData['data']['username'];
+    bandwidth = _accountData['data']['bandwidth'] / 1024000;
+    bandwidthLimit = _accountData['data']['bandwidth_limit'] / 1024000;
+    usernameCount = _accountData['data']['username_count'];
+    subscription = _accountData['data']['subscription'];
+    lastUpdated = _accountData['data']['updated_at'];
 
+    print('_accountData ACCESSED!!!');
     notifyListeners();
   }
 }

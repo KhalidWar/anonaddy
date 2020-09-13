@@ -1,8 +1,10 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/provider/account_data.dart';
+import 'package:anonaddy/provider/aliases_data.dart';
 import 'package:anonaddy/screens/account_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/widgets/account_info_card.dart';
+import 'package:anonaddy/widgets/aliases_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,15 +18,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int aliasesCount = 99;
-  bool isAliasActive;
-  String email, createdAt, emailDescription;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    final accountData = Provider.of<AccountData>(context);
+    final accountData = Provider.of<AccountData>(context, listen: false);
+    final aliasesData = Provider.of<AliasesData>(context, listen: false);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: kBackgroundColor,
@@ -33,100 +33,84 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: FutureBuilder(
-              future: accountData.getAccountData(),
-              builder: (context, snapshot) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AccountInfoCard(
-                      username: accountData.username,
-                      id: accountData.id,
-                      subscription: accountData.subscription,
-                      bandwidth: accountData.bandwidth,
-                      bandwidthLimit: accountData.bandwidthLimit,
-                      aliasesCount: aliasesCount,
+            builder: (context, snapshot) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FutureBuilder(
+                    future: accountData.getAccountData(),
+                    builder: (context, snapshot) {
+                      return Consumer<AccountData>(
+                        builder: (context, accountData, child) {
+                          return AccountInfoCard(
+                            username: accountData.username,
+                            id: accountData.id,
+                            subscription: accountData.subscription,
+                            bandwidth: accountData.bandwidth,
+                            bandwidthLimit: accountData.bandwidthLimit,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  Card(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Aliases'.toUpperCase(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          Divider(
+                            height: 25,
+                            indent: size.width * 0.3,
+                            endIndent: size.width * 0.3,
+                            color: kAppBarColor,
+                            thickness: 1,
+                          ),
+                          Container(
+                            height: size.height * 0.6,
+                            child: FutureBuilder(
+                              future: aliasesData.getAliasesDetails(),
+                              builder: (context, snapshot) {
+                                return Consumer<AliasesData>(
+                                  builder: (context, aliasesData, child) {
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ScrollPhysics(),
+                                      itemCount: aliasesData.aliasList.length,
+                                      itemBuilder: (context, index) {
+                                        return AliasesListTile(
+                                          email: aliasesData
+                                              .aliasList[index].email,
+                                          emailDescription: aliasesData
+                                              .aliasList[index]
+                                              .emailDescription,
+                                          switchOnPress: (toggle) {},
+                                          switchValue: aliasesData
+                                              .aliasList[index].isAliasActive,
+                                          listTileOnPress: () {},
+                                          editOnPress: () {},
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    // Card(
-                    //   child: Padding(
-                    //     padding: EdgeInsets.only(top: 10),
-                    //     child: Column(
-                    //       children: [
-                    //         Text(
-                    //           'Aliases'.toUpperCase(),
-                    //           style: Theme.of(context)
-                    //               .textTheme
-                    //               .headline6
-                    //               .copyWith(fontWeight: FontWeight.bold),
-                    //         ),
-                    //         Divider(
-                    //           height: 25,
-                    //           indent: size.width * 0.3,
-                    //           endIndent: size.width * 0.3,
-                    //           color: kAppBarColor,
-                    //           thickness: 1,
-                    //         ),
-                    //         Container(
-                    //           height: size.height * 0.6,
-                    //           child: ListView.builder(
-                    //               shrinkWrap: true,
-                    //               physics: ScrollPhysics(),
-                    //               itemCount: widget.aliasesData['data'].length,
-                    //               itemBuilder: (context, index) {
-                    //                 email =
-                    //                     widget.aliasesData['data'][index]['email'];
-                    //                 createdAt = widget.aliasesData['data'][index]
-                    //                     ['created_at'];
-                    //                 isAliasActive =
-                    //                     widget.aliasesData['data'][index]['active'];
-                    //                 emailDescription = widget.aliasesData['data']
-                    //                     [index]['description'];
-                    //                 return Column(
-                    //                   children: [
-                    //                     ListTile(
-                    //                       contentPadding:
-                    //                           EdgeInsets.symmetric(horizontal: 15),
-                    //                       dense: true,
-                    //                       title: Text(
-                    //                         '$email',
-                    //                         style:
-                    //                             Theme.of(context).textTheme.bodyText1,
-                    //                       ),
-                    //                       subtitle: Text('$emailDescription'),
-                    //                       leading: Switch(
-                    //                         value: isAliasActive,
-                    //                         onChanged: (toggle) {
-                    //                           setState(() {
-                    //                             // deactivateAlias(
-                    //                             //     id: widget.aliasesData['data']
-                    //                             //         [index]['id']);
-                    //                             toggle = isAliasActive;
-                    //                           });
-                    //                         },
-                    //                       ),
-                    //                       trailing: IconButton(
-                    //                         icon: Icon(Icons.edit),
-                    //                         onPressed: () {},
-                    //                       ),
-                    //                       onTap: () {
-                    //                         //todo copy email to clipboard onTap
-                    //                       },
-                    //                     ),
-                    //                     Divider(
-                    //                       thickness: 1,
-                    //                       indent: size.width * 0.1,
-                    //                       endIndent: size.width * 0.1,
-                    //                     ),
-                    //                   ],
-                    //                 );
-                    //               }),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                );
-              }),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -234,6 +218,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       onPressed: () {
                         // createNewAlias(description: '$descriptionInput');
+                        setState(() {
+                          // aliasesCount++;
+                        });
                         Navigator.pop(context);
                       },
                     )

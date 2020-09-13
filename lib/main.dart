@@ -1,4 +1,5 @@
 import 'package:anonaddy/provider/account_data.dart';
+import 'package:anonaddy/provider/aliases_data.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +12,17 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AnonAddy',
-      debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      home: ChangeNotifierProvider<AccountData>(
-        create: (context) => AccountData(),
-        child: HomeScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AccountData>(create: (_) => AccountData()),
+        ChangeNotifierProvider<AliasesData>(create: (_) => AliasesData())
+      ],
+      child: MaterialApp(
+        title: 'AnonAddy',
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        home: HomeScreen(),
       ),
     );
   }
