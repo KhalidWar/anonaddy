@@ -5,16 +5,10 @@ class AccountData with ChangeNotifier {
   String baseURL = 'https://app.anonaddy.com/api/v1';
   String accountDetailsURL = 'account-details';
 
-  String id,
-      username,
-      subscription,
-      lastUpdated,
-      email,
-      createdAt,
-      emailDescription;
+  String id, username, subscription, lastUpdated, createdAt, emailDescription;
   double bandwidth = 0;
   double bandwidthLimit = 0;
-  int usernameCount = 0;
+  int usernameCount = 0, aliasCount = 0, aliasLimit = 0;
 
   Future getAccountData() async {
     Networking accountDetails = Networking('$baseURL/$accountDetailsURL');
@@ -27,6 +21,9 @@ class AccountData with ChangeNotifier {
     usernameCount = _accountData['data']['username_count'];
     subscription = _accountData['data']['subscription'];
     lastUpdated = _accountData['data']['updated_at'];
+
+    aliasCount = _accountData['data']['active_shared_domain_alias_count'];
+    aliasLimit = _accountData['data']['active_shared_domain_alias_limit'];
 
     print('_accountData ACCESSED!!!');
     notifyListeners();

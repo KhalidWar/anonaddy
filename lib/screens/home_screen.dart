@@ -40,16 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
               FutureBuilder(
                 future: accountData.getAccountData(),
                 builder: (context, snapshot) {
-                  return Consumer<AccountData>(
-                    builder: (context, accountData, child) {
-                      return AccountInfoCard(
-                        username: accountData.username,
-                        id: accountData.id,
-                        subscription: accountData.subscription,
-                        bandwidth: accountData.bandwidth,
-                        bandwidthLimit: accountData.bandwidthLimit,
-                      );
-                    },
+                  return AccountInfoCard(
+                    username: accountData.username,
+                    id: accountData.id,
+                    subscription: accountData.subscription,
+                    bandwidth: accountData.bandwidth,
+                    bandwidthLimit: accountData.bandwidthLimit,
                   );
                 },
               ),
@@ -73,7 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             Column(
                               children: [
                                 Text('Aliases'),
-                                Text('${aliasesData.aliasList.length} / 20'),
+                                Text(
+                                    '${accountData.aliasCount} / ${accountData.aliasLimit}'),
                               ],
                             ),
                           ],
@@ -87,25 +84,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: FutureBuilder(
                             future: aliasesData.getAliasesDetails(),
                             builder: (context, snapshot) {
-                              return Consumer<AliasesData>(
-                                builder: (context, aliasesData, child) {
-                                  return ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: ScrollPhysics(),
-                                    itemCount: aliasesData.aliasList.length,
-                                    itemBuilder: (context, index) {
-                                      return AliasesListTile(
-                                        email:
-                                            aliasesData.aliasList[index].email,
-                                        emailDescription: aliasesData
-                                            .aliasList[index].emailDescription,
-                                        switchOnPress: (toggle) {},
-                                        switchValue: aliasesData
-                                            .aliasList[index].isAliasActive,
-                                        listTileOnPress: () {},
-                                        editOnPress: () {},
-                                      );
-                                    },
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemCount: aliasesData.aliasList.length,
+                                itemBuilder: (context, index) {
+                                  return AliasesListTile(
+                                    email: aliasesData.aliasList[index].email,
+                                    emailDescription: aliasesData
+                                        .aliasList[index].emailDescription,
+                                    switchOnPress: (toggle) {},
+                                    switchValue: aliasesData
+                                        .aliasList[index].isAliasActive,
+                                    listTileOnPress: () {},
+                                    editOnPress: () {},
                                   );
                                 },
                               );
