@@ -61,7 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             aliasCount: apiDataManager.aliasCount,
                             aliasLimit: apiDataManager.aliasLimit,
                             child: Container(
-                              height: size.height * 0.6,
+                              //todo fix overflow issue
+                              height: size.height * 0.635,
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: ScrollPhysics(),

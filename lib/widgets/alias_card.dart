@@ -17,12 +17,12 @@ class AliasCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.only(top: 10),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              Row(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -40,10 +40,10 @@ class AliasCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Divider(thickness: 1, color: kAppBarColor),
-              child,
-            ],
-          ),
+            ),
+            Divider(thickness: 1, color: kAppBarColor),
+            child,
+          ],
         ),
       ),
     );

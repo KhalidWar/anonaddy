@@ -17,11 +17,9 @@ class AliasListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 15),
           dense: true,
           onTap: listTileOnPress,
           title: Text(email, style: Theme.of(context).textTheme.bodyText1),
@@ -35,11 +33,7 @@ class AliasListTile extends StatelessWidget {
             onPressed: editOnPress,
           ),
         ),
-        Divider(
-          thickness: 1,
-          indent: size.width * 0.1,
-          endIndent: size.width * 0.1,
-        ),
+        Divider(),
       ],
     );
   }
