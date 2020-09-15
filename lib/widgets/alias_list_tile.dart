@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AliasesListTile extends StatelessWidget {
-  const AliasesListTile({
+class AliasListTile extends StatelessWidget {
+  const AliasListTile({
     Key key,
     this.email,
     this.emailDescription,

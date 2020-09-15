@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 
-class AccountInfoCard extends StatelessWidget {
-  const AccountInfoCard({
+class AccountCard extends StatelessWidget {
+  const AccountCard({
     Key key,
     @required this.username,
     @required this.id,

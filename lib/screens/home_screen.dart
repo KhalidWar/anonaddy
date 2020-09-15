@@ -2,8 +2,9 @@ import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/provider/api_data_manager.dart';
 import 'package:anonaddy/screens/profile_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
-import 'package:anonaddy/widgets/account_info_card.dart';
-import 'package:anonaddy/widgets/aliases_list_tile.dart';
+import 'package:anonaddy/widgets/account_card.dart';
+import 'package:anonaddy/widgets/alias_card.dart';
+import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/create_alias_dialog.dart';
 import 'package:anonaddy/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -36,92 +37,60 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: kBackgroundColor,
         appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(),
-        body: Padding(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child: RefreshIndicator(
-            onRefresh: _refreshData,
-            child: FutureBuilder(
-              future: _refreshData(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Consumer<APIDataManager>(
-                    builder: (_, __, ___) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        body: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: FutureBuilder(
+            future: _refreshData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Consumer<APIDataManager>(
+                  builder: (_, __, ___) {
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      child: Column(
                         children: [
-                          AccountInfoCard(
+                          AccountCard(
                             username: apiDataManager.username,
                             id: apiDataManager.id,
                             subscription: apiDataManager.subscription,
                             bandwidth: apiDataManager.bandwidth,
                             bandwidthLimit: apiDataManager.bandwidthLimit,
                           ),
-                          Card(
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Aliases'.toUpperCase(),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline5
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text('Aliases'),
-                                            Text(
-                                                '${apiDataManager.aliasCount} / ${apiDataManager.aliasLimit}'),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Divider(thickness: 1, color: kAppBarColor),
-                                    Container(
-                                      height: size.height * 0.6,
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: ScrollPhysics(),
-                                        itemCount:
-                                            apiDataManager.aliasList.length,
-                                        itemBuilder: (context, index) {
-                                          return AliasesListTile(
-                                            email: apiDataManager
-                                                .aliasList[index].email,
-                                            emailDescription: apiDataManager
-                                                .aliasList[index]
-                                                .emailDescription,
-                                            switchOnPress: (toggle) {},
-                                            switchValue: apiDataManager
-                                                .aliasList[index].isAliasActive,
-                                            listTileOnPress: () {},
-                                            editOnPress: () {},
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          AliasCard(
+                            aliasCount: apiDataManager.aliasCount,
+                            aliasLimit: apiDataManager.aliasLimit,
+                            child: Container(
+                              height: size.height * 0.6,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemCount: apiDataManager.aliasList.length,
+                                itemBuilder: (context, index) {
+                                  return AliasListTile(
+                                    email:
+                                        apiDataManager.aliasList[index].email,
+                                    emailDescription: apiDataManager
+                                        .aliasList[index].emailDescription,
+                                    switchOnPress: (toggle) {},
+                                    switchValue: apiDataManager
+                                        .aliasList[index].isAliasActive,
+                                    listTileOnPress: () {},
+                                    editOnPress: () {},
+                                  );
+                                },
                               ),
                             ),
                           ),
                         ],
-                      );
-                    },
-                  );
-                } else {
-                  return LoadingWidget();
-                }
-              },
-            ),
+                      ),
+                    );
+                  },
+                );
+              } else {
+                return LoadingWidget();
+              }
+            },
           ),
         ),
       ),
