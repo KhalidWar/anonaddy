@@ -20,7 +20,7 @@ class AccountData with ChangeNotifier {
 
   List<Aliases> aliasList = [];
 
-  Future getAccountData() async {
+  Future<void> getAccountData() async {
     Networking accountDetails = Networking('$baseURL/$accountDetailsURL');
     var _accountData = await accountDetails.getData();
 

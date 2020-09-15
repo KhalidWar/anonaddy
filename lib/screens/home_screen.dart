@@ -22,94 +22,101 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    final accountData = Provider.of<AccountData>(context);
+    final accountData = Provider.of<AccountData>(context, listen: false);
 
-    return FutureBuilder(
-      future: accountData.getAccountData(),
-      builder: (context, snapshot) {
-        return SafeArea(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: kBackgroundColor,
-            appBar: buildAppBar(),
-            floatingActionButton: buildFloatingActionButton(),
-            body: Padding(
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              child: Consumer<AccountData>(
-                builder: (_, _accountData, ___) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AccountInfoCard(
-                        username: accountData.username,
-                        id: accountData.id,
-                        subscription: accountData.subscription,
-                        bandwidth: accountData.bandwidth,
-                        bandwidthLimit: accountData.bandwidthLimit,
-                      ),
-                      Card(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 10),
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: kBackgroundColor,
+        appBar: buildAppBar(),
+        floatingActionButton: buildFloatingActionButton(),
+        body: Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: FutureBuilder(
+            future: accountData.getAccountData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Consumer<AccountData>(
+                  builder: (_, _accountData, ___) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AccountInfoCard(
+                          username: accountData.username,
+                          id: accountData.id,
+                          subscription: accountData.subscription,
+                          bandwidth: accountData.bandwidth,
+                          bandwidthLimit: accountData.bandwidthLimit,
+                        ),
+                        Card(
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Aliases'.toUpperCase(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline5
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text('Aliases'),
-                                        Text(
-                                            '${accountData.aliasCount} / ${accountData.aliasLimit}'),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Divider(thickness: 1, color: kAppBarColor),
-                                Container(
-                                  height: size.height * 0.6,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: ScrollPhysics(),
-                                    itemCount: accountData.aliasList.length,
-                                    itemBuilder: (context, index) {
-                                      return AliasesListTile(
-                                        email:
-                                            accountData.aliasList[index].email,
-                                        emailDescription: accountData
-                                            .aliasList[index].emailDescription,
-                                        switchOnPress: (toggle) {},
-                                        switchValue: accountData
-                                            .aliasList[index].isAliasActive,
-                                        listTileOnPress: () {},
-                                        editOnPress: () {},
-                                      );
-                                    },
+                            padding: EdgeInsets.only(top: 10),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Aliases'.toUpperCase(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text('Aliases'),
+                                          Text(
+                                              '${accountData.aliasCount} / ${accountData.aliasLimit}'),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                  Divider(thickness: 1, color: kAppBarColor),
+                                  Container(
+                                    height: size.height * 0.6,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ScrollPhysics(),
+                                      itemCount: accountData.aliasList.length,
+                                      itemBuilder: (context, index) {
+                                        return AliasesListTile(
+                                          email: accountData
+                                              .aliasList[index].email,
+                                          emailDescription: accountData
+                                              .aliasList[index]
+                                              .emailDescription,
+                                          switchOnPress: (toggle) {},
+                                          switchValue: accountData
+                                              .aliasList[index].isAliasActive,
+                                          listTileOnPress: () {},
+                                          editOnPress: () {},
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
