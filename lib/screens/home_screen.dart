@@ -5,6 +5,7 @@ import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/widgets/account_info_card.dart';
 import 'package:anonaddy/widgets/aliases_list_tile.dart';
 import 'package:anonaddy/widgets/create_alias_dialog.dart';
+import 'package:anonaddy/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -109,9 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 );
               } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return LoadingWidget();
               }
             },
           ),

@@ -9,19 +9,18 @@ This is a personal project and is **NOT** associated with [AnonAddy's project or
 
 
 ## Features
-- Modern user interface with great user experience
-- Adaptive and persistive Light and Dark themes
+- Get your AnonAddy's account details including usernames and aliases.
+-  Create new aliases with only 2 taps, custom description input available.
 
 ### Upcoming Features
-- Example
+- Adaptive and persistive Light and Dark themes
+- Activate/deactivate alias on the fly.
 
 
 ## Packages used
 - [http](https://pub.dev/packages/http)
 - [Provider](https://pub.dev/packages/provider)
-- [Shared Preferences](https://pub.dev/packages/shared_preferences)
-- [Font Awesome Icons](https://pub.dev/packages/font_awesome_flutter)
-- [Animations](https://pub.dev/packages/animations)
+- [Flutter SVG](https://pub.dev/packages/flutter_svg)
 
 
 ## Installation
