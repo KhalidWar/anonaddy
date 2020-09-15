@@ -46,11 +46,23 @@ class Networking {
     }
   }
 
-  Future toggleAliasActive() async {
-    http.Response response = await http.delete(
+  Future activateAlias({String aliasID}) async {
+    http.Response response = await http.post(
       Uri.encodeFull(url),
       headers: headers,
+      body: json.encode({"id": "$aliasID"}),
     );
+    if (response.statusCode == 200) {
+      print('Networking postData ${response.statusCode}');
+      return jsonDecode(response.body);
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  Future deactivateAlias() async {
+    http.Response response =
+        await http.delete(Uri.encodeFull(url), headers: headers);
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

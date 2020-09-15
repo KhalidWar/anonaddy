@@ -8,11 +8,10 @@ class APIDataManager with ChangeNotifier {
   String baseURL = 'https://app.anonaddy.com/api/v1';
   String accountDetailsURL = 'account-details';
   String activeAliasURL = 'active-aliases';
-  String aliases = 'aliases';
+  String aliasesURL = 'aliases';
 
-  String id, username = 'username', subscription, lastUpdated;
-  double bandwidth = 0;
-  double bandwidthLimit = 0;
+  String id, aliasID, username = 'username', subscription, lastUpdated;
+  double bandwidth = 0, bandwidthLimit = 0;
   int usernameCount = 0, aliasCount = 0, aliasLimit = 0;
 
   bool isAliasActive = false;
@@ -29,7 +28,7 @@ class APIDataManager with ChangeNotifier {
     Networking accountDetails = Networking('$baseURL/$accountDetailsURL');
     var _accountData = await accountDetails.getData();
 
-    Networking aliasesDetails = Networking('$baseURL/$aliases');
+    Networking aliasesDetails = Networking('$baseURL/$aliasesURL');
     var _aliasesData = await aliasesDetails.getData();
 
     id = _accountData['data']['id'];
@@ -48,8 +47,10 @@ class APIDataManager with ChangeNotifier {
       createdAt = _aliasesData['data'][i]['created_at'];
       isAliasActive = _aliasesData['data'][i]['active'];
       emailDescription = _aliasesData['data'][i]['description'] ?? 'None';
+      aliasID = _aliasesData['data'][i]['id'];
 
       _aliasList.add(AliasModel(
+        aliasID: aliasID,
         email: email,
         emailDescription: emailDescription,
         createdAt: createdAt,
@@ -61,15 +62,23 @@ class APIDataManager with ChangeNotifier {
   }
 
   Future createNewAlias({String description}) async {
-    Networking networking = Networking('$baseURL/$aliases');
+    Networking networking = Networking('$baseURL/$aliasesURL');
     var data = await networking.postData(description: description);
     notifyListeners();
     return data;
   }
 
-  Future deactivateAlias({String id}) async {
-    Networking networking = Networking('$baseURL/$activeAliasURL/$id');
-    var data = await networking.toggleAliasActive();
+  Future activateAlias({String aliasID}) async {
+    Networking networking = Networking('$baseURL/$activeAliasURL');
+    var data = await networking.activateAlias(aliasID: aliasID);
+    notifyListeners();
+    return data;
+  }
+
+  Future deactivateAlias({String aliasID}) async {
+    Networking networking = Networking('$baseURL/$activeAliasURL/$aliasID');
+    var data = await networking.deactivateAlias();
+    notifyListeners();
     return data;
   }
 }

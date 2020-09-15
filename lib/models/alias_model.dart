@@ -1,5 +1,6 @@
 class AliasModel {
   AliasModel({
+    this.aliasID,
     this.emailDescription,
     this.isAliasActive,
     this.email,
@@ -10,4 +11,5 @@ class AliasModel {
   final String email;
   final String createdAt;
   final String emailDescription;
+  final String aliasID;
 }

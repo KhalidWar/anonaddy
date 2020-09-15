@@ -20,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Future future;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -73,9 +72,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                         apiDataManager.aliasList[index].email,
                                     emailDescription: apiDataManager
                                         .aliasList[index].emailDescription,
-                                    switchOnPress: (toggle) {},
                                     switchValue: apiDataManager
                                         .aliasList[index].isAliasActive,
+                                    switchOnPress: (toggle) {
+                                      if (apiDataManager
+                                              .aliasList[index].isAliasActive ==
+                                          true) {
+                                        apiDataManager.deactivateAlias(
+                                          aliasID: apiDataManager
+                                              .aliasList[index].aliasID,
+                                        );
+                                        apiDataManager.aliasList[index]
+                                            .isAliasActive = false;
+                                      } else {
+                                        apiDataManager.activateAlias(
+                                          aliasID: apiDataManager
+                                              .aliasList[index].aliasID,
+                                        );
+                                        apiDataManager.aliasList[index]
+                                            .isAliasActive = true;
+                                      }
+                                    },
                                     listTileOnPress: () {},
                                     editOnPress: () {},
                                   );
