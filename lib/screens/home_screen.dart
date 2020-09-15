@@ -19,11 +19,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Future future;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     final apiDataManager = Provider.of<APIDataManager>(context, listen: false);
+
+    Future<void> _refreshData() async {
+      return await apiDataManager.fetchData();
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -33,87 +38,90 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: buildFloatingActionButton(),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child: FutureBuilder(
-            future: apiDataManager.fetchData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return Consumer<APIDataManager>(
-                  builder: (_, __, ___) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AccountInfoCard(
-                          username: apiDataManager.username,
-                          id: apiDataManager.id,
-                          subscription: apiDataManager.subscription,
-                          bandwidth: apiDataManager.bandwidth,
-                          bandwidthLimit: apiDataManager.bandwidthLimit,
-                        ),
-                        Card(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 10),
+          child: RefreshIndicator(
+            onRefresh: _refreshData,
+            child: FutureBuilder(
+              future: _refreshData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Consumer<APIDataManager>(
+                    builder: (_, __, ___) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AccountInfoCard(
+                            username: apiDataManager.username,
+                            id: apiDataManager.id,
+                            subscription: apiDataManager.subscription,
+                            bandwidth: apiDataManager.bandwidth,
+                            bandwidthLimit: apiDataManager.bandwidthLimit,
+                          ),
+                          Card(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Aliases'.toUpperCase(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline5
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text('Aliases'),
-                                          Text(
-                                              '${apiDataManager.aliasCount} / ${apiDataManager.aliasLimit}'),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(thickness: 1, color: kAppBarColor),
-                                  Container(
-                                    height: size.height * 0.6,
-                                    child: ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: ScrollPhysics(),
-                                      itemCount:
-                                          apiDataManager.aliasList.length,
-                                      itemBuilder: (context, index) {
-                                        return AliasesListTile(
-                                          email: apiDataManager
-                                              .aliasList[index].email,
-                                          emailDescription: apiDataManager
-                                              .aliasList[index]
-                                              .emailDescription,
-                                          switchOnPress: (toggle) {},
-                                          switchValue: apiDataManager
-                                              .aliasList[index].isAliasActive,
-                                          listTileOnPress: () {},
-                                          editOnPress: () {},
-                                        );
-                                      },
+                              padding: EdgeInsets.only(top: 10),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Aliases'.toUpperCase(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline5
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text('Aliases'),
+                                            Text(
+                                                '${apiDataManager.aliasCount} / ${apiDataManager.aliasLimit}'),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                    Divider(thickness: 1, color: kAppBarColor),
+                                    Container(
+                                      height: size.height * 0.6,
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: ScrollPhysics(),
+                                        itemCount:
+                                            apiDataManager.aliasList.length,
+                                        itemBuilder: (context, index) {
+                                          return AliasesListTile(
+                                            email: apiDataManager
+                                                .aliasList[index].email,
+                                            emailDescription: apiDataManager
+                                                .aliasList[index]
+                                                .emailDescription,
+                                            switchOnPress: (toggle) {},
+                                            switchValue: apiDataManager
+                                                .aliasList[index].isAliasActive,
+                                            listTileOnPress: () {},
+                                            editOnPress: () {},
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              } else {
-                return LoadingWidget();
-              }
-            },
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  return LoadingWidget();
+                }
+              },
+            ),
           ),
         ),
       ),
