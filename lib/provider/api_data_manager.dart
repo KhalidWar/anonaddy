@@ -1,8 +1,10 @@
-import 'package:anonaddy/models/aliases.dart';
+import 'dart:collection';
+
+import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/services/networking.dart';
 import 'package:flutter/foundation.dart';
 
-class AccountData with ChangeNotifier {
+class APIDataManager with ChangeNotifier {
   String baseURL = 'https://app.anonaddy.com/api/v1';
   String accountDetailsURL = 'account-details';
   String activeAliasURL = 'active-aliases';
@@ -18,9 +20,12 @@ class AccountData with ChangeNotifier {
   String createdAt = 'Test2';
   String emailDescription = 'Test3';
 
-  List<Aliases> aliasList = [];
+  List<AliasModel> _aliasList = [];
+  UnmodifiableListView<AliasModel> get aliasList {
+    return UnmodifiableListView(_aliasList);
+  }
 
-  Future<void> getAccountData() async {
+  Future<void> fetchData() async {
     Networking accountDetails = Networking('$baseURL/$accountDetailsURL');
     var _accountData = await accountDetails.getData();
 
@@ -37,14 +42,14 @@ class AccountData with ChangeNotifier {
     aliasCount = _accountData['data']['active_shared_domain_alias_count'];
     aliasLimit = _accountData['data']['active_shared_domain_alias_limit'];
 
-    aliasList.clear();
+    _aliasList.clear();
     for (int i = 0; i < _aliasesData['data'].length; i++) {
       email = _aliasesData['data'][i]['email'];
       createdAt = _aliasesData['data'][i]['created_at'];
       isAliasActive = _aliasesData['data'][i]['active'];
       emailDescription = _aliasesData['data'][i]['description'] ?? 'None';
 
-      aliasList.add(Aliases(
+      _aliasList.add(AliasModel(
         email: email,
         emailDescription: emailDescription,
         createdAt: createdAt,

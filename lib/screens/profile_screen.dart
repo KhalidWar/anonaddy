@@ -1,12 +1,12 @@
 import 'package:anonaddy/constants.dart';
 import 'package:flutter/material.dart';
 
-class AccountScreen extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
   @override
-  _AccountScreenState createState() => _AccountScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

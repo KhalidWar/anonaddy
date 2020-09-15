@@ -1,6 +1,6 @@
 import 'package:anonaddy/constants.dart';
-import 'package:anonaddy/provider/account_data.dart';
-import 'package:anonaddy/screens/account_screen.dart';
+import 'package:anonaddy/provider/api_data_manager.dart';
+import 'package:anonaddy/screens/profile_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/widgets/account_info_card.dart';
 import 'package:anonaddy/widgets/aliases_list_tile.dart';
@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    final accountData = Provider.of<AccountData>(context, listen: false);
+    final apiDataManager = Provider.of<APIDataManager>(context, listen: false);
 
     return SafeArea(
       child: Scaffold(
@@ -34,20 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: FutureBuilder(
-            future: accountData.getAccountData(),
+            future: apiDataManager.fetchData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return Consumer<AccountData>(
-                  builder: (_, _accountData, ___) {
+                return Consumer<APIDataManager>(
+                  builder: (_, __, ___) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AccountInfoCard(
-                          username: accountData.username,
-                          id: accountData.id,
-                          subscription: accountData.subscription,
-                          bandwidth: accountData.bandwidth,
-                          bandwidthLimit: accountData.bandwidthLimit,
+                          username: apiDataManager.username,
+                          id: apiDataManager.id,
+                          subscription: apiDataManager.subscription,
+                          bandwidth: apiDataManager.bandwidth,
+                          bandwidthLimit: apiDataManager.bandwidthLimit,
                         ),
                         Card(
                           child: Padding(
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Text('Aliases'),
                                           Text(
-                                              '${accountData.aliasCount} / ${accountData.aliasLimit}'),
+                                              '${apiDataManager.aliasCount} / ${apiDataManager.aliasLimit}'),
                                         ],
                                       ),
                                     ],
@@ -83,16 +83,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       physics: ScrollPhysics(),
-                                      itemCount: accountData.aliasList.length,
+                                      itemCount:
+                                          apiDataManager.aliasList.length,
                                       itemBuilder: (context, index) {
                                         return AliasesListTile(
-                                          email: accountData
+                                          email: apiDataManager
                                               .aliasList[index].email,
-                                          emailDescription: accountData
+                                          emailDescription: apiDataManager
                                               .aliasList[index]
                                               .emailDescription,
                                           switchOnPress: (toggle) {},
-                                          switchValue: accountData
+                                          switchValue: apiDataManager
                                               .aliasList[index].isAliasActive,
                                           listTileOnPress: () {},
                                           editOnPress: () {},
@@ -127,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icon(Icons.account_circle, color: Colors.white),
           onPressed: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AccountScreen()));
+                MaterialPageRoute(builder: (context) => ProfileScreen()));
           }),
       actions: [
         IconButton(
@@ -155,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   textFieldInput = input;
                 },
                 buttonOnPress: () {
-                  AccountData().createNewAlias(description: textFieldInput);
+                  APIDataManager().createNewAlias(description: textFieldInput);
                   Navigator.pop(context);
                 },
               );

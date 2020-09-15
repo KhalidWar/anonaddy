@@ -1,5 +1,5 @@
-class Aliases {
-  Aliases({
+class AliasModel {
+  AliasModel({
     this.emailDescription,
     this.isAliasActive,
     this.email,
@@ -10,8 +10,4 @@ class Aliases {
   final String email;
   final String createdAt;
   final String emailDescription;
-
-  void toggleAliasActivity() {
-    isAliasActive = !isAliasActive;
-  }
 }
