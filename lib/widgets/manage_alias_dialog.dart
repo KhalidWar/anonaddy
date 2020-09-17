@@ -14,6 +14,8 @@ class ManageAliasDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    String textFieldInput = emailDescription;
+
     return SimpleDialog(
       contentPadding: EdgeInsets.all(15),
       title: Text('Manage Alias'),
@@ -25,6 +27,10 @@ class ManageAliasDialog extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyText1,
         ),
         TextField(
+          onChanged: (input) {
+            //todo implement edit description
+            input = textFieldInput;
+          },
           decoration: InputDecoration(
             hintText: '$emailDescription',
             hintStyle: Theme.of(context).textTheme.headline6,
@@ -53,7 +59,7 @@ class ManageAliasDialog extends StatelessWidget {
           ],
         ),
         RaisedButton(
-          child: Text('Close'),
+          child: Text('Submit'),
           onPressed: () {
             Navigator.pop(context);
           },

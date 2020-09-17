@@ -82,6 +82,13 @@ class APIDataManager with ChangeNotifier {
     return data;
   }
 
+  Future editDescription({String newDescription}) async {
+    Networking networking = Networking('$baseURL/$aliasesURL/$newDescription');
+    var data = await networking.editDescription(newDescription: newDescription);
+    notifyListeners();
+    return data;
+  }
+
   Future deleteAlias({String aliasID}) async {
     Networking networking = Networking('$baseURL/$aliasesURL/$aliasID');
     var data = networking.deleteAlias();
