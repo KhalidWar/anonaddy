@@ -81,4 +81,11 @@ class APIDataManager with ChangeNotifier {
     notifyListeners();
     return data;
   }
+
+  Future deleteAlias({String aliasID}) async {
+    Networking networking = Networking('$baseURL/$aliasesURL/$aliasID');
+    var data = networking.deleteAlias();
+    notifyListeners();
+    return data;
+  }
 }

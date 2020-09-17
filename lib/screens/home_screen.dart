@@ -7,6 +7,7 @@ import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/create_alias_dialog.dart';
 import 'package:anonaddy/widgets/loading_widget.dart';
+import 'package:anonaddy/widgets/manage_alias_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -94,7 +95,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                       }
                                     },
                                     listTileOnPress: () {},
-                                    editOnPress: () {},
+                                    editOnPress: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return ManageAliasDialog(
+                                              title: apiDataManager
+                                                  .aliasList[index].email,
+                                              emailDescription: apiDataManager
+                                                  .aliasList[index]
+                                                  .emailDescription,
+                                              deleteOnPress: () {
+                                                apiDataManager.deleteAlias(
+                                                    aliasID: apiDataManager
+                                                        .aliasList[index]
+                                                        .aliasID);
+                                                Navigator.pop(context);
+                                              },
+                                            );
+                                          });
+                                    },
                                   );
                                 },
                               ),
