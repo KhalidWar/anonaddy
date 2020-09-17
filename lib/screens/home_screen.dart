@@ -22,8 +22,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     final apiDataManager = Provider.of<APIDataManager>(context, listen: false);
 
     Future<void> _refreshData() async {
@@ -44,27 +42,25 @@ class _HomeScreenState extends State<HomeScreen> {
               if (snapshot.connectionState == ConnectionState.done) {
                 return Consumer<APIDataManager>(
                   builder: (_, __, ___) {
-                    return Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                      child: Column(
-                        children: [
-                          AccountCard(
-                            username: apiDataManager.username,
-                            id: apiDataManager.id,
-                            subscription: apiDataManager.subscription,
-                            bandwidth: apiDataManager.bandwidth,
-                            bandwidthLimit: apiDataManager.bandwidthLimit,
-                          ),
-                          AliasCard(
-                            aliasCount: apiDataManager.aliasCount,
-                            aliasLimit: apiDataManager.aliasLimit,
-                            child: Container(
-                              //todo fix overflow issue
-                              height: size.height * 0.635,
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                        child: Column(
+                          children: [
+                            AccountCard(
+                              username: apiDataManager.username,
+                              id: apiDataManager.id,
+                              subscription: apiDataManager.subscription,
+                              bandwidth: apiDataManager.bandwidth,
+                              bandwidthLimit: apiDataManager.bandwidthLimit,
+                            ),
+                            AliasCard(
+                              aliasCount: apiDataManager.aliasCount,
+                              aliasLimit: apiDataManager.aliasLimit,
                               child: ListView.builder(
                                 shrinkWrap: true,
-                                physics: ScrollPhysics(),
+                                physics: NeverScrollableScrollPhysics(),
                                 itemCount: apiDataManager.aliasList.length,
                                 itemBuilder: (context, index) {
                                   return AliasListTile(
@@ -74,8 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },
