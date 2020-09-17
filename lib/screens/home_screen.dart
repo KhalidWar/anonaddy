@@ -7,7 +7,6 @@ import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/create_alias_dialog.dart';
 import 'package:anonaddy/widgets/loading_widget.dart';
-import 'package:anonaddy/widgets/manage_alias_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -69,52 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 itemCount: apiDataManager.aliasList.length,
                                 itemBuilder: (context, index) {
                                   return AliasListTile(
-                                    email:
-                                        apiDataManager.aliasList[index].email,
-                                    emailDescription: apiDataManager
-                                        .aliasList[index].emailDescription,
-                                    switchValue: apiDataManager
-                                        .aliasList[index].isAliasActive,
-                                    switchOnPress: (toggle) {
-                                      if (apiDataManager
-                                              .aliasList[index].isAliasActive ==
-                                          true) {
-                                        apiDataManager.deactivateAlias(
-                                          aliasID: apiDataManager
-                                              .aliasList[index].aliasID,
-                                        );
-                                        apiDataManager.aliasList[index]
-                                            .isAliasActive = false;
-                                      } else {
-                                        apiDataManager.activateAlias(
-                                          aliasID: apiDataManager
-                                              .aliasList[index].aliasID,
-                                        );
-                                        apiDataManager.aliasList[index]
-                                            .isAliasActive = true;
-                                      }
-                                    },
-                                    listTileOnPress: () {},
-                                    editOnPress: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return ManageAliasDialog(
-                                              title: apiDataManager
-                                                  .aliasList[index].email,
-                                              emailDescription: apiDataManager
-                                                  .aliasList[index]
-                                                  .emailDescription,
-                                              deleteOnPress: () {
-                                                apiDataManager.deleteAlias(
-                                                    aliasID: apiDataManager
-                                                        .aliasList[index]
-                                                        .aliasID);
-                                                Navigator.pop(context);
-                                              },
-                                            );
-                                          });
-                                    },
+                                    index: index,
+                                    apiDataManager: apiDataManager,
                                   );
                                 },
                               ),
