@@ -24,10 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final apiDataManager = Provider.of<APIDataManager>(context, listen: false);
 
-    Future<void> _refreshData() async {
-      return await apiDataManager.fetchData();
-    }
-
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -35,13 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(),
         body: RefreshIndicator(
-          onRefresh: _refreshData,
+          onRefresh: apiDataManager.fetchData,
           child: FutureBuilder(
-            future: _refreshData(),
+            future: apiDataManager.fetchData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return Consumer<APIDataManager>(
-                  builder: (_, __, ___) {
+                  builder: (_, _apiDataManager, ___) {
                     return SingleChildScrollView(
                       child: Padding(
                         padding:

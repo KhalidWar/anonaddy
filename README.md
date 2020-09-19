@@ -5,7 +5,7 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 This is a personal project and is **NOT** associated with [AnonAddy's project or team](https://github.com/anonaddy).
 
 ## Screenshots
-<img src="LINK_TO_SCREENSHOT" width="150"> 
+<img src="assets/screenshots/2020-09-19 12.11.35.jpg" width="150"> <img src="assets/screenshots/2020-09-19 12.11.43.jpg" width="150"> <img src="assets/screenshots/2020-09-19 12.11.50.jpg" width="150">
 
 
 ## Features
