@@ -5,15 +5,21 @@ import '../constants.dart';
 class AccountCard extends StatelessWidget {
   const AccountCard({
     Key key,
-    @required this.username,
-    @required this.id,
-    @required this.subscription,
-    @required this.bandwidth,
-    @required this.bandwidthLimit,
+    this.username,
+    this.id,
+    this.subscription,
+    this.bandwidth,
+    this.bandwidthLimit,
+    this.aliasCount,
+    this.aliasLimit,
+    this.apiDataManager,
+    this.itemCount,
   }) : super(key: key);
 
   final String username, id, subscription;
   final double bandwidth, bandwidthLimit;
+  final int aliasCount, aliasLimit, itemCount;
+  final dynamic apiDataManager;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +30,15 @@ class AccountCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border.all(color: kAppBarColor),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
               child: Text(
                 '$username'.toUpperCase(),
                 style: Theme.of(context)
@@ -33,12 +47,7 @@ class AccountCard extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
             ),
-            Divider(
-                height: 25,
-                indent: size.width * 0.3,
-                endIndent: size.width * 0.3,
-                color: kAppBarColor,
-                thickness: 1),
+            SizedBox(height: size.height * 0.02),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,6 +79,18 @@ class AccountCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyText1),
                 Text(
                   '${bandwidth.round()} MB / ${bandwidthLimit.round()} MB',
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Active Aliases',
+                    style: Theme.of(context).textTheme.bodyText1),
+                Text(
+                  '$aliasCount / $aliasLimit',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ],

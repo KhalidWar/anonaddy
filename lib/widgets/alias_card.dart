@@ -6,45 +6,34 @@ class AliasCard extends StatelessWidget {
   const AliasCard({
     Key key,
     this.child,
-    this.aliasCount,
-    this.aliasLimit,
   }) : super(key: key);
-
-  final int aliasCount, aliasLimit;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Aliases'.toUpperCase(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline5
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Column(
-                    children: [
-                      Text('Aliases'),
-                      Text('$aliasCount / $aliasLimit'),
-                    ],
-                  ),
-                ],
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(8),
+            margin: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              border: Border.all(color: kAppBarColor),
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
               ),
             ),
-            Divider(thickness: 1, color: kAppBarColor),
-            child,
-          ],
-        ),
+            child: Text(
+              'Aliases'.toUpperCase(),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
+          child,
+        ],
       ),
     );
   }

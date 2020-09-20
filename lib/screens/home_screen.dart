@@ -7,7 +7,9 @@ import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/create_alias_dialog.dart';
 import 'package:anonaddy/widgets/loading_widget.dart';
+import 'package:anonaddy/widgets/manage_alias_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,7 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: kBackgroundColor,
         appBar: buildAppBar(),
-        floatingActionButton: buildFloatingActionButton(),
+        floatingActionButton:
+            buildFloatingActionButton(context, apiDataManager),
         body: RefreshIndicator(
           onRefresh: apiDataManager.fetchData,
           child: FutureBuilder(
@@ -39,35 +42,61 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Consumer<APIDataManager>(
                   builder: (_, _apiDataManager, ___) {
                     return SingleChildScrollView(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                        child: Column(
-                          children: [
-                            AccountCard(
-                              username: apiDataManager.username,
-                              id: apiDataManager.id,
-                              subscription: apiDataManager.subscription,
-                              bandwidth: apiDataManager.bandwidth,
-                              bandwidthLimit: apiDataManager.bandwidthLimit,
+                      padding: EdgeInsets.all(5),
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          AccountCard(
+                            username: apiDataManager.username,
+                            id: apiDataManager.id,
+                            subscription: apiDataManager.subscription,
+                            bandwidth: apiDataManager.bandwidth,
+                            bandwidthLimit: apiDataManager.bandwidthLimit,
+                            aliasCount: apiDataManager.aliasCount,
+                            aliasLimit: apiDataManager.aliasLimit,
+                            apiDataManager: apiDataManager,
+                            itemCount: apiDataManager.aliasList.length,
+                          ),
+                          AliasCard(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: apiDataManager.aliasList.length,
+                              itemBuilder: (context, index) {
+                                var data = apiDataManager.aliasList[index];
+                                return AliasListTile(
+                                  email: data.email,
+                                  emailDescription: data.emailDescription,
+                                  switchValue: data.isAliasActive,
+                                  listTileOnPress: () {},
+                                  switchOnPress: (toggle) {
+                                    if (data.isAliasActive == true) {
+                                      apiDataManager.deactivateAlias(
+                                          aliasID: data.aliasID);
+                                      data.isAliasActive = false;
+                                    } else {
+                                      apiDataManager.activateAlias(
+                                        aliasID: data.aliasID,
+                                      );
+                                      data.isAliasActive = true;
+                                    }
+                                  },
+                                  child: ManageAliasDialog(
+                                    title: data.email,
+                                    emailDescription: data.emailDescription,
+                                    deleteOnPress: () {
+                                      setState(() {
+                                        apiDataManager.deleteAlias(
+                                            aliasID: data.aliasID);
+                                        Navigator.pop(context);
+                                      });
+                                    },
+                                  ),
+                                );
+                              },
                             ),
-                            AliasCard(
-                              aliasCount: apiDataManager.aliasCount,
-                              aliasLimit: apiDataManager.aliasLimit,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: apiDataManager.aliasList.length,
-                                itemBuilder: (context, index) {
-                                  return AliasListTile(
-                                    index: index,
-                                    apiDataManager: apiDataManager,
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -85,7 +114,11 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar buildAppBar() {
     return AppBar(
       backgroundColor: kAppBarColor,
-      // title: Image.asset('assets/images/logo-dark.svg'),
+      title: SvgPicture.asset(
+        'assets/images/logo.svg',
+        height: MediaQuery.of(context).size.height * 0.03,
+      ),
+      centerTitle: true,
       leading: IconButton(
           icon: Icon(Icons.account_circle, color: Colors.white),
           onPressed: () {
@@ -103,11 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  FloatingActionButton buildFloatingActionButton() {
-    String textFieldInput;
+  FloatingActionButton buildFloatingActionButton(
+      BuildContext context, APIDataManager apiDataManager) {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
+        String textFieldInput;
         showDialog(
             context: context,
             builder: (context) {
@@ -118,8 +152,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   textFieldInput = input;
                 },
                 buttonOnPress: () {
-                  APIDataManager().createNewAlias(description: textFieldInput);
-                  Navigator.pop(context);
+                  setState(() {
+                    apiDataManager.createNewAlias(description: textFieldInput);
+                    Navigator.pop(context);
+                  });
                 },
               );
             });

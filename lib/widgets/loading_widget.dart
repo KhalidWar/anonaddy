@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({
@@ -12,7 +13,7 @@ class LoadingWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // SvgPicture.asset('assets/images/logo-dark.svg'),
+          SvgPicture.asset('assets/images/logo-dark.svg'),
           SizedBox(height: size.height * 0.03),
           Container(
             height: size.height * 0.1,
