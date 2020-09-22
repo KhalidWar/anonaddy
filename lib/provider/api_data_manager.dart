@@ -49,6 +49,7 @@ class APIDataManager with ChangeNotifier {
     }
     print('fetchData ACCESSED!!!');
     notifyListeners();
+    return data;
   }
 
   Future createNewAlias({String description}) async {

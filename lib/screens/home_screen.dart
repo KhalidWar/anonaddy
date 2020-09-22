@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: FutureBuilder(
             future: apiDataManager.fetchData(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data != null) {
                 return Consumer<APIDataManager>(
                   builder: (_, _apiDataManager, ___) {
                     return SingleChildScrollView(
@@ -47,23 +47,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children: [
                           AccountCard(
-                            username: apiDataManager.username,
-                            id: apiDataManager.id,
-                            subscription: apiDataManager.subscription,
-                            bandwidth: apiDataManager.bandwidth,
-                            bandwidthLimit: apiDataManager.bandwidthLimit,
-                            aliasCount: apiDataManager.aliasCount,
-                            aliasLimit: apiDataManager.aliasLimit,
-                            apiDataManager: apiDataManager,
-                            itemCount: apiDataManager.aliasList.length,
+                            username: _apiDataManager.username,
+                            id: _apiDataManager.id,
+                            subscription: _apiDataManager.subscription,
+                            bandwidth: _apiDataManager.bandwidth,
+                            bandwidthLimit: _apiDataManager.bandwidthLimit,
+                            aliasCount: _apiDataManager.aliasCount,
+                            aliasLimit: _apiDataManager.aliasLimit,
+                            apiDataManager: _apiDataManager,
+                            itemCount: _apiDataManager.aliasList.length,
                           ),
                           AliasCard(
                             child: ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
-                              itemCount: apiDataManager.aliasList.length,
+                              itemCount: _apiDataManager.aliasList.length,
                               itemBuilder: (context, index) {
-                                var data = apiDataManager.aliasList[index];
+                                var data = _apiDataManager.aliasList[index];
                                 return AliasListTile(
                                   email: data.email,
                                   emailDescription: data.emailDescription,
@@ -71,11 +71,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   listTileOnPress: () {},
                                   switchOnPress: (toggle) {
                                     if (data.isAliasActive == true) {
-                                      apiDataManager.deactivateAlias(
+                                      _apiDataManager.deactivateAlias(
                                           aliasID: data.aliasID);
                                       data.isAliasActive = false;
                                     } else {
-                                      apiDataManager.activateAlias(
+                                      _apiDataManager.activateAlias(
                                         aliasID: data.aliasID,
                                       );
                                       data.isAliasActive = true;
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     emailDescription: data.emailDescription,
                                     deleteOnPress: () {
                                       setState(() {
-                                        apiDataManager.deleteAlias(
+                                        _apiDataManager.deleteAlias(
                                             aliasID: data.aliasID);
                                         Navigator.pop(context);
                                       });
