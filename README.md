@@ -10,11 +10,12 @@ This is a personal project and is **NOT** associated with [AnonAddy's project or
 
 ## Features
 - Get your AnonAddy's account details including usernames and aliases.
--  Create new aliases with only 2 taps, custom description input available.
+- Create new aliases with only 2 taps, custom description input available.
+- Activate and deactivate aliases on the fly.
+- Delete selected alias.
 
 ### Upcoming Features
 - Adaptive and persistive Light and Dark themes
-- Activate/deactivate alias on the fly.
 
 
 ## Packages used
