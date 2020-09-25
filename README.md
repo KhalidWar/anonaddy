@@ -1,4 +1,4 @@
-# AnonAddy
+# AnonAddy [UNDER CONSTRUCTION]
 Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's API](https://app.anonaddy.com/docs/) to interact with user account.
 
 ## Disclaimer
