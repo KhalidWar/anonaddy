@@ -21,9 +21,11 @@ class Networking {
       headers: headers,
     );
     if (response.statusCode == 200) {
+      print('Networking getData ${response.statusCode}');
       return jsonDecode(response.body);
     } else {
       print('Networking getData ${response.statusCode}');
+      throw Exception('Failed to getData in Networking');
     }
   }
 
@@ -37,12 +39,12 @@ class Networking {
         "description": "$description",
       }),
     );
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+    if (response.statusCode == 201) {
       print('Networking postData ${response.statusCode}');
-      return data;
+      return jsonDecode(response.body);
     } else {
-      print(response.statusCode);
+      print('Networking postData ${response.statusCode}');
+      throw Exception('Failed to postData in Networking');
     }
   }
 
@@ -55,7 +57,7 @@ class Networking {
     if (response.statusCode == 200) {
       print('Networking activateAlias ${response.statusCode}');
     } else {
-      print(response.statusCode);
+      print('Networking activateAlias ${response.statusCode}');
     }
   }
 
@@ -63,9 +65,11 @@ class Networking {
     http.Response response =
         await http.delete(Uri.encodeFull(url), headers: headers);
     if (response.statusCode == 200) {
+      print('Networking deactivateAlias ${response.statusCode}');
       return jsonDecode(response.body);
     } else {
-      print(response.statusCode);
+      print('Networking deactivateAlias ${response.statusCode}');
+      // throw Exception('Failed to deactivateAlias in Networking');
     }
   }
 
@@ -88,9 +92,11 @@ class Networking {
       headers: headers,
     );
     if (response.statusCode == 200) {
+      print('Networking deleteAlias ${response.statusCode}');
       print(response.statusCode);
-    } else {
+    } else if (response.statusCode == 204) {
       print(response.statusCode);
+      // throw Exception('Failed to deleteAlias');
     }
   }
 }

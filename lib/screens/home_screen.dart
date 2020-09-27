@@ -1,16 +1,15 @@
 import 'package:anonaddy/constants.dart';
-import 'package:anonaddy/provider/api_data_manager.dart';
+import 'package:anonaddy/models/alias_model.dart';
+import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/screens/profile_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
+import 'package:anonaddy/services/api_data_manager.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/create_alias_dialog.dart';
-import 'package:anonaddy/widgets/loading_widget.dart';
-import 'package:anonaddy/widgets/manage_alias_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -22,89 +21,110 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  APIDataManager _apiDataManager = APIDataManager();
+  Future<UserModel> futureUserModel;
+  Future<AliasModel> futureAliasModel;
+
+  Future refreshData() async {
+    return await _apiDataManager.fetchAliasData();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    futureUserModel = _apiDataManager.fetchUserData();
+    futureAliasModel = _apiDataManager.fetchAliasData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final apiDataManager = Provider.of<APIDataManager>(context, listen: false);
-
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: kBackgroundColor,
         appBar: buildAppBar(),
-        floatingActionButton:
-            buildFloatingActionButton(context, apiDataManager),
+        floatingActionButton: buildFloatingActionButton(context),
         body: RefreshIndicator(
-          onRefresh: apiDataManager.fetchData,
-          child: FutureBuilder(
-            future: apiDataManager.fetchData(),
-            builder: (context, snapshot) {
-              if (snapshot.data != null) {
-                return Consumer<APIDataManager>(
-                  builder: (_, _apiDataManager, ___) {
-                    return SingleChildScrollView(
-                      padding: EdgeInsets.all(5),
-                      physics: BouncingScrollPhysics(),
-                      child: Column(
-                        children: [
-                          AccountCard(
-                            username: _apiDataManager.username,
-                            id: _apiDataManager.id,
-                            subscription: _apiDataManager.subscription,
-                            bandwidth: _apiDataManager.bandwidth,
-                            bandwidthLimit: _apiDataManager.bandwidthLimit,
-                            aliasCount: _apiDataManager.aliasCount,
-                            aliasLimit: _apiDataManager.aliasLimit,
-                            apiDataManager: _apiDataManager,
-                            itemCount: _apiDataManager.aliasList.length,
-                          ),
-                          AliasCard(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: _apiDataManager.aliasList.length,
-                              itemBuilder: (context, index) {
-                                var data = _apiDataManager.aliasList[index];
-                                return AliasListTile(
-                                  email: data.email,
-                                  emailDescription: data.emailDescription,
-                                  switchValue: data.isAliasActive,
-                                  listTileOnPress: () {},
-                                  switchOnPress: (toggle) {
-                                    if (data.isAliasActive == true) {
-                                      _apiDataManager.deactivateAlias(
-                                          aliasID: data.aliasID);
-                                      data.isAliasActive = false;
-                                    } else {
-                                      _apiDataManager.activateAlias(
-                                        aliasID: data.aliasID,
-                                      );
-                                      data.isAliasActive = true;
-                                    }
-                                  },
-                                  child: ManageAliasDialog(
-                                    title: data.email,
-                                    emailDescription: data.emailDescription,
-                                    deleteOnPress: () {
-                                      setState(() {
-                                        _apiDataManager.deleteAlias(
-                                            aliasID: data.aliasID);
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+          onRefresh: refreshData,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(5),
+            child: Column(
+              children: [
+                FutureBuilder<UserModel>(
+                  future: futureUserModel,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        // print(snapshot.data.username);
+                        return AccountCard(
+                          username: snapshot.data.username,
+                          id: snapshot.data.id,
+                          subscription: snapshot.data.subscription,
+                          bandwidth: snapshot.data.bandwidth,
+                          bandwidthLimit: snapshot.data.bandwidthLimit,
+                          aliasCount: snapshot.data.aliasCount,
+                          aliasLimit: snapshot.data.aliasLimit,
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      }
+                    }
+                    return CircularProgressIndicator();
                   },
-                );
-              } else {
-                return LoadingWidget();
-              }
-            },
+                ),
+                FutureBuilder<AliasModel>(
+                  future: futureAliasModel,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        var data = snapshot.data.aliasDataList;
+                        List<AliasModel> aliasModelList = List<AliasModel>();
+
+                        for (int i = 0;
+                            i < snapshot.data.aliasDataList.length - 1;
+                            i++) {
+                          aliasModelList.add(
+                            AliasModel(
+                              aliasDataList: [
+                                AliasData(
+                                  aliasID:
+                                      snapshot.data.aliasDataList[i].aliasID,
+                                  email: snapshot.data.aliasDataList[i].email,
+                                  emailDescription: snapshot
+                                      .data.aliasDataList[i].emailDescription,
+                                  createdAt:
+                                      snapshot.data.aliasDataList[i].createdAt,
+                                  isAliasActive: snapshot
+                                      .data.aliasDataList[i].isAliasActive,
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
+                        return AliasCard(
+                          child: ListView(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            children: aliasModelList
+                                .map(
+                                  (aliasModel) => AliasListTile(
+                                    aliasModel: aliasModel.aliasDataList[0],
+                                    apiDataManager: _apiDataManager,
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      }
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -136,8 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  FloatingActionButton buildFloatingActionButton(
-      BuildContext context, APIDataManager apiDataManager) {
+  FloatingActionButton buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
@@ -153,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 buttonOnPress: () {
                   setState(() {
-                    apiDataManager.createNewAlias(description: textFieldInput);
+                    _apiDataManager.createNewAlias(description: textFieldInput);
                     Navigator.pop(context);
                   });
                 },

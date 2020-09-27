@@ -12,14 +12,11 @@ class AccountCard extends StatelessWidget {
     this.bandwidthLimit,
     this.aliasCount,
     this.aliasLimit,
-    this.apiDataManager,
-    this.itemCount,
   }) : super(key: key);
 
   final String username, id, subscription;
   final double bandwidth, bandwidthLimit;
-  final int aliasCount, aliasLimit, itemCount;
-  final dynamic apiDataManager;
+  final int aliasCount, aliasLimit;
 
   @override
   Widget build(BuildContext context) {

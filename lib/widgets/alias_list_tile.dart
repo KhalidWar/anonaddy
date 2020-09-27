@@ -1,36 +1,55 @@
+import 'package:anonaddy/services/api_data_manager.dart';
+import 'package:anonaddy/widgets/manage_alias_dialog.dart';
 import 'package:flutter/material.dart';
 
-class AliasListTile extends StatelessWidget {
+class AliasListTile extends StatefulWidget {
   const AliasListTile({
     Key key,
-    this.email,
-    this.emailDescription,
-    this.switchOnPress,
-    this.listTileOnPress,
-    this.switchValue,
-    this.child,
+    this.aliasModel,
+    this.apiDataManager,
   }) : super(key: key);
 
-  final String email, emailDescription;
-  final Function switchOnPress, listTileOnPress;
-  final bool switchValue;
-  final Widget child;
+  final dynamic aliasModel;
+  final APIDataManager apiDataManager;
 
+  @override
+  _AliasListTileState createState() => _AliasListTileState();
+}
+
+class _AliasListTileState extends State<AliasListTile> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         ListTile(
           dense: true,
-          onTap: listTileOnPress,
+          onTap: () {
+            //todo copy email address upon tap
+          },
           title: Text(
-            email,
+            widget.aliasModel.email,
             style: Theme.of(context).textTheme.bodyText1,
           ),
-          subtitle: Text(emailDescription),
+          subtitle: Text(widget.aliasModel.emailDescription),
           leading: Switch(
-            value: switchValue,
-            onChanged: switchOnPress,
+            value: widget.aliasModel.isAliasActive,
+            onChanged: (toggle) {
+              if (widget.aliasModel.isAliasActive == true) {
+                widget.apiDataManager.deactivateAlias(
+                  aliasID: widget.aliasModel.aliasID,
+                );
+                setState(() {
+                  widget.aliasModel.isAliasActive = false;
+                });
+              } else {
+                widget.apiDataManager.activateAlias(
+                  aliasID: widget.aliasModel.aliasID,
+                );
+                setState(() {
+                  widget.aliasModel.isAliasActive = true;
+                });
+              }
+            },
           ),
           trailing: IconButton(
             icon: Icon(Icons.edit),
@@ -38,7 +57,18 @@ class AliasListTile extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (context) {
-                    return child;
+                    return ManageAliasDialog(
+                      emailDescription: widget.aliasModel.emailDescription,
+                      title: widget.aliasModel.email,
+                      deleteOnPress: () {
+                        setState(() {
+                          widget.apiDataManager.deleteAlias(
+                            aliasID: widget.aliasModel.aliasID,
+                          );
+                          Navigator.pop(context);
+                        });
+                      },
+                    );
                   });
             },
           ),
