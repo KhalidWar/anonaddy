@@ -1,13 +1,12 @@
+import 'package:anonaddy/services/login_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
+import 'initial_screen.dart';
 
-class SettingsScreen extends StatefulWidget {
-  @override
-  _SettingsScreenState createState() => _SettingsScreenState();
-}
+class SettingsScreen extends StatelessWidget {
+  final AccessTokenManager loginManager = AccessTokenManager();
 
-class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -25,7 +24,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
         ),
-        body: Container(),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: RaisedButton(
+                child: Text('Log Out'),
+                onPressed: () {
+                  loginManager.removeAccessToken();
+
+                  //todo remove navigation stack upon log out
+                  // Navigator.pushAndRemoveUntil(context, InitialScreen(), (route) => false);
+
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return InitialScreen();
+                  }));
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/home_screen.dart';
+import 'package:anonaddy/screens/initial_screen.dart';
 import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
       darkTheme: darkTheme,
-      home: HomeScreen(),
+      home: InitialScreen(),
     );
   }
 }

@@ -1,24 +1,22 @@
 import 'dart:convert';
 
-import 'package:anonaddy/confidential.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class Networking {
-  Networking(this.url);
+  Networking({@required this.url, @required this.accessToken});
 
-  final String url;
-
-  Map<String, String> headers = {
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    "Authorization": "Bearer $bearerToken",
-    "Accept": "application/json",
-  };
+  final String url, accessToken;
 
   Future getData() async {
     http.Response response = await http.get(
       Uri.encodeFull(url),
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Authorization": "Bearer $accessToken",
+        "Accept": "application/json",
+      },
     );
     if (response.statusCode == 200) {
       print('Networking getData ${response.statusCode}');
@@ -32,7 +30,12 @@ class Networking {
   Future postData({String description}) async {
     http.Response response = await http.post(
       Uri.encodeFull(url),
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Authorization": "Bearer $accessToken",
+        "Accept": "application/json",
+      },
       body: json.encode({
         "domain": "anonaddy.me",
         "format": "uuid",
@@ -51,7 +54,12 @@ class Networking {
   Future activateAlias({String aliasID}) async {
     http.Response response = await http.post(
       Uri.encodeFull(url),
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Authorization": "Bearer $accessToken",
+        "Accept": "application/json",
+      },
       body: json.encode({"id": "$aliasID"}),
     );
     if (response.statusCode == 200) {
@@ -62,8 +70,12 @@ class Networking {
   }
 
   Future deactivateAlias() async {
-    http.Response response =
-        await http.delete(Uri.encodeFull(url), headers: headers);
+    http.Response response = await http.delete(Uri.encodeFull(url), headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+      "Authorization": "Bearer $accessToken",
+      "Accept": "application/json",
+    });
     if (response.statusCode == 200) {
       print('Networking deactivateAlias ${response.statusCode}');
       return jsonDecode(response.body);
@@ -75,7 +87,12 @@ class Networking {
 
   Future editDescription({String newDescription}) async {
     http.Response response = await http.patch(Uri.encodeFull(url),
-        headers: headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Authorization": "Bearer $accessToken",
+          "Accept": "application/json",
+        },
         body: jsonEncode({
           "description": "$newDescription",
         }));
@@ -89,7 +106,12 @@ class Networking {
   Future deleteAlias() async {
     http.Response response = await http.delete(
       Uri.encodeFull(url),
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Authorization": "Bearer $accessToken",
+        "Accept": "application/json",
+      },
     );
     if (response.statusCode == 200) {
       print('Networking deleteAlias ${response.statusCode}');
