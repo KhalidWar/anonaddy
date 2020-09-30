@@ -8,6 +8,7 @@ import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/create_alias_dialog.dart';
+import 'package:anonaddy/widgets/pop_scope_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -29,6 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return await _apiDataManager.fetchAliasData();
   }
 
+  Future<bool> _onBackButtonPress() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return PopScopeDialog();
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,86 +53,83 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: kBackgroundColor,
         appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(context),
-        body: RefreshIndicator(
-          onRefresh: refreshData,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(5),
-            child: Column(
-              children: [
-                FutureBuilder<UserModel>(
-                  future: futureUserModel,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        // print(snapshot.data.username);
-                        return AccountCard(
-                          username: snapshot.data.username,
-                          id: snapshot.data.id,
-                          subscription: snapshot.data.subscription,
-                          bandwidth: snapshot.data.bandwidth,
-                          bandwidthLimit: snapshot.data.bandwidthLimit,
-                          aliasCount: snapshot.data.aliasCount,
-                          aliasLimit: snapshot.data.aliasLimit,
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
+        body: WillPopScope(
+          onWillPop: _onBackButtonPress,
+          child: RefreshIndicator(
+            onRefresh: refreshData,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(5),
+              child: Column(
+                children: [
+                  FutureBuilder<UserModel>(
+                    future: futureUserModel,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          // print(snapshot.data.username);
+                          return AccountCard(
+                            username: snapshot.data.username,
+                            id: snapshot.data.id,
+                            subscription: snapshot.data.subscription,
+                            bandwidth: snapshot.data.bandwidth,
+                            bandwidthLimit: snapshot.data.bandwidthLimit,
+                            aliasCount: snapshot.data.aliasCount,
+                            aliasLimit: snapshot.data.aliasLimit,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
                       }
-                    }
-                    return CircularProgressIndicator();
-                  },
-                ),
-                FutureBuilder<AliasModel>(
-                  future: futureAliasModel,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        var data = snapshot.data.aliasDataList;
-                        List<AliasModel> aliasModelList = List<AliasModel>();
+                      return CircularProgressIndicator();
+                    },
+                  ),
+                  FutureBuilder<AliasModel>(
+                    future: futureAliasModel,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          var data = snapshot.data.aliasDataList;
+                          List<AliasModel> aliasModelList = List<AliasModel>();
 
-                        for (int i = 0;
-                            i < snapshot.data.aliasDataList.length - 1;
-                            i++) {
-                          aliasModelList.add(
-                            AliasModel(
-                              aliasDataList: [
-                                AliasData(
-                                  aliasID:
-                                      snapshot.data.aliasDataList[i].aliasID,
-                                  email: snapshot.data.aliasDataList[i].email,
-                                  emailDescription: snapshot
-                                      .data.aliasDataList[i].emailDescription,
-                                  createdAt:
-                                      snapshot.data.aliasDataList[i].createdAt,
-                                  isAliasActive: snapshot
-                                      .data.aliasDataList[i].isAliasActive,
-                                ),
-                              ],
+                          for (int i = 0; i < data.length - 1; i++) {
+                            aliasModelList.add(
+                              AliasModel(
+                                aliasDataList: [
+                                  AliasData(
+                                    aliasID: data[i].aliasID,
+                                    email: data[i].email,
+                                    emailDescription: data[i].emailDescription,
+                                    createdAt: data[i].createdAt,
+                                    isAliasActive: data[i].isAliasActive,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+
+                          return AliasCard(
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              children: aliasModelList
+                                  .map(
+                                    (aliasModel) => AliasListTile(
+                                      aliasModel: aliasModel.aliasDataList[0],
+                                      apiDataManager: _apiDataManager,
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           );
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
                         }
-
-                        return AliasCard(
-                          child: ListView(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            children: aliasModelList
-                                .map(
-                                  (aliasModel) => AliasListTile(
-                                    aliasModel: aliasModel.aliasDataList[0],
-                                    apiDataManager: _apiDataManager,
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
                       }
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  },
-                ),
-              ],
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

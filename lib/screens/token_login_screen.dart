@@ -1,6 +1,6 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/home_screen.dart';
-import 'package:anonaddy/services/login_manager.dart';
+import 'package:anonaddy/services/access_token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -13,6 +13,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
   final AccessTokenManager _loginManager = AccessTokenManager();
   TextEditingController _textEditingController = TextEditingController();
   bool _showError = false;
+  bool _isLoading = false;
 
   Widget errorMessage() {
     return Container(
@@ -24,12 +25,18 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
 
   Future logIn() async {
     if (_textEditingController.text.isNotEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
       await _loginManager
           .saveAccessToken(_textEditingController.text.toString());
+      _textEditingController.clear();
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return HomeScreen();
-      }));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ));
     } else {
       setState(() {
         _showError = true;
@@ -128,12 +135,14 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                         child: RaisedButton(
-                          child: Text(
-                            'Login',
-                            style: Theme.of(context).textTheme.headline5,
-                          ),
-                          onPressed: () {
-                            logIn();
+                          child: _isLoading
+                              ? CircularProgressIndicator()
+                              : Text(
+                                  'Login',
+                                  style: Theme.of(context).textTheme.headline5,
+                                ),
+                          onPressed: () async {
+                            await logIn();
                           },
                         ),
                       ),

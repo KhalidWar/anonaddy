@@ -1,4 +1,4 @@
-import 'package:anonaddy/services/login_manager.dart';
+import 'package:anonaddy/services/access_token_manager.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
