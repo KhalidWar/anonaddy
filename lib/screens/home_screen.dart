@@ -133,17 +133,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 'Alias Successfully Deleted!')));
                                       },
                                     ),
-                                    IconSlideAction(
-                                      color: Colors.lightBlue,
-                                      iconWidget: Icon(
-                                        Icons.more_vert,
-                                        size: 35,
-                                        color: Colors.white,
-                                      ),
-                                      onTap: () {
-//todo longPress for bottom ModelSheet for more details about alias
-                                      },
-                                    ),
                                   ],
                                   child: AliasListTile(
                                     apiDataManager: _apiDataManager,
