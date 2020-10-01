@@ -1,4 +1,5 @@
 import 'package:anonaddy/constants.dart';
+import 'package:anonaddy/models/alias_data.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/screens/profile_screen.dart';
