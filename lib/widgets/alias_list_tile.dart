@@ -1,5 +1,4 @@
 import 'package:anonaddy/services/api_data_manager.dart';
-import 'package:anonaddy/widgets/manage_alias_dialog.dart';
 import 'package:flutter/material.dart';
 
 class AliasListTile extends StatefulWidget {
@@ -51,27 +50,7 @@ class _AliasListTileState extends State<AliasListTile> {
               }
             },
           ),
-          trailing: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return ManageAliasDialog(
-                      emailDescription: widget.aliasModel.emailDescription,
-                      title: widget.aliasModel.email,
-                      deleteOnPress: () {
-                        setState(() {
-                          widget.apiDataManager.deleteAlias(
-                            aliasID: widget.aliasModel.aliasID,
-                          );
-                          Navigator.pop(context);
-                        });
-                      },
-                    );
-                  });
-            },
-          ),
+          trailing: Icon(Icons.chevron_left),
         ),
         Divider(),
       ],

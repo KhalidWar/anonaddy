@@ -10,6 +10,7 @@ import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/create_alias_dialog.dart';
 import 'package:anonaddy/widgets/pop_scope_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -108,17 +109,48 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
 
                           return AliasCard(
-                            child: ListView(
+                            child: ListView.builder(
+                              itemCount: data.length,
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
-                              children: aliasModelList
-                                  .map(
-                                    (aliasModel) => AliasListTile(
-                                      aliasModel: aliasModel.aliasDataList[0],
-                                      apiDataManager: _apiDataManager,
+                              itemBuilder: (context, index) {
+                                return Slidable(
+                                  key: Key(data[index].toString()),
+                                  actionPane: SlidableDrawerActionPane(),
+                                  secondaryActions: <Widget>[
+                                    IconSlideAction(
+                                      color: Colors.red,
+                                      iconWidget: Icon(
+                                        Icons.delete,
+                                        size: 35,
+                                        color: Colors.white,
+                                      ),
+                                      onTap: () {
+                                        _apiDataManager.deleteAlias(
+                                            aliasID: data[index].aliasID);
+                                        Scaffold.of(context).showSnackBar(SnackBar(
+                                            content: Text(
+                                                'Alias Successfully Deleted!')));
+                                      },
                                     ),
-                                  )
-                                  .toList(),
+                                    IconSlideAction(
+                                      color: Colors.lightBlue,
+                                      iconWidget: Icon(
+                                        Icons.more_vert,
+                                        size: 35,
+                                        color: Colors.white,
+                                      ),
+                                      onTap: () {
+//todo longPress for bottom ModelSheet for more details about alias
+                                      },
+                                    ),
+                                  ],
+                                  child: AliasListTile(
+                                    apiDataManager: _apiDataManager,
+                                    aliasModel: data[index],
+                                  ),
+                                );
+                              },
                             ),
                           );
                         } else if (snapshot.hasError) {

@@ -16,6 +16,7 @@ dependencies:
   http: ^0.12.2
   flutter_svg: ^0.18.1
   shared_preferences: ^0.5.12
+  flutter_slidable: ^0.5.7
 
 dev_dependencies:
   flutter_test:
