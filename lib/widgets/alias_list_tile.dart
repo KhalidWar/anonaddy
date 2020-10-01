@@ -1,5 +1,6 @@
 import 'package:anonaddy/services/api_data_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AliasListTile extends StatefulWidget {
   const AliasListTile({
@@ -21,9 +22,13 @@ class _AliasListTileState extends State<AliasListTile> {
     return Column(
       children: [
         ListTile(
-          dense: true,
           onTap: () {
-            //todo copy email address upon tap
+            Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Email Alias copied to clipboard!'),
+              ),
+            );
           },
           title: Text(
             widget.aliasModel.email,
