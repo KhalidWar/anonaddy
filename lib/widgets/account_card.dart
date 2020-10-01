@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-
 class AccountCard extends StatelessWidget {
   const AccountCard({
     Key key,
@@ -31,7 +29,10 @@ class AccountCard extends StatelessWidget {
               alignment: Alignment.center,
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
-                border: Border.all(color: kAppBarColor),
+                border: Border.all(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black),
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
                 ),

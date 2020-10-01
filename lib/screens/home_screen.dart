@@ -1,4 +1,3 @@
-import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias_data.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
@@ -52,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: kBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(context),
         body: WillPopScope(
@@ -161,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar buildAppBar() {
     return AppBar(
-      backgroundColor: kAppBarColor,
       title: SvgPicture.asset(
         'assets/images/logo.svg',
         height: MediaQuery.of(context).size.height * 0.03,

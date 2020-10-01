@@ -1,4 +1,3 @@
-import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/services/access_token_manager.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +48,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: kAppBarColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -105,7 +104,10 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
                               controller: _textEditingController,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: kAccentColor),
+                                  borderSide: BorderSide(
+                                        color: Theme
+                                              .of(context)
+                                              .accentColor),
                                 ),
                                 border: OutlineInputBorder(),
                                 hintText: 'Paste here!',
