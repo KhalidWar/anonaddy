@@ -1,5 +1,7 @@
 import 'package:anonaddy/services/access_token_manager.dart';
+import 'package:anonaddy/services/theme_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import 'initial_screen.dart';
@@ -24,11 +26,27 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: RaisedButton(
+        body: Padding(
+          padding: EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Consumer<ThemeManager>(
+                builder: (context, themeManager, child) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Dark Theme'),
+                      Switch(
+                        value: themeManager.isDarkTheme,
+                        onChanged: (toggle) {
+                          themeManager.toggleTheme();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+              RaisedButton(
                 child: Text('Log Out'),
                 onPressed: () {
                   loginManager.removeAccessToken();
@@ -42,8 +60,8 @@ class SettingsScreen extends StatelessWidget {
                   }));
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
