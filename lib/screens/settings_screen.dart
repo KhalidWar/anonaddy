@@ -59,9 +59,9 @@ class SettingsScreen extends StatelessWidget {
                     // Navigator.pushAndRemoveUntil(context, InitialScreen(), (route) => false);
 
                     Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                            return InitialScreen();
-                          }));
+                        MaterialPageRoute(builder: (context) {
+                      return InitialScreen();
+                    }));
                   },
                 ),
               ),

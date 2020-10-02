@@ -1,5 +1,6 @@
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/services/access_token_manager.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -48,7 +49,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color(0xFF19216C),
         body: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -100,18 +101,33 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
                               style: Theme.of(context).textTheme.headline6,
                             ),
                             SizedBox(height: size.height * 0.01),
-                            TextField(
-                              controller: _textEditingController,
-                              decoration: InputDecoration(
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                        color: Theme
-                                              .of(context)
-                                              .accentColor),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _textEditingController,
+                                    decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color:
+                                                Theme.of(context).accentColor),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                      hintText: 'Paste here!',
+                                    ),
+                                  ),
                                 ),
-                                border: OutlineInputBorder(),
-                                hintText: 'Paste here!',
-                              ),
+                                IconButton(
+                                  icon: Icon(Icons.paste),
+                                  onPressed: () {
+                                    FlutterClipboard.paste().then((value) => {
+                                          setState(() {
+                                            _textEditingController.text = value;
+                                          })
+                                        });
+                                  },
+                                ),
+                              ],
                             ),
                             _showError ? errorMessage() : Container(),
                             SizedBox(height: size.height * 0.01),

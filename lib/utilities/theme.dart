@@ -42,8 +42,8 @@ CardTheme cardTheme = CardTheme(
 DialogTheme dialogTheme = DialogTheme(
   backgroundColor: Colors.white,
   shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(style: BorderStyle.solid, color: Colors.red)),
+      borderRadius: BorderRadius.circular(16),
+      side: BorderSide(style: BorderStyle.solid, color: Colors.red)),
 );
 
 AppBarTheme appBarTheme = AppBarTheme(color: Color(0xFF19216C));
