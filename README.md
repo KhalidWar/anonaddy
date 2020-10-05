@@ -1,4 +1,4 @@
-# AnonAddy [UNDER CONSTRUCTION]
+# AnonAddy
 Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's API](https://app.anonaddy.com/docs/) to interact with user account. This app has reached a stable release version as most basic crucial features have been implemented.
 
 ## Screenshots
@@ -11,16 +11,18 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 - Create new aliases with only 2 taps, custom description input available.
 - Activate and deactivate aliases on the fly.
 - Delete selected alias.
-
-
-### Upcoming Features
 - Adaptive and persistive Light and Dark themes
 
 
 ## Packages used
 - [http](https://pub.dev/packages/http)
 - [Provider](https://pub.dev/packages/provider)
+- [Shared Preference](https://pub.dev/packages/shared_preferences)
 - [Flutter SVG](https://pub.dev/packages/flutter_svg)
+- [Font Awesome Flutter](https://pub.dev/packages/font_awesome_flutter)
+- [URL Launcher](https://pub.dev/packages/url_launcher)
+- [Flutter Slidable](https://pub.dev/packages/flutter_slidable)
+- [Clipboard](https://pub.dev/packages/clipboard)
 
 
 ## Installation
@@ -36,7 +38,7 @@ Check out [Flutter's official guide](https://flutter.dev/docs/get-started/instal
 
 ### Steps
 - Clone this repo to your machine: `https://github.com/KhalidWar/anonaddy.git`
-- Generate your own [API Access Token](https://app.anonaddy.com/settings) under API section.
+- Create AnonAddy account and Generate your own [API Access Token](https://app.anonaddy.com/settings) under API section.
 - Declare "accessTokenValue" String with your API Access Token in "api_data_manager" file.
 - Run on Emulator or physical device
 - All set!
