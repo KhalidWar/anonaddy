@@ -7,7 +7,7 @@ import 'package:anonaddy/services/api_data_manager.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/create_alias_dialog.dart';
+import 'package:anonaddy/widgets/domain_format_widget.dart';
 import 'package:anonaddy/widgets/pop_scope_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -28,7 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<AliasModel> futureAliasModel;
 
   Future refreshData() async {
-    return await _apiDataManager.fetchAliasData();
+    return await _apiDataManager
+        .fetchUserData()
+        .then((value) => _apiDataManager.fetchAliasData());
   }
 
   Future<bool> _onBackButtonPress() {
@@ -116,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemBuilder: (context, index) {
                                 return Slidable(
                                   key: Key(data[index].toString()),
-                                  actionPane: SlidableDrawerActionPane(),
+                                  actionPane: SlidableStrechActionPane(),
                                   secondaryActions: <Widget>[
                                     IconSlideAction(
                                       color: Colors.red,
@@ -183,24 +185,75 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   FloatingActionButton buildFloatingActionButton(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
         String textFieldInput;
-        showDialog(
+        showModalBottomSheet(
             context: context,
             builder: (context) {
-              return CreateAliasDialog(
-                format: 'UUID',
-                domain: 'anonaddy.me',
-                textFieldOnChanged: (input) {
-                  textFieldInput = input;
-                },
-                buttonOnPress: () {
-                  setState(() {
-                    _apiDataManager.createNewAlias(description: textFieldInput);
-                    Navigator.pop(context);
-                  });
+              return StatefulBuilder(
+                builder: (context, setModalState) {
+                  return Container(
+                    height: size.height * 0.6,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Divider(
+                              thickness: 3,
+                              color: Colors.grey,
+                              indent: size.width * 0.35,
+                              endIndent: size.width * 0.35,
+                            ),
+                            SizedBox(height: size.height * 0.01),
+                            TextField(
+                              onChanged: (input) {
+                                setModalState(() {
+                                  textFieldInput = input;
+                                });
+                              },
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                                hintText: 'Description (optional)',
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            DomainFormatWidget(
+                                label: 'Domain:', value: '@anonaddy.me'),
+                            SizedBox(height: size.height * 0.03),
+                            DomainFormatWidget(label: 'Format:', value: 'UUID'),
+                          ],
+                        ),
+                        // Spacer(),
+                        Container(
+                          width: double.infinity,
+                          child: RaisedButton(
+                            padding: EdgeInsets.all(15),
+                            child: Text(
+                              'Generate New Alias',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                            onPressed: () {
+                              _apiDataManager.createNewAlias(
+                                  description: textFieldInput);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  );
                 },
               );
             });
