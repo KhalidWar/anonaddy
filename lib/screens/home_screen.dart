@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias_data.dart';
+import 'package:anonaddy/models/alias_data_model.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/screens/profile_screen.dart';
@@ -6,11 +6,9 @@ import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/services/api_data_manager.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/alias_card.dart';
-import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/domain_format_widget.dart';
 import 'package:anonaddy/widgets/pop_scope_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,11 +21,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  APIDataManager _apiDataManager = APIDataManager();
-  Future<UserModel> futureUserModel;
-  Future<AliasModel> futureAliasModel;
+  final APIDataManager _apiDataManager = APIDataManager();
+  Future<UserModel> _futureUserModel;
+  Future<AliasModel> _futureAliasModel;
 
-  Future refreshData() async {
+  Future _refreshData() async {
     return await _apiDataManager
         .fetchUserData()
         .then((value) => _apiDataManager.fetchAliasData());
@@ -44,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    futureUserModel = _apiDataManager.fetchUserData();
-    futureAliasModel = _apiDataManager.fetchAliasData();
+    _futureUserModel = _apiDataManager.fetchUserData();
+    _futureAliasModel = _apiDataManager.fetchAliasData();
   }
 
   @override
@@ -59,26 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
         body: WillPopScope(
           onWillPop: _onBackButtonPress,
           child: RefreshIndicator(
-            onRefresh: refreshData,
+            onRefresh: _refreshData,
             child: SingleChildScrollView(
               padding: EdgeInsets.all(5),
               child: Column(
                 children: [
                   FutureBuilder<UserModel>(
-                    future: futureUserModel,
+                    future: _futureUserModel,
                     builder: (context, snapshot) {
+                      var data = snapshot.data;
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasData) {
-                          // print(snapshot.data.username);
-                          return AccountCard(
-                            username: snapshot.data.username,
-                            id: snapshot.data.id,
-                            subscription: snapshot.data.subscription,
-                            bandwidth: snapshot.data.bandwidth,
-                            bandwidthLimit: snapshot.data.bandwidthLimit,
-                            aliasCount: snapshot.data.aliasCount,
-                            aliasLimit: snapshot.data.aliasLimit,
-                          );
+                          return AccountCard(userData: data);
                         } else if (snapshot.hasError) {
                           return Text('${snapshot.error}');
                         }
@@ -87,62 +77,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   FutureBuilder<AliasModel>(
-                    future: futureAliasModel,
+                    future: _futureAliasModel,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasData) {
                           var data = snapshot.data.aliasDataList;
-                          List<AliasModel> aliasModelList = List<AliasModel>();
 
-                          for (int i = 0; i < data.length - 1; i++) {
-                            aliasModelList.add(
-                              AliasModel(
-                                aliasDataList: [
-                                  AliasData(
-                                    aliasID: data[i].aliasID,
-                                    email: data[i].email,
-                                    emailDescription: data[i].emailDescription,
-                                    createdAt: data[i].createdAt,
-                                    isAliasActive: data[i].isAliasActive,
-                                  ),
-                                ],
-                              ),
+                          for (var item in data) {
+                            AliasModel(
+                              aliasDataList: [
+                                AliasDataModel(
+                                  aliasID: item.aliasID,
+                                  email: item.email,
+                                  emailDescription: item.emailDescription,
+                                  createdAt: item.createdAt,
+                                  isAliasActive: item.isAliasActive,
+                                ),
+                              ],
                             );
                           }
 
                           return AliasCard(
-                            child: ListView.builder(
-                              itemCount: data.length,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return Slidable(
-                                  key: Key(data[index].toString()),
-                                  actionPane: SlidableStrechActionPane(),
-                                  secondaryActions: <Widget>[
-                                    IconSlideAction(
-                                      color: Colors.red,
-                                      iconWidget: Icon(
-                                        Icons.delete,
-                                        size: 35,
-                                        color: Colors.white,
-                                      ),
-                                      onTap: () {
-                                        _apiDataManager.deleteAlias(
-                                            aliasID: data[index].aliasID);
-                                        Scaffold.of(context).showSnackBar(SnackBar(
-                                            content: Text(
-                                                'Alias Successfully Deleted!')));
-                                      },
-                                    ),
-                                  ],
-                                  child: AliasListTile(
-                                    apiDataManager: _apiDataManager,
-                                    aliasModel: data[index],
-                                  ),
-                                );
-                              },
-                            ),
+                            apiDataManager: _apiDataManager,
+                            aliasDataList: data,
                           );
                         } else if (snapshot.hasError) {
                           return Text('${snapshot.error}');

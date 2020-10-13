@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class Networking {
-  Networking({@required this.url, @required this.accessToken});
+  const Networking({@required this.url, @required this.accessToken});
 
   final String url, accessToken;
 

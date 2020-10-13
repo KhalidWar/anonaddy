@@ -1,20 +1,13 @@
+import 'package:anonaddy/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class AccountCard extends StatelessWidget {
   const AccountCard({
     Key key,
-    this.username,
-    this.id,
-    this.subscription,
-    this.bandwidth,
-    this.bandwidthLimit,
-    this.aliasCount,
-    this.aliasLimit,
+    this.userData,
   }) : super(key: key);
 
-  final String username, id, subscription;
-  final double bandwidth, bandwidthLimit;
-  final int aliasCount, aliasLimit;
+  final UserModel userData;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +31,7 @@ class AccountCard extends StatelessWidget {
                 ),
               ),
               child: Text(
-                '$username'.toUpperCase(),
+                '${userData.username}'.toUpperCase(),
                 style: Theme.of(context)
                     .textTheme
                     .headline6
@@ -52,7 +45,7 @@ class AccountCard extends StatelessWidget {
               children: [
                 Text('ID:', style: Theme.of(context).textTheme.bodyText1),
                 Text(
-                  '$id',
+                  '${userData.id}',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ],
@@ -64,7 +57,7 @@ class AccountCard extends StatelessWidget {
                 Text('Subscription:',
                     style: Theme.of(context).textTheme.bodyText1),
                 Text(
-                  '$subscription'.toUpperCase(),
+                  '${userData.subscription}'.toUpperCase(),
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ],
@@ -76,7 +69,7 @@ class AccountCard extends StatelessWidget {
                 Text('Bandwidth:',
                     style: Theme.of(context).textTheme.bodyText1),
                 Text(
-                  '${bandwidth.round()} MB / ${bandwidthLimit.round()} MB',
+                  '${userData.bandwidth.round()} MB / ${userData.bandwidthLimit.round()} MB',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ],
@@ -88,7 +81,7 @@ class AccountCard extends StatelessWidget {
                 Text('Active Aliases',
                     style: Theme.of(context).textTheme.bodyText1),
                 Text(
-                  '$aliasCount / $aliasLimit',
+                  '${userData.aliasCount} / ${userData.aliasLimit}',
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ],

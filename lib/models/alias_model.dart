@@ -1,16 +1,16 @@
-import 'alias_data.dart';
+import 'alias_data_model.dart';
 
 class AliasModel {
-  AliasModel({
+  const AliasModel({
     this.aliasDataList,
   });
 
-  final List<AliasData> aliasDataList;
+  final List<AliasDataModel> aliasDataList;
 
-  factory AliasModel.fromJson(Map<String, dynamic> json) {
-    var list = json['data'] as List;
-    List<AliasData> aliasDataList =
-        list.map((i) => AliasData.fromJson(i)).toList();
+  factory AliasModel.fromJson(Map<String, Object> json) {
+    List list = json['data'];
+    List<AliasDataModel> aliasDataList =
+        list.map((i) => AliasDataModel.fromJson(i)).toList();
 
     return AliasModel(
       aliasDataList: aliasDataList,
