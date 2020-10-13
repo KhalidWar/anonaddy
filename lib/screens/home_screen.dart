@@ -25,18 +25,22 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<UserModel> _futureUserModel;
   Future<AliasModel> _futureAliasModel;
 
-  Future _refreshData() async {
-    return await _apiDataManager
-        .fetchUserData()
-        .then((value) => _apiDataManager.fetchAliasData());
-  }
-
   Future<bool> _onBackButtonPress() {
     return showDialog(
         context: context,
         builder: (context) {
           return PopScopeDialog();
         });
+  }
+
+  Future<AliasModel> _refreshAliasData() async {
+    return _futureAliasModel = _apiDataManager.fetchAliasData();
+  }
+
+  Future _refreshData() async {
+    await _refreshAliasData();
+    // _futureUserModel = _apiDataManager.fetchUserData();
+    _futureAliasModel = _apiDataManager.fetchAliasData();
   }
 
   @override
@@ -54,10 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(context),
-        body: WillPopScope(
-          onWillPop: _onBackButtonPress,
-          child: RefreshIndicator(
-            onRefresh: _refreshData,
+        body: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: WillPopScope(
+            onWillPop: _onBackButtonPress,
             child: SingleChildScrollView(
               padding: EdgeInsets.all(5),
               child: Column(
@@ -146,72 +150,71 @@ class _HomeScreenState extends State<HomeScreen> {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
-        String textFieldInput;
+        TextEditingController textFieldController = TextEditingController();
         showModalBottomSheet(
             context: context,
             builder: (context) {
-              return StatefulBuilder(
-                builder: (context, setModalState) {
-                  return Container(
-                    height: size.height * 0.6,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return Container(
+                height: size.height * 0.6,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
                       children: [
-                        Column(
-                          children: [
-                            Divider(
-                              thickness: 3,
-                              color: Colors.grey,
-                              indent: size.width * 0.35,
-                              endIndent: size.width * 0.35,
-                            ),
-                            SizedBox(height: size.height * 0.01),
-                            TextField(
-                              onChanged: (input) {
-                                setModalState(() {
-                                  textFieldInput = input;
-                                });
-                              },
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                ),
-                                hintText: 'Description (optional)',
-                              ),
-                            ),
-                          ],
+                        Divider(
+                          thickness: 3,
+                          color: Colors.grey,
+                          indent: size.width * 0.35,
+                          endIndent: size.width * 0.35,
                         ),
-                        Column(
-                          children: [
-                            DomainFormatWidget(
-                                label: 'Domain:', value: '@anonaddy.me'),
-                            SizedBox(height: size.height * 0.03),
-                            DomainFormatWidget(label: 'Format:', value: 'UUID'),
-                          ],
-                        ),
-                        // Spacer(),
-                        Container(
-                          width: double.infinity,
-                          child: RaisedButton(
-                            padding: EdgeInsets.all(15),
-                            child: Text(
-                              'Generate New Alias',
-                              style: Theme.of(context).textTheme.headline5,
+                        SizedBox(height: size.height * 0.01),
+                        TextField(
+                          controller: textFieldController,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
                             ),
-                            onPressed: () {
-                              _apiDataManager.createNewAlias(
-                                  description: textFieldInput);
-                              Navigator.pop(context);
-                            },
+                            hintText: 'Description (optional)',
                           ),
-                        )
+                        ),
                       ],
                     ),
-                  );
-                },
+                    Column(
+                      children: [
+                        DomainFormatWidget(
+                            label: 'Domain:', value: '@anonaddy.me'),
+                        SizedBox(height: size.height * 0.03),
+                        DomainFormatWidget(label: 'Format:', value: 'UUID'),
+                      ],
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: RaisedButton(
+                        padding: EdgeInsets.all(15),
+                        child: Text(
+                          'Generate New Alias',
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                        onPressed: () {
+                          if (textFieldController.text.isEmpty ||
+                              textFieldController.text == null) {
+                            _apiDataManager.createNewAlias(
+                                description: 'No Description Provided');
+                          }
+                          _apiDataManager.createNewAlias(
+                              description: textFieldController.text.toString());
+                          Navigator.pop(context);
+                          setState(() {
+                            _refreshData();
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                ),
               );
             });
       },
