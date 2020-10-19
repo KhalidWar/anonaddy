@@ -3,7 +3,7 @@ import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/screens/profile_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
-import 'package:anonaddy/services/api_data_manager.dart';
+import 'package:anonaddy/services/api_call_manager.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/domain_format_widget.dart';
@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final APIDataManager _apiDataManager = APIDataManager();
+  final APICallManager _apiDataManager = APICallManager();
   Future<UserModel> _futureUserModel;
   Future<AliasModel> _futureAliasModel;
 

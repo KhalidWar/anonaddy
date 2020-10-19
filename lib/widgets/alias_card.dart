@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias_data_model.dart';
-import 'package:anonaddy/services/api_data_manager.dart';
+import 'package:anonaddy/services/api_call_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -12,7 +12,7 @@ class AliasCard extends StatelessWidget {
     this.aliasDataList,
   }) : super(key: key);
 
-  final APIDataManager apiDataManager;
+  final APICallManager apiDataManager;
   final List<AliasDataModel> aliasDataList;
 
   @override
