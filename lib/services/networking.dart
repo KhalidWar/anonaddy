@@ -23,7 +23,7 @@ class Networking {
       return jsonDecode(response.body);
     } else {
       print('Networking getData ${response.statusCode}');
-      throw Exception('Failed to getData in Networking');
+      return null;
     }
   }
 
