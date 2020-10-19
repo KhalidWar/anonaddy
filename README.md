@@ -6,21 +6,18 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 
 
 ## Features
-- Log in with [Access Token](https://app.anonaddy.com/settings) under API section.
-- Get AnonAddy's account details including usernames and aliases.
-- Create new aliases with only 2 taps, custom description input available.
+- Log in with [Access Token](https://app.anonaddy.com/settings).
+- Get your AnonAddy's account details including usernames and aliases.
+- Create new aliases with only 2 taps, custom description available.
 - Activate and deactivate aliases on the fly.
 - Delete selected alias.
-- Adaptive and persistive Light and Dark themes
+- Adaptive and persistive Light and Dark themes.
 
 
 ## Packages used
 - [http](https://pub.dev/packages/http)
-- [http](https://pub.dev/packages/http)
-- [Provider](https://pub.dev/packages/provider)
 - [Provider](https://pub.dev/packages/provider)
 - [Shared Preference](https://pub.dev/packages/shared_preferences)
-- [Flutter SVG](https://pub.dev/packages/flutter_svg)
 - [Flutter SVG](https://pub.dev/packages/flutter_svg)
 - [Font Awesome Flutter](https://pub.dev/packages/font_awesome_flutter)
 - [URL Launcher](https://pub.dev/packages/url_launcher)
@@ -37,20 +34,20 @@ Check out [Flutter's official guide](https://flutter.dev/docs/get-started/instal
 ### Prerequisites
 - Download IDE either [Android Studio](https://developer.android.com/studio) or [VSC](https://code.visualstudio.com/)
 - Install Flutter SDK and Dart plugin
-- Emulator or physical device
+- Mobile device (emulator or physical).
 
 ### Steps
 - Clone this repo to your machine: `https://github.com/KhalidWar/anonaddy.git`
-- Create AnonAddy account and Generate your own [API Access Token](https://app.anonaddy.com/settings) under API section.
-- Declare "accessTokenValue" String with your API Access Token in "api_data_manager" file.
-- Run on Emulator or physical device
+- Create AnonAddy account and generate your own [API Access Token](https://app.anonaddy.com/settings), found under API section.
+- Install App on Emulator or physical device.
+- Sign in with API Access Token.
 - All set!
 
 ## License
 This project is licensed under [MIT Licnese](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE).
 
 ## Acknowledgement
-- Special thanks to AnonAddy's team for providing us with their API and excellent documentation.
+- Special thanks to AnonAddy's team for providing us with their [API and excellent documentation](https://app.anonaddy.com/docs/).
 
 ## Disclaimer
 This is a personal project and is **NOT** associated with [AnonAddy's project or team](https://github.com/anonaddy).
