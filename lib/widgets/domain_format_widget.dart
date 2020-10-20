@@ -6,7 +6,9 @@ class DomainFormatWidget extends StatelessWidget {
     this.label,
     this.value,
   }) : super(key: key);
-  final String label, value;
+
+  final String label;
+  final dynamic value;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class DomainFormatWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText1,
           ),
           Text(
-            value,
+            '$value',
             style: Theme.of(context).textTheme.bodyText2,
           ),
         ],
