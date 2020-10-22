@@ -1,8 +1,8 @@
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/services/access_token_manager.dart';
 import 'package:anonaddy/services/networking.dart';
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TokenLoginScreen extends StatefulWidget {
@@ -52,6 +52,20 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
       setState(() {
         _isLoading = false;
         _error = '';
+      });
+    }
+  }
+
+  Future _pasteFromClipboard() async {
+    ClipboardData data = await Clipboard.getData('text/plain');
+    if (data == null || data.text.isEmpty) {
+      setState(() {
+        _error = 'Nothing to paste. Clipboard is empty.';
+      });
+    } else {
+      _textEditingController.clear();
+      setState(() {
+        _textEditingController.text = data.text;
       });
     }
   }
@@ -137,13 +151,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
                                   IconButton(
                                     icon: Icon(Icons.paste),
                                     onPressed: () {
-                                      FlutterClipboard.paste().then((value) => {
-                                            setState(() {
-                                              _textEditingController.clear();
-                                              _textEditingController.text =
-                                                  value;
-                                            })
-                                          });
+                                      _pasteFromClipboard();
                                     },
                                   ),
                                 ],
