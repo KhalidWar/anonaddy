@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/alias_data_model.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
+import 'package:anonaddy/screens/error_screen.dart';
 import 'package:anonaddy/screens/profile_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/services/api_call_manager.dart';
@@ -69,47 +70,74 @@ class _HomeScreenState extends State<HomeScreen> {
                   FutureBuilder<UserModel>(
                     future: _futureUserModel,
                     builder: (context, snapshot) {
-                      var data = snapshot.data;
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasData) {
-                          return AccountCard(userData: data);
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          return ErrorScreen(
+                              label:
+                                  'No Internet Connection. \n Make sure you\'re online.',
+                              buttonLabel: 'Reload',
+                              buttonOnPress: () {});
+                          break;
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                          break;
+                        default:
+                          if (snapshot.hasData) {
+                            return AccountCard(userData: snapshot.data);
+                          } else if (snapshot.hasError) {
+                            return ErrorScreen(
+                                label: '${snapshot.error}',
+                                buttonLabel: 'Sign In',
+                                buttonOnPress: () {});
+                          }
+                          return Center(child: CircularProgressIndicator());
                       }
-                      return CircularProgressIndicator();
                     },
                   ),
                   FutureBuilder<AliasModel>(
                     future: _futureAliasModel,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasData) {
-                          var data = snapshot.data.aliasDataList;
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          return ErrorScreen(
+                              label:
+                                  'No Internet Connection. \n Make sure you\'re online.',
+                              buttonLabel: 'Reload',
+                              buttonOnPress: () {});
+                          break;
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                          break;
+                        default:
+                          if (snapshot.hasData) {
+                            var data = snapshot.data.aliasDataList;
 
-                          for (var item in data) {
-                            AliasModel(
-                              aliasDataList: [
-                                AliasDataModel(
-                                  aliasID: item.aliasID,
-                                  email: item.email,
-                                  emailDescription: item.emailDescription,
-                                  createdAt: item.createdAt,
-                                  isAliasActive: item.isAliasActive,
-                                ),
-                              ],
+                            for (var item in data) {
+                              AliasModel(
+                                aliasDataList: [
+                                  AliasDataModel(
+                                    aliasID: item.aliasID,
+                                    email: item.email,
+                                    emailDescription: item.emailDescription,
+                                    createdAt: item.createdAt,
+                                    isAliasActive: item.isAliasActive,
+                                  ),
+                                ],
+                              );
+                            }
+
+                            return AliasCard(
+                              apiDataManager: _apiDataManager,
+                              aliasDataList: data,
                             );
+                          } else if (snapshot.hasError) {
+                            return ErrorScreen(
+                                label: '${snapshot.error}',
+                                buttonLabel: 'Sign In',
+                                buttonOnPress: () {});
                           }
-
-                          return AliasCard(
-                            apiDataManager: _apiDataManager,
-                            aliasDataList: data,
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
+                          return Center(child: CircularProgressIndicator());
                       }
-                      return Center(child: CircularProgressIndicator());
                     },
                   ),
                 ],
