@@ -1,5 +1,7 @@
+import 'alias_data_model.dart';
+
 class UserModel {
-  UserModel({
+  const UserModel({
     this.id,
     this.username,
     this.fromName,
@@ -21,32 +23,40 @@ class UserModel {
     this.aliasLimit,
     this.createdAt,
     this.lastUpdated,
+    this.aliasDataList,
   });
 
-  String id;
-  String username;
-  dynamic fromName;
-  dynamic emailSubject;
-  String bannerLocation;
-  int bandwidth;
-  int usernameCount;
-  int usernameLimit;
-  String defaultRecipientId;
-  String defaultAliasDomain;
-  String defaultAliasFormat;
-  String subscription;
-  int bandwidthLimit;
-  int recipientCount;
-  int recipientLimit;
-  int activeDomainCount;
-  int activeDomainLimit;
-  int aliasCount;
-  int aliasLimit;
-  DateTime createdAt;
-  DateTime lastUpdated;
+  final List<AliasDataModel> aliasDataList;
+  final String id;
+  final String username;
+  final dynamic fromName;
+  final dynamic emailSubject;
+  final String bannerLocation;
+  final int bandwidth;
+  final int usernameCount;
+  final int usernameLimit;
+  final String defaultRecipientId;
+  final String defaultAliasDomain;
+  final String defaultAliasFormat;
+  final String subscription;
+  final int bandwidthLimit;
+  final int recipientCount;
+  final int recipientLimit;
+  final int activeDomainCount;
+  final int activeDomainLimit;
+  final int aliasCount;
+  final int aliasLimit;
+  final DateTime createdAt;
+  final DateTime lastUpdated;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromJson(
+      {Map<String, dynamic> json, Map<String, Object> aliasJson}) {
+    List list = aliasJson['data'];
+    List<AliasDataModel> aliasDataList =
+        list.map((i) => AliasDataModel.fromJson(i)).toList();
+
     return UserModel(
+      aliasDataList: aliasDataList,
       id: json['data']["id"],
       username: json['data']["username"],
       fromName: json['data']["from_name"],

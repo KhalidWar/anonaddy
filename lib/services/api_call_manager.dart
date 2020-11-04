@@ -1,4 +1,3 @@
-import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/services/networking.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +10,7 @@ class APICallManager {
 
   Future<String> _getAccessToken() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var tokenValue = sharedPreferences.getString('tokenKey');
+    final tokenValue = sharedPreferences.getString('tokenKey');
     if (tokenValue == null || tokenValue.isEmpty) {
       return null;
     } else {
@@ -22,10 +21,16 @@ class APICallManager {
   Future<UserModel> fetchUserData() async {
     try {
       String _accessTokenValue = await _getAccessToken();
-      Networking networking = Networking(
+      Networking accountDetails = Networking(
           url: '$_baseURL/$_accountDetailsURL', accessToken: _accessTokenValue);
-      final response = await networking.getData();
-      var data = UserModel.fromJson(response);
+      final accountDetailsResponse = await accountDetails.getData();
+      Networking aliasDetails = Networking(
+          url: '$_baseURL/$_aliasesURL', accessToken: _accessTokenValue);
+      final aliasDetailsResponse = await aliasDetails.getData();
+      var data = UserModel.fromJson(
+        json: accountDetailsResponse,
+        aliasJson: aliasDetailsResponse,
+      );
       return data;
     } catch (e) {
       print(e.toString());
@@ -33,17 +38,10 @@ class APICallManager {
     }
   }
 
-  Future<AliasModel> fetchAliasData() async {
-    try {
-      String _accessTokenValue = await _getAccessToken();
-      Networking networking = Networking(
-          url: '$_baseURL/$_aliasesURL', accessToken: _accessTokenValue);
-      final response = await networking.getData();
-      var data = AliasModel.fromJson(response);
-      return data;
-    } catch (e) {
-      print(e.toString());
-      return null;
+  Stream<UserModel> getUserDataStream() async* {
+    while (true) {
+      await Future.delayed(Duration(seconds: 5));
+      yield await fetchUserData();
     }
   }
 

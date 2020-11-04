@@ -1,5 +1,4 @@
 import 'package:anonaddy/models/alias_data_model.dart';
-import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/screens/error_screen.dart';
 import 'package:anonaddy/screens/profile_screen.dart';
@@ -7,7 +6,8 @@ import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/services/api_call_manager.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/alias_card.dart';
-import 'package:anonaddy/widgets/domain_format_widget.dart';
+import 'package:anonaddy/widgets/create_new_alias.dart';
+import 'package:anonaddy/widgets/loading_widget.dart';
 import 'package:anonaddy/widgets/pop_scope_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,9 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final APICallManager _apiDataManager = APICallManager();
-  Future<UserModel> _futureUserModel;
-  Future<AliasModel> _futureAliasModel;
+  final APICallManager _apiCallManager = APICallManager();
+
+  Stream<UserModel> userModelStream;
 
   Future<bool> _onBackButtonPress() {
     return showDialog(
@@ -34,21 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  Future<AliasModel> _refreshAliasData() async {
-    return _futureAliasModel = _apiDataManager.fetchAliasData();
-  }
-
-  Future _refreshData() async {
-    await _refreshAliasData();
-    // _futureUserModel = _apiDataManager.fetchUserData();
-    _futureAliasModel = _apiDataManager.fetchAliasData();
-  }
-
   @override
   void initState() {
     super.initState();
-    _futureUserModel = _apiDataManager.fetchUserData();
-    _futureAliasModel = _apiDataManager.fetchAliasData();
+    userModelStream = _apiCallManager.getUserDataStream();
   }
 
   @override
@@ -59,91 +48,57 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: buildAppBar(),
         floatingActionButton: buildFloatingActionButton(context),
-        body: RefreshIndicator(
-          onRefresh: _refreshData,
-          child: WillPopScope(
-            onWillPop: _onBackButtonPress,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                children: [
-                  FutureBuilder<UserModel>(
-                    future: _futureUserModel,
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                          return ErrorScreen(
-                              label:
-                                  'No Internet Connection. \n Make sure you\'re online.',
-                              buttonLabel: 'Reload',
-                              buttonOnPress: () {});
-                          break;
-                        case ConnectionState.waiting:
-                          return Center(child: CircularProgressIndicator());
-                          break;
-                        default:
-                          if (snapshot.hasData) {
-                            return AccountCard(userData: snapshot.data);
-                          } else if (snapshot.hasError) {
-                            return ErrorScreen(
-                                label: '${snapshot.error}',
-                                buttonLabel: 'Sign In',
-                                buttonOnPress: () {});
-                          }
-                          return Center(child: CircularProgressIndicator());
+        body: WillPopScope(
+          onWillPop: _onBackButtonPress,
+          child: StreamBuilder<UserModel>(
+              stream: userModelStream,
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return ErrorScreen(
+                        label:
+                            'No Internet Connection. \n Make sure you\'re online.',
+                        buttonLabel: 'Reload',
+                        buttonOnPress: () {});
+                    break;
+                  case ConnectionState.waiting:
+                    return LoadingWidget();
+                  default:
+                    if (snapshot.hasData) {
+                      for (var item in snapshot.data.aliasDataList) {
+                        UserModel(
+                          aliasDataList: [
+                            AliasDataModel(
+                              aliasID: item.aliasID,
+                              email: item.email,
+                              emailDescription: item.emailDescription,
+                              createdAt: item.createdAt,
+                              isAliasActive: item.isAliasActive,
+                            ),
+                          ],
+                        );
                       }
-                    },
-                  ),
-                  FutureBuilder<AliasModel>(
-                    future: _futureAliasModel,
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                          return ErrorScreen(
-                              label:
-                                  'No Internet Connection. \n Make sure you\'re online.',
-                              buttonLabel: 'Reload',
-                              buttonOnPress: () {});
-                          break;
-                        case ConnectionState.waiting:
-                          return Center(child: CircularProgressIndicator());
-                          break;
-                        default:
-                          if (snapshot.hasData) {
-                            var data = snapshot.data.aliasDataList;
-
-                            for (var item in data) {
-                              AliasModel(
-                                aliasDataList: [
-                                  AliasDataModel(
-                                    aliasID: item.aliasID,
-                                    email: item.email,
-                                    emailDescription: item.emailDescription,
-                                    createdAt: item.createdAt,
-                                    isAliasActive: item.isAliasActive,
-                                  ),
-                                ],
-                              );
-                            }
-
-                            return AliasCard(
-                              apiDataManager: _apiDataManager,
-                              aliasDataList: data,
-                            );
-                          } else if (snapshot.hasError) {
-                            return ErrorScreen(
-                                label: '${snapshot.error}',
-                                buttonLabel: 'Sign In',
-                                buttonOnPress: () {});
-                          }
-                          return Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.all(5),
+                        child: Column(
+                          children: [
+                            AccountCard(userData: snapshot.data),
+                            AliasCard(
+                              apiDataManager: _apiCallManager,
+                              aliasDataList: snapshot.data.aliasDataList,
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return ErrorScreen(
+                          label: '${snapshot.error}',
+                          buttonLabel: 'Sign In',
+                          buttonOnPress: () {});
+                    }
+                    return LoadingWidget();
+                }
+              }),
         ),
       ),
     );
