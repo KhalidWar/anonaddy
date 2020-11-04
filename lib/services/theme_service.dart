@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ThemeManager extends ChangeNotifier {
+class ThemeService extends ChangeNotifier {
   SharedPreferences sharedPreferences;
   String key = 'darkTheme';
   bool _isDarkTheme = false;
 
   bool get isDarkTheme => _isDarkTheme;
 
-  ThemeManager() {
+  ThemeService() {
     _isDarkTheme = false;
     _loadTheme();
   }

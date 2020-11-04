@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/screens/token_login_screen.dart';
-import 'package:anonaddy/services/access_token_manager.dart';
+import 'package:anonaddy/services/access_token_service.dart';
 import 'package:anonaddy/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +13,7 @@ class InitialScreen extends StatefulWidget {
 
 class _InitialScreenState extends State<InitialScreen> {
   void initialWidget() async {
-    var token = await AccessTokenManager().getAccessToken();
+    var token = await AccessTokenService().getAccessToken();
     if (token == null || token.isEmpty) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return TokenLoginScreen();

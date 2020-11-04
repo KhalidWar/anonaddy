@@ -1,4 +1,4 @@
-import 'package:anonaddy/services/api_call_manager.dart';
+import 'package:anonaddy/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,7 +12,7 @@ class AliasListTile extends StatefulWidget {
   }) : super(key: key);
 
   final dynamic aliasModel;
-  final APICallManager apiDataManager;
+  final APIService apiDataManager;
 
   @override
   _AliasListTileState createState() => _AliasListTileState();

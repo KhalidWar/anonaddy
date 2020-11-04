@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/user_model.dart';
-import 'package:anonaddy/services/networking.dart';
+import 'package:anonaddy/services/network_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class APICallManager {
+class APIService {
   static const String _baseURL = 'https://app.anonaddy.com/api/v1';
   static const String _accountDetailsURL = 'account-details';
   static const String _activeAliasURL = 'active-aliases';
@@ -21,10 +21,10 @@ class APICallManager {
   Future<UserModel> fetchUserData() async {
     try {
       String _accessTokenValue = await _getAccessToken();
-      Networking accountDetails = Networking(
+      NetworkService accountDetails = NetworkService(
           url: '$_baseURL/$_accountDetailsURL', accessToken: _accessTokenValue);
       final accountDetailsResponse = await accountDetails.getData();
-      Networking aliasDetails = Networking(
+      NetworkService aliasDetails = NetworkService(
           url: '$_baseURL/$_aliasesURL', accessToken: _accessTokenValue);
       final aliasDetailsResponse = await aliasDetails.getData();
       var data = UserModel.fromJson(
@@ -48,7 +48,7 @@ class APICallManager {
   Future createNewAlias({String description}) async {
     try {
       String _accessTokenValue = await _getAccessToken();
-      Networking networking = Networking(
+      NetworkService networking = NetworkService(
           url: '$_baseURL/$_aliasesURL', accessToken: _accessTokenValue);
       var data = await networking.postData(description: description);
       return data;
@@ -61,7 +61,7 @@ class APICallManager {
   Future activateAlias({String aliasID}) async {
     try {
       String _accessTokenValue = await _getAccessToken();
-      Networking networking = Networking(
+      NetworkService networking = NetworkService(
           url: '$_baseURL/$_activeAliasURL', accessToken: _accessTokenValue);
       var data = await networking.activateAlias(aliasID: aliasID);
       return data;
@@ -74,7 +74,7 @@ class APICallManager {
   Future deactivateAlias({String aliasID}) async {
     try {
       String _accessTokenValue = await _getAccessToken();
-      Networking networking = Networking(
+      NetworkService networking = NetworkService(
           url: '$_baseURL/$_activeAliasURL/$aliasID',
           accessToken: _accessTokenValue);
       var data = await networking.deactivateAlias();
@@ -88,7 +88,7 @@ class APICallManager {
   Future editDescription({String newDescription}) async {
     try {
       String _accessTokenValue = await _getAccessToken();
-      Networking networking = Networking(
+      NetworkService networking = NetworkService(
           url: '$_baseURL/$_aliasesURL/$newDescription',
           accessToken: _accessTokenValue);
       var data =
@@ -103,7 +103,7 @@ class APICallManager {
   Future deleteAlias({String aliasID}) async {
     try {
       String _accessTokenValue = await _getAccessToken();
-      Networking networking = Networking(
+      NetworkService networking = NetworkService(
           url: '$_baseURL/$_aliasesURL/$aliasID',
           accessToken: _accessTokenValue);
       var data = networking.deleteAlias();

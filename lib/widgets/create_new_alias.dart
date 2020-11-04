@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'domain_format_widget.dart';
 
 class CreateNewAlias extends StatefulWidget {
-  const CreateNewAlias({Key key, this.apiCallManager}) : super(key: key);
+  const CreateNewAlias({Key key, this.apiService}) : super(key: key);
 
-  final dynamic apiCallManager;
+  final dynamic apiService;
 
   @override
   _CreateNewAliasState createState() => _CreateNewAliasState();
@@ -19,7 +19,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
 
   _createNewAlias() async {
     setState(() => _isLoading = true);
-    dynamic response = await widget.apiCallManager.createNewAlias(
+    dynamic response = await widget.apiService.createNewAlias(
         description: _textFieldController.text.trim() ?? 'No Description');
 
     // print(response); //todo add response data (if not null) to stream?

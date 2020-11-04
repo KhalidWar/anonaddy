@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AccessTokenManager {
+class AccessTokenService {
   SharedPreferences sharedPreferences;
 
   Future _initSharedPref() async {

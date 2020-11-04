@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-class Networking {
-  const Networking({@required this.url, @required this.accessToken});
+class NetworkService {
+  const NetworkService({@required this.url, @required this.accessToken});
 
   final String url, accessToken;
 

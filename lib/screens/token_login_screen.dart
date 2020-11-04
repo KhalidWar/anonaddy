@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/home_screen.dart';
-import 'package:anonaddy/services/access_token_manager.dart';
-import 'package:anonaddy/services/networking.dart';
+import 'package:anonaddy/services/access_token_service.dart';
+import 'package:anonaddy/services/network_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,7 +11,7 @@ class TokenLoginScreen extends StatefulWidget {
 }
 
 class _TokenLoginScreenState extends State<TokenLoginScreen> {
-  final AccessTokenManager _accessTokenManager = AccessTokenManager();
+  final AccessTokenService _accessTokenManager = AccessTokenService();
   TextEditingController _textEditingController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -19,7 +19,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
   String _error = '';
 
   Future<bool> _validateAccessToken() async {
-    final Networking networking = Networking(
+    final NetworkService networking = NetworkService(
         url: 'https://app.anonaddy.com/api/v1/account-details',
         accessToken: _textEditingController.text.toString());
     final response = await networking.getData();

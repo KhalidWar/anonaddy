@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias_data_model.dart';
-import 'package:anonaddy/services/api_call_manager.dart';
+import 'package:anonaddy/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -8,11 +8,11 @@ import 'alias_list_tile.dart';
 class AliasCard extends StatelessWidget {
   const AliasCard({
     Key key,
-    this.apiDataManager,
+    this.apiService,
     this.aliasDataList,
   }) : super(key: key);
 
-  final APICallManager apiDataManager;
+  final APIService apiService;
   final List<AliasDataModel> aliasDataList;
 
   @override
@@ -58,7 +58,7 @@ class AliasCard extends StatelessWidget {
                       color: Colors.white,
                     ),
                     onTap: () {
-                      apiDataManager.deleteAlias(
+                      apiService.deleteAlias(
                           aliasID: aliasDataList[index].aliasID);
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
@@ -69,7 +69,7 @@ class AliasCard extends StatelessWidget {
                   ),
                 ],
                 child: AliasListTile(
-                  apiDataManager: apiDataManager,
+                  apiDataManager: apiService,
                   aliasModel: aliasDataList[index],
                 ),
               );
