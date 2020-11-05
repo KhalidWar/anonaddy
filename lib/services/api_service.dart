@@ -27,7 +27,7 @@ class APIService {
       NetworkService aliasDetails = NetworkService(
           url: '$_baseURL/$_aliasesURL', accessToken: _accessTokenValue);
       final aliasDetailsResponse = await aliasDetails.getData();
-      var data = UserModel.fromJson(
+      dynamic data = UserModel.fromJson(
         json: accountDetailsResponse,
         aliasJson: aliasDetailsResponse,
       );
@@ -39,8 +39,9 @@ class APIService {
   }
 
   Stream<UserModel> getUserDataStream() async* {
+    yield await fetchUserData();
     while (true) {
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(Duration(seconds: 3));
       yield await fetchUserData();
     }
   }
@@ -50,7 +51,7 @@ class APIService {
       String _accessTokenValue = await _getAccessToken();
       NetworkService networking = NetworkService(
           url: '$_baseURL/$_aliasesURL', accessToken: _accessTokenValue);
-      var data = await networking.postData(description: description);
+      dynamic data = await networking.postData(description: description);
       return data;
     } catch (e) {
       print(e.toString());
@@ -63,7 +64,7 @@ class APIService {
       String _accessTokenValue = await _getAccessToken();
       NetworkService networking = NetworkService(
           url: '$_baseURL/$_activeAliasURL', accessToken: _accessTokenValue);
-      var data = await networking.activateAlias(aliasID: aliasID);
+      dynamic data = await networking.activateAlias(aliasID: aliasID);
       return data;
     } catch (e) {
       print(e.toString());
@@ -77,7 +78,7 @@ class APIService {
       NetworkService networking = NetworkService(
           url: '$_baseURL/$_activeAliasURL/$aliasID',
           accessToken: _accessTokenValue);
-      var data = await networking.deactivateAlias();
+      dynamic data = await networking.deactivateAlias();
       return data;
     } catch (e) {
       print(e.toString());
@@ -91,7 +92,7 @@ class APIService {
       NetworkService networking = NetworkService(
           url: '$_baseURL/$_aliasesURL/$newDescription',
           accessToken: _accessTokenValue);
-      var data =
+      dynamic data =
           await networking.editDescription(newDescription: newDescription);
       return data;
     } catch (e) {
@@ -106,7 +107,7 @@ class APIService {
       NetworkService networking = NetworkService(
           url: '$_baseURL/$_aliasesURL/$aliasID',
           accessToken: _accessTokenValue);
-      var data = networking.deleteAlias();
+      dynamic data = networking.deleteAlias();
       return data;
     } catch (e) {
       print(e.toString());

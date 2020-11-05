@@ -19,10 +19,10 @@ class NetworkService {
       },
     );
     if (response.statusCode == 200) {
-      print('Networking getData ${response.statusCode}');
+      print('Network getData ${response.statusCode}');
       return jsonDecode(response.body);
     } else {
-      print('Networking getData ${response.statusCode}');
+      print('Network getData ${response.statusCode}');
       return null;
     }
   }
@@ -43,11 +43,11 @@ class NetworkService {
       }),
     );
     if (response.statusCode == 201) {
-      print('Networking postData ${response.statusCode}');
+      print('Network postData ${response.statusCode}');
       return jsonDecode(response.body);
     } else {
-      print('Networking postData ${response.statusCode}');
-      throw Exception('Failed to postData in Networking');
+      print('Network postData ${response.statusCode}');
+      throw Exception('Failed to postData in Network');
     }
   }
 
@@ -63,25 +63,30 @@ class NetworkService {
       body: json.encode({"id": "$aliasID"}),
     );
     if (response.statusCode == 200) {
-      print('Networking activateAlias ${response.statusCode}');
+      print('Network activateAlias ${response.statusCode}');
+      return jsonDecode(response.body);
     } else {
-      print('Networking activateAlias ${response.statusCode}');
+      print('Network activateAlias ${response.statusCode}');
+      return null;
     }
   }
 
   Future deactivateAlias() async {
-    http.Response response = await http.delete(Uri.encodeFull(url), headers: {
-      "Content-Type": "application/json",
-      "X-Requested-With": "XMLHttpRequest",
-      "Authorization": "Bearer $accessToken",
-      "Accept": "application/json",
-    });
+    http.Response response = await http.delete(
+      Uri.encodeFull(url),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Authorization": "Bearer $accessToken",
+        "Accept": "application/json",
+      },
+    );
     if (response.statusCode == 200) {
-      print('Networking deactivateAlias ${response.statusCode}');
+      print('Network deactivateAlias ${response.statusCode}');
       return jsonDecode(response.body);
     } else {
-      print('Networking deactivateAlias ${response.statusCode}');
-      // throw Exception('Failed to deactivateAlias in Networking');
+      print('Network deactivateAlias ${response.statusCode}');
+      return null;
     }
   }
 
@@ -97,7 +102,7 @@ class NetworkService {
           "description": "$newDescription",
         }));
     if (response.statusCode == 200) {
-      print('Networking editDescription ${response.statusCode}');
+      print('Network editDescription ${response.statusCode}');
     } else {
       return (response.statusCode);
     }
@@ -114,7 +119,7 @@ class NetworkService {
       },
     );
     if (response.statusCode == 200) {
-      print('Networking deleteAlias ${response.statusCode}');
+      print('Network deleteAlias ${response.statusCode}');
       print(response.statusCode);
     } else if (response.statusCode == 204) {
       print(response.statusCode);

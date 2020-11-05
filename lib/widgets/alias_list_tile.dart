@@ -19,61 +19,88 @@ class AliasListTile extends StatefulWidget {
 }
 
 class _AliasListTileState extends State<AliasListTile> {
+  bool isLoading = false;
+
+  void toggleAliases() async {
+    setState(() => isLoading = true);
+
+    if (widget.aliasModel.isAliasActive == true) {
+      dynamic deactivateResult = await widget.apiDataManager
+          .deactivateAlias(aliasID: widget.aliasModel.aliasID);
+      if (deactivateResult == null) {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Something went wrong. Could not deactivate alias.'),
+          ));
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          widget.aliasModel.isAliasActive = false;
+        });
+      }
+    } else {
+      dynamic activateResult = await widget.apiDataManager
+          .activateAlias(aliasID: widget.aliasModel.aliasID);
+      if (activateResult == null) {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Something went wrong. Could not activate alias.'),
+          ));
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          widget.aliasModel.isAliasActive = true;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Column(
-      children: [
-        ListTile(
-          onTap: () {
-            Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Email Alias copied to clipboard!'),
-              ),
-            );
-          },
-          onLongPress: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return buildBottomSheet(size, context);
-                });
-          },
-          title: Text(
-            widget.aliasModel.email,
-            style: Theme.of(context).textTheme.bodyText1,
+    return ListTile(
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Email Alias copied to clipboard!'),
           ),
-          subtitle: Text(widget.aliasModel.emailDescription),
-          leading: Switch(
-            value: widget.aliasModel.isAliasActive,
-            onChanged: (toggle) {
-              if (widget.aliasModel.isAliasActive == true) {
-                widget.apiDataManager.deactivateAlias(
-                  aliasID: widget.aliasModel.aliasID,
-                );
-                setState(() {
-                  widget.aliasModel.isAliasActive = false;
-                });
-              } else {
-                widget.apiDataManager.activateAlias(
-                  aliasID: widget.aliasModel.aliasID,
-                );
-                setState(() {
-                  widget.aliasModel.isAliasActive = true;
-                });
-              }
-            },
-          ),
-          trailing: Icon(Icons.chevron_left),
-        ),
-        Divider(),
-      ],
+        );
+      },
+      onLongPress: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return buildBottomSheet();
+          },
+        );
+      },
+      leading: isLoading
+          ? Container(
+              margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+              child: CircularProgressIndicator())
+          : Switch(
+              value: widget.aliasModel.isAliasActive,
+              onChanged: (toggle) => toggleAliases(),
+            ),
+      title: Text(
+        widget.aliasModel.email,
+        style: Theme.of(context).textTheme.bodyText1,
+      ),
+      subtitle: Text(widget.aliasModel.emailDescription),
+      trailing: Icon(Icons.chevron_left),
     );
   }
 
-  Container buildBottomSheet(Size size, BuildContext context) {
+  Container buildBottomSheet() {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
       height: size.height * 0.7,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
