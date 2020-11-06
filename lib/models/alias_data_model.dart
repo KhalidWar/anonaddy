@@ -49,7 +49,7 @@ class AliasDataModel {
         // domain: domainValues.map[json["domain"]],
         email: json["email"],
         isAliasActive: json["active"],
-        emailDescription: json["description"] ?? 'No Description Provided',
+        emailDescription: json["description"] ?? 'No Description',
         emailsForwarded: json["emails_forwarded"],
         emailsBlocked: json["emails_blocked"],
         emailsReplied: json["emails_replied"],

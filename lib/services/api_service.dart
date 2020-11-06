@@ -107,7 +107,7 @@ class APIService {
       NetworkService networking = NetworkService(
           url: '$_baseURL/$_aliasesURL/$aliasID',
           accessToken: _accessTokenValue);
-      dynamic data = networking.deleteAlias();
+      dynamic data = await networking.deleteAlias();
       return data;
     } catch (e) {
       print(e.toString());

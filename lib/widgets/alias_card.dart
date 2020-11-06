@@ -5,7 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'alias_list_tile.dart';
 
-class AliasCard extends StatelessWidget {
+class AliasCard extends StatefulWidget {
   const AliasCard({
     Key key,
     this.apiService,
@@ -14,6 +14,32 @@ class AliasCard extends StatelessWidget {
 
   final APIService apiService;
   final List<AliasDataModel> aliasDataList;
+
+  @override
+  _AliasCardState createState() => _AliasCardState();
+}
+
+class _AliasCardState extends State<AliasCard> {
+  bool isLoading = false;
+
+  void deleteAlias(dynamic aliasID) async {
+    setState(() => isLoading = true);
+    dynamic deleteResult =
+        await widget.apiService.deleteAlias(aliasID: aliasID);
+    if (deleteResult == null) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Something went wrong. Could not delete alias.')));
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Alias Successfully Deleted!')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +67,14 @@ class AliasCard extends StatelessWidget {
                   .copyWith(fontWeight: FontWeight.bold),
             ),
           ),
+          isLoading ? LinearProgressIndicator() : Container(),
           ListView.builder(
-            itemCount: aliasDataList.length,
+            itemCount: widget.aliasDataList.length,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return Slidable(
-                key: Key(aliasDataList[index].toString()),
+                key: Key(widget.aliasDataList[index].toString()),
                 actionPane: SlidableStrechActionPane(),
                 secondaryActions: <Widget>[
                   IconSlideAction(
@@ -57,20 +84,13 @@ class AliasCard extends StatelessWidget {
                       size: 35,
                       color: Colors.white,
                     ),
-                    onTap: () {
-                      apiService.deleteAlias(
-                          aliasID: aliasDataList[index].aliasID);
-                      Scaffold.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Alias Successfully Deleted!'),
-                        ),
-                      );
-                    },
+                    onTap: () =>
+                        deleteAlias(widget.aliasDataList[index].aliasID),
                   ),
                 ],
                 child: AliasListTile(
-                  apiDataManager: apiService,
-                  aliasModel: aliasDataList[index],
+                  apiDataManager: widget.apiService,
+                  aliasModel: widget.aliasDataList[index],
                 ),
               );
             },

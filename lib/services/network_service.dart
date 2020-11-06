@@ -81,9 +81,9 @@ class NetworkService {
         "Accept": "application/json",
       },
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       print('Network deactivateAlias ${response.statusCode}');
-      return jsonDecode(response.body);
+      return response.body;
     } else {
       print('Network deactivateAlias ${response.statusCode}');
       return null;
@@ -103,8 +103,10 @@ class NetworkService {
         }));
     if (response.statusCode == 200) {
       print('Network editDescription ${response.statusCode}');
+      return response.body;
     } else {
-      return (response.statusCode);
+      print('Network editDescription ${response.statusCode}');
+      return null;
     }
   }
 
@@ -118,12 +120,12 @@ class NetworkService {
         "Accept": "application/json",
       },
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       print('Network deleteAlias ${response.statusCode}');
-      print(response.statusCode);
-    } else if (response.statusCode == 204) {
-      print(response.statusCode);
-      // throw Exception('Failed to deleteAlias');
+      return response.body;
+    } else {
+      print('Network deleteAlias ${response.statusCode}');
+      return null;
     }
   }
 }
