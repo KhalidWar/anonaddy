@@ -8,6 +8,7 @@ import 'package:anonaddy/services/service_locator.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/create_new_alias.dart';
+import 'package:anonaddy/widgets/fetch_data_indicator.dart';
 import 'package:anonaddy/widgets/loading_widget.dart';
 import 'package:anonaddy/widgets/pop_scope_dialog.dart';
 import 'package:flutter/material.dart';
@@ -25,14 +26,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Stream<UserModel> userModelStream;
 
-  Future<bool> _onBackButtonPress() {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return PopScopeDialog();
-        });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -42,42 +35,43 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: buildAppBar(),
-        floatingActionButton: buildFloatingActionButton(context),
-        body: WillPopScope(
-          onWillPop: _onBackButtonPress,
-          child: StreamBuilder<UserModel>(
-              stream: userModelStream,
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    return ErrorScreen(
-                        label:
-                            'No Internet Connection. \n Make sure you\'re online.',
-                        buttonLabel: 'Reload',
-                        buttonOnPress: () {});
-                    break;
-                  case ConnectionState.waiting:
-                    return LoadingWidget();
-                  default:
-                    if (snapshot.hasData) {
-                      for (var item in snapshot.data.aliasDataList) {
-                        UserModel(
-                          aliasDataList: [
-                            AliasDataModel(
-                              aliasID: item.aliasID,
-                              email: item.email,
-                              emailDescription: item.emailDescription,
-                              createdAt: item.createdAt,
-                              isAliasActive: item.isAliasActive,
-                            ),
-                          ],
-                        );
-                      }
-                      return SingleChildScrollView(
+      child: WillPopScope(
+        onWillPop: () => showDialog(
+            context: context, builder: (context) => PopScopeDialog()),
+        child: StreamBuilder<UserModel>(
+            stream: userModelStream,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return ErrorScreen(
+                      label:
+                          'No Internet Connection. \n Make sure you\'re online.',
+                      buttonLabel: 'Reload',
+                      buttonOnPress: () {});
+                  break;
+                case ConnectionState.waiting:
+                  return FetchingDataIndicator();
+                default:
+                  if (snapshot.hasData) {
+                    for (var item in snapshot.data.aliasDataList) {
+                      UserModel(
+                        aliasDataList: [
+                          AliasDataModel(
+                            aliasID: item.aliasID,
+                            email: item.email,
+                            emailDescription: item.emailDescription,
+                            createdAt: item.createdAt,
+                            isAliasActive: item.isAliasActive,
+                          ),
+                        ],
+                      );
+                    }
+                    return Scaffold(
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      appBar: buildAppBar(),
+                      floatingActionButton: buildFloatingActionButton(context),
+                      body: SingleChildScrollView(
                         padding: EdgeInsets.all(5),
                         child: Column(
                           children: [
@@ -86,17 +80,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 aliasDataList: snapshot.data.aliasDataList),
                           ],
                         ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return ErrorScreen(
-                          label: '${snapshot.error}',
-                          buttonLabel: 'Sign In',
-                          buttonOnPress: () {});
-                    }
-                    return LoadingWidget();
-                }
-              }),
-        ),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return ErrorScreen(
+                        label: '${snapshot.error}',
+                        buttonLabel: 'Sign In',
+                        buttonOnPress: () {});
+                  }
+                  return LoadingWidget();
+              }
+            }),
       ),
     );
   }
