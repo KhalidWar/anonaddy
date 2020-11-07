@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/alias_data_model.dart';
 import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -8,11 +9,9 @@ import 'alias_list_tile.dart';
 class AliasCard extends StatefulWidget {
   const AliasCard({
     Key key,
-    this.apiService,
     this.aliasDataList,
   }) : super(key: key);
 
-  final APIService apiService;
   final List<AliasDataModel> aliasDataList;
 
   @override
@@ -25,7 +24,7 @@ class _AliasCardState extends State<AliasCard> {
   void deleteAlias(dynamic aliasID) async {
     setState(() => isLoading = true);
     dynamic deleteResult =
-        await widget.apiService.deleteAlias(aliasID: aliasID);
+        await serviceLocator<APIService>().deleteAlias(aliasID: aliasID);
     if (deleteResult == null) {
       setState(() {
         isLoading = false;
@@ -88,10 +87,7 @@ class _AliasCardState extends State<AliasCard> {
                         deleteAlias(widget.aliasDataList[index].aliasID),
                   ),
                 ],
-                child: AliasListTile(
-                  apiDataManager: widget.apiService,
-                  aliasModel: widget.aliasDataList[index],
-                ),
+                child: AliasListTile(aliasModel: widget.aliasDataList[index]),
               );
             },
           ),

@@ -1,11 +1,11 @@
+import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/material.dart';
 
 import 'domain_format_widget.dart';
 
 class CreateNewAlias extends StatefulWidget {
-  const CreateNewAlias({Key key, this.apiService}) : super(key: key);
-
-  final dynamic apiService;
+  const CreateNewAlias({Key key}) : super(key: key);
 
   @override
   _CreateNewAliasState createState() => _CreateNewAliasState();
@@ -19,7 +19,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
 
   _createNewAlias() async {
     setState(() => _isLoading = true);
-    dynamic response = await widget.apiService.createNewAlias(
+    dynamic response = await serviceLocator<APIService>().createNewAlias(
         description: _textFieldController.text.trim() ?? 'No Description');
 
     // print(response); //todo add response data (if not null) to stream?

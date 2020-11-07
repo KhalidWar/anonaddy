@@ -4,6 +4,7 @@ import 'package:anonaddy/screens/error_screen.dart';
 import 'package:anonaddy/screens/profile_screen.dart';
 import 'package:anonaddy/screens/settings_screen.dart';
 import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/service_locator.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/alias_card.dart';
 import 'package:anonaddy/widgets/create_new_alias.dart';
@@ -22,8 +23,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final APIService _apiService = APIService();
-
   Stream<UserModel> userModelStream;
 
   Future<bool> _onBackButtonPress() {
@@ -37,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    userModelStream = _apiService.getUserDataStream();
+    userModelStream = serviceLocator<APIService>().getUserDataStream();
   }
 
   @override
@@ -84,9 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             AccountCard(userData: snapshot.data),
                             AliasCard(
-                              apiService: _apiService,
-                              aliasDataList: snapshot.data.aliasDataList,
-                            ),
+                                aliasDataList: snapshot.data.aliasDataList),
                           ],
                         ),
                       );
@@ -135,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
         showModalBottomSheet(
             context: context,
             builder: (context) {
-              return CreateNewAlias(apiService: _apiService);
+              return CreateNewAlias();
             });
       },
     );

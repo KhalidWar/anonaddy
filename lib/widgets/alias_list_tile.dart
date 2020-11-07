@@ -1,4 +1,5 @@
 import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,25 +9,24 @@ class AliasListTile extends StatefulWidget {
   const AliasListTile({
     Key key,
     this.aliasModel,
-    this.apiDataManager,
   }) : super(key: key);
 
   final dynamic aliasModel;
-  final APIService apiDataManager;
 
   @override
   _AliasListTileState createState() => _AliasListTileState();
 }
 
 class _AliasListTileState extends State<AliasListTile> {
+  final _apiService = serviceLocator<APIService>();
   bool isLoading = false;
 
   void toggleAliases() async {
     setState(() => isLoading = true);
 
     if (widget.aliasModel.isAliasActive == true) {
-      dynamic deactivateResult = await widget.apiDataManager
-          .deactivateAlias(aliasID: widget.aliasModel.aliasID);
+      dynamic deactivateResult =
+          await _apiService.deactivateAlias(aliasID: widget.aliasModel.aliasID);
       if (deactivateResult == null) {
         setState(() {
           isLoading = false;
@@ -41,8 +41,8 @@ class _AliasListTileState extends State<AliasListTile> {
         });
       }
     } else {
-      dynamic activateResult = await widget.apiDataManager
-          .activateAlias(aliasID: widget.aliasModel.aliasID);
+      dynamic activateResult =
+          await _apiService.activateAlias(aliasID: widget.aliasModel.aliasID);
       if (activateResult == null) {
         setState(() {
           isLoading = false;

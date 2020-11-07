@@ -1,6 +1,7 @@
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/services/access_token_service.dart';
-import 'package:anonaddy/services/network_service.dart';
+import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,31 +12,22 @@ class TokenLoginScreen extends StatefulWidget {
 }
 
 class _TokenLoginScreenState extends State<TokenLoginScreen> {
-  final AccessTokenService _accessTokenManager = AccessTokenService();
   TextEditingController _textEditingController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
   String _error = '';
 
-  Future<bool> _validateAccessToken() async {
-    final NetworkService networking = NetworkService(
-        url: 'https://app.anonaddy.com/api/v1/account-details',
-        accessToken: _textEditingController.text.toString());
-    final response = await networking.getData();
-    if (response == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   Future _logIn() async {
+    final _accessTokenManager = serviceLocator<AccessTokenService>();
+    final textInput = _textEditingController.text.trim();
+
     if (_formKey.currentState.validate()) {
       setState(() => _isLoading = true);
-      if (await _validateAccessToken() == true) {
-        await _accessTokenManager
-            .saveAccessToken(_textEditingController.text.toString());
+      if (await serviceLocator<APIService>().validateAccessToken(textInput) ==
+          true) {
+        await _accessTokenManager.saveAccessToken(textInput.toString());
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -194,9 +186,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
                                     style:
                                         Theme.of(context).textTheme.headline5,
                                   ),
-                            onPressed: () async {
-                              _logIn();
-                            },
+                            onPressed: () => _logIn(),
                           ),
                         ),
                       ],

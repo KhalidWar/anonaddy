@@ -1,22 +1,19 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkService {
-  const NetworkService({@required this.url, @required this.accessToken});
+  Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    "Accept": "application/json",
+  };
 
-  final String url, accessToken;
-
-  Future getData() async {
+  Future getData({String url, String accessToken}) async {
+    headers["Authorization"] = "Bearer $accessToken";
     http.Response response = await http.get(
       Uri.encodeFull(url),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "Authorization": "Bearer $accessToken",
-        "Accept": "application/json",
-      },
+      headers: headers,
     );
     if (response.statusCode == 200) {
       print('Network getData ${response.statusCode}');
@@ -27,15 +24,11 @@ class NetworkService {
     }
   }
 
-  Future postData({String description}) async {
+  Future postData({String description, String url, String accessToken}) async {
+    headers["Authorization"] = "Bearer $accessToken";
     http.Response response = await http.post(
       Uri.encodeFull(url),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "Authorization": "Bearer $accessToken",
-        "Accept": "application/json",
-      },
+      headers: headers,
       body: json.encode({
         "domain": "anonaddy.me",
         "format": "uuid",
@@ -47,19 +40,15 @@ class NetworkService {
       return jsonDecode(response.body);
     } else {
       print('Network postData ${response.statusCode}');
-      throw Exception('Failed to postData in Network');
+      return null;
     }
   }
 
-  Future activateAlias({String aliasID}) async {
+  Future activateAlias({String aliasID, String url, String accessToken}) async {
+    headers["Authorization"] = "Bearer $accessToken";
     http.Response response = await http.post(
       Uri.encodeFull(url),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "Authorization": "Bearer $accessToken",
-        "Accept": "application/json",
-      },
+      headers: headers,
       body: json.encode({"id": "$aliasID"}),
     );
     if (response.statusCode == 200) {
@@ -71,15 +60,11 @@ class NetworkService {
     }
   }
 
-  Future deactivateAlias() async {
+  Future deactivateAlias({String url, String accessToken}) async {
+    headers["Authorization"] = "Bearer $accessToken";
     http.Response response = await http.delete(
       Uri.encodeFull(url),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "Authorization": "Bearer $accessToken",
-        "Accept": "application/json",
-      },
+      headers: headers,
     );
     if (response.statusCode == 204) {
       print('Network deactivateAlias ${response.statusCode}');
@@ -90,14 +75,11 @@ class NetworkService {
     }
   }
 
-  Future editDescription({String newDescription}) async {
+  Future editDescription(
+      {String newDescription, String url, String accessToken}) async {
+    headers["Authorization"] = "Bearer $accessToken";
     http.Response response = await http.patch(Uri.encodeFull(url),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Authorization": "Bearer $accessToken",
-          "Accept": "application/json",
-        },
+        headers: headers,
         body: jsonEncode({
           "description": "$newDescription",
         }));
@@ -110,15 +92,11 @@ class NetworkService {
     }
   }
 
-  Future deleteAlias() async {
+  Future deleteAlias({String url, String accessToken}) async {
+    headers["Authorization"] = "Bearer $accessToken";
     http.Response response = await http.delete(
       Uri.encodeFull(url),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "Authorization": "Bearer $accessToken",
-        "Accept": "application/json",
-      },
+      headers: headers,
     );
     if (response.statusCode == 204) {
       print('Network deleteAlias ${response.statusCode}');

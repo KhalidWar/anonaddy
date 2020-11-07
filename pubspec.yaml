@@ -20,6 +20,7 @@ dependencies:
   provider: ^4.3.2+2
   url_launcher: ^5.7.8
   font_awesome_flutter: ^8.10.0
+  get_it: ^5.0.1
 
 dev_dependencies:
   flutter_test:
