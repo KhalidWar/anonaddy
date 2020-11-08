@@ -2,7 +2,7 @@
 Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's API](https://app.anonaddy.com/docs/) to interact with user account. This app has reached a stable release version as most basic crucial features have been implemented.
 
 ## Screenshots
-<img src="assets/screenshots/2020-09-19 12.11.35.jpg" width="150"> <img src="assets/screenshots/2020-09-19 12.11.43.jpg" width="150"> <img src="assets/screenshots/2020-09-19 12.11.50.jpg" width="150">
+<img src="assets/screenshots/home.jpg" width="150"> <img src="assets/screenshots/alias_detail.jpg" width="150"> <img src="assets/screenshots/delete_alias.jpg" width="150">
 
 
 ## Features
@@ -23,6 +23,7 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 - [URL Launcher](https://pub.dev/packages/url_launcher)
 - [Flutter Slidable](https://pub.dev/packages/flutter_slidable)
 - [Clipboard](https://pub.dev/packages/clipboard)
+- [Get It](https://pub.dev/packages/get_it)
 
 
 ## Installation
