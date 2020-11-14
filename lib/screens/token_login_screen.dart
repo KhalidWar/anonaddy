@@ -66,11 +66,11 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Color(0xFF19216C),
-        body: Form(
-          key: _formKey,
-          child: Center(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: Scaffold(
+          backgroundColor: Color(0xFF19216C),
+          body: Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -113,49 +113,52 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Login with Access Token',
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                              SizedBox(height: size.height * 0.01),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                      validator: (value) => value.length < 1
-                                          ? 'Please Enter Access Token'
-                                          : null,
-                                      controller: _textEditingController,
-                                      decoration: InputDecoration(
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context)
-                                                  .accentColor),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Login with Access Token',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                                SizedBox(height: size.height * 0.01),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                        validator: (value) => value.length < 1
+                                            ? 'Please Enter Access Token'
+                                            : null,
+                                        controller: _textEditingController,
+                                        decoration: InputDecoration(
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context)
+                                                    .accentColor),
+                                          ),
+                                          border: OutlineInputBorder(),
+                                          hintText: 'Paste here!',
                                         ),
-                                        border: OutlineInputBorder(),
-                                        hintText: 'Paste here!',
                                       ),
                                     ),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.paste),
-                                    onPressed: () {
-                                      _pasteFromClipboard();
-                                    },
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: size.height * 0.01),
-                              GestureDetector(
-                                child: Text('How to get Access Token?'),
-                                onTap: () {
-                                  //todo add how to get Access Token
-                                },
-                              ),
-                            ],
+                                    IconButton(
+                                      icon: Icon(Icons.paste),
+                                      onPressed: () {
+                                        _pasteFromClipboard();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: size.height * 0.01),
+                                GestureDetector(
+                                  child: Text('How to get Access Token?'),
+                                  onTap: () {
+                                    //todo add how to get Access Token
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Text(
