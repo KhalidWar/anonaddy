@@ -1,18 +1,19 @@
 import 'package:anonaddy/services/access_token_service.dart';
-import 'package:anonaddy/services/theme_service.dart';
+import 'package:anonaddy/utilities/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'initial_screen.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerWidget {
   final AccessTokenService accessTokenService = AccessTokenService();
 
   @override
-  Widget build(BuildContext context) {
-    String githubRepoURL = 'https://github.com/KhalidWar/anonaddy';
+  Widget build(BuildContext context, ScopedReader watch) {
+    final themeService = watch(themeServiceProvider);
+    final githubRepoURL = 'https://github.com/KhalidWar/anonaddy';
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -33,22 +34,16 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Consumer<ThemeService>(
-                builder: (context, themeManager, child) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Dark Theme',
-                          style: Theme.of(context).textTheme.headline5),
-                      Switch(
-                        value: themeManager.isDarkTheme,
-                        onChanged: (toggle) {
-                          themeManager.toggleTheme();
-                        },
-                      ),
-                    ],
-                  );
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Dark Theme',
+                      style: Theme.of(context).textTheme.headline5),
+                  Switch(
+                    value: themeService.isDarkTheme,
+                    onChanged: (toggle) => themeService.toggleTheme(),
+                  ),
+                ],
               ),
               GestureDetector(
                 child: Row(
