@@ -1,5 +1,5 @@
 import 'package:anonaddy/services/access_token_service.dart';
-import 'package:anonaddy/utilities/providers.dart';
+import 'package:anonaddy/services/theme_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,12 +8,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'initial_screen.dart';
 
 class SettingsScreen extends ConsumerWidget {
-  final AccessTokenService accessTokenService = AccessTokenService();
-
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final themeService = watch(themeServiceProvider);
+    final accessToken = watch(accessTokenServiceProvider);
     final githubRepoURL = 'https://github.com/KhalidWar/anonaddy';
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -41,7 +41,8 @@ class SettingsScreen extends ConsumerWidget {
                       style: Theme.of(context).textTheme.headline5),
                   Switch(
                     value: themeService.isDarkTheme,
-                    onChanged: (toggle) => themeService.toggleTheme(),
+                    onChanged: (toggle) =>
+                        context.read(themeServiceProvider).toggleTheme(),
                   ),
                 ],
               ),
@@ -100,11 +101,8 @@ class SettingsScreen extends ConsumerWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   onPressed: () {
-                    accessTokenService.removeAccessToken();
-
+                    accessToken.removeAccessToken();
                     //todo remove navigation stack upon log out
-                    // Navigator.pushAndRemoveUntil(context, InitialScreen(), (route) => false);
-
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) {
                       return InitialScreen();

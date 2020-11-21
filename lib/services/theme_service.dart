@@ -1,5 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/all.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final themeServiceProvider =
+    ChangeNotifierProvider<ThemeService>((ref) => ThemeService());
 
 class ThemeService extends ChangeNotifier {
   ThemeService() {

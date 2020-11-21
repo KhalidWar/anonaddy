@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/initial_screen.dart';
 import 'package:anonaddy/services/service_locator.dart';
-import 'package:anonaddy/utilities/providers.dart';
+import 'package:anonaddy/services/theme_service.dart';
 import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
