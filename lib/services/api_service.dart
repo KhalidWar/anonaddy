@@ -1,28 +1,33 @@
 import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/services/network_service.dart';
 import 'package:anonaddy/services/service_locator.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/all.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class APIService {
+final apiServiceProvider =
+    ChangeNotifierProvider.autoDispose<APIService>((ref) => APIService());
+
+class APIService extends ChangeNotifier {
   static const String _baseURL = 'https://app.anonaddy.com/api/v1';
   static const String _accountDetailsURL = 'account-details';
   static const String _activeAliasURL = 'active-aliases';
   static const String _aliasesURL = 'aliases';
 
-  String accessTokenValue;
+  String _accessTokenValue;
 
   Future<String> _getAccessToken() async {
-    if (accessTokenValue == null || accessTokenValue.isEmpty) {
+    if (_accessTokenValue == null || _accessTokenValue.isEmpty) {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       final tokenValue = sharedPreferences.getString('tokenKey');
       if (tokenValue == null || tokenValue.isEmpty) {
         return null;
       } else {
-        return accessTokenValue = tokenValue;
+        return _accessTokenValue = tokenValue;
       }
     }
-    return accessTokenValue;
+    return _accessTokenValue;
   }
 
   Stream<UserModel> getUserDataStream() async* {
