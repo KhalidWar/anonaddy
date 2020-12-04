@@ -1,17 +1,16 @@
+import 'package:anonaddy/models/alias_data_model.dart';
 import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
-import 'domain_format_widget.dart';
+import '../../widgets/domain_format_widget.dart';
 
 class AliasListTile extends StatefulWidget {
-  const AliasListTile({
-    Key key,
-    this.aliasModel,
-  }) : super(key: key);
+  const AliasListTile({Key key, this.aliasModel}) : super(key: key);
 
-  final dynamic aliasModel;
+  final AliasDataModel aliasModel;
 
   @override
   _AliasListTileState createState() => _AliasListTileState();
@@ -19,25 +18,25 @@ class AliasListTile extends StatefulWidget {
 
 class _AliasListTileState extends State<AliasListTile> {
   final _apiService = serviceLocator<APIService>();
-  bool isLoading = false;
+  bool _isLoading = false;
 
-  void toggleAliases() async {
-    setState(() => isLoading = true);
+  void _toggleAliases() async {
+    setState(() => _isLoading = true);
 
     if (widget.aliasModel.isAliasActive == true) {
       dynamic deactivateResult =
           await _apiService.deactivateAlias(aliasID: widget.aliasModel.aliasID);
       if (deactivateResult == null) {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Something went wrong. Could not deactivate alias.'),
           ));
         });
       } else {
         setState(() {
-          isLoading = false;
-          widget.aliasModel.isAliasActive = false;
+          _isLoading = false;
+          // widget.aliasModel.isAliasActive = false;
         });
       }
     } else {
@@ -45,17 +44,36 @@ class _AliasListTileState extends State<AliasListTile> {
           await _apiService.activateAlias(aliasID: widget.aliasModel.aliasID);
       if (activateResult == null) {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Something went wrong. Could not activate alias.'),
           ));
         });
       } else {
         setState(() {
-          isLoading = false;
-          widget.aliasModel.isAliasActive = true;
+          _isLoading = false;
+          // widget.aliasModel.isAliasActive = true;
         });
       }
+    }
+  }
+
+  void deleteAlias(dynamic aliasID) async {
+    setState(() => _isLoading = true);
+    dynamic deleteResult =
+        await serviceLocator<APIService>().deleteAlias(aliasID: aliasID);
+    if (deleteResult == null) {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Something went wrong. Could not delete alias.')));
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Alias Successfully Deleted!')));
     }
   }
 
@@ -63,38 +81,56 @@ class _AliasListTileState extends State<AliasListTile> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return ListTile(
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
+    //   _isLoading ? LinearProgressIndicator() : Container(),
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Email Alias copied to clipboard!'),
+    return Slidable(
+      key: Key(widget.aliasModel.toString()),
+      actionPane: SlidableStrechActionPane(),
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          color: Colors.red,
+          iconWidget: Icon(
+            Icons.delete,
+            size: 35,
+            color: Colors.white,
           ),
-        );
-      },
-      onLongPress: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return buildBottomSheet();
-          },
-        );
-      },
-      leading: isLoading
-          ? Container(
-              margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-              child: CircularProgressIndicator())
-          : Switch(
-              value: widget.aliasModel.isAliasActive,
-              onChanged: (toggle) => toggleAliases(),
+          onTap: () => deleteAlias(widget.aliasModel.aliasID),
+        ),
+      ],
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+        leading: _isLoading
+            ? Container(
+                margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                child: CircularProgressIndicator())
+            : Switch(
+                value: widget.aliasModel.isAliasActive,
+                onChanged: (toggle) => _toggleAliases(),
+              ),
+        title: Text(
+          widget.aliasModel.email,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        subtitle: Text(widget.aliasModel.emailDescription),
+        trailing: Icon(Icons.chevron_left),
+        onTap: () {
+          Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Email Alias copied to clipboard!'),
             ),
-      title: Text(
-        widget.aliasModel.email,
-        style: Theme.of(context).textTheme.bodyText1,
+          );
+        },
+        onLongPress: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return buildBottomSheet();
+            },
+          );
+        },
       ),
-      subtitle: Text(widget.aliasModel.emailDescription),
-      trailing: Icon(Icons.chevron_left),
     );
   }
 

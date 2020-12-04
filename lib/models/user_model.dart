@@ -49,14 +49,8 @@ class UserModel {
   final DateTime createdAt;
   final DateTime lastUpdated;
 
-  factory UserModel.fromJson(
-      {Map<String, dynamic> json, Map<String, Object> aliasJson}) {
-    List list = aliasJson['data'];
-    List<AliasDataModel> aliasDataList =
-        list.map((i) => AliasDataModel.fromJson(i)).toList();
-
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      aliasDataList: aliasDataList,
       id: json['data']["id"],
       username: json['data']["username"],
       fromName: json['data']["from_name"],

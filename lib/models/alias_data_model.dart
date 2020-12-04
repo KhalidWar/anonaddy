@@ -1,5 +1,5 @@
 class AliasDataModel {
-  AliasDataModel({
+  const AliasDataModel({
     this.aliasID,
     this.userId,
     this.aliasableId,
@@ -20,45 +20,47 @@ class AliasDataModel {
     this.deletedAt,
   });
 
-  String aliasID;
-  String userId;
-  dynamic aliasableId;
-  dynamic aliasableType;
-  String localPart;
-  dynamic extension;
-  // Domain domain;
-  String email;
-  bool isAliasActive;
-  String emailDescription;
-  int emailsForwarded;
-  int emailsBlocked;
-  int emailsReplied;
-  int emailsSent;
-  List<dynamic> recipients;
-  DateTime createdAt;
-  DateTime updatedAt;
-  dynamic deletedAt;
+  final String aliasID;
+  final String userId;
+  final dynamic aliasableId;
+  final dynamic aliasableType;
+  final String localPart;
+  final dynamic extension;
+  // final Domain domain;
+  final String email;
+  final bool isAliasActive;
+  final String emailDescription;
+  final int emailsForwarded;
+  final int emailsBlocked;
+  final int emailsReplied;
+  final int emailsSent;
+  final List<dynamic> recipients;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final dynamic deletedAt;
 
-  factory AliasDataModel.fromJson(Map<String, dynamic> json) => AliasDataModel(
-        aliasID: json["id"],
-        userId: json["user_id"],
-        aliasableId: json["aliasable_id"],
-        aliasableType: json["aliasable_type"],
-        localPart: json["local_part"],
-        extension: json["extension"],
-        // domain: domainValues.map[json["domain"]],
-        email: json["email"],
-        isAliasActive: json["active"],
-        emailDescription: json["description"] ?? 'No Description',
-        emailsForwarded: json["emails_forwarded"],
-        emailsBlocked: json["emails_blocked"],
-        emailsReplied: json["emails_replied"],
-        emailsSent: json["emails_sent"],
-        recipients: List<dynamic>.from(json["recipients"].map((x) => x)),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        deletedAt: json["deleted_at"],
-      );
+  factory AliasDataModel.fromJson(Map<String, dynamic> json) {
+    return AliasDataModel(
+      aliasID: json["id"],
+      userId: json["user_id"],
+      aliasableId: json["aliasable_id"],
+      aliasableType: json["aliasable_type"],
+      localPart: json["local_part"],
+      extension: json["extension"],
+      // domain: domainValues.map[json["domain"]],
+      email: json["email"],
+      isAliasActive: json["active"],
+      emailDescription: json["description"] ?? 'No Description',
+      emailsForwarded: json["emails_forwarded"],
+      emailsBlocked: json["emails_blocked"],
+      emailsReplied: json["emails_replied"],
+      emailsSent: json["emails_sent"],
+      recipients: List<dynamic>.from(json["recipients"].map((x) => x)),
+      createdAt: DateTime.parse(json["created_at"]),
+      updatedAt: DateTime.parse(json["updated_at"]),
+      deletedAt: json["deleted_at"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": aliasID,

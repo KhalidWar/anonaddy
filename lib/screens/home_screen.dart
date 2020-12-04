@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       title: SvgPicture.asset(
         'assets/images/logo.svg',
-        height: MediaQuery.of(context).size.height * 0.035,
+        height: MediaQuery.of(context).size.height * 0.03,
       ),
       centerTitle: true,
     );

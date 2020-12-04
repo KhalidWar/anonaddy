@@ -1,3 +1,4 @@
+import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/services/network_service.dart';
 import 'package:anonaddy/services/service_locator.dart';
@@ -30,7 +31,7 @@ class APIService extends ChangeNotifier {
     return _accessTokenValue;
   }
 
-  Stream<UserModel> getUserDataStream() async* {
+  Stream<UserModel> getUserStream() async* {
     yield await _fetchUserData();
     while (true) {
       await Future.delayed(Duration(seconds: 3));
@@ -41,21 +42,29 @@ class APIService extends ChangeNotifier {
   Future<UserModel> _fetchUserData() async {
     try {
       String _accessTokenValue = await _getAccessToken();
-      final accountDetailsResponse =
-          await serviceLocator<NetworkService>().getData(
-        url: '$_baseURL/$_accountDetailsURL',
-        accessToken: _accessTokenValue,
-      );
-      final aliasDetailsResponse =
-          await serviceLocator<NetworkService>().getData(
-        url: '$_baseURL/$_aliasesURL',
-        accessToken: _accessTokenValue,
-      );
-      dynamic data = UserModel.fromJson(
-        json: accountDetailsResponse,
-        aliasJson: aliasDetailsResponse,
-      );
-      return data;
+      final response = await serviceLocator<NetworkService>().getData(
+          url: '$_baseURL/$_accountDetailsURL', accessToken: _accessTokenValue);
+      return UserModel.fromJson(response);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Stream<AliasModel> getAliasStream() async* {
+    yield await _fetchAliasData();
+    while (true) {
+      await Future.delayed(Duration(seconds: 3));
+      yield await _fetchAliasData();
+    }
+  }
+
+  Future<AliasModel> _fetchAliasData() async {
+    try {
+      String _accessTokenValue = await _getAccessToken();
+      final response = await serviceLocator<NetworkService>().getData(
+          url: '$_baseURL/$_aliasesURL', accessToken: _accessTokenValue);
+      return AliasModel.fromJson(response);
     } catch (e) {
       print(e.toString());
       return null;
