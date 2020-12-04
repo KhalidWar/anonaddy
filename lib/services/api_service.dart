@@ -3,6 +3,7 @@ import 'package:anonaddy/services/network_service.dart';
 import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final apiServiceProvider =
@@ -18,8 +19,7 @@ class APIService extends ChangeNotifier {
 
   Future<String> _getAccessToken() async {
     if (_accessTokenValue == null || _accessTokenValue.isEmpty) {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
+      final sharedPreferences = await SharedPreferences.getInstance();
       final tokenValue = sharedPreferences.getString('tokenKey');
       if (tokenValue == null || tokenValue.isEmpty) {
         return null;
