@@ -21,6 +21,7 @@ dependencies:
   font_awesome_flutter: ^8.10.0
   get_it: ^5.0.1
   flutter_riverpod: ^0.12.1
+  animations: ^1.1.2
 
 dev_dependencies:
   flutter_test:

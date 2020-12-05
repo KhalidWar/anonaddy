@@ -72,6 +72,7 @@ class _AliasTabState extends State<AliasTab> {
                           ),
                     ),
                   ),
+                  SizedBox(height: size.height * 0.01),
                   StreamBuilder<AliasModel>(
                     stream: _userDataStream,
                     builder: (context, snapshot) {
@@ -104,19 +105,16 @@ class _AliasTabState extends State<AliasTab> {
                               ]);
                             }
 
-                            return Padding(
-                              padding: EdgeInsets.only(top: 10),
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: snapshot.data.aliasDataList.length,
-                                itemBuilder: (context, index) {
-                                  return AliasListTile(
-                                    aliasModel:
-                                        snapshot.data.aliasDataList[index],
-                                  );
-                                },
-                              ),
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: snapshot.data.aliasDataList.length,
+                              itemBuilder: (context, index) {
+                                return AliasListTile(
+                                  aliasModel:
+                                      snapshot.data.aliasDataList[index],
+                                );
+                              },
                             );
                           } else if (snapshot.hasError) {
                             return ErrorScreen(
