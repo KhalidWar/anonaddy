@@ -32,7 +32,6 @@ class _AliasTabState extends State<AliasTab> {
     return Scaffold(
       floatingActionButton: buildFloatingActionButton(context),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 3, left: 3, right: 3),
         child: Column(
           children: [
             Card(
@@ -47,61 +46,91 @@ class _AliasTabState extends State<AliasTab> {
                   focusedBorder: OutlineInputBorder(
                       borderSide:
                           BorderSide(color: Theme.of(context).accentColor)),
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent)),
+                  enabledBorder: OutlineInputBorder(),
                 ),
               ),
             ),
             Card(
-              child: StreamBuilder<AliasModel>(
-                stream: _userDataStream,
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                      return ErrorScreen(
-                        label:
-                            'No Internet Connection.\nMake sure you\'re online.',
-                        buttonLabel: 'Reload',
-                        buttonOnPress: () =>
-                            context.refresh(apiServiceProvider).getUserStream(),
-                      );
-                    case ConnectionState.waiting:
-                      return FetchingDataIndicator();
-                    default:
-                      if (snapshot.hasData) {
-                        for (var item in snapshot.data.aliasDataList) {
-                          AliasModel(aliasDataList: [
-                            AliasDataModel(
-                              aliasID: item.aliasID,
-                              email: item.email,
-                              emailDescription: item.emailDescription,
-                              createdAt: item.createdAt,
-                              isAliasActive: item.isAliasActive,
-                            ),
-                          ]);
-                        }
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Text(
+                      'Aliases',
+                      style: Theme.of(context).textTheme.headline6.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                  StreamBuilder<AliasModel>(
+                    stream: _userDataStream,
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          return ErrorScreen(
+                            label:
+                                'No Internet Connection.\nMake sure you\'re online.',
+                            buttonLabel: 'Reload',
+                            buttonOnPress: () => context
+                                .refresh(apiServiceProvider)
+                                .getUserStream(),
+                          );
+                        case ConnectionState.waiting:
+                          return Padding(
+                            padding: EdgeInsets.all(20),
+                            child: FetchingDataIndicator(),
+                          );
+                        default:
+                          if (snapshot.hasData) {
+                            for (var item in snapshot.data.aliasDataList) {
+                              AliasModel(aliasDataList: [
+                                AliasDataModel(
+                                  aliasID: item.aliasID,
+                                  email: item.email,
+                                  emailDescription: item.emailDescription,
+                                  createdAt: item.createdAt,
+                                  isAliasActive: item.isAliasActive,
+                                ),
+                              ]);
+                            }
 
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: snapshot.data.aliasDataList.length,
-                          itemBuilder: (context, index) {
-                            return AliasListTile(
-                              aliasModel: snapshot.data.aliasDataList[index],
+                            return Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data.aliasDataList.length,
+                                itemBuilder: (context, index) {
+                                  return AliasListTile(
+                                    aliasModel:
+                                        snapshot.data.aliasDataList[index],
+                                  );
+                                },
+                              ),
                             );
-                          },
-                        );
-                      } else if (snapshot.hasError) {
-                        return ErrorScreen(
-                          label: '${snapshot.error}',
-                          buttonLabel: 'Sign In',
-                          buttonOnPress: () {},
-                        );
-                      } else {
-                        return LoadingWidget();
+                          } else if (snapshot.hasError) {
+                            return ErrorScreen(
+                              label: '${snapshot.error}',
+                              buttonLabel: 'Sign In',
+                              buttonOnPress: () {},
+                            );
+                          } else {
+                            return LoadingWidget();
+                          }
                       }
-                  }
-                },
+                    },
+                  ),
+                ],
               ),
             ),
           ],

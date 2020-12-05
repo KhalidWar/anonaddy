@@ -24,36 +24,40 @@ class _AccountTabState extends State<AccountTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(5),
-      child: StreamBuilder<UserModel>(
-        stream: userDataStream,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return ErrorScreen(
+    return Column(
+      children: [
+        StreamBuilder<UserModel>(
+          stream: userDataStream,
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                return ErrorScreen(
                   label: 'No Internet Connection.\nMake sure you\'re online.',
                   buttonLabel: 'Reload',
-                  buttonOnPress: () {});
-              break;
-            case ConnectionState.waiting:
-              return FetchingDataIndicator();
-            default:
-              if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  child: AccountCard(userData: snapshot.data),
+                  buttonOnPress: () {},
                 );
-              } else if (snapshot.hasError) {
-                return ErrorScreen(
+                break;
+              case ConnectionState.waiting:
+                return FetchingDataIndicator();
+              default:
+                if (snapshot.hasData) {
+                  return Padding(
+                    padding: EdgeInsets.all(5),
+                    child: AccountCard(userData: snapshot.data),
+                  );
+                } else if (snapshot.hasError) {
+                  return ErrorScreen(
                     label: '${snapshot.error}',
                     buttonLabel: 'Sign In',
-                    buttonOnPress: () {});
-              } else {
-                return LoadingWidget();
-              }
-          }
-        },
-      ),
+                    buttonOnPress: () {},
+                  );
+                } else {
+                  return LoadingWidget();
+                }
+            }
+          },
+        ),
+      ],
     );
   }
 }
