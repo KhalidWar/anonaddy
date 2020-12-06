@@ -1,6 +1,7 @@
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/services/access_token_service.dart';
 import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/form_validator.dart';
 import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,6 +59,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
       _textEditingController.clear();
       setState(() {
         _textEditingController.text = data.text;
+        _error = '';
       });
     }
   }
@@ -127,10 +129,14 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
                                   children: [
                                     Expanded(
                                       child: TextFormField(
-                                        validator: (value) => value.length < 1
-                                            ? 'Please Enter Access Token'
-                                            : null,
+                                        validator: (input) => FormValidator()
+                                            .accessTokenValidator(input),
                                         controller: _textEditingController,
+                                        onFieldSubmitted: (input) => _logIn(),
+                                        textInputAction: TextInputAction.go,
+                                        keyboardType: TextInputType.multiline,
+                                        minLines: 1,
+                                        maxLines: 6,
                                         decoration: InputDecoration(
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
@@ -144,9 +150,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
                                     ),
                                     IconButton(
                                       icon: Icon(Icons.paste),
-                                      onPressed: () {
-                                        _pasteFromClipboard();
-                                      },
+                                      onPressed: () => _pasteFromClipboard(),
                                     ),
                                   ],
                                 ),
