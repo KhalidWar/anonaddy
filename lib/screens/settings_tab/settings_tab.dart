@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
-import '../initial_screen.dart';
+import '../login_screen/initial_screen.dart';
 
 class SettingsTab extends StatefulWidget {
   @override

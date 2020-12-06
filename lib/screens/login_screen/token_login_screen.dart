@@ -1,8 +1,8 @@
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/services/access_token_service.dart';
 import 'package:anonaddy/services/api_service.dart';
-import 'package:anonaddy/services/form_validator.dart';
 import 'package:anonaddy/services/service_locator.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';

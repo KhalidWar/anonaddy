@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/initial_screen.dart';
+import 'package:anonaddy/screens/login_screen/initial_screen.dart';
 import 'package:anonaddy/services/service_locator.dart';
 import 'package:anonaddy/services/theme_service.dart';
 import 'package:anonaddy/utilities/theme.dart';
