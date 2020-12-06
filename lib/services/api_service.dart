@@ -63,7 +63,8 @@ class APIService extends ChangeNotifier {
     try {
       String _accessTokenValue = await _getAccessToken();
       final response = await serviceLocator<NetworkService>().getData(
-          url: '$_baseURL/$_aliasesURL', accessToken: _accessTokenValue);
+          url: '$_baseURL/$_aliasesURL?deleted=with',
+          accessToken: _accessTokenValue);
       return AliasModel.fromJson(response);
     } catch (e) {
       print(e.toString());

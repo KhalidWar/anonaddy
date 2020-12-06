@@ -93,28 +93,52 @@ class _AliasTabState extends State<AliasTab> {
                           );
                         default:
                           if (snapshot.hasData) {
-                            for (var item in snapshot.data.aliasDataList) {
-                              AliasModel(aliasDataList: [
-                                AliasDataModel(
-                                  aliasID: item.aliasID,
-                                  email: item.email,
-                                  emailDescription: item.emailDescription,
-                                  createdAt: item.createdAt,
-                                  isAliasActive: item.isAliasActive,
-                                ),
-                              ]);
+                            final aliasDataList = snapshot.data.aliasDataList;
+                            List<AliasDataModel> _availableAliasList = [];
+                            List<AliasDataModel> _deletedAliasList = [];
+
+                            for (int i = 0; i < aliasDataList.length; i++) {
+                              if (aliasDataList[i].deletedAt == null) {
+                                _availableAliasList.add(aliasDataList[i]);
+                              } else {
+                                _deletedAliasList.add(aliasDataList[i]);
+                              }
                             }
 
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data.aliasDataList.length,
-                              itemBuilder: (context, index) {
-                                return AliasListTile(
-                                  aliasModel:
-                                      snapshot.data.aliasDataList[index],
-                                );
-                              },
+                            return Column(
+                              children: [
+                                ExpansionTile(
+                                  title: Text('Available Aliases'),
+                                  initiallyExpanded: true,
+                                  children: [
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: _availableAliasList.length,
+                                      itemBuilder: (context, index) {
+                                        return AliasListTile(
+                                            aliasModel:
+                                                _availableAliasList[index]);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text('Deleted Aliases'),
+                                  children: [
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: _deletedAliasList.length,
+                                      itemBuilder: (context, index) {
+                                        return AliasListTile(
+                                          aliasModel: _deletedAliasList[index],
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
                             );
                           } else if (snapshot.hasError) {
                             return ErrorScreen(
