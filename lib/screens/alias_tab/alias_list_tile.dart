@@ -1,10 +1,12 @@
 import 'package:anonaddy/models/alias_data_model.dart';
 import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/services/service_locator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../widgets/domain_format_widget.dart';
+import 'alias_detailed_screen.dart';
 
 class AliasListTile extends StatefulWidget {
   const AliasListTile({Key key, this.aliasModel}) : super(key: key);
@@ -18,6 +20,14 @@ class AliasListTile extends StatefulWidget {
 class _AliasListTileState extends State<AliasListTile> {
   final _apiService = serviceLocator<APIService>();
   bool _isLoading = false;
+
+  bool _isDeleted() {
+    if (widget.aliasModel.deletedAt == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   void _toggleAliases() async {
     setState(() => _isLoading = true);
@@ -57,10 +67,10 @@ class _AliasListTileState extends State<AliasListTile> {
     }
   }
 
-  void _deleteAlias(dynamic aliasID) async {
+  void _deleteAlias() async {
     setState(() => _isLoading = true);
-    dynamic deleteResult =
-        await serviceLocator<APIService>().deleteAlias(aliasID: aliasID);
+    dynamic deleteResult = await serviceLocator<APIService>()
+        .deleteAlias(aliasID: widget.aliasModel.aliasID);
     if (deleteResult == null) {
       setState(() {
         _isLoading = false;
@@ -75,6 +85,8 @@ class _AliasListTileState extends State<AliasListTile> {
           .showSnackBar(SnackBar(content: Text('Alias Successfully Deleted!')));
     }
   }
+
+  void _restoreAlias() {}
 
   void _copyOnTab() {
     Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
@@ -106,13 +118,13 @@ class _AliasListTileState extends State<AliasListTile> {
               child: CircularProgressIndicator())
           : Switch(
               value: widget.aliasModel.isAliasActive,
-              onChanged: (toggle) => _toggleAliases()),
+              onChanged: _isDeleted() ? null : (toggle) => _toggleAliases(),
+            ),
       trailing:
           IconButton(icon: Icon(Icons.copy), onPressed: () => _copyOnTab()),
       children: [
         Container(
-          height: size.height * 0.22,
-          // color: Colors.grey[200],
+          padding: EdgeInsets.only(left: 10, right: 10, top: 5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -132,15 +144,42 @@ class _AliasListTileState extends State<AliasListTile> {
                 label: 'Created At',
                 value: widget.aliasModel.createdAt,
               ),
-              // DomainFormatWidget(
-              //   label: 'Deleted At:',
-              //   value: widget.aliasModel.deletedAt.toString(),
-              // ),
-
-              FlatButton(
-                child: Text('View more details'),
-                onPressed: () {},
-              )
+              _isDeleted()
+                  ? DomainFormatWidget(
+                      label: 'Deleted At', value: widget.aliasModel.deletedAt)
+                  : Container(),
+              SizedBox(height: size.height * 0.02),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FlatButton(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    color: _isDeleted() ? Colors.green : Colors.red,
+                    child:
+                        Text(_isDeleted() ? 'Restore alias' : 'Delete alias'),
+                    onPressed: _isDeleted()
+                        ? () => _restoreAlias()
+                        : () => _deleteAlias(),
+                  ),
+                  FlatButton(
+                    color: Colors.grey,
+                    child: Text('View details'),
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AliasDetailScreen(
+                              aliasData: widget.aliasModel,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),

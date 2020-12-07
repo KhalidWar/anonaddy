@@ -19,39 +19,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: WillPopScope(
-        onWillPop: () => showDialog(
-            context: context, builder: (context) => PopScopeDialog()),
-        child: Scaffold(
-          appBar: buildAppBar(context),
-          body: IndexedStack(
-            index: _selectedIndex,
-            children: [
-              AccountTab(),
-              AliasTab(),
-              SettingsTab(),
-            ],
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            onTap: _selectedTab,
-            currentIndex: _selectedIndex,
-            selectedItemColor: Theme.of(context).appBarTheme.color,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle),
-                label: 'Account',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.alternate_email_sharp),
-                label: 'Aliases',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-            ],
-          ),
+    return WillPopScope(
+      onWillPop: () =>
+          showDialog(context: context, builder: (context) => PopScopeDialog()),
+      child: Scaffold(
+        appBar: buildAppBar(context),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: [
+            AccountTab(),
+            AliasTab(),
+            SettingsTab(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: _selectedTab,
+          currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).appBarTheme.color,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Account',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.alternate_email_sharp),
+              label: 'Aliases',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
         ),
       ),
     );

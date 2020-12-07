@@ -30,8 +30,8 @@ class _SettingsTabState extends State<SettingsTab> {
           ExpansionTile(
             collapsedBackgroundColor: Colors.grey[300],
             childrenPadding: EdgeInsets.all(5),
-            leading: Icon(Icons.settings),
-            title: Text('App Settings'),
+            leading: Icon(Icons.settings, color: Colors.grey[700]),
+            title: Text('App Settings', style: TextStyle(color: Colors.black)),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
