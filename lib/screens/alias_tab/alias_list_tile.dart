@@ -3,7 +3,6 @@ import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../widgets/domain_format_widget.dart';
 
@@ -58,7 +57,7 @@ class _AliasListTileState extends State<AliasListTile> {
     }
   }
 
-  void deleteAlias(dynamic aliasID) async {
+  void _deleteAlias(dynamic aliasID) async {
     setState(() => _isLoading = true);
     dynamic deleteResult =
         await serviceLocator<APIService>().deleteAlias(aliasID: aliasID);
@@ -77,153 +76,75 @@ class _AliasListTileState extends State<AliasListTile> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    //   _isLoading ? LinearProgressIndicator() : Container(),
-
-    return Slidable(
-      key: Key(widget.aliasModel.toString()),
-      actionPane: SlidableStrechActionPane(),
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          color: Colors.red,
-          iconWidget: Icon(
-            Icons.delete,
-            size: 35,
-            color: Colors.white,
-          ),
-          onTap: () => deleteAlias(widget.aliasModel.aliasID),
-        ),
-      ],
-      child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-        leading: _isLoading
-            ? Container(
-                margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-                child: CircularProgressIndicator())
-            : Switch(
-                value: widget.aliasModel.isAliasActive,
-                onChanged: (toggle) => _toggleAliases(),
-              ),
-        title: Text(
-          widget.aliasModel.email,
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
-        subtitle: Text(widget.aliasModel.emailDescription),
-        trailing: Icon(Icons.chevron_left),
-        onTap: () {
-          Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Email Alias copied to clipboard!'),
-            ),
-          );
-        },
-        onLongPress: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return buildBottomSheet();
-            },
-          );
-        },
+  void _copyOnTab() {
+    Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Email Alias copied to clipboard!'),
       ),
     );
   }
 
-  Container buildBottomSheet() {
+  @override
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return Container(
-      height: size.height * 0.7,
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
+    return ExpansionTile(
+      tilePadding: EdgeInsets.all(0),
+      backgroundColor: Colors.grey[200],
+      title: Text(
+        '${widget.aliasModel.email}',
+        style: TextStyle(color: Colors.black),
+      ),
+      subtitle: Text(
+        '${widget.aliasModel.emailDescription}',
+        style: TextStyle(color: Colors.grey),
+      ),
+      leading: _isLoading
+          ? Container(
+              margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+              child: CircularProgressIndicator())
+          : Switch(
+              value: widget.aliasModel.isAliasActive,
+              onChanged: (toggle) => _toggleAliases()),
+      trailing:
+          IconButton(icon: Icon(Icons.copy), onPressed: () => _copyOnTab()),
+      children: [
+        Container(
+          height: size.height * 0.22,
+          // color: Colors.grey[200],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Divider(
-                thickness: 3,
-                color: Colors.grey,
-                indent: size.width * 0.35,
-                endIndent: size.width * 0.35,
+              DomainFormatWidget(
+                label: 'Emails Forwarded',
+                value: widget.aliasModel.emailsForwarded.toString(),
               ),
-              Text(
-                'Alias Details',
-                style: Theme.of(context).textTheme.headline5,
+              DomainFormatWidget(
+                label: 'Emails Blocked',
+                value: widget.aliasModel.emailsBlocked.toString(),
               ),
+              DomainFormatWidget(
+                label: 'Emails Sent',
+                value: widget.aliasModel.emailsSent,
+              ),
+              DomainFormatWidget(
+                label: 'Created At',
+                value: widget.aliasModel.createdAt,
+              ),
+              // DomainFormatWidget(
+              //   label: 'Deleted At:',
+              //   value: widget.aliasModel.deletedAt.toString(),
+              // ),
+
+              FlatButton(
+                child: Text('View more details'),
+                onPressed: () {},
+              )
             ],
           ),
-          SizedBox(height: size.height * 0.04),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Email:',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    Text(
-                      widget.aliasModel.email,
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                  ],
-                ),
-                DomainFormatWidget(
-                  label: 'ID:',
-                  value: widget.aliasModel.userId,
-                ),
-                DomainFormatWidget(
-                  label: 'Domain:',
-                  value: '@anonaddy.me',
-                ),
-                DomainFormatWidget(
-                  label: 'Email Description:',
-                  value: widget.aliasModel.emailDescription,
-                ),
-                DomainFormatWidget(
-                  label: 'Format:',
-                  value: 'UUID',
-                ),
-                DomainFormatWidget(
-                  label: 'Active:',
-                  value: widget.aliasModel.isAliasActive ? 'Yes' : 'No',
-                ),
-                DomainFormatWidget(
-                  label: 'Emails Forwarded:',
-                  value: widget.aliasModel.emailsForwarded.toString(),
-                ),
-                DomainFormatWidget(
-                  label: 'Emails Blocked:',
-                  value: widget.aliasModel.emailsBlocked.toString(),
-                ),
-                DomainFormatWidget(
-                  label: 'Emails Sent:',
-                  value: widget.aliasModel.emailsSent,
-                ),
-                DomainFormatWidget(
-                  label: 'Created At:',
-                  value: widget.aliasModel.createdAt,
-                ),
-                // DomainFormatWidget(
-                //   label: 'Deleted At:',
-                //   value: widget.aliasModel.deletedAt.toString(),
-                // ),
-                DomainFormatWidget(
-                  label: 'Updated At:',
-                  value: widget.aliasModel.updatedAt.toString(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -10,22 +10,28 @@ class DomainFormatWidget extends StatelessWidget {
   final String label;
   final dynamic value;
 
+  String _dateTimeFixer() {
+    if (value.runtimeType == DateTime) {
+      return '${value.toString().split(' ').first}';
+    } else {
+      return '$value';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Container(
-      width: size.width * 0.8,
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyText2,
           ),
           Text(
-            '$value',
-            style: Theme.of(context).textTheme.bodyText2,
+            _dateTimeFixer(),
+            style: Theme.of(context).textTheme.headline6,
           ),
         ],
       ),

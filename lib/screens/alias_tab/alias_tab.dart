@@ -94,7 +94,10 @@ class _AliasTabState extends State<AliasTab> {
                               return Column(
                                 children: [
                                   ExpansionTile(
-                                    title: Text('Available Aliases'),
+                                    title: Text(
+                                      'Available Aliases',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
                                     initiallyExpanded: true,
                                     children: [
                                       ListView.builder(
@@ -110,7 +113,10 @@ class _AliasTabState extends State<AliasTab> {
                                     ],
                                   ),
                                   ExpansionTile(
-                                    title: Text('Deleted Aliases'),
+                                    title: Text(
+                                      'Deleted Aliases',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
                                     children: [
                                       Column(
                                         children: [
