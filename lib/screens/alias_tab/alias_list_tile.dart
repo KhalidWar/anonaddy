@@ -4,6 +4,7 @@ import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../widgets/domain_format_widget.dart';
 import 'alias_detailed_screen.dart';
@@ -67,33 +68,41 @@ class _AliasListTileState extends State<AliasListTile> {
     }
   }
 
-  void _deleteAlias() async {
+  void _deleteOrRestoreAlias() async {
     setState(() => _isLoading = true);
-    dynamic deleteResult = await serviceLocator<APIService>()
-        .deleteAlias(aliasID: widget.aliasModel.aliasID);
-    if (deleteResult == null) {
+    final result = _isDeleted()
+        ? await context
+            .read(apiServiceProvider)
+            .restoreAlias(widget.aliasModel.aliasID)
+        : await context
+            .read(apiServiceProvider)
+            .deleteAlias(widget.aliasModel.aliasID);
+
+    if (result == null) {
       setState(() {
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Something went wrong. Could not delete alias.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                'Something went wrong. Could not ${_isDeleted() ? 'restore' : 'delete'} alias.')),
+      );
     } else {
       setState(() {
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Alias Successfully Deleted!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                'Alias ${_isDeleted() ? 'restored' : 'deleted'} successfully!')),
+      );
     }
   }
-
-  void _restoreAlias() {}
 
   void _copyOnTab() {
     Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Email Alias copied to clipboard!'),
-      ),
+      SnackBar(content: Text('Email Alias copied to clipboard!')),
     );
   }
 
@@ -157,9 +166,7 @@ class _AliasListTileState extends State<AliasListTile> {
                     color: _isDeleted() ? Colors.green : Colors.red,
                     child:
                         Text(_isDeleted() ? 'Restore alias' : 'Delete alias'),
-                    onPressed: _isDeleted()
-                        ? () => _restoreAlias()
-                        : () => _deleteAlias(),
+                    onPressed: _deleteOrRestoreAlias,
                   ),
                   FlatButton(
                     color: Colors.grey,

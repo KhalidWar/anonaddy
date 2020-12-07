@@ -106,4 +106,17 @@ class NetworkService {
       return null;
     }
   }
+
+  Future restoreAlias({String url, String accessToken}) async {
+    headers["Authorization"] = "Bearer $accessToken";
+    http.Response response =
+        await http.patch(Uri.encodeFull(url), headers: headers);
+    if (response.statusCode == 200) {
+      print('Network restoreAlias ${response.statusCode}');
+      return response.body;
+    } else {
+      print('Network restoreAlias ${response.statusCode}');
+      return null;
+    }
+  }
 }

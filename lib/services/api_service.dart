@@ -130,11 +130,24 @@ class APIService extends ChangeNotifier {
     }
   }
 
-  Future deleteAlias({String aliasID}) async {
+  Future deleteAlias(String aliasID) async {
     try {
       String _accessTokenValue = await _getAccessToken();
       dynamic data = await serviceLocator<NetworkService>().deleteAlias(
           url: '$_baseURL/$_aliasesURL/$aliasID',
+          accessToken: _accessTokenValue);
+      return data;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future restoreAlias(String aliasID) async {
+    try {
+      String _accessTokenValue = await _getAccessToken();
+      dynamic data = await serviceLocator<NetworkService>().restoreAlias(
+          url: '$_baseURL/$_aliasesURL/$aliasID/restore',
           accessToken: _accessTokenValue);
       return data;
     } catch (e) {
