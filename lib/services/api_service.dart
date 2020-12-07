@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
-import 'package:anonaddy/services/network_service.dart';
-import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 final apiServiceProvider =
@@ -15,6 +16,12 @@ class APIService extends ChangeNotifier {
   static const String _accountDetailsURL = 'account-details';
   static const String _activeAliasURL = 'active-aliases';
   static const String _aliasesURL = 'aliases';
+
+  final _headers = <String, String>{
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    "Accept": "application/json",
+  };
 
   String _accessTokenValue;
 
@@ -31,6 +38,22 @@ class APIService extends ChangeNotifier {
     return _accessTokenValue;
   }
 
+  Future<bool> validateAccessToken(String accessToken) async {
+    _headers["Authorization"] = "Bearer $accessToken";
+
+    final response = await http.get(
+        Uri.encodeFull('$_baseURL/$_accountDetailsURL'),
+        headers: _headers);
+
+    if (response.statusCode == 200) {
+      print('validateAccessToken ${response.statusCode}');
+      return true;
+    } else {
+      print('validateAccessToken ${response.statusCode}');
+      return false;
+    }
+  }
+
   Stream<UserModel> getUserStream() async* {
     yield await _fetchUserData();
     while (true) {
@@ -41,10 +64,20 @@ class APIService extends ChangeNotifier {
 
   Future<UserModel> _fetchUserData() async {
     try {
-      String _accessTokenValue = await _getAccessToken();
-      final response = await serviceLocator<NetworkService>().getData(
-          url: '$_baseURL/$_accountDetailsURL', accessToken: _accessTokenValue);
-      return UserModel.fromJson(response);
+      String accessToken = await _getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.get(
+          Uri.encodeFull('$_baseURL/$_accountDetailsURL'),
+          headers: _headers);
+
+      if (response.statusCode == 200) {
+        print('Network getData ${response.statusCode}');
+        return UserModel.fromJson(jsonDecode(response.body));
+      } else {
+        print('Network getData ${response.statusCode}');
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;
@@ -61,108 +94,162 @@ class APIService extends ChangeNotifier {
 
   Future<AliasModel> _fetchAliasData() async {
     try {
-      String _accessTokenValue = await _getAccessToken();
-      final response = await serviceLocator<NetworkService>().getData(
-          url: '$_baseURL/$_aliasesURL?deleted=with',
-          accessToken: _accessTokenValue);
-      return AliasModel.fromJson(response);
+      String accessToken = await _getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.get(
+          Uri.encodeFull('$_baseURL/$_aliasesURL?deleted=with'),
+          headers: _headers);
+
+      if (response.statusCode == 200) {
+        print('Network getData ${response.statusCode}');
+        return AliasModel.fromJson(jsonDecode(response.body));
+      } else {
+        print('Network getData ${response.statusCode}');
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future createNewAlias({String description}) async {
+  Future<String> createNewAlias({String description}) async {
     try {
-      String _accessTokenValue = await _getAccessToken();
-      dynamic data = await serviceLocator<NetworkService>().postData(
-        description: description,
-        url: '$_baseURL/$_aliasesURL',
-        accessToken: _accessTokenValue,
+      String accessToken = await _getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.post(Uri.encodeFull('$_baseURL/$_aliasesURL'),
+          headers: _headers,
+          body: json.encode({
+            "domain": "anonaddy.me",
+            "format": "uuid",
+            "description": "$description",
+          }));
+
+      if (response.statusCode == 201) {
+        print('Network postData ${response.statusCode}');
+        return jsonDecode(response.body);
+      } else {
+        print('Network postData ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<String> activateAlias({String aliasID}) async {
+    try {
+      String accessToken = await _getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.post(
+        Uri.encodeFull('$_baseURL/$_activeAliasURL'),
+        headers: _headers,
+        body: json.encode({"id": "$aliasID"}),
       );
-      return data;
+
+      if (response.statusCode == 200) {
+        print('Network activateAlias ${response.statusCode}');
+        return jsonDecode(response.body);
+      } else {
+        print('Network activateAlias ${response.statusCode}');
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future activateAlias({String aliasID}) async {
+  Future<String> deactivateAlias({String aliasID}) async {
     try {
-      String _accessTokenValue = await _getAccessToken();
-      dynamic data = await serviceLocator<NetworkService>().activateAlias(
-          aliasID: aliasID,
-          url: '$_baseURL/$_activeAliasURL',
-          accessToken: _accessTokenValue);
-      return data;
+      String accessToken = await _getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.delete(
+          Uri.encodeFull('$_baseURL/$_activeAliasURL/$aliasID'),
+          headers: _headers);
+
+      if (response.statusCode == 204) {
+        print('Network deactivateAlias ${response.statusCode}');
+        return response.body;
+      } else {
+        print('Network deactivateAlias ${response.statusCode}');
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future deactivateAlias({String aliasID}) async {
+  Future<String> editDescription({String newDescription}) async {
     try {
-      String _accessTokenValue = await _getAccessToken();
-      dynamic data = await serviceLocator<NetworkService>().deactivateAlias(
-        url: '$_baseURL/$_activeAliasURL/$aliasID',
-        accessToken: _accessTokenValue,
-      );
-      return data;
+      String accessToken = await _getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.patch(
+          Uri.encodeFull('$_baseURL/$_aliasesURL/$newDescription'),
+          headers: _headers,
+          body: jsonEncode({"description": "$newDescription"}));
+
+      if (response.statusCode == 200) {
+        print('Network editDescription ${response.statusCode}');
+        return response.body;
+      } else {
+        print('Network editDescription ${response.statusCode}');
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future editDescription({String newDescription}) async {
+  Future<String> deleteAlias(String aliasID) async {
     try {
-      String _accessTokenValue = await _getAccessToken();
-      dynamic data = await serviceLocator<NetworkService>().editDescription(
-        newDescription: newDescription,
-        url: '$_baseURL/$_aliasesURL/$newDescription',
-        accessToken: _accessTokenValue,
-      );
-      return data;
+      String accessToken = await _getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.delete(
+          Uri.encodeFull('$_baseURL/$_aliasesURL/$aliasID'),
+          headers: _headers);
+
+      if (response.statusCode == 204) {
+        print('Network deleteAlias ${response.statusCode}');
+        return response.body;
+      } else {
+        print('Network deleteAlias ${response.statusCode}');
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;
     }
   }
 
-  Future deleteAlias(String aliasID) async {
+  Future<String> restoreAlias(String aliasID) async {
     try {
-      String _accessTokenValue = await _getAccessToken();
-      dynamic data = await serviceLocator<NetworkService>().deleteAlias(
-          url: '$_baseURL/$_aliasesURL/$aliasID',
-          accessToken: _accessTokenValue);
-      return data;
+      String accessToken = await _getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.patch(
+          Uri.encodeFull('$_baseURL/$_aliasesURL/$aliasID/restore'),
+          headers: _headers);
+
+      if (response.statusCode == 200) {
+        print('Network restoreAlias ${response.statusCode}');
+        return response.body;
+      } else {
+        print('Network restoreAlias ${response.statusCode}');
+        return null;
+      }
     } catch (e) {
       print(e.toString());
       return null;
-    }
-  }
-
-  Future restoreAlias(String aliasID) async {
-    try {
-      String _accessTokenValue = await _getAccessToken();
-      dynamic data = await serviceLocator<NetworkService>().restoreAlias(
-          url: '$_baseURL/$_aliasesURL/$aliasID/restore',
-          accessToken: _accessTokenValue);
-      return data;
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
-  Future<bool> validateAccessToken(String testAccessToken) async {
-    final response = await serviceLocator<NetworkService>().getData(
-        url: '$_baseURL/$_accountDetailsURL', accessToken: testAccessToken);
-    if (response == null) {
-      return false;
-    } else {
-      return true;
     }
   }
 }
