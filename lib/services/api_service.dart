@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:anonaddy/models/alias_data_model.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -85,14 +86,14 @@ class APIService extends ChangeNotifier {
   }
 
   Stream<AliasModel> getAliasStream() async* {
-    yield await _fetchAliasData();
+    yield await _getAllAliasesData();
     while (true) {
       await Future.delayed(Duration(seconds: 3));
-      yield await _fetchAliasData();
+      yield await _getAllAliasesData();
     }
   }
 
-  Future<AliasModel> _fetchAliasData() async {
+  Future<AliasModel> _getAllAliasesData() async {
     try {
       String accessToken = await _getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";

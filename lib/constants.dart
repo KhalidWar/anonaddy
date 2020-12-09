@@ -1,7 +1,7 @@
 const kAboutAppText =
     'This app is a part of Khalid War\'s personal projects. It\'s free and open source. Free as in free of charge, free of ads, and free of trackers. \n\nTo check out the source code for this app, please visit our github repo.';
 const kDeletedAliasText =
-    'Deleted aliases reject all emails sent to it. However, they can be restored to start receiving emails again.';
+    'Deleted aliases reject all emails sent to them. However, they can be restored to start receiving emails again.';
 const kDeleteAliasConfirmation =
     'Are you sure you want to delete this alias? You can restore this alias if you later change your mind. Once deleted, this alias will reject any emails sent to it.';
 const kCreateNewAliasText =

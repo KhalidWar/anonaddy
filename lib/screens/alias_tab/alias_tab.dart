@@ -2,6 +2,7 @@ import 'package:anonaddy/models/alias_data_model.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/widgets/aliases_header.dart';
 import 'package:anonaddy/widgets/create_new_alias.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
@@ -18,7 +19,8 @@ class AliasTab extends StatefulWidget {
 }
 
 class _AliasTabState extends State<AliasTab> {
-  final _textEditingController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   Stream<AliasModel> _userDataStream;
 
   @override
@@ -37,18 +39,20 @@ class _AliasTabState extends State<AliasTab> {
           child: Column(
             children: [
               Card(
-                child: TextFormField(
-                  validator: (value) =>
-                      value.length < 1 ? 'Please Enter Access Token' : null,
-                  controller: _textEditingController,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    hintText: 'Search aliases, descriptions ...',
-                    prefixIcon: Icon(Icons.search, color: Colors.black),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Theme.of(context).accentColor)),
-                    enabledBorder: OutlineInputBorder(),
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    validator: (input) =>
+                        FormValidator().searchValidator(input),
+                    textInputAction: TextInputAction.search,
+                    decoration: InputDecoration(
+                      hintText: 'Search aliases, descriptions ...',
+                      prefixIcon: Icon(Icons.search, color: Colors.black),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Theme.of(context).accentColor)),
+                      enabledBorder: OutlineInputBorder(),
+                    ),
                   ),
                 ),
               ),
@@ -132,7 +136,7 @@ class _AliasTabState extends State<AliasTab> {
                                           ),
                                           Divider(),
                                           FlatButton(
-                                            child: Text('View Full List'),
+                                            child: Text('View full list'),
                                             onPressed: () {
                                               Navigator.push(
                                                 context,

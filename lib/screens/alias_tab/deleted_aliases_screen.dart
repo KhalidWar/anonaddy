@@ -13,10 +13,7 @@ class DeletedAliasesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Deleted Aliases List'),
-        backgroundColor: Colors.white,
-      ),
+      appBar: buildAppBar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,15 +24,11 @@ class DeletedAliasesScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Deleted Aliases Details',
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
                     Text(kDeletedAliasText),
                     SizedBox(height: size.height * 0.02),
                     Row(
                       children: [
-                        Text('Total Aliases deleted:'),
+                        Text('Total Aliases deleted'),
                         Spacer(),
                         Text(
                           '${aliasDataModel.length}',
@@ -49,7 +42,16 @@ class DeletedAliasesScreen extends StatelessWidget {
             ),
             Card(
               child: ExpansionTile(
-                title: Text('Load Full List'),
+                title: Row(
+                  children: [
+                    Icon(Icons.list_alt),
+                    SizedBox(width: 6),
+                    Text(
+                      'View Full List',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
                 initiallyExpanded: false,
                 children: [
                   ListView.builder(
@@ -68,6 +70,19 @@ class DeletedAliasesScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      title: Text('Deleted Aliases List'),
+      backgroundColor: Colors.white,
+      actions: [
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {},
+        ),
+      ],
     );
   }
 }

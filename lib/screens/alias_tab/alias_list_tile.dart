@@ -115,7 +115,7 @@ class _AliasListTileState extends State<AliasListTile> {
       backgroundColor: Colors.grey[200],
       title: Text(
         '${widget.aliasData.email}',
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(color: _isDeleted() ? Colors.grey : Colors.black),
       ),
       subtitle: Text(
         '${widget.aliasData.emailDescription}',
@@ -129,8 +129,10 @@ class _AliasListTileState extends State<AliasListTile> {
               value: widget.aliasData.isAliasActive,
               onChanged: _isDeleted() ? null : (toggle) => _toggleAliases(),
             ),
-      trailing:
-          IconButton(icon: Icon(Icons.copy), onPressed: () => _copyOnTab()),
+      trailing: IconButton(
+        icon: Icon(Icons.copy),
+        onPressed: _isDeleted() ? null : () => _copyOnTab(),
+      ),
       children: [
         Container(
           padding: EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -138,20 +140,20 @@ class _AliasListTileState extends State<AliasListTile> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               DomainFormatWidget(
-                label: 'Emails Forwarded',
+                label: 'Forwarded',
                 value: widget.aliasData.emailsForwarded.toString(),
               ),
               DomainFormatWidget(
-                label: 'Emails Blocked',
+                label: 'Blocked',
                 value: widget.aliasData.emailsBlocked.toString(),
               ),
               DomainFormatWidget(
-                label: 'Emails Sent',
+                label: 'Sent',
                 value: widget.aliasData.emailsSent,
               ),
               DomainFormatWidget(
-                label: 'Created At',
-                value: widget.aliasData.createdAt,
+                label: 'Replied',
+                value: widget.aliasData.emailsReplied,
               ),
               _isDeleted()
                   ? DomainFormatWidget(

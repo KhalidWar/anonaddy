@@ -1,6 +1,9 @@
 import 'package:anonaddy/models/alias_data_model.dart';
+import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDetailScreen extends StatefulWidget {
   const AliasDetailScreen({Key key, this.aliasData}) : super(key: key);
@@ -12,9 +15,34 @@ class AliasDetailScreen extends StatefulWidget {
 }
 
 class _AliasDetailScreenState extends State<AliasDetailScreen> {
+  void _copyOnTab() {
+    Clipboard.setData(ClipboardData(text: widget.aliasData.email));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Email Alias copied to clipboard!')),
+    );
+  }
+
+  bool _isAliasDeleted() {
+    if (widget.aliasData.deletedAt == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  void _deleteOrRestoreAlias() async {
+    _isAliasDeleted()
+        ? await context
+            .read(apiServiceProvider)
+            .restoreAlias(widget.aliasData.aliasID)
+        : await context
+            .read(apiServiceProvider)
+            .deleteAlias(widget.aliasData.aliasID);
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final alias = widget.aliasData;
 
     return Scaffold(
@@ -44,9 +72,9 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
             AliasDetailListTile(
               leadingIconData: Icons.email_outlined,
               title: alias.email,
-              subtitle: 'Description',
+              subtitle: 'Email',
               trailingIconData: Icons.copy,
-              trailingIconOnPress: () {},
+              trailingIconOnPress: _copyOnTab,
             ),
             AliasDetailListTile(
               leadingIconData: Icons.check_circle_outline,
@@ -60,7 +88,7 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
               title: alias.aliasID,
               subtitle: 'Alias ID and Local Port',
               trailingIconData: Icons.copy,
-              trailingIconOnPress: () {},
+              trailingIconOnPress: _copyOnTab,
             ),
             AliasDetailListTile(
               leadingIconData: Icons.dns,
@@ -74,7 +102,7 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
               title: alias.userId,
               subtitle: 'User ID',
               trailingIconData: Icons.copy,
-              trailingIconOnPress: () {},
+              trailingIconOnPress: _copyOnTab,
             ),
             Divider(),
             Row(
@@ -133,19 +161,17 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
             Center(
               child: RaisedButton(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                color: alias.deletedAt == null ? Colors.red : Colors.green,
+                color: _isAliasDeleted() ? Colors.green : Colors.red,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                        alias.deletedAt == null ? Icons.delete : Icons.restore),
+                    Icon(_isAliasDeleted() ? Icons.restore : Icons.delete),
                     SizedBox(width: 10),
-                    Text(
-                        '${alias.deletedAt == null ? 'Delete' : 'Restore'} Alias?'),
+                    Text('${_isAliasDeleted() ? 'Restore' : 'Delete'} Alias?'),
                   ],
                 ),
-                onPressed: () {},
+                onPressed: _deleteOrRestoreAlias,
               ),
             ),
             SizedBox(height: 10),

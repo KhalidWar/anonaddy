@@ -5,4 +5,11 @@ class FormValidator {
     }
     return null;
   }
+
+  String searchValidator(String input) {
+    if (input.isEmpty || input == null) {
+      return 'Field can not be empty';
+    }
+    return null;
+  }
 }
