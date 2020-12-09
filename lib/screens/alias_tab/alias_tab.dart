@@ -29,8 +29,6 @@ class _AliasTabState extends State<AliasTab> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
@@ -106,7 +104,7 @@ class _AliasTabState extends State<AliasTab> {
                                         itemCount: _availableAliasList.length,
                                         itemBuilder: (context, index) {
                                           return AliasListTile(
-                                              aliasModel:
+                                              aliasData:
                                                   _availableAliasList[index]);
                                         },
                                       ),
@@ -127,7 +125,7 @@ class _AliasTabState extends State<AliasTab> {
                                             itemCount: 10,
                                             itemBuilder: (context, index) {
                                               return AliasListTile(
-                                                aliasModel:
+                                                aliasData:
                                                     _deletedAliasList[index],
                                               );
                                             },

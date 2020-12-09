@@ -6,7 +6,7 @@ class AliasDataModel {
     this.aliasableType,
     this.localPart,
     this.extension,
-    // this.domain,
+    this.domain,
     this.email,
     this.isAliasActive,
     this.emailDescription,
@@ -26,7 +26,7 @@ class AliasDataModel {
   final dynamic aliasableType;
   final String localPart;
   final dynamic extension;
-  // final Domain domain;
+  final String domain;
   final String email;
   final bool isAliasActive;
   final String emailDescription;
@@ -47,7 +47,7 @@ class AliasDataModel {
       aliasableType: json["aliasable_type"],
       localPart: json["local_part"],
       extension: json["extension"],
-      // domain: domainValues.map[json["domain"]],
+      domain: json["domain"],
       email: json["email"],
       isAliasActive: json["active"],
       emailDescription: json["description"] ?? 'No Description',

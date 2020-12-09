@@ -10,9 +10,9 @@ import '../../widgets/domain_format_widget.dart';
 import 'alias_detailed_screen.dart';
 
 class AliasListTile extends StatefulWidget {
-  const AliasListTile({Key key, this.aliasModel}) : super(key: key);
+  const AliasListTile({Key key, this.aliasData}) : super(key: key);
 
-  final AliasDataModel aliasModel;
+  final AliasDataModel aliasData;
 
   @override
   _AliasListTileState createState() => _AliasListTileState();
@@ -23,7 +23,7 @@ class _AliasListTileState extends State<AliasListTile> {
   bool _isLoading = false;
 
   bool _isDeleted() {
-    if (widget.aliasModel.deletedAt == null) {
+    if (widget.aliasData.deletedAt == null) {
       return false;
     } else {
       return true;
@@ -33,9 +33,9 @@ class _AliasListTileState extends State<AliasListTile> {
   void _toggleAliases() async {
     setState(() => _isLoading = true);
 
-    if (widget.aliasModel.isAliasActive == true) {
+    if (widget.aliasData.isAliasActive == true) {
       dynamic deactivateResult =
-          await _apiService.deactivateAlias(aliasID: widget.aliasModel.aliasID);
+          await _apiService.deactivateAlias(aliasID: widget.aliasData.aliasID);
       if (deactivateResult == null) {
         setState(() {
           _isLoading = false;
@@ -51,7 +51,7 @@ class _AliasListTileState extends State<AliasListTile> {
       }
     } else {
       dynamic activateResult =
-          await _apiService.activateAlias(aliasID: widget.aliasModel.aliasID);
+          await _apiService.activateAlias(aliasID: widget.aliasData.aliasID);
       if (activateResult == null) {
         setState(() {
           _isLoading = false;
@@ -73,10 +73,10 @@ class _AliasListTileState extends State<AliasListTile> {
     final result = _isDeleted()
         ? await context
             .read(apiServiceProvider)
-            .restoreAlias(widget.aliasModel.aliasID)
+            .restoreAlias(widget.aliasData.aliasID)
         : await context
             .read(apiServiceProvider)
-            .deleteAlias(widget.aliasModel.aliasID);
+            .deleteAlias(widget.aliasData.aliasID);
 
     if (result == null) {
       setState(() {
@@ -100,7 +100,7 @@ class _AliasListTileState extends State<AliasListTile> {
   }
 
   void _copyOnTab() {
-    Clipboard.setData(ClipboardData(text: widget.aliasModel.email));
+    Clipboard.setData(ClipboardData(text: widget.aliasData.email));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Email Alias copied to clipboard!')),
     );
@@ -114,11 +114,11 @@ class _AliasListTileState extends State<AliasListTile> {
       tilePadding: EdgeInsets.all(0),
       backgroundColor: Colors.grey[200],
       title: Text(
-        '${widget.aliasModel.email}',
+        '${widget.aliasData.email}',
         style: TextStyle(color: Colors.black),
       ),
       subtitle: Text(
-        '${widget.aliasModel.emailDescription}',
+        '${widget.aliasData.emailDescription}',
         style: TextStyle(color: Colors.grey),
       ),
       leading: _isLoading
@@ -126,7 +126,7 @@ class _AliasListTileState extends State<AliasListTile> {
               margin: EdgeInsets.symmetric(horizontal: size.width * 0.03),
               child: CircularProgressIndicator())
           : Switch(
-              value: widget.aliasModel.isAliasActive,
+              value: widget.aliasData.isAliasActive,
               onChanged: _isDeleted() ? null : (toggle) => _toggleAliases(),
             ),
       trailing:
@@ -139,23 +139,23 @@ class _AliasListTileState extends State<AliasListTile> {
             children: [
               DomainFormatWidget(
                 label: 'Emails Forwarded',
-                value: widget.aliasModel.emailsForwarded.toString(),
+                value: widget.aliasData.emailsForwarded.toString(),
               ),
               DomainFormatWidget(
                 label: 'Emails Blocked',
-                value: widget.aliasModel.emailsBlocked.toString(),
+                value: widget.aliasData.emailsBlocked.toString(),
               ),
               DomainFormatWidget(
                 label: 'Emails Sent',
-                value: widget.aliasModel.emailsSent,
+                value: widget.aliasData.emailsSent,
               ),
               DomainFormatWidget(
                 label: 'Created At',
-                value: widget.aliasModel.createdAt,
+                value: widget.aliasData.createdAt,
               ),
               _isDeleted()
                   ? DomainFormatWidget(
-                      label: 'Deleted At', value: widget.aliasModel.deletedAt)
+                      label: 'Deleted At', value: widget.aliasData.deletedAt)
                   : Container(),
               SizedBox(height: size.height * 0.02),
               Row(
@@ -178,7 +178,7 @@ class _AliasListTileState extends State<AliasListTile> {
                         MaterialPageRoute(
                           builder: (context) {
                             return AliasDetailScreen(
-                              aliasData: widget.aliasModel,
+                              aliasData: widget.aliasData,
                             );
                           },
                         ),

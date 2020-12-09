@@ -58,7 +58,7 @@ class DeletedAliasesScreen extends StatelessWidget {
                     itemCount: aliasDataModel.length,
                     itemBuilder: (context, index) {
                       return AliasListTile(
-                        aliasModel: aliasDataModel[index],
+                        aliasData: aliasDataModel[index],
                       );
                     },
                   ),
