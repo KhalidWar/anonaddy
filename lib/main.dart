@@ -18,7 +18,8 @@ class MyApp extends ConsumerWidget {
       title: 'AnonAddy',
       debugShowCheckedModeBanner: false,
       theme: themeProvider.isDarkTheme ? darkTheme : lightTheme,
-      darkTheme: darkTheme,
+      //todo fix darkTheme coloring scheme
+      // darkTheme: darkTheme,
       home: InitialScreen(),
     );
   }
