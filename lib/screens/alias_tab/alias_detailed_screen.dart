@@ -76,7 +76,6 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
               trailingIconData: Icons.copy,
               trailingIconOnPress: () {},
             ),
-
             Divider(),
             Row(
               children: [
@@ -114,7 +113,6 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
                 ),
               ],
             ),
-
             Divider(),
             AliasDetailListTile(
               leadingIconData: Icons.access_time_outlined,
@@ -131,19 +129,20 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
               title: 'Deleted At',
               subtitle: alias.deletedAt,
             ),
-
             Divider(),
             Center(
               child: RaisedButton(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                color: Colors.red,
+                color: alias.deletedAt == null ? Colors.red : Colors.green,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.delete),
+                    Icon(
+                        alias.deletedAt == null ? Icons.delete : Icons.restore),
                     SizedBox(width: 10),
-                    Text('Delete Alias?'),
+                    Text(
+                        '${alias.deletedAt == null ? 'Delete' : 'Restore'} Alias?'),
                   ],
                 ),
                 onPressed: () {},
