@@ -237,4 +237,20 @@ class APIService extends ChangeNotifier {
       return null;
     }
   }
+
+  Future<AliasDataModel> getSpecificAliasData(String aliasID) async {
+    final accessToken = await _getAccessToken();
+    _headers["Authorization"] = "Bearer $accessToken";
+
+    final response = await http.get(
+        Uri.encodeFull('$_baseURL/$_aliasesURL/$aliasID'),
+        headers: _headers);
+
+    if (response.statusCode == 200) {
+      final data = AliasDataModel.fromJsonData(jsonDecode(response.body));
+      return data;
+    } else {
+      return null;
+    }
+  }
 }
