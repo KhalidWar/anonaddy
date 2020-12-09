@@ -20,13 +20,20 @@ class AliasTab extends StatefulWidget {
 
 class _AliasTabState extends State<AliasTab> {
   final _formKey = GlobalKey<FormState>();
+  Stream<AliasModel> _aliasDataStream;
 
-  Stream<AliasModel> _userDataStream;
+  Stream<AliasModel> getAliasStream() async* {
+    yield await context.read(apiServiceProvider).getAllAliasesData();
+    while (true) {
+      await Future.delayed(Duration(seconds: 1));
+      yield await context.read(apiServiceProvider).getAllAliasesData();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _userDataStream = context.read(apiServiceProvider).getAliasStream();
+    _aliasDataStream = getAliasStream();
   }
 
   @override
@@ -62,17 +69,13 @@ class _AliasTabState extends State<AliasTab> {
                   children: [
                     AliasesHeader(),
                     StreamBuilder<AliasModel>(
-                      stream: _userDataStream,
+                      stream: _aliasDataStream,
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
                             return ErrorScreen(
                               label:
                                   'No Internet Connection.\nMake sure you\'re online.',
-                              buttonLabel: 'Reload',
-                              buttonOnPress: () => context
-                                  .refresh(apiServiceProvider)
-                                  .getUserStream(),
                             );
                           case ConnectionState.waiting:
                             return Padding(

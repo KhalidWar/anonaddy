@@ -14,12 +14,20 @@ class AccountTab extends StatefulWidget {
 }
 
 class _AccountTabState extends State<AccountTab> {
-  Stream<UserModel> userDataStream;
+  Stream<UserModel> _userDataStream;
+
+  Stream<UserModel> getUserStream() async* {
+    yield await context.read(apiServiceProvider).getUserData();
+    while (true) {
+      await Future.delayed(Duration(seconds: 1));
+      yield await context.read(apiServiceProvider).getUserData();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    userDataStream = context.read(apiServiceProvider).getUserStream();
+    _userDataStream = getUserStream();
   }
 
   @override
@@ -27,7 +35,7 @@ class _AccountTabState extends State<AccountTab> {
     return Column(
       children: [
         StreamBuilder<UserModel>(
-          stream: userDataStream,
+          stream: _userDataStream,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:

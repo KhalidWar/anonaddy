@@ -55,15 +55,7 @@ class APIService extends ChangeNotifier {
     }
   }
 
-  Stream<UserModel> getUserStream() async* {
-    yield await _fetchUserData();
-    while (true) {
-      await Future.delayed(Duration(seconds: 3));
-      yield await _fetchUserData();
-    }
-  }
-
-  Future<UserModel> _fetchUserData() async {
+  Future<UserModel> getUserData() async {
     try {
       String accessToken = await _getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -73,10 +65,10 @@ class APIService extends ChangeNotifier {
           headers: _headers);
 
       if (response.statusCode == 200) {
-        print('Network getData ${response.statusCode}');
+        print('getUserData ${response.statusCode}');
         return UserModel.fromJson(jsonDecode(response.body));
       } else {
-        print('Network getData ${response.statusCode}');
+        print('getUserData ${response.statusCode}');
         return null;
       }
     } catch (e) {
@@ -85,15 +77,7 @@ class APIService extends ChangeNotifier {
     }
   }
 
-  Stream<AliasModel> getAliasStream() async* {
-    yield await _getAllAliasesData();
-    while (true) {
-      await Future.delayed(Duration(seconds: 3));
-      yield await _getAllAliasesData();
-    }
-  }
-
-  Future<AliasModel> _getAllAliasesData() async {
+  Future<AliasModel> getAllAliasesData() async {
     try {
       String accessToken = await _getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -103,10 +87,10 @@ class APIService extends ChangeNotifier {
           headers: _headers);
 
       if (response.statusCode == 200) {
-        print('Network getData ${response.statusCode}');
+        print('getAllAliasesData ${response.statusCode}');
         return AliasModel.fromJson(jsonDecode(response.body));
       } else {
-        print('Network getData ${response.statusCode}');
+        print('getAllAliasesData ${response.statusCode}');
         return null;
       }
     } catch (e) {
