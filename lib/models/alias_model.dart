@@ -93,7 +93,7 @@ class AliasDataModel {
       emailsForwarded: json['data']["emails_forwarded"],
       emailsBlocked: json['data']["emails_blocked"],
       emailsReplied: json['data']["emails_replied"],
-      emailsSent: json["emails_sent"],
+      emailsSent: json['data']["emails_sent"],
       recipients: List<dynamic>.from(json['data']["recipients"].map((x) => x)),
       createdAt: DateTime.parse(json['data']["created_at"]),
       updatedAt: DateTime.parse(json['data']["updated_at"]),

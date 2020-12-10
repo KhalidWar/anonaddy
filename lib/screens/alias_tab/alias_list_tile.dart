@@ -159,7 +159,7 @@ class _AliasListTileState extends State<AliasListTile> {
                   ? DomainFormatWidget(
                       label: 'Deleted At', value: widget.aliasData.deletedAt)
                   : Container(),
-              SizedBox(height: size.height * 0.02),
+              SizedBox(height: size.height * 0.01),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
