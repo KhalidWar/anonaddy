@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/alias_data_model.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:flutter/cupertino.dart';

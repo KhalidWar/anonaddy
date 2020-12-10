@@ -9,12 +9,14 @@ class AliasDetailListTile extends StatelessWidget {
     this.leadingIconData,
     this.title,
     this.trailing,
+    this.titleTextStyle,
   }) : super(key: key);
 
   final Function trailingIconOnPress;
   final IconData trailingIconData, leadingIconData;
   final dynamic title, subtitle;
   final Widget trailing;
+  final TextStyle titleTextStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class AliasDetailListTile extends StatelessWidget {
             horizontalTitleGap: 0,
             dense: true,
             leading: Icon(leadingIconData),
-            title: Text('$title'),
+            title: Text('$title', style: titleTextStyle ?? null),
             subtitle: Text('${subtitle ?? 'Alias not deleted'}'),
             trailing: trailingIconData == null
                 ? trailing

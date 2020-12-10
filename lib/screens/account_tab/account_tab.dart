@@ -49,10 +49,7 @@ class _AccountTabState extends State<AccountTab> {
                 return FetchingDataIndicator();
               default:
                 if (snapshot.hasData) {
-                  return Padding(
-                    padding: EdgeInsets.all(5),
-                    child: AccountCard(userData: snapshot.data),
-                  );
+                  return AccountCard(userData: snapshot.data);
                 } else if (snapshot.hasError) {
                   return ErrorScreen(
                     label: '${snapshot.error}',

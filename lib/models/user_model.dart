@@ -1,5 +1,3 @@
-import 'alias_data_model.dart';
-
 class UserModel {
   const UserModel({
     this.id,
@@ -23,10 +21,8 @@ class UserModel {
     this.aliasLimit,
     this.createdAt,
     this.lastUpdated,
-    this.aliasDataList,
   });
 
-  final List<AliasDataModel> aliasDataList;
   final String id;
   final String username;
   final dynamic fromName;

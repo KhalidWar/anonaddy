@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias_data_model.dart';
+import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/services/service_locator.dart';
 import 'package:flutter/cupertino.dart';
