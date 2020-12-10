@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/user_model.dart';
+import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,20 +39,14 @@ class APIService extends ChangeNotifier {
     return _accessTokenValue;
   }
 
-  Future<bool> validateAccessToken(String accessToken) async {
+  Future<String> validateAccessToken(String accessToken) async {
     _headers["Authorization"] = "Bearer $accessToken";
 
     final response = await http.get(
         Uri.encodeFull('$_baseURL/$_accountDetailsURL'),
         headers: _headers);
 
-    if (response.statusCode == 200) {
-      print('validateAccessToken ${response.statusCode}');
-      return true;
-    } else {
-      print('validateAccessToken ${response.statusCode}');
-      return false;
-    }
+    return APIMessageHandler().getStatusCodeMessage(response.statusCode);
   }
 
   Future<UserModel> getUserData() async {

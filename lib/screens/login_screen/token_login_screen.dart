@@ -1,10 +1,11 @@
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/services/access_token_service.dart';
 import 'package:anonaddy/services/api_service.dart';
-import 'package:anonaddy/services/service_locator.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/widgets/error_message_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TokenLoginScreen extends StatefulWidget {
@@ -13,38 +14,42 @@ class TokenLoginScreen extends StatefulWidget {
 }
 
 class _TokenLoginScreenState extends State<TokenLoginScreen> {
-  TextEditingController _textEditingController = TextEditingController();
-
+  final _textEditingController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool _isLoading = false;
-  String _error = '';
+  String _error;
 
   Future _logIn() async {
-    final _accessTokenManager = serviceLocator<AccessTokenService>();
+    final accessTokenManager = context.read(accessTokenServiceProvider);
     final textInput = _textEditingController.text.trim();
+    final isAccessTokenValid =
+        await context.read(apiServiceProvider).validateAccessToken(textInput);
 
     if (_formKey.currentState.validate()) {
-      setState(() => _isLoading = true);
-      if (await serviceLocator<APIService>().validateAccessToken(textInput) ==
-          true) {
-        await _accessTokenManager.saveAccessToken(textInput.toString());
+      setState(() {
+        _isLoading = true;
+        _error=null;
+      });
+
+      if (isAccessTokenValid == '') {
+        await accessTokenManager.removeAccessToken().whenComplete(() {
+          accessTokenManager.saveAccessToken(textInput);
+        });
         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ));
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
       } else {
-        await _accessTokenManager.removeAccessToken();
-        setState(() {
+        print(isAccessTokenValid);
+
+      setState(() {
           _isLoading = false;
-          _error = 'Invalid Access Token';
+          _error = '$isAccessTokenValid';
         });
       }
     } else {
       setState(() {
         _isLoading = false;
-        _error = '';
+        _error = null;
       });
     }
   }
@@ -59,7 +64,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
       _textEditingController.clear();
       setState(() {
         _textEditingController.text = data.text;
-        _error = '';
+        _error = null;
       });
     }
   }
@@ -72,136 +77,141 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Scaffold(
           backgroundColor: Color(0xFF19216C),
-          body: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/logo.svg',
-                    width: size.width * 0.5,
-                  ),
-                  SizedBox(height: size.height * 0.01),
-                  Container(
-                    height: size.height * 0.6,
-                    width: size.width * 0.8,
-                    padding: EdgeInsets.only(top: 25),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(15),
+          body: Stack(
+            children: [
+              ErrorMessageAlert(errorMessage: _error),
+              Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/logo.svg',
+                        width: size.width * 0.5,
                       ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              'Welcome!',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: size.height * 0.02),
-                            Divider(
-                              color: Color(0xFFE4E7EB),
-                              thickness: 2,
-                              indent: size.width * 0.30,
-                              endIndent: size.width * 0.30,
-                            ),
-                          ],
+                      SizedBox(height: size.height * 0.01),
+                      Container(
+                        height: size.height * 0.6,
+                        width: size.width * 0.8,
+                        padding: EdgeInsets.only(top: 25),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(15),
+                          ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
                               children: [
                                 Text(
-                                  'Login with Access Token',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  'Welcome!',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5
+                                      .copyWith(fontWeight: FontWeight.bold),
                                 ),
-                                SizedBox(height: size.height * 0.01),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        validator: (input) => FormValidator()
-                                            .accessTokenValidator(input),
-                                        controller: _textEditingController,
-                                        onFieldSubmitted: (input) => _logIn(),
-                                        textInputAction: TextInputAction.go,
-                                        keyboardType: TextInputType.multiline,
-                                        minLines: 1,
-                                        maxLines: 6,
-                                        decoration: InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Theme.of(context)
-                                                    .accentColor),
-                                          ),
-                                          border: OutlineInputBorder(),
-                                          hintText: 'Paste here!',
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.paste),
-                                      onPressed: () => _pasteFromClipboard(),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: size.height * 0.01),
-                                GestureDetector(
-                                  child: Text('How to get Access Token?'),
-                                  onTap: () {
-                                    //todo add how to get Access Token
-                                  },
+                                SizedBox(height: size.height * 0.02),
+                                Divider(
+                                  color: Color(0xFFE4E7EB),
+                                  thickness: 2,
+                                  indent: size.width * 0.30,
+                                  endIndent: size.width * 0.30,
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        Text(
-                          _error,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              .copyWith(color: Colors.red),
-                        ),
-                        Container(
-                          height: size.height * 0.1,
-                          width: size.width,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF5F7FA),
-                            borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(15),
-                              bottomLeft: Radius.circular(15),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Login with Access Token',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                    SizedBox(height: size.height * 0.01),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormField(
+                                            validator: (input) =>
+                                                FormValidator()
+                                                    .accessTokenValidator(
+                                                        input),
+                                            controller: _textEditingController,
+                                            onFieldSubmitted: (input) =>
+                                                _logIn(),
+                                            textInputAction: TextInputAction.go,
+                                            keyboardType:
+                                                TextInputType.multiline,
+                                            minLines: 1,
+                                            maxLines: 6,
+                                            decoration: InputDecoration(
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Theme.of(context)
+                                                        .accentColor),
+                                              ),
+                                              border: OutlineInputBorder(),
+                                              hintText: 'Paste here!',
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.paste),
+                                          onPressed: () =>
+                                              _pasteFromClipboard(),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: size.height * 0.01),
+                                    GestureDetector(
+                                      child: Text('How to get Access Token?'),
+                                      onTap: () {
+                                        //todo add how to get Access Token
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 50),
-                          child: RaisedButton(
-                            child: _isLoading
-                                ? CircularProgressIndicator(
-                                    backgroundColor: Color(0xFF19216C))
-                                : Text(
-                                    'Login',
-                                    style:
-                                        Theme.of(context).textTheme.headline5,
-                                  ),
-                            onPressed: () => _logIn(),
-                          ),
+                            Container(
+                              height: size.height * 0.1,
+                              width: size.width,
+                              decoration: BoxDecoration(
+                                color: Color(0xFFF5F7FA),
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 50),
+                              child: RaisedButton(
+                                child: _isLoading
+                                    ? CircularProgressIndicator(
+                                        backgroundColor: Color(0xFF19216C))
+                                    : Text(
+                                        'Login',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5,
+                                      ),
+                                onPressed: () => _logIn(),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
