@@ -93,7 +93,7 @@ class APIService extends ChangeNotifier {
     }
   }
 
-  Future<String> createNewAlias({String description}) async {
+  Future<String> createNewAlias(String description) async {
     try {
       String accessToken = await _getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -106,13 +106,7 @@ class APIService extends ChangeNotifier {
             "description": "$description",
           }));
 
-      if (response.statusCode == 201) {
-        print('Network postData ${response.statusCode}');
-        return jsonDecode(response.body);
-      } else {
-        print('Network postData ${response.statusCode}');
-        return null;
-      }
+      return APIMessageHandler().getSubmissionMessage(response.statusCode);
     } catch (e) {
       print(e.toString());
       return null;

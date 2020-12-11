@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/services/api_service.dart';
@@ -246,12 +247,17 @@ class _AliasTabState extends State<AliasTab> {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return CreateNewAlias();
-          },
-        );
+        showModal(
+            context: context,
+            builder: (context) {
+              return SimpleDialog(
+                contentPadding: EdgeInsets.all(20),
+                title: Text('Create New Alias'),
+                children: [
+                  CreateNewAlias(),
+                ],
+              );
+            });
       },
     );
   }
