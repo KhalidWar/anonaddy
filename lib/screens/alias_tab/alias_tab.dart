@@ -2,6 +2,7 @@ import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/aliases_header.dart';
 import 'package:anonaddy/widgets/create_new_alias.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
@@ -84,19 +85,79 @@ class _AliasTabState extends State<AliasTab> {
                           default:
                             if (snapshot.hasData) {
                               final aliasDataList = snapshot.data.aliasDataList;
-                              List<AliasDataModel> _availableAliasList = [];
-                              List<AliasDataModel> _deletedAliasList = [];
+                              final availableAliasList = <AliasDataModel>[];
+                              final deletedAliasList = <AliasDataModel>[];
+                              final forwardedList = <int>[];
+                              final blockedList = <int>[];
+                              final repliedList = <int>[];
+                              final sentList = <int>[];
 
                               for (int i = 0; i < aliasDataList.length; i++) {
+                                forwardedList
+                                    .add(aliasDataList[i].emailsForwarded);
+                                blockedList.add(aliasDataList[i].emailsBlocked);
+                                repliedList.add(aliasDataList[i].emailsReplied);
+                                sentList.add(aliasDataList[i].emailsSent);
+
                                 if (aliasDataList[i].deletedAt == null) {
-                                  _availableAliasList.add(aliasDataList[i]);
+                                  availableAliasList.add(aliasDataList[i]);
                                 } else {
-                                  _deletedAliasList.add(aliasDataList[i]);
+                                  deletedAliasList.add(aliasDataList[i]);
                                 }
                               }
 
                               return Column(
                                 children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: AliasDetailListTile(
+                                          title:
+                                              '${forwardedList.reduce((value, element) => value + element)}',
+                                          titleTextStyle: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                          subtitle: 'Emails Forwarded',
+                                          leadingIconData:
+                                              Icons.forward_to_inbox,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: AliasDetailListTile(
+                                          title:
+                                              '${sentList.reduce((value, element) => value + element)}',
+                                          titleTextStyle: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                          subtitle: 'Emails Sent',
+                                          leadingIconData:
+                                              Icons.mark_email_read_outlined,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: AliasDetailListTile(
+                                          title:
+                                              '${repliedList.reduce((value, element) => value + element)}',
+                                          titleTextStyle: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                          subtitle: 'Emails Replied',
+                                          leadingIconData: Icons.reply,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: AliasDetailListTile(
+                                          title:
+                                              '${blockedList.reduce((value, element) => value + element)}',
+                                          titleTextStyle: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                          subtitle: 'Emails Blocked',
+                                          leadingIconData: Icons.block,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   ExpansionTile(
                                     title: Text(
                                       'Available Aliases',
@@ -107,11 +168,11 @@ class _AliasTabState extends State<AliasTab> {
                                       ListView.builder(
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
-                                        itemCount: _availableAliasList.length,
+                                        itemCount: availableAliasList.length,
                                         itemBuilder: (context, index) {
                                           return AliasListTile(
                                               aliasData:
-                                                  _availableAliasList[index]);
+                                                  availableAliasList[index]);
                                         },
                                       ),
                                     ],
@@ -132,7 +193,7 @@ class _AliasTabState extends State<AliasTab> {
                                             itemBuilder: (context, index) {
                                               return AliasListTile(
                                                 aliasData:
-                                                    _deletedAliasList[index],
+                                                    deletedAliasList[index],
                                               );
                                             },
                                           ),
@@ -146,7 +207,7 @@ class _AliasTabState extends State<AliasTab> {
                                                   builder: (context) {
                                                     return DeletedAliasesScreen(
                                                       aliasDataModel:
-                                                          _deletedAliasList,
+                                                          deletedAliasList,
                                                     );
                                                   },
                                                 ),
