@@ -57,171 +57,174 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: buildAppBar(),
-      body: FutureBuilder<AliasDataModel>(
-        future: _aliasDataModel,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return ErrorScreen(
-                label: '${snapshot.error}',
-                buttonLabel: 'Sign In',
-                buttonOnPress: () {},
-              );
-            case ConnectionState.waiting:
-              return FetchingDataIndicator();
-            default:
-              if (snapshot.hasData) {
-                final data = snapshot.data;
-                print(data);
-
-                return SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AliasDetailListTile(
-                        leadingIconData: Icons.flaky_outlined,
-                        title: 'Active',
-                        subtitle:
-                            'Alias is ${data.isAliasActive ? 'active' : 'inactive'}',
-                        trailing: Switch(
-                          value: data.isAliasActive,
-                          onChanged: (toggle) {},
-                        ),
-                      ),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.comment,
-                        title: data.emailDescription,
-                        subtitle: 'Description',
-                        trailingIconData: Icons.edit,
-                        trailingIconOnPress: () {},
-                      ),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.email_outlined,
-                        title: data.email,
-                        subtitle: 'Email',
-                        trailingIconData: Icons.copy,
-                        trailingIconOnPress: _copyOnTab,
-                      ),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.check_circle_outline,
-                        title: 'extension',
-                        subtitle: data.extension,
-                        trailingIconData: Icons.edit,
-                        trailingIconOnPress: () {},
-                      ),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.alternate_email,
-                        title: data.aliasID,
-                        subtitle: 'Alias ID and Local Port',
-                        trailingIconData: Icons.copy,
-                        trailingIconOnPress: _copyOnTab,
-                      ),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.dns,
-                        title: data.domain,
-                        subtitle: 'Domain',
-                        trailingIconData: Icons.edit,
-                        trailingIconOnPress: () {},
-                      ),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.account_circle_outlined,
-                        title: data.userId,
-                        subtitle: 'User ID',
-                        trailingIconData: Icons.copy,
-                        trailingIconOnPress: _copyOnTab,
-                      ),
-                      Divider(),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AliasDetailListTile(
-                              leadingIconData: Icons.forward_to_inbox,
-                              title: data.emailsForwarded,
-                              subtitle: 'Emails Forwarded',
-                            ),
-                          ),
-                          Expanded(
-                            child: AliasDetailListTile(
-                              leadingIconData: Icons.reply,
-                              title: data.emailsReplied,
-                              subtitle: 'Emails Replied',
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AliasDetailListTile(
-                              leadingIconData: Icons.mark_email_read_outlined,
-                              title: data.emailsSent,
-                              subtitle: 'Emails Sent',
-                            ),
-                          ),
-                          Expanded(
-                            child: AliasDetailListTile(
-                              leadingIconData: Icons.block,
-                              title: data.emailsBlocked,
-                              subtitle: 'Emails Blocked',
-                            ),
-                          ),
-                        ],
-                      ),
-                      Divider(),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.access_time_outlined,
-                        title: 'Created At',
-                        subtitle: data.createdAt,
-                      ),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.av_timer_outlined,
-                        title: 'Updated At',
-                        subtitle: data.updatedAt,
-                      ),
-                      AliasDetailListTile(
-                        leadingIconData: Icons.auto_delete_outlined,
-                        title: 'Deleted At',
-                        subtitle: data.deletedAt,
-                      ),
-                      Divider(),
-                      Center(
-                        child: RaisedButton(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          color: _isAliasDeleted() ? Colors.green : Colors.red,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(_isAliasDeleted()
-                                  ? Icons.restore
-                                  : Icons.delete),
-                              SizedBox(width: 10),
-                              Text(
-                                  '${_isAliasDeleted() ? 'Restore' : 'Delete'} Alias?'),
-                            ],
-                          ),
-                          onPressed: _deleteOrRestoreAlias,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                );
-              } else if (snapshot.hasError) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: buildAppBar(),
+        body: FutureBuilder<AliasDataModel>(
+          future: _aliasDataModel,
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
                 return ErrorScreen(
                   label: '${snapshot.error}',
                   buttonLabel: 'Sign In',
                   buttonOnPress: () {},
                 );
-              } else {
-                return LoadingWidget();
-              }
-          }
-        },
+              case ConnectionState.waiting:
+                return FetchingDataIndicator();
+              default:
+                if (snapshot.hasData) {
+                  final data = snapshot.data;
+                  print(data);
+
+                  return SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AliasDetailListTile(
+                          leadingIconData: Icons.flaky_outlined,
+                          title: 'Active',
+                          subtitle:
+                              'Alias is ${data.isAliasActive ? 'active' : 'inactive'}',
+                          trailing: Switch(
+                            value: data.isAliasActive,
+                            onChanged: (toggle) {},
+                          ),
+                        ),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.comment,
+                          title: data.emailDescription,
+                          subtitle: 'Description',
+                          trailingIconData: Icons.edit,
+                          trailingIconOnPress: () {},
+                        ),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.email_outlined,
+                          title: data.email,
+                          subtitle: 'Email',
+                          trailingIconData: Icons.copy,
+                          trailingIconOnPress: _copyOnTab,
+                        ),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.check_circle_outline,
+                          title: 'extension',
+                          subtitle: data.extension,
+                          trailingIconData: Icons.edit,
+                          trailingIconOnPress: () {},
+                        ),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.alternate_email,
+                          title: data.aliasID,
+                          subtitle: 'Alias ID and Local Port',
+                          trailingIconData: Icons.copy,
+                          trailingIconOnPress: _copyOnTab,
+                        ),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.dns,
+                          title: data.domain,
+                          subtitle: 'Domain',
+                          trailingIconData: Icons.edit,
+                          trailingIconOnPress: () {},
+                        ),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.account_circle_outlined,
+                          title: data.userId,
+                          subtitle: 'User ID',
+                          trailingIconData: Icons.copy,
+                          trailingIconOnPress: _copyOnTab,
+                        ),
+                        Divider(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: AliasDetailListTile(
+                                leadingIconData: Icons.forward_to_inbox,
+                                title: data.emailsForwarded,
+                                subtitle: 'Emails Forwarded',
+                              ),
+                            ),
+                            Expanded(
+                              child: AliasDetailListTile(
+                                leadingIconData: Icons.reply,
+                                title: data.emailsReplied,
+                                subtitle: 'Emails Replied',
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: AliasDetailListTile(
+                                leadingIconData: Icons.mark_email_read_outlined,
+                                title: data.emailsSent,
+                                subtitle: 'Emails Sent',
+                              ),
+                            ),
+                            Expanded(
+                              child: AliasDetailListTile(
+                                leadingIconData: Icons.block,
+                                title: data.emailsBlocked,
+                                subtitle: 'Emails Blocked',
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.access_time_outlined,
+                          title: 'Created At',
+                          subtitle: data.createdAt,
+                        ),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.av_timer_outlined,
+                          title: 'Updated At',
+                          subtitle: data.updatedAt,
+                        ),
+                        AliasDetailListTile(
+                          leadingIconData: Icons.auto_delete_outlined,
+                          title: 'Deleted At',
+                          subtitle: data.deletedAt,
+                        ),
+                        Divider(),
+                        Center(
+                          child: RaisedButton(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            color:
+                                _isAliasDeleted() ? Colors.green : Colors.red,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(_isAliasDeleted()
+                                    ? Icons.restore
+                                    : Icons.delete),
+                                SizedBox(width: 10),
+                                Text(
+                                    '${_isAliasDeleted() ? 'Restore' : 'Delete'} Alias?'),
+                              ],
+                            ),
+                            onPressed: _deleteOrRestoreAlias,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return ErrorScreen(
+                    label: '${snapshot.error}',
+                    buttonLabel: 'Sign In',
+                    buttonOnPress: () {},
+                  );
+                } else {
+                  return LoadingWidget();
+                }
+            }
+          },
+        ),
       ),
     );
   }

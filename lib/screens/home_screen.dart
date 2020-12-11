@@ -1,7 +1,6 @@
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
 import 'package:anonaddy/screens/settings_tab/settings_tab.dart';
-import 'package:anonaddy/widgets/pop_scope_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -19,9 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () =>
-          showDialog(context: context, builder: (context) => PopScopeDialog()),
+    return SafeArea(
       child: Scaffold(
         appBar: buildAppBar(context),
         body: IndexedStack(
