@@ -8,3 +8,5 @@ const kCreateNewAliasText =
     'Other aliases e.g. alias@khalidwar.anonaddy.com or .me can also be created automatically when they receive their first email.';
 const kRestoreAliasText =
     'Are you sure you want to restore this alias? Once restored, this alias will be able to receive emails again.';
+const kNoInternetConnection =
+    'No Internet Connection.\nMake sure you\'re online.';

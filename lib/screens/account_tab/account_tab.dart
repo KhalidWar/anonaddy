@@ -2,11 +2,11 @@ import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
-import 'package:anonaddy/widgets/loading_widget.dart';
+import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../error_screen.dart';
+import '../../constants.dart';
 
 class AccountTab extends StatefulWidget {
   @override
@@ -39,10 +39,9 @@ class _AccountTabState extends State<AccountTab> {
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
-                return ErrorScreen(
-                  label: 'No Internet Connection.\nMake sure you\'re online.',
-                  buttonLabel: 'Reload',
-                  buttonOnPress: () {},
+                return LottieWidget(
+                  lottie: 'assets/lottie/errorCone.json',
+                  label: kNoInternetConnection,
                 );
                 break;
               case ConnectionState.waiting:
@@ -51,13 +50,15 @@ class _AccountTabState extends State<AccountTab> {
                 if (snapshot.hasData) {
                   return AccountCard(userData: snapshot.data);
                 } else if (snapshot.hasError) {
-                  return ErrorScreen(
-                    label: '${snapshot.error}',
-                    buttonLabel: 'Sign In',
-                    buttonOnPress: () {},
+                  return LottieWidget(
+                    lottie: 'assets/lottie/errorCone.json',
+                    label: snapshot.error,
                   );
                 } else {
-                  return LoadingWidget();
+                  return LottieWidget(
+                    lottie: 'assets/lottie/errorCone.json',
+                    label: snapshot.error,
+                  );
                 }
             }
           },

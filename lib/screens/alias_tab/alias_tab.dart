@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/services/api_service.dart';
@@ -7,11 +8,10 @@ import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/aliases_header.dart';
 import 'package:anonaddy/widgets/create_new_alias.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
-import 'package:anonaddy/widgets/loading_widget.dart';
+import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../error_screen.dart';
 import 'deleted_aliases_screen.dart';
 
 class AliasTab extends StatefulWidget {
@@ -74,9 +74,9 @@ class _AliasTabState extends State<AliasTab> {
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
-                            return ErrorScreen(
-                              label:
-                                  'No Internet Connection.\nMake sure you\'re online.',
+                            return LottieWidget(
+                              lottie: 'assets/lottie/errorCone.json',
+                              label: kNoInternetConnection,
                             );
                           case ConnectionState.waiting:
                             return Padding(
@@ -107,128 +107,24 @@ class _AliasTabState extends State<AliasTab> {
                                 }
                               }
 
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AliasDetailListTile(
-                                          title:
-                                              '${forwardedList.reduce((value, element) => value + element)}',
-                                          titleTextStyle: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                          subtitle: 'Emails Forwarded',
-                                          leadingIconData:
-                                              Icons.forward_to_inbox,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: AliasDetailListTile(
-                                          title:
-                                              '${sentList.reduce((value, element) => value + element)}',
-                                          titleTextStyle: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                          subtitle: 'Emails Sent',
-                                          leadingIconData:
-                                              Icons.mark_email_read_outlined,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: AliasDetailListTile(
-                                          title:
-                                              '${repliedList.reduce((value, element) => value + element)}',
-                                          titleTextStyle: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                          subtitle: 'Emails Replied',
-                                          leadingIconData: Icons.reply,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: AliasDetailListTile(
-                                          title:
-                                              '${blockedList.reduce((value, element) => value + element)}',
-                                          titleTextStyle: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                          subtitle: 'Emails Blocked',
-                                          leadingIconData: Icons.block,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  ExpansionTile(
-                                    title: Text(
-                                      'Available Aliases',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    initiallyExpanded: true,
-                                    children: [
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        itemCount: availableAliasList.length,
-                                        itemBuilder: (context, index) {
-                                          return AliasListTile(
-                                              aliasData:
-                                                  availableAliasList[index]);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  ExpansionTile(
-                                    title: Text(
-                                      'Deleted Aliases',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    children: [
-                                      Column(
-                                        children: [
-                                          ListView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            itemCount: 10,
-                                            itemBuilder: (context, index) {
-                                              return AliasListTile(
-                                                aliasData:
-                                                    deletedAliasList[index],
-                                              );
-                                            },
-                                          ),
-                                          Divider(),
-                                          FlatButton(
-                                            child: Text('View full list'),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return DeletedAliasesScreen(
-                                                      aliasDataModel:
-                                                          deletedAliasList,
-                                                    );
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              return buildSnapshotData(
+                                forwardedList,
+                                sentList,
+                                repliedList,
+                                blockedList,
+                                availableAliasList,
+                                deletedAliasList,
                               );
                             } else if (snapshot.hasError) {
-                              return ErrorScreen(
-                                label: '${snapshot.error}',
-                                buttonLabel: 'Sign In',
-                                buttonOnPress: () {},
+                              return LottieWidget(
+                                lottie: 'assets/lottie/errorCone.json',
+                                label: snapshot.error,
                               );
                             } else {
-                              return LoadingWidget();
+                              return LottieWidget(
+                                lottie: 'assets/lottie/errorCone.json',
+                                label: snapshot.error,
+                              );
                             }
                         }
                       },
@@ -243,21 +139,135 @@ class _AliasTabState extends State<AliasTab> {
     );
   }
 
+  Column buildSnapshotData(
+    List<int> forwardedList,
+    List<int> sentList,
+    List<int> repliedList,
+    List<int> blockedList,
+    List<AliasDataModel> availableAliasList,
+    List<AliasDataModel> deletedAliasList,
+  ) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: AliasDetailListTile(
+                title:
+                    '${forwardedList.reduce((value, element) => value + element)}',
+                titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                subtitle: 'Emails Forwarded',
+                leadingIconData: Icons.forward_to_inbox,
+              ),
+            ),
+            Expanded(
+              child: AliasDetailListTile(
+                title:
+                    '${sentList.reduce((value, element) => value + element)}',
+                titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                subtitle: 'Emails Sent',
+                leadingIconData: Icons.mark_email_read_outlined,
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: AliasDetailListTile(
+                title:
+                    '${repliedList.reduce((value, element) => value + element)}',
+                titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                subtitle: 'Emails Replied',
+                leadingIconData: Icons.reply,
+              ),
+            ),
+            Expanded(
+              child: AliasDetailListTile(
+                title:
+                    '${blockedList.reduce((value, element) => value + element)}',
+                titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                subtitle: 'Emails Blocked',
+                leadingIconData: Icons.block,
+              ),
+            ),
+          ],
+        ),
+        ExpansionTile(
+          title: Text(
+            'Available Aliases',
+            style: TextStyle(color: Colors.black),
+          ),
+          initiallyExpanded: true,
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: availableAliasList.length,
+              itemBuilder: (context, index) {
+                return AliasListTile(aliasData: availableAliasList[index]);
+              },
+            ),
+          ],
+        ),
+        ExpansionTile(
+          title: Text(
+            'Deleted Aliases',
+            style: TextStyle(color: Colors.black),
+          ),
+          children: [
+            Column(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return AliasListTile(
+                      aliasData: deletedAliasList[index],
+                    );
+                  },
+                ),
+                Divider(),
+                FlatButton(
+                  child: Text('View full list'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return DeletedAliasesScreen(
+                            aliasDataModel: deletedAliasList,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   FloatingActionButton buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
         showModal(
-            context: context,
-            builder: (context) {
-              return SimpleDialog(
-                contentPadding: EdgeInsets.all(20),
-                title: Text('Create New Alias'),
-                children: [
-                  CreateNewAlias(),
-                ],
-              );
-            });
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              contentPadding: EdgeInsets.all(20),
+              title: Text('Create New Alias'),
+              children: [
+                CreateNewAlias(),
+              ],
+            );
+          },
+        );
       },
     );
   }

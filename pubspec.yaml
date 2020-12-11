@@ -22,6 +22,7 @@ dependencies:
   get_it: ^5.0.1
   flutter_riverpod: ^0.12.1
   animations: ^1.1.2
+  lottie: ^0.7.0+1
 
 dev_dependencies:
   flutter_test:
@@ -32,6 +33,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/lottie/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
