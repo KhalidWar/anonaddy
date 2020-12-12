@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias_model.dart';
+import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -123,7 +124,7 @@ class _AliasTabState extends State<AliasTab> {
                             } else {
                               return LottieWidget(
                                 lottie: 'assets/lottie/errorCone.json',
-                                label: snapshot.error,
+                                label: 'Something went wrong.',
                               );
                             }
                         }
@@ -140,13 +141,12 @@ class _AliasTabState extends State<AliasTab> {
   }
 
   Column buildSnapshotData(
-    List<int> forwardedList,
-    List<int> sentList,
-    List<int> repliedList,
-    List<int> blockedList,
-    List<AliasDataModel> availableAliasList,
-    List<AliasDataModel> deletedAliasList,
-  ) {
+      List<int> forwardedList,
+      List<int> sentList,
+      List<int> repliedList,
+      List<int> blockedList,
+      List<AliasDataModel> availableAliasList,
+      List<AliasDataModel> deletedAliasList) {
     return Column(
       children: [
         Row(
@@ -196,7 +196,7 @@ class _AliasTabState extends State<AliasTab> {
         ExpansionTile(
           title: Text(
             'Available Aliases',
-            style: TextStyle(color: Colors.black),
+            style: Theme.of(context).textTheme.headline6,
           ),
           initiallyExpanded: true,
           children: [
@@ -205,7 +205,23 @@ class _AliasTabState extends State<AliasTab> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: availableAliasList.length,
               itemBuilder: (context, index) {
-                return AliasListTile(aliasData: availableAliasList[index]);
+                return GestureDetector(
+                  child: AliasListTile(
+                    aliasData: availableAliasList[index],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AliasDetailScreen(
+                            aliasData: availableAliasList[index],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ],
@@ -213,7 +229,7 @@ class _AliasTabState extends State<AliasTab> {
         ExpansionTile(
           title: Text(
             'Deleted Aliases',
-            style: TextStyle(color: Colors.black),
+            style: Theme.of(context).textTheme.headline6,
           ),
           children: [
             Column(
@@ -223,8 +239,22 @@ class _AliasTabState extends State<AliasTab> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return AliasListTile(
-                      aliasData: deletedAliasList[index],
+                    return GestureDetector(
+                      child: AliasListTile(
+                        aliasData: deletedAliasList[index],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return AliasDetailScreen(
+                                aliasData: deletedAliasList[index],
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
