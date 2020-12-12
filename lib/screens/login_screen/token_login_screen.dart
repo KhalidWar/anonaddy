@@ -21,6 +21,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
   String _error;
 
   Future _logIn() async {
+    setState(() => _isLoading = true);
     final accessTokenManager = context.read(accessTokenServiceProvider);
     final textInput = _textEditingController.text.trim();
     final isAccessTokenValid =
@@ -29,7 +30,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
     if (_formKey.currentState.validate()) {
       setState(() {
         _isLoading = true;
-        _error=null;
+        _error = null;
       });
 
       if (isAccessTokenValid == '') {
@@ -39,9 +40,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
       } else {
-        print(isAccessTokenValid);
-
-      setState(() {
+        setState(() {
           _isLoading = false;
           _error = '$isAccessTokenValid';
         });

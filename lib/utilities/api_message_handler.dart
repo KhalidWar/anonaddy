@@ -3,6 +3,10 @@ class APIMessageHandler {
     switch (statusCode) {
       case 200:
         return '';
+      case 201:
+        return '';
+      case 204:
+        return '';
       case 400:
         return 'Bad Request -- Your request sucks';
       case 401:
@@ -23,15 +27,5 @@ class APIMessageHandler {
         return 'Service Unavailable -- We\'re temporarily offline for maintenance. Please try again later';
     }
     throw UnimplementedError(statusCode.toString());
-  }
-
-  String getSubmissionMessage(int code) {
-    switch (code) {
-      case 201:
-        return '';
-      case 204:
-        return '';
-    }
-    throw UnimplementedError(code.toString());
   }
 }

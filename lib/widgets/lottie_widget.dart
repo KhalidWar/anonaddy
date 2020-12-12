@@ -23,28 +23,31 @@ class LottieWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          lottie == null
-              ? Container()
-              : Lottie.asset(
-                  lottie,
-                  height: lottieHeight,
-                  fit: BoxFit.fitHeight,
-                  repeat: false,
-                ),
-          label == null
-              ? Container()
-              : Text(
-                  '$label',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(fontWeight: FontWeight.normal),
-                ),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            lottie == null
+                ? Container()
+                : Lottie.asset(
+                    lottie,
+                    height: lottieHeight,
+                    fit: BoxFit.fitHeight,
+                    repeat: false,
+                  ),
+            label == null
+                ? Container()
+                : Text(
+                    '$label',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(fontWeight: FontWeight.normal),
+                  ),
+          ],
+        ),
       ),
     );
   }

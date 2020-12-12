@@ -106,7 +106,7 @@ class APIService extends ChangeNotifier {
             "description": "$description",
           }));
 
-      return APIMessageHandler().getSubmissionMessage(response.statusCode);
+      return APIMessageHandler().getStatusCodeMessage(response.statusCode);
     } catch (e) {
       print(e.toString());
       return null;
