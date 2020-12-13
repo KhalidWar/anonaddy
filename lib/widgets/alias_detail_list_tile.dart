@@ -20,13 +20,22 @@ class AliasDetailListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String _dateTimeFixer(dynamic input) {
+      if (input.runtimeType == DateTime) {
+        return '${input.month}/${input.day}/${input.year.toString().substring(2)} ${input.hour}:${input.minute}';
+      } else {
+        return '$input';
+      }
+    }
+
     return subtitle == null
         ? Container()
         : ListTile(
             horizontalTitleGap: 0,
             dense: true,
             leading: Icon(leadingIconData),
-            title: Text('$title', style: titleTextStyle ?? null),
+            title:
+                Text('${_dateTimeFixer(title)}', style: titleTextStyle ?? null),
             subtitle: Text('${subtitle ?? 'Alias not deleted'}'),
             trailing: trailingIconData == null
                 ? trailing

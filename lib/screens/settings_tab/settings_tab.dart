@@ -30,6 +30,21 @@ class _SettingsTabState extends State<SettingsTab> {
           ExpansionTile(
             collapsedBackgroundColor: Colors.grey[300],
             childrenPadding: EdgeInsets.all(5),
+            title: Text(
+              'Default Settings',
+              style: TextStyle(color: Colors.black),
+            ),
+            leading: Icon(
+              Icons.account_circle_outlined,
+              color: Colors.grey[700],
+            ),
+            initiallyExpanded: true,
+            children: [],
+          ),
+          SizedBox(height: size.height * 0.01),
+          ExpansionTile(
+            collapsedBackgroundColor: Colors.grey[300],
+            childrenPadding: EdgeInsets.all(5),
             leading: Icon(Icons.settings, color: Colors.grey[700]),
             title: Text('App Settings', style: TextStyle(color: Colors.black)),
             children: [
@@ -57,43 +72,40 @@ class _SettingsTabState extends State<SettingsTab> {
                     Icon(FontAwesomeIcons.github),
                   ],
                 ),
-                onTap: () => buildShowModal(),
+                onTap: () => aboutAlertDialog(),
               ),
               SizedBox(height: size.height * 0.01),
               // todo add license info
               RaisedButton(
                 color: Colors.red,
+                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                 child: Text(
                   'Log Out',
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 onPressed: () {
                   context.read(accessTokenServiceProvider).removeAccessToken();
-                  //todo remove navigation stack upon log out
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
                     return InitialScreen();
                   }));
                 },
               ),
-              SizedBox(height: size.height * 0.01),
+              // SizedBox(height: size.height * 0.01),
             ],
           ),
-          SizedBox(height: size.height * 0.01),
         ],
       ),
     );
   }
 
-  buildShowModal() async {
+  aboutAlertDialog() async {
     showModal(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text('About App'),
-            content: Text(
-              kAboutAppText,
-            ),
+            content: Text(kAboutAppText),
             actions: [
               RaisedButton(
                 child: Text('Visit Project Repo'),
@@ -108,16 +120,7 @@ class _SettingsTabState extends State<SettingsTab> {
               ),
               RaisedButton(
                 child: Text('Cancel'),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return InitialScreen();
-                      },
-                    ),
-                  );
-                },
+                onPressed: () => Navigator.pop(context),
               ),
             ],
           );

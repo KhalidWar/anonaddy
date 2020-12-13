@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:anonaddy/models/alias_model.dart';
 import 'package:anonaddy/models/domain_options.dart';
 import 'package:anonaddy/models/user_model.dart';
+import 'package:anonaddy/models/username_model.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/all.dart';
@@ -255,6 +256,23 @@ class APIService extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       final data = DomainOptions.fromJson(jsonDecode(response.body));
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  Future<UsernameModel> getUsernameData() async {
+    final accessToken = await _getAccessToken();
+    _headers["Authorization"] = "Bearer $accessToken";
+
+    final response = await http.get(
+      Uri.encodeFull('$_baseURL/usernames'),
+      headers: _headers,
+    );
+
+    if (response.statusCode == 200) {
+      final data = UsernameModel.fromJson(jsonDecode(response.body));
       return data;
     } else {
       return null;
