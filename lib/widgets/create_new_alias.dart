@@ -8,7 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CreateNewAlias extends StatefulWidget {
   const CreateNewAlias({
     Key key,
+    this.domainOptions,
   });
+
+  final Future<DomainOptions> domainOptions;
 
   @override
   _CreateNewAliasState createState() => _CreateNewAliasState();
@@ -19,7 +22,6 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
   bool isLoading = false;
   String defaultAliasDomain;
   String defaultAliasFormat;
-  Future<DomainOptions> domainOptions;
 
   final aliasFormatList = <String>[
     'uuid',
@@ -42,12 +44,6 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    domainOptions = context.read(apiServiceProvider).getDomainOptions();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
@@ -55,7 +51,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
       height: size.height * 0.4,
       width: size.width,
       child: FutureBuilder<DomainOptions>(
-        future: domainOptions,
+        future: widget.domainOptions,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:

@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias_model.dart';
+import 'package:anonaddy/models/domain_options.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/services/api_service.dart';
@@ -22,6 +23,7 @@ class AliasTab extends StatefulWidget {
 
 class _AliasTabState extends State<AliasTab> {
   final _formKey = GlobalKey<FormState>();
+  Future<DomainOptions> domainOptions;
   Stream<AliasModel> _aliasDataStream;
 
   Stream<AliasModel> getAliasStream() async* {
@@ -36,6 +38,7 @@ class _AliasTabState extends State<AliasTab> {
   void initState() {
     super.initState();
     _aliasDataStream = getAliasStream();
+    domainOptions = context.read(apiServiceProvider).getDomainOptions();
   }
 
   @override
@@ -293,7 +296,7 @@ class _AliasTabState extends State<AliasTab> {
               contentPadding: EdgeInsets.all(20),
               title: Text('Create New Alias'),
               children: [
-                CreateNewAlias(),
+                CreateNewAlias(domainOptions: domainOptions),
               ],
             );
           },
