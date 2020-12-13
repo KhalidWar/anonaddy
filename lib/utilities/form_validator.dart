@@ -12,4 +12,11 @@ class FormValidator {
     }
     return null;
   }
+
+  String customFieldInput(String input) {
+    if (input.isEmpty || input == null) {
+      return 'Custom Alias not available for shared domains';
+    }
+    return null;
+  }
 }

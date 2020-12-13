@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:anonaddy/models/alias_model.dart';
+import 'package:anonaddy/models/domain_options.dart';
 import 'package:anonaddy/models/user_model.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:flutter/cupertino.dart';
@@ -93,7 +94,8 @@ class APIService extends ChangeNotifier {
     }
   }
 
-  Future<String> createNewAlias(String description) async {
+  Future<String> createNewAlias(
+      {String desc, String format, String domain}) async {
     try {
       String accessToken = await _getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -101,9 +103,9 @@ class APIService extends ChangeNotifier {
       final response = await http.post(Uri.encodeFull('$_baseURL/$_aliasesURL'),
           headers: _headers,
           body: json.encode({
-            "domain": "anonaddy.me",
-            "format": "uuid",
-            "description": "$description",
+            "domain": "$domain",
+            "format": "$format",
+            "description": "$desc",
           }));
 
       return APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -236,6 +238,23 @@ class APIService extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       final data = AliasDataModel.fromJsonData(jsonDecode(response.body));
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  Future<DomainOptions> getDomainOptions() async {
+    final accessToken = await _getAccessToken();
+    _headers["Authorization"] = "Bearer $accessToken";
+
+    final response = await http.get(
+      Uri.encodeFull('$_baseURL/domain-options'),
+      headers: _headers,
+    );
+
+    if (response.statusCode == 200) {
+      final data = DomainOptions.fromJson(jsonDecode(response.body));
       return data;
     } else {
       return null;
