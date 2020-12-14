@@ -1,9 +1,9 @@
-class UsernameModel {
-  UsernameModel({
-    this.usernameDataList,
-  });
+import 'alias_model.dart';
 
-  List<UsernameDataModel> usernameDataList;
+class UsernameModel {
+  const UsernameModel({this.usernameDataList});
+
+  final List<UsernameDataModel> usernameDataList;
 
   factory UsernameModel.fromJson(Map<String, dynamic> json) {
     List list = json['data'];
@@ -17,12 +17,12 @@ class UsernameModel {
 }
 
 class UsernameDataModel {
-  UsernameDataModel({
+  const UsernameDataModel({
     this.id,
     this.userId,
     this.username,
     this.description,
-    // this.aliases,
+    this.aliases,
     // this.defaultRecipient,
     this.active,
     this.catchAll,
@@ -30,24 +30,28 @@ class UsernameDataModel {
     this.updatedAt,
   });
 
-  String id;
-  String userId;
-  String username;
-  String description;
-  // List<Map<String, dynamic>> aliases;
+  final String id;
+  final String userId;
+  final String username;
+  final String description;
+  final List<AliasDataModel> aliases;
   // RecipientDataModel defaultRecipient;
-  bool active;
-  bool catchAll;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final bool active;
+  final bool catchAll;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory UsernameDataModel.fromJson(Map<String, dynamic> json) {
+    List list = json['aliases'];
+    List<AliasDataModel> aliasesList =
+        list.map((i) => AliasDataModel.fromJson(i)).toList();
+
     return UsernameDataModel(
       id: json["id"],
       userId: json["user_id"],
       username: json["username"],
       description: json["description"],
-      // aliases: AliasModel.fromJsonList(json["aliases"]),
+      aliases: aliasesList,
       // defaultRecipient: json["default_recipient"],
       active: json["active"],
       catchAll: json["catch_all"],

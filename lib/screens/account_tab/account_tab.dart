@@ -17,7 +17,7 @@ class AccountTab extends StatefulWidget {
 
 class _AccountTabState extends State<AccountTab> {
   Stream<UserModel> _userDataStream;
-  Future<UsernameModel> _usernameDataStream;
+  Future<UsernameModel> _usernameDataFuture;
 
   Stream<UserModel> getUserStream() async* {
     yield await context.read(apiServiceProvider).getUserData();
@@ -31,7 +31,7 @@ class _AccountTabState extends State<AccountTab> {
   void initState() {
     super.initState();
     _userDataStream = getUserStream();
-    _usernameDataStream = context.read(apiServiceProvider).getUsernameData();
+    _usernameDataFuture = context.read(apiServiceProvider).getUsernameData();
   }
 
   @override
@@ -68,59 +68,61 @@ class _AccountTabState extends State<AccountTab> {
               }
             },
           ),
-          Card(
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 18),
-                  child: Text(
-                    'Additional Usernames',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                ),
-                Divider(height: 0, color: Colors.black),
-                FutureBuilder<UsernameModel>(
-                  future: _usernameDataStream,
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                        return Center(child: CircularProgressIndicator());
-                      case ConnectionState.waiting:
-                        return FetchingDataIndicator();
-                      default:
-                        if (snapshot.hasData) {
-                          final usernameList = snapshot.data.usernameDataList;
-                          if (usernameList.isEmpty) {
-                            return emptyUsernameWidget();
-                          }
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: usernameList.length,
-                            itemBuilder: (context, index) {
-                              return AdditionalUsernameCard(
-                                username: usernameList[index],
-                              );
-                            },
-                          );
-                        } else if (snapshot.hasError) {
-                          return Center(
-                            child: Text(
-                              snapshot.error.toString(),
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
-                          );
-                        } else {
-                          return LottieWidget(
-                            lottie: 'assets/lottie/errorCone.json',
-                            label: snapshot.error,
-                          );
-                        }
+          FutureBuilder<UsernameModel>(
+            future: _usernameDataFuture,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Center(child: CircularProgressIndicator());
+                case ConnectionState.waiting:
+                  return FetchingDataIndicator();
+                default:
+                  if (snapshot.hasData) {
+                    final usernameList = snapshot.data.usernameDataList;
+                    if (usernameList.isEmpty) {
+                      return emptyUsernameWidget();
                     }
-                  },
-                ),
-              ],
-            ),
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: usernameList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                child: Text(
+                                  'Additional Username',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                              ),
+                              Divider(height: 0, color: Colors.black),
+                              if (usernameList.isEmpty)
+                                Text('No usernames found'),
+                              AdditionalUsernameCard(
+                                username: usernameList[index],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        snapshot.error.toString(),
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    );
+                  } else {
+                    return LottieWidget(
+                      lottie: 'assets/lottie/errorCone.json',
+                      label: snapshot.error,
+                    );
+                  }
+              }
+            },
           ),
         ],
       ),

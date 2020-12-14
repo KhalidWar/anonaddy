@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/username_model.dart';
+import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:flutter/material.dart';
 
@@ -68,21 +69,44 @@ class AdditionalUsernameCard extends StatelessWidget {
         ),
         Divider(height: 0),
         ExpansionTile(
-          // initiallyExpanded: true,
-          title: Text(
-            'Aliases',
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-          children: [],
+          title: Text('Aliases', style: Theme.of(context).textTheme.bodyText1),
+          children: [
+            if (username.aliases.isEmpty)
+              Container(
+                  padding: EdgeInsets.all(20), child: Text('No aliases found')),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: username.aliases.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  dense: true,
+                  horizontalTitleGap: 0,
+                  leading: Icon(Icons.email_outlined),
+                  title: Text('${username.aliases[index].email}'),
+                  subtitle: Text('${username.aliases[index].emailDescription}'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AliasDetailScreen(
+                            aliasData: username.aliases[index],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
         ExpansionTile(
-          title: Text(
-            'Recipients',
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
+          title:
+              Text('Recipients', style: Theme.of(context).textTheme.bodyText1),
           children: [],
         ),
-        Divider(height: 0, color: Colors.black),
       ],
     );
   }
