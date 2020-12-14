@@ -70,28 +70,4 @@ class UserModel {
       lastUpdated: DateTime.parse(json['data']["updated_at"]),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "username": username,
-        "from_name": fromName,
-        "email_subject": emailSubject,
-        "banner_location": bannerLocation,
-        "bandwidth": bandwidth,
-        "username_count": usernameCount,
-        "username_limit": usernameLimit,
-        "default_recipient_id": defaultRecipientId,
-        "default_alias_domain": defaultAliasDomain,
-        "default_alias_format": defaultAliasFormat,
-        "subscription": subscription,
-        "bandwidth_limit": bandwidthLimit,
-        "recipient_count": recipientCount,
-        "recipient_limit": recipientLimit,
-        "active_domain_count": activeDomainCount,
-        "active_domain_limit": activeDomainLimit,
-        "active_shared_domain_alias_count": aliasCount,
-        "active_shared_domain_alias_limit": aliasLimit,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": lastUpdated.toIso8601String(),
-      };
 }

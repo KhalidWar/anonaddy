@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/username_model.dart';
+import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:flutter/material.dart';

@@ -1,9 +1,10 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/alias_model.dart';
+import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain_options.dart';
-import 'package:anonaddy/models/user_model.dart';
-import 'package:anonaddy/models/username_model.dart';
+import 'package:anonaddy/models/user/user_model.dart';
+import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/all.dart';

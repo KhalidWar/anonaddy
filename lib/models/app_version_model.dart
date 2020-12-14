@@ -1,15 +1,15 @@
 class AppVersion {
-  AppVersion({
+  const AppVersion({
     this.version,
     this.major,
     this.minor,
     this.patch,
   });
 
-  String version;
-  int major;
-  int minor;
-  int patch;
+  final String version;
+  final int major;
+  final int minor;
+  final int patch;
 
   factory AppVersion.fromJson(Map<String, dynamic> json) {
     return AppVersion(
@@ -19,11 +19,4 @@ class AppVersion {
       patch: json["patch"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "version": version,
-        "major": major,
-        "minor": minor,
-        "patch": patch,
-      };
 }

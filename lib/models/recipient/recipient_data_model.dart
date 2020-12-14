@@ -1,23 +1,5 @@
-class RecipientModel {
-  RecipientModel({
-    this.recipientDataList,
-  });
-
-  List<RecipientDataModel> recipientDataList;
-
-  factory RecipientModel.fromJson(Map<String, dynamic> json) {
-    List list = json['data'];
-    List<RecipientDataModel> recipientDataModel =
-        list.map((i) => RecipientDataModel.fromJson(i)).toList();
-
-    return RecipientModel(
-      recipientDataList: recipientDataModel,
-    );
-  }
-}
-
 class RecipientDataModel {
-  RecipientDataModel({
+  const RecipientDataModel({
     this.id,
     this.userId,
     this.email,
@@ -29,15 +11,15 @@ class RecipientDataModel {
     this.updatedAt,
   });
 
-  String id;
-  String userId;
-  String email;
-  bool shouldEncrypt;
-  dynamic fingerprint;
-  DateTime emailVerifiedAt;
-  List<dynamic> aliases;
-  DateTime createdAt;
-  DateTime updatedAt;
+  final String id;
+  final String userId;
+  final String email;
+  final bool shouldEncrypt;
+  final dynamic fingerprint;
+  final DateTime emailVerifiedAt;
+  final List<dynamic> aliases;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory RecipientDataModel.fromJson(Map<String, dynamic> json) {
     return RecipientDataModel(

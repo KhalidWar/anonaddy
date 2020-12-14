@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/user_model.dart';
-import 'package:anonaddy/models/username_model.dart';
+import 'package:anonaddy/models/user/user_model.dart';
+import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/additional_username_card.dart';

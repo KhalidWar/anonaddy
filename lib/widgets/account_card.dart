@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/user_model.dart';
+import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

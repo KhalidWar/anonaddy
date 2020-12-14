@@ -1,13 +1,13 @@
 class DomainOptions {
-  DomainOptions({
+  const DomainOptions({
     this.data,
     this.defaultAliasDomain,
     this.defaultAliasFormat,
   });
 
-  List<String> data;
-  String defaultAliasDomain;
-  String defaultAliasFormat;
+  final List<String> data;
+  final String defaultAliasDomain;
+  final String defaultAliasFormat;
 
   factory DomainOptions.fromJson(Map<String, dynamic> json) {
     return DomainOptions(
@@ -16,10 +16,4 @@ class DomainOptions {
       defaultAliasFormat: json["defaultAliasFormat"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x)),
-        "defaultAliasDomain": defaultAliasDomain,
-        "defaultAliasFormat": defaultAliasFormat,
-      };
 }
