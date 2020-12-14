@@ -97,7 +97,7 @@ class _AccountTabState extends State<AccountTab> {
                                   style: Theme.of(context).textTheme.headline6,
                                 ),
                               ),
-                              Divider(height: 0, color: Colors.black),
+                              Divider(height: 0),
                               if (usernameList.isEmpty)
                                 Text('No usernames found'),
                               AdditionalUsernameCard(

@@ -71,41 +71,58 @@ class AdditionalUsernameCard extends StatelessWidget {
         ExpansionTile(
           title: Text('Aliases', style: Theme.of(context).textTheme.bodyText1),
           children: [
-            if (username.aliases.isEmpty)
-              Container(
-                  padding: EdgeInsets.all(20), child: Text('No aliases found')),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: username.aliases.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  dense: true,
-                  horizontalTitleGap: 0,
-                  leading: Icon(Icons.email_outlined),
-                  title: Text('${username.aliases[index].email}'),
-                  subtitle: Text('${username.aliases[index].emailDescription}'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return AliasDetailScreen(
-                            aliasData: username.aliases[index],
+            username.aliases.isEmpty
+                ? Container(
+                    padding: EdgeInsets.all(20),
+                    child: Text('No aliases found'))
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: username.aliases.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        dense: true,
+                        horizontalTitleGap: 0,
+                        leading: Icon(Icons.email_outlined),
+                        title: Text('${username.aliases[index].email}'),
+                        subtitle:
+                            Text('${username.aliases[index].emailDescription}'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return AliasDetailScreen(
+                                  aliasData: username.aliases[index],
+                                );
+                              },
+                            ),
                           );
                         },
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+                      );
+                    },
+                  ),
           ],
         ),
+        Divider(height: 0),
         ExpansionTile(
-          title:
-              Text('Recipients', style: Theme.of(context).textTheme.bodyText1),
-          children: [],
+          title: Text('Default Recipient',
+              style: Theme.of(context).textTheme.bodyText1),
+          children: [
+            username.defaultRecipient.email == 'tempSolution'
+                ? Container(
+                    padding: EdgeInsets.all(20),
+                    child: Text('No default recipient found'),
+                  )
+                : ListTile(
+                    dense: true,
+                    horizontalTitleGap: 0,
+                    leading: Icon(Icons.account_circle_outlined),
+                    title: Text('${username.defaultRecipient.email}'),
+                    subtitle: Text('${username.defaultRecipient.userId}'),
+                    onTap: () {},
+                  ),
+          ],
         ),
       ],
     );

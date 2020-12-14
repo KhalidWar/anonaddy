@@ -1,3 +1,5 @@
+import 'package:anonaddy/models/recipient_model.dart';
+
 import 'alias_model.dart';
 
 class UsernameModel {
@@ -23,7 +25,7 @@ class UsernameDataModel {
     this.username,
     this.description,
     this.aliases,
-    // this.defaultRecipient,
+    this.defaultRecipient,
     this.active,
     this.catchAll,
     this.createdAt,
@@ -35,7 +37,7 @@ class UsernameDataModel {
   final String username;
   final String description;
   final List<AliasDataModel> aliases;
-  // RecipientDataModel defaultRecipient;
+  final RecipientDataModel defaultRecipient;
   final bool active;
   final bool catchAll;
   final DateTime createdAt;
@@ -46,13 +48,26 @@ class UsernameDataModel {
     List<AliasDataModel> aliasesList =
         list.map((i) => AliasDataModel.fromJson(i)).toList();
 
+    RecipientDataModel tempSolution = json["default_recipient"] == null
+        ? RecipientDataModel.fromJson({
+            "id": "tempSolution",
+            "user_id": "tempSolution",
+            "email": "tempSolution",
+            "should_encrypt": false,
+            "fingerprint": null,
+            "email_verified_at": "${DateTime.now()}",
+            "created_at": "${DateTime.now()}",
+            "updated_at": "${DateTime.now()}",
+          })
+        : RecipientDataModel.fromJson(json["default_recipient"]);
+
     return UsernameDataModel(
       id: json["id"],
       userId: json["user_id"],
       username: json["username"],
       description: json["description"],
       aliases: aliasesList,
-      // defaultRecipient: json["default_recipient"],
+      defaultRecipient: tempSolution,
       active: json["active"],
       catchAll: json["catch_all"],
       createdAt: DateTime.parse(json["created_at"]),

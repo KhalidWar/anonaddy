@@ -14,10 +14,6 @@ class RecipientModel {
       recipientDataList: recipientDataModel,
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(recipientDataList.map((x) => x.toJson())),
-      };
 }
 
 class RecipientDataModel {
@@ -43,31 +39,19 @@ class RecipientDataModel {
   DateTime createdAt;
   DateTime updatedAt;
 
-  factory RecipientDataModel.fromJson(Map<String, dynamic> json) =>
-      RecipientDataModel(
-        id: json["id"],
-        userId: json["user_id"],
-        email: json["email"],
-        shouldEncrypt: json["should_encrypt"],
-        fingerprint: json["fingerprint"],
-        emailVerifiedAt: json["email_verified_at"] == null
-            ? null
-            : DateTime.parse(json["email_verified_at"]),
-        aliases: List<dynamic>.from(json["aliases"].map((x) => x)),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "user_id": userId,
-        "email": email,
-        "should_encrypt": shouldEncrypt,
-        "fingerprint": fingerprint,
-        "email_verified_at":
-            emailVerifiedAt == null ? null : emailVerifiedAt.toIso8601String(),
-        "aliases": List<dynamic>.from(aliases.map((x) => x)),
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
-      };
+  factory RecipientDataModel.fromJson(Map<String, dynamic> json) {
+    return RecipientDataModel(
+      id: json["id"],
+      userId: json["user_id"],
+      email: json["email"],
+      shouldEncrypt: json["should_encrypt"],
+      fingerprint: json["fingerprint"],
+      emailVerifiedAt: json["email_verified_at"] == null
+          ? null
+          : DateTime.parse(json["email_verified_at"]),
+      // aliases: List<dynamic>.from(json["aliases"].map((x) => x)),
+      createdAt: DateTime.parse(json["created_at"]),
+      updatedAt: DateTime.parse(json["updated_at"]),
+    );
+  }
 }
