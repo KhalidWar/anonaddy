@@ -148,20 +148,28 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
                 ],
               ),
               Divider(),
-              AliasDetailListTile(
-                leadingIconData: Icons.access_time_outlined,
-                title: 'Created At',
-                subtitle: alias.createdAt,
-              ),
-              AliasDetailListTile(
-                leadingIconData: Icons.av_timer_outlined,
-                title: 'Updated At',
-                subtitle: alias.updatedAt,
+              Row(
+                children: [
+                  Expanded(
+                    child: AliasDetailListTile(
+                      leadingIconData: Icons.access_time_outlined,
+                      title: alias.createdAt,
+                      subtitle: 'Created At',
+                    ),
+                  ),
+                  Expanded(
+                    child: AliasDetailListTile(
+                      leadingIconData: Icons.av_timer_outlined,
+                      title: alias.updatedAt,
+                      subtitle: 'Updated At',
+                    ),
+                  ),
+                ],
               ),
               AliasDetailListTile(
                 leadingIconData: Icons.auto_delete_outlined,
-                title: 'Deleted At',
-                subtitle: alias.deletedAt,
+                title: alias.deletedAt,
+                subtitle: 'Deleted At',
               ),
               Divider(),
               Center(
