@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/services/access_token_service.dart';
+import 'package:anonaddy/services/secure_storage.dart';
 import 'package:anonaddy/services/theme_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +84,7 @@ class _SettingsTabState extends State<SettingsTab> {
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 onPressed: () {
-                  context.read(accessTokenServiceProvider).removeAccessToken();
+                  context.read(secureStorageProvider).deleteAccessToken();
                   Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (context) {
                     return InitialScreen();

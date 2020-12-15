@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/home_screen.dart';
-import 'package:anonaddy/services/access_token_service.dart';
 import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/secure_storage.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/widgets/error_message_alert.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
 
   Future _logIn() async {
     setState(() => _isLoading = true);
-    final accessTokenManager = context.read(accessTokenServiceProvider);
+    final accessTokenManager = context.read(secureStorageProvider);
     final textInput = _textEditingController.text.trim();
     final isAccessTokenValid =
         await context.read(apiServiceProvider).validateAccessToken(textInput);
@@ -34,7 +34,7 @@ class _TokenLoginScreenState extends State<TokenLoginScreen> {
       });
 
       if (isAccessTokenValid == '') {
-        await accessTokenManager.removeAccessToken().whenComplete(() {
+        await accessTokenManager.deleteAccessToken().whenComplete(() {
           accessTokenManager.saveAccessToken(textInput);
         });
         Navigator.pushReplacement(
