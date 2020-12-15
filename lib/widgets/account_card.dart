@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
+import 'package:anonaddy/widgets/card_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,7 @@ class AccountCard extends StatelessWidget {
       child: Card(
         child: Column(
           children: [
+            CardHeader(label: 'Main'),
             AccountCardHeader(
               title: userData.username,
               subtitle: '${userData.subscription} subscription',

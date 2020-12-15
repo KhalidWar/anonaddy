@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
-class AliasesHeader extends StatelessWidget {
-  const AliasesHeader({
-    Key key,
-  }) : super(key: key);
-
+class CardHeader extends StatelessWidget {
+  const CardHeader({Key key, this.label}) : super(key: key);
+  final String label;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +17,7 @@ class AliasesHeader extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(4)),
       ),
       child: Text(
-        'Aliases',
+        label,
         style: Theme.of(context).textTheme.headline6.copyWith(
               fontWeight: FontWeight.bold,
             ),

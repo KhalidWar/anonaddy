@@ -35,8 +35,9 @@ ButtonThemeData buttonThemeData = ButtonThemeData(
 );
 
 CardTheme cardTheme = CardTheme(
-  elevation: 8,
+  elevation: 6,
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+  margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
 );
 
 DialogTheme dialogTheme = DialogTheme(
