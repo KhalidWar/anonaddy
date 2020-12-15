@@ -24,6 +24,7 @@ dependencies:
   animations: ^1.1.2
   lottie: ^0.7.0+1
   flutter_secure_storage: ^3.3.5
+  fluttertoast: ^7.1.5
 
 dev_dependencies:
   flutter_test:

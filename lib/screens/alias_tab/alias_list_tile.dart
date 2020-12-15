@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../constants.dart';
 
 class AliasListTile extends StatefulWidget {
   const AliasListTile({Key key, this.aliasData}) : super(key: key);
@@ -27,6 +30,12 @@ class _AliasListTileState extends State<AliasListTile> {
 
   void _copyOnTab() {
     Clipboard.setData(ClipboardData(text: widget.aliasData.email));
+    Fluttertoast.showToast(
+      msg: kEmailCopied,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.grey[600],
+    );
   }
 
   void _toggleAliases() async {

@@ -10,3 +10,5 @@ const kRestoreAliasText =
     'Are you sure you want to restore this alias? Once restored, this alias will be able to receive emails again.';
 const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
+
+const kEmailCopied = 'Email Copied to Clipboard';

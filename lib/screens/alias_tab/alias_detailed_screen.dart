@@ -4,6 +4,9 @@ import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../constants.dart';
 
 class AliasDetailScreen extends StatefulWidget {
   const AliasDetailScreen({Key key, this.aliasData}) : super(key: key);
@@ -17,8 +20,11 @@ class AliasDetailScreen extends StatefulWidget {
 class _AliasDetailScreenState extends State<AliasDetailScreen> {
   void _copyOnTab() {
     Clipboard.setData(ClipboardData(text: widget.aliasData.email));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Email Alias copied to clipboard!')),
+    Fluttertoast.showToast(
+      msg: kEmailCopied,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.grey[600],
     );
   }
 
