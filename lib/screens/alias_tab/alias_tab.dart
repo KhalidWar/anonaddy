@@ -124,7 +124,7 @@ class _AliasTabState extends State<AliasTab> {
                   validator: (input) => FormValidator().searchValidator(input),
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    hintText: 'Search aliases, descriptions ...',
+                    hintText: kSearchHintText,
                     prefixIcon: Icon(Icons.search, color: Colors.black),
                     focusedBorder: OutlineInputBorder(
                       borderSide:

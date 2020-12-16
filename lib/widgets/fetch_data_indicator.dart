@@ -1,3 +1,4 @@
+import 'package:anonaddy/constants.dart';
 import 'package:flutter/material.dart';
 
 class FetchingDataIndicator extends StatelessWidget {
@@ -9,7 +10,7 @@ class FetchingDataIndicator extends StatelessWidget {
         children: [
           CircularProgressIndicator(),
           SizedBox(height: 15),
-          Text('Fetching data...'),
+          Text(kFetchingDataText),
         ],
       ),
     );

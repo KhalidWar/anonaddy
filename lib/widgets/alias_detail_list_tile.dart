@@ -27,9 +27,11 @@ class AliasDetailListTile extends StatelessWidget {
             horizontalTitleGap: 0,
             dense: true,
             leading: Icon(leadingIconData),
-            title: Text('${DateTimeFixer().fixDateTime(title)}',
-                style: titleTextStyle ?? null),
-            subtitle: Text('${subtitle ?? 'Alias not deleted'}'),
+            title: Text(
+              '${DateTimeFixer().fixDateTime(title)}',
+              style: titleTextStyle ?? null,
+            ),
+            subtitle: Text('$subtitle'),
             trailing: trailingIconData == null
                 ? trailing
                 : IconButton(

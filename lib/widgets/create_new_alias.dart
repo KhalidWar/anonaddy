@@ -1,3 +1,4 @@
+import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/domain_options.dart';
 import 'package:anonaddy/services/api_service.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
@@ -73,7 +74,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
-                      hintText: 'Description (optional)',
+                      hintText: kDescriptionInputText,
                     ),
                   ),
                   Column(

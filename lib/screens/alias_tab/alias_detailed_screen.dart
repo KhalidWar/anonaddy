@@ -56,59 +56,6 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AliasDetailListTile(
-              leadingIconData: Icons.flaky_outlined,
-              title: 'Active',
-              subtitle:
-                  'Alias is ${alias.isAliasActive ? 'active' : 'inactive'}',
-              trailing: Switch(
-                value: alias.isAliasActive,
-                onChanged: (toggle) {},
-              ),
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.comment,
-              title: alias.emailDescription,
-              subtitle: 'Description',
-              trailingIconData: Icons.edit,
-              trailingIconOnPress: () {},
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.email_outlined,
-              title: alias.email,
-              subtitle: 'Email',
-              trailingIconData: Icons.copy,
-              trailingIconOnPress: _copyOnTab,
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.check_circle_outline,
-              title: 'extension',
-              subtitle: alias.extension,
-              trailingIconData: Icons.edit,
-              trailingIconOnPress: () {},
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.alternate_email,
-              title: alias.aliasID,
-              subtitle: 'Alias ID and Local Port',
-              trailingIconData: Icons.copy,
-              trailingIconOnPress: _copyOnTab,
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.dns,
-              title: alias.domain,
-              subtitle: 'Domain',
-              trailingIconData: Icons.edit,
-              trailingIconOnPress: () {},
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.account_circle_outlined,
-              title: alias.userId,
-              subtitle: 'User ID',
-              trailingIconData: Icons.copy,
-              trailingIconOnPress: _copyOnTab,
-            ),
-            Divider(),
             Row(
               children: [
                 Expanded(
@@ -146,6 +93,59 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
               ],
             ),
             Divider(),
+            AliasDetailListTile(
+              leadingIconData: Icons.flaky_outlined,
+              title: 'Active',
+              subtitle:
+                  'Alias is ${alias.isAliasActive ? 'active' : 'inactive'}',
+              trailing: Switch(
+                value: alias.isAliasActive,
+                onChanged: (toggle) {},
+              ),
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.comment,
+              title: alias.emailDescription,
+              subtitle: 'Description',
+              trailingIconData: Icons.edit,
+              trailingIconOnPress: () {},
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.email_outlined,
+              title: alias.email,
+              subtitle: 'Email',
+              trailingIconData: Icons.copy,
+              trailingIconOnPress: _copyOnTab,
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.check_circle_outline,
+              title: alias.extension,
+              subtitle: 'extension',
+              trailingIconData: Icons.edit,
+              trailingIconOnPress: () {},
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.alternate_email,
+              title: alias.aliasID,
+              subtitle: 'Alias ID',
+              trailingIconData: Icons.copy,
+              trailingIconOnPress: _copyOnTab,
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.dns,
+              title: alias.domain,
+              subtitle: 'Domain',
+              trailingIconData: Icons.edit,
+              trailingIconOnPress: () {},
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.account_circle_outlined,
+              title: alias.userId,
+              subtitle: 'User ID',
+              trailingIconData: Icons.copy,
+              trailingIconOnPress: _copyOnTab,
+            ),
+            Divider(),
             Row(
               children: [
                 Expanded(
@@ -156,18 +156,19 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
                   ),
                 ),
                 Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.av_timer_outlined,
-                    title: alias.updatedAt,
-                    subtitle: 'Updated At',
-                  ),
-                ),
+                  child: alias.deletedAt == null
+                      ? AliasDetailListTile(
+                          leadingIconData: Icons.av_timer_outlined,
+                          title: alias.updatedAt,
+                          subtitle: 'Updated At',
+                        )
+                      : AliasDetailListTile(
+                          leadingIconData: Icons.auto_delete_outlined,
+                          title: alias.deletedAt,
+                          subtitle: 'Deleted At',
+                        ),
+                )
               ],
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.auto_delete_outlined,
-              title: alias.deletedAt,
-              subtitle: 'Deleted At',
             ),
             Divider(),
             Center(

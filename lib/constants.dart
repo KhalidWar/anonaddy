@@ -15,6 +15,9 @@ const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
 
 const kEmailCopied = 'Email Copied to Clipboard';
+const kSearchHintText = 'Search aliases, descriptions ...';
+const kFetchingDataText = 'Fetching data...';
+const kDescriptionInputText = 'description (optional)';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);
