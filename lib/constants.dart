@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+// Strings
 const kAboutAppText =
     'This app is a part of Khalid War\'s personal projects. It\'s free and open source. Free as in free of charge, free of ads, and free of trackers. \n\nTo check out the source code for this app, please visit our github repo.';
 const kDeletedAliasText =
@@ -12,3 +15,7 @@ const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
 
 const kEmailCopied = 'Email Copied to Clipboard';
+
+// Colors
+const kBlueNavyColor = Color(0xFF19216C);
+const kAccentColor = Color(0xFF62F4EB);

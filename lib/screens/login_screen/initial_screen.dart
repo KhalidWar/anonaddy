@@ -12,30 +12,28 @@ class InitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: FutureBuilder(
-          future: context.read(secureStorageProvider).getAccessToken(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                return ErrorScreen(
-                  label: 'No Internet Connection.\nMake sure you\'re online.',
-                  buttonLabel: 'Reload',
-                  buttonOnPress: () {},
-                );
-                break;
-              case ConnectionState.waiting:
-                return LoadingWidget();
-              default:
-                if (snapshot.data == null) {
-                  return TokenLoginScreen();
-                } else {
-                  return HomeScreen();
-                }
-            }
-          },
-        ),
+    return Scaffold(
+      body: FutureBuilder(
+        future: context.read(secureStorageProvider).getAccessToken(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return ErrorScreen(
+                label: 'No Internet Connection.\nMake sure you\'re online.',
+                buttonLabel: 'Reload',
+                buttonOnPress: () {},
+              );
+              break;
+            case ConnectionState.waiting:
+              return LoadingWidget();
+            default:
+              if (snapshot.data == null) {
+                return TokenLoginScreen();
+              } else {
+                return HomeScreen();
+              }
+          }
+        },
       ),
     );
   }

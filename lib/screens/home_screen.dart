@@ -2,7 +2,10 @@ import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
 import 'package:anonaddy/screens/settings_tab/settings_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../constants.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,7 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: kBlueNavyColor,
+        systemNavigationBarColor: Colors.transparent,
+      ),
       child: Scaffold(
         appBar: buildAppBar(context),
         body: IndexedStack(
@@ -32,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectedTab,
           currentIndex: _selectedIndex,
-          selectedItemColor: Theme.of(context).appBarTheme.color,
+          selectedItemColor: kBlueNavyColor,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle),
