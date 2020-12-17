@@ -8,7 +8,7 @@ import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/screens/alias_tab/create_new_alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
@@ -24,7 +24,6 @@ class AliasTab extends StatefulWidget {
 }
 
 class _AliasTabState extends State<AliasTab> {
-  final _formKey = GlobalKey<FormState>();
   Future<DomainOptions> _domainOptions;
   Stream<AliasModel> _aliasDataStream;
 
@@ -120,21 +119,21 @@ class _AliasTabState extends State<AliasTab> {
         child: Column(
           children: [
             Card(
-              child: Form(
-                key: _formKey,
-                child: TextFormField(
-                  validator: (input) => FormValidator().searchValidator(input),
-                  textInputAction: TextInputAction.search,
+              child: GestureDetector(
+                onTap: () {
+                  showSearch(
+                      context: context,
+                      delegate: SearchService(
+                        [...availableAliasList, ...deletedAliasList],
+                      ));
+                },
+                child: TextField(
+                  enabled: false,
                   decoration: InputDecoration(
                     hintText: kSearchHintText,
                     prefixIcon: Icon(Icons.search, color: Colors.black),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Theme.of(context).accentColor),
-                    ),
-                    enabledBorder: OutlineInputBorder(),
+                    disabledBorder: OutlineInputBorder(),
                   ),
-                  onTap: () {},
                 ),
               ),
             ),

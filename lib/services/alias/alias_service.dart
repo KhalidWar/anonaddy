@@ -36,7 +36,7 @@ class AliasService {
       }
     } catch (e) {
       print(e.toString());
-      return e.message;
+      return null;
     }
   }
 
