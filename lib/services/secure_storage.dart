@@ -7,15 +7,15 @@ class SecureStorage {
   final _secureStorage = FlutterSecureStorage();
   final _accessTokenKey = 'accessToken';
 
-  Future saveAccessToken(String value) async {
+  Future<void> saveAccessToken(String value) async {
     await _secureStorage.write(key: _accessTokenKey, value: value);
   }
 
-  Future getAccessToken() async {
+  Future<String> getAccessToken() async {
     return await _secureStorage.read(key: _accessTokenKey);
   }
 
-  Future deleteAccessToken() async {
+  Future<void> deleteAccessToken() async {
     await _secureStorage.delete(key: _accessTokenKey);
   }
 }

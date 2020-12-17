@@ -5,12 +5,12 @@ import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain_options.dart';
 import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
+import 'package:anonaddy/services/secure_storage.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 final apiServiceProvider =
     ChangeNotifierProvider.autoDispose<APIService>((ref) => APIService());
@@ -27,21 +27,6 @@ class APIService extends ChangeNotifier {
     "Accept": "application/json",
   };
 
-  String _accessTokenValue;
-
-  Future<String> _getAccessToken() async {
-    if (_accessTokenValue == null || _accessTokenValue.isEmpty) {
-      final sharedPreferences = await SharedPreferences.getInstance();
-      final tokenValue = sharedPreferences.getString('tokenKey');
-      if (tokenValue == null || tokenValue.isEmpty) {
-        return null;
-      } else {
-        return _accessTokenValue = tokenValue;
-      }
-    }
-    return _accessTokenValue;
-  }
-
   Future<String> validateAccessToken(String accessToken) async {
     _headers["Authorization"] = "Bearer $accessToken";
 
@@ -54,7 +39,7 @@ class APIService extends ChangeNotifier {
 
   Future<UserModel> getUserData() async {
     try {
-      String accessToken = await _getAccessToken();
+      final accessToken = await SecureStorage().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.get(
@@ -76,7 +61,7 @@ class APIService extends ChangeNotifier {
 
   Future<AliasModel> getAllAliasesData() async {
     try {
-      String accessToken = await _getAccessToken();
+      final accessToken = await SecureStorage().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.get(
@@ -99,7 +84,7 @@ class APIService extends ChangeNotifier {
   Future<String> createNewAlias(
       {String desc, String format, String domain}) async {
     try {
-      String accessToken = await _getAccessToken();
+      final accessToken = await SecureStorage().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.post(Uri.encodeFull('$_baseURL/$_aliasesURL'),
@@ -119,7 +104,7 @@ class APIService extends ChangeNotifier {
 
   Future<String> activateAlias({String aliasID}) async {
     try {
-      String accessToken = await _getAccessToken();
+      final accessToken = await SecureStorage().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.post(
@@ -143,7 +128,7 @@ class APIService extends ChangeNotifier {
 
   Future<String> deactivateAlias({String aliasID}) async {
     try {
-      String accessToken = await _getAccessToken();
+      final accessToken = await SecureStorage().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.delete(
@@ -165,7 +150,7 @@ class APIService extends ChangeNotifier {
 
   Future<String> editDescription({String newDescription}) async {
     try {
-      String accessToken = await _getAccessToken();
+      final accessToken = await SecureStorage().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.patch(
@@ -188,7 +173,7 @@ class APIService extends ChangeNotifier {
 
   Future<String> deleteAlias(String aliasID) async {
     try {
-      String accessToken = await _getAccessToken();
+      final accessToken = await SecureStorage().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.delete(
@@ -210,7 +195,7 @@ class APIService extends ChangeNotifier {
 
   Future<String> restoreAlias(String aliasID) async {
     try {
-      String accessToken = await _getAccessToken();
+      final accessToken = await SecureStorage().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.patch(
@@ -231,7 +216,7 @@ class APIService extends ChangeNotifier {
   }
 
   Future<AliasDataModel> getSpecificAliasData(String aliasID) async {
-    final accessToken = await _getAccessToken();
+    final accessToken = await SecureStorage().getAccessToken();
     _headers["Authorization"] = "Bearer $accessToken";
 
     final response = await http.get(
@@ -247,7 +232,7 @@ class APIService extends ChangeNotifier {
   }
 
   Future<DomainOptions> getDomainOptions() async {
-    final accessToken = await _getAccessToken();
+    final accessToken = await SecureStorage().getAccessToken();
     _headers["Authorization"] = "Bearer $accessToken";
 
     final response = await http.get(
@@ -264,7 +249,7 @@ class APIService extends ChangeNotifier {
   }
 
   Future<UsernameModel> getUsernameData() async {
-    final accessToken = await _getAccessToken();
+    final accessToken = await SecureStorage().getAccessToken();
     _headers["Authorization"] = "Bearer $accessToken";
 
     final response = await http.get(
