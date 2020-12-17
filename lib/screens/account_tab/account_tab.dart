@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
-import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/user/user_service.dart';
+import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/widgets/account_card.dart';
 import 'package:anonaddy/widgets/additional_username_card.dart';
 import 'package:anonaddy/widgets/card_header.dart';
@@ -21,10 +22,10 @@ class _AccountTabState extends State<AccountTab> {
   Future<UsernameModel> _usernameDataFuture;
 
   Stream<UserModel> getUserStream() async* {
-    yield await context.read(apiServiceProvider).getUserData();
+    yield await context.read(userServiceProvider).getUserData();
     while (true) {
       await Future.delayed(Duration(seconds: 1));
-      yield await context.read(apiServiceProvider).getUserData();
+      yield await context.read(userServiceProvider).getUserData();
     }
   }
 
@@ -32,7 +33,8 @@ class _AccountTabState extends State<AccountTab> {
   void initState() {
     super.initState();
     _userDataStream = getUserStream();
-    _usernameDataFuture = context.read(apiServiceProvider).getUsernameData();
+    _usernameDataFuture =
+        context.read(usernameServiceProvider).getUsernameData();
   }
 
   @override

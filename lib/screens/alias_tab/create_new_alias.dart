@@ -1,6 +1,6 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/domain_options.dart';
-import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
 
   void createAlias(String defaultAliasDomain, String defaultAliasFormat) async {
     setState(() => isLoading = true);
-    final response = await context.read(apiServiceProvider).createNewAlias(
+    final response = await context.read(aliasService).createNewAlias(
         desc: _textFieldController.text.trim(),
         domain: defaultAliasDomain,
         format: defaultAliasFormat);

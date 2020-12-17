@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +39,7 @@ class _AliasListTileState extends State<AliasListTile> {
   }
 
   void _toggleAliases() async {
-    final _apiService = context.read(apiServiceProvider);
+    final _apiService = context.read(aliasService);
     setState(() => _isLoading = true);
 
     if (widget.aliasData.isAliasActive == true) {

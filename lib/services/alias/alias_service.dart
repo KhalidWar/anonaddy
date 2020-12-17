@@ -2,70 +2,29 @@ import 'dart:convert';
 
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/models/domain_options.dart';
-import 'package:anonaddy/models/user/user_model.dart';
-import 'package:anonaddy/models/username/username_model.dart';
-import 'package:anonaddy/services/secure_storage.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
-final apiServiceProvider =
-    ChangeNotifierProvider.autoDispose<APIService>((ref) => APIService());
+import '../../constants.dart';
+import '../access_token/access_token_service.dart';
 
-class APIService extends ChangeNotifier {
-  static const String _baseURL = 'https://app.anonaddy.com/api/v1';
-  static const String _accountDetailsURL = 'account-details';
-  static const String _activeAliasURL = 'active-aliases';
-  static const String _aliasesURL = 'aliases';
+final aliasService = Provider((ref) => AliasService());
 
+class AliasService {
   final _headers = <String, String>{
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",
     "Accept": "application/json",
   };
 
-  Future<String> validateAccessToken(String accessToken) async {
-    _headers["Authorization"] = "Bearer $accessToken";
-
-    final response = await http.get(
-        Uri.encodeFull('$_baseURL/$_accountDetailsURL'),
-        headers: _headers);
-
-    return APIMessageHandler().getStatusCodeMessage(response.statusCode);
-  }
-
-  Future<UserModel> getUserData() async {
-    try {
-      final accessToken = await SecureStorage().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
-
-      final response = await http.get(
-          Uri.encodeFull('$_baseURL/$_accountDetailsURL'),
-          headers: _headers);
-
-      if (response.statusCode == 200) {
-        print('getUserData ${response.statusCode}');
-        return UserModel.fromJson(jsonDecode(response.body));
-      } else {
-        print('getUserData ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
   Future<AliasModel> getAllAliasesData() async {
     try {
-      final accessToken = await SecureStorage().getAccessToken();
+      final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.get(
-          Uri.encodeFull('$_baseURL/$_aliasesURL?deleted=with'),
+          Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
           headers: _headers);
 
       if (response.statusCode == 200) {
@@ -77,17 +36,17 @@ class APIService extends ChangeNotifier {
       }
     } catch (e) {
       print(e.toString());
-      return null;
+      return e.message;
     }
   }
 
   Future<String> createNewAlias(
       {String desc, String format, String domain}) async {
     try {
-      final accessToken = await SecureStorage().getAccessToken();
+      final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
-      final response = await http.post(Uri.encodeFull('$_baseURL/$_aliasesURL'),
+      final response = await http.post(Uri.encodeFull('$kBaseURL/$kAliasesURL'),
           headers: _headers,
           body: json.encode({
             "domain": "$domain",
@@ -104,11 +63,11 @@ class APIService extends ChangeNotifier {
 
   Future<String> activateAlias({String aliasID}) async {
     try {
-      final accessToken = await SecureStorage().getAccessToken();
+      final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.post(
-        Uri.encodeFull('$_baseURL/$_activeAliasURL'),
+        Uri.encodeFull('$kBaseURL/$kActiveAliasURL'),
         headers: _headers,
         body: json.encode({"id": "$aliasID"}),
       );
@@ -128,11 +87,11 @@ class APIService extends ChangeNotifier {
 
   Future<String> deactivateAlias({String aliasID}) async {
     try {
-      final accessToken = await SecureStorage().getAccessToken();
+      final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.delete(
-          Uri.encodeFull('$_baseURL/$_activeAliasURL/$aliasID'),
+          Uri.encodeFull('$kBaseURL/$kActiveAliasURL/$aliasID'),
           headers: _headers);
 
       if (response.statusCode == 204) {
@@ -148,13 +107,13 @@ class APIService extends ChangeNotifier {
     }
   }
 
-  Future<String> editDescription({String newDescription}) async {
+  Future<String> editAliasDescription({String newDescription}) async {
     try {
-      final accessToken = await SecureStorage().getAccessToken();
+      final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.patch(
-          Uri.encodeFull('$_baseURL/$_aliasesURL/$newDescription'),
+          Uri.encodeFull('$kBaseURL/$kAliasesURL/$newDescription'),
           headers: _headers,
           body: jsonEncode({"description": "$newDescription"}));
 
@@ -173,11 +132,11 @@ class APIService extends ChangeNotifier {
 
   Future<String> deleteAlias(String aliasID) async {
     try {
-      final accessToken = await SecureStorage().getAccessToken();
+      final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.delete(
-          Uri.encodeFull('$_baseURL/$_aliasesURL/$aliasID'),
+          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
           headers: _headers);
 
       if (response.statusCode == 204) {
@@ -195,11 +154,11 @@ class APIService extends ChangeNotifier {
 
   Future<String> restoreAlias(String aliasID) async {
     try {
-      final accessToken = await SecureStorage().getAccessToken();
+      final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.patch(
-          Uri.encodeFull('$_baseURL/$_aliasesURL/$aliasID/restore'),
+          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID/restore'),
           headers: _headers);
 
       if (response.statusCode == 200) {
@@ -216,49 +175,15 @@ class APIService extends ChangeNotifier {
   }
 
   Future<AliasDataModel> getSpecificAliasData(String aliasID) async {
-    final accessToken = await SecureStorage().getAccessToken();
+    final accessToken = await AccessTokenService().getAccessToken();
     _headers["Authorization"] = "Bearer $accessToken";
 
     final response = await http.get(
-        Uri.encodeFull('$_baseURL/$_aliasesURL/$aliasID'),
+        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
         headers: _headers);
 
     if (response.statusCode == 200) {
       final data = AliasDataModel.fromJsonData(jsonDecode(response.body));
-      return data;
-    } else {
-      return null;
-    }
-  }
-
-  Future<DomainOptions> getDomainOptions() async {
-    final accessToken = await SecureStorage().getAccessToken();
-    _headers["Authorization"] = "Bearer $accessToken";
-
-    final response = await http.get(
-      Uri.encodeFull('$_baseURL/domain-options'),
-      headers: _headers,
-    );
-
-    if (response.statusCode == 200) {
-      final data = DomainOptions.fromJson(jsonDecode(response.body));
-      return data;
-    } else {
-      return null;
-    }
-  }
-
-  Future<UsernameModel> getUsernameData() async {
-    final accessToken = await SecureStorage().getAccessToken();
-    _headers["Authorization"] = "Bearer $accessToken";
-
-    final response = await http.get(
-      Uri.encodeFull('$_baseURL/usernames'),
-      headers: _headers,
-    );
-
-    if (response.statusCode == 200) {
-      final data = UsernameModel.fromJson(jsonDecode(response.body));
       return data;
     } else {
       return null;

@@ -5,11 +5,12 @@ import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain_options.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
-import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/screens/alias_tab/create_new_alias.dart';
+import 'package:anonaddy/services/alias/alias_service.dart';
+import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
-import 'package:anonaddy/widgets/create_new_alias.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +29,10 @@ class _AliasTabState extends State<AliasTab> {
   Stream<AliasModel> _aliasDataStream;
 
   Stream<AliasModel> getAliasStream() async* {
-    yield await context.read(apiServiceProvider).getAllAliasesData();
+    yield await context.read(aliasService).getAllAliasesData();
     while (true) {
       await Future.delayed(Duration(seconds: 1));
-      yield await context.read(apiServiceProvider).getAllAliasesData();
+      yield await context.read(aliasService).getAllAliasesData();
     }
   }
 
@@ -39,7 +40,8 @@ class _AliasTabState extends State<AliasTab> {
   void initState() {
     super.initState();
     _aliasDataStream = getAliasStream();
-    _domainOptions = context.read(apiServiceProvider).getDomainOptions();
+    _domainOptions =
+        context.read(domainOptionsServiceProvider).getDomainOptions();
   }
 
   @override

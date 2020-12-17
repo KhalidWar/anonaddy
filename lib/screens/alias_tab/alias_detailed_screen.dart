@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/services/api_service.dart';
+import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,10 +39,10 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
   void _deleteOrRestoreAlias() async {
     _isAliasDeleted()
         ? await context
-            .read(apiServiceProvider)
+            .read(aliasService)
             .restoreAlias(widget.aliasData.aliasID)
         : await context
-            .read(apiServiceProvider)
+            .read(aliasService)
             .deleteAlias(widget.aliasData.aliasID);
     Navigator.pop(context);
   }
