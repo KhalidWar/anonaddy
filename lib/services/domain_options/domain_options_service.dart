@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/domain_options.dart';
+import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:http/http.dart' as http;
