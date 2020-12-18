@@ -2,16 +2,28 @@
 Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's API](https://app.anonaddy.com/docs/) to interact with user account. This app has reached a stable release version as most basic crucial features have been implemented.
 
 ## Screenshots
-<img src="assets/screenshots/home.jpg" width="150"> <img src="assets/screenshots/alias_detail.jpg" width="150"> <img src="assets/screenshots/delete_alias.jpg" width="150">
+<img src="assets/screenshots/account.jpg" width="150"> <img src="assets/screenshots/alias.jpg" width="150"> <img src="assets/screenshots/search.jpg" width="150"> <img src="assets/screenshots/create_new_alias.jpg" width="150"> <img src="assets/screenshots/alias_detail.jpg" width="150">
 
 
 ## Features
 - Log in with [Access Token](https://app.anonaddy.com/settings).
-- Get your AnonAddy's account details including usernames and aliases.
-- Create new aliases with only 2 taps, custom description available.
+- Get AnonAddy account details including additional usernames and their details.
+- Get detailed view of available and deleted aliases.
+- Create new alias with custom description, domain, and format (UUID and random words).
+- Search aliases by email address, alias id, or description.
+- Copy alias email address with a single tap.
 - Activate and deactivate aliases on the fly.
-- Delete selected alias.
+- Delete and restore aliases.
 - Adaptive and persistive Light and Dark themes.
+
+
+## Security
+App requires [Access Token](https://app.anonaddy.com/settings) to access and manage your AnonAddy account. 
+This app uses secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token.
+
+
+## Privacy
+This app is a one of [Khalid War's](https://github.com/KhalidWar) personal projects. It's free and open source licensed under [MIT](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). It's presented to you without any Ads or trackers. Please feel free to inspect the code and verify for yourself. 
 
 
 ## Packages used
@@ -21,9 +33,10 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 - [Flutter SVG](https://pub.dev/packages/flutter_svg)
 - [Font Awesome Flutter](https://pub.dev/packages/font_awesome_flutter)
 - [URL Launcher](https://pub.dev/packages/url_launcher)
-- [Flutter Slidable](https://pub.dev/packages/flutter_slidable)
 - [Clipboard](https://pub.dev/packages/clipboard)
-- [Get It](https://pub.dev/packages/get_it)
+- [Lottie](https://pub.dev/packages/lottie)
+- [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage)
+- [FlutterToast](https://pub.dev/packages/fluttertoast)
 
 
 ## Installation
