@@ -61,7 +61,7 @@ class AliasService {
     }
   }
 
-  Future<String> activateAlias({String aliasID}) async {
+  Future activateAlias(String aliasID) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -85,7 +85,7 @@ class AliasService {
     }
   }
 
-  Future<String> deactivateAlias({String aliasID}) async {
+  Future deactivateAlias(String aliasID) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";

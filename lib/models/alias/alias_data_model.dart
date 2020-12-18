@@ -1,5 +1,5 @@
 class AliasDataModel {
-  AliasDataModel({
+  const AliasDataModel({
     this.aliasID,
     this.userId,
     this.aliasableId,
@@ -28,7 +28,7 @@ class AliasDataModel {
   final dynamic extension;
   final String domain;
   final String email;
-  bool isAliasActive;
+  final bool isAliasActive;
   final String emailDescription;
   final int emailsForwarded;
   final int emailsBlocked;

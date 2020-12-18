@@ -19,6 +19,7 @@ class AliasListTile extends StatefulWidget {
 
 class _AliasListTileState extends State<AliasListTile> {
   bool _isLoading = false;
+  bool _switchValue;
 
   bool _isDeleted() {
     if (widget.aliasData.deletedAt == null) {
@@ -42,33 +43,39 @@ class _AliasListTileState extends State<AliasListTile> {
     final _apiService = context.read(aliasService);
     setState(() => _isLoading = true);
 
-    if (widget.aliasData.isAliasActive == true) {
+    if (_switchValue == true) {
       dynamic deactivateResult =
-          await _apiService.deactivateAlias(aliasID: widget.aliasData.aliasID);
+          await _apiService.deactivateAlias(widget.aliasData.aliasID);
       if (deactivateResult == null) {
         setState(() {
           _isLoading = false;
         });
       } else {
         setState(() {
-          widget.aliasData.isAliasActive = false;
+          _switchValue = false;
           _isLoading = false;
         });
       }
     } else {
       dynamic activateResult =
-          await _apiService.activateAlias(aliasID: widget.aliasData.aliasID);
+          await _apiService.activateAlias(widget.aliasData.aliasID);
       if (activateResult == null) {
         setState(() {
           _isLoading = false;
         });
       } else {
         setState(() {
-          widget.aliasData.isAliasActive = true;
+          _switchValue = true;
           _isLoading = false;
         });
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _switchValue = widget.aliasData.isAliasActive;
   }
 
   @override
@@ -90,7 +97,7 @@ class _AliasListTileState extends State<AliasListTile> {
                   horizontal: MediaQuery.of(context).size.width * 0.03),
               child: CircularProgressIndicator())
           : Switch(
-              value: widget.aliasData.isAliasActive,
+              value: _switchValue,
               onChanged: _isDeleted() ? null : (toggle) => _toggleAliases(),
             ),
       trailing: IconButton(

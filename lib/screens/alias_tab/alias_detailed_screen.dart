@@ -18,6 +18,17 @@ class AliasDetailScreen extends StatefulWidget {
 }
 
 class _AliasDetailScreenState extends State<AliasDetailScreen> {
+  bool _isLoading = false;
+  bool _switchValue;
+
+  bool _isDeleted() {
+    if (widget.aliasData.deletedAt == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   void _copyOnTab() {
     Clipboard.setData(ClipboardData(text: widget.aliasData.email));
     Fluttertoast.showToast(
@@ -45,6 +56,47 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
             .read(aliasService)
             .deleteAlias(widget.aliasData.aliasID);
     Navigator.pop(context);
+  }
+
+  void _toggleAliases() async {
+    final _apiService = context.read(aliasService);
+    setState(() => _isLoading = true);
+
+    if (_switchValue == true) {
+      dynamic deactivateResult =
+          await _apiService.deactivateAlias(widget.aliasData.aliasID);
+      if (deactivateResult == null) {
+        setState(() {
+          _switchValue = true;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _switchValue = false;
+          _isLoading = false;
+        });
+      }
+    } else {
+      dynamic activateResult =
+          await _apiService.activateAlias(widget.aliasData.aliasID);
+      if (activateResult == null) {
+        setState(() {
+          _switchValue = false;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _switchValue = true;
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _switchValue = widget.aliasData.isAliasActive;
   }
 
   @override
@@ -98,10 +150,16 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
               title: 'Active',
               subtitle:
                   'Alias is ${alias.isAliasActive ? 'active' : 'inactive'}',
-              trailing: Switch(
-                value: alias.isAliasActive,
-                onChanged: (toggle) {},
-              ),
+              trailing: _isLoading
+                  ? Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.03),
+                      child: CircularProgressIndicator())
+                  : Switch(
+                      value: _switchValue,
+                      onChanged:
+                          _isDeleted() ? null : (toggle) => _toggleAliases(),
+                    ),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.comment,
