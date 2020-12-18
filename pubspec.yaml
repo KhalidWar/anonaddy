@@ -16,10 +16,8 @@ dependencies:
   http: ^0.12.2
   flutter_svg: ^0.19.1
   shared_preferences: ^0.5.12+4
-  flutter_slidable: ^0.5.7
   url_launcher: ^5.7.10
   font_awesome_flutter: ^8.10.0
-  get_it: ^5.0.1
   flutter_riverpod: ^0.12.1
   animations: ^1.1.2
   lottie: ^0.7.0+1
