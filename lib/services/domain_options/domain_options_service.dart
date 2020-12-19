@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
@@ -23,10 +24,11 @@ class DomainOptionsService {
     );
 
     if (response.statusCode == 200) {
-      final data = DomainOptions.fromJson(jsonDecode(response.body));
-      return data;
+      print('getDomainOptions ${response.statusCode}');
+      return DomainOptions.fromJson(jsonDecode(response.body));
     } else {
-      return null;
+      print('getDomainOptions ${response.statusCode}');
+      throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
     }
   }
 }

@@ -50,16 +50,16 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
   void _deleteOrRestoreAlias() async {
     _isAliasDeleted()
         ? await context
-            .read(aliasService)
+            .read(aliasServiceProvider)
             .restoreAlias(widget.aliasData.aliasID)
         : await context
-            .read(aliasService)
+            .read(aliasServiceProvider)
             .deleteAlias(widget.aliasData.aliasID);
     Navigator.pop(context);
   }
 
   void _toggleAliases() async {
-    final _apiService = context.read(aliasService);
+    final _apiService = context.read(aliasServiceProvider);
     setState(() => _isLoading = true);
 
     if (_switchValue == true) {

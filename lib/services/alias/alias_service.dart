@@ -16,45 +16,42 @@ class AliasService {
   };
 
   Future<AliasModel> getAllAliasesData() async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await AccessTokenService().getAccessToken();
+    _headers["Authorization"] = "Bearer $accessToken";
 
-      final response = await http.get(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
-          headers: _headers);
+    final response = await http.get(
+        Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
+        headers: _headers);
 
-      if (response.statusCode == 200) {
-        print('getAllAliasesData ${response.statusCode}');
-        return AliasModel.fromJson(jsonDecode(response.body));
-      } else {
-        print('getAllAliasesData ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print(e.toString());
-      return null;
+    if (response.statusCode == 200) {
+      print('getAllAliasesData ${response.statusCode}');
+      return AliasModel.fromJson(jsonDecode(response.body));
+    } else {
+      print('getAllAliasesData ${response.statusCode}');
+      throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
     }
   }
 
-  Future<String> createNewAlias(
+  Future<int> createNewAlias(
       {String desc, String format, String domain}) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await AccessTokenService().getAccessToken();
+    _headers["Authorization"] = "Bearer $accessToken";
 
-      final response = await http.post(Uri.encodeFull('$kBaseURL/$kAliasesURL'),
-          headers: _headers,
-          body: json.encode({
-            "domain": "$domain",
-            "format": "$format",
-            "description": "$desc",
-          }));
+    final response = await http.post(Uri.encodeFull('$kBaseURL/$kAliasesURL'),
+        headers: _headers,
+        body: json.encode({
+          "domain": "$domain",
+          "format": "$format",
+          "description": "$desc",
+        }));
 
-      return APIMessageHandler().getStatusCodeMessage(response.statusCode);
-    } catch (e) {
-      print(e.toString());
-      return null;
+    if (response.statusCode == 201) {
+      print("createNewAlias ${response.statusCode}");
+      // return AliasDataModel.fromJsonData(jsonDecode(response.body));
+      return response.statusCode;
+    } else {
+      print("createNewAlias ${response.statusCode}");
+      throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
     }
   }
 

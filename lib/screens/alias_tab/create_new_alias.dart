@@ -1,45 +1,69 @@
-import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/fetch_data_indicator.dart';
+import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../constants.dart';
+
+final _textFieldController = StateProvider((ref) => TextEditingController());
+final _isLoading = StateProvider<bool>((ref) => false);
+
+final _defaultAliasDomain = StateProvider<String>((ref) => null);
+final _defaultAliasFormat = StateProvider<String>((ref) => null);
 
 class CreateNewAlias extends StatefulWidget {
-  const CreateNewAlias({
-    Key key,
-    this.domainOptions,
-  });
+  CreateNewAlias({Key key, this.domainOptions});
 
-  final Future<DomainOptions> domainOptions;
+  final AsyncValue<DomainOptions> domainOptions;
 
   @override
   _CreateNewAliasState createState() => _CreateNewAliasState();
 }
 
 class _CreateNewAliasState extends State<CreateNewAlias> {
-  final _textFieldController = TextEditingController();
-  bool isLoading = false;
-  String defaultAliasDomain;
-  String defaultAliasFormat;
-
   final aliasFormatList = <String>[
     'uuid',
     'random_words',
     // 'Custom',
   ];
 
-  void createAlias(String defaultAliasDomain, String defaultAliasFormat) async {
-    setState(() => isLoading = true);
-    final response = await context.read(aliasService).createNewAlias(
-        desc: _textFieldController.text.trim(),
-        domain: defaultAliasDomain,
-        format: defaultAliasFormat);
+  void createAlias(BuildContext context, DomainOptions data) async {
+    setState(() {
+      context.read(_isLoading).state = true;
+    });
+    final response = await context.read(aliasServiceProvider).createNewAlias(
+          desc: context.read(_textFieldController).state.text.trim(),
+          domain: context.read(_defaultAliasDomain).state ??
+              data.defaultAliasDomain,
+          format: context.read(_defaultAliasFormat).state ??
+              data.defaultAliasFormat,
+        );
 
-    if (response == '') {
-      setState(() => isLoading = false);
-      _textFieldController.clear();
+    if (response == 201) {
+      setState(() {
+        context.read(_isLoading).state = false;
+      });
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+        msg: 'Alias created successfully!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.grey[600],
+      );
+    } else {
+      setState(() {
+        context.read(_isLoading).state = false;
+      });
+      Fluttertoast.showToast(
+        msg: 'Failed to create alias',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.grey[600],
+      );
       Navigator.pop(context);
     }
   }
@@ -48,26 +72,22 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Container(
-      height: size.height * 0.4,
-      width: size.width,
-      child: FutureBuilder<DomainOptions>(
-        future: widget.domainOptions,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return null;
-            case ConnectionState.waiting:
-              return FetchingDataIndicator();
-            default:
-              final domain = snapshot.data;
-
-              return Column(
+    return widget.domainOptions.when(
+      loading: () => FetchingDataIndicator(),
+      data: (data) {
+        return SimpleDialog(
+          contentPadding: EdgeInsets.all(20),
+          title: Text('Create New Alias'),
+          children: [
+            Container(
+              height: size.height * 0.4,
+              width: size.width,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextFormField(
-                    controller: _textFieldController,
+                    controller: context.read(_textFieldController).state,
                     textInputAction: TextInputAction.next,
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
@@ -87,10 +107,9 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                       DropdownButton<String>(
                         isExpanded: true,
                         isDense: true,
-                        value: defaultAliasDomain,
-                        hint: Text('${domain.defaultAliasDomain}'),
-                        items:
-                            domain.data.map<DropdownMenuItem<String>>((value) {
+                        value: context.read(_defaultAliasDomain).state,
+                        hint: Text('${data.defaultAliasDomain}'),
+                        items: data.data.map<DropdownMenuItem<String>>((value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -98,7 +117,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                         }).toList(),
                         onChanged: (String value) {
                           setState(() {
-                            defaultAliasDomain = value;
+                            context.read(_defaultAliasDomain).state = value;
                           });
                         },
                       ),
@@ -114,8 +133,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                       DropdownButton<String>(
                         isExpanded: true,
                         isDense: true,
-                        value: defaultAliasFormat,
-                        hint: Text('${domain.defaultAliasFormat}'),
+                        value: context.read(_defaultAliasFormat).state,
+                        hint: Text('${data.defaultAliasFormat}'),
                         items: aliasFormatList
                             .map<DropdownMenuItem<String>>((value) {
                           return DropdownMenuItem<String>(
@@ -125,7 +144,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                         }).toList(),
                         onChanged: (String value) {
                           setState(() {
-                            defaultAliasFormat = value;
+                            context.read(_defaultAliasFormat).state = value;
                           });
                         },
                       ),
@@ -135,24 +154,29 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                     child: RaisedButton(
                       padding:
                           EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                      child: isLoading
+                      child: context.read(_isLoading).state
                           ? CircularProgressIndicator(
                               backgroundColor:
-                                  Theme.of(context).appBarTheme.color)
+                                  Theme.of(context).appBarTheme.color,
+                            )
                           : Text(
                               'Submit',
                               style: Theme.of(context).textTheme.headline5,
                             ),
-                      onPressed: () => createAlias(
-                        defaultAliasDomain ?? domain.defaultAliasDomain,
-                        defaultAliasFormat ?? domain.defaultAliasFormat,
-                      ),
+                      // onPressed: () {},
+                      onPressed: () => createAlias(context, data),
                     ),
                   ),
                 ],
-              );
-          }
-        },
+              ),
+            ),
+            // CreateNewAlias(domainOptions: domainOptions),
+          ],
+        );
+      },
+      error: (error, stackTrade) => LottieWidget(
+        lottie: 'assets/lottie/errorCone.json',
+        label: error,
       ),
     );
   }

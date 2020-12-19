@@ -26,6 +26,7 @@ class UserService {
       print('getUserData ${response.statusCode}');
       return UserModel.fromJson(jsonDecode(response.body));
     } else {
+      print('getUserData ${response.statusCode}');
       throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
     }
   }

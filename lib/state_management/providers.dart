@@ -7,6 +7,6 @@ import 'package:flutter_riverpod/all.dart';
 
 final usernameServiceProvider = Provider((ref) => UsernameService());
 final userServiceProvider = Provider((ref) => UserService());
-final aliasService = Provider((ref) => AliasService());
+final aliasServiceProvider = Provider((ref) => AliasService());
 final domainOptionsServiceProvider = Provider((ref) => DomainOptionsService());
 final accessTokenServiceProvider = Provider((ref) => AccessTokenService());

@@ -40,7 +40,7 @@ class _AliasListTileState extends State<AliasListTile> {
   }
 
   void _toggleAliases() async {
-    final _apiService = context.read(aliasService);
+    final _apiService = context.read(aliasServiceProvider);
     setState(() => _isLoading = true);
 
     if (_switchValue == true) {
