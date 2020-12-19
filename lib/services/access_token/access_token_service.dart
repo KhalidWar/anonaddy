@@ -1,11 +1,8 @@
 import 'package:anonaddy/utilities/api_message_handler.dart';
-import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
-
-final accessTokenServiceProvider = Provider((ref) => AccessTokenService());
 
 class AccessTokenService {
   final _secureStorage = FlutterSecureStorage();

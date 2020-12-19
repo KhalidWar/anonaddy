@@ -1,44 +1,39 @@
 import 'package:anonaddy/models/user/user_model.dart';
+import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anonaddy/widgets/fetch_data_indicator.dart';
+import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'account_card_header.dart';
+final mainAccountStream = FutureProvider<UserModel>((ref) async {
+  return await ref.watch(userServiceProvider).getUserData();
+});
 
-class AccountCard extends StatelessWidget {
-  const AccountCard({
-    Key key,
-    this.userData,
-  }) : super(key: key);
-
-  final UserModel userData;
-
-  String _isUnlimited(int input, String unit) {
-    if (input == 0) {
-      return 'unlimited';
-    } else {
-      return '$input $unit';
-    }
-  }
+class MainAccount extends ConsumerWidget {
+  MainAccount({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      physics: ScrollPhysics(),
-      child: Card(
+  Widget build(BuildContext context, ScopedReader watch) {
+    final stream = watch(mainAccountStream);
+
+    return stream.when(
+      loading: () => FetchingDataIndicator(),
+      data: (data) => Card(
         child: Column(
           children: [
             CardHeader(label: 'Main'),
             AccountCardHeader(
-              title: userData.username,
-              subtitle: '${userData.subscription} subscription',
+              title: data.username,
+              subtitle: '${data.subscription} subscription',
             ),
-            SizedBox(height: size.height * 0.03),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             AliasDetailListTile(
               title:
-                  '${(userData.bandwidth / 1000000).toStringAsFixed(2)} MB / ${_isUnlimited(userData.bandwidthLimit, 'MD')}',
+                  '${(data.bandwidth / 1000000).toStringAsFixed(2)} MB / ${NicheMethod().isUnlimited(data.bandwidthLimit, 'MD')}',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Monthly Bandwidth',
               leadingIconData: Icons.speed_outlined,
@@ -47,8 +42,7 @@ class AccountCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: AliasDetailListTile(
-                    title:
-                        '${userData.usernameCount} / ${userData.usernameLimit}',
+                    title: '${data.usernameCount} / ${data.usernameLimit}',
                     titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                     subtitle: 'Add. Usernames',
                     leadingIconData: Icons.account_circle_outlined,
@@ -56,8 +50,7 @@ class AccountCard extends StatelessWidget {
                 ),
                 Expanded(
                   child: AliasDetailListTile(
-                    title:
-                        '${userData.recipientCount} / ${userData.recipientLimit}',
+                    title: '${data.recipientCount} / ${data.recipientLimit}',
                     titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                     subtitle: 'Recipients',
                     leadingIconData: Icons.account_circle_outlined,
@@ -70,7 +63,7 @@ class AccountCard extends StatelessWidget {
                 Expanded(
                   child: AliasDetailListTile(
                     title:
-                        '${userData.aliasCount} / ${_isUnlimited(userData.aliasLimit, '')}',
+                        '${data.aliasCount} / ${NicheMethod().isUnlimited(data.aliasLimit, '')}',
                     titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                     subtitle: 'Active Aliases',
                     leadingIconData: Icons.email_outlined,
@@ -79,7 +72,7 @@ class AccountCard extends StatelessWidget {
                 Expanded(
                   child: AliasDetailListTile(
                     title:
-                        '${userData.activeDomainCount} / ${userData.activeDomainLimit}',
+                        '${data.activeDomainCount} / ${data.activeDomainLimit}',
                     titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                     subtitle: 'Active Domain Count',
                     leadingIconData: Icons.dns,
@@ -88,7 +81,7 @@ class AccountCard extends StatelessWidget {
               ],
             ),
             AliasDetailListTile(
-              title: userData.id,
+              title: data.id,
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'ID',
               leadingIconData: Icons.perm_identity,
@@ -104,7 +97,7 @@ class AccountCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: AliasDetailListTile(
-                        title: userData.defaultAliasDomain,
+                        title: data.defaultAliasDomain,
                         titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                         subtitle: 'Default Alias Domain',
                         leadingIconData: Icons.dns,
@@ -112,7 +105,7 @@ class AccountCard extends StatelessWidget {
                     ),
                     Expanded(
                       child: AliasDetailListTile(
-                        title: userData.defaultAliasFormat,
+                        title: data.defaultAliasFormat,
                         titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                         subtitle: 'Default Alias Format',
                         leadingIconData: Icons.alternate_email,
@@ -121,7 +114,7 @@ class AccountCard extends StatelessWidget {
                   ],
                 ),
                 AliasDetailListTile(
-                  title: userData.defaultRecipientId,
+                  title: data.defaultRecipientId,
                   titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                   subtitle: 'Default Recipient ID',
                   leadingIconData: Icons.account_circle_outlined,
@@ -130,6 +123,10 @@ class AccountCard extends StatelessWidget {
             )
           ],
         ),
+      ),
+      error: (error, stackTrace) => LottieWidget(
+        lottie: 'assets/lottie/errorCone.json',
+        label: "$error",
       ),
     );
   }

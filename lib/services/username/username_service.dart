@@ -2,13 +2,10 @@ import 'dart:convert';
 
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
-import 'package:flutter_riverpod/all.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
-
-final usernameServiceProvider = Provider((ref) => UsernameService());
 
 class UsernameService {
   final _headers = <String, String>{
@@ -27,10 +24,11 @@ class UsernameService {
     );
 
     if (response.statusCode == 200) {
-      final data = UsernameModel.fromJson(jsonDecode(response.body));
-      return data;
+      print('getUsernameData ${response.statusCode}');
+      return UsernameModel.fromJson(jsonDecode(response.body));
     } else {
-      return null;
+      print('getUsernameData ${response.statusCode}');
+      throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
     }
   }
 }

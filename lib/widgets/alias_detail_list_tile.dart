@@ -1,4 +1,4 @@
-import 'package:anonaddy/utilities/date_time_fixer.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 
 class AliasDetailListTile extends StatelessWidget {
@@ -28,7 +28,7 @@ class AliasDetailListTile extends StatelessWidget {
             dense: true,
             leading: Icon(leadingIconData),
             title: Text(
-              '${DateTimeFixer().fixDateTime(title)}',
+              '${NicheMethod().fixDateTime(title)}',
               style: titleTextStyle ?? null,
             ),
             subtitle: Text('$subtitle'),

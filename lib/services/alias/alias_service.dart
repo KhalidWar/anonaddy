@@ -3,13 +3,10 @@ import 'dart:convert';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
-import 'package:flutter_riverpod/all.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
 import '../access_token/access_token_service.dart';
-
-final aliasService = Provider((ref) => AliasService());
 
 class AliasService {
   final _headers = <String, String>{
