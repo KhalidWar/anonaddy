@@ -15,20 +15,24 @@ class DomainOptionsService {
   };
 
   Future<DomainOptions> getDomainOptions() async {
-    final accessToken = await AccessTokenService().getAccessToken();
-    _headers["Authorization"] = "Bearer $accessToken";
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
 
-    final response = await http.get(
-      Uri.encodeFull('$kBaseURL/domain-options'),
-      headers: _headers,
-    );
+      final response = await http.get(
+        Uri.encodeFull('$kBaseURL/domain-options'),
+        headers: _headers,
+      );
 
-    if (response.statusCode == 200) {
-      print('getDomainOptions ${response.statusCode}');
-      return DomainOptions.fromJson(jsonDecode(response.body));
-    } else {
-      print('getDomainOptions ${response.statusCode}');
-      throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      if (response.statusCode == 200) {
+        print('getDomainOptions ${response.statusCode}');
+        return DomainOptions.fromJson(jsonDecode(response.body));
+      } else {
+        print('getDomainOptions ${response.statusCode}');
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
     }
   }
 }
