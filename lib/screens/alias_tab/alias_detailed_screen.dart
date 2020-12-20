@@ -1,126 +1,41 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../constants.dart';
-
-class AliasDetailScreen extends StatefulWidget {
-  const AliasDetailScreen({Key key, this.aliasData}) : super(key: key);
-
-  final AliasDataModel aliasData;
-
+class AliasDetailScreen extends ConsumerWidget {
   @override
-  _AliasDetailScreenState createState() => _AliasDetailScreenState();
-}
+  Widget build(BuildContext context, ScopedReader watch) {
+    final aliasDataProvider = watch(aliasStateManagerProvider);
+    final aliasDataModel = aliasDataProvider.aliasDataModel;
+    final switchValue = aliasDataProvider.switchValue;
+    final toggleAlias = aliasDataProvider.toggleAlias;
+    final isLoading = aliasDataProvider.isLoading;
+    final copyOnTap = aliasDataProvider.copyToClipboard;
+    final isAliasDeleted = aliasDataProvider.isAliasDeleted;
+    final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
 
-class _AliasDetailScreenState extends State<AliasDetailScreen> {
-  bool _isLoading = false;
-  bool _switchValue;
-
-  bool _isDeleted() {
-    if (widget.aliasData.deletedAt == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  void _copyOnTab() {
-    Clipboard.setData(ClipboardData(text: widget.aliasData.email));
-    Fluttertoast.showToast(
-      msg: kEmailCopied,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.grey[600],
-    );
-  }
-
-  bool _isAliasDeleted() {
-    if (widget.aliasData.deletedAt == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  void _deleteOrRestoreAlias() async {
-    _isAliasDeleted()
-        ? await context
-            .read(aliasServiceProvider)
-            .restoreAlias(widget.aliasData.aliasID)
-        : await context
-            .read(aliasServiceProvider)
-            .deleteAlias(widget.aliasData.aliasID);
-    Navigator.pop(context);
-  }
-
-  void _toggleAliases() async {
-    final _apiService = context.read(aliasServiceProvider);
-    setState(() => _isLoading = true);
-
-    if (_switchValue == true) {
-      dynamic deactivateResult =
-          await _apiService.deactivateAlias(widget.aliasData.aliasID);
-      if (deactivateResult == null) {
-        setState(() {
-          _switchValue = true;
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _switchValue = false;
-          _isLoading = false;
-        });
-      }
-    } else {
-      dynamic activateResult =
-          await _apiService.activateAlias(widget.aliasData.aliasID);
-      if (activateResult == null) {
-        setState(() {
-          _switchValue = false;
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _switchValue = true;
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _switchValue = widget.aliasData.isAliasActive;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final alias = widget.aliasData;
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar:
+          AppBar(title: Text('Alias Details'), backgroundColor: Colors.white),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            isLoading ? LinearProgressIndicator(minHeight: 6) : Container(),
             Row(
               children: [
                 Expanded(
                   child: AliasDetailListTile(
                     leadingIconData: Icons.forward_to_inbox,
-                    title: alias.emailsForwarded,
+                    title: aliasDataModel.emailsForwarded,
                     subtitle: 'Emails Forwarded',
                   ),
                 ),
                 Expanded(
                   child: AliasDetailListTile(
                     leadingIconData: Icons.reply,
-                    title: alias.emailsReplied,
+                    title: aliasDataModel.emailsReplied,
                     subtitle: 'Emails Replied',
                   ),
                 ),
@@ -131,14 +46,14 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
                 Expanded(
                   child: AliasDetailListTile(
                     leadingIconData: Icons.mark_email_read_outlined,
-                    title: alias.emailsSent,
+                    title: aliasDataModel.emailsSent,
                     subtitle: 'Emails Sent',
                   ),
                 ),
                 Expanded(
                   child: AliasDetailListTile(
                     leadingIconData: Icons.block,
-                    title: alias.emailsBlocked,
+                    title: aliasDataModel.emailsBlocked,
                     subtitle: 'Emails Blocked',
                   ),
                 ),
@@ -147,61 +62,56 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
             Divider(),
             AliasDetailListTile(
               leadingIconData: Icons.flaky_outlined,
-              title: 'Active',
-              subtitle:
-                  'Alias is ${alias.isAliasActive ? 'active' : 'inactive'}',
-              trailing: _isLoading
-                  ? Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.03),
-                      child: CircularProgressIndicator())
-                  : Switch(
-                      value: _switchValue,
-                      onChanged:
-                          _isDeleted() ? null : (toggle) => _toggleAliases(),
-                    ),
+              title: 'Alias is ${switchValue ? 'active' : 'inactive'}',
+              subtitle: 'Activity',
+              trailing: Switch(
+                value: switchValue,
+                onChanged: (toggle) {
+                  toggleAlias(context, aliasDataModel.aliasID);
+                },
+              ),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.comment,
-              title: alias.emailDescription,
+              title: aliasDataModel.emailDescription,
               subtitle: 'Description',
               trailingIconData: Icons.edit,
               trailingIconOnPress: () {},
             ),
             AliasDetailListTile(
               leadingIconData: Icons.email_outlined,
-              title: alias.email,
+              title: aliasDataModel.email,
               subtitle: 'Email',
               trailingIconData: Icons.copy,
-              trailingIconOnPress: _copyOnTab,
+              trailingIconOnPress: () => copyOnTap(aliasDataModel.email),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.check_circle_outline,
-              title: alias.extension,
+              title: aliasDataModel.extension,
               subtitle: 'extension',
               trailingIconData: Icons.edit,
               trailingIconOnPress: () {},
             ),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
-              title: alias.aliasID,
+              title: aliasDataModel.aliasID,
               subtitle: 'Alias ID',
               trailingIconData: Icons.copy,
-              trailingIconOnPress: _copyOnTab,
+              trailingIconOnPress: () => copyOnTap(aliasDataModel.aliasID),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.dns,
-              title: alias.domain,
+              title: aliasDataModel.domain,
               subtitle: 'Domain',
               trailingIconData: Icons.edit,
               trailingIconOnPress: () {},
             ),
             AliasDetailListTile(
               leadingIconData: Icons.account_circle_outlined,
-              title: alias.userId,
+              title: aliasDataModel.userId,
               subtitle: 'User ID',
               trailingIconData: Icons.copy,
-              trailingIconOnPress: _copyOnTab,
+              trailingIconOnPress: () => copyOnTap(aliasDataModel.userId),
             ),
             Divider(),
             Row(
@@ -209,20 +119,20 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
                 Expanded(
                   child: AliasDetailListTile(
                     leadingIconData: Icons.access_time_outlined,
-                    title: alias.createdAt,
+                    title: aliasDataModel.createdAt,
                     subtitle: 'Created At',
                   ),
                 ),
                 Expanded(
-                  child: alias.deletedAt == null
+                  child: aliasDataModel.deletedAt == null
                       ? AliasDetailListTile(
                           leadingIconData: Icons.av_timer_outlined,
-                          title: alias.updatedAt,
+                          title: aliasDataModel.updatedAt,
                           subtitle: 'Updated At',
                         )
                       : AliasDetailListTile(
                           leadingIconData: Icons.auto_delete_outlined,
-                          title: alias.deletedAt,
+                          title: aliasDataModel.deletedAt,
                           subtitle: 'Deleted At',
                         ),
                 )
@@ -232,30 +142,35 @@ class _AliasDetailScreenState extends State<AliasDetailScreen> {
             Center(
               child: RaisedButton(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                color: _isAliasDeleted() ? Colors.green : Colors.red,
+                color: isAliasDeleted(aliasDataModel.deletedAt)
+                    ? Colors.green
+                    : Colors.red,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(_isAliasDeleted() ? Icons.restore : Icons.delete),
+                    Icon(isAliasDeleted(aliasDataModel.deletedAt)
+                        ? Icons.restore
+                        : Icons.delete),
                     SizedBox(width: 10),
-                    Text('${_isAliasDeleted() ? 'Restore' : 'Delete'} Alias?'),
+                    Text(
+                      '${isAliasDeleted(aliasDataModel.deletedAt) ? 'Restore' : 'Delete'} Alias?',
+                    ),
                   ],
                 ),
-                onPressed: _deleteOrRestoreAlias,
+                onPressed: () {
+                  deleteOrRestoreAlias(
+                    context,
+                    aliasDataModel.deletedAt,
+                    aliasDataModel.aliasID,
+                  );
+                },
               ),
             ),
             SizedBox(height: 10),
           ],
         ),
       ),
-    );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      title: Text('Alias Details'),
-      backgroundColor: Colors.white,
     );
   }
 }

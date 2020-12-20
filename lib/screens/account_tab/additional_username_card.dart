@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
@@ -8,6 +9,7 @@ import 'package:anonaddy/widgets/fetch_data_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final additionalUsernameFuture =
     FutureProvider.autoDispose<UsernameModel>((ref) async {
@@ -32,7 +34,7 @@ class AdditionalUsernameCard extends ConsumerWidget {
             ),
           );
         }
-        return buildListView(data);
+        return buildListView(context, data);
       },
       error: (error, stackTrace) => LottieWidget(
         lottie: 'assets/lottie/errorCone.json',
@@ -41,7 +43,9 @@ class AdditionalUsernameCard extends ConsumerWidget {
     );
   }
 
-  ListView buildListView(UsernameModel data) {
+  ListView buildListView(BuildContext context, UsernameModel data) {
+    final aliasDataProvider = context.read(aliasStateManagerProvider);
+
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -131,14 +135,15 @@ class AdditionalUsernameCard extends ConsumerWidget {
                                   subtitle: Text(
                                       '${username.aliases[index].emailDescription}'),
                                   onTap: () {
+                                    aliasDataProvider.setAliasDataModel =
+                                        username.aliases[index];
+                                    aliasDataProvider.setSwitchValue(
+                                        username.aliases[index].isAliasActive);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) {
-                                          return AliasDetailScreen(
-                                            aliasData: username.aliases[index],
-                                          );
-                                        },
+                                        builder: (context) =>
+                                            AliasDetailScreen(),
                                       ),
                                     );
                                   },

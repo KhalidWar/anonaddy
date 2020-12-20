@@ -32,7 +32,7 @@ class _AliasListTileState extends State<AliasListTile> {
   void _copyOnTab() {
     Clipboard.setData(ClipboardData(text: widget.aliasData.email));
     Fluttertoast.showToast(
-      msg: kEmailCopied,
+      msg: kCopiedToClipboard,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.grey[600],

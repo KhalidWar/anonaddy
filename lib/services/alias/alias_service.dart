@@ -124,47 +124,37 @@ class AliasService {
     }
   }
 
-  Future<String> deleteAlias(String aliasID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+  Future deleteAlias(String aliasID) async {
+    final accessToken = await AccessTokenService().getAccessToken();
+    _headers["Authorization"] = "Bearer $accessToken";
 
-      final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
-          headers: _headers);
+    final response = await http.delete(
+        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        headers: _headers);
 
-      if (response.statusCode == 204) {
-        print('Network deleteAlias ${response.statusCode}');
-        return response.body;
-      } else {
-        print('Network deleteAlias ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print(e.toString());
-      return null;
+    if (response.statusCode == 204) {
+      print('Network deleteAlias ${response.statusCode}');
+      return 204;
+    } else {
+      print('Network deleteAlias ${response.statusCode}');
+      throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
     }
   }
 
-  Future<String> restoreAlias(String aliasID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+  Future restoreAlias(String aliasID) async {
+    final accessToken = await AccessTokenService().getAccessToken();
+    _headers["Authorization"] = "Bearer $accessToken";
 
-      final response = await http.patch(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID/restore'),
-          headers: _headers);
+    final response = await http.patch(
+        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID/restore'),
+        headers: _headers);
 
-      if (response.statusCode == 200) {
-        print('Network restoreAlias ${response.statusCode}');
-        return response.body;
-      } else {
-        print('Network restoreAlias ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print(e.toString());
-      return null;
+    if (response.statusCode == 200) {
+      print('Network restoreAlias ${response.statusCode}');
+      return 200;
+    } else {
+      print('Network restoreAlias ${response.statusCode}');
+      throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
     }
   }
 

@@ -6,7 +6,7 @@ const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
 const String kAliasesURL = 'aliases';
 
-// Strings
+// Official AnonAddy Strings
 const kAboutAppText =
     'This app is a part of Khalid War\'s personal projects. It\'s free and open source. Free as in free of charge, free of ads, and free of trackers. \n\nTo check out the source code for this app, please visit our github repo.';
 const kDeletedAliasText =
@@ -17,13 +17,20 @@ const kCreateNewAliasText =
     'Other aliases e.g. alias@khalidwar.anonaddy.com or .me can also be created automatically when they receive their first email.';
 const kRestoreAliasText =
     'Are you sure you want to restore this alias? Once restored, this alias will be able to receive emails again.';
-const kNoInternetConnection =
-    'No Internet Connection.\nMake sure you\'re online.';
 
-const kEmailCopied = 'Email Copied to Clipboard';
+// Toast Messages
+const kCopiedToClipboard = 'Copied to Clipboard';
+const kAliasRestoredSuccessfully = 'Alias Restored Successfully';
+const kFailedToRestoreAlias = 'Failed to Restore Alias';
+const kAliasDeletedSuccessfully = 'Alias Deleted Successfully';
+const kFailedToDeleteAlias = 'Failed to Delete Alias';
+
+// UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';
 const kFetchingDataText = 'Fetching data...';
 const kDescriptionInputText = 'description (optional)';
+const kNoInternetConnection =
+    'No Internet Connection.\nMake sure you\'re online.';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);

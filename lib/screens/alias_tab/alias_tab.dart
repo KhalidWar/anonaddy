@@ -7,6 +7,7 @@ import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/screens/alias_tab/create_new_alias.dart';
 import 'package:anonaddy/services/search/search_service.dart';
+import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
@@ -206,6 +207,8 @@ class AliasTab extends ConsumerWidget {
       BuildContext context,
       List<AliasDataModel> availableAliasList,
       List<AliasDataModel> deletedAliasList) {
+    final aliasDataProvider = context.read(aliasStateManagerProvider);
+
     return Card(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -230,14 +233,14 @@ class AliasTab extends ConsumerWidget {
                           aliasData: availableAliasList[index],
                         ),
                         onTap: () {
+                          aliasDataProvider.setAliasDataModel =
+                              availableAliasList[index];
+                          aliasDataProvider.setSwitchValue(
+                              availableAliasList[index].isAliasActive);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) {
-                                return AliasDetailScreen(
-                                  aliasData: availableAliasList[index],
-                                );
-                              },
+                              builder: (context) => AliasDetailScreen(),
                             ),
                           );
                         },
@@ -264,14 +267,14 @@ class AliasTab extends ConsumerWidget {
                               aliasData: deletedAliasList[index],
                             ),
                             onTap: () {
+                              aliasDataProvider.setAliasDataModel =
+                                  deletedAliasList[index];
+                              aliasDataProvider.setSwitchValue(
+                                  availableAliasList[index].isAliasActive);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) {
-                                    return AliasDetailScreen(
-                                      aliasData: deletedAliasList[index],
-                                    );
-                                  },
+                                  builder: (context) => AliasDetailScreen(),
                                 ),
                               );
                             },
