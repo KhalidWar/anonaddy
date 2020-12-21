@@ -15,15 +15,29 @@ class AliasStateManager extends ChangeNotifier {
   AliasDataModel _aliasDataModel;
   bool _isLoading = false;
   bool _switchValue;
+  String _aliasDomain;
+  String _aliasFormat;
 
   AliasDataModel get aliasDataModel => _aliasDataModel;
   bool get isLoading => _isLoading;
   bool get switchValue => _switchValue;
+  String get aliasDomain => _aliasDomain;
+  String get aliasFormat => _aliasFormat;
 
   set setAliasDataModel(AliasDataModel aliasDataModel) {
     print('ALIAS DATA FROM PROVIDER ${aliasDataModel.emailDescription}');
     print('ALIAS DATA FROM PROVIDER ${aliasDataModel.isAliasActive}');
     _aliasDataModel = aliasDataModel;
+    notifyListeners();
+  }
+
+  set setAliasDomain(String input) {
+    _aliasDomain = input;
+    notifyListeners();
+  }
+
+  set setAliasFormat(String input) {
+    _aliasFormat = input;
     notifyListeners();
   }
 
@@ -49,23 +63,35 @@ class AliasStateManager extends ChangeNotifier {
       return true;
   }
 
+  void createNewAlias(
+      BuildContext context, String desc, String domain, String format) async {
+    setIsLoading(true);
+    final aliasService = context.read(aliasServiceProvider);
+    final response = await aliasService.createNewAlias(
+        desc: desc, domain: domain, format: format);
+    if (response == 201) {
+      setIsLoading(false);
+      showToast('Alias created successfully!');
+    } else {
+      setIsLoading(false);
+      showToast('Failed to create alias');
+    }
+    Navigator.pop(context);
+    notifyListeners();
+  }
+
   void deleteOrRestoreAlias(
       BuildContext context, String input, String aliasID) async {
     setIsLoading(true);
+    final aliasService = context.read(aliasServiceProvider);
     isAliasDeleted(input)
-        ? await context
-            .read(aliasServiceProvider)
-            .restoreAlias(aliasID)
-            .then((response) {
+        ? await aliasService.restoreAlias(aliasID).then((response) {
             response == 200
                 ? showToast(kAliasRestoredSuccessfully)
                 : showToast(kFailedToRestoreAlias);
             setIsLoading(false);
           })
-        : await context
-            .read(aliasServiceProvider)
-            .deleteAlias(aliasID)
-            .then((response) {
+        : await aliasService.deleteAlias(aliasID).then((response) {
             response == 204
                 ? showToast(kAliasDeletedSuccessfully)
                 : showToast(kFailedToDeleteAlias);
@@ -77,10 +103,10 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   void toggleAlias(BuildContext context, String aliasID) async {
-    final _apiService = context.read(aliasServiceProvider);
+    final aliasService = context.read(aliasServiceProvider);
     setIsLoading(true);
     if (_switchValue) {
-      dynamic deactivateResult = await _apiService.deactivateAlias(aliasID);
+      dynamic deactivateResult = await aliasService.deactivateAlias(aliasID);
       if (deactivateResult == null) {
         showToast('Failed to deactivate alias');
         toggleSwitchValue();
@@ -91,7 +117,7 @@ class AliasStateManager extends ChangeNotifier {
         setIsLoading(false);
       }
     } else {
-      dynamic activateResult = await _apiService.activateAlias(aliasID);
+      dynamic activateResult = await aliasService.activateAlias(aliasID);
       if (activateResult == null) {
         showToast('Failed to activate alias');
         toggleSwitchValue();

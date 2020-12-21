@@ -27,7 +27,7 @@ final _aliasDataStreamProvider =
   }
 });
 
-final _domainOptionsProvider = FutureProvider<DomainOptions>((ref) async {
+final domainOptionsProvider = FutureProvider<DomainOptions>((ref) async {
   return await ref.read(domainOptionsServiceProvider).getDomainOptions();
 });
 
@@ -35,7 +35,8 @@ class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasDataStream = watch(_aliasDataStreamProvider);
-    final domainOptions = watch(_domainOptionsProvider);
+    // preloads domainOptions for create new alias on FAB click
+    watch(domainOptionsProvider);
 
     return aliasDataStream.when(
       loading: () => FetchingDataIndicator(),
@@ -62,17 +63,7 @@ class AliasTab extends ConsumerWidget {
         }
 
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () {
-              showModal(
-                context: context,
-                builder: (context) {
-                  return CreateNewAlias(domainOptions: domainOptions);
-                },
-              );
-            },
-          ),
+          floatingActionButton: buildFloatingActionButton(context),
           body: SingleChildScrollView(
             child: Column(
               children: [
@@ -305,6 +296,31 @@ class AliasTab extends ConsumerWidget {
           )
         ],
       ),
+    );
+  }
+
+  FloatingActionButton buildFloatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        showModal(
+          context: context,
+          builder: (context) {
+            final size = MediaQuery.of(context).size;
+
+            return SimpleDialog(
+              contentPadding: EdgeInsets.all(20),
+              title: Text('Create New Alias'),
+              children: [
+                Container(
+                    height: size.height * 0.4,
+                    width: size.width,
+                    child: CreateNewAlias()),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }
