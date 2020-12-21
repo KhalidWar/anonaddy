@@ -10,7 +10,6 @@ class AliasDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasDataProvider = watch(aliasStateManagerProvider);
     final aliasDataModel = aliasDataProvider.aliasDataModel;
-    final emailDescription = aliasDataProvider.emailDescription;
     final switchValue = aliasDataProvider.switchValue;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isLoading = aliasDataProvider.isLoading;
@@ -140,22 +139,16 @@ class AliasDetailScreen extends ConsumerWidget {
               leadingIconData: Icons.alternate_email,
               title: aliasDataModel.aliasID,
               subtitle: 'Alias ID',
-              trailingIconData: Icons.copy,
-              trailingIconOnPress: () => copyOnTap(aliasDataModel.aliasID),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.dns,
               title: aliasDataModel.domain,
               subtitle: 'Domain',
-              trailingIconData: Icons.edit,
-              trailingIconOnPress: () {},
             ),
             AliasDetailListTile(
               leadingIconData: Icons.account_circle_outlined,
               title: aliasDataModel.userId,
               subtitle: 'User ID',
-              trailingIconData: Icons.copy,
-              trailingIconOnPress: () => copyOnTap(aliasDataModel.userId),
             ),
             Divider(),
             Row(
