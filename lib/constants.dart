@@ -32,7 +32,17 @@ const kFetchingDataText = 'Fetching data...';
 const kDescriptionInputText = 'description (optional)';
 const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
+const kEditDescSuccessful = 'Description Updated Successfully';
+const kEditDescFailed = 'Failed to update description';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);
 const kAccentColor = Color(0xFF62F4EB);
+
+// UI Decoration
+const kTextFormFieldDecoration = InputDecoration(
+  border:
+      OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+  focusedBorder:
+      OutlineInputBorder(borderSide: BorderSide(color: kBlueNavyColor)),
+);

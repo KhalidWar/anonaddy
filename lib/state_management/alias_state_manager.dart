@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../constants.dart';
@@ -17,8 +18,10 @@ class AliasStateManager extends ChangeNotifier {
   bool _switchValue;
   String _aliasDomain;
   String _aliasFormat;
+  String _emailDescription;
 
   AliasDataModel get aliasDataModel => _aliasDataModel;
+  String get emailDescription => _emailDescription;
   bool get isLoading => _isLoading;
   bool get switchValue => _switchValue;
   String get aliasDomain => _aliasDomain;
@@ -53,6 +56,11 @@ class AliasStateManager extends ChangeNotifier {
 
   void toggleSwitchValue() {
     _switchValue = !_switchValue;
+    notifyListeners();
+  }
+
+  void setEmailDescription(String input) {
+    _aliasDataModel.emailDescription = input;
     notifyListeners();
   }
 
@@ -128,6 +136,24 @@ class AliasStateManager extends ChangeNotifier {
         setIsLoading(false);
       }
     }
+  }
+
+  void editDescription(
+      BuildContext context, String aliasID, String input) async {
+    Navigator.pop(context);
+    setIsLoading(true);
+    await context
+        .read(aliasServiceProvider)
+        .editAliasDescription(aliasID, input)
+        .then((value) {
+      if (value.emailDescription == null) {
+        showToast(kEditDescFailed);
+      } else {
+        showToast(kEditDescSuccessful);
+        setEmailDescription(value.emailDescription);
+      }
+    });
+    setIsLoading(false);
   }
 
   void copyToClipboard(String input) {

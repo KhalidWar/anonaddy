@@ -32,16 +32,12 @@ class CreateNewAlias extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: _textFieldController,
-              textInputAction: TextInputAction.next,
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                hintText: kDescriptionInputText,
-              ),
-            ),
+                controller: _textFieldController,
+                textInputAction: TextInputAction.next,
+                textAlign: TextAlign.center,
+                decoration: kTextFormFieldDecoration.copyWith(
+                  hintText: kDescriptionInputText,
+                )),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

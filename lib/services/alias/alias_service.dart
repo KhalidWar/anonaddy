@@ -109,26 +109,26 @@ class AliasService {
     }
   }
 
-  Future<String> editAliasDescription({String newDescription}) async {
+  Future editAliasDescription(String aliasID, String newDesc) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.patch(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL/$newDescription'),
+          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
           headers: _headers,
-          body: jsonEncode({"description": "$newDescription"}));
+          body: jsonEncode({"description": "$newDesc"}));
 
       if (response.statusCode == 200) {
         print('Network editDescription ${response.statusCode}');
-        return response.body;
+        return AliasDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print('Network editDescription ${response.statusCode}');
-        return null;
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
-      print(e.toString());
-      return null;
+      print(e);
+      throw e;
     }
   }
 

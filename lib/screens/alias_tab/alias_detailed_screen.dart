@@ -1,3 +1,5 @@
+import 'package:animations/animations.dart';
+import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +10,16 @@ class AliasDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasDataProvider = watch(aliasStateManagerProvider);
     final aliasDataModel = aliasDataProvider.aliasDataModel;
+    final emailDescription = aliasDataProvider.emailDescription;
     final switchValue = aliasDataProvider.switchValue;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isLoading = aliasDataProvider.isLoading;
     final copyOnTap = aliasDataProvider.copyToClipboard;
     final isAliasDeleted = aliasDataProvider.isAliasDeleted;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
+    final editDescription = aliasDataProvider.editDescription;
+
+    final _textEditingController = TextEditingController();
 
     return Scaffold(
       appBar:
@@ -76,7 +82,45 @@ class AliasDetailScreen extends ConsumerWidget {
               title: aliasDataModel.emailDescription,
               subtitle: 'Description',
               trailingIconData: Icons.edit,
-              trailingIconOnPress: () {},
+              trailingIconOnPress: () {
+                showModal(
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text('Edit Description'),
+                      contentPadding: EdgeInsets.all(20),
+                      children: [
+                        TextFormField(
+                          autofocus: true,
+                          controller: _textEditingController,
+                          onFieldSubmitted: (toggle) => editDescription(
+                            context,
+                            aliasDataModel.aliasID,
+                            _textEditingController.text.trim(),
+                          ),
+                          decoration: kTextFormFieldDecoration.copyWith(
+                            hintText: 'New Description',
+                          ),
+                        ),
+                        SizedBox(height: 25),
+                        RaisedButton(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 15,
+                          ),
+                          child: Text('Update Description'),
+                          onPressed: () => editDescription(
+                            context,
+                            aliasDataModel.aliasID,
+                            _textEditingController.text.trim(),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+                // editDescription();
+              },
             ),
             AliasDetailListTile(
               leadingIconData: Icons.email_outlined,
