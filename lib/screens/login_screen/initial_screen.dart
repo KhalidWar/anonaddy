@@ -6,34 +6,30 @@ import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
-import '../../constants.dart';
+final accessTokenManager = FutureProvider(
+  (ref) => ref.watch(accessTokenServiceProvider).getAccessToken(),
+);
 
-class InitialScreen extends StatelessWidget {
+class InitialScreen extends ConsumerWidget {
   const InitialScreen({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    final accessToken = watch(accessTokenManager);
     return Scaffold(
-      body: FutureBuilder(
-        future: context.read(accessTokenServiceProvider).getAccessToken(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return LottieWidget(
-                lottie: 'assets/lottie/errorCone.json',
-                label: kNoInternetConnection,
-              );
-              break;
-            case ConnectionState.waiting:
-              return LoadingWidget();
-            default:
-              if (snapshot.data == null) {
-                return TokenLoginScreen();
-              } else {
-                return HomeScreen();
-              }
+      body: accessToken.when(
+        loading: () => LoadingWidget(),
+        data: (data) {
+          if (data == null) {
+            return TokenLoginScreen();
+          } else {
+            return HomeScreen();
           }
         },
+        error: (error, stackTrace) => LottieWidget(
+          lottie: 'assets/lottie/errorCone.json',
+          label: error,
+        ),
       ),
     );
   }

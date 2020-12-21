@@ -23,7 +23,7 @@ final _aliasDataStreamProvider =
   yield await ref.watch(aliasServiceProvider).getAllAliasesData();
   while (true) {
     await Future.delayed(Duration(seconds: 1));
-    yield await ref.watch(aliasServiceProvider).getAllAliasesData();
+    yield await ref.read(aliasServiceProvider).getAllAliasesData();
   }
 });
 

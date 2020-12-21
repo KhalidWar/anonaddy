@@ -5,6 +5,7 @@ const String kBaseURL = 'https://app.anonaddy.com/api/v1';
 const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
 const String kAliasesURL = 'aliases';
+const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
 
 // Official AnonAddy Strings
 const kAboutAppText =

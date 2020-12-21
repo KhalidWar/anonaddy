@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
+import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
-import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,18 +8,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
-import '../login_screen/initial_screen.dart';
 
-class SettingsTab extends StatefulWidget {
+class SettingsTab extends ConsumerWidget {
   @override
-  _SettingsTabState createState() => _SettingsTabState();
-}
-
-class _SettingsTabState extends State<SettingsTab> {
-  final _githubRepoURL = 'https://github.com/KhalidWar/anonaddy';
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    final loginManager = watch(loginStateManagerProvider);
     final size = MediaQuery.of(context).size;
 
     return Padding(
@@ -27,21 +20,21 @@ class _SettingsTabState extends State<SettingsTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ExpansionTile(
-            collapsedBackgroundColor: Colors.grey[300],
-            childrenPadding: EdgeInsets.all(5),
-            title: Text(
-              'Default Settings',
-              style: TextStyle(color: Colors.black),
-            ),
-            leading: Icon(
-              Icons.account_circle_outlined,
-              color: Colors.grey[700],
-            ),
-            initiallyExpanded: true,
-            children: [],
-          ),
-          SizedBox(height: size.height * 0.01),
+          // ExpansionTile(
+          //   collapsedBackgroundColor: Colors.grey[300],
+          //   childrenPadding: EdgeInsets.all(5),
+          //   title: Text(
+          //     'Default Settings',
+          //     style: TextStyle(color: Colors.black),
+          //   ),
+          //   leading: Icon(
+          //     Icons.account_circle_outlined,
+          //     color: Colors.grey[700],
+          //   ),
+          //    initiallyExpanded: true,
+          //   children: [],
+          // ),
+          // SizedBox(height: size.height * 0.01),
           ExpansionTile(
             collapsedBackgroundColor: Colors.grey[300],
             childrenPadding: EdgeInsets.all(5),
@@ -72,7 +65,7 @@ class _SettingsTabState extends State<SettingsTab> {
                     Icon(FontAwesomeIcons.github),
                   ],
                 ),
-                onTap: () => aboutAlertDialog(),
+                onTap: () => aboutAlertDialog(context),
               ),
               SizedBox(height: size.height * 0.01),
               // todo add license info
@@ -83,13 +76,7 @@ class _SettingsTabState extends State<SettingsTab> {
                   'Log Out',
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                onPressed: () {
-                  context.read(accessTokenServiceProvider).deleteAccessToken();
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return InitialScreen();
-                  }));
-                },
+                onPressed: () => loginManager.logout(context),
               ),
               // SizedBox(height: size.height * 0.01),
             ],
@@ -99,7 +86,7 @@ class _SettingsTabState extends State<SettingsTab> {
     );
   }
 
-  aboutAlertDialog() async {
+  aboutAlertDialog(BuildContext context) async {
     showModal(
         context: context,
         builder: (context) {
@@ -110,10 +97,10 @@ class _SettingsTabState extends State<SettingsTab> {
               RaisedButton(
                 child: Text('Visit Project Repo'),
                 onPressed: () async {
-                  if (await canLaunch(_githubRepoURL)) {
-                    await launch(_githubRepoURL);
+                  if (await canLaunch(kGithubRepoURL)) {
+                    await launch(kGithubRepoURL);
                   } else {
-                    throw 'Could not launch $_githubRepoURL';
+                    throw 'Could not launch $kGithubRepoURL';
                   }
                   Navigator.pop(context);
                 },

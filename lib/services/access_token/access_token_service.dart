@@ -9,16 +9,20 @@ class AccessTokenService {
   final _accessTokenKey = 'accessToken';
 
   Future<String> validateAccessToken(String accessToken) async {
-    final response = await http.get(
-      Uri.encodeFull('$kBaseURL/$kAccountDetailsURL'),
-      headers: {
-        "Content-Type": "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-        "Accept": "application/json",
-        "Authorization": "Bearer $accessToken",
-      },
-    );
-    return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+    try {
+      final response = await http.get(
+        Uri.encodeFull('$kBaseURL/$kAccountDetailsURL'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+      return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<void> saveAccessToken(String value) async {
