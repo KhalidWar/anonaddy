@@ -9,8 +9,12 @@ import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final mainAccountStream = FutureProvider<UserModel>((ref) async {
-  return await ref.watch(userServiceProvider).getUserData();
+final mainAccountStream = StreamProvider.autoDispose<UserModel>((ref) async* {
+  yield await ref.watch(userServiceProvider).getUserData();
+  while (true) {
+    await Future.delayed(Duration(seconds: 10));
+    yield await ref.watch(userServiceProvider).getUserData();
+  }
 });
 
 class MainAccount extends ConsumerWidget {
