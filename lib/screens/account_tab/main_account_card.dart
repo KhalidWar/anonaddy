@@ -13,7 +13,7 @@ final mainAccountStream = StreamProvider.autoDispose<UserModel>((ref) async* {
   yield await ref.watch(userServiceProvider).getUserData();
   while (true) {
     await Future.delayed(Duration(seconds: 10));
-    yield await ref.watch(userServiceProvider).getUserData();
+    yield await ref.read(userServiceProvider).getUserData();
   }
 });
 

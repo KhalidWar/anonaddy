@@ -16,7 +16,7 @@ final additionalUsernameFuture =
   yield await ref.watch(usernameServiceProvider).getUsernameData();
   while (true) {
     await Future.delayed(Duration(seconds: 10));
-    yield await ref.watch(usernameServiceProvider).getUsernameData();
+    yield await ref.read(usernameServiceProvider).getUsernameData();
   }
 });
 
