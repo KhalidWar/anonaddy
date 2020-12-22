@@ -19,11 +19,11 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 
 ## Security
 App requires [Access Token](https://app.anonaddy.com/settings) to access and manage your AnonAddy account. 
-This app uses secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token.
+This app uses secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token. Your access token is NEVER sent to me or any external server. 
 
 
 ## Privacy
-This app is a one of [Khalid War's](https://github.com/KhalidWar) personal projects. It's free and open source licensed under [MIT](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). It's presented to you without any Ads or trackers. Please feel free to inspect the code and verify for yourself. 
+This app is a one of [Khalid War's](https://github.com/KhalidWar) personal projects. It's free and open source licensed under [MIT](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). Free as in free of charge, ads, analytics, and trackers. What's yours is yours. Please feel free to inspect the code and verify for yourself.
 
 
 ## Packages used
