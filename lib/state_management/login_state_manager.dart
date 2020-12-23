@@ -1,5 +1,5 @@
 import 'package:anonaddy/screens/home_screen.dart';
-import 'package:anonaddy/screens/login_screen/initial_screen.dart';
+import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,18 +43,14 @@ class LoginStateManager extends ChangeNotifier {
       BuildContext context, String input, GlobalKey<FormState> formKey) async {
     setIsLoading(true);
     final accessTokenManager = context.read(accessTokenServiceProvider);
-    final isAccessTokenValid = await context
-        .read(accessTokenServiceProvider)
-        .validateAccessToken(input);
     if (formKey.currentState.validate()) {
-      setIsLoading(true);
+      final isAccessTokenValid = await context
+          .read(accessTokenServiceProvider)
+          .validateAccessToken(input);
       if (isAccessTokenValid == '') {
-        await accessTokenManager.deleteAccessToken().whenComplete(() {
-          accessTokenManager.saveAccessToken(input);
-        });
+        await accessTokenManager.saveAccessToken(input);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        notifyListeners();
       } else {
         setIsLoading(false);
         setError('$isAccessTokenValid');
@@ -65,18 +61,11 @@ class LoginStateManager extends ChangeNotifier {
   }
 
   void logout(BuildContext context) async {
-    setIsLoading(true);
-    await context
-        .read(accessTokenServiceProvider)
-        .deleteAccessToken()
-        .whenComplete(() {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) {
-          return InitialScreen();
-        }),
-      );
-    });
     setIsLoading(false);
+    await context.read(accessTokenServiceProvider).deleteAccessToken();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => TokenLoginScreen()),
+    );
   }
 }
