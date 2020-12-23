@@ -73,13 +73,9 @@ class _AliasListTileState extends State<AliasListTile> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _switchValue = widget.aliasData.isAliasActive;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    _switchValue = widget.aliasData.isAliasActive;
+
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
       dense: true,
