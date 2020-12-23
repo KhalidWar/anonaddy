@@ -129,8 +129,9 @@ class AliasTab extends ConsumerWidget {
             children: [
               Expanded(
                 child: AliasDetailListTile(
-                  title:
-                      '${forwardedList.reduce((value, element) => value + element)}',
+                  title: forwardedList.isEmpty
+                      ? '0'
+                      : '${forwardedList.reduce((value, element) => value + element)}',
                   titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                   subtitle: 'Emails Forwarded',
                   leadingIconData: Icons.forward_to_inbox,
@@ -138,8 +139,9 @@ class AliasTab extends ConsumerWidget {
               ),
               Expanded(
                 child: AliasDetailListTile(
-                  title:
-                      '${sentList.reduce((value, element) => value + element)}',
+                  title: sentList.isEmpty
+                      ? '0'
+                      : '${sentList.reduce((value, element) => value + element)}',
                   titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                   subtitle: 'Emails Sent',
                   leadingIconData: Icons.mark_email_read_outlined,
@@ -151,8 +153,9 @@ class AliasTab extends ConsumerWidget {
             children: [
               Expanded(
                 child: AliasDetailListTile(
-                  title:
-                      '${repliedList.reduce((value, element) => value + element)}',
+                  title: repliedList.isEmpty
+                      ? '0'
+                      : '${repliedList.reduce((value, element) => value + element)}',
                   titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                   subtitle: 'Emails Replied',
                   leadingIconData: Icons.reply,
@@ -160,8 +163,9 @@ class AliasTab extends ConsumerWidget {
               ),
               Expanded(
                 child: AliasDetailListTile(
-                  title:
-                      '${blockedList.reduce((value, element) => value + element)}',
+                  title: blockedList.isEmpty
+                      ? '0'
+                      : '${blockedList.reduce((value, element) => value + element)}',
                   titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                   subtitle: 'Emails Blocked',
                   leadingIconData: Icons.block,
@@ -214,30 +218,40 @@ class AliasTab extends ConsumerWidget {
                 ),
                 initiallyExpanded: true,
                 children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: availableAliasList.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        child: AliasListTile(
-                          aliasData: availableAliasList[index],
+                  availableAliasList.isEmpty
+                      ? Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 10),
+                          child: Text(
+                            'No available aliases found',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: availableAliasList.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              child: AliasListTile(
+                                aliasData: availableAliasList[index],
+                              ),
+                              onTap: () {
+                                aliasDataProvider.setAliasDataModel =
+                                    availableAliasList[index];
+                                aliasDataProvider.setSwitchValue(
+                                    availableAliasList[index].isAliasActive);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AliasDetailScreen(),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
-                        onTap: () {
-                          aliasDataProvider.setAliasDataModel =
-                              availableAliasList[index];
-                          aliasDataProvider.setSwitchValue(
-                              availableAliasList[index].isAliasActive);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AliasDetailScreen(),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
                 ],
               ),
               ExpansionTile(
@@ -246,50 +260,63 @@ class AliasTab extends ConsumerWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 children: [
-                  Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            child: AliasListTile(
-                              aliasData: deletedAliasList[index],
-                            ),
-                            onTap: () {
-                              aliasDataProvider.setAliasDataModel =
-                                  deletedAliasList[index];
-                              aliasDataProvider.setSwitchValue(
-                                  availableAliasList[index].isAliasActive);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AliasDetailScreen(),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      Divider(),
-                      FlatButton(
-                        child: Text('View full list'),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return DeletedAliasesScreen(
-                                  aliasDataModel: deletedAliasList,
+                  deletedAliasList.isEmpty
+                      ? Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 10),
+                          child: Text(
+                            'No deleted aliases found',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: deletedAliasList.length > 10
+                                  ? 10
+                                  : deletedAliasList.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  child: AliasListTile(
+                                    aliasData: deletedAliasList[index],
+                                  ),
+                                  onTap: () {
+                                    aliasDataProvider.setAliasDataModel =
+                                        deletedAliasList[index];
+                                    aliasDataProvider.setSwitchValue(
+                                        deletedAliasList[index].isAliasActive);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            AliasDetailScreen(),
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                            Divider(),
+                            FlatButton(
+                              child: Text('View full list'),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return DeletedAliasesScreen(
+                                        aliasDataModel: deletedAliasList,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                 ],
               ),
             ],

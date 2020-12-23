@@ -37,7 +37,7 @@ class MainAccount extends ConsumerWidget {
             SizedBox(height: MediaQuery.of(context).size.height * 0.03),
             AliasDetailListTile(
               title:
-                  '${(data.bandwidth / 1000000).toStringAsFixed(2)} MB / ${NicheMethod().isUnlimited(data.bandwidthLimit, 'MD')}',
+                  '${(data.bandwidth / 1000000).toStringAsFixed(2)} MB / ${NicheMethod().isUnlimited(data.bandwidthLimit / 1000000, 'MB')}',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Monthly Bandwidth',
               leadingIconData: Icons.speed_outlined,

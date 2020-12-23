@@ -29,12 +29,19 @@ class AdditionalUsernameCard extends ConsumerWidget {
       loading: () => FetchingDataIndicator(),
       data: (data) {
         if (data.usernameDataList.isEmpty) {
-          return Center(
-            child: Container(
-              child: Text(
-                'You don\'t have any additional username.',
-                style: Theme.of(context).textTheme.headline6,
-              ),
+          return Card(
+            child: Column(
+              children: [
+                CardHeader(label: 'Additional Username'),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  child: Text(
+                    'No additional usernames found',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+              ],
             ),
           );
         }
