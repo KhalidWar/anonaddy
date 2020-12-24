@@ -1,16 +1,12 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../constants.dart';
 
 class AliasListTile extends StatefulWidget {
   const AliasListTile({Key key, this.aliasData}) : super(key: key);
-
   final AliasDataModel aliasData;
 
   @override
@@ -21,29 +17,10 @@ class _AliasListTileState extends State<AliasListTile> {
   bool _isLoading = false;
   bool _switchValue;
 
-  bool _isDeleted() {
-    if (widget.aliasData.deletedAt == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  void _copyOnTab() {
-    Clipboard.setData(ClipboardData(text: widget.aliasData.email));
-    Fluttertoast.showToast(
-      msg: kCopiedToClipboard,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.grey[600],
-    );
-  }
-
-  void _toggleAliases() async {
+  void toggleAlias() async {
     final _apiService = context.read(aliasServiceProvider);
     setState(() => _isLoading = true);
-
-    if (_switchValue == true) {
+    if (widget.aliasData.isAliasActive == true) {
       dynamic deactivateResult =
           await _apiService.deactivateAlias(widget.aliasData.aliasID);
       if (deactivateResult == null) {
@@ -74,6 +51,10 @@ class _AliasListTileState extends State<AliasListTile> {
 
   @override
   Widget build(BuildContext context) {
+    final aliasState = context.read(aliasStateManagerProvider);
+    final copyAlias = aliasState.copyToClipboard;
+    final isDeleted = aliasState.isAliasDeleted;
+
     _switchValue = widget.aliasData.isAliasActive;
 
     return ListTile(
@@ -81,7 +62,10 @@ class _AliasListTileState extends State<AliasListTile> {
       dense: true,
       title: Text(
         '${widget.aliasData.email}',
-        style: TextStyle(color: _isDeleted() ? Colors.grey : Colors.black),
+        style: TextStyle(
+            color: isDeleted(widget.aliasData.deletedAt)
+                ? Colors.grey
+                : Colors.black),
       ),
       subtitle: Text(
         '${widget.aliasData.emailDescription}',
@@ -94,11 +78,15 @@ class _AliasListTileState extends State<AliasListTile> {
               child: CircularProgressIndicator())
           : Switch(
               value: _switchValue,
-              onChanged: _isDeleted() ? null : (toggle) => _toggleAliases(),
+              onChanged: isDeleted(widget.aliasData.deletedAt)
+                  ? null
+                  : (toggle) => toggleAlias(),
             ),
       trailing: IconButton(
         icon: Icon(Icons.copy),
-        onPressed: _isDeleted() ? null : () => _copyOnTab(),
+        onPressed: isDeleted(widget.aliasData.deletedAt)
+            ? null
+            : () => copyAlias(widget.aliasData.email),
       ),
     );
   }

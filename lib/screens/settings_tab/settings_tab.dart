@@ -69,7 +69,6 @@ class SettingsTab extends ConsumerWidget {
                 onTap: () => aboutAlertDialog(context),
               ),
               SizedBox(height: size.height * 0.02),
-              // todo add license info
               RaisedButton(
                 color: Colors.red,
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
