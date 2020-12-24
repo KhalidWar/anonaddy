@@ -1,9 +1,12 @@
+import 'package:animations/animations.dart';
 import 'package:anonaddy/state_management/login_state_manager.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 
@@ -115,9 +118,17 @@ class TokenLoginScreen extends ConsumerWidget {
                               ),
                               SizedBox(height: size.height * 0.01),
                               GestureDetector(
-                                child: Text('How to get Access Token?'),
+                                child: Text(
+                                  'How to get Access Token?',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                ),
                                 onTap: () {
-                                  //todo add how to get Access Token
+                                  buildShowModal(context);
                                 },
                               ),
                             ],
@@ -160,5 +171,37 @@ class TokenLoginScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  buildShowModal(BuildContext context) async {
+    showModal(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.all(20),
+            title: Text('How to get Access Token?'),
+            content: Text(kGetAccessToken),
+            actions: [
+              RaisedButton(
+                child: Text('Get Token Now!'),
+                onPressed: () async {
+                  await launch(kAnonAddySettingsAPIURL)
+                      .catchError((error, stackTrace) {
+                    throw Fluttertoast.showToast(
+                      msg: error.message,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[600],
+                    );
+                  });
+                },
+              ),
+              RaisedButton(
+                child: Text('Cancel'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        });
   }
 }

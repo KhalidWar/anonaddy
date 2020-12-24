@@ -6,6 +6,7 @@ const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
 const String kAliasesURL = 'aliases';
 const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
+const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 
 // Official AnonAddy Strings
 const kAboutAppText =
@@ -34,6 +35,12 @@ const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
 const kEditDescSuccessful = 'Description Updated Successfully';
 const kEditDescFailed = 'Failed to update description';
+const kGetAccessToken =
+    'To access your AnonAddy account, you have to obtain an API Access Token.'
+    '\n\nLogin to your AnonAddy account, head to settings, and navigate to API section.'
+    '\n\nGenerate a new access token.'
+    '\n\nAccess Token is a long string of alphabets, numbers, and special characters.'
+    '\n\nPaste it here as is!';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);
