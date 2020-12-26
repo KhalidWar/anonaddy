@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
@@ -180,7 +181,19 @@ class AdditionalUsernameCard extends ConsumerWidget {
                               title: Text('${username.defaultRecipient.email}'),
                               subtitle:
                                   Text('${username.defaultRecipient.userId}'),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return RecipientDetailedScreen(
+                                        recipientData:
+                                            username.defaultRecipient,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
                             ),
                     ],
                   ),

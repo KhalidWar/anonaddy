@@ -41,6 +41,9 @@ const kGetAccessToken =
     '\n\nGenerate a new access token.'
     '\n\nAccess Token is a long string of alphabets, numbers, and special characters.'
     '\n\nPaste it here as is!';
+const kPublicGPGKeyHintText =
+    'Begins with \'-----BEGIN PGP PUBLIC KEY BLOCK-----\'';
+const kRemoveCommentAndVersion = 'Make sure to remove Comment: and Version:';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);
