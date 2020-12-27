@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,12 @@ class RecipientDetailedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
+    final recipientStateProvider = watch(recipientStateManagerProvider);
+    final encryptionSwitch = recipientStateProvider.encryptionSwitch;
+    final isLoading = recipientStateProvider.isLoading;
+    final copyOnTap = recipientStateProvider.copyOnTap;
+    final toggleEncryption = recipientStateProvider.toggleEncryption;
+    final verifyEmail = recipientStateProvider.verifyEmail;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -23,7 +30,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // isLoading ? LinearProgressIndicator(minHeight: 6) : Container(),
+          isLoading ? LinearProgressIndicator(minHeight: 6) : Container(),
           SizedBox(height: 10),
           Container(
             padding: EdgeInsets.symmetric(vertical: 10),
@@ -38,7 +45,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             subtitle: 'Recipient Email',
             trailing: IconButton(
               icon: Icon(Icons.copy),
-              onPressed: () {},
+              onPressed: () => copyOnTap(recipientData.email),
             ),
           ),
           AliasDetailListTile(
@@ -49,26 +56,21 @@ class RecipientDetailedScreen extends ConsumerWidget {
             subtitle: 'Fingerprint',
             trailing: IconButton(
               icon: Icon(Icons.settings),
-              onPressed: () {},
-              // onPressed: () =>
-              //     buildFingerprintSettingDialog(context, recipientData),
+              onPressed: () =>
+                  buildFingerprintSettingDialog(context, recipientData),
             ),
           ),
           AliasDetailListTile(
-            leadingIconData:
-                recipientData.shouldEncrypt ? Icons.lock : Icons.lock_open,
-            title:
-                '${recipientData.shouldEncrypt ? 'Encrypted' : 'Not encrypted'}',
+            leadingIconData: encryptionSwitch ? Icons.lock : Icons.lock_open,
+            title: '${encryptionSwitch ? 'Encrypted' : 'Not encrypted'}',
             subtitle: 'Should Encrypt?',
             trailing: Switch(
-              value: recipientData.shouldEncrypt,
-              onChanged: (toggle) {},
-              // onChanged: (toggle) {
-              //   recipientData.fingerprint == null
-              //       ? buildFingerprintSettingDialog(context, recipientData)
-              //       : toggleEncryption();
-              //       : Container();
-              // },
+              value: encryptionSwitch,
+              onChanged: (toggle) {
+                recipientData.fingerprint == null
+                    ? buildFingerprintSettingDialog(context, recipientData)
+                    : toggleEncryption(context, recipientData.id);
+              },
             ),
           ),
           AliasDetailListTile(
@@ -78,9 +80,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             trailing: recipientData.emailVerifiedAt == null
                 ? RaisedButton(
                     child: Text('Verify now!'),
-                    onPressed: () {
-                      //todo verify email
-                    },
+                    onPressed: () => verifyEmail(context, recipientData.id),
                   )
                 : null,
           ),
@@ -106,8 +106,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
           Divider(height: 0),
           RaisedButton(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            // color: isAliasDeleted(aliasDataModel.deletedAt=true)
-            //     ? Colors.green
             color: Colors.red,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -141,32 +139,39 @@ class RecipientDetailedScreen extends ConsumerWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('PGP Key Management'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                minLines: 3,
-                maxLines: 5,
-                decoration: kTextFormFieldDecoration.copyWith(
-                  hintText: kPublicGPGKeyHintText,
+          title: Text('Add Public GPG Key'),
+          content: Container(
+            height: MediaQuery.of(context).size.height * 0.25,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(kEnterPublicKeyData),
+                TextFormField(
+                  minLines: 5,
+                  maxLines: 8,
+                  decoration: kTextFormFieldDecoration.copyWith(
+                    hintText: kPublicGPGKeyHintText,
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(height: 10),
+              ],
+            ),
           ),
+          buttonPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           actions: [
             isFingerprintNull()
                 ? null
                 : RaisedButton(
                     color: Colors.red,
                     child: Text(
-                      'Delete GPG Key',
+                      'Delete Current Key',
                       style: TextStyle(color: Colors.black),
                     ),
                     onPressed: () {},
                   ),
             RaisedButton(
-              child: Text('${isFingerprintNull() ? 'Add' : 'Update'} GPG Key'),
+              child: Text('${isFingerprintNull() ? 'Add New' : 'Update'} Key'),
               onPressed: () {},
             ),
           ],

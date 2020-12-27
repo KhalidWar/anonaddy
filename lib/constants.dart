@@ -5,6 +5,7 @@ const String kBaseURL = 'https://app.anonaddy.com/api/v1';
 const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
 const String kAliasesURL = 'aliases';
+const String kEncryptedRecipient = 'encrypted-recipients';
 const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 
@@ -43,6 +44,8 @@ const kGetAccessToken =
     '\n\nPaste it here as is!';
 const kPublicGPGKeyHintText =
     'Begins with \'-----BEGIN PGP PUBLIC KEY BLOCK-----\'';
+const kEnterPublicKeyData =
+    'Enter your PUBLIC key data in the text area below.';
 const kRemoveCommentAndVersion = 'Make sure to remove Comment: and Version:';
 
 // Colors

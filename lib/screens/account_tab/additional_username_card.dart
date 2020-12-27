@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
@@ -58,6 +59,7 @@ class AdditionalUsernameCard extends ConsumerWidget {
 
   ListView buildListView(BuildContext context, UsernameModel data) {
     final aliasDataProvider = context.read(aliasStateManagerProvider);
+    final recipientDataProvider = context.read(recipientStateManagerProvider);
 
     return ListView.builder(
       shrinkWrap: true,
@@ -178,6 +180,11 @@ class AdditionalUsernameCard extends ConsumerWidget {
                               subtitle:
                                   Text('${username.defaultRecipient.userId}'),
                               onTap: () {
+                                recipientDataProvider.setRecipientData(
+                                    username.defaultRecipient);
+                                recipientDataProvider.setEncryptionSwitch(
+                                    username.defaultRecipient.shouldEncrypt);
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
