@@ -16,11 +16,13 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // isLoading ? LinearProgressIndicator(minHeight: 6) : Container(),
           SizedBox(height: 10),
           Container(
             height: size.height * 0.2,

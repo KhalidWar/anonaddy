@@ -84,47 +84,27 @@ class MainAccount extends ConsumerWidget {
                 ),
               ],
             ),
-            AliasDetailListTile(
-              title: data.id,
-              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-              subtitle: 'ID',
-              leadingIconData: Icons.perm_identity,
-            ),
-            Divider(height: 0),
-            ExpansionTile(
-              title: Text(
-                'View defaults',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
+            Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: AliasDetailListTile(
-                        title: data.defaultAliasDomain,
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                        subtitle: 'Default Alias Domain',
-                        leadingIconData: Icons.dns,
-                      ),
-                    ),
-                    Expanded(
-                      child: AliasDetailListTile(
-                        title: data.defaultAliasFormat,
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                        subtitle: 'Default Alias Format',
-                        leadingIconData: Icons.alternate_email,
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: AliasDetailListTile(
+                    title: data.defaultAliasDomain,
+                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                    subtitle: 'Default Alias Domain',
+                    leadingIconData: Icons.dns,
+                  ),
                 ),
-                AliasDetailListTile(
-                  title: data.defaultRecipientId,
-                  titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                  subtitle: 'Default Recipient ID',
-                  leadingIconData: Icons.account_circle_outlined,
+                Expanded(
+                  child: AliasDetailListTile(
+                    title: data.defaultAliasFormat,
+                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                    subtitle: 'Default Alias Format',
+                    leadingIconData: Icons.alternate_email,
+                  ),
                 ),
               ],
-            )
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           ],
         ),
       ),

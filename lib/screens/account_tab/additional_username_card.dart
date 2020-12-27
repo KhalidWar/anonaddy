@@ -42,6 +42,7 @@ class AdditionalUsernameCard extends ConsumerWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
+                //todo add add username function
               ],
             ),
           );
@@ -72,14 +73,9 @@ class AdditionalUsernameCard extends ConsumerWidget {
                 children: [
                   AccountCardHeader(
                     title: '${data.usernameDataList[index].username}',
-                    subtitle: username.description,
+                    subtitle: '${data.usernameDataList[index].description}',
                   ),
-                  AliasDetailListTile(
-                    title: '${username.id}',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'ID',
-                    leadingIconData: Icons.perm_identity,
-                  ),
+                  SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
