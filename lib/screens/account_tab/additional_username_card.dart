@@ -137,7 +137,7 @@ class AdditionalUsernameCard extends ConsumerWidget {
                                 return ListTile(
                                   dense: true,
                                   horizontalTitleGap: 0,
-                                  leading: Icon(Icons.email_outlined),
+                                  leading: Icon(Icons.alternate_email),
                                   title:
                                       Text('${username.aliases[index].email}'),
                                   subtitle: Text(

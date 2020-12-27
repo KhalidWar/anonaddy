@@ -5,6 +5,7 @@ import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
   RecipientDetailedScreen({this.recipientData});
@@ -25,15 +26,14 @@ class RecipientDetailedScreen extends ConsumerWidget {
           // isLoading ? LinearProgressIndicator(minHeight: 6) : Container(),
           SizedBox(height: 10),
           Container(
-            height: size.height * 0.2,
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.account_circle_outlined,
-              size: size.height * 0.14,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: SvgPicture.asset(
+              'assets/images/envelope.svg',
+              height: size.height * 0.25,
             ),
           ),
           AliasDetailListTile(
-            leadingIconData: Icons.flaky_outlined,
+            leadingIconData: Icons.email_outlined,
             title: recipientData.email,
             subtitle: 'Recipient Email',
             trailing: IconButton(
@@ -42,7 +42,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             ),
           ),
           AliasDetailListTile(
-            leadingIconData: Icons.access_time_outlined,
+            leadingIconData: Icons.fingerprint_outlined,
             title: recipientData.fingerprint == null
                 ? 'No fingerprint found'
                 : '${recipientData.fingerprint}',
@@ -72,7 +72,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             ),
           ),
           AliasDetailListTile(
-            leadingIconData: Icons.access_time_outlined,
+            leadingIconData: Icons.verified_outlined,
             title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
             subtitle: 'Is Email Verified?',
             trailing: recipientData.emailVerifiedAt == null
@@ -84,6 +84,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                   )
                 : null,
           ),
+          Divider(height: 0),
           Row(
             children: [
               Expanded(
@@ -95,14 +96,14 @@ class RecipientDetailedScreen extends ConsumerWidget {
               ),
               Expanded(
                 child: AliasDetailListTile(
-                  leadingIconData: Icons.auto_delete_outlined,
+                  leadingIconData: Icons.av_timer_outlined,
                   title: recipientData.updatedAt,
                   subtitle: 'Updated at',
                 ),
               )
             ],
           ),
-          Divider(),
+          Divider(height: 0),
           RaisedButton(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             // color: isAliasDeleted(aliasDataModel.deletedAt=true)
@@ -121,6 +122,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             ),
             onPressed: () {},
           ),
+          SizedBox(height: 10),
         ],
       ),
     );

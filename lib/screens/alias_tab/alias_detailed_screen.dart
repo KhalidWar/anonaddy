@@ -5,6 +5,7 @@ import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AliasDetailScreen extends ConsumerWidget {
   @override
@@ -28,9 +29,13 @@ class AliasDetailScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           isLoading ? LinearProgressIndicator(minHeight: 6) : Container(),
-          SizedBox(height: 10),
-          Icon(Icons.alternate_email, size: 100),
-          SizedBox(height: 10),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: SvgPicture.asset(
+              'assets/images/mailbox.svg',
+              height: MediaQuery.of(context).size.height * 0.25,
+            ),
+          ),
           Row(
             children: [
               Expanded(
@@ -67,9 +72,9 @@ class AliasDetailScreen extends ConsumerWidget {
               ),
             ],
           ),
-          Divider(),
+          Divider(height: 0),
           AliasDetailListTile(
-            leadingIconData: Icons.email_outlined,
+            leadingIconData: Icons.alternate_email,
             title: aliasDataModel.email,
             subtitle: 'Email',
             trailingIconData: Icons.copy,
@@ -108,12 +113,7 @@ class AliasDetailScreen extends ConsumerWidget {
             trailingIconData: Icons.edit,
             trailingIconOnPress: () {},
           ),
-          AliasDetailListTile(
-            leadingIconData: Icons.dns,
-            title: aliasDataModel.domain,
-            subtitle: 'Domain',
-          ),
-          Divider(),
+          Divider(height: 0),
           Row(
             children: [
               Expanded(
@@ -138,7 +138,7 @@ class AliasDetailScreen extends ConsumerWidget {
               )
             ],
           ),
-          Divider(),
+          Divider(height: 0),
           Center(
             child: RaisedButton(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -194,15 +194,12 @@ class AliasDetailScreen extends ConsumerWidget {
                 _textEditingController.text.trim(),
               ),
               decoration: kTextFormFieldDecoration.copyWith(
-                hintText: 'New Description',
+                hintText: '${aliasDataModel.emailDescription}',
               ),
             ),
             SizedBox(height: 25),
             RaisedButton(
-              padding: EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 15,
-              ),
+              padding: EdgeInsets.symmetric(vertical: 20),
               child: Text('Update Description'),
               onPressed: () => editDescription(
                 context,
