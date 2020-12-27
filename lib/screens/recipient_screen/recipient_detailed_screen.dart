@@ -21,6 +21,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final isLoading = recipientStateProvider.isLoading;
     final copyOnTap = recipientStateProvider.copyOnTap;
     final toggleEncryption = recipientStateProvider.toggleEncryption;
+    final removePublicGPGKey = recipientStateProvider.removePublicGPGKey;
     final verifyEmail = recipientStateProvider.verifyEmail;
 
     return Scaffold(
@@ -56,8 +57,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
             subtitle: 'Fingerprint',
             trailing: IconButton(
               icon: Icon(Icons.settings),
-              onPressed: () =>
-                  buildFingerprintSettingDialog(context, recipientData),
+              onPressed: () => buildFingerprintSettingDialog(
+                  context, recipientData, removePublicGPGKey),
             ),
           ),
           AliasDetailListTile(
@@ -68,7 +69,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
               value: encryptionSwitch,
               onChanged: (toggle) {
                 recipientData.fingerprint == null
-                    ? buildFingerprintSettingDialog(context, recipientData)
+                    ? buildFingerprintSettingDialog(
+                        context, recipientData, removePublicGPGKey)
                     : toggleEncryption(context, recipientData.id);
               },
             ),
@@ -113,9 +115,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
               children: [
                 Icon(Icons.delete),
                 SizedBox(width: 10),
-                Text(
-                  'Delete Recipient',
-                ),
+                Text('Delete Recipient'),
               ],
             ),
             onPressed: () {},
@@ -126,8 +126,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildFingerprintSettingDialog(
-      BuildContext context, RecipientDataModel recipientData) {
+  Future buildFingerprintSettingDialog(BuildContext context,
+      RecipientDataModel recipientData, Function removePublicKey) {
     bool isFingerprintNull() {
       if (recipientData.fingerprint == null)
         return true;
@@ -168,7 +168,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                       'Delete Current Key',
                       style: TextStyle(color: Colors.black),
                     ),
-                    onPressed: () {},
+                    onPressed: () => removePublicKey(context, recipientData.id),
                   ),
             RaisedButton(
               child: Text('${isFingerprintNull() ? 'Add New' : 'Update'} Key'),

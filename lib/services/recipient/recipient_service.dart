@@ -45,13 +45,32 @@ class RecipientService {
         Uri.encodeFull('$kBaseURL/$kEncryptedRecipient/$recipientID'),
         headers: _headers,
       );
-
       if (response.statusCode == 204) {
         print('disableEncryption ${response.statusCode}');
         return 204;
       } else {
         print('disableEncryption ${response.statusCode}');
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
+  Future removePublicGPGKey(String recipientID) async {
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.delete(
+          Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
+          headers: _headers);
+
+      if (response.statusCode == 204) {
+        print('removePublicKey ${response.statusCode}');
+        return 204;
+      } else {
+        print('removePublicKey ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {

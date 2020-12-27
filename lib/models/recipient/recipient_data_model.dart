@@ -1,5 +1,5 @@
 class RecipientDataModel {
-  const RecipientDataModel({
+  RecipientDataModel({
     this.id,
     this.userId,
     this.email,
@@ -15,7 +15,7 @@ class RecipientDataModel {
   final String userId;
   final String email;
   final bool shouldEncrypt;
-  final dynamic fingerprint;
+  dynamic fingerprint;
   final DateTime emailVerifiedAt;
   final List<dynamic> aliases;
   final DateTime createdAt;

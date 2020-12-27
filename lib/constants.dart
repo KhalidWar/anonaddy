@@ -6,6 +6,7 @@ const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
 const String kAliasesURL = 'aliases';
 const String kEncryptedRecipient = 'encrypted-recipients';
+const String kRecipientKeys = 'recipient-keys';
 const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 
@@ -27,6 +28,12 @@ const kAliasRestoredSuccessfully = 'Alias Restored Successfully';
 const kFailedToRestoreAlias = 'Failed to Restore Alias';
 const kAliasDeletedSuccessfully = 'Alias Deleted Successfully';
 const kFailedToDeleteAlias = 'Failed to Delete Alias';
+const kEncryptionEnabled = 'Encryption enabled';
+const kFailedToEnableEncryption = 'Failed to Enable Encryption';
+const kEncryptionDisabled = 'Encryption disabled';
+const kFailedToDisableEncryption = 'Failed to disable encryption';
+const kGPGKeyDeletedSuccessfully = 'GPG Key Deleted Successfully';
+const kFailedToDeleteGPGKey = 'Failed to Delete GPG Key';
 
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';
@@ -45,8 +52,7 @@ const kGetAccessToken =
 const kPublicGPGKeyHintText =
     'Begins with \'-----BEGIN PGP PUBLIC KEY BLOCK-----\'';
 const kEnterPublicKeyData =
-    'Enter your PUBLIC key data in the text area below.';
-const kRemoveCommentAndVersion = 'Make sure to remove Comment: and Version:';
+    'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);
