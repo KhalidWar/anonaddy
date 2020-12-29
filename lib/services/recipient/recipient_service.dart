@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:anonaddy/constants.dart';
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
@@ -57,7 +58,8 @@ class RecipientService {
     }
   }
 
-  Future addPublicGPGKey(String recipientID, String keyData) async {
+  Future<RecipientDataModel> addPublicGPGKey(
+      String recipientID, String keyData) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -65,11 +67,12 @@ class RecipientService {
       final response = await http.patch(
           Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
           headers: _headers,
-          body: {"key_data": "$keyData"});
+          body: jsonEncode({"key_data": "$keyData"}));
 
       if (response.statusCode == 200) {
         print("addPublicGPGKey ${response.statusCode}");
-        return 200;
+        print(jsonDecode(response.body));
+        return RecipientDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print("addPublicGPGKey ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);

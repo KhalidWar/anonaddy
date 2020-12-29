@@ -39,8 +39,8 @@ class RecipientStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setFingerprint() {
-    _recipientDataModel.fingerprint = null;
+  void setFingerprint(dynamic input) {
+    _recipientDataModel.fingerprint = input;
     notifyListeners();
   }
 
@@ -54,10 +54,10 @@ class RecipientStateManager extends ChangeNotifier {
         if (value == 204) {
           setIsLoading(false);
           _toggleEncryptionSwitch();
-          showToast(kEncryptionDisabled);
+          _showToast(kEncryptionDisabled);
         } else {
           setIsLoading(false);
-          showToast(kFailedToDisableEncryption);
+          _showToast(kFailedToDisableEncryption);
         }
       });
     } else {
@@ -68,31 +68,30 @@ class RecipientStateManager extends ChangeNotifier {
         if (value == 200) {
           setIsLoading(false);
           _toggleEncryptionSwitch();
-          showToast(kEncryptionEnabled);
+          _showToast(kEncryptionEnabled);
         } else {
           setIsLoading(false);
-          showToast(kFailedToEnableEncryption);
+          _showToast(kFailedToEnableEncryption);
         }
       });
     }
   }
 
-  void addPublicGPGKey(BuildContext context, String recipientID) async {
+  void addPublicGPGKey(
+      BuildContext context, String recipientID, String keyData) async {
     Navigator.pop(context);
     setIsLoading(true);
     await context
         .read(recipientServiceProvider)
-        .addPublicGPGKey(recipientID, '') //todo implement json escape
+        .addPublicGPGKey(recipientID, keyData)
         .then((value) {
-      if (value == 200) {
-        showToast(kGPGKeyDeletedSuccessfully);
-        setIsLoading(false);
-        setEncryptionSwitch(false);
-        setFingerprint();
-      } else {
-        showToast(kFailedToDeleteGPGKey);
-        setIsLoading(false);
-      }
+      _showToast(kGPGKeyAddedSuccessfully);
+      setIsLoading(false);
+      setFingerprint(value.fingerprint);
+      setEncryptionSwitch(value.shouldEncrypt);
+    }).catchError((error, stackTrace) {
+      _showToast(error);
+      setIsLoading(false);
     });
   }
 
@@ -103,15 +102,13 @@ class RecipientStateManager extends ChangeNotifier {
         .read(recipientServiceProvider)
         .removePublicGPGKey(recipientID)
         .then((value) {
-      if (value == 204) {
-        showToast(kGPGKeyDeletedSuccessfully);
-        setIsLoading(false);
-        setEncryptionSwitch(false);
-        setFingerprint();
-      } else {
-        showToast(kFailedToDeleteGPGKey);
-        setIsLoading(false);
-      }
+      _showToast(kGPGKeyDeletedSuccessfully);
+      setIsLoading(false);
+      setEncryptionSwitch(false);
+      setFingerprint(null);
+    }).catchError((error, stackTrace) {
+      _showToast('$kFailedToDeleteGPGKey: $error');
+      setIsLoading(false);
     });
   }
 
@@ -122,10 +119,10 @@ class RecipientStateManager extends ChangeNotifier {
         .sendVerificationEmail(recipientID)
         .then((value) {
       if (value == 200) {
-        showToast('Verification email is sent');
+        _showToast('Verification email is sent');
         setIsLoading(false);
       } else {
-        showToast('Failed to send verification email');
+        _showToast('Failed to send verification email');
         setIsLoading(false);
       }
     });
@@ -133,10 +130,10 @@ class RecipientStateManager extends ChangeNotifier {
 
   void copyOnTap(String input) {
     Clipboard.setData(ClipboardData(text: input));
-    showToast(kCopiedToClipboard);
+    _showToast(kCopiedToClipboard);
   }
 
-  void showToast(String input) {
+  void _showToast(String input) {
     Fluttertoast.showToast(
       msg: input,
       toastLength: Toast.LENGTH_SHORT,

@@ -21,6 +21,9 @@ const kCreateNewAliasText =
     'Other aliases e.g. alias@khalidwar.anonaddy.com or .me can also be created automatically when they receive their first email.';
 const kRestoreAliasText =
     'Are you sure you want to restore this alias? Once restored, this alias will be able to receive emails again.';
+const kRemoveRecipientPublicKey = 'Remove recipient public key';
+const kRemoveRecipientPublicKeyBody =
+    'Are you sure you want to remove the public key for this recipient? It will also be removed from any other recipients using the same key.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
@@ -34,6 +37,8 @@ const kEncryptionDisabled = 'Encryption disabled';
 const kFailedToDisableEncryption = 'Failed to disable encryption';
 const kGPGKeyDeletedSuccessfully = 'GPG Key Deleted Successfully';
 const kFailedToDeleteGPGKey = 'Failed to Delete GPG Key';
+const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
+const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';

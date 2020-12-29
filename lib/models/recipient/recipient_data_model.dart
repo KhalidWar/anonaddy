@@ -36,4 +36,11 @@ class RecipientDataModel {
       updatedAt: DateTime.parse(json["updated_at"]),
     );
   }
+
+  factory RecipientDataModel.fromJsonData(Map<String, dynamic> json) {
+    return RecipientDataModel(
+      shouldEncrypt: json["data"]["should_encrypt"],
+      fingerprint: json["data"]["fingerprint"],
+    );
+  }
 }

@@ -22,6 +22,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final isLoading = recipientStateProvider.isLoading;
     final copyOnTap = recipientStateProvider.copyOnTap;
     final toggleEncryption = recipientStateProvider.toggleEncryption;
+    final addPublicGPGKey = recipientStateProvider.addPublicGPGKey;
     final removePublicGPGKey = recipientStateProvider.removePublicGPGKey;
     final verifyEmail = recipientStateProvider.verifyEmail;
 
@@ -56,23 +57,29 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 ? 'No fingerprint found'
                 : '${recipientData.fingerprint}',
             subtitle: 'GPG Key Fingerprint',
-            trailing: IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () => buildFingerprintSettingDialog(
-                  context, recipientData, removePublicGPGKey),
-            ),
+            trailing: recipientData.fingerprint == null
+                ? IconButton(
+                    icon: Icon(Icons.add_circle_outline_outlined),
+                    onPressed: () => buildFingerprintSettingDialog(
+                        context, recipientData, addPublicGPGKey),
+                  )
+                : IconButton(
+                    icon: Icon(Icons.delete_outline_outlined),
+                    onPressed: () =>
+                        buildRemovePGPKeyDialog(context, removePublicGPGKey),
+                  ),
           ),
           AliasDetailListTile(
             leadingIconData: encryptionSwitch ? Icons.lock : Icons.lock_open,
             title: '${encryptionSwitch ? 'Encrypted' : 'Not Encrypted'}',
             subtitle: 'Encryption',
-            trailing: Switch(
-              value: encryptionSwitch,
-              onChanged: recipientData.fingerprint == null
-                  ? (toggle) => buildFingerprintSettingDialog(
-                      context, recipientData, removePublicGPGKey)
-                  : (toggle) => toggleEncryption(context, recipientData.id),
-            ),
+            trailing: recipientData.fingerprint == null
+                ? null
+                : Switch(
+                    value: encryptionSwitch,
+                    onChanged: (toggle) =>
+                        toggleEncryption(context, recipientData.id),
+                  ),
           ),
           AliasDetailListTile(
             leadingIconData: Icons.verified_outlined,
@@ -109,14 +116,33 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
+  Future buildRemovePGPKeyDialog(
+      BuildContext context, Function removePublicGPGKey) {
+    return showModal(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(kRemoveRecipientPublicKey),
+          content: Text(kRemoveRecipientPublicKeyBody),
+          actions: [
+            RaisedButton(
+              color: Colors.red,
+              child: Text('Remove Public Key'),
+              onPressed: () => removePublicGPGKey(context, recipientData.id),
+            ),
+            RaisedButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future buildFingerprintSettingDialog(BuildContext context,
-      RecipientDataModel recipientData, Function removePublicKey) {
-    bool isFingerprintNull() {
-      if (recipientData.fingerprint == null)
-        return true;
-      else
-        return false;
-    }
+      RecipientDataModel recipientData, Function addPublicGPGKey) {
+    final _texEditingController = TextEditingController();
 
     return showModal(
       context: context,
@@ -126,36 +152,32 @@ class RecipientDetailedScreen extends ConsumerWidget {
           content: Container(
             height: MediaQuery.of(context).size.height * 0.25,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(kEnterPublicKeyData),
-                TextFormField(
-                  minLines: 5,
-                  maxLines: 8,
-                  decoration: kTextFormFieldDecoration.copyWith(
-                    hintText: kPublicGPGKeyHintText,
+                SizedBox(height: 5),
+                Expanded(
+                  child: TextFormField(
+                    controller: _texEditingController,
+                    minLines: 8,
+                    maxLines: 8,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(5),
+                      hintText: kPublicGPGKeyHintText,
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: kBlueNavyColor),
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 10),
               ],
             ),
           ),
-          buttonPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           actions: [
-            isFingerprintNull()
-                ? null
-                : RaisedButton(
-                    color: Colors.red,
-                    child: Text(
-                      'Delete Current Key',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () => removePublicKey(context, recipientData.id),
-                  ),
             RaisedButton(
-              child: Text('${isFingerprintNull() ? 'Add New' : 'Update'} Key'),
-              onPressed: () {},
+              child: Text('Add New Key'),
+              onPressed: () => addPublicGPGKey(
+                  context, recipientData.id, _texEditingController.text),
             ),
           ],
         );
