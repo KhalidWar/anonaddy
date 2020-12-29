@@ -57,6 +57,28 @@ class RecipientService {
     }
   }
 
+  Future addPublicGPGKey(String recipientID, String keyData) async {
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.patch(
+          Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
+          headers: _headers,
+          body: {"key_data": "$keyData"});
+
+      if (response.statusCode == 200) {
+        print("addPublicGPGKey ${response.statusCode}");
+        return 200;
+      } else {
+        print("addPublicGPGKey ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future removePublicGPGKey(String recipientID) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();

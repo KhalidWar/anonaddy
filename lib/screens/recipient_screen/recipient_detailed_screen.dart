@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
@@ -7,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../constants.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
   RecipientDetailedScreen({this.recipientData});
@@ -54,7 +55,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             title: recipientData.fingerprint == null
                 ? 'No fingerprint found'
                 : '${recipientData.fingerprint}',
-            subtitle: 'Fingerprint',
+            subtitle: 'GPG Key Fingerprint',
             trailing: IconButton(
               icon: Icon(Icons.settings),
               onPressed: () => buildFingerprintSettingDialog(
@@ -63,16 +64,14 @@ class RecipientDetailedScreen extends ConsumerWidget {
           ),
           AliasDetailListTile(
             leadingIconData: encryptionSwitch ? Icons.lock : Icons.lock_open,
-            title: '${encryptionSwitch ? 'Encrypted' : 'Not encrypted'}',
-            subtitle: 'Should Encrypt?',
+            title: '${encryptionSwitch ? 'Encrypted' : 'Not Encrypted'}',
+            subtitle: 'Encryption',
             trailing: Switch(
               value: encryptionSwitch,
-              onChanged: (toggle) {
-                recipientData.fingerprint == null
-                    ? buildFingerprintSettingDialog(
-                        context, recipientData, removePublicGPGKey)
-                    : toggleEncryption(context, recipientData.id);
-              },
+              onChanged: recipientData.fingerprint == null
+                  ? (toggle) => buildFingerprintSettingDialog(
+                      context, recipientData, removePublicGPGKey)
+                  : (toggle) => toggleEncryption(context, recipientData.id),
             ),
           ),
           AliasDetailListTile(
@@ -86,7 +85,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
                   )
                 : null,
           ),
-          Divider(height: 0),
           Row(
             children: [
               Expanded(
@@ -105,22 +103,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
               )
             ],
           ),
-          Divider(height: 0),
-          RaisedButton(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            color: Colors.red,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.delete),
-                SizedBox(width: 10),
-                Text('Delete Recipient'),
-              ],
-            ),
-            onPressed: () {},
-          ),
-          SizedBox(height: 10),
+          SizedBox(height: size.height * 0.04),
         ],
       ),
     );

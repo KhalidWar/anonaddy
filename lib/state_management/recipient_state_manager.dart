@@ -54,10 +54,10 @@ class RecipientStateManager extends ChangeNotifier {
         if (value == 204) {
           setIsLoading(false);
           _toggleEncryptionSwitch();
-          _showToast(kEncryptionDisabled);
+          showToast(kEncryptionDisabled);
         } else {
           setIsLoading(false);
-          _showToast(kFailedToDisableEncryption);
+          showToast(kFailedToDisableEncryption);
         }
       });
     } else {
@@ -68,13 +68,32 @@ class RecipientStateManager extends ChangeNotifier {
         if (value == 200) {
           setIsLoading(false);
           _toggleEncryptionSwitch();
-          _showToast(kEncryptionEnabled);
+          showToast(kEncryptionEnabled);
         } else {
           setIsLoading(false);
-          _showToast(kFailedToEnableEncryption);
+          showToast(kFailedToEnableEncryption);
         }
       });
     }
+  }
+
+  void addPublicGPGKey(BuildContext context, String recipientID) async {
+    Navigator.pop(context);
+    setIsLoading(true);
+    await context
+        .read(recipientServiceProvider)
+        .addPublicGPGKey(recipientID, '') //todo implement json escape
+        .then((value) {
+      if (value == 200) {
+        showToast(kGPGKeyDeletedSuccessfully);
+        setIsLoading(false);
+        setEncryptionSwitch(false);
+        setFingerprint();
+      } else {
+        showToast(kFailedToDeleteGPGKey);
+        setIsLoading(false);
+      }
+    });
   }
 
   void removePublicGPGKey(BuildContext context, String recipientID) async {
@@ -85,12 +104,12 @@ class RecipientStateManager extends ChangeNotifier {
         .removePublicGPGKey(recipientID)
         .then((value) {
       if (value == 204) {
-        _showToast(kGPGKeyDeletedSuccessfully);
+        showToast(kGPGKeyDeletedSuccessfully);
         setIsLoading(false);
         setEncryptionSwitch(false);
         setFingerprint();
       } else {
-        _showToast(kFailedToDeleteGPGKey);
+        showToast(kFailedToDeleteGPGKey);
         setIsLoading(false);
       }
     });
@@ -103,10 +122,10 @@ class RecipientStateManager extends ChangeNotifier {
         .sendVerificationEmail(recipientID)
         .then((value) {
       if (value == 200) {
-        _showToast('Verification email is sent');
+        showToast('Verification email is sent');
         setIsLoading(false);
       } else {
-        _showToast('Failed to send verification email');
+        showToast('Failed to send verification email');
         setIsLoading(false);
       }
     });
@@ -114,10 +133,10 @@ class RecipientStateManager extends ChangeNotifier {
 
   void copyOnTap(String input) {
     Clipboard.setData(ClipboardData(text: input));
-    _showToast(kCopiedToClipboard);
+    showToast(kCopiedToClipboard);
   }
 
-  void _showToast(String input) {
+  void showToast(String input) {
     Fluttertoast.showToast(
       msg: input,
       toastLength: Toast.LENGTH_SHORT,

@@ -113,7 +113,6 @@ class AliasDetailScreen extends ConsumerWidget {
             trailingIconData: Icons.edit,
             trailingIconOnPress: () {},
           ),
-          Divider(height: 0),
           Row(
             children: [
               Expanded(
