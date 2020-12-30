@@ -105,8 +105,6 @@ class AliasStateManager extends ChangeNotifier {
                 : showToast(kFailedToDeleteAlias);
             setIsLoading(false);
           });
-
-    Navigator.pop(context);
     notifyListeners();
   }
 

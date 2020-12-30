@@ -4,6 +4,7 @@ import 'package:anonaddy/services/theme/theme_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -53,7 +54,7 @@ class SettingsTab extends ConsumerWidget {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.01),
+              SizedBox(height: size.height * 0.02),
               InkWell(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,13 +63,12 @@ class SettingsTab extends ConsumerWidget {
                       'About App',
                       style: Theme.of(context).textTheme.headline5,
                     ),
-                    Icon(FontAwesomeIcons.github),
+                    Icon(FontAwesomeIcons.github, size: 30),
                   ],
                 ),
                 onTap: () => aboutAlertDialog(context),
               ),
-              SizedBox(height: size.height * 0.01),
-              // todo add license info
+              SizedBox(height: size.height * 0.02),
               RaisedButton(
                 color: Colors.red,
                 padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
@@ -97,11 +97,14 @@ class SettingsTab extends ConsumerWidget {
               RaisedButton(
                 child: Text('Visit Project Repo'),
                 onPressed: () async {
-                  if (await canLaunch(kGithubRepoURL)) {
-                    await launch(kGithubRepoURL);
-                  } else {
-                    throw 'Could not launch $kGithubRepoURL';
-                  }
+                  await launch(kGithubRepoURL).catchError((error, stackTrace) {
+                    throw Fluttertoast.showToast(
+                      msg: error.message,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[600],
+                    );
+                  });
                   Navigator.pop(context);
                 },
               ),

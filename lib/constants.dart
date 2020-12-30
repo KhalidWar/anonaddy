@@ -5,7 +5,10 @@ const String kBaseURL = 'https://app.anonaddy.com/api/v1';
 const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
 const String kAliasesURL = 'aliases';
+const String kEncryptedRecipient = 'encrypted-recipients';
+const String kRecipientKeys = 'recipient-keys';
 const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
+const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 
 // Official AnonAddy Strings
 const kAboutAppText =
@@ -18,6 +21,9 @@ const kCreateNewAliasText =
     'Other aliases e.g. alias@khalidwar.anonaddy.com or .me can also be created automatically when they receive their first email.';
 const kRestoreAliasText =
     'Are you sure you want to restore this alias? Once restored, this alias will be able to receive emails again.';
+const kRemoveRecipientPublicKey = 'Remove recipient public key';
+const kRemoveRecipientPublicKeyBody =
+    'Are you sure you want to remove the public key for this recipient? It will also be removed from any other recipients using the same key.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
@@ -25,6 +31,14 @@ const kAliasRestoredSuccessfully = 'Alias Restored Successfully';
 const kFailedToRestoreAlias = 'Failed to Restore Alias';
 const kAliasDeletedSuccessfully = 'Alias Deleted Successfully';
 const kFailedToDeleteAlias = 'Failed to Delete Alias';
+const kEncryptionEnabled = 'Encryption enabled';
+const kFailedToEnableEncryption = 'Failed to Enable Encryption';
+const kEncryptionDisabled = 'Encryption disabled';
+const kFailedToDisableEncryption = 'Failed to disable encryption';
+const kGPGKeyDeletedSuccessfully = 'GPG Key Deleted Successfully';
+const kFailedToDeleteGPGKey = 'Failed to Delete GPG Key';
+const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
+const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';
@@ -34,6 +48,16 @@ const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
 const kEditDescSuccessful = 'Description Updated Successfully';
 const kEditDescFailed = 'Failed to update description';
+const kGetAccessToken =
+    'To access your AnonAddy account, you have to obtain an API Access Token.'
+    '\n\nLogin to your AnonAddy account, head to settings, and navigate to API section.'
+    '\n\nGenerate a new access token.'
+    '\n\nAccess Token is a long string of alphabets, numbers, and special characters.'
+    '\n\nPaste it here as is!';
+const kPublicGPGKeyHintText =
+    'Begins with \'-----BEGIN PGP PUBLIC KEY BLOCK-----\'';
+const kEnterPublicKeyData =
+    'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);

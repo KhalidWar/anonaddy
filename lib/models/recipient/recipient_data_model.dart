@@ -1,5 +1,5 @@
 class RecipientDataModel {
-  const RecipientDataModel({
+  RecipientDataModel({
     this.id,
     this.userId,
     this.email,
@@ -15,7 +15,7 @@ class RecipientDataModel {
   final String userId;
   final String email;
   final bool shouldEncrypt;
-  final dynamic fingerprint;
+  dynamic fingerprint;
   final DateTime emailVerifiedAt;
   final List<dynamic> aliases;
   final DateTime createdAt;
@@ -34,6 +34,13 @@ class RecipientDataModel {
       // aliases: List<dynamic>.from(json["aliases"].map((x) => x)),
       createdAt: DateTime.parse(json["created_at"]),
       updatedAt: DateTime.parse(json["updated_at"]),
+    );
+  }
+
+  factory RecipientDataModel.fromJsonData(Map<String, dynamic> json) {
+    return RecipientDataModel(
+      shouldEncrypt: json["data"]["should_encrypt"],
+      fingerprint: json["data"]["fingerprint"],
     );
   }
 }

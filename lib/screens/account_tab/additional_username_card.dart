@@ -1,7 +1,9 @@
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
@@ -41,6 +43,7 @@ class AdditionalUsernameCard extends ConsumerWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
+                //todo add add username function
               ],
             ),
           );
@@ -56,6 +59,7 @@ class AdditionalUsernameCard extends ConsumerWidget {
 
   ListView buildListView(BuildContext context, UsernameModel data) {
     final aliasDataProvider = context.read(aliasStateManagerProvider);
+    final recipientDataProvider = context.read(recipientStateManagerProvider);
 
     return ListView.builder(
       shrinkWrap: true,
@@ -71,14 +75,9 @@ class AdditionalUsernameCard extends ConsumerWidget {
                 children: [
                   AccountCardHeader(
                     title: '${data.usernameDataList[index].username}',
-                    subtitle: username.description,
+                    subtitle: '${data.usernameDataList[index].description}',
                   ),
-                  AliasDetailListTile(
-                    title: '${username.id}',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'ID',
-                    leadingIconData: Icons.perm_identity,
-                  ),
+                  SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
@@ -140,7 +139,7 @@ class AdditionalUsernameCard extends ConsumerWidget {
                                 return ListTile(
                                   dense: true,
                                   horizontalTitleGap: 0,
-                                  leading: Icon(Icons.email_outlined),
+                                  leading: Icon(Icons.alternate_email),
                                   title:
                                       Text('${username.aliases[index].email}'),
                                   subtitle: Text(
@@ -180,7 +179,24 @@ class AdditionalUsernameCard extends ConsumerWidget {
                               title: Text('${username.defaultRecipient.email}'),
                               subtitle:
                                   Text('${username.defaultRecipient.userId}'),
-                              onTap: () {},
+                              onTap: () {
+                                recipientDataProvider.setRecipientData(
+                                    username.defaultRecipient);
+                                recipientDataProvider.setEncryptionSwitch(
+                                    username.defaultRecipient.shouldEncrypt);
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return RecipientDetailedScreen(
+                                        recipientData:
+                                            username.defaultRecipient,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
                             ),
                     ],
                   ),
