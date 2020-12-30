@@ -131,7 +131,7 @@ class AliasDetailScreen extends ConsumerWidget {
               : AliasDetailListTile(
                   leadingIconData: Icons.restore_outlined,
                   title: 'Restore Alias',
-                  subtitle: 'Restore alias will reject any email sent to it',
+                  subtitle: 'Restored alias will be able to receive emails',
                   trailing: IconButton(
                     icon: Icon(Icons.restore_outlined, color: Colors.green),
                     onPressed: () {
