@@ -16,7 +16,6 @@ class AliasDetailScreen extends ConsumerWidget {
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isLoading = aliasDataProvider.isLoading;
     final copyOnTap = aliasDataProvider.copyToClipboard;
-    final isAliasDeleted = aliasDataProvider.isAliasDeleted;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
 
@@ -113,6 +112,38 @@ class AliasDetailScreen extends ConsumerWidget {
             trailingIconData: Icons.edit,
             trailingIconOnPress: () {},
           ),
+          aliasDataModel.deletedAt == null
+              ? AliasDetailListTile(
+                  leadingIconData: Icons.delete_outline,
+                  title: 'Delete Alias',
+                  subtitle: 'Deleted alias will reject any email sent to it',
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete_outline, color: Colors.red),
+                    onPressed: () {
+                      buildDeleteAliasDialog(
+                        context,
+                        deleteOrRestoreAlias,
+                        aliasDataModel,
+                      );
+                    },
+                  ),
+                )
+              : AliasDetailListTile(
+                  leadingIconData: Icons.restore_outlined,
+                  title: 'Restore Alias',
+                  subtitle: 'Restore alias will reject any email sent to it',
+                  trailing: IconButton(
+                    icon: Icon(Icons.restore_outlined, color: Colors.green),
+                    onPressed: () {
+                      buildRestoreAliasDialog(
+                        context,
+                        deleteOrRestoreAlias,
+                        aliasDataModel,
+                      );
+                    },
+                  ),
+                ),
+          Divider(height: 0),
           Row(
             children: [
               Expanded(
@@ -137,38 +168,73 @@ class AliasDetailScreen extends ConsumerWidget {
               )
             ],
           ),
-          Divider(height: 0),
-          Center(
-            child: RaisedButton(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              color: isAliasDeleted(aliasDataModel.deletedAt)
-                  ? Colors.green
-                  : Colors.red,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(isAliasDeleted(aliasDataModel.deletedAt)
-                      ? Icons.restore
-                      : Icons.delete),
-                  SizedBox(width: 10),
-                  Text(
-                    '${isAliasDeleted(aliasDataModel.deletedAt) ? 'Restore' : 'Delete'} Alias',
-                  ),
-                ],
-              ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+        ],
+      ),
+    );
+  }
+
+  Future buildDeleteAliasDialog(BuildContext context,
+      Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
+    return showModal(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Delete Alias'),
+          content: Text(kDeleteAliasConfirmation),
+          actions: [
+            RaisedButton(
+              color: Colors.red,
+              child: Text('Delete Alias'),
               onPressed: () {
                 deleteOrRestoreAlias(
                   context,
                   aliasDataModel.deletedAt,
                   aliasDataModel.aliasID,
                 );
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
             ),
-          ),
-          SizedBox(height: 10),
-        ],
-      ),
+            RaisedButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future buildRestoreAliasDialog(BuildContext context,
+      Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
+    return showModal(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Restore Alias'),
+          content: Text(kRestoreAliasText),
+          actions: [
+            RaisedButton(
+              color: Colors.green,
+              child: Text('Restore Alias'),
+              onPressed: () {
+                deleteOrRestoreAlias(
+                  context,
+                  aliasDataModel.deletedAt,
+                  aliasDataModel.aliasID,
+                );
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+            RaisedButton(
+              child: Text('Cancel'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
     );
   }
 
