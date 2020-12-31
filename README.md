@@ -7,7 +7,8 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 
 
 ## Screenshots
-<img src="assets/screenshots/anonaddy.png" width="150"> <img src="assets/screenshots/account.png" width="150"> <img src="assets/screenshots/aliases.png" width="150"> <img src="assets/screenshots/login.png" width="150"> <img src="assets/screenshots/create_alias.png" width="150"> <img src="assets/screenshots/search.png" width="150">
+<img src="assets/screenshots/anonaddy.png" width="200"> <img src="assets/screenshots/account.png" width="200"> <img src="assets/screenshots/aliases.png" width="200"> 
+<img src="assets/screenshots/login.png" width="150"> <img src="assets/screenshots/create_alias.png" width="150"> <img src="assets/screenshots/search.png" width="150">
 
 
 ## Features
