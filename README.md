@@ -3,11 +3,11 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 
 
 ## Get it on
-[<img src="assets/screenshots/google_play_badge.png">](https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy)
+[<img src="assets/screenshots/google_play_badge.png" width="250">](https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy)
 
 
 ## Screenshots
-<img src="assets/screenshots/anonaddy.png" width="150"> <img src="assets/screenshots/account.png" width="150"> <img src="assets/screenshots/alias.png" width="150"> <img src="assets/screenshots/login.png" width="150"> <img src="assets/screenshots/create_alias.png" width="150"> <img src="assets/screenshots/search.png" width="150">
+<img src="assets/screenshots/anonaddy.png" width="150"> <img src="assets/screenshots/account.png" width="150"> <img src="assets/screenshots/aliases.png" width="150"> <img src="assets/screenshots/login.png" width="150"> <img src="assets/screenshots/create_alias.png" width="150"> <img src="assets/screenshots/search.png" width="150">
 
 
 ## Features
