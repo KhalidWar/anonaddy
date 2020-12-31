@@ -1,14 +1,20 @@
 # AnonAddy
-Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's API](https://app.anonaddy.com/docs/) to interact with user account. This app has reached a stable release version as most basic crucial features have been implemented.
+Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's API](https://app.anonaddy.com/docs/) to interact with user account.
+
+
+## Get it on
+[<img src="assets/screenshots/google_play_badge.png" width="250">](https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy)
+
 
 ## Screenshots
-<img src="assets/screenshots/account.jpg" width="150"> <img src="assets/screenshots/alias.jpg" width="150"> <img src="assets/screenshots/search.jpg" width="150"> <img src="assets/screenshots/create_new_alias.jpg" width="150"> <img src="assets/screenshots/alias_detail.jpg" width="150">
+<img src="assets/screenshots/anonaddy.png" width="200"> <img src="assets/screenshots/account.png" width="200"> <img src="assets/screenshots/aliases.png" width="200"> 
+<img src="assets/screenshots/login.png" width="200"> <img src="assets/screenshots/create_alias.png" width="200"> <img src="assets/screenshots/search.png" width="200">
 
 
 ## Features
 - Log in with [Access Token](https://app.anonaddy.com/settings).
-- Get AnonAddy account details including additional usernames and their details.
-- Get detailed view of available and deleted aliases.
+- Get AnonAddy account details including additional usernames.
+- Get detailed view of all aliases, available and deleted ones.
 - Create new alias with custom description, domain, and format (UUID and random words).
 - Search aliases by email address, alias id, or description.
 - Copy alias email address with a single tap.
