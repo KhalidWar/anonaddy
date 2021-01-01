@@ -86,6 +86,7 @@ class TokenLoginScreen extends ConsumerWidget {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
+                                      key: Key('loginTextField'),
                                       validator: (input) => FormValidator()
                                           .accessTokenValidator(input),
                                       controller: _textEditingController,
@@ -148,6 +149,7 @@ class TokenLoginScreen extends ConsumerWidget {
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                         child: RaisedButton(
+                          key: Key('loginButton'),
                           child: isLoading
                               ? CircularProgressIndicator(
                                   backgroundColor: kBlueNavyColor)
