@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../constants.dart';
 
 final loginStateManagerProvider =
-    ChangeNotifierProvider((ref) => LoginStateManager());
+    ChangeNotifierProvider((ref) => LoginStateManager(false));
 
 class TokenLoginScreen extends ConsumerWidget {
   final _textEditingController = TextEditingController();
@@ -19,7 +19,7 @@ class TokenLoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     final loginManager = watch(loginStateManagerProvider);
     final isLoading = loginManager.isLoading;
     final login = loginManager.login;
@@ -28,6 +28,7 @@ class TokenLoginScreen extends ConsumerWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
+        key: Key('loginScreenScaffold'),
         backgroundColor: kBlueNavyColor,
         body: Center(
           child: SingleChildScrollView(
@@ -110,6 +111,7 @@ class TokenLoginScreen extends ConsumerWidget {
                                     ),
                                   ),
                                   IconButton(
+                                    key: Key('pasteFromClipboard'),
                                     icon: Icon(Icons.paste),
                                     onPressed: () => pasteFromClipboard(
                                       _textEditingController,
@@ -119,6 +121,7 @@ class TokenLoginScreen extends ConsumerWidget {
                               ),
                               SizedBox(height: size.height * 0.01),
                               GestureDetector(
+                                key: Key('loginGetAccessToken'),
                                 child: Text(
                                   'How to get Access Token?',
                                   style: Theme.of(context)
@@ -152,7 +155,9 @@ class TokenLoginScreen extends ConsumerWidget {
                           key: Key('loginButton'),
                           child: isLoading
                               ? CircularProgressIndicator(
-                                  backgroundColor: kBlueNavyColor)
+                                  key: Key('loginLoadingIndicator'),
+                                  backgroundColor: kBlueNavyColor,
+                                )
                               : Text(
                                   'Login',
                                   style: Theme.of(context).textTheme.headline5,
