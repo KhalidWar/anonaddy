@@ -13,19 +13,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final additionalUsernameFuture =
-    StreamProvider.autoDispose<UsernameModel>((ref) async* {
-  yield await ref.watch(usernameServiceProvider).getUsernameData();
-  while (true) {
-    await Future.delayed(Duration(seconds: 10));
-    yield await ref.read(usernameServiceProvider).getUsernameData();
-  }
+final additionalUsernameStream =
+    StreamProvider.autoDispose<UsernameModel>((ref) {
+  return ref.watch(usernameServiceProvider).getUsernameData();
 });
 
 class AdditionalUsernameCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final stream = watch(additionalUsernameFuture);
+    final stream = watch(additionalUsernameStream);
 
     return stream.when(
       loading: () => FetchingDataIndicator(),

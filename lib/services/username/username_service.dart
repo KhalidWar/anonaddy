@@ -14,22 +14,24 @@ class UsernameService {
     "Accept": "application/json",
   };
 
-  Future<UsernameModel> getUsernameData() async {
+  Stream<UsernameModel> getUsernameData() async* {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
+      while (true) {
+        await Future.delayed(Duration(seconds: 10));
+        final response = await http.get(
+          Uri.encodeFull('$kBaseURL/usernames'),
+          headers: _headers,
+        );
 
-      final response = await http.get(
-        Uri.encodeFull('$kBaseURL/usernames'),
-        headers: _headers,
-      );
-
-      if (response.statusCode == 200) {
-        print('getUsernameData ${response.statusCode}');
-        return UsernameModel.fromJson(jsonDecode(response.body));
-      } else {
-        print('getUsernameData ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        if (response.statusCode == 200) {
+          print('getUsernameData ${response.statusCode}');
+          yield UsernameModel.fromJson(jsonDecode(response.body));
+        } else {
+          print('getUsernameData ${response.statusCode}');
+          throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        }
       }
     } catch (e) {
       throw e;
