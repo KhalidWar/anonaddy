@@ -14,8 +14,12 @@ import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final additionalUsernameStream =
-    StreamProvider.autoDispose<UsernameModel>((ref) {
-  return ref.watch(usernameServiceProvider).getUsernameData();
+    StreamProvider.autoDispose<UsernameModel>((ref) async* {
+  yield await ref.watch(usernameServiceProvider).getUsernameData();
+  while (true) {
+    await Future.delayed(Duration(seconds: 10));
+    yield await ref.watch(usernameServiceProvider).getUsernameData();
+  }
 });
 
 class AdditionalUsernameCard extends ConsumerWidget {

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
@@ -16,26 +15,23 @@ class AliasService {
     "Accept": "application/json",
   };
 
-  Stream<AliasModel> getAllAliasesData() async* {
+  Future<AliasModel> getAllAliasesData() async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
-      while (true) {
-        await Future.delayed(Duration(seconds: 1));
-        final response = await http.get(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
-          headers: _headers,
-        );
 
-        if (response.statusCode == 200) {
-          print('getAllAliasesData ${response.statusCode}');
-          yield AliasModel.fromJson(jsonDecode(response.body));
-        } else {
-          print('getAllAliasesData ${response.statusCode}');
-          throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
-        }
+      final response = await http.get(
+          Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
+          headers: _headers);
+
+      if (response.statusCode == 200) {
+        print('getAllAliasesData ${response.statusCode}');
+        return AliasModel.fromJson(jsonDecode(response.body));
+      } else {
+        print('getAllAliasesData ${response.statusCode}');
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
-    } on SocketException {} catch (e) {
+    } catch (e) {
       throw e;
     }
   }
