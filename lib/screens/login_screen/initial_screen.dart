@@ -1,3 +1,4 @@
+import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
@@ -17,6 +18,8 @@ class InitialScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final accessToken = watch(accessTokenManager);
     return Scaffold(
+      key: Key('initialScreenScaffold'),
+      backgroundColor: kBlueNavyColor,
       body: accessToken.when(
         loading: () => LoadingWidget(),
         data: (data) {
@@ -26,10 +29,13 @@ class InitialScreen extends ConsumerWidget {
             return HomeScreen();
           }
         },
-        error: (error, stackTrace) => LottieWidget(
-          lottie: 'assets/lottie/errorCone.json',
-          label: error,
-        ),
+        error: (error, stackTrace) {
+          return LottieWidget(
+            key: Key('errorWidget'),
+            lottie: 'assets/lottie/errorCone.json',
+            label: error,
+          );
+        },
       ),
     );
   }

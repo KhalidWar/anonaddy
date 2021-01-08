@@ -8,7 +8,7 @@ class AccessTokenService {
   final _secureStorage = FlutterSecureStorage();
   final _accessTokenKey = 'accessToken';
 
-  Future<String> validateAccessToken(String accessToken) async {
+  Future validateAccessToken(String accessToken) async {
     try {
       final response = await http.get(
         Uri.encodeFull('$kBaseURL/$kAccountDetailsURL'),
@@ -19,7 +19,10 @@ class AccessTokenService {
           "Authorization": "Bearer $accessToken",
         },
       );
-      return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      if (response.statusCode == 200)
+        return 200;
+      else
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
     } catch (e) {
       throw e;
     }

@@ -116,7 +116,7 @@ class AliasDetailScreen extends ConsumerWidget {
               ? AliasDetailListTile(
                   leadingIconData: Icons.delete_outline,
                   title: 'Delete Alias',
-                  subtitle: 'Deleted alias will reject any email sent to it',
+                  subtitle: 'Deleted alias will reject all emails sent to it',
                   trailing: IconButton(
                     icon: Icon(Icons.delete_outline, color: Colors.red),
                     onPressed: () {

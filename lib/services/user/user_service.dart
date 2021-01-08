@@ -20,8 +20,9 @@ class UserService {
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.get(
-          Uri.encodeFull('$kBaseURL/$kAccountDetailsURL'),
-          headers: _headers);
+        Uri.encodeFull('$kBaseURL/$kAccountDetailsURL'),
+        headers: _headers,
+      );
 
       if (response.statusCode == 200) {
         print('getUserData ${response.statusCode}');

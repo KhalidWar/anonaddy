@@ -64,13 +64,17 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         context, recipientData, addPublicGPGKey),
                   )
                 : IconButton(
-                    icon: Icon(Icons.delete_outline_outlined),
+                    icon: Icon(
+                      Icons.delete_outline_outlined,
+                      color: Colors.red,
+                    ),
                     onPressed: () =>
                         buildRemovePGPKeyDialog(context, removePublicGPGKey),
                   ),
           ),
           AliasDetailListTile(
             leadingIconData: encryptionSwitch ? Icons.lock : Icons.lock_open,
+            leadingIconColor: encryptionSwitch ? Colors.green : null,
             title: '${encryptionSwitch ? 'Encrypted' : 'Not Encrypted'}',
             subtitle: 'Encryption',
             trailing: recipientData.fingerprint == null
@@ -92,6 +96,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                   )
                 : null,
           ),
+          Divider(height: 0),
           Row(
             children: [
               Expanded(

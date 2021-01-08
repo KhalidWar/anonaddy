@@ -10,11 +10,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../constants.dart';
 
 final aliasStateManagerProvider =
-    ChangeNotifierProvider((ref) => AliasStateManager());
+    ChangeNotifierProvider((ref) => AliasStateManager(false));
 
 class AliasStateManager extends ChangeNotifier {
+  AliasStateManager(this._isLoading);
   AliasDataModel _aliasDataModel;
-  bool _isLoading = false;
+  bool _isLoading;
   bool _switchValue;
   String _aliasDomain;
   String _aliasFormat;
