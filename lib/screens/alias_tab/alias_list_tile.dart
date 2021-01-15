@@ -60,6 +60,7 @@ class _AliasListTileState extends State<AliasListTile> {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
       dense: true,
+      horizontalTitleGap: 5,
       title: Text(
         '${widget.aliasData.email}',
         style: TextStyle(
