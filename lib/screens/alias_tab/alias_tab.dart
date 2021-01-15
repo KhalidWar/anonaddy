@@ -1,12 +1,9 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/constants.dart';
-import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/screens/alias_tab/create_new_alias.dart';
-import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
@@ -36,18 +33,26 @@ class AliasTab extends ConsumerWidget {
     final stream = watch(aliasDataStream);
     // preloads domainOptions for create new alias on FAB click
     watch(domainOptionsProvider);
+
     final aliasDataProvider = context.read(aliasStateManagerProvider);
+    final availableAliasList = aliasDataProvider.availableAliasList;
+    final deletedAliasList = aliasDataProvider.deletedAliasList;
+    final forwardedList = aliasDataProvider.forwardedList;
+    final blockedList = aliasDataProvider.blockedList;
+    final repliedList = aliasDataProvider.repliedList;
+    final sentList = aliasDataProvider.sentList;
 
     return stream.when(
       loading: () => FetchingDataIndicator(),
       data: (data) {
         final aliasDataList = data.aliasDataList;
-        final availableAliasList = <AliasDataModel>[];
-        final deletedAliasList = <AliasDataModel>[];
-        final forwardedList = <int>[];
-        final blockedList = <int>[];
-        final repliedList = <int>[];
-        final sentList = <int>[];
+
+        availableAliasList.clear();
+        deletedAliasList.clear();
+        forwardedList.clear();
+        blockedList.clear();
+        repliedList.clear();
+        sentList.clear();
 
         for (int i = 0; i < aliasDataList.length; i++) {
           forwardedList.add(aliasDataList[i].emailsForwarded);
@@ -67,26 +72,6 @@ class AliasTab extends ConsumerWidget {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                Card(
-                  child: GestureDetector(
-                    onTap: () {
-                      showSearch(
-                        context: context,
-                        delegate: SearchService(
-                          [...availableAliasList, ...deletedAliasList],
-                        ),
-                      );
-                    },
-                    child: TextField(
-                      enabled: false,
-                      decoration: InputDecoration(
-                        hintText: kSearchHintText,
-                        prefixIcon: Icon(Icons.search, color: Colors.black),
-                        disabledBorder: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ),
                 Card(
                   child: Column(
                     children: [
@@ -176,11 +161,11 @@ class AliasTab extends ConsumerWidget {
                       Column(
                         children: [
                           ExpansionTile(
+                            initiallyExpanded: true,
                             title: Text(
                               'Available Aliases',
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
-                            initiallyExpanded: true,
                             children: [
                               availableAliasList.isEmpty
                                   ? emptyAvailableAliasList(context)
@@ -189,14 +174,13 @@ class AliasTab extends ConsumerWidget {
                                       physics: NeverScrollableScrollPhysics(),
                                       itemCount: availableAliasList.length,
                                       itemBuilder: (context, index) {
-                                        return GestureDetector(
+                                        return InkWell(
                                           child: AliasListTile(
                                             aliasData:
                                                 availableAliasList[index],
                                           ),
                                           onTap: () {
-                                            aliasDataProvider
-                                                    .setAliasDataModel =
+                                            aliasDataProvider.aliasDataModel =
                                                 availableAliasList[index];
                                             aliasDataProvider.setSwitchValue(
                                                 availableAliasList[index]
@@ -213,6 +197,7 @@ class AliasTab extends ConsumerWidget {
                             ],
                           ),
                           ExpansionTile(
+                            initiallyExpanded: true,
                             title: Text(
                               'Deleted Aliases',
                               style: Theme.of(context).textTheme.bodyText1,
@@ -231,14 +216,14 @@ class AliasTab extends ConsumerWidget {
                                                   ? 10
                                                   : deletedAliasList.length,
                                           itemBuilder: (context, index) {
-                                            return GestureDetector(
+                                            return InkWell(
                                               child: AliasListTile(
                                                 aliasData:
                                                     deletedAliasList[index],
                                               ),
                                               onTap: () {
                                                 aliasDataProvider
-                                                        .setAliasDataModel =
+                                                        .aliasDataModel =
                                                     deletedAliasList[index];
                                                 aliasDataProvider
                                                     .setSwitchValue(

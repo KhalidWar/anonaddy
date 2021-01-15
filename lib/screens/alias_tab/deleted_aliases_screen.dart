@@ -1,7 +1,11 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/services/search/search_service.dart';
+import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
 
 import '../../constants.dart';
+import 'alias_detailed_screen.dart';
 import 'alias_list_tile.dart';
 
 class DeletedAliasesScreen extends StatelessWidget {
@@ -12,6 +16,8 @@ class DeletedAliasesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final aliasDataProvider = context.read(aliasStateManagerProvider);
+
     return Scaffold(
       appBar: buildAppBar(context),
       body: SingleChildScrollView(
@@ -55,13 +61,24 @@ class DeletedAliasesScreen extends StatelessWidget {
                 initiallyExpanded: false,
                 children: [
                   ListView.builder(
-                    //todo onTap opens alias detailed screen
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: aliasDataModel.length,
                     itemBuilder: (context, index) {
-                      return AliasListTile(
-                        aliasData: aliasDataModel[index],
+                      return InkWell(
+                        onTap: () {
+                          aliasDataProvider.aliasDataModel =
+                              aliasDataModel[index];
+                          aliasDataProvider.setSwitchValue(
+                              aliasDataModel[index].isAliasActive);
+                          Navigator.push(
+                            context,
+                            buildPageRoute(AliasDetailScreen()),
+                          );
+                        },
+                        child: AliasListTile(
+                          aliasData: aliasDataModel[index],
+                        ),
                       );
                     },
                   ),
@@ -86,13 +103,44 @@ class DeletedAliasesScreen extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       actions: [
-        //todo implement search functionality
         IconButton(
           icon: Icon(Icons.search),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            final aliasStateManager = context.read(aliasStateManagerProvider);
+
+            showSearch(
+              context: context,
+              delegate: SearchService(
+                [
+                  ...aliasStateManager.availableAliasList,
+                  ...aliasStateManager.deletedAliasList,
+                ],
+              ),
+            );
+          },
         ),
       ],
+    );
+  }
+
+  PageRouteBuilder buildPageRoute(Widget child) {
+    return PageRouteBuilder(
+      transitionsBuilder: (context, animation, secondAnimation, child) {
+        animation =
+            CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut);
+
+        return SlideTransition(
+          position: Tween(
+            begin: Offset(1.0, 0.0),
+            end: Offset(0.0, 0.0),
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (context, animation, secondAnimation) {
+        return child;
+      },
     );
   }
 }

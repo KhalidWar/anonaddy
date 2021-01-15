@@ -14,24 +14,24 @@ final aliasStateManagerProvider =
 
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager(this._isLoading);
-  AliasDataModel _aliasDataModel;
+
+  AliasDataModel aliasDataModel;
   bool _isLoading;
   bool _switchValue;
   String _aliasDomain;
   String _aliasFormat;
-  String _emailDescription;
 
-  AliasDataModel get aliasDataModel => _aliasDataModel;
-  String get emailDescription => _emailDescription;
+  List<AliasDataModel> availableAliasList = [];
+  List<AliasDataModel> deletedAliasList = [];
+  List<int> forwardedList = [];
+  List<int> blockedList = [];
+  List<int> repliedList = [];
+  List<int> sentList = [];
+
   bool get isLoading => _isLoading;
   bool get switchValue => _switchValue;
   String get aliasDomain => _aliasDomain;
   String get aliasFormat => _aliasFormat;
-
-  set setAliasDataModel(AliasDataModel aliasDataModel) {
-    _aliasDataModel = aliasDataModel;
-    notifyListeners();
-  }
 
   set setAliasDomain(String input) {
     _aliasDomain = input;
@@ -59,7 +59,7 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   void setEmailDescription(String input) {
-    _aliasDataModel.emailDescription = input;
+    aliasDataModel.emailDescription = input;
     notifyListeners();
   }
 

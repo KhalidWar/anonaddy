@@ -145,7 +145,7 @@ class AdditionalUsernameCard extends ConsumerWidget {
                                   subtitle: Text(
                                       '${username.aliases[index].emailDescription}'),
                                   onTap: () {
-                                    aliasDataProvider.setAliasDataModel =
+                                    aliasDataProvider.aliasDataModel =
                                         username.aliases[index];
                                     aliasDataProvider.setSwitchValue(
                                         username.aliases[index].isAliasActive);
@@ -162,8 +162,10 @@ class AdditionalUsernameCard extends ConsumerWidget {
                   ),
                   Divider(height: 0),
                   ExpansionTile(
-                    title: Text('Default Recipient',
-                        style: Theme.of(context).textTheme.bodyText1),
+                    title: Text(
+                      'Default Recipient',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                     children: [
                       username.defaultRecipient.email == 'tempSolution'
                           ? Container(

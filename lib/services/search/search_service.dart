@@ -57,7 +57,7 @@ class SearchService extends SearchDelegate {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            aliasDataProvider.setAliasDataModel = initialList[index];
+            aliasDataProvider.aliasDataModel = initialList[index];
             aliasDataProvider.setSwitchValue(initialList[index].isAliasActive);
             Navigator.push(
               context,

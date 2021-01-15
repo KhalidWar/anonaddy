@@ -1,8 +1,11 @@
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
 import 'package:anonaddy/screens/settings_tab/settings_tab.dart';
+import 'package:anonaddy/services/search/search_service.dart';
+import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/all.dart';
 
 import '../constants.dart';
 
@@ -59,11 +62,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: SvgPicture.asset(
-        'assets/images/logo.svg',
+      title: Image.asset(
+        'assets/images/logo.png',
         height: MediaQuery.of(context).size.height * 0.03,
       ),
       centerTitle: true,
+      actions: [
+        IconButton(
+          icon: Icon(Icons.search, color: Colors.white),
+          onPressed: () {
+            final aliasStateManager = context.read(aliasStateManagerProvider);
+
+            showSearch(
+              context: context,
+              delegate: SearchService(
+                [
+                  ...aliasStateManager.availableAliasList,
+                  ...aliasStateManager.deletedAliasList,
+                ],
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
