@@ -151,10 +151,8 @@ class AdditionalUsernameCard extends ConsumerWidget {
                                         username.aliases[index].isAliasActive);
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            AliasDetailScreen(),
-                                      ),
+                                      buildPageRouteBuilder(
+                                          AliasDetailScreen()),
                                     );
                                   },
                                 );
@@ -187,13 +185,10 @@ class AdditionalUsernameCard extends ConsumerWidget {
 
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return RecipientDetailedScreen(
-                                        recipientData:
-                                            username.defaultRecipient,
-                                      );
-                                    },
+                                  buildPageRouteBuilder(
+                                    RecipientDetailedScreen(
+                                      recipientData: username.defaultRecipient,
+                                    ),
                                   ),
                                 );
                               },
@@ -205,6 +200,26 @@ class AdditionalUsernameCard extends ConsumerWidget {
             ],
           ),
         );
+      },
+    );
+  }
+
+  PageRouteBuilder buildPageRouteBuilder(Widget child) {
+    return PageRouteBuilder(
+      transitionsBuilder: (context, animation, secondAnimation, child) {
+        animation =
+            CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut);
+
+        return SlideTransition(
+          position: Tween(
+            begin: Offset(1.0, 0.0),
+            end: Offset(0.0, 0.0),
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (context, animation, secondAnimation) {
+        return child;
       },
     );
   }

@@ -5,6 +5,7 @@ import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/loading_widget.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
 
 final accessTokenManager = FutureProvider(
@@ -17,25 +18,31 @@ class InitialScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final accessToken = watch(accessTokenManager);
-    return Scaffold(
-      key: Key('initialScreenScaffold'),
-      backgroundColor: kBlueNavyColor,
-      body: accessToken.when(
-        loading: () => LoadingWidget(),
-        data: (data) {
-          if (data == null) {
-            return TokenLoginScreen();
-          } else {
-            return HomeScreen();
-          }
-        },
-        error: (error, stackTrace) {
-          return LottieWidget(
-            key: Key('errorWidget'),
-            lottie: 'assets/lottie/errorCone.json',
-            label: error,
-          );
-        },
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: kBlueNavyColor,
+        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      child: Scaffold(
+        key: Key('initialScreenScaffold'),
+        backgroundColor: kBlueNavyColor,
+        body: accessToken.when(
+          loading: () => LoadingWidget(),
+          data: (data) {
+            if (data == null) {
+              return TokenLoginScreen();
+            } else {
+              return HomeScreen();
+            }
+          },
+          error: (error, stackTrace) {
+            return LottieWidget(
+              key: Key('errorWidget'),
+              lottie: 'assets/lottie/errorCone.json',
+              label: error,
+            );
+          },
+        ),
       ),
     );
   }

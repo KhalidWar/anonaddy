@@ -29,8 +29,6 @@ class AliasStateManager extends ChangeNotifier {
   String get aliasFormat => _aliasFormat;
 
   set setAliasDataModel(AliasDataModel aliasDataModel) {
-    print('ALIAS DATA FROM PROVIDER ${aliasDataModel.emailDescription}');
-    print('ALIAS DATA FROM PROVIDER ${aliasDataModel.isAliasActive}');
     _aliasDataModel = aliasDataModel;
     notifyListeners();
   }

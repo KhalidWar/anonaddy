@@ -71,10 +71,11 @@ class AliasTab extends ConsumerWidget {
                   child: GestureDetector(
                     onTap: () {
                       showSearch(
-                          context: context,
-                          delegate: SearchService(
-                            [...availableAliasList, ...deletedAliasList],
-                          ));
+                        context: context,
+                        delegate: SearchService(
+                          [...availableAliasList, ...deletedAliasList],
+                        ),
+                      );
                     },
                     child: TextField(
                       enabled: false,
@@ -202,10 +203,8 @@ class AliasTab extends ConsumerWidget {
                                                     .isAliasActive);
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    AliasDetailScreen(),
-                                              ),
+                                              buildPageRouteBuilder(
+                                                  AliasDetailScreen()),
                                             );
                                           },
                                         );
@@ -247,10 +246,8 @@ class AliasTab extends ConsumerWidget {
                                                             .isAliasActive);
                                                 Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AliasDetailScreen(),
-                                                  ),
+                                                  buildPageRouteBuilder(
+                                                      AliasDetailScreen()),
                                                 );
                                               },
                                             );
@@ -262,13 +259,11 @@ class AliasTab extends ConsumerWidget {
                                           onPressed: () {
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(
-                                                builder: (context) {
-                                                  return DeletedAliasesScreen(
-                                                    aliasDataModel:
-                                                        deletedAliasList,
-                                                  );
-                                                },
+                                              buildPageRouteBuilder(
+                                                DeletedAliasesScreen(
+                                                  aliasDataModel:
+                                                      deletedAliasList,
+                                                ),
                                               ),
                                             );
                                           },
@@ -292,6 +287,26 @@ class AliasTab extends ConsumerWidget {
           lottie: 'assets/lottie/errorCone.json',
           label: '$error',
         );
+      },
+    );
+  }
+
+  PageRouteBuilder buildPageRouteBuilder(Widget child) {
+    return PageRouteBuilder(
+      transitionsBuilder: (context, animation, secondAnimation, child) {
+        animation =
+            CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut);
+
+        return SlideTransition(
+          position: Tween(
+            begin: Offset(1.0, 0.0),
+            end: Offset(0.0, 0.0),
+          ).animate(animation),
+          child: child,
+        );
+      },
+      pageBuilder: (context, animation, secondAnimation) {
+        return child;
       },
     );
   }
