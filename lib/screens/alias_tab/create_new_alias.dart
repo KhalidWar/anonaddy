@@ -20,6 +20,7 @@ class CreateNewAlias extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final domainOptions = watch(domainOptionsProvider);
+
     final aliasStateProvider = watch(aliasStateManagerProvider);
     final isLoading = aliasStateProvider.isLoading;
     final createNewAlias = aliasStateProvider.createNewAlias;
@@ -28,16 +29,15 @@ class CreateNewAlias extends ConsumerWidget {
       loading: () => FetchingDataIndicator(),
       data: (data) {
         return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-                controller: _textFieldController,
-                textInputAction: TextInputAction.next,
-                textAlign: TextAlign.center,
-                decoration: kTextFormFieldDecoration.copyWith(
-                  hintText: kDescriptionInputText,
-                )),
+              controller: _textFieldController,
+              textInputAction: TextInputAction.next,
+              decoration: kTextFormFieldDecoration.copyWith(
+                hintText: kDescriptionInputText,
+              ),
+            ),
+            SizedBox(height: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -62,6 +62,7 @@ class CreateNewAlias extends ConsumerWidget {
                 ),
               ],
             ),
+            SizedBox(height: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -86,27 +87,25 @@ class CreateNewAlias extends ConsumerWidget {
                 ),
               ],
             ),
-            Center(
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                child: isLoading
-                    ? CircularProgressIndicator(backgroundColor: kBlueNavyColor)
-                    : Text(
-                        'Submit',
-                        style: Theme.of(context).textTheme.headline5,
+            SizedBox(height: 20),
+            RaisedButton(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: isLoading
+                  ? CircularProgressIndicator(backgroundColor: kBlueNavyColor)
+                  : Text(
+                      'Submit',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+              onPressed: isLoading
+                  ? () {}
+                  : () => createNewAlias(
+                        context,
+                        _textFieldController.text.trim(),
+                        aliasStateProvider.aliasDomain ??
+                            data.defaultAliasDomain,
+                        aliasStateProvider.aliasFormat ??
+                            data.defaultAliasFormat,
                       ),
-                onPressed: isLoading
-                    ? () {}
-                    : () => createNewAlias(
-                          context,
-                          _textFieldController.text.trim(),
-                          aliasStateProvider.aliasDomain ??
-                              data.defaultAliasDomain,
-                          aliasStateProvider.aliasFormat ??
-                              data.defaultAliasFormat,
-                        ),
-                // onPressed: () => createAlias(context, data),
-              ),
             ),
           ],
         );

@@ -325,16 +325,11 @@ class AliasTab extends ConsumerWidget {
         showModal(
           context: context,
           builder: (context) {
-            final size = MediaQuery.of(context).size;
-
             return SimpleDialog(
               contentPadding: EdgeInsets.all(20),
               title: Text('Create New Alias'),
               children: [
-                Container(
-                    height: size.height * 0.4,
-                    width: size.width,
-                    child: CreateNewAlias()),
+                CreateNewAlias(),
               ],
             );
           },
