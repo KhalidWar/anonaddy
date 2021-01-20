@@ -2,7 +2,6 @@ import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
-import 'package:anonaddy/widgets/loading_widget.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +26,7 @@ class InitialScreen extends ConsumerWidget {
         key: Key('initialScreenScaffold'),
         backgroundColor: kBlueNavyColor,
         body: accessToken.when(
-          loading: () => LoadingWidget(),
+          loading: () => Center(child: CircularProgressIndicator()),
           data: (data) {
             if (data == null) {
               return TokenLoginScreen();

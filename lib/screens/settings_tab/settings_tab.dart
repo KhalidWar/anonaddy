@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
+import 'package:anonaddy/state_management/login_state_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,13 +77,40 @@ class SettingsTab extends ConsumerWidget {
                   'Log Out',
                   style: Theme.of(context).textTheme.headline6,
                 ),
-                onPressed: () => loginManager.logout(context),
+                onPressed: () => buildLogoutDialog(context, loginManager),
               ),
               // SizedBox(height: size.height * 0.01),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Future buildLogoutDialog(
+      BuildContext context, LoginStateManager loginManager) {
+    return showModal(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to log out?'),
+          actions: [
+            RaisedButton(
+              color: Colors.red,
+              child: Text('Yes'),
+              onPressed: () {
+                loginManager.logout(context);
+                Navigator.pop(context);
+              },
+            ),
+            RaisedButton(
+              child: Text('No'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
     );
   }
 
