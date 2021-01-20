@@ -62,9 +62,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
-      title: Image.asset(
-        'assets/images/logo.png',
-        height: MediaQuery.of(context).size.height * 0.03,
+      title: Text(
+        'AddyManager',
+        style: TextStyle(color: Colors.white),
       ),
       centerTitle: true,
       actions: [

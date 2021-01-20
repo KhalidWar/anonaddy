@@ -13,7 +13,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final themeProvider = watch(themeServiceProvider);
     return MaterialApp(
-      title: 'AnonAddy',
+      title: 'AddyManager',
       debugShowCheckedModeBanner: false,
       theme: themeProvider.isDarkTheme ? darkTheme : lightTheme,
       //todo fix darkTheme coloring scheme
