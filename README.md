@@ -4,8 +4,10 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 [![Codemagic build status](https://api.codemagic.io/apps/5fe2a9a115bfd177d368e1b3/5fe2a9a115bfd177d368e1b2/status_badge.svg)](https://codemagic.io/apps/5fe2a9a115bfd177d368e1b3/5fe2a9a115bfd177d368e1b2/latest_build)
 
 ## Get it on
-[<img src="assets/screenshots/play_store_badge.png" width="250">](https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy)   
-[<img src="assets/screenshots/app_store_badge.svg" width="250">](https://apps.apple.com/us/app/addymanager/id1547461270)   
+[<img src="assets/screenshots/play_store_badge.png" width="300">](https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy)   [<img src="assets/screenshots/app_store_badge.svg" width="250">](https://apps.apple.com/us/app/addymanager/id1547461270)
+
+## Support AddyManager
+Your support will help the continuous development of this project.
 [<img src="assets/screenshots/bmc.png" width="250">](https://www.buymeacoffee.com/khalidwar)
 
 
