@@ -5,12 +5,12 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 
 ## Get it on
 [<img src="assets/screenshots/play_store_badge.png" width="250">](https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy)   
-[<img src="assets/screenshots/app_store_badge.png" width="250">](https://apps.apple.com/us/app/addymanager/id1547461270)   
-<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="khalidwar" data-color="#19216c" data-emoji=""  data-font="Comic" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script>
+[<img src="assets/screenshots/app_store_badge.svg" width="250">](https://apps.apple.com/us/app/addymanager/id1547461270)   
+[<img src="assets/screenshots/bmc.png" width="250">](https://www.buymeacoffee.com/khalidwar)
 
 
 ## Screenshots
-<img src="assets/screenshots/anonaddy.png" width="200"> <img src="assets/screenshots/account.png" width="200"> <img src="assets/screenshots/aliases.png" width="200"> 
+<img src="assets/screenshots/addymanager.png" width="200"> <img src="assets/screenshots/account.png" width="200"> <img src="assets/screenshots/aliases.png" width="200"> 
 <img src="assets/screenshots/login.png" width="200"> <img src="assets/screenshots/create_alias.png" width="200"> <img src="assets/screenshots/search.png" width="200">
 
 
