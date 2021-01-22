@@ -50,10 +50,12 @@ class AdditionalUsernameCard extends ConsumerWidget {
         }
         return buildListView(context, data);
       },
-      error: (error, stackTrace) => LottieWidget(
-        lottie: 'assets/lottie/errorCone.json',
-        label: '$error',
-      ),
+      error: (error, stackTrace) {
+        return LottieWidget(
+          lottie: 'assets/lottie/errorCone.json',
+          label: '$error',
+        );
+      },
     );
   }
 

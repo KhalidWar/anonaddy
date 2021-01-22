@@ -108,10 +108,13 @@ class MainAccount extends ConsumerWidget {
           ],
         ),
       ),
-      error: (error, stackTrace) => LottieWidget(
-        lottie: 'assets/lottie/errorCone.json',
-        label: "$error",
-      ),
+      error: (error, stackTrace) {
+        return LottieWidget(
+          showLoading: true,
+          lottie: 'assets/lottie/errorCone.json',
+          label: "$error",
+        );
+      },
     );
   }
 }

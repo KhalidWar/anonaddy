@@ -12,6 +12,7 @@ class LottieWidget extends StatelessWidget {
     this.scaffoldColor,
     this.lottie,
     this.lottieHeight,
+    this.showLoading,
   }) : super(key: key);
 
   final String label, buttonLabel, lottie;
@@ -19,15 +20,18 @@ class LottieWidget extends StatelessWidget {
   final Function buttonOnPress;
   final Color iconColor, scaffoldColor;
   final double lottieHeight;
+  final bool showLoading;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
+    return Stack(
+      children: <Widget>[
+        showLoading ?? false
+            ? LinearProgressIndicator(backgroundColor: Colors.transparent)
+            : Container(),
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             lottie == null
                 ? Container()
                 : Lottie.asset(
@@ -40,15 +44,14 @@ class LottieWidget extends StatelessWidget {
                 ? Container()
                 : Text(
                     '$label',
-                    textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .bodyText2
                         .copyWith(fontWeight: FontWeight.normal),
                   ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

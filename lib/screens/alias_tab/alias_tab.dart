@@ -269,6 +269,7 @@ class AliasTab extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         return LottieWidget(
+          showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           label: '$error',
         );
