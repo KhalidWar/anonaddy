@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final mainAccountStream = StreamProvider.autoDispose<UserModel>((ref) async* {
-  yield await ref.watch(userServiceProvider).getUserData();
+  yield* Stream.fromFuture(ref.read(userServiceProvider).getUserData());
   while (true) {
     await Future.delayed(Duration(seconds: 10));
-    yield await ref.watch(userServiceProvider).getUserData();
+    yield* Stream.fromFuture(ref.read(userServiceProvider).getUserData());
   }
 });
 

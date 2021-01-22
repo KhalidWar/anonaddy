@@ -16,10 +16,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
-  yield await ref.watch(aliasServiceProvider).getAllAliasesData();
   while (true) {
     await Future.delayed(Duration(seconds: 1));
-    yield await ref.watch(aliasServiceProvider).getAllAliasesData();
+    yield* Stream.fromFuture(
+        ref.read(aliasServiceProvider).getAllAliasesData());
   }
 });
 
