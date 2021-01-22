@@ -82,7 +82,7 @@ class _AliasListTileState extends State<AliasListTile> {
               margin: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.03),
               child: CircularProgressIndicator())
-          : Switch(
+          : Switch.adaptive(
               value: _switchValue,
               onChanged: isDeleted(widget.aliasData.deletedAt)
                   ? null
