@@ -55,6 +55,8 @@ class _AliasListTileState extends State<AliasListTile> {
     final copyAlias = aliasState.copyToClipboard;
     final isDeleted = aliasState.isAliasDeleted;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     _switchValue = widget.aliasData.isAliasActive;
 
     return ListTile(
@@ -64,9 +66,12 @@ class _AliasListTileState extends State<AliasListTile> {
       title: Text(
         '${widget.aliasData.email}',
         style: TextStyle(
-            color: isDeleted(widget.aliasData.deletedAt)
-                ? Colors.grey
-                : Colors.black),
+          color: isDeleted(widget.aliasData.deletedAt)
+              ? Colors.grey
+              : isDark
+                  ? Colors.white
+                  : Colors.black,
+        ),
       ),
       subtitle: Text(
         '${widget.aliasData.emailDescription}',
