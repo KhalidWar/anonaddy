@@ -79,7 +79,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             subtitle: 'Encryption',
             trailing: recipientData.fingerprint == null
                 ? null
-                : Switch(
+                : Switch.adaptive(
                     value: encryptionSwitch,
                     onChanged: (toggle) =>
                         toggleEncryption(context, recipientData.id),

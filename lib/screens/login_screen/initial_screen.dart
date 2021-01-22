@@ -26,7 +26,9 @@ class InitialScreen extends ConsumerWidget {
         key: Key('initialScreenScaffold'),
         backgroundColor: kBlueNavyColor,
         body: accessToken.when(
-          loading: () => Center(child: CircularProgressIndicator()),
+          loading: () => Center(
+            child: CircularProgressIndicator(key: Key('loadingIndicator')),
+          ),
           data: (data) {
             if (data == null) {
               return TokenLoginScreen();

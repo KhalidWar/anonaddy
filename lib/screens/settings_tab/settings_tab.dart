@@ -48,7 +48,7 @@ class SettingsTab extends ConsumerWidget {
                 children: [
                   Text('Dark Theme',
                       style: Theme.of(context).textTheme.headline5),
-                  Switch(
+                  Switch.adaptive(
                     value: context.read(themeServiceProvider).isDarkTheme,
                     onChanged: (toggle) =>
                         context.read(themeServiceProvider).toggleTheme(),

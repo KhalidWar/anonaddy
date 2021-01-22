@@ -23,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
@@ -40,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectedTab,
           currentIndex: _selectedIndex,
-          selectedItemColor: kBlueNavyColor,
+          selectedItemColor: isDark ? kAccentColor : kBlueNavyColor,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle),

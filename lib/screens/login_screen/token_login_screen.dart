@@ -30,6 +30,7 @@ class TokenLoginScreen extends ConsumerWidget {
         value: SystemUiOverlayStyle(systemNavigationBarColor: kBlueNavyColor),
         child: Scaffold(
           key: Key('loginScreenScaffold'),
+          appBar: AppBar(elevation: 0, brightness: Brightness.dark),
           backgroundColor: kBlueNavyColor,
           body: Center(
             child: SingleChildScrollView(

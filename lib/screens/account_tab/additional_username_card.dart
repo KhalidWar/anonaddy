@@ -15,10 +15,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final additionalUsernameStream =
     StreamProvider.autoDispose<UsernameModel>((ref) async* {
-  yield await ref.watch(usernameServiceProvider).getUsernameData();
+  yield* Stream.fromFuture(ref.read(usernameServiceProvider).getUsernameData());
   while (true) {
     await Future.delayed(Duration(seconds: 10));
-    yield await ref.watch(usernameServiceProvider).getUsernameData();
+    yield* Stream.fromFuture(
+        ref.read(usernameServiceProvider).getUsernameData());
   }
 });
 
@@ -50,10 +51,12 @@ class AdditionalUsernameCard extends ConsumerWidget {
         }
         return buildListView(context, data);
       },
-      error: (error, stackTrace) => LottieWidget(
-        lottie: 'assets/lottie/errorCone.json',
-        label: '$error',
-      ),
+      error: (error, stackTrace) {
+        return LottieWidget(
+          lottie: 'assets/lottie/errorCone.json',
+          label: '$error',
+        );
+      },
     );
   }
 

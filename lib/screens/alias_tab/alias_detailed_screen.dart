@@ -83,7 +83,7 @@ class AliasDetailScreen extends ConsumerWidget {
             leadingIconData: Icons.flaky_outlined,
             title: 'Alias is ${switchValue ? 'active' : 'inactive'}',
             subtitle: 'Activity',
-            trailing: Switch(
+            trailing: Switch.adaptive(
               value: switchValue,
               onChanged: (toggle) {
                 toggleAlias(context, aliasDataModel.aliasID);
