@@ -36,27 +36,27 @@ class AliasService {
     }
   }
 
-  Future<int> createNewAlias(
-      {String desc, String format, String domain}) async {
+  Future createNewAlias(String desc, String domain, String format) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
-      final response = await http.post(Uri.encodeFull('$kBaseURL/$kAliasesURL'),
-          headers: _headers,
-          body: json.encode({
-            "domain": "$domain",
-            "format": "$format",
-            "description": "$desc",
-          }));
+      final response = await http.post(
+        Uri.encodeFull('$kBaseURL/$kAliasesURL'),
+        headers: _headers,
+        body: json.encode({
+          "domain": "$domain",
+          "format": "$format",
+          "description": "$desc",
+        }),
+      );
 
       if (response.statusCode == 201) {
         print("createNewAlias ${response.statusCode}");
-        // return AliasDataModel.fromJsonData(jsonDecode(response.body));
-        return response.statusCode;
+        return 201;
       } else {
         print("createNewAlias ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;

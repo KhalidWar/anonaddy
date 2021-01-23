@@ -3,7 +3,6 @@ import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
-import 'package:anonaddy/screens/alias_tab/create_new_alias.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
@@ -13,6 +12,8 @@ import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../constants.dart';
+import 'create_new_alias.dart';
 import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
@@ -327,9 +328,11 @@ class AliasTab extends ConsumerWidget {
           context: context,
           builder: (context) {
             return SimpleDialog(
+              title: Text('Create new alias'),
               contentPadding: EdgeInsets.all(20),
-              title: Text('Create New Alias'),
               children: [
+                Text(kCreateNewAliasText),
+                SizedBox(height: 10),
                 CreateNewAlias(),
               ],
             );
