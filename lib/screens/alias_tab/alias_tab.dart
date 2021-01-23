@@ -4,6 +4,7 @@ import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/main_account_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
@@ -12,7 +13,6 @@ import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants.dart';
 import 'create_new_alias.dart';
 import 'deleted_aliases_screen.dart';
 
@@ -321,6 +321,10 @@ class AliasTab extends ConsumerWidget {
   }
 
   FloatingActionButton buildFloatingActionButton(BuildContext context) {
+    final username = context.read(mainAccountProvider).accountUsername;
+    final createAliasText =
+        'Other aliases e.g. alias@${username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
+
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
@@ -331,7 +335,7 @@ class AliasTab extends ConsumerWidget {
               title: Text('Create new alias'),
               contentPadding: EdgeInsets.all(20),
               children: [
-                Text(kCreateNewAliasText),
+                Text(createAliasText),
                 SizedBox(height: 10),
                 CreateNewAlias(),
               ],
