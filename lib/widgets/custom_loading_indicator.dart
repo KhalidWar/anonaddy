@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomLoadingIndicator {
-  final isIOS = TargetedPlatform().isIOS();
+  final _isIOS = TargetedPlatform().isIOS();
 
   Widget customLoadingIndicator() {
-    return isIOS
+    return _isIOS
         ? CupertinoActivityIndicator(radius: 15)
         : CircularProgressIndicator();
   }

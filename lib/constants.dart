@@ -23,7 +23,7 @@ const kRestoreAliasText =
     'Are you sure you want to restore this alias? Once restored, this alias will be able to receive emails again.';
 const kRemoveRecipientPublicKey = 'Remove recipient public key';
 const kRemoveRecipientPublicKeyBody =
-    'Are you sure you want to remove the public key for this recipient? It will also be removed from any other recipients using the same key.';
+    'Are you sure you want to remove the public key for this recipient?\nIt will also be removed from any other recipients using the same key.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';

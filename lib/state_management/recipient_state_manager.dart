@@ -57,7 +57,7 @@ class RecipientStateManager extends ChangeNotifier {
           _showToast(kEncryptionDisabled);
         } else {
           setIsLoading(false);
-          _showToast(kFailedToDisableEncryption);
+          _showToast('$kFailedToDisableEncryption: $value');
         }
       });
     } else {
@@ -71,7 +71,7 @@ class RecipientStateManager extends ChangeNotifier {
           _showToast(kEncryptionEnabled);
         } else {
           setIsLoading(false);
-          _showToast(kFailedToEnableEncryption);
+          _showToast('$kFailedToEnableEncryption: $value');
         }
       });
     }
@@ -80,50 +80,41 @@ class RecipientStateManager extends ChangeNotifier {
   void addPublicGPGKey(
       BuildContext context, String recipientID, String keyData) async {
     Navigator.pop(context);
-    setIsLoading(true);
     await context
         .read(recipientServiceProvider)
         .addPublicGPGKey(recipientID, keyData)
         .then((value) {
       _showToast(kGPGKeyAddedSuccessfully);
-      setIsLoading(false);
       setFingerprint(value.fingerprint);
       setEncryptionSwitch(value.shouldEncrypt);
     }).catchError((error, stackTrace) {
       _showToast(error);
-      setIsLoading(false);
     });
   }
 
   void removePublicGPGKey(BuildContext context, String recipientID) async {
     Navigator.pop(context);
-    setIsLoading(true);
     await context
         .read(recipientServiceProvider)
         .removePublicGPGKey(recipientID)
         .then((value) {
       _showToast(kGPGKeyDeletedSuccessfully);
-      setIsLoading(false);
       setEncryptionSwitch(false);
       setFingerprint(null);
     }).catchError((error, stackTrace) {
       _showToast('$kFailedToDeleteGPGKey: $error');
-      setIsLoading(false);
     });
   }
 
   void verifyEmail(BuildContext context, String recipientID) async {
-    setIsLoading(true);
     await context
         .read(recipientServiceProvider)
         .sendVerificationEmail(recipientID)
         .then((value) {
       if (value == 200) {
         _showToast('Verification email is sent');
-        setIsLoading(false);
       } else {
         _showToast('Failed to send verification email');
-        setIsLoading(false);
       }
     });
   }
