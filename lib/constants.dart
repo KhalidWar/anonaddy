@@ -12,7 +12,7 @@ const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 
 // Official AnonAddy Strings
 const kAboutAppText =
-    'This app is a part of Khalid War\'s personal projects. It\'s free and open source. Free as in free of charge, free of ads, and free of trackers. \n\nTo check out the source code for this app, please visit our github repo.';
+    'AddyManager is independently created by Khalid War as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com project or team. It\'s free and open source. Free as in free of charge, free of ads, and free of trackers. \n\nPlease visit AddyManager\'s Github repository for more info.';
 const kDeletedAliasText =
     'Deleted aliases reject all emails sent to them. However, they can be restored to start receiving emails again.';
 const kDeleteAliasConfirmation =
@@ -58,6 +58,7 @@ const kPublicGPGKeyHintText =
     'Begins with \'-----BEGIN PGP PUBLIC KEY BLOCK-----\'';
 const kEnterPublicKeyData =
     'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
+const kSignOutAlertDialog = 'Are you sure you want to sign out?';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);

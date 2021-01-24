@@ -29,7 +29,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
   buttonTheme: buttonThemeData,
   floatingActionButtonTheme: fabThemeData,
   cardTheme: cardTheme.copyWith(color: Color(0xFF141414)),
-  dialogTheme: dialogTheme.copyWith(backgroundColor: Color(0xFF0f0f0f)),
+  dialogTheme: dialogTheme,
   bottomNavigationBarTheme:
       BottomNavigationBarThemeData(backgroundColor: Colors.black),
 );
@@ -37,7 +37,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
 ButtonThemeData buttonThemeData = ButtonThemeData().copyWith(
   buttonColor: Color(0xFF62F4EB),
   shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderRadius: BorderRadius.all(Radius.circular(6)),
   ),
 );
 
@@ -47,10 +47,7 @@ CardTheme cardTheme = CardTheme().copyWith(
 );
 
 DialogTheme dialogTheme = DialogTheme().copyWith(
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(10),
-    side: BorderSide(style: BorderStyle.solid, color: kBlueNavyColor),
-  ),
+  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
 );
 
 AppBarTheme appBarTheme = AppBarTheme().copyWith(
