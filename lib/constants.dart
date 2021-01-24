@@ -12,7 +12,7 @@ const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 
 // Official AnonAddy Strings
 const kAboutAppText =
-    'AddyManager is independently created by Khalid War as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com project or team. It\'s free and open source. Free as in free of charge, free of ads, and free of trackers. \n\nPlease visit AddyManager\'s Github repository for more info.';
+    'AddyManager is created by Khalid War as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com team or project. AddyManager is free and open-source. Free as in free of charge, free of ads, and free of trackers. \n\nPlease visit AddyManager\'s Github repository for more info.';
 const kDeletedAliasText =
     'Deleted aliases reject all emails sent to them. However, they can be restored to start receiving emails again.';
 const kDeleteAliasConfirmation =
