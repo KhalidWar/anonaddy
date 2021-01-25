@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
 import 'package:anonaddy/screens/settings_tab/settings_tab.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
@@ -62,31 +63,30 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      title: Text(
-        'AddyManager',
-        style: TextStyle(color: Colors.white),
+  Widget buildAppBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
+      child: AppBar(
+        title: Text('AddyManager', style: TextStyle(color: Colors.white)),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.white),
+            onPressed: () {
+              final aliasStateManager = context.read(aliasStateManagerProvider);
+              showSearch(
+                context: context,
+                delegate: SearchService(
+                  [
+                    ...aliasStateManager.availableAliasList,
+                    ...aliasStateManager.deletedAliasList,
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      centerTitle: true,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.search, color: Colors.white),
-          onPressed: () {
-            final aliasStateManager = context.read(aliasStateManagerProvider);
-
-            showSearch(
-              context: context,
-              delegate: SearchService(
-                [
-                  ...aliasStateManager.availableAliasList,
-                  ...aliasStateManager.deletedAliasList,
-                ],
-              ),
-            );
-          },
-        ),
-      ],
     );
   }
 }

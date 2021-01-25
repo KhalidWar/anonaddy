@@ -8,7 +8,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   primaryColorLight: Colors.white,
   primaryColorDark: Color(0xFFF5F7FA),
   appBarTheme: appBarTheme,
-  toggleableActiveColor: Color(0xFF62F4EB),
+  toggleableActiveColor: kAccentColor,
   accentColor: kAccentColor,
   buttonTheme: buttonThemeData,
   floatingActionButtonTheme: fabThemeData,
