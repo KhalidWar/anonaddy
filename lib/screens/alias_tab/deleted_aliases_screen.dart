@@ -91,36 +91,39 @@ class DeletedAliasesScreen extends StatelessWidget {
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      title: Text(
-        'Deleted Aliases List',
-        style: TextStyle(color: Colors.white),
-      ),
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        color: Colors.white,
-        onPressed: () => Navigator.pop(context),
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.search),
-          color: Colors.white,
-          onPressed: () {
-            final aliasStateManager = context.read(aliasStateManagerProvider);
-
-            showSearch(
-              context: context,
-              delegate: SearchService(
-                [
-                  ...aliasStateManager.availableAliasList,
-                  ...aliasStateManager.deletedAliasList,
-                ],
-              ),
-            );
-          },
+  Widget buildAppBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
+      child: AppBar(
+        title: Text(
+          'Deleted Aliases List',
+          style: TextStyle(color: Colors.white),
         ),
-      ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            color: Colors.white,
+            onPressed: () {
+              final aliasStateManager = context.read(aliasStateManagerProvider);
+
+              showSearch(
+                context: context,
+                delegate: SearchService(
+                  [
+                    ...aliasStateManager.availableAliasList,
+                    ...aliasStateManager.deletedAliasList,
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
