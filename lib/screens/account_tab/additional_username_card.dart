@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
@@ -139,14 +140,10 @@ class AdditionalUsernameCard extends ConsumerWidget {
                               physics: NeverScrollableScrollPhysics(),
                               itemCount: username.aliases.length,
                               itemBuilder: (context, index) {
-                                return ListTile(
-                                  dense: true,
-                                  horizontalTitleGap: 0,
-                                  leading: Icon(Icons.alternate_email),
-                                  title:
-                                      Text('${username.aliases[index].email}'),
-                                  subtitle: Text(
-                                      '${username.aliases[index].emailDescription}'),
+                                return InkWell(
+                                  child: AliasListTile(
+                                    aliasData: username.aliases[index],
+                                  ),
                                   onTap: () {
                                     aliasDataProvider.aliasDataModel =
                                         username.aliases[index];
