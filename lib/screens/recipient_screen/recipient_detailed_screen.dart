@@ -1,7 +1,11 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
+import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
+import 'package:anonaddy/widgets/custom_app_bar.dart';
+import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
@@ -13,6 +17,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
   RecipientDetailedScreen({this.recipientData});
 
   final RecipientDataModel recipientData;
+
+  final isIOS = TargetedPlatform().isIOS();
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -33,10 +39,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          isLoading ? LinearProgressIndicator(minHeight: 6) : Container(),
-          SizedBox(height: 10),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 50),
             child: SvgPicture.asset(
               'assets/images/envelope.svg',
               height: size.height * 0.25,
@@ -60,7 +64,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             trailing: recipientData.fingerprint == null
                 ? IconButton(
                     icon: Icon(Icons.add_circle_outline_outlined),
-                    onPressed: () => buildFingerprintSettingDialog(
+                    onPressed: () => buildAddPGPKeyDialog(
                         context, recipientData, addPublicGPGKey),
                   )
                 : IconButton(
@@ -79,18 +83,20 @@ class RecipientDetailedScreen extends ConsumerWidget {
             subtitle: 'Encryption',
             trailing: recipientData.fingerprint == null
                 ? null
-                : Switch.adaptive(
-                    value: encryptionSwitch,
-                    onChanged: (toggle) =>
-                        toggleEncryption(context, recipientData.id),
-                  ),
+                : isLoading
+                    ? CustomLoadingIndicator().customLoadingIndicator()
+                    : Switch.adaptive(
+                        value: encryptionSwitch,
+                        onChanged: (toggle) =>
+                            toggleEncryption(context, recipientData.id),
+                      ),
           ),
           AliasDetailListTile(
             leadingIconData: Icons.verified_outlined,
             title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
             subtitle: 'Is Email Verified?',
             trailing: recipientData.emailVerifiedAt == null
-                ? RaisedButton(
+                ? ElevatedButton(
                     child: Text('Verify now!'),
                     onPressed: () => verifyEmail(context, recipientData.id),
                   )
@@ -123,85 +129,116 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
   Future buildRemovePGPKeyDialog(
       BuildContext context, Function removePublicGPGKey) {
+    final confirmationDialog = ConfirmationDialog();
+
+    void removePublicKey() {
+      removePublicGPGKey(context, recipientData.id);
+    }
+
     return showModal(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(kRemoveRecipientPublicKey),
-          content: Text(kRemoveRecipientPublicKeyBody),
-          actions: [
-            RaisedButton(
-              color: Colors.red,
-              child: Text('Remove Public Key'),
-              onPressed: () => removePublicGPGKey(context, recipientData.id),
-            ),
-            RaisedButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
+        return isIOS
+            ? confirmationDialog.iOSAlertDialog(
+                context,
+                kRemoveRecipientPublicKeyBody,
+                removePublicKey,
+                'Remove Public Key')
+            : confirmationDialog.androidAlertDialog(
+                context,
+                kRemoveRecipientPublicKeyBody,
+                removePublicKey,
+                'Remove Public Key');
       },
     );
   }
 
-  Future buildFingerprintSettingDialog(BuildContext context,
+  Future buildAddPGPKeyDialog(BuildContext context,
       RecipientDataModel recipientData, Function addPublicGPGKey) {
     final _texEditingController = TextEditingController();
 
+    void addPublicKey() {
+      addPublicGPGKey(context, recipientData.id, _texEditingController.text);
+      _texEditingController.clear();
+    }
+
     return showModal(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Add Public GPG Key'),
-          content: Container(
-            height: MediaQuery.of(context).size.height * 0.25,
-            child: Column(
-              children: [
-                Text(kEnterPublicKeyData),
-                SizedBox(height: 5),
-                Expanded(
-                  child: TextFormField(
-                    controller: _texEditingController,
-                    minLines: 8,
-                    maxLines: 8,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(5),
-                      hintText: kPublicGPGKeyHintText,
-                      border: OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: kBlueNavyColor),
+        return isIOS
+            ? CupertinoAlertDialog(
+                title: Text('Add Public GPG Key'),
+                content: Column(
+                  children: [
+                    Text(kEnterPublicKeyData),
+                    SizedBox(height: 5),
+                    CupertinoTextField(
+                      autofocus: true,
+                      controller: _texEditingController,
+                      textInputAction: TextInputAction.done,
+                      onEditingComplete: () => addPublicKey(),
+                      placeholder: kPublicGPGKeyHintText,
+                      minLines: 3,
+                      maxLines: 8,
+                    ),
+                  ],
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text('Add Key'),
+                    onPressed: () => addPublicKey(),
+                  ),
+                  CupertinoDialogAction(
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              )
+            : AlertDialog(
+                title: Text('Add Public GPG Key'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(kEnterPublicKeyData),
+                    SizedBox(height: 5),
+                    TextFormField(
+                      controller: _texEditingController,
+                      minLines: 3,
+                      maxLines: 8,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (submit) => addPublicKey(),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(5),
+                        hintText: kPublicGPGKeyHintText,
+                        border: OutlineInputBorder(),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: kBlueNavyColor),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          actions: [
-            RaisedButton(
-              child: Text('Add New Key'),
-              onPressed: () => addPublicGPGKey(
-                  context, recipientData.id, _texEditingController.text),
-            ),
-          ],
-        );
+                actions: [
+                  TextButton(
+                    child: Text('Add Key'),
+                    onPressed: () => addPublicGPGKey(
+                        context, recipientData.id, _texEditingController.text),
+                  ),
+                  TextButton(
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              );
       },
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      // brightness: Brightness.dark,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        color: Colors.white,
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: Text(
-        'Recipient Details',
-        style: TextStyle(color: Colors.white),
-      ),
-    );
+  Widget buildAppBar(BuildContext context) {
+    final customAppBar = CustomAppBar();
+
+    return isIOS
+        ? customAppBar.iOSAppBar(context, 'Recipient')
+        : customAppBar.androidAppBar(context, 'Recipient');
   }
 }

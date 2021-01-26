@@ -1,5 +1,4 @@
 import 'package:anonaddy/screens/home_screen.dart';
-import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +60,7 @@ class LoginStateManager extends ChangeNotifier {
     }
   }
 
-  void logout(BuildContext context) async {
+  Future<void> logout(BuildContext context) async {
     await context.read(accessTokenServiceProvider).deleteAccessToken();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => TokenLoginScreen()),
-    );
   }
 }

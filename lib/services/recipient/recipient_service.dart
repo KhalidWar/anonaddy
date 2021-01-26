@@ -29,8 +29,7 @@ class RecipientService {
         return 200;
       } else {
         print('enableEncryption ${response.statusCode}');
-
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -51,7 +50,7 @@ class RecipientService {
         return 204;
       } else {
         print('disableEncryption ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;

@@ -1,72 +1,31 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/widgets/alias_list_tile_leading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasListTile extends StatefulWidget {
+class AliasListTile extends ConsumerWidget {
   const AliasListTile({Key key, this.aliasData}) : super(key: key);
   final AliasDataModel aliasData;
 
   @override
-  _AliasListTileState createState() => _AliasListTileState();
-}
-
-class _AliasListTileState extends State<AliasListTile> {
-  bool _isLoading = false;
-  bool _switchValue;
-
-  void toggleAlias() async {
-    final _apiService = context.read(aliasServiceProvider);
-    setState(() => _isLoading = true);
-    if (widget.aliasData.isAliasActive == true) {
-      dynamic deactivateResult =
-          await _apiService.deactivateAlias(widget.aliasData.aliasID);
-      if (deactivateResult == null) {
-        setState(() {
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _switchValue = false;
-          _isLoading = false;
-        });
-      }
-    } else {
-      dynamic activateResult =
-          await _apiService.activateAlias(widget.aliasData.aliasID);
-      if (activateResult == null) {
-        setState(() {
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _switchValue = true;
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final aliasState = context.read(aliasStateManagerProvider);
+  Widget build(BuildContext context, ScopedReader watch) {
+    final aliasState = watch(aliasStateManagerProvider);
     final copyAlias = aliasState.copyToClipboard;
     final isDeleted = aliasState.isAliasDeleted;
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    _switchValue = widget.aliasData.isAliasActive;
-
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+      contentPadding: EdgeInsets.only(left: 6),
       dense: true,
-      horizontalTitleGap: 5,
+      horizontalTitleGap: 0,
+      // minLeadingWidth: 0,
       title: Text(
-        '${widget.aliasData.email}',
+        '${aliasData.email}',
         style: TextStyle(
-          color: isDeleted(widget.aliasData.deletedAt)
+          color: isDeleted(aliasData.deletedAt)
               ? Colors.grey
               : isDark
                   ? Colors.white
@@ -74,25 +33,18 @@ class _AliasListTileState extends State<AliasListTile> {
         ),
       ),
       subtitle: Text(
-        '${widget.aliasData.emailDescription}',
+        '${aliasData.emailDescription}',
         style: TextStyle(color: Colors.grey),
       ),
-      leading: _isLoading
-          ? Container(
-              margin: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.03),
-              child: CircularProgressIndicator())
-          : Switch.adaptive(
-              value: _switchValue,
-              onChanged: isDeleted(widget.aliasData.deletedAt)
-                  ? null
-                  : (toggle) => toggleAlias(),
-            ),
+      leading: AliasListTileLeading(
+        isDeleted: isDeleted(aliasData.deletedAt),
+        aliasData: aliasData,
+      ),
       trailing: IconButton(
         icon: Icon(Icons.copy),
-        onPressed: isDeleted(widget.aliasData.deletedAt)
+        onPressed: isDeleted(aliasData.deletedAt)
             ? null
-            : () => copyAlias(widget.aliasData.email),
+            : () => copyAlias(aliasData.email),
       ),
     );
   }

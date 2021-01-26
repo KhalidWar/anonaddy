@@ -1,5 +1,5 @@
 import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/widgets/fetch_data_indicator.dart';
+import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +11,6 @@ import 'alias_tab.dart';
 class CreateNewAlias extends ConsumerWidget {
   final _textFieldController = TextEditingController();
 
-  final aliasFormatList = <String>[
-    'uuid',
-    'random_words',
-    // 'Custom',
-  ];
-
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final domainOptions = watch(domainOptionsProvider);
@@ -24,9 +18,21 @@ class CreateNewAlias extends ConsumerWidget {
     final aliasStateProvider = watch(aliasStateManagerProvider);
     final isLoading = aliasStateProvider.isLoading;
     final createNewAlias = aliasStateProvider.createNewAlias;
+    final aliasFormatList = aliasStateProvider.aliasFormatList;
+
+    String correctAliasString(String input) {
+      switch (input) {
+        case 'random_words':
+          return 'Random Words';
+        case 'uuid':
+          return 'UUID';
+        case 'random_characters':
+          return 'Random Characters';
+      }
+    }
 
     return domainOptions.when(
-      loading: () => FetchingDataIndicator(),
+      loading: () => LoadingIndicator(),
       data: (data) {
         return Column(
           children: [
@@ -42,14 +48,16 @@ class CreateNewAlias extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Domain',
-                  style: Theme.of(context).textTheme.headline6,
+                  'Alias domain',
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
                 DropdownButton<String>(
                   isExpanded: true,
                   isDense: true,
                   value: aliasStateProvider.aliasDomain,
-                  hint: Text('${data.defaultAliasDomain}'),
+                  hint: Text(
+                    '${data.defaultAliasDomain ?? 'Choose Alias Domain'}',
+                  ),
                   items: data.data.map<DropdownMenuItem<String>>((value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -67,18 +75,20 @@ class CreateNewAlias extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Alias',
-                  style: Theme.of(context).textTheme.headline6,
+                  'Alias format',
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
                 DropdownButton<String>(
                   isExpanded: true,
                   isDense: true,
                   value: aliasStateProvider.aliasFormat,
-                  hint: Text('${data.defaultAliasFormat}'),
+                  hint: Text(
+                    '${data.defaultAliasFormat ?? 'Choose Alias Format'}',
+                  ),
                   items: aliasFormatList.map<DropdownMenuItem<String>>((value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(correctAliasString(value)),
                     );
                   }).toList(),
                   onChanged: (String value) {
@@ -98,23 +108,33 @@ class CreateNewAlias extends ConsumerWidget {
                     ),
               onPressed: isLoading
                   ? () {}
-                  : () => createNewAlias(
-                        context,
-                        _textFieldController.text.trim(),
-                        aliasStateProvider.aliasDomain ??
-                            data.defaultAliasDomain,
-                        aliasStateProvider.aliasFormat ??
-                            data.defaultAliasFormat,
-                      ),
+                  : () {
+                      if (aliasStateProvider.aliasDomain == null &&
+                              data.defaultAliasDomain == null ||
+                          aliasStateProvider.aliasFormat == null &&
+                              data.defaultAliasFormat == null) {
+                      } else {
+                        createNewAlias(
+                          context,
+                          _textFieldController.text.trim(),
+                          aliasStateProvider.aliasDomain ??
+                              data.defaultAliasDomain,
+                          aliasStateProvider.aliasFormat ??
+                              data.defaultAliasFormat,
+                        );
+                      }
+                    },
             ),
           ],
         );
       },
-      error: (error, stackTrade) => LottieWidget(
-        lottie: 'assets/lottie/errorCone.json',
-        label: error,
-        lottieHeight: MediaQuery.of(context).size.height * 0.2,
-      ),
+      error: (error, stackTrade) {
+        return LottieWidget(
+          lottie: 'assets/lottie/errorCone.json',
+          label: error,
+          lottieHeight: MediaQuery.of(context).size.height * 0.2,
+        );
+      },
     );
   }
 }

@@ -12,7 +12,7 @@ const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 
 // Official AnonAddy Strings
 const kAboutAppText =
-    'This app is a part of Khalid War\'s personal projects. It\'s free and open source. Free as in free of charge, free of ads, and free of trackers. \n\nTo check out the source code for this app, please visit our github repo.';
+    'AddyManager is created by Khalid War as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com team or project. AddyManager is free and open-source. Free as in free of charge, free of ads, and free of trackers. \n\nPlease visit AddyManager\'s Github repository for more info.';
 const kDeletedAliasText =
     'Deleted aliases reject all emails sent to them. However, they can be restored to start receiving emails again.';
 const kDeleteAliasConfirmation =
@@ -23,7 +23,7 @@ const kRestoreAliasText =
     'Are you sure you want to restore this alias? Once restored, this alias will be able to receive emails again.';
 const kRemoveRecipientPublicKey = 'Remove recipient public key';
 const kRemoveRecipientPublicKeyBody =
-    'Are you sure you want to remove the public key for this recipient? It will also be removed from any other recipients using the same key.';
+    'Are you sure you want to remove the public key for this recipient?\nIt will also be removed from any other recipients using the same key.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
@@ -42,7 +42,7 @@ const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';
-const kFetchingDataText = 'Fetching data...';
+const kLoadingText = 'Loading';
 const kDescriptionInputText = 'description (optional)';
 const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
@@ -58,6 +58,7 @@ const kPublicGPGKeyHintText =
     'Begins with \'-----BEGIN PGP PUBLIC KEY BLOCK-----\'';
 const kEnterPublicKeyData =
     'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
+const kSignOutAlertDialog = 'Are you sure you want to sign out?';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);

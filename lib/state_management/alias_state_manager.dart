@@ -28,6 +28,8 @@ class AliasStateManager extends ChangeNotifier {
   List<int> repliedList = [];
   List<int> sentList = [];
 
+  final aliasFormatList = ['uuid', 'random_words', 'random_characters'];
+
   bool get isLoading => _isLoading;
   bool get switchValue => _switchValue;
   String get aliasDomain => _aliasDomain;
@@ -74,15 +76,15 @@ class AliasStateManager extends ChangeNotifier {
       BuildContext context, String desc, String domain, String format) async {
     setIsLoading(true);
     final aliasService = context.read(aliasServiceProvider);
-    final response = await aliasService.createNewAlias(
-        desc: desc, domain: domain, format: format);
-    if (response == 201) {
-      setIsLoading(false);
-      showToast('Alias created successfully!');
-    } else {
-      setIsLoading(false);
-      showToast('Failed to create alias');
-    }
+    await aliasService.createNewAlias(desc, domain, format).then((value) {
+      if (value == 201) {
+        setIsLoading(false);
+        showToast('Alias created successfully!');
+      } else {
+        setIsLoading(false);
+        showToast(value);
+      }
+    });
     Navigator.pop(context);
     notifyListeners();
   }

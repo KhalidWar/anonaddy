@@ -1,16 +1,20 @@
 import 'package:anonaddy/constants.dart';
+import 'package:anonaddy/widgets/custom_loading_indicator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class FetchingDataIndicator extends StatelessWidget {
+class LoadingIndicator extends StatelessWidget {
+  final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+          customLoading,
           SizedBox(height: 15),
-          Text(kFetchingDataText),
+          Text(kLoadingText),
         ],
       ),
     );

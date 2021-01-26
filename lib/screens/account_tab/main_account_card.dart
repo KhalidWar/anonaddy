@@ -1,10 +1,10 @@
 import 'package:anonaddy/models/user/user_model.dart';
+import 'package:anonaddy/state_management/main_account_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
-import 'package:anonaddy/widgets/card_header.dart';
-import 'package:anonaddy/widgets/fetch_data_indicator.dart';
+import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,12 +24,15 @@ class MainAccount extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final stream = watch(mainAccountStream);
 
+    final mainAccountManager = context.read(mainAccountProvider);
+
     return stream.when(
-      loading: () => FetchingDataIndicator(),
-      data: (data) => Card(
-        child: Column(
+      loading: () => LoadingIndicator(),
+      data: (data) {
+        mainAccountManager.accountUsername = data.username;
+
+        return Column(
           children: [
-            CardHeader(label: 'Main'),
             AccountCardHeader(
               title: data.username,
               subtitle: '${data.subscription} subscription',
@@ -106,8 +109,8 @@ class MainAccount extends ConsumerWidget {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           ],
-        ),
-      ),
+        );
+      },
       error: (error, stackTrace) {
         return LottieWidget(
           showLoading: true,

@@ -2,12 +2,20 @@ import 'package:animations/animations.dart';
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
+import 'package:anonaddy/widgets/custom_app_bar.dart';
+import 'package:anonaddy/widgets/custom_loading_indicator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AliasDetailScreen extends ConsumerWidget {
+  final isIOS = TargetedPlatform().isIOS();
+  final confirmationDialog = ConfirmationDialog();
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasDataProvider = watch(aliasStateManagerProvider);
@@ -27,9 +35,8 @@ class AliasDetailScreen extends ConsumerWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          isLoading ? LinearProgressIndicator(minHeight: 6) : Container(),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 25),
             child: SvgPicture.asset(
               'assets/images/mailbox.svg',
               height: MediaQuery.of(context).size.height * 0.25,
@@ -83,12 +90,14 @@ class AliasDetailScreen extends ConsumerWidget {
             leadingIconData: Icons.flaky_outlined,
             title: 'Alias is ${switchValue ? 'active' : 'inactive'}',
             subtitle: 'Activity',
-            trailing: Switch.adaptive(
-              value: switchValue,
-              onChanged: (toggle) {
-                toggleAlias(context, aliasDataModel.aliasID);
-              },
-            ),
+            trailing: isLoading
+                ? CustomLoadingIndicator().customLoadingIndicator()
+                : Switch.adaptive(
+                    value: switchValue,
+                    onChanged: (toggle) {
+                      toggleAlias(context, aliasDataModel.aliasID);
+                    },
+                  ),
           ),
           AliasDetailListTile(
             leadingIconData: Icons.comment,
@@ -176,64 +185,48 @@ class AliasDetailScreen extends ConsumerWidget {
 
   Future buildDeleteAliasDialog(BuildContext context,
       Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
+    deleteAlias() {
+      deleteOrRestoreAlias(
+        context,
+        aliasDataModel.deletedAt,
+        aliasDataModel.aliasID,
+      );
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
+
     return showModal(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Delete Alias'),
-          content: Text(kDeleteAliasConfirmation),
-          actions: [
-            RaisedButton(
-              color: Colors.red,
-              child: Text('Delete Alias'),
-              onPressed: () {
-                deleteOrRestoreAlias(
-                  context,
-                  aliasDataModel.deletedAt,
-                  aliasDataModel.aliasID,
-                );
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
-            RaisedButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
+        return isIOS
+            ? confirmationDialog.iOSAlertDialog(
+                context, kDeleteAliasConfirmation, deleteAlias, 'Delete Alias')
+            : confirmationDialog.androidAlertDialog(
+                context, kDeleteAliasConfirmation, deleteAlias, 'Delete Alias');
       },
     );
   }
 
   Future buildRestoreAliasDialog(BuildContext context,
       Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
+    restoreAlias() {
+      deleteOrRestoreAlias(
+        context,
+        aliasDataModel.deletedAt,
+        aliasDataModel.aliasID,
+      );
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
+
     return showModal(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Restore Alias'),
-          content: Text(kRestoreAliasText),
-          actions: [
-            RaisedButton(
-              color: Colors.green,
-              child: Text('Restore Alias'),
-              onPressed: () {
-                deleteOrRestoreAlias(
-                  context,
-                  aliasDataModel.deletedAt,
-                  aliasDataModel.aliasID,
-                );
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
-            RaisedButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
+        return isIOS
+            ? confirmationDialog.iOSAlertDialog(
+                context, kRestoreAliasText, restoreAlias, 'Restore Alias')
+            : confirmationDialog.androidAlertDialog(
+                context, kRestoreAliasText, restoreAlias, 'Restore Alias');
       },
     );
   }
@@ -243,52 +236,68 @@ class AliasDetailScreen extends ConsumerWidget {
       TextEditingController _textEditingController,
       Function editDescription,
       AliasDataModel aliasDataModel) {
+    void editDesc() {
+      editDescription(
+        context,
+        aliasDataModel.aliasID,
+        _textEditingController.text.trim(),
+      );
+      Navigator.pop(context);
+    }
+
     return showModal(
       context: context,
       builder: (context) {
-        return SimpleDialog(
-          title: Text('Edit Description'),
-          contentPadding: EdgeInsets.all(20),
-          children: [
-            TextFormField(
-              autofocus: true,
-              controller: _textEditingController,
-              onFieldSubmitted: (toggle) => editDescription(
-                context,
-                aliasDataModel.aliasID,
-                _textEditingController.text.trim(),
-              ),
-              decoration: kTextFormFieldDecoration.copyWith(
-                hintText: '${aliasDataModel.emailDescription}',
-              ),
-            ),
-            SizedBox(height: 25),
-            RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Text('Update Description'),
-              onPressed: () => editDescription(
-                context,
-                aliasDataModel.aliasID,
-                _textEditingController.text.trim(),
-              ),
-            ),
-          ],
-        );
+        return isIOS
+            ? CupertinoAlertDialog(
+                title: Text('Update description'),
+                content: CupertinoTextField(
+                  autofocus: true,
+                  controller: _textEditingController,
+                  onEditingComplete: () => editDesc(),
+                  placeholder: '${aliasDataModel.emailDescription}',
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                    child: Text('Update'),
+                    onPressed: () => editDesc(),
+                  ),
+                  CupertinoDialogAction(
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              )
+            : AlertDialog(
+                title: Text('Update description'),
+                content: TextFormField(
+                  autofocus: true,
+                  controller: _textEditingController,
+                  onFieldSubmitted: (toggle) => editDesc(),
+                  decoration: kTextFormFieldDecoration.copyWith(
+                    hintText: '${aliasDataModel.emailDescription}',
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    child: Text('Update'),
+                    onPressed: () => editDesc(),
+                  ),
+                  TextButton(
+                    child: Text('Cancel'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              );
       },
     );
   }
 
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        color: Colors.white,
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: Text(
-        'Alias Details',
-        style: TextStyle(color: Colors.white),
-      ),
-    );
+  Widget buildAppBar(BuildContext context) {
+    final customAppBar = CustomAppBar();
+
+    return isIOS
+        ? customAppBar.iOSAppBar(context, 'Alias')
+        : customAppBar.androidAppBar(context, 'Alias');
   }
 }

@@ -7,6 +7,7 @@ class AccountTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: EdgeInsets.all(4),
       child: Column(
         children: [
           MainAccount(),
