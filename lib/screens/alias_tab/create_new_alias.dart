@@ -1,5 +1,5 @@
 import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/widgets/fetch_data_indicator.dart';
+import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class CreateNewAlias extends ConsumerWidget {
     }
 
     return domainOptions.when(
-      loading: () => FetchingDataIndicator(),
+      loading: () => LoadingIndicator(),
       data: (data) {
         return Column(
           children: [

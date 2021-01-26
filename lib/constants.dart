@@ -42,7 +42,7 @@ const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';
-const kFetchingDataText = 'Fetching data...';
+const kLoadingText = 'Loading';
 const kDescriptionInputText = 'description (optional)';
 const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';

@@ -15,15 +15,19 @@ class SettingsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
+    final isIOS = TargetedPlatform().isIOS();
 
     return Padding(
       padding: EdgeInsets.all(size.height * 0.01),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // todo implement feedback mechanism.
+          // todo Give dev email to receive feedback and suggestions
+          // todo encourage users to get into beta program
           ExpansionTile(
             childrenPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            leading: Icon(Icons.settings),
+            leading: Icon(isIOS ? CupertinoIcons.settings : Icons.settings),
             title: Text('App Settings'),
             children: [
               ListTile(

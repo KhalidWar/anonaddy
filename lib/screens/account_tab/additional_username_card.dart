@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
-import 'package:anonaddy/widgets/fetch_data_indicator.dart';
+import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -24,34 +24,29 @@ class AdditionalUsernameCard extends ConsumerWidget {
     final stream = watch(additionalUsernameStream);
 
     return stream.when(
-      loading: () => FetchingDataIndicator(),
+      loading: () => LoadingIndicator(),
       data: (data) {
         if (data.usernameDataList.isEmpty) {
-          return Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: Column(
-              children: [
-                Text(
-                  'Additional Username${data.usernameDataList.length >= 2 ? 's' : ''}',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(height: 10),
-                Text('No additional usernames found'),
-              ],
-            ),
-          );
-        }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Divider(height: 0),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Text(
+          return Column(
+            children: [
+              Divider(height: 0),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(
                 'Additional Username${data.usernameDataList.length >= 2 ? 's' : ''}',
                 style: Theme.of(context).textTheme.headline6,
               ),
+              SizedBox(height: 10),
+              Text('No additional usernames found'),
+            ],
+          );
+        }
+        return Column(
+          children: [
+            Divider(height: 0),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Text(
+              'Additional Username${data.usernameDataList.length >= 2 ? 's' : ''}',
+              style: Theme.of(context).textTheme.headline6,
             ),
             ListView.builder(
               shrinkWrap: true,

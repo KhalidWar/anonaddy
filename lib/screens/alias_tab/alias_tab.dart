@@ -8,7 +8,7 @@ import 'package:anonaddy/state_management/main_account_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
-import 'package:anonaddy/widgets/fetch_data_indicator.dart';
+import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,7 +44,7 @@ class AliasTab extends ConsumerWidget {
     final sentList = aliasDataProvider.sentList;
 
     return stream.when(
-      loading: () => FetchingDataIndicator(),
+      loading: () => LoadingIndicator(),
       data: (data) {
         final aliasDataList = data.aliasDataList;
 

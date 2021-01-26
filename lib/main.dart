@@ -16,8 +16,7 @@ class MyApp extends ConsumerWidget {
       title: 'AddyManager',
       debugShowCheckedModeBanner: false,
       theme: themeProvider.isDarkTheme ? darkTheme : lightTheme,
-      //todo fix darkTheme coloring scheme
-      // darkTheme: darkTheme,
+      darkTheme: darkTheme,
       home: InitialScreen(),
     );
   }
