@@ -237,8 +237,11 @@ class RecipientDetailedScreen extends ConsumerWidget {
   Widget buildAppBar(BuildContext context) {
     final customAppBar = CustomAppBar();
 
-    return isIOS
-        ? customAppBar.iOSAppBar(context, 'Recipient')
-        : customAppBar.androidAppBar(context, 'Recipient');
+    return customAppBar.androidAppBar(context, 'Recipient');
+
+    //todo fix CupertinoNavigationBar causing build failure
+    // return isIOS
+    //     ? customAppBar.iOSAppBar(context, 'Recipient')
+    //     : customAppBar.androidAppBar(context, 'Recipient');
   }
 }

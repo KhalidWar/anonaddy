@@ -4,7 +4,6 @@ import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
@@ -179,8 +178,11 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
 
   Widget buildAppBar() {
     final customAppBar = CustomAppBar();
-    return TargetedPlatform().isIOS()
-        ? customAppBar.iOSAppBar(context, 'Additional Username')
-        : customAppBar.androidAppBar(context, 'Additional Username');
+    return customAppBar.androidAppBar(context, 'Additional Username');
+
+    //todo fix CupertinoNavigationBar causing build failure
+    // return TargetedPlatform().isIOS()
+    //     ? customAppBar.iOSAppBar(context, 'Additional Username')
+    //     : customAppBar.androidAppBar(context, 'Additional Username');
   }
 }

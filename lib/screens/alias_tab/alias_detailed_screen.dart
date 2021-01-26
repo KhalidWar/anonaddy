@@ -296,8 +296,11 @@ class AliasDetailScreen extends ConsumerWidget {
   Widget buildAppBar(BuildContext context) {
     final customAppBar = CustomAppBar();
 
-    return isIOS
-        ? customAppBar.iOSAppBar(context, 'Alias')
-        : customAppBar.androidAppBar(context, 'Alias');
+    return customAppBar.androidAppBar(context, 'Alias');
+
+    //todo fix CupertinoNavigationBar causing build failure
+    // return isIOS
+    //     ? customAppBar.iOSAppBar(context, 'Alias')
+    //     : customAppBar.androidAppBar(context, 'Alias');
   }
 }
