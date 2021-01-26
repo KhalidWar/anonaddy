@@ -48,16 +48,8 @@ class DeletedAliasesScreen extends StatelessWidget {
             ),
             Card(
               child: ExpansionTile(
-                title: Row(
-                  children: [
-                    Icon(Icons.list_alt),
-                    SizedBox(width: 6),
-                    Text(
-                      'View Full List',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
+                leading: Icon(Icons.list_alt),
+                title: Text('Load full list'),
                 initiallyExpanded: false,
                 children: [
                   ListView.builder(

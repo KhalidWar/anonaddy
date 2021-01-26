@@ -297,7 +297,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final customAppBar = CustomAppBar();
 
     return isIOS
-        ? customAppBar.iOSAppBar(context, 'Alias Details')
-        : customAppBar.androidAppBar(context, 'Alias Details');
+        ? customAppBar.iOSAppBar(context, 'Alias')
+        : customAppBar.androidAppBar(context, 'Alias');
   }
 }

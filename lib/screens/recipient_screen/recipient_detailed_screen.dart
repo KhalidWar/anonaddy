@@ -238,7 +238,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final customAppBar = CustomAppBar();
 
     return isIOS
-        ? customAppBar.iOSAppBar(context, 'Recipient Details')
-        : customAppBar.androidAppBar(context, 'Recipient Details');
+        ? customAppBar.iOSAppBar(context, 'Recipient')
+        : customAppBar.androidAppBar(context, 'Recipient');
   }
 }
