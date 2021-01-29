@@ -43,7 +43,8 @@ const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';
 const kLoadingText = 'Loading';
-const kDescriptionInputText = 'description (optional)';
+const kDescriptionInputText = 'Description (optional)';
+const kEnterLocalPart = 'Enter Local Part (no space or @)';
 const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
 const kEditDescSuccessful = 'Description Updated Successfully';
@@ -66,8 +67,6 @@ const kAccentColor = Color(0xFF62F4EB);
 
 // UI Decoration
 const kTextFormFieldDecoration = InputDecoration(
-  border:
-      OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-  focusedBorder:
-      OutlineInputBorder(borderSide: BorderSide(color: kBlueNavyColor)),
+  border: OutlineInputBorder(),
+  focusedBorder: OutlineInputBorder(),
 );

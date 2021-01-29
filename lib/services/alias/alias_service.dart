@@ -36,7 +36,8 @@ class AliasService {
     }
   }
 
-  Future createNewAlias(String desc, String domain, String format) async {
+  Future createNewAlias(
+      String desc, String domain, String format, String localPart) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -48,6 +49,7 @@ class AliasService {
           "domain": "$domain",
           "format": "$format",
           "description": "$desc",
+          if (format == 'custom') "local_part": "$localPart"
         }),
       );
 

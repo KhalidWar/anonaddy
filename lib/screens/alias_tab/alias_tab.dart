@@ -1,10 +1,8 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/state_management/main_account_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
@@ -289,24 +287,19 @@ class AliasTab extends ConsumerWidget {
   }
 
   FloatingActionButton buildFloatingActionButton(BuildContext context) {
-    final username = context.read(mainAccountProvider).accountUsername;
-    final createAliasText =
-        'Other aliases e.g. alias@${username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
-
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
-        showModal(
+        showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
           builder: (context) {
-            return SimpleDialog(
-              title: Text('Create new alias'),
-              contentPadding: EdgeInsets.all(20),
-              children: [
-                Text(createAliasText),
-                SizedBox(height: 10),
-                CreateNewAlias(),
-              ],
+            return SingleChildScrollView(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+              child: CreateNewAlias(),
             );
           },
         );

@@ -29,7 +29,7 @@ class MainAccount extends ConsumerWidget {
     return stream.when(
       loading: () => LoadingIndicator(),
       data: (data) {
-        mainAccountManager.accountUsername = data.username;
+        mainAccountManager.userModel = data;
 
         return Column(
           children: [

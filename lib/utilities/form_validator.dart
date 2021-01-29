@@ -19,4 +19,21 @@ class FormValidator {
     }
     return null;
   }
+
+  String validateLocalPart(String input) {
+    final emailPattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)';
+    final anonAddyPattern =
+        r'(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))\$/)';
+
+    // todo fix pattern validation
+    final regExp = RegExp('');
+
+    if (input.isEmpty) {
+      return 'Provide a valid local part';
+    } else if (!regExp.hasMatch(input)) {
+      return 'Invalid alias local part';
+    } else {
+      return null;
+    }
+  }
 }

@@ -21,14 +21,30 @@ class AliasStateManager extends ChangeNotifier {
   String _aliasDomain;
   String _aliasFormat;
 
+  final descFieldController = TextEditingController();
+  final customFieldController = TextEditingController();
+  final customFormKey = GlobalKey<FormState>();
+
+  final freeTierWithSharedDomain = ['uuid', 'random_characters'];
+  final freeTierNoSharedDomain = ['uuid', 'random_characters', 'custom'];
+  final paidTierWithSharedDomain = [
+    'uuid',
+    'random_characters',
+    'random_words',
+  ];
+  final paidTierNoSharedDomain = [
+    'uuid',
+    'random_characters',
+    'random_words',
+    'custom',
+  ];
+
   List<AliasDataModel> availableAliasList = [];
   List<AliasDataModel> deletedAliasList = [];
   List<int> forwardedList = [];
   List<int> blockedList = [];
   List<int> repliedList = [];
   List<int> sentList = [];
-
-  final aliasFormatList = ['uuid', 'random_words', 'random_characters'];
 
   bool get isLoading => _isLoading;
   bool get switchValue => _switchValue;
@@ -72,21 +88,35 @@ class AliasStateManager extends ChangeNotifier {
       return true;
   }
 
-  void createNewAlias(
-      BuildContext context, String desc, String domain, String format) async {
-    setIsLoading(true);
-    final aliasService = context.read(aliasServiceProvider);
-    await aliasService.createNewAlias(desc, domain, format).then((value) {
-      if (value == 201) {
-        setIsLoading(false);
-        showToast('Alias created successfully!');
-      } else {
-        setIsLoading(false);
-        showToast(value);
+  void createNewAlias(BuildContext context, String desc, String domain,
+      String format, String localPart) async {
+    void createAlias() async {
+      setIsLoading(true);
+      final aliasService = context.read(aliasServiceProvider);
+      await aliasService
+          .createNewAlias(desc, domain, format, localPart)
+          .then((value) {
+        if (value == 201) {
+          setIsLoading(false);
+          showToast('Alias created successfully!');
+        } else {
+          setIsLoading(false);
+          showToast(value);
+        }
+        descFieldController.clear();
+        customFieldController.clear();
+      });
+      Navigator.pop(context);
+      notifyListeners();
+    }
+
+    if (format == 'custom') {
+      if (customFormKey.currentState.validate()) {
+        createAlias();
       }
-    });
-    Navigator.pop(context);
-    notifyListeners();
+    } else {
+      createAlias();
+    }
   }
 
   void deleteOrRestoreAlias(
@@ -167,5 +197,18 @@ class AliasStateManager extends ChangeNotifier {
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.grey[600],
     );
+  }
+
+  String correctAliasString(String input) {
+    switch (input) {
+      case 'uuid':
+        return 'UUID';
+      case 'random_characters':
+        return 'Random Characters';
+      case 'random_words':
+        return 'Random Words';
+      case 'custom':
+        return 'Custom (not available on shared domains)';
+    }
   }
 }
