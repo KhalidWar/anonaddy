@@ -31,18 +31,8 @@ class UsernameDataModel {
     List<AliasDataModel> aliasesList =
         list.map((i) => AliasDataModel.fromJson(i)).toList();
 
-    RecipientDataModel tempSolution = json["default_recipient"] == null
-        ? RecipientDataModel.fromJson({
-            "id": "tempSolution",
-            "user_id": "tempSolution",
-            "email": "tempSolution",
-            "should_encrypt": false,
-            "fingerprint": null,
-            "email_verified_at": "${DateTime.now()}",
-            "created_at": "${DateTime.now()}",
-            "updated_at": "${DateTime.now()}",
-          })
-        : RecipientDataModel.fromJson(json["default_recipient"]);
+    final defaultRecipient =
+        RecipientDataModel.fromJsonDefaultRecipient(json["default_recipient"]);
 
     return UsernameDataModel(
       id: json["id"],
@@ -50,7 +40,7 @@ class UsernameDataModel {
       username: json["username"],
       description: json["description"],
       aliases: aliasesList,
-      defaultRecipient: tempSolution,
+      defaultRecipient: defaultRecipient,
       active: json["active"],
       catchAll: json["catch_all"],
       createdAt: DateTime.parse(json["created_at"]),

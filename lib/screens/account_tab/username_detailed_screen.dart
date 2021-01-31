@@ -1,14 +1,10 @@
 import 'package:anonaddy/models/username/username_data_model.dart';
-import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
-import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
-import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
+import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
+import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
 
 class UsernameDetailedScreen extends StatefulWidget {
   const UsernameDetailedScreen({Key key, this.username}) : super(key: key);
@@ -22,9 +18,6 @@ class UsernameDetailedScreen extends StatefulWidget {
 class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
   @override
   Widget build(BuildContext context) {
-    final aliasDataProvider = context.read(aliasStateManagerProvider);
-    final recipientDataProvider = context.read(recipientStateManagerProvider);
-
     final username = widget.username;
 
     return Scaffold(
@@ -93,20 +86,8 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: username.aliases.length,
                         itemBuilder: (context, index) {
-                          return InkWell(
-                            child: AliasListTile(
-                              aliasData: username.aliases[index],
-                            ),
-                            onTap: () {
-                              aliasDataProvider.aliasDataModel =
-                                  username.aliases[index];
-                              aliasDataProvider.setSwitchValue(
-                                  username.aliases[index].isAliasActive);
-                              Navigator.push(
-                                context,
-                                buildPageRouteBuilder(AliasDetailScreen()),
-                              );
-                            },
+                          return AliasListTile(
+                            aliasData: username.aliases[index],
                           );
                         },
                       ),
@@ -119,33 +100,15 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               children: [
-                username.defaultRecipient.email == 'tempSolution'
-                    ? Container(
-                        padding: EdgeInsets.all(20),
-                        child: Text('No default recipient found'),
-                      )
-                    : ListTile(
-                        dense: true,
-                        horizontalTitleGap: 0,
-                        leading: Icon(Icons.account_circle_outlined),
-                        title: Text('${username.defaultRecipient.email}'),
-                        subtitle: Text('${username.defaultRecipient.userId}'),
-                        onTap: () {
-                          recipientDataProvider
-                              .setRecipientData(username.defaultRecipient);
-                          recipientDataProvider.setEncryptionSwitch(
-                              username.defaultRecipient.shouldEncrypt);
-
-                          Navigator.push(
-                            context,
-                            buildPageRouteBuilder(
-                              RecipientDetailedScreen(
-                                recipientData: username.defaultRecipient,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                if (username.defaultRecipient.email == null)
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Text('No default recipient found'),
+                  )
+                else
+                  RecipientListTile(
+                    recipientDataModel: username.defaultRecipient,
+                  ),
               ],
             ),
             Divider(height: 0),

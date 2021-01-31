@@ -1,10 +1,9 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
-import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
-import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
+import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/card_header.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
@@ -156,20 +155,8 @@ class AliasTab extends ConsumerWidget {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: availableAliasList.length,
                             itemBuilder: (context, index) {
-                              return InkWell(
-                                child: AliasListTile(
-                                  aliasData: availableAliasList[index],
-                                ),
-                                onTap: () {
-                                  aliasDataProvider.aliasDataModel =
-                                      availableAliasList[index];
-                                  aliasDataProvider.setSwitchValue(
-                                      availableAliasList[index].isAliasActive);
-                                  Navigator.push(
-                                    context,
-                                    buildPageRouteBuilder(AliasDetailScreen()),
-                                  );
-                                },
+                              return AliasListTile(
+                                aliasData: availableAliasList[index],
                               );
                             },
                           ),
@@ -192,22 +179,8 @@ class AliasTab extends ConsumerWidget {
                                     ? 10
                                     : deletedAliasList.length,
                                 itemBuilder: (context, index) {
-                                  return InkWell(
-                                    child: AliasListTile(
-                                      aliasData: deletedAliasList[index],
-                                    ),
-                                    onTap: () {
-                                      aliasDataProvider.aliasDataModel =
-                                          deletedAliasList[index];
-                                      aliasDataProvider.setSwitchValue(
-                                          deletedAliasList[index]
-                                              .isAliasActive);
-                                      Navigator.push(
-                                        context,
-                                        buildPageRouteBuilder(
-                                            AliasDetailScreen()),
-                                      );
-                                    },
+                                  return AliasListTile(
+                                    aliasData: deletedAliasList[index],
                                   );
                                 },
                               ),

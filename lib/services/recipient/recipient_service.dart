@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,29 @@ class RecipientService {
     "X-Requested-With": "XMLHttpRequest",
     "Accept": "application/json",
   };
+
+  Future<RecipientModel> getAllRecipient() async {
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.get(
+        Uri.encodeFull('$kBaseURL/$kRecipientsURL'),
+        headers: _headers,
+      );
+
+      if (response.statusCode == 200) {
+        print('getAllRecipient ${response.statusCode}');
+        // print(jsonDecode(response.body));
+        return RecipientModel.fromJson(jsonDecode(response.body));
+      } else {
+        print('getAllRecipient ${response.statusCode}');
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
   Future enableEncryption(String recipientID) async {
     try {

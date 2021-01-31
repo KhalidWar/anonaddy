@@ -4,12 +4,13 @@ import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
+import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../constants.dart';
 
@@ -35,94 +36,122 @@ class RecipientDetailedScreen extends ConsumerWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 50),
-            child: SvgPicture.asset(
-              'assets/images/envelope.svg',
-              height: size.height * 0.25,
-            ),
-          ),
-          AliasDetailListTile(
-            leadingIconData: Icons.email_outlined,
-            title: recipientData.email,
-            subtitle: 'Recipient Email',
-            trailing: IconButton(
-              icon: Icon(Icons.copy),
-              onPressed: () => copyOnTap(recipientData.email),
-            ),
-          ),
-          AliasDetailListTile(
-            leadingIconData: Icons.fingerprint_outlined,
-            title: recipientData.fingerprint == null
-                ? 'No fingerprint found'
-                : '${recipientData.fingerprint}',
-            subtitle: 'GPG Key Fingerprint',
-            trailing: recipientData.fingerprint == null
-                ? IconButton(
-                    icon: Icon(Icons.add_circle_outline_outlined),
-                    onPressed: () => buildAddPGPKeyDialog(
-                        context, recipientData, addPublicGPGKey),
-                  )
-                : IconButton(
-                    icon: Icon(
-                      Icons.delete_outline_outlined,
-                      color: Colors.red,
-                    ),
-                    onPressed: () =>
-                        buildRemovePGPKeyDialog(context, removePublicGPGKey),
-                  ),
-          ),
-          AliasDetailListTile(
-            leadingIconData: encryptionSwitch ? Icons.lock : Icons.lock_open,
-            leadingIconColor: encryptionSwitch ? Colors.green : null,
-            title: '${encryptionSwitch ? 'Encrypted' : 'Not Encrypted'}',
-            subtitle: 'Encryption',
-            trailing: recipientData.fingerprint == null
-                ? null
-                : isLoading
-                    ? CustomLoadingIndicator().customLoadingIndicator()
-                    : Switch.adaptive(
-                        value: encryptionSwitch,
-                        onChanged: (toggle) =>
-                            toggleEncryption(context, recipientData.id),
-                      ),
-          ),
-          AliasDetailListTile(
-            leadingIconData: Icons.verified_outlined,
-            title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
-            subtitle: 'Is Email Verified?',
-            trailing: recipientData.emailVerifiedAt == null
-                ? ElevatedButton(
-                    child: Text('Verify now!'),
-                    onPressed: () => verifyEmail(context, recipientData.id),
-                  )
-                : null,
-          ),
-          Divider(height: 0),
-          Row(
-            children: [
-              Expanded(
-                child: AliasDetailListTile(
-                  leadingIconData: Icons.access_time_outlined,
-                  title: recipientData.createdAt,
-                  subtitle: 'Created At',
-                ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: SvgPicture.asset(
+                'assets/images/envelope.svg',
+                height: size.height * 0.25,
               ),
-              Expanded(
-                child: AliasDetailListTile(
-                  leadingIconData: Icons.av_timer_outlined,
-                  title: recipientData.updatedAt,
-                  subtitle: 'Updated at',
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: AliasDetailListTile(
+                    leadingIconData: Icons.access_time_outlined,
+                    title: recipientData.createdAt,
+                    subtitle: 'Created At',
+                  ),
                 ),
-              )
-            ],
-          ),
-          SizedBox(height: size.height * 0.04),
-        ],
+                Expanded(
+                  child: AliasDetailListTile(
+                    leadingIconData: Icons.av_timer_outlined,
+                    title: recipientData.updatedAt,
+                    subtitle: 'Updated at',
+                  ),
+                )
+              ],
+            ),
+            Divider(height: 0),
+            AliasDetailListTile(
+              leadingIconData: Icons.email_outlined,
+              title: recipientData.email,
+              subtitle: 'Recipient Email',
+              trailing: IconButton(
+                icon: Icon(Icons.copy),
+                onPressed: () => copyOnTap(recipientData.email),
+              ),
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.fingerprint_outlined,
+              title: recipientData.fingerprint == null
+                  ? 'No fingerprint found'
+                  : '${recipientData.fingerprint}',
+              subtitle: 'GPG Key Fingerprint',
+              trailing: recipientData.fingerprint == null
+                  ? IconButton(
+                      icon: Icon(Icons.add_circle_outline_outlined),
+                      onPressed: () => buildAddPGPKeyDialog(
+                          context, recipientData, addPublicGPGKey),
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        Icons.delete_outline_outlined,
+                        color: Colors.red,
+                      ),
+                      onPressed: () =>
+                          buildRemovePGPKeyDialog(context, removePublicGPGKey),
+                    ),
+            ),
+            AliasDetailListTile(
+              leadingIconData: encryptionSwitch ? Icons.lock : Icons.lock_open,
+              leadingIconColor: encryptionSwitch ? Colors.green : null,
+              title: '${encryptionSwitch ? 'Encrypted' : 'Not Encrypted'}',
+              subtitle: 'Encryption',
+              trailing: recipientData.fingerprint == null
+                  ? null
+                  : isLoading
+                      ? CustomLoadingIndicator().customLoadingIndicator()
+                      : Switch.adaptive(
+                          value: encryptionSwitch,
+                          onChanged: (toggle) =>
+                              toggleEncryption(context, recipientData.id),
+                        ),
+            ),
+            recipientData.emailVerifiedAt == null
+                ? AliasDetailListTile(
+                    leadingIconData: Icons.verified_outlined,
+                    title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
+                    subtitle: 'Is Email Verified?',
+                    trailing: recipientData.emailVerifiedAt == null
+                        ? ElevatedButton(
+                            child: Text('Verify now!'),
+                            onPressed: () =>
+                                verifyEmail(context, recipientData.id),
+                          )
+                        : null,
+                  )
+                : Container(),
+            Divider(height: 0),
+            ExpansionTile(
+              leading: Icon(Icons.alternate_email),
+              title: Text('Associated Aliases'),
+              childrenPadding: EdgeInsets.symmetric(horizontal: 10),
+              children: [
+                // todo handle no aliases from defaultRecipients
+
+                if (recipientData.aliases == null ||
+                    recipientData.aliases.isEmpty)
+                  Text('No aliases found')
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: recipientData.aliases.length,
+                    itemBuilder: (context, index) {
+                      print(recipientData.aliases.length.toString() * 10);
+
+                      return AliasListTile(
+                        aliasData: recipientData.aliases[index],
+                      );
+                    },
+                  ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.01),
+          ],
+        ),
       ),
     );
   }

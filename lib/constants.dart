@@ -6,6 +6,7 @@ const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
 const String kAliasesURL = 'aliases';
 const String kEncryptedRecipient = 'encrypted-recipients';
+const String kRecipientsURL = 'recipients';
 const String kRecipientKeys = 'recipient-keys';
 const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';

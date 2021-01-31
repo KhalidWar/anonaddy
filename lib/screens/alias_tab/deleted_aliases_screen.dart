@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
 import '../../constants.dart';
-import 'alias_detailed_screen.dart';
-import 'alias_list_tile.dart';
+import '../../widgets/alias_list_tile.dart';
 
 class DeletedAliasesScreen extends StatelessWidget {
   const DeletedAliasesScreen({Key key, this.aliasDataModel}) : super(key: key);
@@ -16,7 +15,6 @@ class DeletedAliasesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final aliasDataProvider = context.read(aliasStateManagerProvider);
 
     return Scaffold(
       appBar: buildAppBar(context),
@@ -57,20 +55,8 @@ class DeletedAliasesScreen extends StatelessWidget {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: aliasDataModel.length,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          aliasDataProvider.aliasDataModel =
-                              aliasDataModel[index];
-                          aliasDataProvider.setSwitchValue(
-                              aliasDataModel[index].isAliasActive);
-                          Navigator.push(
-                            context,
-                            buildPageRoute(AliasDetailScreen()),
-                          );
-                        },
-                        child: AliasListTile(
-                          aliasData: aliasDataModel[index],
-                        ),
+                      return AliasListTile(
+                        aliasData: aliasDataModel[index],
                       );
                     },
                   ),
