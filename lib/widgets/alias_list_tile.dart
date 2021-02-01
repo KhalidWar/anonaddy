@@ -19,33 +19,49 @@ class AliasListTile extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final aliasDataProvider = context.read(aliasStateManagerProvider);
 
-    return ListTile(
-      contentPadding: EdgeInsets.only(left: 6),
-      dense: true,
-      horizontalTitleGap: 0,
-      title: Text(
-        '${aliasData.email}',
-        style: TextStyle(
-          color: isDeleted(aliasData.deletedAt)
-              ? Colors.grey
-              : isDark
-                  ? Colors.white
-                  : Colors.black,
+    Color themedColor() {
+      return isDark ? Colors.white : Colors.grey;
+    }
+
+    return InkWell(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        child: Row(
+          children: [
+            AliasListTileLeading(
+              isDeleted: isDeleted(aliasData.deletedAt),
+              isActive: aliasData.isAliasActive,
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${aliasData.email}',
+                    style: TextStyle(
+                      color: isDeleted(aliasData.deletedAt)
+                          ? Colors.grey
+                          : isDark
+                              ? Colors.white
+                              : Colors.black,
+                    ),
+                  ),
+                  Text(
+                    '${aliasData.emailDescription}',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.copy, color: themedColor()),
+              onPressed: isDeleted(aliasData.deletedAt)
+                  ? null
+                  : () => copyAlias(aliasData.email),
+            ),
+          ],
         ),
-      ),
-      subtitle: Text(
-        '${aliasData.emailDescription}',
-        style: TextStyle(color: Colors.grey),
-      ),
-      leading: AliasListTileLeading(
-        isDeleted: isDeleted(aliasData.deletedAt),
-        isActive: aliasData.isAliasActive,
-      ),
-      trailing: IconButton(
-        icon: Icon(Icons.copy),
-        onPressed: isDeleted(aliasData.deletedAt)
-            ? null
-            : () => copyAlias(aliasData.email),
       ),
       onTap: () {
         aliasDataProvider.aliasDataModel = aliasData;

@@ -24,6 +24,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
+
     final recipientStateProvider = watch(recipientStateManagerProvider);
     final encryptionSwitch = recipientStateProvider.encryptionSwitch;
     final isLoading = recipientStateProvider.isLoading;
@@ -128,7 +129,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             ExpansionTile(
               leading: Icon(Icons.alternate_email),
               title: Text('Associated Aliases'),
-              childrenPadding: EdgeInsets.symmetric(horizontal: 10),
+              childrenPadding: EdgeInsets.symmetric(horizontal: 12),
               children: [
                 // todo handle no aliases from defaultRecipients
 

@@ -13,20 +13,39 @@ class RecipientListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final recipientDataProvider = context.read(recipientStateManagerProvider);
 
-    return ListTile(
-      dense: true,
-      leading: Icon(Icons.email_outlined),
-      title: Text(recipientDataModel.email),
-      subtitle: recipientDataModel.emailVerifiedAt == null
-          ? Text(
-              'Unverified',
-              style: TextStyle(color: Colors.red),
-            )
-          : Text(
-              'Verified',
-              style: TextStyle(color: Colors.green),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return InkWell(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.email_outlined,
+              color: isDark ? Colors.white : Colors.grey,
+              size: 30,
             ),
-      horizontalTitleGap: 0,
+            SizedBox(width: 15),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(recipientDataModel.email),
+                SizedBox(height: 2),
+                recipientDataModel.emailVerifiedAt == null
+                    ? Text(
+                        'Unverified',
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : Text(
+                        'Verified',
+                        style: TextStyle(color: Colors.green),
+                      ),
+              ],
+            ),
+          ],
+        ),
+      ),
       onTap: () {
         recipientDataProvider.setRecipientData(recipientDataModel);
         recipientDataProvider

@@ -29,11 +29,10 @@ class SettingsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
-    final isIOS = TargetedPlatform().isIOS();
     final recipientData = watch(recipientDataStream);
 
     return Padding(
-      padding: EdgeInsets.all(size.height * 0.01),
+      padding: EdgeInsets.all(size.height * 0.015),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -61,6 +60,7 @@ class SettingsTab extends ConsumerWidget {
                       );
                     },
                   ),
+                  SizedBox(height: 8),
                 ],
               );
             },
@@ -74,9 +74,11 @@ class SettingsTab extends ConsumerWidget {
           ),
           Divider(height: 0),
           ExpansionTile(
-            childrenPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            leading: Icon(isIOS ? CupertinoIcons.settings : Icons.settings),
-            title: Text('App Settings'),
+            tilePadding: EdgeInsets.symmetric(vertical: 0),
+            title: Text(
+              'App Settings',
+              style: Theme.of(context).textTheme.headline6,
+            ),
             children: [
               ListTile(
                 leading: Text(
