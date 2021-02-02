@@ -43,7 +43,7 @@ class RecipientDataModel {
     );
   }
 
-  factory RecipientDataModel.fromJsonDefaultRecipient(
+  factory RecipientDataModel.fromJsonRecipientNoAliases(
       Map<String, dynamic> json) {
     // DefaultRecipient coming from AdditionalUsername do NOT have "aliases"
     return RecipientDataModel(

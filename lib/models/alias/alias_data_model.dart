@@ -1,3 +1,5 @@
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+
 class AliasDataModel {
   AliasDataModel({
     this.aliasID,
@@ -56,6 +58,34 @@ class AliasDataModel {
       emailsReplied: json["emails_replied"],
       emailsSent: json["emails_sent"],
       // recipients: List<dynamic>.from(json["recipients"].map((x) => x)),
+      createdAt: DateTime.parse(json["created_at"]),
+      updatedAt: DateTime.parse(json["updated_at"]),
+      deletedAt: json["deleted_at"],
+    );
+  }
+
+  factory AliasDataModel.fromJsonAliasData(Map<String, dynamic> json) {
+    List list = json['recipients'];
+    List<RecipientDataModel> recipientList = list
+        .map((i) => RecipientDataModel.fromJsonRecipientNoAliases(i))
+        .toList();
+
+    return AliasDataModel(
+      aliasID: json["id"],
+      userId: json["user_id"],
+      aliasableId: json["aliasable_id"],
+      aliasableType: json["aliasable_type"],
+      localPart: json["local_part"],
+      extension: json["extension"],
+      domain: json["domain"],
+      email: json["email"],
+      isAliasActive: json["active"],
+      emailDescription: json["description"] ?? 'No Description',
+      emailsForwarded: json["emails_forwarded"],
+      emailsBlocked: json["emails_blocked"],
+      emailsReplied: json["emails_replied"],
+      emailsSent: json["emails_sent"],
+      recipients: recipientList,
       createdAt: DateTime.parse(json["created_at"]),
       updatedAt: DateTime.parse(json["updated_at"]),
       deletedAt: json["deleted_at"],

@@ -61,6 +61,8 @@ const kPublicGPGKeyHintText =
 const kEnterPublicKeyData =
     'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
 const kSignOutAlertDialog = 'Are you sure you want to sign out?';
+const kFullRecipientDetails =
+    'All recipient details, including associated aliases, can be found under Settings';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);

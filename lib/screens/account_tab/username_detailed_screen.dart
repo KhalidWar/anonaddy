@@ -74,6 +74,24 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
             Divider(height: 0),
             ExpansionTile(
               initiallyExpanded: true,
+              title: Text(
+                'Default Recipient',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              children: [
+                if (username.defaultRecipient.email == null)
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: Text('No default recipient found'),
+                  )
+                else
+                  RecipientListTile(
+                    recipientDataModel: username.defaultRecipient,
+                  ),
+              ],
+            ),
+            ExpansionTile(
+              initiallyExpanded: true,
               title: Text('Associated Aliases',
                   style: Theme.of(context).textTheme.bodyText1),
               children: [
@@ -91,24 +109,6 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
                           );
                         },
                       ),
-              ],
-            ),
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: Text(
-                'Default Recipient',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              children: [
-                if (username.defaultRecipient.email == null)
-                  Container(
-                    padding: EdgeInsets.all(20),
-                    child: Text('No default recipient found'),
-                  )
-                else
-                  RecipientListTile(
-                    recipientDataModel: username.defaultRecipient,
-                  ),
               ],
             ),
             Divider(height: 0),

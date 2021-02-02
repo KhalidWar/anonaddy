@@ -12,17 +12,12 @@ final recipientStateManagerProvider =
     ChangeNotifierProvider((ref) => RecipientStateManager());
 
 class RecipientStateManager extends ChangeNotifier {
-  RecipientDataModel _recipientDataModel;
+  RecipientDataModel recipientDataModel;
   bool _encryptionSwitch;
   bool _isLoading = false;
 
   get encryptionSwitch => _encryptionSwitch;
   get isLoading => _isLoading;
-
-  void setRecipientData(RecipientDataModel recipient) {
-    _recipientDataModel = recipient;
-    notifyListeners();
-  }
 
   void setEncryptionSwitch(bool value) {
     _encryptionSwitch = value;
@@ -40,7 +35,7 @@ class RecipientStateManager extends ChangeNotifier {
   }
 
   void setFingerprint(dynamic input) {
-    _recipientDataModel.fingerprint = input;
+    recipientDataModel.fingerprint = input;
     notifyListeners();
   }
 

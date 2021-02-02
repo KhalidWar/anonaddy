@@ -7,10 +7,11 @@ import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/custom_loading_indicator.dart';
+import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AliasDetailScreen extends ConsumerWidget {
   final isIOS = TargetedPlatform().isIOS();
@@ -18,6 +19,8 @@ class AliasDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final size = MediaQuery.of(context).size;
+
     final aliasDataProvider = watch(aliasStateManagerProvider);
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final switchValue = aliasDataProvider.switchValue;
@@ -32,153 +35,189 @@ class AliasDetailScreen extends ConsumerWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 25),
-            child: SvgPicture.asset(
-              'assets/images/mailbox.svg',
-              height: MediaQuery.of(context).size.height * 0.25,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 20, bottom: 40),
+              child: SvgPicture.asset(
+                'assets/images/mailbox.svg',
+                height: size.height * 0.2,
+              ),
             ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: AliasDetailListTile(
-                  leadingIconData: Icons.forward_to_inbox,
-                  title: aliasDataModel.emailsForwarded,
-                  subtitle: 'Emails Forwarded',
-                ),
-              ),
-              Expanded(
-                child: AliasDetailListTile(
-                  leadingIconData: Icons.reply,
-                  title: aliasDataModel.emailsReplied,
-                  subtitle: 'Emails Replied',
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: AliasDetailListTile(
-                  leadingIconData: Icons.mark_email_read_outlined,
-                  title: aliasDataModel.emailsSent,
-                  subtitle: 'Emails Sent',
-                ),
-              ),
-              Expanded(
-                child: AliasDetailListTile(
-                  leadingIconData: Icons.block,
-                  title: aliasDataModel.emailsBlocked,
-                  subtitle: 'Emails Blocked',
-                ),
-              ),
-            ],
-          ),
-          Divider(height: 0),
-          AliasDetailListTile(
-            leadingIconData: Icons.alternate_email,
-            title: aliasDataModel.email,
-            subtitle: 'Email',
-            trailingIconData: Icons.copy,
-            trailingIconOnPress: () => copyOnTap(aliasDataModel.email),
-          ),
-          AliasDetailListTile(
-            leadingIconData: Icons.flaky_outlined,
-            title: 'Alias is ${switchValue ? 'active' : 'inactive'}',
-            subtitle: 'Activity',
-            trailing: isLoading
-                ? CustomLoadingIndicator().customLoadingIndicator()
-                : Switch.adaptive(
-                    value: switchValue,
-                    onChanged: (toggle) {
-                      toggleAlias(context, aliasDataModel.aliasID);
-                    },
+            Row(
+              children: [
+                Expanded(
+                  child: AliasDetailListTile(
+                    leadingIconData: Icons.forward_to_inbox,
+                    title: aliasDataModel.emailsForwarded,
+                    subtitle: 'Emails Forwarded',
                   ),
-          ),
-          AliasDetailListTile(
-            leadingIconData: Icons.comment,
-            title: aliasDataModel.emailDescription,
-            subtitle: 'Description',
-            trailingIconData: Icons.edit,
-            trailingIconOnPress: () {
-              buildEditDescriptionDialog(
-                context,
-                _textEditingController,
-                editDescription,
-                aliasDataModel,
-              );
-              // editDescription();
-            },
-          ),
-          AliasDetailListTile(
-            leadingIconData: Icons.check_circle_outline,
-            title: aliasDataModel.extension,
-            subtitle: 'extension',
-            trailingIconData: Icons.edit,
-            trailingIconOnPress: () {},
-          ),
-          aliasDataModel.deletedAt == null
-              ? AliasDetailListTile(
-                  leadingIconData: Icons.delete_outline,
-                  title: 'Delete Alias',
-                  subtitle: 'Deleted alias will reject all emails sent to it',
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete_outline, color: Colors.red),
-                    onPressed: () {
-                      buildDeleteAliasDialog(
-                        context,
-                        deleteOrRestoreAlias,
-                        aliasDataModel,
-                      );
-                    },
+                ),
+                Expanded(
+                  child: AliasDetailListTile(
+                    leadingIconData: Icons.reply,
+                    title: aliasDataModel.emailsReplied,
+                    subtitle: 'Emails Replied',
                   ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: AliasDetailListTile(
+                    leadingIconData: Icons.mark_email_read_outlined,
+                    title: aliasDataModel.emailsSent,
+                    subtitle: 'Emails Sent',
+                  ),
+                ),
+                Expanded(
+                  child: AliasDetailListTile(
+                    leadingIconData: Icons.block,
+                    title: aliasDataModel.emailsBlocked,
+                    subtitle: 'Emails Blocked',
+                  ),
+                ),
+              ],
+            ),
+            Divider(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: AliasDetailListTile(
+                    leadingIconData: Icons.access_time_outlined,
+                    title: aliasDataModel.createdAt,
+                    subtitle: 'Created At',
+                  ),
+                ),
+                Expanded(
+                  child: aliasDataModel.deletedAt == null
+                      ? AliasDetailListTile(
+                          leadingIconData: Icons.av_timer_outlined,
+                          title: aliasDataModel.updatedAt,
+                          subtitle: 'Updated At',
+                        )
+                      : AliasDetailListTile(
+                          leadingIconData: Icons.auto_delete_outlined,
+                          title: aliasDataModel.deletedAt,
+                          subtitle: 'Deleted At',
+                        ),
                 )
-              : AliasDetailListTile(
-                  leadingIconData: Icons.restore_outlined,
-                  title: 'Restore Alias',
-                  subtitle: 'Restored alias will be able to receive emails',
-                  trailing: IconButton(
-                    icon: Icon(Icons.restore_outlined, color: Colors.green),
-                    onPressed: () {
-                      buildRestoreAliasDialog(
-                        context,
-                        deleteOrRestoreAlias,
-                        aliasDataModel,
-                      );
-                    },
+              ],
+            ),
+            Divider(height: 10),
+            AliasDetailListTile(
+              leadingIconData: Icons.alternate_email,
+              title: aliasDataModel.email,
+              subtitle: 'Email',
+              trailingIconData: Icons.copy,
+              trailingIconOnPress: () => copyOnTap(aliasDataModel.email),
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.flaky_outlined,
+              title: 'Alias is ${switchValue ? 'active' : 'inactive'}',
+              subtitle: 'Activity',
+              trailing: isLoading
+                  ? CustomLoadingIndicator().customLoadingIndicator()
+                  : Switch.adaptive(
+                      value: switchValue,
+                      onChanged: (toggle) {
+                        toggleAlias(context, aliasDataModel.aliasID);
+                      },
+                    ),
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.comment,
+              title: aliasDataModel.emailDescription,
+              subtitle: 'Description',
+              trailingIconData: Icons.edit,
+              trailingIconOnPress: () {
+                buildEditDescriptionDialog(
+                  context,
+                  _textEditingController,
+                  editDescription,
+                  aliasDataModel,
+                );
+              },
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.check_circle_outline,
+              title: aliasDataModel.extension,
+              subtitle: 'extension',
+              trailingIconData: Icons.edit,
+              trailingIconOnPress: () {},
+            ),
+            aliasDataModel.deletedAt == null
+                ? AliasDetailListTile(
+                    leadingIconData: Icons.delete_outline,
+                    title: 'Delete Alias',
+                    subtitle: 'Deleted alias will reject all emails sent to it',
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete_outline, color: Colors.red),
+                      onPressed: () {
+                        buildDeleteAliasDialog(
+                          context,
+                          deleteOrRestoreAlias,
+                          aliasDataModel,
+                        );
+                      },
+                    ),
+                  )
+                : AliasDetailListTile(
+                    leadingIconData: Icons.restore_outlined,
+                    title: 'Restore Alias',
+                    subtitle: 'Restored alias will be able to receive emails',
+                    trailing: IconButton(
+                      icon: Icon(Icons.restore_outlined, color: Colors.green),
+                      onPressed: () {
+                        buildRestoreAliasDialog(
+                          context,
+                          deleteOrRestoreAlias,
+                          aliasDataModel,
+                        );
+                      },
+                    ),
                   ),
+            Divider(height: 0),
+            if (aliasDataModel.recipients == null)
+              Container()
+            else
+              ExpansionTile(
+                initiallyExpanded: true,
+                title: Text(
+                  'Default recipient',
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
-          Divider(height: 0),
-          Row(
-            children: [
-              Expanded(
-                child: AliasDetailListTile(
-                  leadingIconData: Icons.access_time_outlined,
-                  title: aliasDataModel.createdAt,
-                  subtitle: 'Created At',
-                ),
+                children: [
+                  if (aliasDataModel.recipients.isEmpty)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('No recipients found'),
+                        RaisedButton.icon(
+                          icon: Icon(Icons.add),
+                          label: Text('Add recipient'),
+                          onPressed: () {},
+                        ),
+                      ],
+                    )
+                  else
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: aliasDataModel.recipients.length,
+                      itemBuilder: (context, index) {
+                        final recipients = aliasDataModel.recipients;
+                        return RecipientListTile(
+                          recipientDataModel: recipients[index],
+                        );
+                      },
+                    ),
+                ],
               ),
-              Expanded(
-                child: aliasDataModel.deletedAt == null
-                    ? AliasDetailListTile(
-                        leadingIconData: Icons.av_timer_outlined,
-                        title: aliasDataModel.updatedAt,
-                        subtitle: 'Updated At',
-                      )
-                    : AliasDetailListTile(
-                        leadingIconData: Icons.auto_delete_outlined,
-                        title: aliasDataModel.deletedAt,
-                        subtitle: 'Deleted At',
-                      ),
-              )
-            ],
-          ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-        ],
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+          ],
+        ),
       ),
     );
   }

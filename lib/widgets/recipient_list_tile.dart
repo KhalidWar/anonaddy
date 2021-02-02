@@ -47,7 +47,7 @@ class RecipientListTile extends StatelessWidget {
         ),
       ),
       onTap: () {
-        recipientDataProvider.setRecipientData(recipientDataModel);
+        recipientDataProvider.recipientDataModel = recipientDataModel;
         recipientDataProvider
             .setEncryptionSwitch(recipientDataModel.shouldEncrypt);
 

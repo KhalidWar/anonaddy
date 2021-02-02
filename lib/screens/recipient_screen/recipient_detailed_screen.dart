@@ -41,10 +41,10 @@ class RecipientDetailedScreen extends ConsumerWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: EdgeInsets.only(top: 20, bottom: 50),
               child: SvgPicture.asset(
                 'assets/images/envelope.svg',
-                height: size.height * 0.25,
+                height: size.height * 0.2,
               ),
             ),
             Row(
@@ -126,30 +126,45 @@ class RecipientDetailedScreen extends ConsumerWidget {
                   )
                 : Container(),
             Divider(height: 0),
-            ExpansionTile(
-              leading: Icon(Icons.alternate_email),
-              title: Text('Associated Aliases'),
-              childrenPadding: EdgeInsets.symmetric(horizontal: 12),
-              children: [
-                // todo handle no aliases from defaultRecipients
+            if (recipientData.aliases == null)
+              Container(
+                height: size.height * 0.05,
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 14),
+                child: Row(
+                  children: [
+                    Icon(Icons.warning_amber_outlined),
+                    SizedBox(width: 16),
+                    Expanded(child: Text(kFullRecipientDetails)),
+                    Container(),
+                  ],
+                ),
+              )
+            else
+              ExpansionTile(
+                initiallyExpanded: true,
+                title: Text(
+                  'Associated Aliases',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                childrenPadding: EdgeInsets.symmetric(horizontal: 12),
+                children: [
+                  if (recipientData.aliases.isEmpty)
+                    Text('No aliases found')
+                  else
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: recipientData.aliases.length,
+                      itemBuilder: (context, index) {
+                        print(recipientData.aliases.length.toString() * 10);
 
-                if (recipientData.aliases == null ||
-                    recipientData.aliases.isEmpty)
-                  Text('No aliases found')
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: recipientData.aliases.length,
-                    itemBuilder: (context, index) {
-                      print(recipientData.aliases.length.toString() * 10);
-
-                      return AliasListTile(
-                        aliasData: recipientData.aliases[index],
-                      );
-                    },
-                  ),
-              ],
-            ),
+                        return AliasListTile(
+                          aliasData: recipientData.aliases[index],
+                        );
+                      },
+                    ),
+                ],
+              ),
             SizedBox(height: size.height * 0.01),
           ],
         ),

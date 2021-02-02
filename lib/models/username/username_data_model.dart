@@ -31,8 +31,8 @@ class UsernameDataModel {
     List<AliasDataModel> aliasesList =
         list.map((i) => AliasDataModel.fromJson(i)).toList();
 
-    final defaultRecipient =
-        RecipientDataModel.fromJsonDefaultRecipient(json["default_recipient"]);
+    final defaultRecipient = RecipientDataModel.fromJsonRecipientNoAliases(
+        json["default_recipient"]);
 
     return UsernameDataModel(
       id: json["id"],
