@@ -16,6 +16,9 @@ class RecipientStateManager extends ChangeNotifier {
   bool _encryptionSwitch;
   bool _isLoading = false;
 
+  final textEditController = TextEditingController();
+  final recipientFormKey = GlobalKey<FormState>();
+
   get encryptionSwitch => _encryptionSwitch;
   get isLoading => _isLoading;
 
@@ -111,6 +114,36 @@ class RecipientStateManager extends ChangeNotifier {
       } else {
         _showToast('Failed to send verification email');
       }
+    });
+  }
+
+  void addRecipient(BuildContext context, String email) async {
+    if (recipientFormKey.currentState.validate()) {
+      await context
+          .read(recipientServiceProvider)
+          .addRecipient(email)
+          .then((value) {
+        _showToast('Recipient added successfully!');
+        Navigator.pop(context);
+      }).catchError((error, stackTrace) {
+        return _showToast(error);
+      });
+    }
+  }
+
+  void removeRecipient(BuildContext context, String recipientID) async {
+    await context
+        .read(recipientServiceProvider)
+        .removeRecipient(recipientID)
+        .then((value) {
+      if (value == 204) {
+        _showToast('Recipient deleted successfully!');
+      } else {
+        _showToast('Failed to delete recipient!');
+      }
+      Navigator.pop(context);
+    }).catchError((error, stackTrace) {
+      return _showToast(error);
     });
   }
 

@@ -3,7 +3,9 @@ import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
 import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
@@ -31,6 +33,11 @@ class SettingsTab extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
     final recipientData = watch(recipientDataStream);
 
+    final recipientStateProvider = context.read(recipientStateManagerProvider);
+    final addRecipient = recipientStateProvider.addRecipient;
+    final textEditController = recipientStateProvider.textEditController;
+    final recipientFormKey = recipientStateProvider.recipientFormKey;
+
     return Padding(
       padding: EdgeInsets.all(size.height * 0.015),
       child: Column(
@@ -47,9 +54,19 @@ class SettingsTab extends ConsumerWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Recipients',
-                    style: Theme.of(context).textTheme.headline6,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Recipients',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.add_circle_outline_outlined),
+                        onPressed: () => buildShowModalBottomSheet(context,
+                            textEditController, recipientFormKey, addRecipient),
+                      ),
+                    ],
                   ),
                   ListView.builder(
                     shrinkWrap: true,
@@ -113,6 +130,69 @@ class SettingsTab extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future buildShowModalBottomSheet(
+      BuildContext context,
+      TextEditingController textEditController,
+      GlobalKey recipientFormKey,
+      Function addRecipient) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final size = MediaQuery.of(context).size;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+          child: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              child: Column(
+                children: [
+                  Divider(
+                    thickness: 3,
+                    indent: size.width * 0.4,
+                    endIndent: size.width * 0.4,
+                  ),
+                  SizedBox(height: size.height * 0.02),
+                  Column(
+                    children: [
+                      Text('Add new recipient'),
+                      Text(kAddRecipientText),
+                      SizedBox(height: size.height * 0.02),
+                      Form(
+                        key: recipientFormKey,
+                        child: TextFormField(
+                          controller: textEditController,
+                          validator: (input) => FormValidator().customValidator(
+                              input, 'Please enter a valid email'),
+                          textInputAction: TextInputAction.next,
+                          decoration: kTextFormFieldDecoration.copyWith(
+                              hintText: 'joedoe@example.com'),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      RaisedButton(
+                        child: Text('Add Recipient'),
+                        onPressed: () => addRecipient(
+                          context,
+                          textEditController.text.trim(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

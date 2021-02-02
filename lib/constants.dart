@@ -25,6 +25,10 @@ const kRestoreAliasText =
 const kRemoveRecipientPublicKey = 'Remove recipient public key';
 const kRemoveRecipientPublicKeyBody =
     'Are you sure you want to remove the public key for this recipient?\nIt will also be removed from any other recipients using the same key.';
+const kDeleteRecipientDialogText =
+    'Are you sure you want to delete this recipient?';
+const kAddRecipientText =
+    'Enter the individual email of the new recipient you\'d like to add.\nYou will receive an email with a verification link that will expire in one hour, you can click "Resend email" to get a new one.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
@@ -61,8 +65,8 @@ const kPublicGPGKeyHintText =
 const kEnterPublicKeyData =
     'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
 const kSignOutAlertDialog = 'Are you sure you want to sign out?';
-const kFullRecipientDetails =
-    'All recipient details, including associated aliases, can be found under Settings';
+const kUnverifiedRecipient =
+    'Unverified recipient emails can NOT be set as default recipient for aliases.';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);

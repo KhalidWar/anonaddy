@@ -126,6 +126,51 @@ class RecipientService {
     }
   }
 
+  Future<RecipientDataModel> addRecipient(String email) async {
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+      print(email * 20);
+
+      final response = await http.post(
+          Uri.encodeFull('$kBaseURL/$kRecipientsURL'),
+          headers: _headers,
+          body: jsonEncode({"email": "$email"}));
+
+      if (response.statusCode == 201) {
+        print("addRecipient ${response.statusCode}");
+        print(jsonDecode(response.body));
+        return RecipientDataModel.fromJsonData(jsonDecode(response.body));
+      } else {
+        print("addRecipient ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future removeRecipient(String recipientID) async {
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.delete(
+          Uri.encodeFull('$kBaseURL/$kRecipientsURL/$recipientID'),
+          headers: _headers);
+
+      if (response.statusCode == 204) {
+        print('removeRecipient ${response.statusCode}');
+        return 204;
+      } else {
+        print('removeRecipient ${response.statusCode}');
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future sendVerificationEmail(String recipientID) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();

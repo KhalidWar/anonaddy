@@ -33,6 +33,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final addPublicGPGKey = recipientStateProvider.addPublicGPGKey;
     final removePublicGPGKey = recipientStateProvider.removePublicGPGKey;
     final verifyEmail = recipientStateProvider.verifyEmail;
+    final removeRecipient = recipientStateProvider.removeRecipient;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -65,7 +66,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 )
               ],
             ),
-            Divider(height: 0),
+            Divider(height: 10),
             AliasDetailListTile(
               leadingIconData: Icons.email_outlined,
               title: recipientData.email,
@@ -73,6 +74,18 @@ class RecipientDetailedScreen extends ConsumerWidget {
               trailing: IconButton(
                 icon: Icon(Icons.copy),
                 onPressed: () => copyOnTap(recipientData.email),
+              ),
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.delete_outline,
+              title: recipientData.email,
+              subtitle: 'Delete recipient',
+              trailing: IconButton(
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: Colors.red,
+                ),
+                onPressed: () => buildRemoveRecipient(context, removeRecipient),
               ),
             ),
             AliasDetailListTile(
@@ -125,17 +138,24 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         : null,
                   )
                 : Container(),
+            SizedBox(height: 10),
             Divider(height: 0),
             if (recipientData.aliases == null)
+              Container()
+            else if (recipientData.emailVerifiedAt == null)
               Container(
                 height: size.height * 0.05,
                 width: double.infinity,
+                color: Colors.amber,
                 padding: EdgeInsets.symmetric(horizontal: 14),
                 child: Row(
                   children: [
-                    Icon(Icons.warning_amber_outlined),
+                    Icon(Icons.warning_amber_outlined, color: Colors.black),
                     SizedBox(width: 16),
-                    Expanded(child: Text(kFullRecipientDetails)),
+                    Expanded(
+                      child: Text(kUnverifiedRecipient,
+                          style: TextStyle(color: Colors.black)),
+                    ),
                     Container(),
                   ],
                 ),
@@ -154,10 +174,9 @@ class RecipientDetailedScreen extends ConsumerWidget {
                   else
                     ListView.builder(
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: recipientData.aliases.length,
                       itemBuilder: (context, index) {
-                        print(recipientData.aliases.length.toString() * 10);
-
                         return AliasListTile(
                           aliasData: recipientData.aliases[index],
                         );
@@ -275,6 +294,26 @@ class RecipientDetailedScreen extends ConsumerWidget {
                   ),
                 ],
               );
+      },
+    );
+  }
+
+  Future buildRemoveRecipient(BuildContext context, Function removeRecipient) {
+    final confirmationDialog = ConfirmationDialog();
+
+    void remove() {
+      removeRecipient(context, recipientData.id);
+      Navigator.pop(context);
+    }
+
+    return showModal(
+      context: context,
+      builder: (context) {
+        return isIOS
+            ? confirmationDialog.iOSAlertDialog(
+                context, kDeleteRecipientDialogText, remove, 'Delete recipient')
+            : confirmationDialog.androidAlertDialog(context,
+                kDeleteRecipientDialogText, remove, 'Delete recipient');
       },
     );
   }

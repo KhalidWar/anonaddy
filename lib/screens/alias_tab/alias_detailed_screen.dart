@@ -183,28 +183,30 @@ class AliasDetailScreen extends ConsumerWidget {
             if (aliasDataModel.recipients == null)
               Container()
             else
-              ExpansionTile(
-                initiallyExpanded: true,
-                title: Text(
-                  'Default recipient',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
+              Column(
                 children: [
-                  if (aliasDataModel.recipients.isEmpty)
-                    Column(
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('No recipients found'),
-                        RaisedButton.icon(
-                          icon: Icon(Icons.add),
-                          label: Text('Add recipient'),
+                        Text(
+                          'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.edit),
                           onPressed: () {},
                         ),
                       ],
-                    )
+                    ),
+                  ),
+                  if (aliasDataModel.recipients.isEmpty)
+                    Text('No recipients found')
                   else
                     ListView.builder(
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: aliasDataModel.recipients.length,
                       itemBuilder: (context, index) {
                         final recipients = aliasDataModel.recipients;

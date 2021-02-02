@@ -1,4 +1,12 @@
 class FormValidator {
+  //todo unify and consolidate all methods into customValidator
+  String customValidator(String input, String errorText) {
+    if (input.isEmpty || input == null) {
+      return errorText;
+    }
+    return null;
+  }
+
   String accessTokenValidator(String input) {
     if (input.isEmpty || input == null) {
       return 'Please Enter Access Token';
