@@ -88,6 +88,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 onPressed: () => buildRemoveRecipient(context, removeRecipient),
               ),
             ),
+            Divider(height: 10),
             AliasDetailListTile(
               leadingIconData: Icons.fingerprint_outlined,
               title: recipientData.fingerprint == null
@@ -226,74 +227,66 @@ class RecipientDetailedScreen extends ConsumerWidget {
       _texEditingController.clear();
     }
 
-    return showModal(
+    return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) {
-        return isIOS
-            ? CupertinoAlertDialog(
-                title: Text('Add Public GPG Key'),
-                content: Column(
-                  children: [
-                    Text(kEnterPublicKeyData),
-                    SizedBox(height: 5),
-                    CupertinoTextField(
-                      autofocus: true,
-                      controller: _texEditingController,
-                      textInputAction: TextInputAction.done,
-                      onEditingComplete: () => addPublicKey(),
-                      placeholder: kPublicGPGKeyHintText,
-                      minLines: 3,
-                      maxLines: 8,
-                    ),
-                  ],
+        final size = MediaQuery.of(context).size;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              children: [
+                Divider(
+                  thickness: 3,
+                  indent: size.width * 0.4,
+                  endIndent: size.width * 0.4,
                 ),
-                actions: [
-                  CupertinoDialogAction(
-                    child: Text('Add Key'),
-                    onPressed: () => addPublicKey(),
-                  ),
-                  CupertinoDialogAction(
-                    child: Text('Cancel'),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              )
-            : AlertDialog(
-                title: Text('Add Public GPG Key'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(kEnterPublicKeyData),
-                    SizedBox(height: 5),
-                    TextFormField(
-                      controller: _texEditingController,
-                      minLines: 3,
-                      maxLines: 8,
-                      textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (submit) => addPublicKey(),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(5),
-                        hintText: kPublicGPGKeyHintText,
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kBlueNavyColor),
-                        ),
-                      ),
-                    ),
-                  ],
+                SizedBox(height: size.height * 0.01),
+                Text(
+                  'Add new recipient',
+                  style: Theme.of(context).textTheme.headline6,
                 ),
-                actions: [
-                  TextButton(
-                    child: Text('Add Key'),
-                    onPressed: () => addPublicGPGKey(
-                        context, recipientData.id, _texEditingController.text),
+                Divider(thickness: 1),
+                SizedBox(height: size.height * 0.01),
+                Text(kEnterPublicKeyData),
+                SizedBox(height: size.height * 0.01),
+                TextFormField(
+                  autofocus: true,
+                  controller: _texEditingController,
+                  minLines: 3,
+                  maxLines: 8,
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (submit) => addPublicKey(),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(5),
+                    hintText: kPublicGPGKeyHintText,
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kBlueNavyColor),
+                    ),
                   ),
-                  TextButton(
-                    child: Text('Cancel'),
-                    onPressed: () => Navigator.pop(context),
+                ),
+                SizedBox(height: size.height * 0.01),
+                RaisedButton(
+                  child: Text('Add Key'),
+                  onPressed: () => addPublicGPGKey(
+                    context,
+                    recipientData.id,
+                    _texEditingController.text,
                   ),
-                ],
-              );
+                ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }

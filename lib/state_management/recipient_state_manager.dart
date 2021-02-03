@@ -125,6 +125,7 @@ class RecipientStateManager extends ChangeNotifier {
           .then((value) {
         _showToast('Recipient added successfully!');
         Navigator.pop(context);
+        textEditController.clear();
       }).catchError((error, stackTrace) {
         return _showToast(error);
       });

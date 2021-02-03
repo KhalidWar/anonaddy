@@ -38,7 +38,7 @@ class SettingsTab extends ConsumerWidget {
     final textEditController = recipientStateProvider.textEditController;
     final recipientFormKey = recipientStateProvider.recipientFormKey;
 
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.all(size.height * 0.015),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,47 +148,52 @@ class SettingsTab extends ConsumerWidget {
         final size = MediaQuery.of(context).size;
 
         return SingleChildScrollView(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
           child: Container(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Container(
-              child: Column(
-                children: [
-                  Divider(
-                    thickness: 3,
-                    indent: size.width * 0.4,
-                    endIndent: size.width * 0.4,
-                  ),
-                  SizedBox(height: size.height * 0.02),
-                  Column(
-                    children: [
-                      Text('Add new recipient'),
-                      Text(kAddRecipientText),
-                      SizedBox(height: size.height * 0.02),
-                      Form(
-                        key: recipientFormKey,
-                        child: TextFormField(
-                          controller: textEditController,
-                          validator: (input) => FormValidator().customValidator(
-                              input, 'Please enter a valid email'),
-                          textInputAction: TextInputAction.next,
-                          decoration: kTextFormFieldDecoration.copyWith(
-                              hintText: 'joedoe@example.com'),
-                        ),
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              children: [
+                Divider(
+                  thickness: 3,
+                  indent: size.width * 0.4,
+                  endIndent: size.width * 0.4,
+                ),
+                SizedBox(height: size.height * 0.01),
+                Text(
+                  'Add new recipient',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Divider(thickness: 1),
+                SizedBox(height: size.height * 0.01),
+                Column(
+                  children: [
+                    Text(kAddRecipientText),
+                    SizedBox(height: size.height * 0.01),
+                    Form(
+                      key: recipientFormKey,
+                      child: TextFormField(
+                        autofocus: true,
+                        controller: textEditController,
+                        validator: (input) =>
+                            FormValidator().validateRecipientEmail(input),
+                        textInputAction: TextInputAction.next,
+                        decoration: kTextFormFieldDecoration.copyWith(
+                            hintText: 'joedoe@example.com'),
                       ),
-                      SizedBox(height: 20),
-                      RaisedButton(
-                        child: Text('Add Recipient'),
-                        onPressed: () => addRecipient(
-                          context,
-                          textEditController.text.trim(),
-                        ),
+                    ),
+                    SizedBox(height: 10),
+                    RaisedButton(
+                      child: Text('Add Recipient'),
+                      onPressed: () => addRecipient(
+                        context,
+                        textEditController.text.trim(),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         );

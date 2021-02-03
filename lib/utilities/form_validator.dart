@@ -1,12 +1,4 @@
 class FormValidator {
-  //todo unify and consolidate all methods into customValidator
-  String customValidator(String input, String errorText) {
-    if (input.isEmpty || input == null) {
-      return errorText;
-    }
-    return null;
-  }
-
   String accessTokenValidator(String input) {
     if (input.isEmpty || input == null) {
       return 'Please Enter Access Token';
@@ -14,22 +6,34 @@ class FormValidator {
     return null;
   }
 
-  String searchValidator(String input) {
+  String validateSearchField(String input) {
     if (input.isEmpty || input == null) {
       return 'Field can not be empty';
     }
     return null;
   }
 
-  String customFieldInput(String input) {
+  String validateCustomField(String input) {
     if (input.isEmpty || input == null) {
       return 'Custom Alias not available for shared domains';
     }
     return null;
   }
 
-  String validateLocalPart(String input) {
+  String validateRecipientEmail(String input) {
     final emailPattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)';
+    final regExp = RegExp(emailPattern);
+
+    if (input.isEmpty || input == null) {
+      return 'Field can not be empty';
+    } else if (!regExp.hasMatch(input)) {
+      return 'Please enter a valid email';
+    } else {
+      return null;
+    }
+  }
+
+  String validateLocalPart(String input) {
     final anonAddyPattern =
         r'(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))\$/)';
 

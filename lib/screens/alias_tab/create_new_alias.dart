@@ -81,7 +81,7 @@ class CreateNewAlias extends ConsumerWidget {
                 validator: (input) => FormValidator().validateLocalPart(input),
                 textInputAction: TextInputAction.next,
                 decoration: kTextFormFieldDecoration.copyWith(
-                  labelText: kEnterLocalPart,
+                  hintText: kEnterLocalPart,
                 ),
               ),
             ),
@@ -105,7 +105,13 @@ class CreateNewAlias extends ConsumerWidget {
                 indent: size.width * 0.4,
                 endIndent: size.width * 0.4,
               ),
-              SizedBox(height: size.height * 0.02),
+              SizedBox(height: size.height * 0.01),
+              Text(
+                'Create new alias',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Divider(thickness: 1),
+              SizedBox(height: size.height * 0.01),
               Column(
                 children: [
                   Text(createAliasText),
@@ -114,7 +120,7 @@ class CreateNewAlias extends ConsumerWidget {
                     controller: descFieldController,
                     textInputAction: TextInputAction.next,
                     decoration: kTextFormFieldDecoration.copyWith(
-                        labelText: kDescriptionInputText),
+                        hintText: kDescriptionInputText),
                   ),
                   buildCustomInputField(),
                 ],
@@ -122,7 +128,7 @@ class CreateNewAlias extends ConsumerWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: size.height * 0.03),
+                  SizedBox(height: size.height * 0.02),
                   Text(
                     'Alias domain',
                     style: Theme.of(context).textTheme.bodyText1,
@@ -152,7 +158,7 @@ class CreateNewAlias extends ConsumerWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: size.height * 0.03),
+                  SizedBox(height: size.height * 0.02),
                   Text(
                     'Alias format',
                     style: Theme.of(context).textTheme.bodyText1,
@@ -171,7 +177,7 @@ class CreateNewAlias extends ConsumerWidget {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.03),
+              SizedBox(height: size.height * 0.02),
               isLoading
                   ? isIOS
                       ? CupertinoActivityIndicator()
