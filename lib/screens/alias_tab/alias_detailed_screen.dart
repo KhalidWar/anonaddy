@@ -279,39 +279,45 @@ class AliasDetailScreen extends ConsumerWidget {
       AliasDataModel aliasDataModel) {
     void editDesc() {
       editDescription(
-        context,
-        aliasDataModel.aliasID,
-        _textEditingController.text.trim(),
-      );
-      Navigator.pop(context);
+          context, aliasDataModel.aliasID, _textEditingController.text.trim());
     }
 
-    return showModal(
+    return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) {
-        return isIOS
-            ? CupertinoAlertDialog(
-                title: Text('Update description'),
-                content: CupertinoTextField(
-                  autofocus: true,
-                  controller: _textEditingController,
-                  onEditingComplete: () => editDesc(),
-                  placeholder: '${aliasDataModel.emailDescription}',
+        final size = MediaQuery.of(context).size;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Container(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              children: [
+                Divider(
+                  thickness: 3,
+                  indent: size.width * 0.4,
+                  endIndent: size.width * 0.4,
                 ),
-                actions: [
-                  CupertinoDialogAction(
-                    child: Text('Update'),
-                    onPressed: () => editDesc(),
-                  ),
-                  CupertinoDialogAction(
-                    child: Text('Cancel'),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              )
-            : AlertDialog(
-                title: Text('Update description'),
-                content: TextFormField(
+                SizedBox(height: size.height * 0.01),
+                Text(
+                  'Update description',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Divider(thickness: 1),
+                SizedBox(height: size.height * 0.01),
+                Text('Update description for'),
+                Text(
+                  '${aliasDataModel.email}',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                SizedBox(height: size.height * 0.02),
+                TextFormField(
                   autofocus: true,
                   controller: _textEditingController,
                   onFieldSubmitted: (toggle) => editDesc(),
@@ -319,17 +325,15 @@ class AliasDetailScreen extends ConsumerWidget {
                     hintText: '${aliasDataModel.emailDescription}',
                   ),
                 ),
-                actions: [
-                  TextButton(
-                    child: Text('Update'),
-                    onPressed: () => editDesc(),
-                  ),
-                  TextButton(
-                    child: Text('Cancel'),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              );
+                SizedBox(height: size.height * 0.02),
+                RaisedButton(
+                  child: Text('Update'),
+                  onPressed: () => editDesc(),
+                ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }

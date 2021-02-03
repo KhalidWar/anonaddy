@@ -20,8 +20,10 @@ import '../../constants.dart';
 
 final recipientDataStream =
     StreamProvider.autoDispose<RecipientModel>((ref) async* {
+  yield* Stream.fromFuture(
+      ref.read(recipientServiceProvider).getAllRecipient());
   while (true) {
-    await Future.delayed(Duration(seconds: 10));
+    await Future.delayed(Duration(seconds: 5));
     yield* Stream.fromFuture(
         ref.read(recipientServiceProvider).getAllRecipient());
   }

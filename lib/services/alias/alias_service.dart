@@ -176,6 +176,7 @@ class AliasService {
     }
   }
 
+  //todo unused method
   Future<AliasDataModel> getSpecificAliasData(String aliasID) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();

@@ -170,7 +170,6 @@ class AliasStateManager extends ChangeNotifier {
   void editDescription(
       BuildContext context, String aliasID, String input) async {
     Navigator.pop(context);
-    setIsLoading(true);
     await context
         .read(aliasServiceProvider)
         .editAliasDescription(aliasID, input)
@@ -182,7 +181,6 @@ class AliasStateManager extends ChangeNotifier {
         setEmailDescription(value.emailDescription);
       }
     });
-    setIsLoading(false);
   }
 
   void copyToClipboard(String input) {

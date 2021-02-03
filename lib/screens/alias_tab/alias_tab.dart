@@ -14,6 +14,7 @@ import 'create_new_alias.dart';
 import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
+  yield* Stream.fromFuture(ref.read(aliasServiceProvider).getAllAliasesData());
   while (true) {
     await Future.delayed(Duration(seconds: 1));
     yield* Stream.fromFuture(

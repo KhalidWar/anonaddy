@@ -11,7 +11,7 @@ final additionalUsernameStream =
     StreamProvider.autoDispose<UsernameModel>((ref) async* {
   yield* Stream.fromFuture(ref.read(usernameServiceProvider).getUsernameData());
   while (true) {
-    await Future.delayed(Duration(seconds: 10));
+    await Future.delayed(Duration(seconds: 5));
     yield* Stream.fromFuture(
         ref.read(usernameServiceProvider).getUsernameData());
   }
