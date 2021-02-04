@@ -26,7 +26,6 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print('getAllRecipient ${response.statusCode}');
-        // print(jsonDecode(response.body));
         return RecipientModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllRecipient ${response.statusCode}');
@@ -94,7 +93,6 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print("addPublicGPGKey ${response.statusCode}");
-        print(jsonDecode(response.body));
         return RecipientDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print("addPublicGPGKey ${response.statusCode}");
@@ -139,7 +137,6 @@ class RecipientService {
 
       if (response.statusCode == 201) {
         print("addRecipient ${response.statusCode}");
-        print(jsonDecode(response.body));
         return RecipientDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print("addRecipient ${response.statusCode}");
@@ -187,6 +184,7 @@ class RecipientService {
         print('sendVerificationEmail ${response.statusCode}');
         return 200;
       } else {
+        print('sendVerificationEmail ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {

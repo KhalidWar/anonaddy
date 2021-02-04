@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
@@ -186,7 +187,7 @@ class AliasDetailScreen extends ConsumerWidget {
               Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -217,7 +218,7 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                 ],
               ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           ],
         ),
       ),

@@ -185,7 +185,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     ),
                 ],
               ),
-            SizedBox(height: size.height * 0.01),
+            SizedBox(height: size.height * 0.05),
           ],
         ),
       ),

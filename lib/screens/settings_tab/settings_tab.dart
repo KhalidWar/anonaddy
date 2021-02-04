@@ -1,11 +1,13 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/screens/account_tab/main_account_card.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
@@ -34,6 +36,7 @@ class SettingsTab extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
     final recipientData = watch(recipientDataStream);
+    final userModel = watch(mainAccountStream);
 
     final recipientStateProvider = context.read(recipientStateManagerProvider);
     final addRecipient = recipientStateProvider.addRecipient;
@@ -62,6 +65,12 @@ class SettingsTab extends ConsumerWidget {
                       Text(
                         'Recipients',
                         style: Theme.of(context).textTheme.headline6,
+                      ),
+                      userModel.when(
+                        loading: () => Container(),
+                        data: (data) => Text(
+                            '${data.recipientCount} / ${NicheMethod().isUnlimited(data.recipientLimit, '')}'),
+                        error: (error, stackTrace) => Text(''),
                       ),
                       IconButton(
                         icon: Icon(Icons.add_circle_outline_outlined),

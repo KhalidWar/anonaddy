@@ -84,7 +84,6 @@ class AliasService {
         return null;
       }
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -106,12 +105,12 @@ class AliasService {
         return null;
       }
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
 
-  Future editAliasDescription(String aliasID, String newDesc) async {
+  Future<AliasDataModel> editAliasDescription(
+      String aliasID, String newDesc) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -129,7 +128,6 @@ class AliasService {
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
-      print(e);
       throw e;
     }
   }

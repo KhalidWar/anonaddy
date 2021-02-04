@@ -36,7 +36,7 @@ class AliasDataModel {
   final int emailsBlocked;
   final int emailsReplied;
   final int emailsSent;
-  final List<dynamic> recipients;
+  final List<RecipientDataModel> recipients;
   final DateTime createdAt;
   final DateTime updatedAt;
   final dynamic deletedAt;
@@ -108,7 +108,7 @@ class AliasDataModel {
       emailsBlocked: json['data']["emails_blocked"],
       emailsReplied: json['data']["emails_replied"],
       emailsSent: json['data']["emails_sent"],
-      recipients: List<dynamic>.from(json['data']["recipients"].map((x) => x)),
+      // recipients: List<dynamic>.from(json['data']["recipients"].map((x) => x)),
       createdAt: DateTime.parse(json['data']["created_at"]),
       updatedAt: DateTime.parse(json['data']["updated_at"]),
       deletedAt: json['data']["deleted_at"],

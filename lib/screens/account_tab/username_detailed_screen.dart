@@ -112,7 +112,7 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
               ],
             ),
             Divider(height: 0),
-            SizedBox(height: 50),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
           ],
         ),
       ),

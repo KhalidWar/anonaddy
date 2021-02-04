@@ -1,6 +1,8 @@
 import 'package:anonaddy/models/username/username_model.dart';
+import 'package:anonaddy/screens/account_tab/main_account_card.dart';
 import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -21,6 +23,7 @@ class AdditionalUsername extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final stream = watch(additionalUsernameStream);
+    final userModel = watch(mainAccountStream);
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -34,9 +37,20 @@ class AdditionalUsername extends ConsumerWidget {
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
-              child: Text(
-                'Additional Username${data.usernameDataList.length >= 2 ? 's' : ''}',
-                style: Theme.of(context).textTheme.headline6,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Additional Username${data.usernameDataList.length >= 2 ? 's' : ''}',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  userModel.when(
+                    loading: () => Container(),
+                    data: (data) => Text(
+                        '${data.usernameCount} / ${NicheMethod().isUnlimited(data.usernameLimit, '')}'),
+                    error: (error, stackTrace) => Text('Error'),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 10),
