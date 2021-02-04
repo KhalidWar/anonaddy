@@ -174,21 +174,22 @@ class AliasService {
     }
   }
 
-  //todo unused method
-  Future<AliasDataModel> getSpecificAliasData(String aliasID) async {
+  Future editAliasRecipient(String aliasID, List<String> recipients) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
-      final response = await http.get(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
-          headers: _headers);
+      final response = await http.patch(
+        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        headers: _headers,
+        body: jsonEncode({"recipient_ids": recipients}),
+      );
 
       if (response.statusCode == 200) {
-        print(' getSpecificAliasData ${response.statusCode}');
+        print('editAliasRecipient ${response.statusCode}');
         return AliasDataModel.fromJsonData(jsonDecode(response.body));
       } else {
-        print(' getSpecificAliasData ${response.statusCode}');
+        print('editAliasRecipient ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {

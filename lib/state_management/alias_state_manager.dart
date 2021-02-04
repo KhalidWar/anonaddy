@@ -183,6 +183,22 @@ class AliasStateManager extends ChangeNotifier {
     });
   }
 
+  void editAliasRecipient(
+      BuildContext context, String aliasID, List<String> recipients) async {
+    Navigator.pop(context);
+    await context
+        .read(aliasServiceProvider)
+        .editAliasRecipient(aliasID, recipients)
+        .then((value) {
+      if (value.emailDescription == null) {
+        showToast(kEditDescFailed);
+      } else {
+        showToast(kEditDescSuccessful);
+        setEmailDescription(value.emailDescription);
+      }
+    });
+  }
+
   void copyToClipboard(String input) {
     Clipboard.setData(ClipboardData(text: input));
     showToast(kCopiedToClipboard);

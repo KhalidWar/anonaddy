@@ -29,6 +29,8 @@ const kDeleteRecipientDialogText =
     'Are you sure you want to delete this recipient?';
 const kAddRecipientText =
     'Enter the individual email of the new recipient you\'d like to add.\n\nYou will receive an email with a verification link that will expire in one hour, you can click "Resend email" to get a new one.';
+const kUpdateAliasRecipients =
+    'Select the recipients for this alias. You can choose multiple recipients. Leave it empty if you would like to use the default recipient.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
