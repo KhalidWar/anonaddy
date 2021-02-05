@@ -44,7 +44,7 @@ class SettingsTab extends ConsumerWidget {
     final recipientFormKey = recipientStateProvider.recipientFormKey;
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(size.height * 0.015),
+      padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
