@@ -6,6 +6,7 @@ const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
 const String kAliasesURL = 'aliases';
 const String kEncryptedRecipient = 'encrypted-recipients';
+const String kRecipientsURL = 'recipients';
 const String kRecipientKeys = 'recipient-keys';
 const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
@@ -24,6 +25,12 @@ const kRestoreAliasText =
 const kRemoveRecipientPublicKey = 'Remove recipient public key';
 const kRemoveRecipientPublicKeyBody =
     'Are you sure you want to remove the public key for this recipient?\nIt will also be removed from any other recipients using the same key.';
+const kDeleteRecipientDialogText =
+    'Are you sure you want to delete this recipient?';
+const kAddRecipientText =
+    'Enter the individual email of the new recipient you\'d like to add.\n\nYou will receive an email with a verification link that will expire in one hour, you can click "Resend email" to get a new one.';
+const kUpdateAliasRecipients =
+    'Select the recipients for this alias. You can choose multiple recipients. Leave it empty if you would like to use the default recipient.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
@@ -43,7 +50,8 @@ const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';
 const kLoadingText = 'Loading';
-const kDescriptionInputText = 'description (optional)';
+const kDescriptionInputText = 'Description (optional)';
+const kEnterLocalPart = 'Enter Local Part (no space or @)';
 const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
 const kEditDescSuccessful = 'Description Updated Successfully';
@@ -59,6 +67,8 @@ const kPublicGPGKeyHintText =
 const kEnterPublicKeyData =
     'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
 const kSignOutAlertDialog = 'Are you sure you want to sign out?';
+const kUnverifiedRecipient =
+    'Unverified recipient emails can NOT be set as default recipient for aliases.';
 
 // Colors
 const kBlueNavyColor = Color(0xFF19216C);
@@ -66,8 +76,6 @@ const kAccentColor = Color(0xFF62F4EB);
 
 // UI Decoration
 const kTextFormFieldDecoration = InputDecoration(
-  border:
-      OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-  focusedBorder:
-      OutlineInputBorder(borderSide: BorderSide(color: kBlueNavyColor)),
+  border: OutlineInputBorder(),
+  focusedBorder: OutlineInputBorder(),
 );

@@ -36,7 +36,8 @@ class AliasService {
     }
   }
 
-  Future createNewAlias(String desc, String domain, String format) async {
+  Future createNewAlias(
+      String desc, String domain, String format, String localPart) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -48,6 +49,7 @@ class AliasService {
           "domain": "$domain",
           "format": "$format",
           "description": "$desc",
+          if (format == 'custom') "local_part": "$localPart"
         }),
       );
 
@@ -82,7 +84,6 @@ class AliasService {
         return null;
       }
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
@@ -104,12 +105,12 @@ class AliasService {
         return null;
       }
     } catch (e) {
-      print(e.toString());
       return null;
     }
   }
 
-  Future editAliasDescription(String aliasID, String newDesc) async {
+  Future<AliasDataModel> editAliasDescription(
+      String aliasID, String newDesc) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -127,7 +128,6 @@ class AliasService {
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
-      print(e);
       throw e;
     }
   }
@@ -174,20 +174,22 @@ class AliasService {
     }
   }
 
-  Future<AliasDataModel> getSpecificAliasData(String aliasID) async {
+  Future editAliasRecipient(String aliasID, List<String> recipients) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
 
-      final response = await http.get(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
-          headers: _headers);
+      final response = await http.patch(
+        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        headers: _headers,
+        body: jsonEncode({"recipient_ids": recipients}),
+      );
 
       if (response.statusCode == 200) {
-        print(' getSpecificAliasData ${response.statusCode}');
+        print('editAliasRecipient ${response.statusCode}');
         return AliasDataModel.fromJsonData(jsonDecode(response.body));
       } else {
-        print(' getSpecificAliasData ${response.statusCode}');
+        print('editAliasRecipient ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {

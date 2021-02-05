@@ -1,15 +1,13 @@
-import 'package:animations/animations.dart';
+import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
-import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
-import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
+import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/state_management/main_account_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
-import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
-import 'package:anonaddy/widgets/card_header.dart';
+import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,6 +15,7 @@ import 'create_new_alias.dart';
 import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
+  yield* Stream.fromFuture(ref.read(aliasServiceProvider).getAllAliasesData());
   while (true) {
     await Future.delayed(Duration(seconds: 1));
     yield* Stream.fromFuture(
@@ -31,6 +30,7 @@ final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
 class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final size = MediaQuery.of(context).size;
     final stream = watch(aliasDataStream);
     // preloads domainOptions for create new alias on FAB click
     watch(domainOptionsProvider);
@@ -69,169 +69,102 @@ class AliasTab extends ConsumerWidget {
         }
 
         return Scaffold(
-          floatingActionButton: buildFloatingActionButton(context),
-          body: SingleChildScrollView(
-            padding: EdgeInsets.all(4),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CardHeader(label: 'Aliases'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AliasDetailListTile(
-                        title: forwardedList.isEmpty
-                            ? '0'
-                            : '${forwardedList.reduce((value, element) => value + element)}',
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                        subtitle: 'Emails Forwarded',
-                        leadingIconData: Icons.forward_to_inbox,
-                      ),
+          body: DefaultTabController(
+            length: 2,
+            child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    expandedHeight: size.height * 0.18,
+                    floating: false,
+                    pinned: true,
+                    title: Text('AddyManager'),
+                    centerTitle: true,
+                    leading: buildCreateNewAlias(context),
+                    actions: [buildSearch(context)],
+                    flexibleSpace: buildFlexibleSpaceBar(
+                        forwardedList, sentList, repliedList, blockedList),
+                    bottom: TabBar(
+                      indicatorColor: kAccentColor,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      tabs: [
+                        Tab(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text('Available Aliases'),
+                              Text('${availableAliasList.length}'),
+                            ],
+                          ),
+                        ),
+                        Tab(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text('Deleted Aliases'),
+                              Text('${deletedAliasList.length}'),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: AliasDetailListTile(
-                        title: sentList.isEmpty
-                            ? '0'
-                            : '${sentList.reduce((value, element) => value + element)}',
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                        subtitle: 'Emails Sent',
-                        leadingIconData: Icons.mark_email_read_outlined,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AliasDetailListTile(
-                        title: repliedList.isEmpty
-                            ? '0'
-                            : '${repliedList.reduce((value, element) => value + element)}',
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                        subtitle: 'Emails Replied',
-                        leadingIconData: Icons.reply,
-                      ),
-                    ),
-                    Expanded(
-                      child: AliasDetailListTile(
-                        title: blockedList.isEmpty
-                            ? '0'
-                            : '${blockedList.reduce((value, element) => value + element)}',
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                        subtitle: 'Emails Blocked',
-                        leadingIconData: Icons.block,
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AliasDetailListTile(
-                        title: '${availableAliasList.length}',
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                        subtitle: 'Available Aliases',
-                        leadingIconData: Icons.alternate_email,
-                      ),
-                    ),
-                    Expanded(
-                      child: AliasDetailListTile(
-                        title: '${deletedAliasList.length}',
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                        subtitle: 'Deleted Aliases',
-                        leadingIconData: Icons.delete_outline_outlined,
-                      ),
-                    ),
-                  ],
-                ),
-                ExpansionTile(
-                  initiallyExpanded: true,
-                  title: Text(
-                    'Available Aliases',
-                    style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  children: [
-                    availableAliasList.isEmpty
-                        ? emptyAvailableAliasList(context)
-                        : ListView.builder(
+                ];
+              },
+              body: TabBarView(
+                children: [
+                  if (availableAliasList.isEmpty)
+                    buildEmptyAliasList(context, 'available')
+                  else
+                    ListView.builder(
+                      padding: EdgeInsets.only(top: 0),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: availableAliasList.length,
+                      itemBuilder: (context, index) {
+                        return AliasListTile(
+                          aliasData: availableAliasList[index],
+                        );
+                      },
+                    ),
+                  if (deletedAliasList.isEmpty)
+                    buildEmptyAliasList(context, 'deleted')
+                  else
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListView.builder(
+                            padding: EdgeInsets.only(top: 0),
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: availableAliasList.length,
+                            itemCount: deletedAliasList.length >= 15
+                                ? 15
+                                : deletedAliasList.length,
                             itemBuilder: (context, index) {
-                              return InkWell(
-                                child: AliasListTile(
-                                  aliasData: availableAliasList[index],
-                                ),
-                                onTap: () {
-                                  aliasDataProvider.aliasDataModel =
-                                      availableAliasList[index];
-                                  aliasDataProvider.setSwitchValue(
-                                      availableAliasList[index].isAliasActive);
-                                  Navigator.push(
-                                    context,
-                                    buildPageRouteBuilder(AliasDetailScreen()),
-                                  );
-                                },
+                              return AliasListTile(
+                                aliasData: deletedAliasList[index],
                               );
                             },
                           ),
-                  ],
-                ),
-                ExpansionTile(
-                  title: Text(
-                    'Deleted Aliases',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  children: [
-                    deletedAliasList.isEmpty
-                        ? emptyDeletedAliasList(context)
-                        : Column(
-                            children: [
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: deletedAliasList.length > 10
-                                    ? 10
-                                    : deletedAliasList.length,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    child: AliasListTile(
-                                      aliasData: deletedAliasList[index],
-                                    ),
-                                    onTap: () {
-                                      aliasDataProvider.aliasDataModel =
-                                          deletedAliasList[index];
-                                      aliasDataProvider.setSwitchValue(
-                                          deletedAliasList[index]
-                                              .isAliasActive);
-                                      Navigator.push(
-                                        context,
-                                        buildPageRouteBuilder(
-                                            AliasDetailScreen()),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                              Divider(),
-                              FlatButton(
-                                child: Text('View all deleted aliases'),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    buildPageRouteBuilder(
-                                      DeletedAliasesScreen(
-                                        aliasDataModel: deletedAliasList,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
+                          Divider(),
+                          FlatButton(
+                            child: Text('View all deleted aliases'),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                buildPageRouteBuilder(
+                                  DeletedAliasesScreen(
+                                    aliasDataModel: deletedAliasList,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                  ],
-                )
-              ],
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         );
@@ -241,6 +174,83 @@ class AliasTab extends ConsumerWidget {
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           label: '$error',
+        );
+      },
+    );
+  }
+
+  FlexibleSpaceBar buildFlexibleSpaceBar(List<int> forwardedList,
+      List<int> sentList, List<int> repliedList, List<int> blockedList) {
+    return FlexibleSpaceBar(
+      background: Padding(
+        padding: EdgeInsets.only(top: 40),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            FlexSpaceText(
+              label: 'Forward',
+              digit: forwardedList.isEmpty
+                  ? 0
+                  : forwardedList.reduce((value, element) => value + element),
+            ),
+            FlexSpaceText(
+              label: 'Sent',
+              digit: sentList.isEmpty
+                  ? 0
+                  : sentList.reduce((value, element) => value + element),
+            ),
+            FlexSpaceText(
+              label: 'Replied',
+              digit: repliedList.isEmpty
+                  ? 0
+                  : repliedList.reduce((value, element) => value + element),
+            ),
+            FlexSpaceText(
+              label: 'Blocked',
+              digit: blockedList.isEmpty
+                  ? 0
+                  : blockedList.reduce((value, element) => value + element),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  IconButton buildCreateNewAlias(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.add_circle_outline_outlined),
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+              child: CreateNewAlias(),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  IconButton buildSearch(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.search, color: Colors.white),
+      onPressed: () {
+        final aliasStateManager = context.read(aliasStateManagerProvider);
+        showSearch(
+          context: context,
+          delegate: SearchService(
+            [
+              ...aliasStateManager.availableAliasList,
+              ...aliasStateManager.deletedAliasList,
+            ],
+          ),
         );
       },
     );
@@ -266,51 +276,43 @@ class AliasTab extends ConsumerWidget {
     );
   }
 
-  Container emptyAvailableAliasList(BuildContext context) {
+  Container buildEmptyAliasList(BuildContext context, String label) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
       child: Text(
-        'No available aliases found',
+        'No $label aliases found',
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.headline6,
       ),
     );
   }
+}
 
-  Container emptyDeletedAliasList(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-      child: Text(
-        'No deleted aliases found',
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline6,
-      ),
-    );
-  }
+class FlexSpaceText extends StatelessWidget {
+  const FlexSpaceText({Key key, this.label, this.digit}) : super(key: key);
 
-  FloatingActionButton buildFloatingActionButton(BuildContext context) {
-    final username = context.read(mainAccountProvider).accountUsername;
-    final createAliasText =
-        'Other aliases e.g. alias@${username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
+  final String label;
+  final int digit;
 
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: () {
-        showModal(
-          context: context,
-          builder: (context) {
-            return SimpleDialog(
-              title: Text('Create new alias'),
-              contentPadding: EdgeInsets.all(20),
-              children: [
-                Text(createAliasText),
-                SizedBox(height: 10),
-                CreateNewAlias(),
-              ],
-            );
-          },
-        );
-      },
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          '$label: ',
+          style: Theme.of(context)
+              .textTheme
+              .bodyText2
+              .copyWith(color: Colors.white),
+        ),
+        Text(
+          digit.toString(),
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1
+              .copyWith(color: Colors.white),
+        ),
+      ],
     );
   }
 }

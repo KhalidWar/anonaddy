@@ -1,3 +1,5 @@
+import 'package:anonaddy/models/alias/alias_data_model.dart';
+
 class RecipientDataModel {
   RecipientDataModel({
     this.id,
@@ -17,11 +19,15 @@ class RecipientDataModel {
   final bool shouldEncrypt;
   dynamic fingerprint;
   final DateTime emailVerifiedAt;
-  final List<dynamic> aliases;
+  final List<AliasDataModel> aliases;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   factory RecipientDataModel.fromJson(Map<String, dynamic> json) {
+    List list = json['aliases'];
+    List<AliasDataModel> aliasesList =
+        list.map((i) => AliasDataModel.fromJson(i)).toList();
+
     return RecipientDataModel(
       id: json["id"],
       userId: json["user_id"],
@@ -31,7 +37,24 @@ class RecipientDataModel {
       emailVerifiedAt: json["email_verified_at"] == null
           ? null
           : DateTime.parse(json["email_verified_at"]),
-      // aliases: List<dynamic>.from(json["aliases"].map((x) => x)),
+      aliases: aliasesList,
+      createdAt: DateTime.parse(json["created_at"]),
+      updatedAt: DateTime.parse(json["updated_at"]),
+    );
+  }
+
+  factory RecipientDataModel.fromJsonRecipientNoAliases(
+      Map<String, dynamic> json) {
+    // DefaultRecipient coming from AdditionalUsername do NOT have "aliases"
+    return RecipientDataModel(
+      id: json["id"],
+      userId: json["user_id"],
+      email: json["email"],
+      shouldEncrypt: json["should_encrypt"],
+      fingerprint: json["fingerprint"],
+      emailVerifiedAt: json["email_verified_at"] == null
+          ? null
+          : DateTime.parse(json["email_verified_at"]),
       createdAt: DateTime.parse(json["created_at"]),
       updatedAt: DateTime.parse(json["updated_at"]),
     );

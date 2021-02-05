@@ -23,23 +23,52 @@ class AliasDetailListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    Color themedColor() {
+      return isDark ? Colors.white : Colors.grey;
+    }
+
     return title == null
         ? Container()
-        : ListTile(
-            horizontalTitleGap: 0,
-            dense: true,
-            leading: Icon(leadingIconData, color: leadingIconColor),
-            title: Text(
-              '${NicheMethod().fixDateTime(title)}',
-              style: titleTextStyle ?? null,
-            ),
-            subtitle: Text('$subtitle'),
-            trailing: trailingIconData == null
-                ? trailing
-                : IconButton(
-                    icon: Icon(trailingIconData),
-                    onPressed: trailingIconOnPress,
+        : Container(
+            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: Row(
+              children: [
+                Icon(
+                  leadingIconData,
+                  color: leadingIconColor ?? themedColor(),
+                ),
+                SizedBox(width: 15),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${NicheMethod().fixDateTime(title)}',
+                        style: titleTextStyle ?? null,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 2),
+                        child: Text(
+                          '$subtitle',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+                trailingIconData == null
+                    ? trailing ?? Container()
+                    : IconButton(
+                        icon: Icon(
+                          trailingIconData,
+                          color: themedColor(),
+                        ),
+                        onPressed: trailingIconOnPress,
+                      ),
+              ],
+            ),
           );
   }
 }

@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/all.dart';
 
 import '../constants.dart';
+import 'alias_tab/create_new_alias.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -86,11 +87,29 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildAppBar(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
-      child: AppBar(
+    if (_selectedIndex == 0 || _selectedIndex == 2)
+      return AppBar(
         title: Text('AddyManager', style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.add_circle_outline_outlined),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              builder: (context) {
+                return SingleChildScrollView(
+                  padding:
+                      EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+                  child: CreateNewAlias(),
+                );
+              },
+            );
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.search, color: Colors.white),
@@ -108,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ],
-      ),
-    );
+      );
   }
 }

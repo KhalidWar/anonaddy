@@ -1,9 +1,6 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
-import 'package:anonaddy/screens/alias_tab/alias_list_tile.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SearchService extends SearchDelegate {
   SearchService(this._aliasDataList);
@@ -37,8 +34,6 @@ class SearchService extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final aliasDataProvider = context.read(aliasStateManagerProvider);
-
     List<AliasDataModel> _resultList = [];
 
     _aliasDataList.forEach((element) {
@@ -57,21 +52,9 @@ class SearchService extends SearchDelegate {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            aliasDataProvider.aliasDataModel = initialList[index];
-            aliasDataProvider.setSwitchValue(initialList[index].isAliasActive);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return AliasDetailScreen();
-                },
-              ),
-            );
             _recentSearches.add(initialList[index]);
           },
-          child: AliasListTile(
-            aliasData: initialList[index],
-          ),
+          child: AliasListTile(aliasData: initialList[index]),
         );
       },
     );

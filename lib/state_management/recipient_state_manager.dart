@@ -12,17 +12,15 @@ final recipientStateManagerProvider =
     ChangeNotifierProvider((ref) => RecipientStateManager());
 
 class RecipientStateManager extends ChangeNotifier {
-  RecipientDataModel _recipientDataModel;
+  RecipientDataModel recipientDataModel;
   bool _encryptionSwitch;
   bool _isLoading = false;
 
+  final textEditController = TextEditingController();
+  final recipientFormKey = GlobalKey<FormState>();
+
   get encryptionSwitch => _encryptionSwitch;
   get isLoading => _isLoading;
-
-  void setRecipientData(RecipientDataModel recipient) {
-    _recipientDataModel = recipient;
-    notifyListeners();
-  }
 
   void setEncryptionSwitch(bool value) {
     _encryptionSwitch = value;
@@ -40,7 +38,7 @@ class RecipientStateManager extends ChangeNotifier {
   }
 
   void setFingerprint(dynamic input) {
-    _recipientDataModel.fingerprint = input;
+    recipientDataModel.fingerprint = input;
     notifyListeners();
   }
 
@@ -116,6 +114,37 @@ class RecipientStateManager extends ChangeNotifier {
       } else {
         _showToast('Failed to send verification email');
       }
+    });
+  }
+
+  void addRecipient(BuildContext context, String email) async {
+    if (recipientFormKey.currentState.validate()) {
+      await context
+          .read(recipientServiceProvider)
+          .addRecipient(email)
+          .then((value) {
+        _showToast('Recipient added successfully!');
+        Navigator.pop(context);
+        textEditController.clear();
+      }).catchError((error, stackTrace) {
+        return _showToast(error);
+      });
+    }
+  }
+
+  void removeRecipient(BuildContext context, String recipientID) async {
+    await context
+        .read(recipientServiceProvider)
+        .removeRecipient(recipientID)
+        .then((value) {
+      if (value == 204) {
+        _showToast('Recipient deleted successfully!');
+      } else {
+        _showToast('Failed to delete recipient!');
+      }
+      Navigator.pop(context);
+    }).catchError((error, stackTrace) {
+      return _showToast(error);
     });
   }
 

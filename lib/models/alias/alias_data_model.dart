@@ -1,3 +1,5 @@
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+
 class AliasDataModel {
   AliasDataModel({
     this.aliasID,
@@ -34,7 +36,7 @@ class AliasDataModel {
   final int emailsBlocked;
   final int emailsReplied;
   final int emailsSent;
-  final List<dynamic> recipients;
+  final List<RecipientDataModel> recipients;
   final DateTime createdAt;
   final DateTime updatedAt;
   final dynamic deletedAt;
@@ -62,6 +64,34 @@ class AliasDataModel {
     );
   }
 
+  factory AliasDataModel.fromJsonAliasData(Map<String, dynamic> json) {
+    List list = json['recipients'];
+    List<RecipientDataModel> recipientList = list
+        .map((i) => RecipientDataModel.fromJsonRecipientNoAliases(i))
+        .toList();
+
+    return AliasDataModel(
+      aliasID: json["id"],
+      userId: json["user_id"],
+      aliasableId: json["aliasable_id"],
+      aliasableType: json["aliasable_type"],
+      localPart: json["local_part"],
+      extension: json["extension"],
+      domain: json["domain"],
+      email: json["email"],
+      isAliasActive: json["active"],
+      emailDescription: json["description"] ?? 'No Description',
+      emailsForwarded: json["emails_forwarded"],
+      emailsBlocked: json["emails_blocked"],
+      emailsReplied: json["emails_replied"],
+      emailsSent: json["emails_sent"],
+      recipients: recipientList,
+      createdAt: DateTime.parse(json["created_at"]),
+      updatedAt: DateTime.parse(json["updated_at"]),
+      deletedAt: json["deleted_at"],
+    );
+  }
+
   factory AliasDataModel.fromJsonData(Map<String, dynamic> json) {
     return AliasDataModel(
       aliasID: json['data']["id"],
@@ -78,7 +108,7 @@ class AliasDataModel {
       emailsBlocked: json['data']["emails_blocked"],
       emailsReplied: json['data']["emails_replied"],
       emailsSent: json['data']["emails_sent"],
-      recipients: List<dynamic>.from(json['data']["recipients"].map((x) => x)),
+      // recipients: List<dynamic>.from(json['data']["recipients"].map((x) => x)),
       createdAt: DateTime.parse(json['data']["created_at"]),
       updatedAt: DateTime.parse(json['data']["updated_at"]),
       deletedAt: json['data']["deleted_at"],

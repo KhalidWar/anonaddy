@@ -8,7 +8,7 @@ class AliasModel {
   factory AliasModel.fromJson(Map<String, dynamic> json) {
     List list = json['data'];
     List<AliasDataModel> aliasDataList =
-        list.map((i) => AliasDataModel.fromJson(i)).toList();
+        list.map((i) => AliasDataModel.fromJsonAliasData(i)).toList();
 
     return AliasModel(
       aliasDataList: aliasDataList,
