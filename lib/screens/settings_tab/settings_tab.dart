@@ -160,52 +160,47 @@ class SettingsTab extends ConsumerWidget {
 
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
-          child: Container(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Column(
-              children: [
-                Divider(
-                  thickness: 3,
-                  indent: size.width * 0.4,
-                  endIndent: size.width * 0.4,
-                ),
-                SizedBox(height: size.height * 0.01),
-                Text(
-                  'Add new recipient',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                Divider(thickness: 1),
-                SizedBox(height: size.height * 0.01),
-                Column(
-                  children: [
-                    Text(kAddRecipientText),
-                    SizedBox(height: size.height * 0.01),
-                    Form(
-                      key: recipientFormKey,
-                      child: TextFormField(
-                        autofocus: true,
-                        controller: textEditController,
-                        validator: (input) =>
-                            FormValidator().validateRecipientEmail(input),
-                        textInputAction: TextInputAction.next,
-                        decoration: kTextFormFieldDecoration.copyWith(
-                            hintText: 'joedoe@example.com'),
-                      ),
+          child: Column(
+            children: [
+              Divider(
+                thickness: 3,
+                indent: size.width * 0.4,
+                endIndent: size.width * 0.4,
+              ),
+              SizedBox(height: size.height * 0.01),
+              Text(
+                'Add new recipient',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Divider(thickness: 1),
+              SizedBox(height: size.height * 0.01),
+              Column(
+                children: [
+                  Text(kAddRecipientText),
+                  SizedBox(height: size.height * 0.01),
+                  Form(
+                    key: recipientFormKey,
+                    child: TextFormField(
+                      autofocus: true,
+                      controller: textEditController,
+                      validator: (input) =>
+                          FormValidator().validateRecipientEmail(input),
+                      textInputAction: TextInputAction.next,
+                      decoration: kTextFormFieldDecoration.copyWith(
+                          hintText: 'joedoe@example.com'),
                     ),
-                    SizedBox(height: 10),
-                    RaisedButton(
-                      child: Text('Add Recipient'),
-                      onPressed: () => addRecipient(
-                        context,
-                        textEditController.text.trim(),
-                      ),
+                  ),
+                  SizedBox(height: 10),
+                  RaisedButton(
+                    child: Text('Add Recipient'),
+                    onPressed: () => addRecipient(
+                      context,
+                      textEditController.text.trim(),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },

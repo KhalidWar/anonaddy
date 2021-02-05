@@ -238,53 +238,44 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
-          child: Container(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Column(
-              children: [
-                Divider(
-                  thickness: 3,
-                  indent: size.width * 0.4,
-                  endIndent: size.width * 0.4,
+          child: Column(
+            children: [
+              Divider(
+                thickness: 3,
+                indent: size.width * 0.4,
+                endIndent: size.width * 0.4,
+              ),
+              SizedBox(height: size.height * 0.01),
+              Text(
+                'Add new recipient',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Divider(thickness: 1),
+              SizedBox(height: size.height * 0.01),
+              Text(kEnterPublicKeyData),
+              SizedBox(height: size.height * 0.01),
+              TextFormField(
+                autofocus: true,
+                controller: _texEditingController,
+                minLines: 3,
+                maxLines: 8,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (submit) => addPublicKey(),
+                decoration: kTextFormFieldDecoration.copyWith(
+                  contentPadding: EdgeInsets.all(5),
+                  hintText: kPublicGPGKeyHintText,
                 ),
-                SizedBox(height: size.height * 0.01),
-                Text(
-                  'Add new recipient',
-                  style: Theme.of(context).textTheme.headline6,
+              ),
+              SizedBox(height: size.height * 0.01),
+              RaisedButton(
+                child: Text('Add Key'),
+                onPressed: () => addPublicGPGKey(
+                  context,
+                  recipientData.id,
+                  _texEditingController.text,
                 ),
-                Divider(thickness: 1),
-                SizedBox(height: size.height * 0.01),
-                Text(kEnterPublicKeyData),
-                SizedBox(height: size.height * 0.01),
-                TextFormField(
-                  autofocus: true,
-                  controller: _texEditingController,
-                  minLines: 3,
-                  maxLines: 8,
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (submit) => addPublicKey(),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(5),
-                    hintText: kPublicGPGKeyHintText,
-                    border: OutlineInputBorder(),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: kBlueNavyColor),
-                    ),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.01),
-                RaisedButton(
-                  child: Text('Add Key'),
-                  onPressed: () => addPublicGPGKey(
-                    context,
-                    recipientData.id,
-                    _texEditingController.text,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

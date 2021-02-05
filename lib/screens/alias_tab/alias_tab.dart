@@ -117,7 +117,7 @@ class AliasTab extends ConsumerWidget {
                     buildEmptyAliasList(context, 'available')
                   else
                     ListView.builder(
-                      padding: EdgeInsets.only(top: 0),
+                      padding: EdgeInsets.only(top: 10),
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: availableAliasList.length,
@@ -134,7 +134,7 @@ class AliasTab extends ConsumerWidget {
                       child: Column(
                         children: [
                           ListView.builder(
-                            padding: EdgeInsets.only(top: 0),
+                            padding: EdgeInsets.only(top: 10),
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: deletedAliasList.length >= 15

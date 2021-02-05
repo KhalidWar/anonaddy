@@ -77,5 +77,6 @@ const kAccentColor = Color(0xFF62F4EB);
 // UI Decoration
 const kTextFormFieldDecoration = InputDecoration(
   border: OutlineInputBorder(),
-  focusedBorder: OutlineInputBorder(),
+  focusedBorder:
+      OutlineInputBorder(borderSide: BorderSide(color: kAccentColor)),
 );

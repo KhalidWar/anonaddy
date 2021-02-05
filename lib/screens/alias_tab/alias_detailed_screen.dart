@@ -317,45 +317,40 @@ class AliasDetailScreen extends ConsumerWidget {
 
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
-          child: Container(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Column(
-              children: [
-                Divider(
-                  thickness: 3,
-                  indent: size.width * 0.4,
-                  endIndent: size.width * 0.4,
+          child: Column(
+            children: [
+              Divider(
+                thickness: 3,
+                indent: size.width * 0.4,
+                endIndent: size.width * 0.4,
+              ),
+              SizedBox(height: size.height * 0.01),
+              Text(
+                'Update description',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Divider(thickness: 1),
+              SizedBox(height: size.height * 0.01),
+              Text('Update description for'),
+              Text(
+                '${aliasDataModel.email}',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              SizedBox(height: size.height * 0.02),
+              TextFormField(
+                autofocus: true,
+                controller: _textEditingController,
+                onFieldSubmitted: (toggle) => editDesc(),
+                decoration: kTextFormFieldDecoration.copyWith(
+                  hintText: '${aliasDataModel.emailDescription}',
                 ),
-                SizedBox(height: size.height * 0.01),
-                Text(
-                  'Update description',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                Divider(thickness: 1),
-                SizedBox(height: size.height * 0.01),
-                Text('Update description for'),
-                Text(
-                  '${aliasDataModel.email}',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                SizedBox(height: size.height * 0.02),
-                TextFormField(
-                  autofocus: true,
-                  controller: _textEditingController,
-                  onFieldSubmitted: (toggle) => editDesc(),
-                  decoration: kTextFormFieldDecoration.copyWith(
-                    hintText: '${aliasDataModel.emailDescription}',
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                RaisedButton(
-                  child: Text('Update'),
-                  onPressed: () => editDesc(),
-                ),
-              ],
-            ),
+              ),
+              SizedBox(height: size.height * 0.02),
+              RaisedButton(
+                child: Text('Update'),
+                onPressed: () => editDesc(),
+              ),
+            ],
           ),
         );
       },
