@@ -38,11 +38,6 @@ class SettingsTab extends ConsumerWidget {
     final recipientData = watch(recipientDataStream);
     final userModel = watch(mainAccountStream);
 
-    final recipientStateProvider = context.read(recipientStateManagerProvider);
-    final addRecipient = recipientStateProvider.addRecipient;
-    final textEditController = recipientStateProvider.textEditController;
-    final recipientFormKey = recipientStateProvider.recipientFormKey;
-
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
       child: Column(
@@ -74,13 +69,13 @@ class SettingsTab extends ConsumerWidget {
                       ),
                       IconButton(
                         icon: Icon(Icons.add_circle_outline_outlined),
-                        onPressed: () => buildShowModalBottomSheet(context,
-                            textEditController, recipientFormKey, addRecipient),
+                        onPressed: () => buildShowModalBottomSheet(context),
                       ),
                     ],
                   ),
                   ListView.builder(
                     shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: recipientList.length,
                     itemBuilder: (context, index) {
                       return RecipientListTile(
@@ -144,11 +139,7 @@ class SettingsTab extends ConsumerWidget {
     );
   }
 
-  Future buildShowModalBottomSheet(
-      BuildContext context,
-      TextEditingController textEditController,
-      GlobalKey recipientFormKey,
-      Function addRecipient) {
+  Future buildShowModalBottomSheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -157,6 +148,7 @@ class SettingsTab extends ConsumerWidget {
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
+        final recipientManager = context.read(recipientStateManagerProvider);
 
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
@@ -179,10 +171,10 @@ class SettingsTab extends ConsumerWidget {
                   Text(kAddRecipientText),
                   SizedBox(height: size.height * 0.01),
                   Form(
-                    key: recipientFormKey,
+                    key: recipientManager.recipientFormKey,
                     child: TextFormField(
                       autofocus: true,
-                      controller: textEditController,
+                      controller: recipientManager.textEditController,
                       validator: (input) =>
                           FormValidator().validateRecipientEmail(input),
                       textInputAction: TextInputAction.next,
@@ -193,10 +185,11 @@ class SettingsTab extends ConsumerWidget {
                   SizedBox(height: 10),
                   RaisedButton(
                     child: Text('Add Recipient'),
-                    onPressed: () => addRecipient(
-                      context,
-                      textEditController.text.trim(),
-                    ),
+                    onPressed: () {
+                      recipientManager.addRecipient(
+                          context,
+                          recipientManager.textEditController.text.trim(),);
+                    },
                   ),
                 ],
               ),
