@@ -1,7 +1,6 @@
 import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
@@ -22,18 +21,31 @@ class MainAccount extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final size = MediaQuery.of(context).size;
+
     final accountStream = watch(accountStreamProvider);
 
     return accountStream.when(
       loading: () => LoadingIndicator(),
       data: (data) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AccountCardHeader(
-              title: data.username,
-              subtitle: '${data.subscription} subscription',
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
+              child: Text(
+                '${data.username.replaceFirst(data.username[0], data.username[0].toUpperCase())}',
+                style: Theme.of(context).textTheme.headline6,
+              ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+            SizedBox(height: 10),
+            AliasDetailListTile(
+              title: data.subscription.replaceFirst(
+                  data.subscription[0], data.subscription[0].toUpperCase()),
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Subscription',
+              leadingIconData: Icons.attach_money_outlined,
+            ),
             AliasDetailListTile(
               title:
                   '${(data.bandwidth / 1000000).toStringAsFixed(2)} MB / ${NicheMethod().isUnlimited(data.bandwidthLimit / 1000000, 'MB')}',
@@ -41,67 +53,17 @@ class MainAccount extends ConsumerWidget {
               subtitle: 'Monthly Bandwidth',
               leadingIconData: Icons.speed_outlined,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: '${data.usernameCount} / ${data.usernameLimit}',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Add. Usernames',
-                    leadingIconData: Icons.account_circle_outlined,
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: '${data.recipientCount} / ${data.recipientLimit}',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Recipients',
-                    leadingIconData: Icons.account_circle_outlined,
-                  ),
-                ),
-              ],
+            AliasDetailListTile(
+              title: data.defaultAliasDomain,
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Default Alias Domain',
+              leadingIconData: Icons.dns,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    title:
-                        '${data.aliasCount} / ${NicheMethod().isUnlimited(data.aliasLimit, '')}',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Active Aliases',
-                    leadingIconData: Icons.email_outlined,
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    title:
-                        '${data.activeDomainCount} / ${data.activeDomainLimit}',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Active Domain Count',
-                    leadingIconData: Icons.dns,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: data.defaultAliasDomain,
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Default Alias Domain',
-                    leadingIconData: Icons.dns,
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: data.defaultAliasFormat,
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Default Alias Format',
-                    leadingIconData: Icons.alternate_email,
-                  ),
-                ),
-              ],
+            AliasDetailListTile(
+              title: data.defaultAliasFormat,
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Default Alias Format',
+              leadingIconData: Icons.alternate_email,
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           ],
@@ -112,6 +74,40 @@ class MainAccount extends ConsumerWidget {
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           label: "$error",
+        );
+      },
+    );
+  }
+
+  Future buildUpdateDefaultAliasDomain(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
+      builder: (context) {
+        return Container(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Divider(
+                  thickness: 3,
+                  indent: size.width * 0.4,
+                  endIndent: size.width * 0.4,
+                ),
+                SizedBox(height: size.height * 0.01),
+                Text(
+                  'Create new alias',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Divider(thickness: 1),
+                SizedBox(height: size.height * 0.01),
+              ],
+            ),
+          ),
         );
       },
     );
