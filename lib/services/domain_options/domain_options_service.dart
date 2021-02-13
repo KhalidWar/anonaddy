@@ -2,10 +2,16 @@ import 'dart:convert';
 
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:flutter_riverpod/all.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
+
+final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
+  return ref.read(domainOptionsServiceProvider).getDomainOptions();
+});
 
 class DomainOptionsService {
   final _headers = <String, String>{

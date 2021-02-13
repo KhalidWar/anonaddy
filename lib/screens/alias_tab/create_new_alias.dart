@@ -1,5 +1,6 @@
+import 'package:anonaddy/screens/account_tab/main_account_card.dart';
+import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/state_management/main_account_state_manager.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
-import 'alias_tab.dart';
 
 class CreateNewAlias extends ConsumerWidget {
   @override
@@ -32,7 +32,7 @@ class CreateNewAlias extends ConsumerWidget {
     final paidTierWithSharedDomain =
         aliasStateProvider.paidTierWithSharedDomain;
 
-    final userModel = watch(mainAccountProvider).userModel;
+    final userModel = watch(accountStreamProvider).data.value;
     final subscription = userModel.subscription;
     final createAliasText =
         'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';

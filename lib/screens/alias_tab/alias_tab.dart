@@ -1,6 +1,6 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/models/domain_options/domain_options.dart';
+import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
@@ -23,16 +23,13 @@ final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
   }
 });
 
-final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
-  return ref.read(domainOptionsServiceProvider).getDomainOptions();
-});
-
 class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
     final stream = watch(aliasDataStream);
-    // preloads domainOptions for create new alias on FAB click
+
+    /// preloads domainOptions for create new alias screen
     watch(domainOptionsProvider);
 
     final aliasDataProvider = context.read(aliasStateManagerProvider);

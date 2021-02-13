@@ -9,7 +9,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final additionalUsernameStream =
+final additionalUsernameStreamProvider =
     StreamProvider.autoDispose<UsernameModel>((ref) async* {
   yield* Stream.fromFuture(ref.read(usernameServiceProvider).getUsernameData());
   while (true) {
@@ -22,12 +22,12 @@ final additionalUsernameStream =
 class AdditionalUsername extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final stream = watch(additionalUsernameStream);
-    final userModel = watch(mainAccountStream);
+    final additionalUsernameStream = watch(additionalUsernameStreamProvider);
+    final userModel = watch(accountStreamProvider);
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return stream.when(
+    return additionalUsernameStream.when(
       loading: () => Container(),
       data: (data) {
         return Column(

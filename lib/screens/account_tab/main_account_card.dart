@@ -1,5 +1,4 @@
 import 'package:anonaddy/models/user/user_model.dart';
-import 'package:anonaddy/state_management/main_account_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
@@ -9,7 +8,8 @@ import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final mainAccountStream = StreamProvider.autoDispose<UserModel>((ref) async* {
+final accountStreamProvider =
+    StreamProvider.autoDispose<UserModel>((ref) async* {
   yield* Stream.fromFuture(ref.read(userServiceProvider).getUserData());
   while (true) {
     await Future.delayed(Duration(seconds: 5));
@@ -22,15 +22,11 @@ class MainAccount extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final stream = watch(mainAccountStream);
+    final accountStream = watch(accountStreamProvider);
 
-    final mainAccountManager = context.read(mainAccountProvider);
-
-    return stream.when(
+    return accountStream.when(
       loading: () => LoadingIndicator(),
       data: (data) {
-        mainAccountManager.userModel = data;
-
         return Column(
           children: [
             AccountCardHeader(

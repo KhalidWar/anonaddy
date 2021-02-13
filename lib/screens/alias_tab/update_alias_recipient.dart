@@ -26,7 +26,7 @@ class _UpdateAliasRecipientState extends State<UpdateAliasRecipient> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final allRecipients = context.read(recipientDataStream).data.value;
+    final allRecipients = context.read(recipientStreamProvider).data.value;
     final aliasRecipients = widget.aliasDataModel.recipients;
 
     for (RecipientDataModel recipient in allRecipients.recipientDataList) {

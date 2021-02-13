@@ -20,7 +20,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 
-final recipientDataStream =
+final recipientStreamProvider =
     StreamProvider.autoDispose<RecipientModel>((ref) async* {
   yield* Stream.fromFuture(
       ref.read(recipientServiceProvider).getAllRecipient());
@@ -35,8 +35,9 @@ class SettingsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
-    final recipientData = watch(recipientDataStream);
-    final userModel = watch(mainAccountStream);
+
+    final recipientStream = watch(recipientStreamProvider);
+    final accountStream = watch(accountStreamProvider);
 
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -47,7 +48,7 @@ class SettingsTab extends ConsumerWidget {
           // todo Give dev email to receive feedback and suggestions
           // todo encourage users to get into beta program
 
-          recipientData.when(
+          recipientStream.when(
             loading: () => LoadingIndicator(),
             data: (data) {
               final recipientList = data.recipientDataList;
@@ -61,7 +62,7 @@ class SettingsTab extends ConsumerWidget {
                         'Recipients',
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                      userModel.when(
+                      accountStream.when(
                         loading: () => Container(),
                         data: (data) => Text(
                             '${data.recipientCount} / ${NicheMethod().isUnlimited(data.recipientLimit, '')}'),
@@ -187,8 +188,9 @@ class SettingsTab extends ConsumerWidget {
                     child: Text('Add Recipient'),
                     onPressed: () {
                       recipientManager.addRecipient(
-                          context,
-                          recipientManager.textEditController.text.trim(),);
+                        context,
+                        recipientManager.textEditController.text.trim(),
+                      );
                     },
                   ),
                 ],
