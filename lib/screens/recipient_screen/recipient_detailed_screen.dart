@@ -37,7 +37,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context),
+      appBar: buildAppBar(context, removeRecipient),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -76,19 +76,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 onPressed: () => copyOnTap(recipientData.email),
               ),
             ),
-            AliasDetailListTile(
-              leadingIconData: Icons.delete_outline,
-              title: recipientData.email,
-              subtitle: 'Delete recipient',
-              trailing: IconButton(
-                icon: Icon(
-                  Icons.delete_outline,
-                  color: Colors.red,
-                ),
-                onPressed: () => buildRemoveRecipient(context, removeRecipient),
-              ),
-            ),
-            Divider(height: 10),
             AliasDetailListTile(
               leadingIconData: Icons.fingerprint_outlined,
               title: recipientData.fingerprint == null
@@ -282,7 +269,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildRemoveRecipient(BuildContext context, Function removeRecipient) {
+  Widget buildAppBar(BuildContext context, Function removeRecipient) {
+    final customAppBar = CustomAppBar();
     final confirmationDialog = ConfirmationDialog();
 
     void remove() {
@@ -290,22 +278,29 @@ class RecipientDetailedScreen extends ConsumerWidget {
       Navigator.pop(context);
     }
 
-    return showModal(
-      context: context,
-      builder: (context) {
-        return isIOS
-            ? confirmationDialog.iOSAlertDialog(
-                context, kDeleteRecipientDialogText, remove, 'Delete recipient')
-            : confirmationDialog.androidAlertDialog(context,
-                kDeleteRecipientDialogText, remove, 'Delete recipient');
-      },
+    return AppBar(
+      title: Text('Recipient', style: TextStyle(color: Colors.white)),
+      leading: IconButton(
+        icon: Icon(isIOS ? CupertinoIcons.back : Icons.arrow_back),
+        color: Colors.white,
+        onPressed: () => Navigator.pop(context),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () => showModal(
+            context: context,
+            builder: (context) {
+              return isIOS
+                  ? confirmationDialog.iOSAlertDialog(context,
+                      kDeleteRecipientDialogText, remove, 'Delete recipient')
+                  : confirmationDialog.androidAlertDialog(context,
+                      kDeleteRecipientDialogText, remove, 'Delete recipient');
+            },
+          ),
+        ),
+      ],
     );
-  }
-
-  Widget buildAppBar(BuildContext context) {
-    final customAppBar = CustomAppBar();
-
-    return customAppBar.androidAppBar(context, 'Recipient');
 
     //todo fix CupertinoNavigationBar causing build failure
     // return isIOS
