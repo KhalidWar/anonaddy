@@ -1,22 +1,16 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/screens/account_tab/main_account_card.dart';
-import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
-import 'package:anonaddy/services/theme/theme_service.dart';
+import 'package:anonaddy/screens/settings_tab/app_settings.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
-import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 
@@ -96,44 +90,36 @@ class SettingsTab extends ConsumerWidget {
               );
             },
           ),
-          Divider(height: 0),
-          ExpansionTile(
-            tilePadding: EdgeInsets.symmetric(vertical: 0),
+          Divider(height: 10),
+          ListTile(
+            contentPadding:
+                EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 12),
             title: Text(
               'App Settings',
               style: Theme.of(context).textTheme.headline6,
             ),
-            children: [
-              ListTile(
-                leading: Text(
-                  'Dark Theme',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                trailing: Switch.adaptive(
-                  value: context.read(themeServiceProvider).isDarkTheme,
-                  onChanged: (toggle) =>
-                      context.read(themeServiceProvider).toggleTheme(),
-                ),
+            trailing: Icon(Icons.settings),
+            onTap: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                transitionsBuilder:
+                    (context, animation, secondAnimation, child) {
+                  animation = CurvedAnimation(
+                      parent: animation, curve: Curves.linearToEaseOut);
+
+                  return SlideTransition(
+                    position: Tween(
+                      begin: Offset(1.0, 0.0),
+                      end: Offset(0.0, 0.0),
+                    ).animate(animation),
+                    child: child,
+                  );
+                },
+                pageBuilder: (context, animation, secondAnimation) {
+                  return AppSettings();
+                },
               ),
-              ListTile(
-                leading: Text(
-                  'About App',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                onTap: () => aboutAppDialog(context),
-              ),
-              SizedBox(height: size.height * 0.01),
-              ListTile(
-                tileColor: Colors.red,
-                title: Center(
-                  child: Text(
-                    'Log Out',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                ),
-                onTap: () => buildLogoutDialog(context),
-              ),
-            ],
+            ),
           ),
         ],
       ),
@@ -198,63 +184,6 @@ class SettingsTab extends ConsumerWidget {
             ],
           ),
         );
-      },
-    );
-  }
-
-  Future buildLogoutDialog(BuildContext context) {
-    final logout = context.read(loginStateManagerProvider).logout;
-    final confirmationDialog = ConfirmationDialog();
-
-    return showModal(
-      context: context,
-      builder: (context) {
-        signOut() {
-          logout(context).then((value) {
-            Navigator.pop(context);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return TokenLoginScreen();
-                },
-              ),
-            );
-          });
-        }
-
-        return TargetedPlatform().isIOS()
-            ? confirmationDialog.iOSAlertDialog(
-                context, kSignOutAlertDialog, signOut, 'Sign out')
-            : confirmationDialog.androidAlertDialog(
-                context, kSignOutAlertDialog, signOut, 'Sign out');
-      },
-    );
-  }
-
-  aboutAppDialog(BuildContext context) async {
-    final confirmationDialog = ConfirmationDialog();
-
-    launchUrl() async {
-      await launch(kGithubRepoURL).catchError((error, stackTrace) {
-        throw Fluttertoast.showToast(
-          msg: error.message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey[600],
-        );
-      });
-      Navigator.pop(context);
-    }
-
-    showModal(
-      context: context,
-      builder: (context) {
-        return TargetedPlatform().isIOS()
-            ? confirmationDialog.iOSAlertDialog(context, kAboutAppText,
-                launchUrl, 'About App', 'Visit Github', 'Cancel')
-            : confirmationDialog.androidAlertDialog(context, kAboutAppText,
-                launchUrl, 'About App', 'Visit Github', 'Cancel');
       },
     );
   }
