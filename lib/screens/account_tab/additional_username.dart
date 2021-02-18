@@ -1,7 +1,10 @@
+import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/main_account_card.dart';
 import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/username_state_manager.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +27,7 @@ class AdditionalUsername extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final additionalUsernameStream = watch(additionalUsernameStreamProvider);
     final userModel = watch(accountStreamProvider);
+    final usernameStateManager = watch(usernameStateManagerProvider);
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -34,14 +38,13 @@ class AdditionalUsername extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Divider(height: 0),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Additional Username${data.usernameDataList.length >= 2 ? 's' : ''}',
+                    'Username${data.usernameDataList.length >= 2 ? 's' : ''}',
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   userModel.when(
@@ -50,10 +53,14 @@ class AdditionalUsername extends ConsumerWidget {
                         '${data.usernameCount} / ${NicheMethod().isUnlimited(data.usernameLimit, '')}'),
                     error: (error, stackTrace) => Text('Error'),
                   ),
+                  IconButton(
+                    icon: Icon(Icons.add_circle_outline_outlined),
+                    onPressed: () =>
+                        buildAddNewUsername(context, usernameStateManager),
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 10),
             if (data.usernameDataList.isEmpty)
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 6),
@@ -84,10 +91,10 @@ class AdditionalUsername extends ConsumerWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${data.usernameDataList[index].username}'),
+                              Text(username.username),
                               SizedBox(height: 2),
                               Text(
-                                '${data.usernameDataList[index].description}',
+                                username.description ?? 'No description',
                                 style: TextStyle(color: Colors.grey),
                               ),
                             ],
@@ -129,6 +136,65 @@ class AdditionalUsername extends ConsumerWidget {
         return LottieWidget(
           lottie: 'assets/lottie/errorCone.json',
           label: '$error',
+        );
+      },
+    );
+  }
+
+  Future buildAddNewUsername(
+      BuildContext context, UsernameStateManager usernameStateManager) {
+    final createNewUsername = usernameStateManager.createNewUsername;
+    final textEditController = TextEditingController();
+
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final size = MediaQuery.of(context).size;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Column(
+            children: [
+              Divider(
+                thickness: 3,
+                indent: size.width * 0.4,
+                endIndent: size.width * 0.4,
+              ),
+              SizedBox(height: size.height * 0.01),
+              Text(
+                'Add new username',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Divider(thickness: 1),
+              SizedBox(height: size.height * 0.01),
+              Text(kAddNewUsernameText),
+              SizedBox(height: size.height * 0.02),
+              Form(
+                key: usernameStateManager.usernameFormKey,
+                child: TextFormField(
+                  autofocus: true,
+                  controller: textEditController,
+                  validator: (input) =>
+                      FormValidator().validateSearchField(input),
+                  onFieldSubmitted: (toggle) => createNewUsername(context,
+                      textEditController.text.trim(), textEditController),
+                  decoration: kTextFormFieldDecoration.copyWith(
+                    hintText: 'johndoe',
+                  ),
+                ),
+              ),
+              SizedBox(height: size.height * 0.02),
+              RaisedButton(
+                child: Text('Update'),
+                onPressed: () => createNewUsername(context,
+                    textEditController.text.trim(), textEditController),
+              ),
+            ],
+          ),
         );
       },
     );

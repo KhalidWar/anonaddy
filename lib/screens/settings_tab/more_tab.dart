@@ -25,7 +25,7 @@ final recipientStreamProvider =
   }
 });
 
-class SettingsTab extends ConsumerWidget {
+class MoreTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;

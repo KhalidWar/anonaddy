@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
-import 'package:anonaddy/screens/settings_tab/settings_tab.dart';
+import 'package:anonaddy/screens/settings_tab/more_tab.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             AccountTab(),
             AliasTab(),
-            SettingsTab(),
+            MoreTab(),
           ],
         ),
         bottomNavigationBar: TargetedPlatform().isIOS()
@@ -77,8 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: 'Aliases',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: 'Settings',
+                    icon: Icon(Icons.more_horiz_rounded),
+                    label: 'More',
                   ),
                 ],
               ),

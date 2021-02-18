@@ -27,8 +27,8 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
         child: Column(
           children: [
             AccountCardHeader(
-              title: '${username.username}',
-              subtitle: '${widget.username.description}',
+              title: username.username,
+              subtitle: username.description ?? 'No description',
             ),
             SizedBox(height: 10),
             Row(
@@ -79,7 +79,7 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               children: [
-                if (username.defaultRecipient.email == null)
+                if (username.defaultRecipient == null)
                   Container(
                     padding: EdgeInsets.all(20),
                     child: Text('No default recipient found'),

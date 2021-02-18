@@ -10,6 +10,8 @@ const String kRecipientsURL = 'recipients';
 const String kRecipientKeys = 'recipient-keys';
 const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
+const kUsernamesURL = 'usernames';
+const kDomainsURL = 'domains';
 
 // Official AnonAddy Strings
 const kAboutAppText =
@@ -31,6 +33,8 @@ const kAddRecipientText =
     'Enter the individual email of the new recipient you\'d like to add.\n\nYou will receive an email with a verification link that will expire in one hour, you can click "Resend email" to get a new one.';
 const kUpdateAliasRecipients =
     'Select the recipients for this alias. You can choose multiple recipients. Leave it empty if you would like to use the default recipient.';
+const kAddNewUsernameText =
+    'Please choose additional usernames carefully as you can only add a maximum of three. You cannot login with these usernames, only the one you originally signed up with.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
