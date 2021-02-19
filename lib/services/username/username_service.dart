@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
@@ -37,7 +36,7 @@ class UsernameService {
     }
   }
 
-  Future<UsernameDataModel> createNewUsername(String username) async {
+  Future createNewUsername(String username) async {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -49,11 +48,11 @@ class UsernameService {
       );
 
       if (response.statusCode == 201) {
-        print("createNewAlias ${response.statusCode}");
-        return UsernameDataModel.fromJson(jsonDecode(response.body));
+        print("createNewUsername ${response.statusCode}");
+        return 201;
       } else {
-        print("createNewAlias ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        print("createNewUsername ${response.statusCode}");
+        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;

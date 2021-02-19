@@ -13,20 +13,22 @@ class UsernameStateManager extends ChangeNotifier {
   Future<void> createNewUsername(BuildContext context, String username,
       TextEditingController textEditController) async {
     if (usernameFormKey.currentState.validate()) {
-      context
+      await context
           .read(usernameServiceProvider)
           .createNewUsername(username)
           .then((value) {
-        Navigator.pop(context);
-        _showToast('Username Added Successfully!');
+        if (value == 201) {
+          showToast('Username added successfully!');
+        } else {
+          showToast('Failed to add username!');
+        }
         textEditController.clear();
-      }).catchError((error) {
-        return _showToast(error.toString());
       });
+      Navigator.pop(context);
     }
   }
 
-  void _showToast(String input) {
+  showToast(String input) {
     Fluttertoast.showToast(
       msg: input,
       toastLength: Toast.LENGTH_SHORT,
