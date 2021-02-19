@@ -179,7 +179,7 @@ class AdditionalUsername extends ConsumerWidget {
                   autofocus: true,
                   controller: textEditController,
                   validator: (input) =>
-                      FormValidator().validateSearchField(input),
+                      FormValidator().validateUsernameInput(input),
                   onFieldSubmitted: (toggle) => createNewUsername(context,
                       textEditController.text.trim(), textEditController),
                   decoration: kTextFormFieldDecoration.copyWith(

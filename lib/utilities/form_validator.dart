@@ -13,6 +13,13 @@ class FormValidator {
     return null;
   }
 
+  String validateUsernameInput(String input) {
+    if (input.isEmpty || input == null) {
+      return ' Username is required';
+    }
+    return null;
+  }
+
   String validateCustomField(String input) {
     if (input.isEmpty || input == null) {
       return 'Custom Alias not available for shared domains';

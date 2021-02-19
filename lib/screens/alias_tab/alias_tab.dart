@@ -72,13 +72,10 @@ class AliasTab extends ConsumerWidget {
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    expandedHeight: size.height * 0.18,
-                    floating: false,
+                    expandedHeight: size.height * 0.1,
+                    elevation: 0,
+                    floating: true,
                     pinned: true,
-                    title: Text('AddyManager'),
-                    centerTitle: true,
-                    leading: buildCreateNewAlias(context),
-                    actions: [buildSearch(context)],
                     flexibleSpace: buildFlexibleSpaceBar(
                         forwardedList, sentList, repliedList, blockedList),
                     bottom: TabBar(
@@ -114,7 +111,6 @@ class AliasTab extends ConsumerWidget {
                     buildEmptyAliasList(context, 'available')
                   else
                     ListView.builder(
-                      padding: EdgeInsets.only(top: 10),
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: availableAliasList.length,
@@ -131,7 +127,6 @@ class AliasTab extends ConsumerWidget {
                       child: Column(
                         children: [
                           ListView.builder(
-                            padding: EdgeInsets.only(top: 10),
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: deletedAliasList.length >= 15
@@ -180,7 +175,7 @@ class AliasTab extends ConsumerWidget {
       List<int> sentList, List<int> repliedList, List<int> blockedList) {
     return FlexibleSpaceBar(
       background: Padding(
-        padding: EdgeInsets.only(top: 40),
+        padding: EdgeInsets.only(top: 0, bottom: 35),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
