@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
-import 'package:anonaddy/screens/settings_tab/settings_tab.dart';
+import 'package:anonaddy/screens/settings_tab/more_tab.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             AccountTab(),
             AliasTab(),
-            SettingsTab(),
+            MoreTab(),
           ],
         ),
         bottomNavigationBar: TargetedPlatform().isIOS()
@@ -77,8 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: 'Aliases',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
-                    label: 'Settings',
+                    icon: Icon(Icons.more_horiz_rounded),
+                    label: 'More',
                   ),
                 ],
               ),
@@ -87,46 +87,46 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildAppBar(BuildContext context) {
-    if (_selectedIndex == 0 || _selectedIndex == 2)
-      return AppBar(
-        title: Text('AddyManager', style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.add_circle_outline_outlined),
+    return AppBar(
+      elevation: 0,
+      title: Text('AddyManager', style: TextStyle(color: Colors.white)),
+      centerTitle: true,
+      leading: IconButton(
+        icon: Icon(Icons.add_circle_outline_outlined),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (context) {
+              return SingleChildScrollView(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+                child: CreateNewAlias(),
+              );
+            },
+          );
+        },
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.search, color: Colors.white),
           onPressed: () {
-            showModalBottomSheet(
+            final aliasStateManager = context.read(aliasStateManagerProvider);
+            showSearch(
               context: context,
-              isScrollControlled: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              delegate: SearchService(
+                [
+                  ...aliasStateManager.availableAliasList,
+                  ...aliasStateManager.deletedAliasList,
+                ],
               ),
-              builder: (context) {
-                return SingleChildScrollView(
-                  padding:
-                      EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
-                  child: CreateNewAlias(),
-                );
-              },
             );
           },
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              final aliasStateManager = context.read(aliasStateManagerProvider);
-              showSearch(
-                context: context,
-                delegate: SearchService(
-                  [
-                    ...aliasStateManager.availableAliasList,
-                    ...aliasStateManager.deletedAliasList,
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
-      );
+      ],
+    );
   }
 }

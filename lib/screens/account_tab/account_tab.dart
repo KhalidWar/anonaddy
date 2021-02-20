@@ -12,6 +12,8 @@ class AccountTab extends StatelessWidget {
         children: [
           MainAccount(),
           AdditionalUsername(),
+          Divider(height: 10),
+          // Domains(),
         ],
       ),
     );

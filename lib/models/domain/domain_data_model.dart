@@ -25,20 +25,21 @@ class DomainDataModel {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  factory DomainDataModel.fromJson(Map<String, dynamic> json) =>
-      DomainDataModel(
-        id: json["id"],
-        userId: json["user_id"],
-        domain: json["domain"],
-        description: json["description"],
-        aliases: List<dynamic>.from(json["aliases"].map((x) => x)),
-        defaultRecipient: json["default_recipient"],
-        active: json["active"],
-        catchAll: json["catch_all"],
-        domainVerifiedAt: json["domain_verified_at"] == null
-            ? null
-            : DateTime.parse(json["domain_verified_at"]),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-      );
+  factory DomainDataModel.fromJson(Map<String, dynamic> json) {
+    return DomainDataModel(
+      id: json["id"],
+      userId: json["user_id"],
+      domain: json["domain"],
+      description: json["description"],
+      aliases: List<dynamic>.from(json["aliases"].map((x) => x)),
+      defaultRecipient: json["default_recipient"],
+      active: json["active"],
+      catchAll: json["catch_all"],
+      domainVerifiedAt: json["domain_verified_at"] == null
+          ? null
+          : DateTime.parse(json["domain_verified_at"]),
+      createdAt: DateTime.parse(json["created_at"]),
+      updatedAt: DateTime.parse(json["updated_at"]),
+    );
+  }
 }

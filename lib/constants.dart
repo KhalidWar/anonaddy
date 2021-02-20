@@ -10,6 +10,9 @@ const String kRecipientsURL = 'recipients';
 const String kRecipientKeys = 'recipient-keys';
 const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
+const kUsernamesURL = 'usernames';
+const kDomainsURL = 'domains';
+const kDefaultAliasURL = 'https://app.anonaddy.com/settings';
 
 // Official AnonAddy Strings
 const kAboutAppText =
@@ -31,6 +34,12 @@ const kAddRecipientText =
     'Enter the individual email of the new recipient you\'d like to add.\n\nYou will receive an email with a verification link that will expire in one hour, you can click "Resend email" to get a new one.';
 const kUpdateAliasRecipients =
     'Select the recipients for this alias. You can choose multiple recipients. Leave it empty if you would like to use the default recipient.';
+const kAddNewUsernameText =
+    'Please choose additional usernames carefully as you can only add a maximum of three. You cannot login with these usernames, only the one you originally signed up with.';
+const kDeleteUsername =
+    'Are you sure you want to delete this username? This will also delete all aliases associated with this username.\n\nYou will no longer be able to receive any emails at this username subdomain.\n\nThis will still count towards your additional username limit even once deleted.';
+const kReachedUsernameLimit = 'You have reached your additional username limit';
+const kReachedRecipientLimit = 'You have reached your recipient limit';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
@@ -46,6 +55,7 @@ const kGPGKeyDeletedSuccessfully = 'GPG Key Deleted Successfully';
 const kFailedToDeleteGPGKey = 'Failed to Delete GPG Key';
 const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
 const kFailedToAddGPGKey = 'Failed to Add GPG Key';
+const kOnlyAvailableToPaid = 'Only available to paid users';
 
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';

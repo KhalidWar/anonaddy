@@ -1,10 +1,18 @@
+import 'package:animations/animations.dart';
 import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/state_management/username_state_manager.dart';
+import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
+
+import '../../constants.dart';
 
 class UsernameDetailedScreen extends StatefulWidget {
   const UsernameDetailedScreen({Key key, this.username}) : super(key: key);
@@ -21,14 +29,14 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
     final username = widget.username;
 
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(context, username.id),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(4),
         child: Column(
           children: [
             AccountCardHeader(
-              title: '${username.username}',
-              subtitle: '${widget.username.description}',
+              title: username.username,
+              subtitle: username.description ?? 'No description',
             ),
             SizedBox(height: 10),
             Row(
@@ -79,7 +87,7 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               children: [
-                if (username.defaultRecipient.email == null)
+                if (username.defaultRecipient == null)
                   Container(
                     padding: EdgeInsets.all(20),
                     child: Text('No default recipient found'),
@@ -139,9 +147,42 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
     );
   }
 
-  Widget buildAppBar() {
+  Widget buildAppBar(BuildContext context, String usernameID) {
     final customAppBar = CustomAppBar();
-    return customAppBar.androidAppBar(context, 'Additional Username');
+    final isIOS = TargetedPlatform().isIOS();
+    final confirmationDialog = ConfirmationDialog();
+
+    void deleteUsername() {
+      context
+          .read(usernameStateManagerProvider)
+          .deleteUsername(context, usernameID);
+    }
+
+    return AppBar(
+      title: Text('Additional Username', style: TextStyle(color: Colors.white)),
+      leading: IconButton(
+        icon: Icon(isIOS ? CupertinoIcons.back : Icons.arrow_back),
+        color: Colors.white,
+        onPressed: () => Navigator.pop(context),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            showModal(
+              context: context,
+              builder: (context) {
+                return isIOS
+                    ? confirmationDialog.iOSAlertDialog(context,
+                        kDeleteUsername, deleteUsername, 'Delete username')
+                    : confirmationDialog.androidAlertDialog(context,
+                        kDeleteUsername, deleteUsername, 'Delete username');
+              },
+            );
+          },
+        ),
+      ],
+    );
 
     //todo fix CupertinoNavigationBar causing build failure
     // return TargetedPlatform().isIOS()

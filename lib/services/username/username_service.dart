@@ -20,7 +20,7 @@ class UsernameService {
       _headers["Authorization"] = "Bearer $accessToken";
 
       final response = await http.get(
-        Uri.encodeFull('$kBaseURL/usernames'),
+        Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
         headers: _headers,
       );
 
@@ -29,6 +29,51 @@ class UsernameService {
         return UsernameModel.fromJson(jsonDecode(response.body));
       } else {
         print('getUsernameData ${response.statusCode}');
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future createNewUsername(String username) async {
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.post(
+        Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
+        headers: _headers,
+        body: json.encode({"username": "$username"}),
+      );
+
+      if (response.statusCode == 201) {
+        print("createNewUsername ${response.statusCode}");
+        return 201;
+      } else {
+        print("createNewUsername ${response.statusCode}");
+        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future deleteUsername(String usernameID) async {
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.delete(
+        Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
+        headers: _headers,
+      );
+
+      if (response.statusCode == 204) {
+        print("deleteUsername ${response.statusCode}");
+        return 204;
+      } else {
+        print("deleteUsername ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {

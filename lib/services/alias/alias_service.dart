@@ -15,7 +15,7 @@ class AliasService {
     "Accept": "application/json",
   };
 
-  Future<AliasModel> getAllAliasesData() async {
+  Stream<AliasModel> getAllAliasesData() async* {
     try {
       final accessToken = await AccessTokenService().getAccessToken();
       _headers["Authorization"] = "Bearer $accessToken";
@@ -26,7 +26,7 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('getAllAliasesData ${response.statusCode}');
-        return AliasModel.fromJson(jsonDecode(response.body));
+        yield AliasModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllAliasesData ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);

@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
-import 'package:anonaddy/screens/settings_tab/settings_tab.dart';
+import 'package:anonaddy/screens/settings_tab/more_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/all.dart';
 
@@ -26,7 +26,7 @@ class _UpdateAliasRecipientState extends State<UpdateAliasRecipient> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final allRecipients = context.read(recipientDataStream).data.value;
+    final allRecipients = context.read(recipientStreamProvider).data.value;
     final aliasRecipients = widget.aliasDataModel.recipients;
 
     for (RecipientDataModel recipient in allRecipients.recipientDataList) {

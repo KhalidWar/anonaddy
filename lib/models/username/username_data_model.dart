@@ -31,16 +31,16 @@ class UsernameDataModel {
     List<AliasDataModel> aliasesList =
         list.map((i) => AliasDataModel.fromJson(i)).toList();
 
-    final defaultRecipient = RecipientDataModel.fromJsonRecipientNoAliases(
-        json["default_recipient"]);
-
     return UsernameDataModel(
       id: json["id"],
       userId: json["user_id"],
       username: json["username"],
       description: json["description"],
       aliases: aliasesList,
-      defaultRecipient: defaultRecipient,
+      defaultRecipient: json["default_recipient"] == null
+          ? null
+          : RecipientDataModel.fromJsonRecipientNoAliases(
+              json["default_recipient"]),
       active: json["active"],
       catchAll: json["catch_all"],
       createdAt: DateTime.parse(json["created_at"]),

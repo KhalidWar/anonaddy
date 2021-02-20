@@ -1,6 +1,6 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/models/domain_options/domain_options.dart';
+import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
@@ -15,16 +15,9 @@ import 'create_new_alias.dart';
 import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
-  yield* Stream.fromFuture(ref.read(aliasServiceProvider).getAllAliasesData());
   while (true) {
-    await Future.delayed(Duration(seconds: 1));
-    yield* Stream.fromFuture(
-        ref.read(aliasServiceProvider).getAllAliasesData());
+    yield* ref.watch(aliasServiceProvider).getAllAliasesData();
   }
-});
-
-final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
-  return ref.read(domainOptionsServiceProvider).getDomainOptions();
 });
 
 class AliasTab extends ConsumerWidget {
@@ -32,7 +25,8 @@ class AliasTab extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
     final stream = watch(aliasDataStream);
-    // preloads domainOptions for create new alias on FAB click
+
+    /// preloads domainOptions for create new alias screen
     watch(domainOptionsProvider);
 
     final aliasDataProvider = context.read(aliasStateManagerProvider);
@@ -75,13 +69,10 @@ class AliasTab extends ConsumerWidget {
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    expandedHeight: size.height * 0.18,
-                    floating: false,
+                    expandedHeight: size.height * 0.1,
+                    elevation: 0,
+                    floating: true,
                     pinned: true,
-                    title: Text('AddyManager'),
-                    centerTitle: true,
-                    leading: buildCreateNewAlias(context),
-                    actions: [buildSearch(context)],
                     flexibleSpace: buildFlexibleSpaceBar(
                         forwardedList, sentList, repliedList, blockedList),
                     bottom: TabBar(
@@ -117,7 +108,6 @@ class AliasTab extends ConsumerWidget {
                     buildEmptyAliasList(context, 'available')
                   else
                     ListView.builder(
-                      padding: EdgeInsets.only(top: 10),
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: availableAliasList.length,
@@ -134,7 +124,6 @@ class AliasTab extends ConsumerWidget {
                       child: Column(
                         children: [
                           ListView.builder(
-                            padding: EdgeInsets.only(top: 10),
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: deletedAliasList.length >= 15
@@ -183,7 +172,7 @@ class AliasTab extends ConsumerWidget {
       List<int> sentList, List<int> repliedList, List<int> blockedList) {
     return FlexibleSpaceBar(
       background: Padding(
-        padding: EdgeInsets.only(top: 40),
+        padding: EdgeInsets.only(top: 0, bottom: 35),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
