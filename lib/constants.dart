@@ -35,6 +35,8 @@ const kUpdateAliasRecipients =
     'Select the recipients for this alias. You can choose multiple recipients. Leave it empty if you would like to use the default recipient.';
 const kAddNewUsernameText =
     'Please choose additional usernames carefully as you can only add a maximum of three. You cannot login with these usernames, only the one you originally signed up with.';
+const kDeleteUsername =
+    'Are you sure you want to delete this username? This will also delete all aliases associated with this username.\n\nYou will no longer be able to receive any emails at this username subdomain.\n\nThis will still count towards your additional username limit even once deleted.';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';

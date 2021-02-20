@@ -58,4 +58,26 @@ class UsernameService {
       throw e;
     }
   }
+
+  Future deleteUsername(String usernameID) async {
+    try {
+      final accessToken = await AccessTokenService().getAccessToken();
+      _headers["Authorization"] = "Bearer $accessToken";
+
+      final response = await http.delete(
+        Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
+        headers: _headers,
+      );
+
+      if (response.statusCode == 204) {
+        print("deleteUsername ${response.statusCode}");
+        return 204;
+      } else {
+        print("deleteUsername ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 }

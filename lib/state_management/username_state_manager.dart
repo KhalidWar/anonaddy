@@ -28,6 +28,21 @@ class UsernameStateManager extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteUsername(BuildContext context, String usernameID) async {
+    await context
+        .read(usernameServiceProvider)
+        .deleteUsername(usernameID)
+        .then((value) {
+      if (value == 204) {
+        showToast('Username deleted successfully!');
+      } else {
+        showToast('Failed to delete username!');
+      }
+    });
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
   showToast(String input) {
     Fluttertoast.showToast(
       msg: input,
