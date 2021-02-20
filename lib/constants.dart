@@ -38,6 +38,8 @@ const kAddNewUsernameText =
     'Please choose additional usernames carefully as you can only add a maximum of three. You cannot login with these usernames, only the one you originally signed up with.';
 const kDeleteUsername =
     'Are you sure you want to delete this username? This will also delete all aliases associated with this username.\n\nYou will no longer be able to receive any emails at this username subdomain.\n\nThis will still count towards your additional username limit even once deleted.';
+const kReachedUsernameLimit = 'You have reached your additional username limit';
+const kReachedRecipientLimit = 'You have reached your recipient limit';
 
 // Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
@@ -53,6 +55,7 @@ const kGPGKeyDeletedSuccessfully = 'GPG Key Deleted Successfully';
 const kFailedToDeleteGPGKey = 'Failed to Delete GPG Key';
 const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
 const kFailedToAddGPGKey = 'Failed to Add GPG Key';
+const kOnlyAvailableToPaid = 'Only available to paid users';
 
 // UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';

@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/account_tab/main_account_card.dart';
 import 'package:anonaddy/screens/settings_tab/app_settings.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
+import 'package:anonaddy/state_management/username_state_manager.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
@@ -46,40 +47,50 @@ class MoreTab extends ConsumerWidget {
             loading: () => LoadingIndicator(),
             data: (data) {
               final recipientList = data.recipientDataList;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              return accountStream.when(
+                loading: () => Container(),
+                data: (userModelData) {
+                  final usernameCount = userModelData.recipientCount;
+                  final usernameLimit = userModelData.recipientLimit;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Recipients',
-                        style: Theme.of(context).textTheme.headline6,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Recipients',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          Text(
+                              '${userModelData.recipientCount} / ${NicheMethod().isUnlimited(userModelData.recipientLimit, '')}'),
+                          IconButton(
+                            icon: Icon(Icons.add_circle_outline_outlined),
+                            onPressed: usernameCount == usernameLimit
+                                ? () => context
+                                    .read(usernameStateManagerProvider)
+                                    .showToast(kReachedRecipientLimit)
+                                : () => buildShowModalBottomSheet(context),
+                          ),
+                        ],
                       ),
-                      accountStream.when(
-                        loading: () => Container(),
-                        data: (data) => Text(
-                            '${data.recipientCount} / ${NicheMethod().isUnlimited(data.recipientLimit, '')}'),
-                        error: (error, stackTrace) => Text(''),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: recipientList.length,
+                        itemBuilder: (context, index) {
+                          return RecipientListTile(
+                            recipientDataModel: recipientList[index],
+                          );
+                        },
                       ),
-                      IconButton(
-                        icon: Icon(Icons.add_circle_outline_outlined),
-                        onPressed: () => buildShowModalBottomSheet(context),
-                      ),
+                      SizedBox(height: 8),
                     ],
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: recipientList.length,
-                    itemBuilder: (context, index) {
-                      return RecipientListTile(
-                        recipientDataModel: recipientList[index],
-                      );
-                    },
-                  ),
-                  SizedBox(height: 8),
-                ],
+                  );
+                },
+                error: (error, stackTrace) => Text(''),
               );
             },
             error: (error, stackTrace) {

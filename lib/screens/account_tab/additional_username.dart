@@ -28,6 +28,7 @@ class AdditionalUsername extends ConsumerWidget {
     final additionalUsernameStream = watch(additionalUsernameStreamProvider);
     final userModel = watch(accountStreamProvider);
     final usernameStateManager = watch(usernameStateManagerProvider);
+    final showToast = usernameStateManager.showToast;
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -38,6 +39,8 @@ class AdditionalUsername extends ConsumerWidget {
           loading: () => Container(),
           data: (userModelData) {
             final isFree = userModelData.subscription == 'free';
+            final usernameCount = userModelData.usernameCount;
+            final usernameLimit = userModelData.usernameLimit;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,16 +56,18 @@ class AdditionalUsername extends ConsumerWidget {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       isFree
-                          ? Container()
+                          ? Text('0 / 0')
                           : Text(
-                              '${userModelData.usernameCount} / ${NicheMethod().isUnlimited(userModelData.usernameLimit, '')}'),
-                      isFree
-                          ? Container()
-                          : IconButton(
-                              icon: Icon(Icons.add_circle_outline_outlined),
-                              onPressed: () => buildAddNewUsername(
-                                  context, usernameStateManager),
-                            ),
+                              '$usernameCount / ${NicheMethod().isUnlimited(usernameLimit, '')}'),
+                      IconButton(
+                        icon: Icon(Icons.add_circle_outline_outlined),
+                        onPressed: isFree
+                            ? () => showToast(kOnlyAvailableToPaid)
+                            : () => usernameCount == usernameLimit
+                                ? showToast(kReachedUsernameLimit)
+                                : buildAddNewUsername(
+                                    context, usernameStateManager),
+                      ),
                     ],
                   ),
                 ),
