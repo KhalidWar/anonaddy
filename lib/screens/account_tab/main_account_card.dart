@@ -6,6 +6,10 @@ import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../constants.dart';
 
 final accountStreamProvider =
     StreamProvider.autoDispose<UserModel>((ref) async* {
@@ -21,8 +25,6 @@ class MainAccount extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final size = MediaQuery.of(context).size;
-
     final accountStream = watch(accountStreamProvider);
 
     return accountStream.when(
@@ -46,6 +48,7 @@ class MainAccount extends ConsumerWidget {
               subtitle: 'Subscription',
               leadingIconData: Icons.attach_money_outlined,
             ),
+            SizedBox(height: 10),
             AliasDetailListTile(
               title:
                   '${(data.bandwidth / 1000000).toStringAsFixed(2)} MB / ${NicheMethod().isUnlimited(data.bandwidthLimit / 1000000, 'MB')}',
@@ -58,12 +61,14 @@ class MainAccount extends ConsumerWidget {
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Default Alias Domain',
               leadingIconData: Icons.dns,
+              trailing: buildUpdateDefaultAliasFormatDomain(context),
             ),
             AliasDetailListTile(
               title: data.defaultAliasFormat,
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Default Alias Format',
               leadingIconData: Icons.alternate_email,
+              trailing: buildUpdateDefaultAliasFormatDomain(context),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.01),
           ],
@@ -75,6 +80,22 @@ class MainAccount extends ConsumerWidget {
           lottie: 'assets/lottie/errorCone.json',
           label: "$error",
         );
+      },
+    );
+  }
+
+  IconButton buildUpdateDefaultAliasFormatDomain(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.open_in_new_outlined),
+      onPressed: () async {
+        await launch(kDefaultAliasURL).catchError((error, stackTrace) {
+          throw Fluttertoast.showToast(
+            msg: error.message,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: Colors.grey[600],
+          );
+        });
       },
     );
   }

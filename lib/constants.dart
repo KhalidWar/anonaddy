@@ -12,6 +12,7 @@ const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 const kUsernamesURL = 'usernames';
 const kDomainsURL = 'domains';
+const kDefaultAliasURL = 'https://app.anonaddy.com/settings';
 
 // Official AnonAddy Strings
 const kAboutAppText =

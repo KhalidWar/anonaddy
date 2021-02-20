@@ -2,7 +2,6 @@ import 'package:anonaddy/screens/account_tab/main_account_card.dart';
 import 'package:flutter/material.dart';
 
 import 'additional_username.dart';
-import 'domains.dart';
 
 class AccountTab extends StatelessWidget {
   @override
@@ -13,7 +12,8 @@ class AccountTab extends StatelessWidget {
         children: [
           MainAccount(),
           AdditionalUsername(),
-          Domains(),
+          Divider(height: 10),
+          // Domains(),
         ],
       ),
     );

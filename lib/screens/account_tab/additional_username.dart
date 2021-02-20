@@ -33,103 +33,117 @@ class AdditionalUsername extends ConsumerWidget {
 
     return additionalUsernameStream.when(
       loading: () => Container(),
-      data: (data) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Divider(height: 0),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Username${data.usernameDataList.length >= 2 ? 's' : ''}',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  userModel.when(
-                    loading: () => Container(),
-                    data: (data) => Text(
-                        '${data.usernameCount} / ${NicheMethod().isUnlimited(data.usernameLimit, '')}'),
-                    error: (error, stackTrace) => Text('Error'),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.add_circle_outline_outlined),
-                    onPressed: () =>
-                        buildAddNewUsername(context, usernameStateManager),
-                  ),
-                ],
-              ),
-            ),
-            if (data.usernameDataList.isEmpty)
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-                child: Text('No additional usernames found'),
-              )
-            else
-              ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.symmetric(vertical: 0),
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: data.usernameDataList.length,
-                itemBuilder: (context, index) {
-                  final username = data.usernameDataList[index];
+      data: (usernameData) {
+        return userModel.when(
+          loading: () => Container(),
+          data: (userModelData) {
+            final isFree = userModelData.subscription == 'free';
 
-                  return InkWell(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.account_circle_outlined,
-                            color: isDark ? Colors.white : Colors.grey,
-                            size: 30,
-                          ),
-                          SizedBox(width: 15),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Divider(height: 0),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Username${usernameData.usernameDataList.length >= 2 ? 's' : ''}',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      isFree
+                          ? Container()
+                          : Text(
+                              '${userModelData.usernameCount} / ${NicheMethod().isUnlimited(userModelData.usernameLimit, '')}'),
+                      isFree
+                          ? Container()
+                          : IconButton(
+                              icon: Icon(Icons.add_circle_outline_outlined),
+                              onPressed: () => buildAddNewUsername(
+                                  context, usernameStateManager),
+                            ),
+                    ],
+                  ),
+                ),
+                if (usernameData.usernameDataList.isEmpty)
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+                    child: isFree
+                        ? Text(
+                            'Additional Usernames only available to paid users',
+                          )
+                        : Text('No additional usernames found'),
+                  )
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(vertical: 0),
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: usernameData.usernameDataList.length,
+                    itemBuilder: (context, index) {
+                      final username = usernameData.usernameDataList[index];
+
+                      return InkWell(
+                        child: Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(username.username),
-                              SizedBox(height: 2),
-                              Text(
-                                username.description ?? 'No description',
-                                style: TextStyle(color: Colors.grey),
+                              Icon(
+                                Icons.account_circle_outlined,
+                                color: isDark ? Colors.white : Colors.grey,
+                                size: 30,
+                              ),
+                              SizedBox(width: 15),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(username.username),
+                                  SizedBox(height: 2),
+                                  Text(
+                                    username.description ?? 'No description',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          transitionsBuilder:
-                              (context, animation, secondAnimation, child) {
-                            animation = CurvedAnimation(
-                                parent: animation,
-                                curve: Curves.linearToEaseOut);
-
-                            return SlideTransition(
-                              position: Tween(
-                                begin: Offset(1.0, 0.0),
-                                end: Offset(0.0, 0.0),
-                              ).animate(animation),
-                              child: child,
-                            );
-                          },
-                          pageBuilder: (context, animation, secondAnimation) {
-                            return UsernameDetailedScreen(username: username);
-                          },
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionsBuilder:
+                                  (context, animation, secondAnimation, child) {
+                                animation = CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.linearToEaseOut);
+
+                                return SlideTransition(
+                                  position: Tween(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset(0.0, 0.0),
+                                  ).animate(animation),
+                                  child: child,
+                                );
+                              },
+                              pageBuilder:
+                                  (context, animation, secondAnimation) {
+                                return UsernameDetailedScreen(
+                                    username: username);
+                              },
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              ),
-          ],
+                  ),
+              ],
+            );
+          },
+          error: (error, stackTrace) => Text('Error'),
         );
       },
       error: (error, stackTrace) {
