@@ -58,8 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: 'Aliases',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.settings),
-                    label: 'Settings',
+                    icon: Icon(Icons.more_horiz_rounded),
+                    label: 'More',
                   ),
                 ],
               )
