@@ -3,6 +3,7 @@ import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
@@ -301,6 +302,8 @@ class AliasDetailScreen extends ConsumerWidget {
       TextEditingController _textEditingController,
       Function editDescription,
       AliasDataModel aliasDataModel) {
+    final formKey = context.read(aliasStateManagerProvider).descriptionFormKey;
+
     void editDesc() {
       editDescription(
           context, aliasDataModel.aliasID, _textEditingController.text.trim());
@@ -337,12 +340,17 @@ class AliasDetailScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               SizedBox(height: size.height * 0.02),
-              TextFormField(
-                autofocus: true,
-                controller: _textEditingController,
-                onFieldSubmitted: (toggle) => editDesc(),
-                decoration: kTextFormFieldDecoration.copyWith(
-                  hintText: '${aliasDataModel.emailDescription}',
+              Form(
+                key: formKey,
+                child: TextFormField(
+                  autofocus: true,
+                  controller: _textEditingController,
+                  validator: (input) =>
+                      FormValidator().validateDescriptionField(input),
+                  onFieldSubmitted: (toggle) => editDesc(),
+                  decoration: kTextFormFieldDecoration.copyWith(
+                    hintText: '${aliasDataModel.emailDescription}',
+                  ),
                 ),
               ),
               SizedBox(height: size.height * 0.02),

@@ -6,6 +6,13 @@ class FormValidator {
     return null;
   }
 
+  String validateDescriptionField(String input) {
+    if (input.isEmpty || input == null) {
+      return 'Provide a description';
+    }
+    return null;
+  }
+
   String validateSearchField(String input) {
     if (input.isEmpty || input == null) {
       return 'Field can not be empty';
