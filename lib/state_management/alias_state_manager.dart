@@ -25,19 +25,10 @@ class AliasStateManager extends ChangeNotifier {
   final customFormKey = GlobalKey<FormState>();
   final descriptionFormKey = GlobalKey<FormState>();
 
-  final freeTierWithSharedDomain = ['uuid', 'random_characters'];
-  final freeTierNoSharedDomain = ['uuid', 'random_characters', 'custom'];
-  final paidTierWithSharedDomain = [
-    'uuid',
-    'random_characters',
-    'random_words',
-  ];
-  final paidTierNoSharedDomain = [
-    'uuid',
-    'random_characters',
-    'random_words',
-    'custom',
-  ];
+  final freeTierWithSharedDomain = [kUUID, kRandomChars];
+  final freeTierNoSharedDomain = [kUUID, kRandomChars, kCustom];
+  final paidTierWithSharedDomain = [kUUID, kRandomChars, kRandomWords];
+  final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
 
   List<AliasDataModel> availableAliasList = [];
   List<AliasDataModel> deletedAliasList = [];

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// URLs
+/// URLs
 const String kBaseURL = 'https://app.anonaddy.com/api/v1';
 const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
@@ -14,7 +14,13 @@ const kUsernamesURL = 'usernames';
 const kDomainsURL = 'domains';
 const kDefaultAliasURL = 'https://app.anonaddy.com/settings';
 
-// Official AnonAddy Strings
+/// Official AnonAddy Code Strings
+const kUUID = 'uuid';
+const kRandomChars = 'random_characters';
+const kCustom = 'custom';
+const kRandomWords = 'random_words';
+
+/// Official AnonAddy Messages
 const kAboutAppText =
     'AddyManager is created by Khalid War as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com team or project. AddyManager is free and open-source. Free as in free of charge, free of ads, and free of trackers. \n\nPlease visit AddyManager\'s Github repository for more info.';
 const kDeletedAliasText =
@@ -41,7 +47,7 @@ const kDeleteUsername =
 const kReachedUsernameLimit = 'You have reached your additional username limit';
 const kReachedRecipientLimit = 'You have reached your recipient limit';
 
-// Toast Messages
+/// Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
 const kAliasRestoredSuccessfully = 'Alias Restored Successfully';
 const kFailedToRestoreAlias = 'Failed to Restore Alias';
@@ -57,7 +63,7 @@ const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
 const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 const kOnlyAvailableToPaid = 'Only available to paid users';
 
-// UI Strings
+/// UI Strings
 const kSearchHintText = 'Search aliases, descriptions ...';
 const kLoadingText = 'Loading';
 const kDescriptionInputText = 'Description (optional)';
@@ -80,11 +86,11 @@ const kSignOutAlertDialog = 'Are you sure you want to sign out?';
 const kUnverifiedRecipient =
     'Unverified recipient emails can NOT be set as default recipient for aliases.';
 
-// Colors
+/// Colors
 const kBlueNavyColor = Color(0xFF19216C);
 const kAccentColor = Color(0xFF62F4EB);
 
-// UI Decoration
+/// UI Decoration
 const kTextFormFieldDecoration = InputDecoration(
   border: OutlineInputBorder(),
   focusedBorder:
