@@ -16,6 +16,7 @@ import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
   while (true) {
+    await Future.delayed(Duration(seconds: 1));
     yield* ref.watch(aliasServiceProvider).getAllAliasesData();
   }
 });
@@ -37,7 +38,7 @@ class AliasTab extends ConsumerWidget {
     final repliedList = aliasDataProvider.repliedList;
     final sentList = aliasDataProvider.sentList;
 
-    return stream.when(
+    return aliasStream.when(
       loading: () => LoadingIndicator(),
       data: (data) {
         final aliasDataList = data.aliasDataList;
