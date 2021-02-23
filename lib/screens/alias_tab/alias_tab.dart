@@ -1,11 +1,11 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/screens/alias_tab/shimmer_loading.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class AliasTab extends ConsumerWidget {
     final sentList = aliasDataProvider.sentList;
 
     return aliasStream.when(
-      loading: () => LoadingIndicator(),
+      loading: () => ShimmerLoading(),
       data: (data) {
         final aliasDataList = data.aliasDataList;
 
