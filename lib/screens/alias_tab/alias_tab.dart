@@ -15,6 +15,7 @@ import 'create_new_alias.dart';
 import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
+  yield* ref.watch(aliasServiceProvider).getAllAliasesData();
   while (true) {
     await Future.delayed(Duration(seconds: 1));
     yield* ref.watch(aliasServiceProvider).getAllAliasesData();
@@ -25,12 +26,12 @@ class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
-    final stream = watch(aliasDataStream);
+    final aliasStream = watch(aliasDataStream);
 
     /// preloads domainOptions for create new alias screen
     watch(domainOptionsProvider);
 
-    final aliasDataProvider = context.read(aliasStateManagerProvider);
+    final aliasDataProvider = watch(aliasStateManagerProvider);
     final availableAliasList = aliasDataProvider.availableAliasList;
     final deletedAliasList = aliasDataProvider.deletedAliasList;
     final forwardedList = aliasDataProvider.forwardedList;

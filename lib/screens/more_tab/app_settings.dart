@@ -5,7 +5,7 @@ import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -51,15 +51,18 @@ class _AppSettingsState extends State<AppSettings> {
               onTap: () => aboutAppDialog(context),
             ),
             Spacer(),
-            ListTile(
-              tileColor: Colors.red,
-              title: Center(
-                child: Text(
-                  'Log Out',
-                  style: Theme.of(context).textTheme.headline6,
+            Container(
+              height: size.height * 0.08,
+              child: ListTile(
+                tileColor: Colors.red,
+                title: Center(
+                  child: Text(
+                    'Log Out',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ),
+                onTap: () => buildLogoutDialog(context),
               ),
-              onTap: () => buildLogoutDialog(context),
             ),
           ],
         ),
