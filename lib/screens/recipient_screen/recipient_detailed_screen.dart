@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
@@ -222,6 +223,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
+        final pgpKeyFormKey =
+            context.read(recipientStateManagerProvider).pgpKeyFormKey;
 
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
@@ -241,16 +244,21 @@ class RecipientDetailedScreen extends ConsumerWidget {
               SizedBox(height: size.height * 0.01),
               Text(kEnterPublicKeyData),
               SizedBox(height: size.height * 0.01),
-              TextFormField(
-                autofocus: true,
-                controller: _texEditingController,
-                minLines: 3,
-                maxLines: 8,
-                textInputAction: TextInputAction.done,
-                onFieldSubmitted: (submit) => addPublicKey(),
-                decoration: kTextFormFieldDecoration.copyWith(
-                  contentPadding: EdgeInsets.all(5),
-                  hintText: kPublicGPGKeyHintText,
+              Form(
+                key: pgpKeyFormKey,
+                child: TextFormField(
+                  autofocus: true,
+                  controller: _texEditingController,
+                  validator: (input) =>
+                      FormValidator().validatePGPKeyField(input),
+                  minLines: 3,
+                  maxLines: 8,
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (submit) => addPublicKey(),
+                  decoration: kTextFormFieldDecoration.copyWith(
+                    contentPadding: EdgeInsets.all(5),
+                    hintText: kPublicGPGKeyHintText,
+                  ),
                 ),
               ),
               SizedBox(height: size.height * 0.01),

@@ -18,6 +18,7 @@ class RecipientStateManager extends ChangeNotifier {
 
   final textEditController = TextEditingController();
   final recipientFormKey = GlobalKey<FormState>();
+  final pgpKeyFormKey = GlobalKey<FormState>();
 
   get encryptionSwitch => _encryptionSwitch;
   get isLoading => _isLoading;
@@ -77,17 +78,19 @@ class RecipientStateManager extends ChangeNotifier {
 
   void addPublicGPGKey(
       BuildContext context, String recipientID, String keyData) async {
-    Navigator.pop(context);
-    await context
-        .read(recipientServiceProvider)
-        .addPublicGPGKey(recipientID, keyData)
-        .then((value) {
-      _showToast(kGPGKeyAddedSuccessfully);
-      setFingerprint(value.fingerprint);
-      setEncryptionSwitch(value.shouldEncrypt);
-    }).catchError((error, stackTrace) {
-      _showToast(error);
-    });
+    if (pgpKeyFormKey.currentState.validate()) {
+      Navigator.pop(context);
+      await context
+          .read(recipientServiceProvider)
+          .addPublicGPGKey(recipientID, keyData)
+          .then((value) {
+        _showToast(kGPGKeyAddedSuccessfully);
+        setFingerprint(value.fingerprint);
+        setEncryptionSwitch(value.shouldEncrypt);
+      }).catchError((error, stackTrace) {
+        _showToast(error);
+      });
+    }
   }
 
   void removePublicGPGKey(BuildContext context, String recipientID) async {

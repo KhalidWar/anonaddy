@@ -13,6 +13,13 @@ class FormValidator {
     return null;
   }
 
+  String validatePGPKeyField(String input) {
+    if (input.isEmpty || input == null) {
+      return 'Provide a PGP Key';
+    }
+    return null;
+  }
+
   String validateSearchField(String input) {
     if (input.isEmpty || input == null) {
       return 'Field can not be empty';
