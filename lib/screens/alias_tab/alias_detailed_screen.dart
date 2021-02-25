@@ -6,13 +6,13 @@ import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
+import 'package:anonaddy/widgets/alias_pie_chart.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 
 class AliasDetailScreen extends ConsumerWidget {
   final isIOS = TargetedPlatform().isIOS();
@@ -20,8 +20,6 @@ class AliasDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final size = MediaQuery.of(context).size;
-
     final aliasDataProvider = watch(aliasStateManagerProvider);
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final switchValue = aliasDataProvider.switchValue;
@@ -39,50 +37,8 @@ class AliasDetailScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(top: 20, bottom: 40),
-              child: SvgPicture.asset(
-                'assets/images/mailbox.svg',
-                height: size.height * 0.2,
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.forward_to_inbox,
-                    title: aliasDataModel.emailsForwarded,
-                    subtitle: 'Emails Forwarded',
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.reply,
-                    title: aliasDataModel.emailsReplied,
-                    subtitle: 'Emails Replied',
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.mark_email_read_outlined,
-                    title: aliasDataModel.emailsSent,
-                    subtitle: 'Emails Sent',
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.block,
-                    title: aliasDataModel.emailsBlocked,
-                    subtitle: 'Emails Blocked',
-                  ),
-                ),
-              ],
-            ),
-            Divider(height: 10),
+            AliasPieChart(aliasDataModel: aliasDataModel),
+            Divider(height: 20),
             Row(
               children: [
                 Expanded(
