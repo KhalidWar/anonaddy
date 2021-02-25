@@ -11,19 +11,30 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Icons
   cupertino_icons: ^1.0.1
-  http: ^0.12.2
-  flutter_svg: ^0.20.0-nullsafety.3
-  shared_preferences: ^0.5.12+4
-  url_launcher: ^5.7.10
   font_awesome_flutter: ^8.10.0
-  flutter_riverpod: ^0.12.1
-  animations: ^1.1.2
+
+  # UI Components
+  flutter_svg: ^0.20.0-nullsafety.3
   lottie: ^0.7.0+1
-  flutter_secure_storage: ^3.3.5
-  fluttertoast: ^7.1.5
-  mockito: ^4.1.3
+  animations: ^1.1.2
   shimmer: ^1.1.2
+  fluttertoast: ^7.1.5
+
+  # Internet Connectivity
+  http: ^0.12.2
+  url_launcher: ^5.7.10
+
+  # Storage
+  shared_preferences: ^0.5.12+4
+  flutter_secure_storage: ^3.3.5
+
+  # State Management
+  flutter_riverpod: ^0.12.1
+
+  # Testing
+  mockito: ^4.1.3
 
 dev_dependencies:
   flutter_test:
