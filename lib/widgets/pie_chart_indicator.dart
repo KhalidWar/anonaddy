@@ -13,8 +13,8 @@ class PieChartIndicator extends StatelessWidget {
     return Row(
       children: [
         Container(
-          height: 10,
-          width: 10,
+          height: 12,
+          width: 12,
           color: color,
         ),
         SizedBox(width: 4),

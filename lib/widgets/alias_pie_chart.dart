@@ -14,36 +14,40 @@ class AliasPieChart extends StatelessWidget {
     final secondPieceColor = Color(0xfff8b250);
     final thirdPieceColor = Color(0xff845bef);
     final fourthPieceColor = Color(0xff13d38e);
+    final pieChartSectionRadius = 50.0;
 
     return Column(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height * 0.3,
+          height: MediaQuery.of(context).size.height * 0.28,
           width: double.infinity,
           padding: EdgeInsets.symmetric(vertical: 20),
           child: PieChart(
             PieChartData(
               borderData: FlBorderData(show: false),
               sectionsSpace: 0,
-              startDegreeOffset: 0,
               sections: [
                 PieChartSectionData(
                   showTitle: false,
+                  radius: pieChartSectionRadius,
                   color: firstPieceColor,
                   value: aliasDataModel.emailsForwarded.toDouble(),
                 ),
                 PieChartSectionData(
                   showTitle: false,
+                  radius: pieChartSectionRadius,
                   color: secondPieceColor,
                   value: aliasDataModel.emailsBlocked.toDouble(),
                 ),
                 PieChartSectionData(
                   showTitle: false,
+                  radius: pieChartSectionRadius,
                   color: thirdPieceColor,
                   value: aliasDataModel.emailsSent.toDouble(),
                 ),
                 PieChartSectionData(
                   showTitle: false,
+                  radius: pieChartSectionRadius,
                   color: fourthPieceColor,
                   value: aliasDataModel.emailsReplied.toDouble(),
                 ),
@@ -59,12 +63,12 @@ class AliasPieChart extends StatelessWidget {
               children: [
                 PieChartIndicator(
                   color: firstPieceColor,
-                  label: 'Forwarded',
+                  label: 'emails forwarded',
                   count: aliasDataModel.emailsForwarded,
                 ),
                 PieChartIndicator(
                   color: secondPieceColor,
-                  label: 'Blocked',
+                  label: 'emails blocked',
                   count: aliasDataModel.emailsBlocked,
                 ),
               ],
@@ -74,12 +78,12 @@ class AliasPieChart extends StatelessWidget {
               children: [
                 PieChartIndicator(
                   color: fourthPieceColor,
-                  label: 'Replied',
+                  label: 'emails replied',
                   count: aliasDataModel.emailsReplied,
                 ),
                 PieChartIndicator(
                   color: thirdPieceColor,
-                  label: 'Sent',
+                  label: 'emails sent',
                   count: aliasDataModel.emailsSent,
                 ),
               ],
