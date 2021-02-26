@@ -5,6 +5,7 @@ import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
+import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_pie_chart.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
@@ -39,30 +40,15 @@ class AliasDetailScreen extends ConsumerWidget {
           children: [
             AliasPieChart(aliasDataModel: aliasDataModel),
             Divider(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.access_time_outlined,
-                    title: aliasDataModel.createdAt,
-                    subtitle: 'Created At',
-                  ),
-                ),
-                Expanded(
-                  child: aliasDataModel.deletedAt == null
-                      ? AliasDetailListTile(
-                          leadingIconData: Icons.av_timer_outlined,
-                          title: aliasDataModel.updatedAt,
-                          subtitle: 'Updated At',
-                        )
-                      : AliasDetailListTile(
-                          leadingIconData: Icons.auto_delete_outlined,
-                          title: aliasDataModel.deletedAt,
-                          subtitle: 'Deleted At',
-                        ),
-                )
-              ],
+            AliasCreatedAtWidget(
+              label: 'Created at:',
+              dateTime: aliasDataModel.createdAt,
             ),
+            aliasDataModel.deletedAt == null
+                ? AliasCreatedAtWidget(
+                    label: 'Updated at:', dateTime: aliasDataModel.updatedAt)
+                : AliasCreatedAtWidget(
+                    label: 'Deleted at:', dateTime: aliasDataModel.deletedAt),
             Divider(height: 10),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
@@ -183,7 +169,10 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                   ),
                   if (aliasDataModel.recipients.isEmpty)
-                    Text('No recipients found')
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(children: [Text('No recipients found')]),
+                    )
                   else
                     ListView.builder(
                       shrinkWrap: true,
