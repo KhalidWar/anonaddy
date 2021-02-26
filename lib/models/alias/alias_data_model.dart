@@ -39,7 +39,7 @@ class AliasDataModel {
   final List<RecipientDataModel> recipients;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final dynamic deletedAt;
+  final DateTime deletedAt;
 
   factory AliasDataModel.fromJson(Map<String, dynamic> json) {
     return AliasDataModel(
@@ -57,10 +57,11 @@ class AliasDataModel {
       emailsBlocked: json["emails_blocked"],
       emailsReplied: json["emails_replied"],
       emailsSent: json["emails_sent"],
-      // recipients: List<dynamic>.from(json["recipients"].map((x) => x)),
       createdAt: DateTime.parse(json["created_at"]),
       updatedAt: DateTime.parse(json["updated_at"]),
-      deletedAt: json["deleted_at"],
+      deletedAt: json["deleted_at"] == null
+          ? null
+          : DateTime.parse(json["deleted_at"]),
     );
   }
 
@@ -88,7 +89,9 @@ class AliasDataModel {
       recipients: recipientList,
       createdAt: DateTime.parse(json["created_at"]),
       updatedAt: DateTime.parse(json["updated_at"]),
-      deletedAt: json["deleted_at"],
+      deletedAt: json["deleted_at"] == null
+          ? null
+          : DateTime.parse(json["deleted_at"]),
     );
   }
 
@@ -108,10 +111,11 @@ class AliasDataModel {
       emailsBlocked: json['data']["emails_blocked"],
       emailsReplied: json['data']["emails_replied"],
       emailsSent: json['data']["emails_sent"],
-      // recipients: List<dynamic>.from(json['data']["recipients"].map((x) => x)),
       createdAt: DateTime.parse(json['data']["created_at"]),
       updatedAt: DateTime.parse(json['data']["updated_at"]),
-      deletedAt: json['data']["deleted_at"],
+      deletedAt: json["deleted_at"] == null
+          ? null
+          : DateTime.parse(json['data']["deleted_at"]),
     );
   }
 }
