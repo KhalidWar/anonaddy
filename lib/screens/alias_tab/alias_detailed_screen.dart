@@ -43,12 +43,20 @@ class AliasDetailScreen extends ConsumerWidget {
             AliasCreatedAtWidget(
               label: 'Created at:',
               dateTime: aliasDataModel.createdAt,
+              iconData: Icons.access_time_outlined,
             ),
+            SizedBox(height: 6),
             aliasDataModel.deletedAt == null
                 ? AliasCreatedAtWidget(
-                    label: 'Updated at:', dateTime: aliasDataModel.updatedAt)
+                    label: 'Updated at:',
+                    dateTime: aliasDataModel.updatedAt,
+                    iconData: Icons.av_timer_outlined,
+                  )
                 : AliasCreatedAtWidget(
-                    label: 'Deleted at:', dateTime: aliasDataModel.deletedAt),
+                    label: 'Deleted at:',
+                    dateTime: aliasDataModel.deletedAt,
+                    iconData: Icons.auto_delete_outlined,
+                  ),
             Divider(height: 10),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
