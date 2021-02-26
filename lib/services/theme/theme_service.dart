@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/all.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final themeServiceProvider =
     ChangeNotifierProvider<ThemeService>((ref) => ThemeService());
@@ -11,10 +11,10 @@ class ThemeService extends ChangeNotifier {
     _loadTheme();
   }
 
-  SharedPreferences _sharedPreferences;
-  String _key = 'darkTheme';
-  bool _isDarkTheme = false;
+  final _secureStorage = FlutterSecureStorage();
+  String _darkThemeKey = 'darkTheme';
 
+  bool _isDarkTheme = false;
   bool get isDarkTheme => _isDarkTheme;
 
   toggleTheme() {
@@ -23,20 +23,17 @@ class ThemeService extends ChangeNotifier {
     notifyListeners();
   }
 
-  _initSharedPref() async {
-    if (_sharedPreferences == null) {
-      _sharedPreferences = await SharedPreferences.getInstance();
-    }
-  }
-
-  _saveTheme() async {
-    await _initSharedPref();
-    _sharedPreferences.setBool(_key, _isDarkTheme);
+  _saveTheme() {
+    _secureStorage.write(key: _darkThemeKey, value: _isDarkTheme.toString());
   }
 
   _loadTheme() async {
-    await _initSharedPref();
-    _isDarkTheme = _sharedPreferences.getBool(_key) ?? false;
+    _isDarkTheme = await _secureStorage.read(key: _darkThemeKey).then((value) {
+      if (value == 'true') {
+        return true;
+      }
+      return false;
+    });
     notifyListeners();
   }
 }
