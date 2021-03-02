@@ -16,12 +16,14 @@ dependencies:
   font_awesome_flutter: ^8.10.0
 
   # UI Components
-  flutter_svg: ^0.19.2+1
+#  flutter_svg: ^0.19.2+1
+  flutter_svg: ^0.21.0-nullsafety.0
   lottie: ^0.7.0+1
   animations: ^1.1.2
   shimmer: ^1.1.2
   fluttertoast: ^7.1.5
-  fl_chart: ^0.12.3
+#  fl_chart: ^0.12.3
+  fl_chart: ^0.20.0-nullsafety1
 
   # Internet Connectivity
   http: ^0.12.2
