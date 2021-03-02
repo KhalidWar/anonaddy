@@ -12,7 +12,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'create_new_alias.dart';
 import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
@@ -180,27 +179,6 @@ class AliasTab extends ConsumerWidget {
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           label: '$error',
-        );
-      },
-    );
-  }
-
-  IconButton buildCreateNewAlias(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.add_circle_outline_outlined),
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          builder: (context) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
-              child: CreateNewAlias(),
-            );
-          },
         );
       },
     );
