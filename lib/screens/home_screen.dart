@@ -1,16 +1,15 @@
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
-import 'package:anonaddy/screens/settings_tab/more_tab.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../constants.dart';
 import 'alias_tab/create_new_alias.dart';
+import 'more_tab/more_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -42,46 +41,25 @@ class _HomeScreenState extends State<HomeScreen> {
             MoreTab(),
           ],
         ),
-        bottomNavigationBar: TargetedPlatform().isIOS()
-            ? CupertinoTabBar(
-                currentIndex: _selectedIndex,
-                onTap: _selectedTab,
-                activeColor: isDark ? kAccentColor : kBlueNavyColor,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.profile_circled),
-                    label: 'Account',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.at),
-                    label: 'Aliases',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(CupertinoIcons.settings),
-                    label: 'Settings',
-                  ),
-                ],
-              )
-            : BottomNavigationBar(
-                onTap: _selectedTab,
-                currentIndex: _selectedIndex,
-                selectedItemColor: isDark ? kAccentColor : kBlueNavyColor,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle),
-                    label: 'Account',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.alternate_email_sharp),
-                    label: 'Aliases',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.more_horiz_rounded),
-                    label: 'More',
-                  ),
-                ],
-              ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: _selectedTab,
+          currentIndex: _selectedIndex,
+          selectedItemColor: isDark ? kAccentColor : kBlueNavyColor,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'Account',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.alternate_email_sharp),
+              label: 'Aliases',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.more_horiz_rounded),
+              label: 'More',
+            ),
+          ],
+        ),
       ),
     );
   }

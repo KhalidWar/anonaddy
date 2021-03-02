@@ -9,7 +9,6 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final additionalUsernameStreamProvider =

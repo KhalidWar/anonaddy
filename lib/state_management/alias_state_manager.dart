@@ -3,7 +3,6 @@ import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -24,20 +23,12 @@ class AliasStateManager extends ChangeNotifier {
   final descFieldController = TextEditingController();
   final customFieldController = TextEditingController();
   final customFormKey = GlobalKey<FormState>();
+  final descriptionFormKey = GlobalKey<FormState>();
 
-  final freeTierWithSharedDomain = ['uuid', 'random_characters'];
-  final freeTierNoSharedDomain = ['uuid', 'random_characters', 'custom'];
-  final paidTierWithSharedDomain = [
-    'uuid',
-    'random_characters',
-    'random_words',
-  ];
-  final paidTierNoSharedDomain = [
-    'uuid',
-    'random_characters',
-    'random_words',
-    'custom',
-  ];
+  final freeTierWithSharedDomain = [kUUID, kRandomChars];
+  final freeTierNoSharedDomain = [kUUID, kRandomChars, kCustom];
+  final paidTierWithSharedDomain = [kUUID, kRandomChars, kRandomWords];
+  final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
 
   List<AliasDataModel> availableAliasList = [];
   List<AliasDataModel> deletedAliasList = [];
@@ -169,18 +160,20 @@ class AliasStateManager extends ChangeNotifier {
 
   void editDescription(
       BuildContext context, String aliasID, String input) async {
-    Navigator.pop(context);
-    await context
-        .read(aliasServiceProvider)
-        .editAliasDescription(aliasID, input)
-        .then((value) {
-      if (value.emailDescription == null) {
-        showToast(kEditDescFailed);
-      } else {
-        showToast(kEditDescSuccessful);
-        setEmailDescription(value.emailDescription);
-      }
-    });
+    if (descriptionFormKey.currentState.validate()) {
+      Navigator.pop(context);
+      await context
+          .read(aliasServiceProvider)
+          .editAliasDescription(aliasID, input)
+          .then((value) {
+        if (value.emailDescription == null) {
+          showToast(kEditDescFailed);
+        } else {
+          showToast(kEditDescSuccessful);
+          setEmailDescription(value.emailDescription);
+        }
+      });
+    }
   }
 
   void editAliasRecipient(

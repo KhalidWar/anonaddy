@@ -1,6 +1,5 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/screens/account_tab/main_account_card.dart';
-import 'package:anonaddy/screens/settings_tab/app_settings.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/state_management/username_state_manager.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
+import 'app_settings.dart';
 
 final recipientStreamProvider =
     StreamProvider.autoDispose<RecipientModel>((ref) async* {

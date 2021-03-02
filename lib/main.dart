@@ -2,7 +2,7 @@ import 'package:anonaddy/screens/login_screen/initial_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));

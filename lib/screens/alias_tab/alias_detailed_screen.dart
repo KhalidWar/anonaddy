@@ -3,15 +3,17 @@ import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
+import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
+import 'package:anonaddy/widgets/alias_pie_chart.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 
 class AliasDetailScreen extends ConsumerWidget {
   final isIOS = TargetedPlatform().isIOS();
@@ -19,8 +21,6 @@ class AliasDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final size = MediaQuery.of(context).size;
-
     final aliasDataProvider = watch(aliasStateManagerProvider);
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final switchValue = aliasDataProvider.switchValue;
@@ -38,74 +38,25 @@ class AliasDetailScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(top: 20, bottom: 40),
-              child: SvgPicture.asset(
-                'assets/images/mailbox.svg',
-                height: size.height * 0.2,
-              ),
+            AliasPieChart(aliasDataModel: aliasDataModel),
+            Divider(height: 20),
+            AliasCreatedAtWidget(
+              label: 'Created at:',
+              dateTime: aliasDataModel.createdAt,
+              iconData: Icons.access_time_outlined,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.forward_to_inbox,
-                    title: aliasDataModel.emailsForwarded,
-                    subtitle: 'Emails Forwarded',
+            SizedBox(height: 6),
+            aliasDataModel.deletedAt == null
+                ? AliasCreatedAtWidget(
+                    label: 'Updated at:',
+                    dateTime: aliasDataModel.updatedAt,
+                    iconData: Icons.av_timer_outlined,
+                  )
+                : AliasCreatedAtWidget(
+                    label: 'Deleted at:',
+                    dateTime: aliasDataModel.deletedAt,
+                    iconData: Icons.auto_delete_outlined,
                   ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.reply,
-                    title: aliasDataModel.emailsReplied,
-                    subtitle: 'Emails Replied',
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.mark_email_read_outlined,
-                    title: aliasDataModel.emailsSent,
-                    subtitle: 'Emails Sent',
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.block,
-                    title: aliasDataModel.emailsBlocked,
-                    subtitle: 'Emails Blocked',
-                  ),
-                ),
-              ],
-            ),
-            Divider(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.access_time_outlined,
-                    title: aliasDataModel.createdAt,
-                    subtitle: 'Created At',
-                  ),
-                ),
-                Expanded(
-                  child: aliasDataModel.deletedAt == null
-                      ? AliasDetailListTile(
-                          leadingIconData: Icons.av_timer_outlined,
-                          title: aliasDataModel.updatedAt,
-                          subtitle: 'Updated At',
-                        )
-                      : AliasDetailListTile(
-                          leadingIconData: Icons.auto_delete_outlined,
-                          title: aliasDataModel.deletedAt,
-                          subtitle: 'Deleted At',
-                        ),
-                )
-              ],
-            ),
             Divider(height: 10),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
@@ -226,7 +177,10 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                   ),
                   if (aliasDataModel.recipients.isEmpty)
-                    Text('No recipients found')
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(children: [Text('No recipients found')]),
+                    )
                   else
                     ListView.builder(
                       shrinkWrap: true,
@@ -301,6 +255,8 @@ class AliasDetailScreen extends ConsumerWidget {
       TextEditingController _textEditingController,
       Function editDescription,
       AliasDataModel aliasDataModel) {
+    final formKey = context.read(aliasStateManagerProvider).descriptionFormKey;
+
     void editDesc() {
       editDescription(
           context, aliasDataModel.aliasID, _textEditingController.text.trim());
@@ -337,12 +293,17 @@ class AliasDetailScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               SizedBox(height: size.height * 0.02),
-              TextFormField(
-                autofocus: true,
-                controller: _textEditingController,
-                onFieldSubmitted: (toggle) => editDesc(),
-                decoration: kTextFormFieldDecoration.copyWith(
-                  hintText: '${aliasDataModel.emailDescription}',
+              Form(
+                key: formKey,
+                child: TextFormField(
+                  autofocus: true,
+                  controller: _textEditingController,
+                  validator: (input) =>
+                      FormValidator().validateDescriptionField(input),
+                  onFieldSubmitted: (toggle) => editDesc(),
+                  decoration: kTextFormFieldDecoration.copyWith(
+                    hintText: '${aliasDataModel.emailDescription}',
+                  ),
                 ),
               ),
               SizedBox(height: size.height * 0.02),

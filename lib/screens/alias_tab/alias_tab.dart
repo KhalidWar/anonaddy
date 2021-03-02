@@ -1,21 +1,23 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/screens/alias_tab/shimmer_loading.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/loading_indicator.dart';
+import 'package:anonaddy/widgets/alias_tab_pie_chart.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'create_new_alias.dart';
 import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
+  yield* ref.watch(aliasServiceProvider).getAllAliasesData();
   while (true) {
+    await Future.delayed(Duration(seconds: 1));
     yield* ref.watch(aliasServiceProvider).getAllAliasesData();
   }
 });
@@ -24,12 +26,12 @@ class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
-    final stream = watch(aliasDataStream);
+    final aliasStream = watch(aliasDataStream);
 
     /// preloads domainOptions for create new alias screen
     watch(domainOptionsProvider);
 
-    final aliasDataProvider = context.read(aliasStateManagerProvider);
+    final aliasDataProvider = watch(aliasStateManagerProvider);
     final availableAliasList = aliasDataProvider.availableAliasList;
     final deletedAliasList = aliasDataProvider.deletedAliasList;
     final forwardedList = aliasDataProvider.forwardedList;
@@ -37,8 +39,8 @@ class AliasTab extends ConsumerWidget {
     final repliedList = aliasDataProvider.repliedList;
     final sentList = aliasDataProvider.sentList;
 
-    return stream.when(
-      loading: () => LoadingIndicator(),
+    return aliasStream.when(
+      loading: () => ShimmerLoading(),
       data: (data) {
         final aliasDataList = data.aliasDataList;
 
@@ -69,12 +71,26 @@ class AliasTab extends ConsumerWidget {
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    expandedHeight: size.height * 0.1,
+                    expandedHeight: size.height * 0.25,
+                    snap: true,
                     elevation: 0,
                     floating: true,
                     pinned: true,
-                    flexibleSpace: buildFlexibleSpaceBar(
-                        forwardedList, sentList, repliedList, blockedList),
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Padding(
+                        padding: EdgeInsets.only(bottom: 30),
+                        child: AliasTabPieChart(
+                          emailsForwarded: forwardedList
+                              .reduce((value, element) => value + element),
+                          emailsBlocked: blockedList
+                              .reduce((value, element) => value + element),
+                          emailsReplied: repliedList
+                              .reduce((value, element) => value + element),
+                          emailsSent: sentList
+                              .reduce((value, element) => value + element),
+                        ),
+                      ),
+                    ),
                     bottom: TabBar(
                       indicatorColor: kAccentColor,
                       indicatorSize: TabBarIndicatorSize.label,
@@ -163,65 +179,6 @@ class AliasTab extends ConsumerWidget {
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           label: '$error',
-        );
-      },
-    );
-  }
-
-  FlexibleSpaceBar buildFlexibleSpaceBar(List<int> forwardedList,
-      List<int> sentList, List<int> repliedList, List<int> blockedList) {
-    return FlexibleSpaceBar(
-      background: Padding(
-        padding: EdgeInsets.only(top: 0, bottom: 35),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            FlexSpaceText(
-              label: 'Forward',
-              digit: forwardedList.isEmpty
-                  ? 0
-                  : forwardedList.reduce((value, element) => value + element),
-            ),
-            FlexSpaceText(
-              label: 'Sent',
-              digit: sentList.isEmpty
-                  ? 0
-                  : sentList.reduce((value, element) => value + element),
-            ),
-            FlexSpaceText(
-              label: 'Replied',
-              digit: repliedList.isEmpty
-                  ? 0
-                  : repliedList.reduce((value, element) => value + element),
-            ),
-            FlexSpaceText(
-              label: 'Blocked',
-              digit: blockedList.isEmpty
-                  ? 0
-                  : blockedList.reduce((value, element) => value + element),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  IconButton buildCreateNewAlias(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.add_circle_outline_outlined),
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          builder: (context) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
-              child: CreateNewAlias(),
-            );
-          },
         );
       },
     );
