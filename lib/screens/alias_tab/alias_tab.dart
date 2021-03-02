@@ -6,6 +6,7 @@ import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
+import 'package:anonaddy/widgets/alias_tab_pie_chart.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -71,12 +72,26 @@ class AliasTab extends ConsumerWidget {
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    expandedHeight: size.height * 0.1,
+                    expandedHeight: size.height * 0.25,
+                    snap: true,
                     elevation: 0,
                     floating: true,
                     pinned: true,
-                    flexibleSpace: buildFlexibleSpaceBar(
-                        forwardedList, sentList, repliedList, blockedList),
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: Padding(
+                        padding: EdgeInsets.only(bottom: 30),
+                        child: AliasTabPieChart(
+                          emailsForwarded: forwardedList
+                              .reduce((value, element) => value + element),
+                          emailsBlocked: blockedList
+                              .reduce((value, element) => value + element),
+                          emailsReplied: repliedList
+                              .reduce((value, element) => value + element),
+                          emailsSent: sentList
+                              .reduce((value, element) => value + element),
+                        ),
+                      ),
+                    ),
                     bottom: TabBar(
                       indicatorColor: kAccentColor,
                       indicatorSize: TabBarIndicatorSize.label,
@@ -167,44 +182,6 @@ class AliasTab extends ConsumerWidget {
           label: '$error',
         );
       },
-    );
-  }
-
-  FlexibleSpaceBar buildFlexibleSpaceBar(List<int> forwardedList,
-      List<int> sentList, List<int> repliedList, List<int> blockedList) {
-    return FlexibleSpaceBar(
-      background: Padding(
-        padding: EdgeInsets.only(top: 0, bottom: 35),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            FlexSpaceText(
-              label: 'Forward',
-              digit: forwardedList.isEmpty
-                  ? 0
-                  : forwardedList.reduce((value, element) => value + element),
-            ),
-            FlexSpaceText(
-              label: 'Sent',
-              digit: sentList.isEmpty
-                  ? 0
-                  : sentList.reduce((value, element) => value + element),
-            ),
-            FlexSpaceText(
-              label: 'Replied',
-              digit: repliedList.isEmpty
-                  ? 0
-                  : repliedList.reduce((value, element) => value + element),
-            ),
-            FlexSpaceText(
-              label: 'Blocked',
-              digit: blockedList.isEmpty
-                  ? 0
-                  : blockedList.reduce((value, element) => value + element),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
