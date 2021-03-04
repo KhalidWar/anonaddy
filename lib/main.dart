@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/login_screen/initial_screen.dart';
+import 'package:anonaddy/screens/secure_app_screen/secure_app_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: themeProvider.isDarkTheme ? darkTheme : lightTheme,
       darkTheme: darkTheme,
-      home: InitialScreen(),
+      home: SecureAppScreen(),
     );
   }
 }

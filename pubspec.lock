@@ -188,6 +188,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.11"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -408,6 +415,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.4"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.24.1"
+  secure_application:
+    dependency: "direct main"
+    description:
+      name: secure_application
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.5.3"
   shelf:
     dependency: transitive
     description:

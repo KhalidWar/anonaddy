@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
+import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
@@ -42,6 +43,26 @@ class _AppSettingsState extends State<AppSettings> {
                     context.read(themeServiceProvider).toggleTheme(),
               ),
               onTap: () => context.read(themeServiceProvider).toggleTheme(),
+            ),
+            Consumer(
+              builder: (_, watch, __) {
+                final secureApp = watch(secureAppProvider);
+                return ListTile(
+                  title: Text(
+                    'Secure App',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  subtitle: Text(
+                      'Disables screenshot taking and blocks app switcher view'),
+                  trailing: Switch.adaptive(
+                    value: secureApp.isAppSecured,
+                    onChanged: (toggle) {
+                      secureApp.toggleSecureApp();
+                    },
+                  ),
+                  onTap: () => secureApp.toggleSecureApp(),
+                );
+              },
             ),
             ListTile(
               leading: Text(
