@@ -33,10 +33,11 @@ class _AppSettingsState extends State<AppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ListTile(
-              leading: Text(
+              title: Text(
                 'Dark Theme',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
+              subtitle: Text('App follows system by default'),
               trailing: Switch.adaptive(
                 value: context.read(themeServiceProvider).isDarkTheme,
                 onChanged: (toggle) =>
@@ -64,14 +65,16 @@ class _AppSettingsState extends State<AppSettings> {
                 );
               },
             ),
+            Spacer(),
             ListTile(
-              leading: Text(
-                'About App',
-                style: Theme.of(context).textTheme.bodyText1,
+              title: Center(
+                child: Text(
+                  'About App',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
               ),
               onTap: () => aboutAppDialog(context),
             ),
-            Spacer(),
             Container(
               height: size.height * 0.08,
               child: ListTile(
