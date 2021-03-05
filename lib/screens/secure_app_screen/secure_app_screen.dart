@@ -15,7 +15,16 @@ class SecureAppScreen extends ConsumerWidget {
       child: Builder(
         builder: (context) {
           final secureAppProvider = SecureApplicationProvider.of(context);
-          isAppSecured ? secureAppProvider.secure() : secureAppProvider.open();
+
+          if (isAppSecured) {
+            secureAppProvider.lock();
+            secureAppProvider.secure();
+            secureAppProvider.pause();
+          } else {
+            secureAppProvider.open();
+            secureAppProvider.pause();
+          }
+
           return InitialScreen();
         },
       ),

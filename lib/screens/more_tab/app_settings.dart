@@ -57,9 +57,7 @@ class _AppSettingsState extends State<AppSettings> {
                       'Disables screenshot taking and blocks app switcher view'),
                   trailing: Switch.adaptive(
                     value: secureApp.isAppSecured,
-                    onChanged: (toggle) {
-                      secureApp.toggleSecureApp();
-                    },
+                    onChanged: (toggle) => secureApp.toggleSecureApp(),
                   ),
                   onTap: () => secureApp.toggleSecureApp(),
                 );

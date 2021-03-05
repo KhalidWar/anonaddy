@@ -23,19 +23,21 @@ class SecureAppService extends ChangeNotifier {
     notifyListeners();
   }
 
-  _saveSecureAppKey() async {
+  Future<void> _saveSecureAppKey() async {
     await _secureStorage.write(
       key: _secureAppKey,
       value: _isAppSecured.toString(),
     );
   }
 
-  _loadSecureAppKey() async {
-    _isAppSecured = await _secureStorage.read(key: _secureAppKey).then((value) {
+  Future<bool> _loadSecureAppKey() async {
+    return _isAppSecured =
+        await _secureStorage.read(key: _secureAppKey).then((value) {
       if (value == 'true') {
         return true;
+      } else {
+        return false;
       }
-      return false;
     });
   }
 }
