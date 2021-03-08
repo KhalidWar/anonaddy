@@ -34,6 +34,7 @@ dependencies:
 
   # Security
   secure_application: ^3.5.3
+  local_auth: ^0.4.0
 
   # State Management
   flutter_riverpod: ^0.12.1
