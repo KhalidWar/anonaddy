@@ -5,13 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(ProviderScope(child: MyApp()));
+  runApp(
+    /// Riverpod base widget to store provider state
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
+/// ConsumerWidget is used to update state using ChangeNotifierProvider
 class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    /// Use [watch] method to access different providers
     final themeProvider = watch(themeServiceProvider);
+
     return MaterialApp(
       title: 'AddyManager',
       debugShowCheckedModeBanner: false,
