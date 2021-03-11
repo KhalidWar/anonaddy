@@ -10,7 +10,7 @@ import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
 
