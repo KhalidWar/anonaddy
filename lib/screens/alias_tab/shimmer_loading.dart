@@ -144,28 +144,37 @@ class ShimmerLoading extends StatelessWidget {
                           borderRadius: BorderRadius.circular(40),
                         ),
                       ),
-                      title: Container(
-                        width: 50,
-                        height: 10.0,
-                        color: Colors.white,
-                      ),
-                      subtitle: Row(
+                      title: Row(
                         children: [
                           Expanded(
                             child: Container(
-                              width: 20,
+                              width: 50,
                               height: 10.0,
                               color: Colors.white,
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 50),
+                            padding: EdgeInsets.only(left: size.width * 0.1),
+                          ),
+                        ],
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 10.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: size.width * 0.45),
                           ),
                         ],
                       ),
                       trailing: Container(
                         width: 20.0,
                         height: 25.0,
+                        margin: EdgeInsets.only(right: 10),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(5),
