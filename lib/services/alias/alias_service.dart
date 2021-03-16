@@ -38,11 +38,10 @@ class AliasService {
         yield AliasModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllAliasesData ${response.statusCode}');
-        yield AliasModel.fromJson(jsonDecode(securedAliasData));
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } on SocketException {
-      throw AliasModel.fromJson(jsonDecode(securedAliasData));
+      yield AliasModel.fromJson(jsonDecode(securedAliasData));
     } catch (e) {
       throw e;
     }
