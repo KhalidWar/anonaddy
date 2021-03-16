@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
@@ -16,21 +19,31 @@ class AliasService {
   };
 
   Stream<AliasModel> getAllAliasesData() async* {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final secureStorage = FlutterSecureStorage();
+    final accessToken = await AccessTokenService().getAccessToken();
+    final securedAliasData = await secureStorage.read(key: 'aliasDataKey');
 
-      final response = await http.get(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
-          headers: _headers);
+    try {
+      final response = await http
+          .get(Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'), headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Accept": "application/json",
+        "Authorization": "Bearer $accessToken",
+      });
 
       if (response.statusCode == 200) {
+        secureStorage.write(key: 'aliasDataKey', value: response.body);
         print('getAllAliasesData ${response.statusCode}');
         yield AliasModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllAliasesData ${response.statusCode}');
+        yield AliasModel.fromJson(jsonDecode(securedAliasData));
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
+    } on SocketException {
+      yield AliasModel.fromJson(jsonDecode(securedAliasData));
+      throw 'No Internet Connection';
     } catch (e) {
       throw e;
     }
