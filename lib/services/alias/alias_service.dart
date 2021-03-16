@@ -42,8 +42,7 @@ class AliasService {
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } on SocketException {
-      yield AliasModel.fromJson(jsonDecode(securedAliasData));
-      throw 'No Internet Connection';
+      throw AliasModel.fromJson(jsonDecode(securedAliasData));
     } catch (e) {
       throw e;
     }
