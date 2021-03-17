@@ -10,12 +10,6 @@ import 'package:http/http.dart' as http;
 import '../../constants.dart';
 
 class UsernameService {
-  final _headers = <String, String>{
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    "Accept": "application/json",
-  };
-
   Future<UsernameModel> getUsernameData() async {
     final accessToken = await AccessTokenService().getAccessToken();
     final offlineData = OfflineData();
@@ -48,13 +42,17 @@ class UsernameService {
   }
 
   Future createNewUsername(String username) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await AccessTokenService().getAccessToken();
 
+    try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
         body: json.encode({"username": "$username"}),
       );
 
@@ -71,13 +69,17 @@ class UsernameService {
   }
 
   Future deleteUsername(String usernameID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await AccessTokenService().getAccessToken();
 
+    try {
       final response = await http.delete(
         Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
       );
 
       if (response.statusCode == 204) {
