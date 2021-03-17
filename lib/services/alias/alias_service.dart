@@ -32,8 +32,8 @@ class AliasService {
       });
 
       if (response.statusCode == 200) {
-        offlineData.writeAliasOfflineData(response.body);
         print('getAllAliasesData ${response.statusCode}');
+        await offlineData.writeAliasOfflineData(response.body);
         yield AliasModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllAliasesData ${response.statusCode}');
