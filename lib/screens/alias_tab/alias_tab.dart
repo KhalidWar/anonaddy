@@ -31,6 +31,7 @@ class AliasTab extends ConsumerWidget {
     watch(domainOptionsProvider);
 
     final aliasDataProvider = watch(aliasStateManagerProvider);
+    final clearAllLists = aliasDataProvider.clearAllLists;
     final availableAliasList = aliasDataProvider.availableAliasList;
     final deletedAliasList = aliasDataProvider.deletedAliasList;
     final forwardedList = aliasDataProvider.forwardedList;
@@ -43,12 +44,7 @@ class AliasTab extends ConsumerWidget {
       data: (data) {
         final aliasDataList = data.aliasDataList;
 
-        availableAliasList.clear();
-        deletedAliasList.clear();
-        forwardedList.clear();
-        blockedList.clear();
-        repliedList.clear();
-        sentList.clear();
+        clearAllLists();
 
         for (int i = 0; i < aliasDataList.length; i++) {
           forwardedList.add(aliasDataList[i].emailsForwarded);

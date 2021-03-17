@@ -96,25 +96,25 @@ class _AppSettingsState extends State<AppSettings> {
     final logout = context.read(loginStateManagerProvider).logout;
     final confirmationDialog = ConfirmationDialog();
 
+    signOut() async {
+      await logout(context).whenComplete(() {
+        Navigator.pop(context);
+        Navigator.pop(context);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return TokenLoginScreen();
+            },
+          ),
+        );
+      });
+    }
+
     return showModal(
       context: context,
       builder: (context) {
-        signOut() {
-          logout(context).then((value) {
-            Navigator.pop(context);
-            Navigator.pop(context);
-
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return TokenLoginScreen();
-                },
-              ),
-            );
-          });
-        }
-
         return TargetedPlatform().isIOS()
             ? confirmationDialog.iOSAlertDialog(
                 context, kSignOutAlertDialog, signOut, 'Sign out')

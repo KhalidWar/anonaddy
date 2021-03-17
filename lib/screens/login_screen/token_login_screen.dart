@@ -10,7 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../constants.dart';
 
 final loginStateManagerProvider =
-    ChangeNotifierProvider((ref) => LoginStateManager(false));
+    ChangeNotifierProvider((ref) => LoginStateManager());
 
 class TokenLoginScreen extends ConsumerWidget {
   final _textEditingController = TextEditingController();

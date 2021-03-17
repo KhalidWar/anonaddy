@@ -9,10 +9,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../constants.dart';
 
 final aliasStateManagerProvider =
-    ChangeNotifierProvider((ref) => AliasStateManager(false));
+    ChangeNotifierProvider((ref) => AliasStateManager());
 
 class AliasStateManager extends ChangeNotifier {
-  AliasStateManager(this._isLoading);
+  AliasStateManager() {
+    _isLoading = false;
+  }
 
   AliasDataModel aliasDataModel;
   bool _isLoading;
@@ -77,6 +79,15 @@ class AliasStateManager extends ChangeNotifier {
       return false;
     else
       return true;
+  }
+
+  void clearAllLists() {
+    availableAliasList.clear();
+    deletedAliasList.clear();
+    forwardedList.clear();
+    blockedList.clear();
+    repliedList.clear();
+    sentList.clear();
   }
 
   void createNewAlias(BuildContext context, String desc, String domain,
