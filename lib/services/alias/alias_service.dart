@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/services/offline_data/offline_data.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
@@ -19,9 +19,8 @@ class AliasService {
   };
 
   Stream<AliasModel> getAllAliasesData() async* {
-    final secureStorage = FlutterSecureStorage();
     final accessToken = await AccessTokenService().getAccessToken();
-    final securedAliasData = await secureStorage.read(key: 'aliasDataKey');
+    final offlineData = OfflineData();
 
     try {
       final response = await http
@@ -33,7 +32,7 @@ class AliasService {
       });
 
       if (response.statusCode == 200) {
-        secureStorage.write(key: 'aliasDataKey', value: response.body);
+        offlineData.writeAliasOfflineData(response.body);
         print('getAllAliasesData ${response.statusCode}');
         yield AliasModel.fromJson(jsonDecode(response.body));
       } else {
@@ -41,7 +40,8 @@ class AliasService {
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } on SocketException {
-      yield AliasModel.fromJson(jsonDecode(securedAliasData));
+      final securedData = await offlineData.readAliasOfflineData();
+      yield AliasModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
