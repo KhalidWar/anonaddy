@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/services/offline_data/offline_data.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,22 +17,31 @@ class RecipientService {
   };
 
   Future<RecipientModel> getAllRecipient() async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await AccessTokenService().getAccessToken();
+    final offlineData = OfflineData();
 
+    try {
       final response = await http.get(
         Uri.encodeFull('$kBaseURL/$kRecipientsURL'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
       );
 
       if (response.statusCode == 200) {
         print('getAllRecipient ${response.statusCode}');
+        await offlineData.writeRecipientsOfflineData(response.body);
         return RecipientModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllRecipient ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
+    } on SocketException {
+      final securedData = await offlineData.readRecipientsOfflineData();
+      return RecipientModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
