@@ -10,8 +10,10 @@ import 'package:http/http.dart' as http;
 import '../../constants.dart';
 
 class UsernameService {
+  final _accessTokenService = AccessTokenService();
+
   Future<UsernameModel> getUsernameData() async {
-    final accessToken = await AccessTokenService().getAccessToken();
+    final accessToken = await _accessTokenService.getAccessToken();
     final offlineData = OfflineData();
 
     try {
@@ -42,7 +44,7 @@ class UsernameService {
   }
 
   Future createNewUsername(String username) async {
-    final accessToken = await AccessTokenService().getAccessToken();
+    final accessToken = await _accessTokenService.getAccessToken();
 
     try {
       final response = await http.post(
@@ -69,7 +71,7 @@ class UsernameService {
   }
 
   Future deleteUsername(String usernameID) async {
-    final accessToken = await AccessTokenService().getAccessToken();
+    final accessToken = await _accessTokenService.getAccessToken();
 
     try {
       final response = await http.delete(

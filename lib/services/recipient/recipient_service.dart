@@ -10,14 +10,10 @@ import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
 class RecipientService {
-  final _headers = <String, String>{
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    "Accept": "application/json",
-  };
+  final _accessTokenService = AccessTokenService();
 
   Future<RecipientModel> getAllRecipient() async {
-    final accessToken = await AccessTokenService().getAccessToken();
+    final accessToken = await _accessTokenService.getAccessToken();
     final offlineData = OfflineData();
 
     try {
@@ -48,13 +44,17 @@ class RecipientService {
   }
 
   Future enableEncryption(String recipientID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kEncryptedRecipient'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
         body: json.encode({"id": "$recipientID"}),
       );
 
@@ -71,13 +71,17 @@ class RecipientService {
   }
 
   Future disableEncryption(String recipientID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.delete(
         Uri.encodeFull('$kBaseURL/$kEncryptedRecipient/$recipientID'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
       );
       if (response.statusCode == 204) {
         print('disableEncryption ${response.statusCode}');
@@ -93,13 +97,17 @@ class RecipientService {
 
   Future<RecipientDataModel> addPublicGPGKey(
       String recipientID, String keyData) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.patch(
           Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
-          headers: _headers,
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $accessToken",
+          },
           body: jsonEncode({"key_data": "$keyData"}));
 
       if (response.statusCode == 200) {
@@ -115,13 +123,18 @@ class RecipientService {
   }
 
   Future removePublicGPGKey(String recipientID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
-          headers: _headers);
+        Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 204) {
         print('removePublicKey ${response.statusCode}');
@@ -136,15 +149,19 @@ class RecipientService {
   }
 
   Future<RecipientDataModel> addRecipient(String email) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
-      print(email * 20);
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.post(
-          Uri.encodeFull('$kBaseURL/$kRecipientsURL'),
-          headers: _headers,
-          body: jsonEncode({"email": "$email"}));
+        Uri.encodeFull('$kBaseURL/$kRecipientsURL'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+        body: jsonEncode({"email": "$email"}),
+      );
 
       if (response.statusCode == 201) {
         print("addRecipient ${response.statusCode}");
@@ -159,13 +176,18 @@ class RecipientService {
   }
 
   Future removeRecipient(String recipientID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kRecipientsURL/$recipientID'),
-          headers: _headers);
+        Uri.encodeFull('$kBaseURL/$kRecipientsURL/$recipientID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 204) {
         print('removeRecipient ${response.statusCode}');
@@ -180,14 +202,17 @@ class RecipientService {
   }
 
   Future sendVerificationEmail(String recipientID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.post(
-        Uri.encodeFull(
-            'https://app.anonaddy.com/api/v1/recipients/email/resend'),
-        headers: _headers,
+        Uri.encodeFull('$kBaseURL/$kRecipientsURL/email/resend'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
         body: json.encode({"recipient_id": "$recipientID"}),
       );
 

@@ -16,8 +16,10 @@ final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
 });
 
 class DomainOptionsService {
+  final _accessTokenService = AccessTokenService();
+
   Future<DomainOptions> getDomainOptions() async {
-    final accessToken = await AccessTokenService().getAccessToken();
+    final accessToken = await _accessTokenService.getAccessToken();
     final offlineData = OfflineData();
 
     try {
