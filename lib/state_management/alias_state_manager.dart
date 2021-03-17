@@ -111,7 +111,7 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   void deleteOrRestoreAlias(
-      BuildContext context, String input, String aliasID) async {
+      BuildContext context, DateTime input, String aliasID) async {
     setIsLoading(true);
     final aliasService = context.read(aliasServiceProvider);
     isAliasDeleted(input)
