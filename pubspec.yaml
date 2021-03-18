@@ -26,6 +26,7 @@ dependencies:
   # Internet Connectivity
   http: ^0.12.2
   url_launcher: ^5.7.10
+  connectivity: ^3.0.2
 
   # Storage
   flutter_secure_storage: ^3.3.5

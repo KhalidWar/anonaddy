@@ -1,15 +1,23 @@
-import 'package:anonaddy/screens/account_tab/account_tab.dart';
-import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
+import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../constants.dart';
+import 'account_tab/account_tab.dart';
+import 'alias_tab/alias_tab.dart';
 import 'alias_tab/create_new_alias.dart';
 import 'more_tab/more_tab.dart';
+
+final connectivityStreamProvider =
+    StreamProvider.autoDispose<ConnectionStatus>((ref) {
+  return ref.read(connectivityServiceProvider).streamController.stream;
+});
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -33,13 +41,31 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Scaffold(
         appBar: buildAppBar(context),
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: [
-            AccountTab(),
-            AliasTab(),
-            MoreTab(),
-          ],
+        body: Consumer(
+          builder: (_, watch, child) {
+            final connectivityAsyncValue = watch(connectivityStreamProvider);
+
+            connectivityAsyncValue.whenData((data) {
+              if (data == ConnectionStatus.offline) {
+                Fluttertoast.showToast(
+                  msg: 'No Internet. Activated Offline mode.',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.grey[600],
+                );
+              }
+            });
+
+            return child;
+          },
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: [
+              AccountTab(),
+              AliasTab(),
+              MoreTab(),
+            ],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectedTab,
