@@ -22,10 +22,7 @@ class _AppSettingsState extends State<AppSettings> {
     final size = MediaQuery.of(context).size;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: kBlueNavyColor,
-        systemNavigationBarColor: Colors.red,
-      ),
+      value: SystemUiOverlayStyle(statusBarColor: kBlueNavyColor),
       child: Scaffold(
         appBar: AppBar(title: Text('App Settings')),
         body: Column(
@@ -96,16 +93,16 @@ class _AppSettingsState extends State<AppSettings> {
             ),
             Spacer(),
             Container(
-              height: size.height * 0.08,
-              child: ListTile(
-                tileColor: Colors.red,
-                title: Center(
-                  child: Text(
-                    'Log Out',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+              width: size.width,
+              height: size.height * 0.05,
+              margin: EdgeInsets.all(10),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  primary: Colors.red,
                 ),
-                onTap: () => buildLogoutDialog(context),
+                child: Text('Log out'),
+                onPressed: () => buildLogoutDialog(context),
               ),
             ),
           ],
