@@ -21,7 +21,7 @@ void main() {
       'When user is logs in, '
       'Then accessToken is stored in FlutterSecureStorage.', () async {
     // Arrange
-    final loginState = LoginStateManager(false);
+    final loginState = LoginStateManager();
     final textEditingController = TextEditingController();
     final mockHttp = MockHttp();
 
