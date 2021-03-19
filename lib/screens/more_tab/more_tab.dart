@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
-import 'app_settings.dart';
+import '../app_settings/app_settings.dart';
 
 final recipientStreamProvider =
     StreamProvider.autoDispose<RecipientModel>((ref) async* {
@@ -112,24 +112,9 @@ class MoreTab extends ConsumerWidget {
             trailing: Icon(Icons.settings),
             onTap: () => Navigator.push(
               context,
-              PageRouteBuilder(
-                transitionsBuilder:
-                    (context, animation, secondAnimation, child) {
-                  animation = CurvedAnimation(
-                      parent: animation, curve: Curves.linearToEaseOut);
-
-                  return SlideTransition(
-                    position: Tween(
-                      begin: Offset(1.0, 0.0),
-                      end: Offset(0.0, 0.0),
-                    ).animate(animation),
-                    child: child,
-                  );
-                },
-                pageBuilder: (context, animation, secondAnimation) {
-                  return AppSettings();
-                },
-              ),
+              context
+                  .read(customPageRouteProvider)
+                  .customPageRouteBuilder(AppSettings()),
             ),
           ),
         ],

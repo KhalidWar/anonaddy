@@ -1,49 +1,60 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/services/offline_data/offline_data.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants.dart';
 
 class UsernameService {
-  final _headers = <String, String>{
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    "Accept": "application/json",
-  };
+  final _accessTokenService = AccessTokenService();
 
   Future<UsernameModel> getUsernameData() async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
+    final offlineData = OfflineData();
 
+    try {
       final response = await http.get(
         Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
       );
 
       if (response.statusCode == 200) {
         print('getUsernameData ${response.statusCode}');
+        await offlineData.writeUsernameOfflineData(response.body);
         return UsernameModel.fromJson(jsonDecode(response.body));
       } else {
         print('getUsernameData ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
+    } on SocketException {
+      final securedData = await offlineData.readUsernameOfflineData();
+      return UsernameModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
   }
 
   Future createNewUsername(String username) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
         body: json.encode({"username": "$username"}),
       );
 
@@ -60,13 +71,17 @@ class UsernameService {
   }
 
   Future deleteUsername(String usernameID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.delete(
         Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
       );
 
       if (response.statusCode == 204) {

@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/services/offline_data/offline_data.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,28 +12,34 @@ import '../../constants.dart';
 import '../access_token/access_token_service.dart';
 
 class AliasService {
-  final _headers = <String, String>{
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    "Accept": "application/json",
-  };
+  final _accessTokenService = AccessTokenService();
 
   Stream<AliasModel> getAllAliasesData() async* {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
+    final offlineData = OfflineData();
 
+    try {
       final response = await http.get(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
-          headers: _headers);
+        Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 200) {
         print('getAllAliasesData ${response.statusCode}');
+        await offlineData.writeAliasOfflineData(response.body);
         yield AliasModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllAliasesData ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
+    } on SocketException {
+      final securedData = await offlineData.readAliasOfflineData();
+      yield AliasModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
@@ -38,18 +47,22 @@ class AliasService {
 
   Future createNewAlias(
       String desc, String domain, String format, String localPart) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kAliasesURL'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
         body: json.encode({
           "domain": "$domain",
           "format": "$format",
           "description": "$desc",
-          if (format == 'custom') "local_part": "$localPart"
+          if (format == 'custom') "local_part": "$localPart",
         }),
       );
 
@@ -66,13 +79,17 @@ class AliasService {
   }
 
   Future activateAlias(String aliasID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kActiveAliasURL'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
         body: json.encode({"id": "$aliasID"}),
       );
 
@@ -89,13 +106,18 @@ class AliasService {
   }
 
   Future deactivateAlias(String aliasID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kActiveAliasURL/$aliasID'),
-          headers: _headers);
+        Uri.encodeFull('$kBaseURL/$kActiveAliasURL/$aliasID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 204) {
         print('Network deactivateAlias ${response.statusCode}');
@@ -111,14 +133,19 @@ class AliasService {
 
   Future<AliasDataModel> editAliasDescription(
       String aliasID, String newDesc) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.patch(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
-          headers: _headers,
-          body: jsonEncode({"description": "$newDesc"}));
+        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+        body: jsonEncode({"description": "$newDesc"}),
+      );
 
       if (response.statusCode == 200) {
         print('Network editDescription ${response.statusCode}');
@@ -133,13 +160,18 @@ class AliasService {
   }
 
   Future deleteAlias(String aliasID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
-          headers: _headers);
+        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 204) {
         print('Network deleteAlias ${response.statusCode}');
@@ -154,13 +186,18 @@ class AliasService {
   }
 
   Future restoreAlias(String aliasID) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.patch(
-          Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID/restore'),
-          headers: _headers);
+        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID/restore'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 200) {
         print('Network restoreAlias ${response.statusCode}');
@@ -175,13 +212,17 @@ class AliasService {
   }
 
   Future editAliasRecipient(String aliasID, List<String> recipients) async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.patch(
         Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
         body: jsonEncode({"recipient_ids": recipients}),
       );
 

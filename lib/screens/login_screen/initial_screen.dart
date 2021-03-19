@@ -11,12 +11,17 @@ final accessTokenManager = FutureProvider(
   (ref) => ref.watch(accessTokenServiceProvider).getAccessToken(),
 );
 
+/// ConsumerWidget is used to update state using ChangeNotifierProvider
 class InitialScreen extends ConsumerWidget {
   const InitialScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    /// Use [watch] method to access different providers
+    /// and returns AsyncValue of same type.
     final accessToken = watch(accessTokenManager);
+
+    /// Customize Status Bar and Bottom Navigator Bar colors.
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: kBlueNavyColor,
@@ -25,9 +30,13 @@ class InitialScreen extends ConsumerWidget {
       child: Scaffold(
         key: Key('initialScreenScaffold'),
         backgroundColor: kBlueNavyColor,
+
+        /// AsyncValue's [when] function returns 3 states:
         body: accessToken.when(
-          loading: () => Center(
-              child: CircularProgressIndicator(key: Key('loadingIndicator'))),
+          /// 1) future is loading
+          loading: () => Container(),
+
+          /// 2) data is obtained
           data: (data) {
             if (data == null) {
               return TokenLoginScreen();
@@ -35,6 +44,8 @@ class InitialScreen extends ConsumerWidget {
               return HomeScreen();
             }
           },
+
+          /// 3) error is thrown
           error: (error, stackTrace) {
             return LottieWidget(
               key: Key('errorWidget'),

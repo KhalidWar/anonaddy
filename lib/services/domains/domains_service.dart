@@ -8,20 +8,20 @@ import 'package:http/http.dart' as http;
 import '../../constants.dart';
 
 class DomainsService {
-  final _headers = <String, String>{
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-    "Accept": "application/json",
-  };
+  final _accessTokenService = AccessTokenService();
 
   Future<DomainModel> getAllDomains() async {
-    try {
-      final accessToken = await AccessTokenService().getAccessToken();
-      _headers["Authorization"] = "Bearer $accessToken";
+    final accessToken = await _accessTokenService.getAccessToken();
 
+    try {
       final response = await http.get(
         Uri.encodeFull('$kBaseURL/$kDomainsURL'),
-        headers: _headers,
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
       );
 
       if (response.statusCode == 200) {

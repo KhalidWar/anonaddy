@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile_leading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -69,23 +70,9 @@ class AliasListTile extends ConsumerWidget {
 
         Navigator.push(
           context,
-          PageRouteBuilder(
-            transitionsBuilder: (context, animation, secondAnimation, child) {
-              animation = CurvedAnimation(
-                  parent: animation, curve: Curves.linearToEaseOut);
-
-              return SlideTransition(
-                position: Tween(
-                  begin: Offset(1.0, 0.0),
-                  end: Offset(0.0, 0.0),
-                ).animate(animation),
-                child: child,
-              );
-            },
-            pageBuilder: (context, animation, secondAnimation) {
-              return AliasDetailScreen();
-            },
-          ),
+          context
+              .read(customPageRouteProvider)
+              .customPageRouteBuilder(AliasDetailScreen()),
         );
       },
     );

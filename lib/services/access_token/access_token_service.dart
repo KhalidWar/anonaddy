@@ -7,6 +7,7 @@ import '../../constants.dart';
 class AccessTokenService {
   final _secureStorage = FlutterSecureStorage();
   final _accessTokenKey = 'accessToken';
+  String _accessTokenValue;
 
   Future validateAccessToken(String accessToken) async {
     try {
@@ -33,7 +34,12 @@ class AccessTokenService {
   }
 
   Future<String> getAccessToken() async {
-    return await _secureStorage.read(key: _accessTokenKey);
+    if (_accessTokenValue == null) {
+      _accessTokenValue = await _secureStorage.read(key: _accessTokenKey);
+      return _accessTokenValue;
+    } else {
+      return _accessTokenValue;
+    }
   }
 
   Future<void> deleteAccessToken() async {

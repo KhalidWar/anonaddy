@@ -3,11 +3,14 @@ import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginStateManager extends ChangeNotifier {
-  LoginStateManager(this._isLoading);
+  LoginStateManager() {
+    _isLoading = false;
+  }
 
   bool _isLoading;
 
@@ -61,6 +64,6 @@ class LoginStateManager extends ChangeNotifier {
   }
 
   Future<void> logout(BuildContext context) async {
-    await context.read(accessTokenServiceProvider).deleteAccessToken();
+    await FlutterSecureStorage().deleteAll();
   }
 }

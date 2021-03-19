@@ -13,6 +13,7 @@ class LottieWidget extends StatelessWidget {
     this.lottie,
     this.lottieHeight,
     this.showLoading,
+    this.repeat,
   }) : super(key: key);
 
   final String label, buttonLabel, lottie;
@@ -20,7 +21,7 @@ class LottieWidget extends StatelessWidget {
   final Function buttonOnPress;
   final Color iconColor, scaffoldColor;
   final double lottieHeight;
-  final bool showLoading;
+  final bool showLoading, repeat;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class LottieWidget extends StatelessWidget {
                     lottie,
                     height: lottieHeight,
                     fit: BoxFit.fitHeight,
-                    repeat: false,
+                    repeat: repeat ?? false,
                   ),
             label == null
                 ? Container()
