@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:anonaddy/screens/app_settings/about_app_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
@@ -7,8 +8,6 @@ import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 
@@ -71,7 +70,29 @@ class _AppSettingsState extends State<AppSettings> {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
-              onTap: () => aboutAppDialog(context),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionsBuilder:
+                        (context, animation, secondAnimation, child) {
+                      animation = CurvedAnimation(
+                          parent: animation, curve: Curves.linearToEaseOut);
+
+                      return SlideTransition(
+                        position: Tween(
+                          begin: Offset(1.0, 0.0),
+                          end: Offset(0.0, 0.0),
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                    pageBuilder: (context, animation, secondAnimation) {
+                      return AboutAppScreen();
+                    },
+                  ),
+                );
+              },
             ),
             Container(
               height: size.height * 0.08,
@@ -120,33 +141,6 @@ class _AppSettingsState extends State<AppSettings> {
                 context, kSignOutAlertDialog, signOut, 'Sign out')
             : confirmationDialog.androidAlertDialog(
                 context, kSignOutAlertDialog, signOut, 'Sign out');
-      },
-    );
-  }
-
-  Future aboutAppDialog(BuildContext context) async {
-    final confirmationDialog = ConfirmationDialog();
-
-    launchUrl() async {
-      await launch(kGithubRepoURL).catchError((error, stackTrace) {
-        throw Fluttertoast.showToast(
-          msg: error.message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.grey[600],
-        );
-      });
-      Navigator.pop(context);
-    }
-
-    showModal(
-      context: context,
-      builder: (context) {
-        return TargetedPlatform().isIOS()
-            ? confirmationDialog.iOSAlertDialog(context, kAboutAppText,
-                launchUrl, 'About App', 'Visit Github', 'Cancel')
-            : confirmationDialog.androidAlertDialog(context, kAboutAppText,
-                launchUrl, 'About App', 'Visit Github', 'Cancel');
       },
     );
   }

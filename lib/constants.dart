@@ -8,11 +8,18 @@ const String kAliasesURL = 'aliases';
 const String kEncryptedRecipient = 'encrypted-recipients';
 const String kRecipientsURL = 'recipients';
 const String kRecipientKeys = 'recipient-keys';
-const kGithubRepoURL = 'https://github.com/KhalidWar/anonaddy';
-const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 const kUsernamesURL = 'usernames';
 const kDomainsURL = 'domains';
+
+const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
 const kDefaultAliasURL = 'https://app.anonaddy.com/settings';
+
+const kAddyManagerRepo = 'https://github.com/KhalidWar/anonaddy';
+const kAddyManagerIssue = 'https://github.com/KhalidWar/anonaddy/issues';
+const kAddyManagerLicense =
+    'https://github.com/KhalidWar/anonaddy/blob/master/LICENSE';
+const kKhalidWarGithub = 'https://github.com/KhalidWar';
+const kWillBrowningGithub = 'https://github.com/willbrowningme';
 
 /// Official AnonAddy Code Strings
 const kUUID = 'uuid';
@@ -21,8 +28,6 @@ const kCustom = 'custom';
 const kRandomWords = 'random_words';
 
 /// Official AnonAddy Messages
-const kAboutAppText =
-    'AddyManager is created by Khalid War as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com team or project. AddyManager is free and open-source. Free as in free of charge, free of ads, and free of trackers. \n\nPlease visit AddyManager\'s Github repository for more info.';
 const kDeletedAliasText =
     'Deleted aliases reject all emails sent to them. However, they can be restored to start receiving emails again.';
 const kDeleteAliasConfirmation =
