@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
-import 'app_settings.dart';
+import '../app_settings/app_settings.dart';
 
 final recipientStreamProvider =
     StreamProvider.autoDispose<RecipientModel>((ref) async* {

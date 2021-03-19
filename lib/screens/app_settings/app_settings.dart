@@ -53,7 +53,8 @@ class _AppSettingsState extends State<AppSettings> {
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   subtitle: Text(
-                      'Disables screenshot taking and blocks app switcher view'),
+                    'Blocks screenshots, screen recording, and app switcher view',
+                  ),
                   trailing: Switch.adaptive(
                     value: secureApp.isAppSecured,
                     onChanged: (toggle) => secureApp.toggleSecureApp(),
@@ -62,14 +63,13 @@ class _AppSettingsState extends State<AppSettings> {
                 );
               },
             ),
-            Spacer(),
             ListTile(
-              title: Center(
-                child: Text(
-                  'About App',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
+              title: Text(
+                'About App',
+                style: Theme.of(context).textTheme.bodyText1,
               ),
+              subtitle: Text('View AddyManager details'),
+              trailing: Icon(Icons.help_outline),
               onTap: () {
                 Navigator.push(
                   context,
@@ -94,6 +94,7 @@ class _AppSettingsState extends State<AppSettings> {
                 );
               },
             ),
+            Spacer(),
             Container(
               height: size.height * 0.08,
               child: ListTile(

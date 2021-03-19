@@ -52,17 +52,15 @@ class AboutAppScreen extends StatelessWidget {
                             children: [
                               Text(
                                 data.appName,
-                                style: Theme.of(context).textTheme.headline6,
+                                style: Theme.of(context).textTheme.bodyText1,
                               ),
-                              Text(
-                                '${data.version}+${data.buildNumber}',
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
+                              Text('${data.version} (${data.buildNumber})'),
                             ],
                           );
                         },
                         loading: () => CircularProgressIndicator(),
-                        error: (error, stackTrace) => Text('Failed to load'),
+                        error: (error, stackTrace) =>
+                            Text('Failed to load  package info: $error'),
                       );
                     },
                   ),
@@ -114,8 +112,6 @@ class AboutAppScreen extends StatelessWidget {
                 ),
               ),
               Divider(height: 0),
-              SizedBox(height: size.height * 0.02),
-              Center(child: Text('Thanks for using AddyManager!')),
             ],
           ),
         ),
