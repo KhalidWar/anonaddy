@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/app_settings/about_app_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
+import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/material.dart';
@@ -70,24 +71,9 @@ class _AppSettingsState extends State<AppSettings> {
               onTap: () {
                 Navigator.push(
                   context,
-                  PageRouteBuilder(
-                    transitionsBuilder:
-                        (context, animation, secondAnimation, child) {
-                      animation = CurvedAnimation(
-                          parent: animation, curve: Curves.linearToEaseOut);
-
-                      return SlideTransition(
-                        position: Tween(
-                          begin: Offset(1.0, 0.0),
-                          end: Offset(0.0, 0.0),
-                        ).animate(animation),
-                        child: child,
-                      );
-                    },
-                    pageBuilder: (context, animation, secondAnimation) {
-                      return AboutAppScreen();
-                    },
-                  ),
+                  context
+                      .read(customPageRouteProvider)
+                      .customPageRouteBuilder(AboutAppScreen()),
                 );
               },
             ),

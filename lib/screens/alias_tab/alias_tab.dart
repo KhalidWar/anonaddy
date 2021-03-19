@@ -8,7 +8,6 @@ import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/alias_tab_pie_chart.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -92,7 +91,7 @@ class AliasTab extends ConsumerWidget {
                       tabs: [
                         Tab(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text('Available Aliases'),
                               Text('${availableAliasList.length}'),
@@ -101,7 +100,7 @@ class AliasTab extends ConsumerWidget {
                         ),
                         Tab(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text('Deleted Aliases'),
                               Text('${deletedAliasList.length}'),
@@ -152,11 +151,13 @@ class AliasTab extends ConsumerWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                buildPageRouteBuilder(
-                                  DeletedAliasesScreen(
-                                    aliasDataModel: deletedAliasList,
-                                  ),
-                                ),
+                                context
+                                    .read(customPageRouteProvider)
+                                    .customPageRouteBuilder(
+                                      DeletedAliasesScreen(
+                                        aliasDataModel: deletedAliasList,
+                                      ),
+                                    ),
                               );
                             },
                           ),
@@ -197,26 +198,6 @@ class AliasTab extends ConsumerWidget {
     );
   }
 
-  PageRouteBuilder buildPageRouteBuilder(Widget child) {
-    return PageRouteBuilder(
-      transitionsBuilder: (context, animation, secondAnimation, child) {
-        animation =
-            CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut);
-
-        return SlideTransition(
-          position: Tween(
-            begin: Offset(1.0, 0.0),
-            end: Offset(0.0, 0.0),
-          ).animate(animation),
-          child: child,
-        );
-      },
-      pageBuilder: (context, animation, secondAnimation) {
-        return child;
-      },
-    );
-  }
-
   Container buildEmptyAliasList(BuildContext context, String label) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
@@ -225,35 +206,6 @@ class AliasTab extends ConsumerWidget {
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.headline6,
       ),
-    );
-  }
-}
-
-class FlexSpaceText extends StatelessWidget {
-  const FlexSpaceText({Key key, this.label, this.digit}) : super(key: key);
-
-  final String label;
-  final int digit;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          '$label: ',
-          style: Theme.of(context)
-              .textTheme
-              .bodyText2
-              .copyWith(color: Colors.white),
-        ),
-        Text(
-          digit.toString(),
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1
-              .copyWith(color: Colors.white),
-        ),
-      ],
     );
   }
 }

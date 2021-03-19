@@ -118,27 +118,11 @@ class AdditionalUsername extends ConsumerWidget {
                         onTap: () {
                           Navigator.push(
                             context,
-                            PageRouteBuilder(
-                              transitionsBuilder:
-                                  (context, animation, secondAnimation, child) {
-                                animation = CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.linearToEaseOut);
-
-                                return SlideTransition(
-                                  position: Tween(
-                                    begin: Offset(1.0, 0.0),
-                                    end: Offset(0.0, 0.0),
-                                  ).animate(animation),
-                                  child: child,
-                                );
-                              },
-                              pageBuilder:
-                                  (context, animation, secondAnimation) {
-                                return UsernameDetailedScreen(
-                                    username: username);
-                              },
-                            ),
+                            context
+                                .read(customPageRouteProvider)
+                                .customPageRouteBuilder(
+                                  UsernameDetailedScreen(username: username),
+                                ),
                           );
                         },
                       );

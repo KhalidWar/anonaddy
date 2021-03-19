@@ -1,8 +1,9 @@
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
+import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RecipientListTile extends StatelessWidget {
   const RecipientListTile({Key key, this.recipientDataModel}) : super(key: key);
@@ -53,22 +54,9 @@ class RecipientListTile extends StatelessWidget {
 
         Navigator.push(
           context,
-          PageRouteBuilder(
-            transitionsBuilder: (context, animation, secondAnimation, child) {
-              animation = CurvedAnimation(
-                  parent: animation, curve: Curves.linearToEaseOut);
-              return SlideTransition(
-                position: Tween(
-                  begin: Offset(1.0, 0.0),
-                  end: Offset(0.0, 0.0),
-                ).animate(animation),
-                child: child,
-              );
-            },
-            pageBuilder: (context, animation, secondAnimation) {
-              return RecipientDetailedScreen(recipientData: recipientDataModel);
-            },
-          ),
+          context.read(customPageRouteProvider).customPageRouteBuilder(
+                RecipientDetailedScreen(recipientData: recipientDataModel),
+              ),
         );
       },
     );
