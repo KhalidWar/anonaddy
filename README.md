@@ -27,6 +27,7 @@ Your support will help the continuous development of this project.
 - Add or remove PGP key.
 - Enable or disable PGP Email encryption.
 - Adaptive and persistive Light and Dark themes.
+- Offline support: access your data even if you're in an airplane.
 
 
 ## Security
@@ -38,7 +39,7 @@ AddyManager is free and open source software licensed under [MIT](https://github
 
 
 ## Packages used
-- [http](https://pub.dev/packages/http)
+- [HTTP](https://pub.dev/packages/http)
 - [Flutter Riverpod](https://pub.dev/packages/flutter_riverpod)
 - [Shared Preference](https://pub.dev/packages/shared_preferences)
 - [Flutter SVG](https://pub.dev/packages/flutter_svg)
@@ -49,12 +50,19 @@ AddyManager is free and open source software licensed under [MIT](https://github
 - [FlutterToast](https://pub.dev/packages/fluttertoast)
 - [Animations](https://pub.dev/packages/animations)
 - [Mockito](https://pub.dev/packages/mockito)
+- [Shimmer](https://pub.dev/packages/shimmer)
+- [FL Chart](https://pub.dev/packages/fl_chart)
+- [Connectivity](https://pub.dev/packages/connectivity)
+- [Secure Application](https://pub.dev/packages/secure_application)
+- [Local Auth](https://pub.dev/packages/local_auth)
+- [Package Info](https://pub.dev/packages/package_info)
 
 
 ## Development
 
 ### Contribution
-Please fork this repo and help out. Make small and concise commits.
+1. Feel free to fork this repo and help out
+2. Make small and concise commits.
 
 ### Getting Started
 Check out [Flutter's official guide](https://flutter.dev/docs/get-started/install) to installing and running flutter.
