@@ -3,9 +3,9 @@ import 'package:anonaddy/screens/app_settings/about_app_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
-import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
+import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -71,9 +71,7 @@ class _AppSettingsState extends State<AppSettings> {
               onTap: () {
                 Navigator.push(
                   context,
-                  context
-                      .read(customPageRouteProvider)
-                      .customPageRouteBuilder(AboutAppScreen()),
+                  CustomPageRoute().customPageRouteBuilder(AboutAppScreen()),
                 );
               },
             ),
@@ -91,6 +89,7 @@ class _AppSettingsState extends State<AppSettings> {
                 onPressed: () => buildLogoutDialog(context),
               ),
             ),
+            SizedBox(height: size.height * 0.01),
           ],
         ),
       ),

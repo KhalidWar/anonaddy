@@ -1,11 +1,12 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile_leading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'custom_page_route.dart';
 
 class AliasListTile extends ConsumerWidget {
   const AliasListTile({Key key, this.aliasData}) : super(key: key);
@@ -70,9 +71,7 @@ class AliasListTile extends ConsumerWidget {
 
         Navigator.push(
           context,
-          context
-              .read(customPageRouteProvider)
-              .customPageRouteBuilder(AliasDetailScreen()),
+          CustomPageRoute().customPageRouteBuilder(AliasDetailScreen()),
         );
       },
     );

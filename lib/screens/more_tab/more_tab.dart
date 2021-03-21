@@ -5,6 +5,7 @@ import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/state_management/username_state_manager.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
@@ -112,9 +113,7 @@ class MoreTab extends ConsumerWidget {
             trailing: Icon(Icons.settings),
             onTap: () => Navigator.push(
               context,
-              context
-                  .read(customPageRouteProvider)
-                  .customPageRouteBuilder(AppSettings()),
+              CustomPageRoute().customPageRouteBuilder(AppSettings()),
             ),
           ),
         ],

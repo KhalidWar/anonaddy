@@ -1,9 +1,10 @@
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
-import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'custom_page_route.dart';
 
 class RecipientListTile extends StatelessWidget {
   const RecipientListTile({Key key, this.recipientDataModel}) : super(key: key);
@@ -54,9 +55,9 @@ class RecipientListTile extends StatelessWidget {
 
         Navigator.push(
           context,
-          context.read(customPageRouteProvider).customPageRouteBuilder(
-                RecipientDetailedScreen(recipientData: recipientDataModel),
-              ),
+          CustomPageRoute().customPageRouteBuilder(
+            RecipientDetailedScreen(recipientData: recipientDataModel),
+          ),
         );
       },
     );

@@ -7,6 +7,7 @@ import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/alias_tab_pie_chart.dart';
+import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -151,13 +152,11 @@ class AliasTab extends ConsumerWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                context
-                                    .read(customPageRouteProvider)
-                                    .customPageRouteBuilder(
-                                      DeletedAliasesScreen(
-                                        aliasDataModel: deletedAliasList,
-                                      ),
-                                    ),
+                                CustomPageRoute().customPageRouteBuilder(
+                                  DeletedAliasesScreen(
+                                    aliasDataModel: deletedAliasList,
+                                  ),
+                                ),
                               );
                             },
                           ),
