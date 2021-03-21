@@ -7,7 +7,6 @@ import 'package:anonaddy/services/domains/domains_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/user/user_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
-import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernameServiceProvider = Provider((ref) => UsernameService());
@@ -19,4 +18,3 @@ final recipientServiceProvider = Provider((ref) => RecipientService());
 final domainsServiceProvider = Provider((ref) => DomainsService());
 final biometricAuthServiceProvider = Provider((ref) => BiometricAuthService());
 final connectivityServiceProvider = Provider((ref) => ConnectivityService());
-final customPageRouteProvider = Provider((ref) => CustomPageRoute());
