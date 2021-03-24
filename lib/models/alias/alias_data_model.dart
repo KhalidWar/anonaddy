@@ -36,7 +36,7 @@ class AliasDataModel {
   final int emailsBlocked;
   final int emailsReplied;
   final int emailsSent;
-  final List<RecipientDataModel> recipients;
+  List<RecipientDataModel> recipients;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime deletedAt;
@@ -96,6 +96,11 @@ class AliasDataModel {
   }
 
   factory AliasDataModel.fromJsonData(Map<String, dynamic> json) {
+    List list = json["data"]['recipients'];
+    List<RecipientDataModel> recipientList = list
+        .map((i) => RecipientDataModel.fromJsonRecipientNoAliases(i))
+        .toList();
+
     return AliasDataModel(
       aliasID: json['data']["id"],
       userId: json['data']["user_id"],
@@ -111,6 +116,7 @@ class AliasDataModel {
       emailsBlocked: json['data']["emails_blocked"],
       emailsReplied: json['data']["emails_replied"],
       emailsSent: json['data']["emails_sent"],
+      recipients: recipientList,
       createdAt: DateTime.parse(json['data']["created_at"]),
       updatedAt: DateTime.parse(json['data']["updated_at"]),
       deletedAt: json["deleted_at"] == null

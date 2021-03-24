@@ -211,20 +211,20 @@ class AliasService {
     }
   }
 
-  Future updateAliasDefaultRecipient(
+  Future<AliasDataModel> updateAliasDefaultRecipient(
       String aliasID, List<String> recipients) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
-      final response = await http.patch(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+      final response = await http.post(
+        Uri.encodeFull('$kBaseURL/$kAliasURL-$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: jsonEncode({"recipient_ids": recipients}),
+        body: jsonEncode({"alias_id": aliasID, "recipient_ids": recipients}),
       );
 
       if (response.statusCode == 200) {

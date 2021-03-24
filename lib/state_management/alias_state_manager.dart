@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,11 @@ class AliasStateManager extends ChangeNotifier {
 
   void setEmailDescription(String input) {
     aliasDataModel.emailDescription = input;
+    notifyListeners();
+  }
+
+  void setAliasRecipients(List<RecipientDataModel> recipients) {
+    aliasDataModel.recipients = recipients;
     notifyListeners();
   }
 
@@ -187,20 +193,18 @@ class AliasStateManager extends ChangeNotifier {
     }
   }
 
-  void updateAliasDefaultRecipient(
+  Future updateAliasDefaultRecipient(
       BuildContext context, String aliasID, List<String> recipients) async {
-    Navigator.pop(context);
     await context
         .read(aliasServiceProvider)
         .updateAliasDefaultRecipient(aliasID, recipients)
         .then((value) {
-      if (value.emailDescription == null) {
-        showToast(kEditDescFailed);
-      } else {
-        showToast(kEditDescSuccessful);
-        setEmailDescription(value.emailDescription);
-      }
+      setAliasRecipients(value.recipients);
+      showToast(kUpdateAliasRecipientSuccessful);
+    }).catchError((error) {
+      showToast(kUpdateAliasRecipientFailed);
     });
+    Navigator.pop(context);
   }
 
   void copyToClipboard(String input) {

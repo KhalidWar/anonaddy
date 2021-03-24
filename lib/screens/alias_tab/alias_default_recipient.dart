@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/screens/more_tab/more_tab.dart';
+import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,34 +22,27 @@ class _AliasDefaultRecipientScreenState
     extends State<AliasDefaultRecipientScreen> {
   final _verifiedRecipients = <RecipientDataModel>[];
   final _defaultRecipients = <RecipientDataModel>[];
-
   final _selectedRecipientsID = <String>[];
 
-  void _updateDefaultRecipient() {}
-
   void _toggleRecipient(RecipientDataModel verifiedRecipient) {
-    setState(() {
-      if (_defaultRecipients.contains(verifiedRecipient)) {
-        _defaultRecipients.remove(verifiedRecipient);
-      } else {
-        _defaultRecipients.add(verifiedRecipient);
-      }
-    });
+    if (_defaultRecipients.contains(verifiedRecipient)) {
+      _defaultRecipients
+          .removeWhere((element) => element.email == verifiedRecipient.email);
+      _selectedRecipientsID
+          .removeWhere((element) => element == verifiedRecipient.id);
+    } else {
+      _defaultRecipients.add(verifiedRecipient);
+      _selectedRecipientsID.add(verifiedRecipient.id);
+    }
   }
 
   bool _isDefaultRecipient(RecipientDataModel verifiedRecipient) {
-    if (_defaultRecipients.contains(verifiedRecipient)) {
-      return true;
-    } else {
-      return false;
+    for (RecipientDataModel defaultRecipient in _defaultRecipients) {
+      if (defaultRecipient.email == verifiedRecipient.email) {
+        return true;
+      }
     }
-
-    // for (RecipientDataModel defaultRecipient in _defaultRecipients) {
-    //   if (defaultRecipient == verifiedRecipient) {
-    //     return true;
-    //   }
-    // }
-    // return false;
+    return false;
   }
 
   void _setVerifiedRecipients() {
@@ -66,6 +60,7 @@ class _AliasDefaultRecipientScreenState
       for (RecipientDataModel recipient in aliasDefaultRecipients) {
         if (recipient.email == verifiedRecipient.email) {
           _defaultRecipients.add(recipient);
+          _selectedRecipientsID.add(recipient.id);
         }
       }
     }
@@ -107,27 +102,37 @@ class _AliasDefaultRecipientScreenState
         else
           ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
             itemCount: _verifiedRecipients.length,
             itemBuilder: (context, index) {
               final verifiedRecipient = _verifiedRecipients[index];
-              bool selected = _isDefaultRecipient(verifiedRecipient);
 
-              return ListTile(
-                selected: selected,
-                selectedTileColor: Colors.green,
-                title: Text(verifiedRecipient.email),
-                onTap: () {
-                  _toggleRecipient(verifiedRecipient);
-                },
+              return Padding(
+                padding: EdgeInsets.all(2),
+                child: ListTile(
+                  selected: _isDefaultRecipient(verifiedRecipient),
+                  selectedTileColor: kBlueNavyColor,
+                  horizontalTitleGap: 0,
+                  title: Text(verifiedRecipient.email),
+                  onTap: () {
+                    setState(() {
+                      _toggleRecipient(verifiedRecipient);
+                    });
+                  },
+                ),
               );
             },
           ),
+        SizedBox(height: size.height * 0.02),
         RaisedButton(
           child: Text('Update Recipients'),
-          onPressed: () => _updateDefaultRecipient(),
+          onPressed: () => context
+              .read(aliasStateManagerProvider)
+              .updateAliasDefaultRecipient(
+                context,
+                widget.aliasDataModel.aliasID,
+                _selectedRecipientsID,
+              ),
         ),
-        SizedBox(height: size.height * 0.01),
       ],
     );
   }
