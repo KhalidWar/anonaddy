@@ -187,12 +187,12 @@ class AliasStateManager extends ChangeNotifier {
     }
   }
 
-  void editAliasRecipient(
+  void updateAliasDefaultRecipient(
       BuildContext context, String aliasID, List<String> recipients) async {
     Navigator.pop(context);
     await context
         .read(aliasServiceProvider)
-        .editAliasRecipient(aliasID, recipients)
+        .updateAliasDefaultRecipient(aliasID, recipients)
         .then((value) {
       if (value.emailDescription == null) {
         showToast(kEditDescFailed);

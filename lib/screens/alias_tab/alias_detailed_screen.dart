@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -145,34 +146,11 @@ class AliasDetailScreen extends ConsumerWidget {
                           'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
-                        // IconButton(
-                        //   icon: Icon(Icons.edit),
-                        //   onPressed: () {
-                        //     showModalBottomSheet(
-                        //       context: context,
-                        //       isScrollControlled: true,
-                        //       shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.vertical(
-                        //             top: Radius.circular(20)),
-                        //       ),
-                        //       builder: (context) {
-                        //         return SingleChildScrollView(
-                        //           padding: EdgeInsets.only(
-                        //               left: 20, right: 20, top: 0, bottom: 10),
-                        //           child: Container(
-                        //             padding: EdgeInsets.only(
-                        //                 bottom: MediaQuery.of(context)
-                        //                     .viewInsets
-                        //                     .bottom),
-                        //             child: UpdateAliasRecipient(
-                        //               aliasDataModel: aliasDataModel,
-                        //             ),
-                        //           ),
-                        //         );
-                        //       },
-                        //     );
-                        //   },
-                        // ),
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () => buildUpdateDefaultRecipient(
+                              context, aliasDataModel),
+                        ),
                       ],
                     ),
                   ),
@@ -199,6 +177,27 @@ class AliasDetailScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future buildUpdateDefaultRecipient(
+      BuildContext context, AliasDataModel aliasDataModel) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: AliasDefaultRecipientScreen(aliasDataModel),
+          ),
+        );
+      },
     );
   }
 

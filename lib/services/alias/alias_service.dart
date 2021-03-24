@@ -211,7 +211,8 @@ class AliasService {
     }
   }
 
-  Future editAliasRecipient(String aliasID, List<String> recipients) async {
+  Future updateAliasDefaultRecipient(
+      String aliasID, List<String> recipients) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
