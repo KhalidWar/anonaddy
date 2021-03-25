@@ -97,23 +97,20 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   void createNewAlias(BuildContext context, String desc, String domain,
-      String format, String localPart) async {
+      String format, String localPart) {
     void createAlias() async {
       setIsToggleLoading(true);
-      final aliasService = context.read(aliasServiceProvider);
-      await aliasService
+      await context
+          .read(aliasServiceProvider)
           .createNewAlias(desc, domain, format, localPart)
           .then((value) {
-        if (value == 201) {
-          setIsToggleLoading(false);
-          showToast('Alias created successfully!');
-        } else {
-          setIsToggleLoading(false);
-          showToast(value);
-        }
-        descFieldController.clear();
-        customFieldController.clear();
+        showToast('Alias created successfully!');
+      }).catchError((error) {
+        showToast(error.toString());
       });
+      descFieldController.clear();
+      customFieldController.clear();
+      setIsToggleLoading(false);
       Navigator.pop(context);
       notifyListeners();
     }

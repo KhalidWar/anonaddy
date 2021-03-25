@@ -14,7 +14,7 @@ import '../access_token/access_token_service.dart';
 class AliasService {
   final _accessTokenService = AccessTokenService();
 
-  Stream<AliasModel> getAllAliasesData() async* {
+  Future<AliasModel> getAllAliasesData() async {
     final accessToken = await _accessTokenService.getAccessToken();
     final offlineData = OfflineData();
 
@@ -32,20 +32,20 @@ class AliasService {
       if (response.statusCode == 200) {
         print('getAllAliasesData ${response.statusCode}');
         await offlineData.writeAliasOfflineData(response.body);
-        yield AliasModel.fromJson(jsonDecode(response.body));
+        return AliasModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllAliasesData ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } on SocketException {
       final securedData = await offlineData.readAliasOfflineData();
-      yield AliasModel.fromJson(jsonDecode(securedData));
+      return AliasModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
   }
 
-  Future createNewAlias(
+  Future<AliasDataModel> createNewAlias(
       String desc, String domain, String format, String localPart) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
@@ -68,10 +68,10 @@ class AliasService {
 
       if (response.statusCode == 201) {
         print("createNewAlias ${response.statusCode}");
-        return 201;
+        return AliasDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print("createNewAlias ${response.statusCode}");
-        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;
