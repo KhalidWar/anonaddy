@@ -95,13 +95,13 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('Network activateAlias ${response.statusCode}');
-        return jsonDecode(response.body);
+        return 200;
       } else {
         print('Network activateAlias ${response.statusCode}');
-        return null;
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 
@@ -121,13 +121,13 @@ class AliasService {
 
       if (response.statusCode == 204) {
         print('Network deactivateAlias ${response.statusCode}');
-        return response.body;
+        return 204;
       } else {
         print('Network deactivateAlias ${response.statusCode}');
-        return null;
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 

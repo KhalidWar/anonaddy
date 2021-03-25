@@ -201,6 +201,7 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
+  //todo combine both delete and restore dialogs
   Future buildDeleteAliasDialog(BuildContext context,
       Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
     deleteAlias() {
@@ -209,7 +210,6 @@ class AliasDetailScreen extends ConsumerWidget {
         aliasDataModel.deletedAt,
         aliasDataModel.aliasID,
       );
-      Navigator.pop(context);
       Navigator.pop(context);
     }
 
@@ -233,7 +233,6 @@ class AliasDetailScreen extends ConsumerWidget {
         aliasDataModel.deletedAt,
         aliasDataModel.aliasID,
       );
-      Navigator.pop(context);
       Navigator.pop(context);
     }
 

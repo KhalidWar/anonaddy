@@ -127,73 +127,67 @@ class AliasStateManager extends ChangeNotifier {
     }
   }
 
-  void deleteOrRestoreAlias(
-      BuildContext context, DateTime input, String aliasID) async {
-    setIsLoading(true);
+  Future<void> deleteOrRestoreAlias(
+      BuildContext context, DateTime aliasDeletedAt, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
-    isAliasDeleted(input)
-        ? await aliasService.restoreAlias(aliasID).then((response) {
-            response == 200
-                ? showToast(kAliasRestoredSuccessfully)
-                : showToast(kFailedToRestoreAlias);
-            setIsLoading(false);
-          })
-        : await aliasService.deleteAlias(aliasID).then((response) {
-            response == 204
-                ? showToast(kAliasDeletedSuccessfully)
-                : showToast(kFailedToDeleteAlias);
-            setIsLoading(false);
-          });
+
+    if (aliasDeletedAt == null) {
+      await aliasService.deleteAlias(aliasID).whenComplete(() {
+        showToast(kAliasDeletedSuccessfully);
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+      Navigator.pop(context);
+    } else {
+      await aliasService.restoreAlias(aliasID).whenComplete(() {
+        showToast(kAliasRestoredSuccessfully);
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+      Navigator.pop(context);
+    }
     notifyListeners();
   }
 
-  void toggleAlias(BuildContext context, String aliasID) async {
+  Future<void> toggleAlias(BuildContext context, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
     setIsLoading(true);
     if (_switchValue) {
-      dynamic deactivateResult = await aliasService.deactivateAlias(aliasID);
-      if (deactivateResult == null) {
-        showToast('Failed to deactivate alias');
+      await aliasService.deactivateAlias(aliasID).whenComplete(() {
+        showToast('Alias Deactivated Successfully!');
         toggleSwitchValue();
-        setIsLoading(false);
-      } else {
-        showToast('Alias deactivated');
-        toggleSwitchValue();
-        setIsLoading(false);
-      }
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+      setIsLoading(false);
     } else {
-      dynamic activateResult = await aliasService.activateAlias(aliasID);
-      if (activateResult == null) {
-        showToast('Failed to activate alias');
+      await aliasService.activateAlias(aliasID).whenComplete(() {
+        showToast('Alias Activated Successfully!');
         toggleSwitchValue();
-        setIsLoading(false);
-      } else {
-        showToast('Alias activated');
-        toggleSwitchValue();
-        setIsLoading(false);
-      }
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+      setIsLoading(false);
     }
   }
 
-  void editDescription(
+  Future<void> editDescription(
       BuildContext context, String aliasID, String input) async {
     if (descriptionFormKey.currentState.validate()) {
-      Navigator.pop(context);
       await context
           .read(aliasServiceProvider)
           .editAliasDescription(aliasID, input)
           .then((value) {
-        if (value.emailDescription == null) {
-          showToast(kEditDescFailed);
-        } else {
-          showToast(kEditDescSuccessful);
-          setEmailDescription(value.emailDescription);
-        }
+        showToast(kEditDescSuccessful);
+        setEmailDescription(value.emailDescription);
+      }).catchError((error) {
+        showToast(error.toString());
       });
+      Navigator.pop(context);
     }
   }
 
-  Future updateAliasDefaultRecipient(
+  Future<void> updateAliasDefaultRecipient(
       BuildContext context, String aliasID, List<String> recipients) async {
     await context
         .read(aliasServiceProvider)
@@ -202,7 +196,7 @@ class AliasStateManager extends ChangeNotifier {
       setAliasRecipients(value.recipients);
       showToast(kUpdateAliasRecipientSuccessful);
     }).catchError((error) {
-      showToast(kUpdateAliasRecipientFailed);
+      showToast(error.toString());
     });
     Navigator.pop(context);
   }
