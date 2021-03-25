@@ -14,7 +14,7 @@ final aliasStateManagerProvider =
 
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager() {
-    _isToggleLoading = false;
+    isToggleLoading = false;
   }
 
   AliasDataModel aliasDataModel;
@@ -55,12 +55,12 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setIsToggleLoading(bool value) {
-    _isToggleLoading = value;
+  set isToggleLoading(bool input) {
+    _isToggleLoading = input;
     notifyListeners();
   }
 
-  void setSwitchValue(bool value) {
+  set switchValue(bool value) {
     _switchValue = value;
     notifyListeners();
   }
@@ -80,13 +80,6 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isAliasDeleted(dynamic input) {
-    if (input == null)
-      return false;
-    else
-      return true;
-  }
-
   void clearAllLists() {
     availableAliasList.clear();
     deletedAliasList.clear();
@@ -99,7 +92,7 @@ class AliasStateManager extends ChangeNotifier {
   void createNewAlias(BuildContext context, String desc, String domain,
       String format, String localPart) {
     void createAlias() async {
-      setIsToggleLoading(true);
+      isToggleLoading = true;
       await context
           .read(aliasServiceProvider)
           .createNewAlias(desc, domain, format, localPart)
@@ -110,7 +103,7 @@ class AliasStateManager extends ChangeNotifier {
       });
       descFieldController.clear();
       customFieldController.clear();
-      setIsToggleLoading(false);
+      isToggleLoading = false;
       Navigator.pop(context);
       notifyListeners();
     }
@@ -148,7 +141,7 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> toggleAlias(BuildContext context, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
-    setIsToggleLoading(true);
+    isToggleLoading = true;
     if (_switchValue) {
       await aliasService.deactivateAlias(aliasID).whenComplete(() {
         showToast('Alias Deactivated Successfully!');
@@ -156,7 +149,7 @@ class AliasStateManager extends ChangeNotifier {
       }).catchError((error) {
         showToast(error.toString());
       });
-      setIsToggleLoading(false);
+      isToggleLoading = false;
     } else {
       await aliasService.activateAlias(aliasID).whenComplete(() {
         showToast('Alias Activated Successfully!');
@@ -164,7 +157,7 @@ class AliasStateManager extends ChangeNotifier {
       }).catchError((error) {
         showToast(error.toString());
       });
-      setIsToggleLoading(false);
+      isToggleLoading = false;
     }
   }
 

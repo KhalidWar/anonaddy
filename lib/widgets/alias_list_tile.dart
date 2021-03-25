@@ -16,13 +16,16 @@ class AliasListTile extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasState = watch(aliasStateManagerProvider);
     final copyAlias = aliasState.copyToClipboard;
-    final isDeleted = aliasState.isAliasDeleted;
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final aliasDataProvider = context.read(aliasStateManagerProvider);
 
     Color themedColor() {
       return isDark ? Colors.white : Colors.grey;
+    }
+
+    bool isDeleted(dynamic input) {
+      return input == null ? false : true;
     }
 
     return InkWell(
@@ -67,7 +70,7 @@ class AliasListTile extends ConsumerWidget {
       ),
       onTap: () {
         aliasDataProvider.aliasDataModel = aliasData;
-        aliasDataProvider.setSwitchValue(aliasData.isAliasActive);
+        aliasDataProvider.switchValue = aliasData.isAliasActive;
 
         Navigator.push(
           context,
