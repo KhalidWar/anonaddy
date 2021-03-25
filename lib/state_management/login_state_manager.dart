@@ -9,7 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginStateManager extends ChangeNotifier {
   LoginStateManager() {
-    _isLoading = false;
+    isLoading = false;
   }
 
   bool _isLoading;
@@ -20,6 +20,44 @@ class LoginStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  void login(BuildContext context, String accessToken,
+      GlobalKey<FormState> formKey) async {
+    if (formKey.currentState.validate()) {
+      isLoading = true;
+      await context
+          .read(accessTokenServiceProvider)
+          .validateAccessToken(accessToken)
+          .then((value) async {
+        if (value == 200) {
+          await context
+              .read(accessTokenServiceProvider)
+              .saveAccessToken(accessToken);
+          isLoading = false;
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        }
+      }).catchError((error, stackTrade) {
+        isLoading = false;
+        _showError(error.toString());
+      });
+    }
+  }
+
+  Future<void> logout(BuildContext context) async {
+    //todo logout should clear all app data
+    await FlutterSecureStorage().deleteAll();
+  }
+
+  void pasteFromClipboard(TextEditingController controller) async {
+    final data = await Clipboard.getData('text/plain');
+    if (data == null || data.text.isEmpty) {
+      _showError('Nothing to paste. Clipboard is empty.');
+    } else {
+      controller.clear();
+      controller.text = data.text;
+    }
+  }
+
   void _showError(String input) {
     Fluttertoast.showToast(
       msg: input,
@@ -27,43 +65,5 @@ class LoginStateManager extends ChangeNotifier {
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.grey[600],
     );
-  }
-
-  void pasteFromClipboard(TextEditingController _textEditingController) async {
-    ClipboardData data = await Clipboard.getData('text/plain');
-    if (data == null || data.text.isEmpty) {
-      _showError('Nothing to paste. Clipboard is empty.');
-    } else {
-      _textEditingController.clear();
-      _textEditingController.text = data.text;
-    }
-  }
-
-  void login(
-      BuildContext context, String input, GlobalKey<FormState> formKey) async {
-    if (formKey.currentState.validate()) {
-      isLoading = true;
-      await context
-          .read(accessTokenServiceProvider)
-          .validateAccessToken(input)
-          .then((value) async {
-        if (value == 200) {
-          await context.read(accessTokenServiceProvider).saveAccessToken(input);
-          isLoading = false;
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        } else {
-          isLoading = false;
-          _showError('$value');
-        }
-      }).catchError((error, stackTrade) {
-        isLoading = false;
-        _showError('$error');
-      });
-    }
-  }
-
-  Future<void> logout(BuildContext context) async {
-    await FlutterSecureStorage().deleteAll();
   }
 }
