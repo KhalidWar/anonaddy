@@ -122,14 +122,14 @@ class AliasStateManager extends ChangeNotifier {
     final aliasService = context.read(aliasServiceProvider);
 
     if (aliasDeletedAt == null) {
-      await aliasService.deleteAlias(aliasID).whenComplete(() {
+      await aliasService.deleteAlias(aliasID).then((value) {
         showToast(kAliasDeletedSuccessfully);
       }).catchError((error) {
         showToast(error.toString());
       });
       Navigator.pop(context);
     } else {
-      await aliasService.restoreAlias(aliasID).whenComplete(() {
+      await aliasService.restoreAlias(aliasID).then((value) {
         showToast(kAliasRestoredSuccessfully);
       }).catchError((error) {
         showToast(error.toString());
@@ -143,7 +143,7 @@ class AliasStateManager extends ChangeNotifier {
     final aliasService = context.read(aliasServiceProvider);
     isToggleLoading = true;
     if (_switchValue) {
-      await aliasService.deactivateAlias(aliasID).whenComplete(() {
+      await aliasService.deactivateAlias(aliasID).then((value) {
         showToast('Alias Deactivated Successfully!');
         toggleSwitchValue();
       }).catchError((error) {
@@ -151,7 +151,7 @@ class AliasStateManager extends ChangeNotifier {
       });
       isToggleLoading = false;
     } else {
-      await aliasService.activateAlias(aliasID).whenComplete(() {
+      await aliasService.activateAlias(aliasID).then((value) {
         showToast('Alias Activated Successfully!');
         toggleSwitchValue();
       }).catchError((error) {

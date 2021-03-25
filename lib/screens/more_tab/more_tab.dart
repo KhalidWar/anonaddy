@@ -1,9 +1,7 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/screens/account_tab/main_account_card.dart';
 import 'package:anonaddy/state_management/providers.dart';
-import 'package:anonaddy/state_management/recipient_state_manager.dart';
 import 'package:anonaddy/state_management/username_state_manager.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
@@ -15,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
 import '../app_settings/app_settings.dart';
+import 'add_new_recipient.dart';
 
 final recipientStreamProvider =
     StreamProvider.autoDispose<RecipientModel>((ref) async* {
@@ -128,58 +127,7 @@ class MoreTab extends ConsumerWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) {
-        final size = MediaQuery.of(context).size;
-        final recipientManager = context.read(recipientStateManagerProvider);
-
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
-          child: Column(
-            children: [
-              Divider(
-                thickness: 3,
-                indent: size.width * 0.4,
-                endIndent: size.width * 0.4,
-              ),
-              SizedBox(height: size.height * 0.01),
-              Text(
-                'Add new recipient',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Divider(thickness: 1),
-              SizedBox(height: size.height * 0.01),
-              Column(
-                children: [
-                  Text(kAddRecipientText),
-                  SizedBox(height: size.height * 0.01),
-                  Form(
-                    key: recipientManager.recipientFormKey,
-                    child: TextFormField(
-                      autofocus: true,
-                      controller: recipientManager.textEditController,
-                      validator: (input) =>
-                          FormValidator().validateRecipientEmail(input),
-                      textInputAction: TextInputAction.next,
-                      decoration: kTextFormFieldDecoration.copyWith(
-                          hintText: 'joedoe@example.com'),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  RaisedButton(
-                    child: Text('Add Recipient'),
-                    onPressed: () {
-                      recipientManager.addRecipient(
-                        context,
-                        recipientManager.textEditController.text.trim(),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
+      builder: (context) => AddNewRecipient(),
     );
   }
 }

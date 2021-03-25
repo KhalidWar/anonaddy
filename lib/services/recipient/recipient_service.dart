@@ -43,9 +43,8 @@ class RecipientService {
     }
   }
 
-  Future enableEncryption(String recipientID) async {
+  Future<RecipientDataModel> enableEncryption(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kEncryptedRecipient'),
@@ -60,10 +59,10 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print('enableEncryption ${response.statusCode}');
-        return 200;
+        return RecipientDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print('enableEncryption ${response.statusCode}');
-        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -72,7 +71,6 @@ class RecipientService {
 
   Future disableEncryption(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.delete(
         Uri.encodeFull('$kBaseURL/$kEncryptedRecipient/$recipientID'),
@@ -88,7 +86,7 @@ class RecipientService {
         return 204;
       } else {
         print('disableEncryption ${response.statusCode}');
-        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -124,17 +122,15 @@ class RecipientService {
 
   Future removePublicGPGKey(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
+          Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $accessToken",
+          });
 
       if (response.statusCode == 204) {
         print('removePublicKey ${response.statusCode}');
@@ -150,7 +146,6 @@ class RecipientService {
 
   Future<RecipientDataModel> addRecipient(String email) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kRecipientsURL'),
@@ -177,17 +172,15 @@ class RecipientService {
 
   Future removeRecipient(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kRecipientsURL/$recipientID'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
+          Uri.encodeFull('$kBaseURL/$kRecipientsURL/$recipientID'),
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $accessToken",
+          });
 
       if (response.statusCode == 204) {
         print('removeRecipient ${response.statusCode}');
@@ -203,7 +196,6 @@ class RecipientService {
 
   Future sendVerificationEmail(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kRecipientsURL/email/resend'),
