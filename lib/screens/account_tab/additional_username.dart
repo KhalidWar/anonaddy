@@ -156,6 +156,11 @@ class AdditionalUsername extends ConsumerWidget {
       builder: (context) {
         final size = MediaQuery.of(context).size;
 
+        void createUsername() {
+          createNewUsername(
+              context, textEditController.text.trim(), textEditController);
+        }
+
         return SingleChildScrollView(
           padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
           child: Column(
@@ -181,8 +186,7 @@ class AdditionalUsername extends ConsumerWidget {
                   controller: textEditController,
                   validator: (input) =>
                       FormValidator().validateUsernameInput(input),
-                  onFieldSubmitted: (toggle) => createNewUsername(context,
-                      textEditController.text.trim(), textEditController),
+                  onFieldSubmitted: (toggle) => createUsername(),
                   decoration: kTextFormFieldDecoration.copyWith(
                     hintText: 'johndoe',
                   ),
@@ -191,8 +195,7 @@ class AdditionalUsername extends ConsumerWidget {
               SizedBox(height: size.height * 0.02),
               RaisedButton(
                 child: Text('Update'),
-                onPressed: () => createNewUsername(context,
-                    textEditController.text.trim(), textEditController),
+                onPressed: () => createUsername(),
               ),
             ],
           ),

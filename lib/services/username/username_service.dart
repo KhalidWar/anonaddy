@@ -43,9 +43,8 @@ class UsernameService {
     }
   }
 
-  Future createNewUsername(String username) async {
+  Future<UsernameModel> createNewUsername(String username) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
@@ -60,10 +59,10 @@ class UsernameService {
 
       if (response.statusCode == 201) {
         print("createNewUsername ${response.statusCode}");
-        return 201;
+        return UsernameModel.fromJson(jsonDecode(response.body));
       } else {
         print("createNewUsername ${response.statusCode}");
-        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -72,17 +71,15 @@ class UsernameService {
 
   Future deleteUsername(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
+          Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $accessToken",
+          });
 
       if (response.statusCode == 204) {
         print("deleteUsername ${response.statusCode}");

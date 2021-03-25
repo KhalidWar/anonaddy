@@ -1,7 +1,7 @@
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 final usernameStateManagerProvider =
@@ -17,30 +17,27 @@ class UsernameStateManager extends ChangeNotifier {
           .read(usernameServiceProvider)
           .createNewUsername(username)
           .then((value) {
-        if (value == 201) {
-          showToast('Username added successfully!');
-        } else {
-          showToast('Failed to add username!');
-        }
-        textEditController.clear();
+        print(value);
+        showToast('Username added successfully!');
+        Navigator.pop(context);
+      }).catchError((error) {
+        showToast(error.toString());
       });
-      Navigator.pop(context);
+      textEditController.clear();
     }
   }
 
   Future<void> deleteUsername(BuildContext context, String usernameID) async {
+    Navigator.pop(context);
     await context
         .read(usernameServiceProvider)
         .deleteUsername(usernameID)
         .then((value) {
-      if (value == 204) {
-        showToast('Username deleted successfully!');
-      } else {
-        showToast('Failed to delete username!');
-      }
+      Navigator.pop(context);
+      showToast('Username deleted successfully!');
+    }).catchError((error) {
+      showToast(error.toString());
     });
-    Navigator.pop(context);
-    Navigator.pop(context);
   }
 
   showToast(String input) {
