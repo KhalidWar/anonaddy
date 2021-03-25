@@ -63,7 +63,7 @@ class ShimmerLoading extends StatelessWidget {
           body: TabBarView(
             children: [
               Shimmer.fromColors(
-                baseColor: isDark ? Colors.grey : Colors.grey[300],
+                baseColor: isDark ? Colors.grey : Colors.grey[400],
                 highlightColor: Colors.grey[100],
                 enabled: true,
                 child: ListView.builder(

@@ -19,7 +19,7 @@ class CreateNewAlias extends ConsumerWidget {
     final isIOS = TargetedPlatform().isIOS();
 
     final aliasStateProvider = watch(aliasStateManagerProvider);
-    final isLoading = aliasStateProvider.isLoading;
+    final isLoading = aliasStateProvider.isToggleLoading;
     final createNewAlias = aliasStateProvider.createNewAlias;
     final descFieldController = aliasStateProvider.descFieldController;
     final customFieldController = aliasStateProvider.customFieldController;
