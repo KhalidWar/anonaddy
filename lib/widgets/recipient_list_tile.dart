@@ -54,11 +54,9 @@ class RecipientListTile extends StatelessWidget {
             recipientDataModel.shouldEncrypt;
 
         Navigator.push(
-          context,
-          CustomPageRoute().customPageRouteBuilder(
-            RecipientDetailedScreen(recipientData: recipientDataModel),
-          ),
-        );
+            context,
+            CustomPageRoute(
+                RecipientDetailedScreen(recipientData: recipientDataModel)));
       },
     );
   }

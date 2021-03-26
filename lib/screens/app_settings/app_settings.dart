@@ -69,10 +69,7 @@ class _AppSettingsState extends State<AppSettings> {
               subtitle: Text('View AddyManager details'),
               trailing: Icon(Icons.help_outline),
               onTap: () {
-                Navigator.push(
-                  context,
-                  CustomPageRoute().customPageRouteBuilder(AboutAppScreen()),
-                );
+                Navigator.push(context, CustomPageRoute(AboutAppScreen()));
               },
             ),
             Spacer(),

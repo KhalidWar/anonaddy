@@ -156,10 +156,9 @@ class AliasTab extends ConsumerWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                CustomPageRoute().customPageRouteBuilder(
+                                CustomPageRoute(
                                   DeletedAliasesScreen(
-                                    aliasDataModel: deletedAliasList,
-                                  ),
+                                      aliasDataModel: deletedAliasList),
                                 ),
                               );
                             },

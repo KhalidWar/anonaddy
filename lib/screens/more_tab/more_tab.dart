@@ -111,10 +111,8 @@ class MoreTab extends ConsumerWidget {
               style: Theme.of(context).textTheme.headline6,
             ),
             trailing: Icon(Icons.settings),
-            onTap: () => Navigator.push(
-              context,
-              CustomPageRoute().customPageRouteBuilder(AppSettings()),
-            ),
+            onTap: () =>
+                Navigator.push(context, CustomPageRoute(AppSettings())),
           ),
         ],
       ),

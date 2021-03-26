@@ -121,9 +121,8 @@ class AdditionalUsername extends ConsumerWidget {
                         onTap: () {
                           Navigator.push(
                             context,
-                            CustomPageRoute().customPageRouteBuilder(
-                              UsernameDetailedScreen(username: username),
-                            ),
+                            CustomPageRoute(
+                                UsernameDetailedScreen(username: username)),
                           );
                         },
                       );

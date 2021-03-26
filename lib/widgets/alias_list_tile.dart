@@ -2,11 +2,10 @@ import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/widgets/alias_list_tile_leading.dart';
+import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'custom_page_route.dart';
 
 class AliasListTile extends ConsumerWidget {
   const AliasListTile({Key key, this.aliasData}) : super(key: key);
@@ -24,8 +23,8 @@ class AliasListTile extends ConsumerWidget {
       return isDark ? Colors.white : Colors.grey;
     }
 
-    bool isDeleted(dynamic input) {
-      return input == null ? false : true;
+    bool isAliasDeleted() {
+      return aliasData.deletedAt == null ? false : true;
     }
 
     return InkWell(
@@ -34,7 +33,7 @@ class AliasListTile extends ConsumerWidget {
         child: Row(
           children: [
             AliasListTileLeading(
-              isDeleted: isDeleted(aliasData.deletedAt),
+              isDeleted: isAliasDeleted(),
               isActive: aliasData.isAliasActive,
             ),
             SizedBox(width: 10),
@@ -45,7 +44,7 @@ class AliasListTile extends ConsumerWidget {
                   Text(
                     '${aliasData.email}',
                     style: TextStyle(
-                      color: isDeleted(aliasData.deletedAt)
+                      color: isAliasDeleted()
                           ? Colors.grey
                           : isDark
                               ? Colors.white
@@ -61,9 +60,8 @@ class AliasListTile extends ConsumerWidget {
             ),
             IconButton(
               icon: Icon(Icons.copy, color: themedColor()),
-              onPressed: isDeleted(aliasData.deletedAt)
-                  ? null
-                  : () => copyAlias(aliasData.email),
+              onPressed:
+                  isAliasDeleted() ? null : () => copyAlias(aliasData.email),
             ),
           ],
         ),
@@ -72,10 +70,7 @@ class AliasListTile extends ConsumerWidget {
         aliasDataProvider.aliasDataModel = aliasData;
         aliasDataProvider.switchValue = aliasData.isAliasActive;
 
-        Navigator.push(
-          context,
-          CustomPageRoute().customPageRouteBuilder(AliasDetailScreen()),
-        );
+        Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
       },
     );
   }
