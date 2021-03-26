@@ -12,15 +12,15 @@ import 'package:http/http.dart' as http;
 import '../../constants.dart';
 
 final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
-  return ref.read(domainOptionsServiceProvider).getDomainOptions();
+  final offlineData = ref.read(offlineDataProvider);
+  return ref.read(domainOptionsServiceProvider).getDomainOptions(offlineData);
 });
 
 class DomainOptionsService {
   final _accessTokenService = AccessTokenService();
 
-  Future<DomainOptions> getDomainOptions() async {
+  Future<DomainOptions> getDomainOptions(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
-    final offlineData = OfflineData();
 
     try {
       final response = await http.get(

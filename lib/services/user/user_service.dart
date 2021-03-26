@@ -12,9 +12,8 @@ import '../../constants.dart';
 class UserService {
   final _accessTokenService = AccessTokenService();
 
-  Future<UserModel> getUserData() async {
+  Future<UserModel> getUserData(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
-    final offlineData = OfflineData();
 
     try {
       final response = await http.get(

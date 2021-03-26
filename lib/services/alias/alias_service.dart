@@ -14,9 +14,8 @@ import '../access_token/access_token_service.dart';
 class AliasService {
   final _accessTokenService = AccessTokenService();
 
-  Future<AliasModel> getAllAliasesData() async {
+  Future<AliasModel> getAllAliasesData(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
-    final offlineData = OfflineData();
 
     try {
       final response = await http.get(

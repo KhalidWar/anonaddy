@@ -12,9 +12,8 @@ import 'package:http/http.dart' as http;
 class RecipientService {
   final _accessTokenService = AccessTokenService();
 
-  Future<RecipientModel> getAllRecipient() async {
+  Future<RecipientModel> getAllRecipient(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
-    final offlineData = OfflineData();
 
     try {
       final response = await http.get(

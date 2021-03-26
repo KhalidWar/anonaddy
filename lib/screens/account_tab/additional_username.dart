@@ -14,11 +14,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final additionalUsernameStreamProvider =
     StreamProvider.autoDispose<UsernameModel>((ref) async* {
-  yield* Stream.fromFuture(ref.read(usernameServiceProvider).getUsernameData());
+  final offlineData = ref.read(offlineDataProvider);
+  yield* Stream.fromFuture(
+      ref.read(usernameServiceProvider).getUsernameData(offlineData));
   while (true) {
     await Future.delayed(Duration(seconds: 5));
     yield* Stream.fromFuture(
-        ref.read(usernameServiceProvider).getUsernameData());
+        ref.read(usernameServiceProvider).getUsernameData(offlineData));
   }
 });
 

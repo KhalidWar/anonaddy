@@ -13,10 +13,13 @@ import '../../constants.dart';
 
 final accountStreamProvider =
     StreamProvider.autoDispose<UserModel>((ref) async* {
-  yield* Stream.fromFuture(ref.read(userServiceProvider).getUserData());
+  final offlineData = ref.read(offlineDataProvider);
+  yield* Stream.fromFuture(
+      ref.read(userServiceProvider).getUserData(offlineData));
   while (true) {
     await Future.delayed(Duration(seconds: 5));
-    yield* Stream.fromFuture(ref.read(userServiceProvider).getUserData());
+    yield* Stream.fromFuture(
+        ref.read(userServiceProvider).getUserData(offlineData));
   }
 });
 
