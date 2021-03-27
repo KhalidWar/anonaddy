@@ -1,4 +1,5 @@
 import 'package:anonaddy/constants.dart';
+import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/shimmer_loading.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
@@ -16,12 +17,10 @@ import 'deleted_aliases_screen.dart';
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  yield* Stream.fromFuture(
-      ref.read(aliasServiceProvider).getAllAliasesData(offlineData));
   while (true) {
-    await Future.delayed(Duration(seconds: 1));
     yield* Stream.fromFuture(
         ref.read(aliasServiceProvider).getAllAliasesData(offlineData));
+    await Future.delayed(Duration(seconds: 1));
   }
 });
 
@@ -46,20 +45,18 @@ class AliasTab extends ConsumerWidget {
     return aliasStream.when(
       loading: () => ShimmerLoading(),
       data: (data) {
-        final aliasDataList = data.aliasDataList;
-
         clearAllLists();
 
-        for (int i = 0; i < aliasDataList.length; i++) {
-          forwardedList.add(aliasDataList[i].emailsForwarded);
-          blockedList.add(aliasDataList[i].emailsBlocked);
-          repliedList.add(aliasDataList[i].emailsReplied);
-          sentList.add(aliasDataList[i].emailsSent);
+        for (AliasDataModel alias in data.aliasDataList) {
+          forwardedList.add(alias.emailsForwarded);
+          blockedList.add(alias.emailsBlocked);
+          repliedList.add(alias.emailsReplied);
+          sentList.add(alias.emailsSent);
 
-          if (aliasDataList[i].deletedAt == null) {
-            availableAliasList.add(aliasDataList[i]);
+          if (alias.deletedAt == null) {
+            availableAliasList.add(alias);
           } else {
-            deletedAliasList.add(aliasDataList[i]);
+            deletedAliasList.add(alias);
           }
         }
 

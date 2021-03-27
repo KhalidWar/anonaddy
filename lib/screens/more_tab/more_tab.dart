@@ -18,12 +18,10 @@ import 'add_new_recipient.dart';
 final recipientStreamProvider =
     StreamProvider.autoDispose<RecipientModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  yield* Stream.fromFuture(
-      ref.read(recipientServiceProvider).getAllRecipient(offlineData));
   while (true) {
-    await Future.delayed(Duration(seconds: 5));
     yield* Stream.fromFuture(
         ref.read(recipientServiceProvider).getAllRecipient(offlineData));
+    await Future.delayed(Duration(seconds: 5));
   }
 });
 
