@@ -70,7 +70,7 @@ const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 const kOnlyAvailableToPaid = 'Only available to paid users';
 
 /// UI Strings
-const kSearchHintText = 'Search aliases, descriptions ...';
+const kSearchHintText = 'Search aliases by email or description';
 const kLoadingText = 'Loading';
 const kDescriptionInputText = 'Description (optional)';
 const kEnterLocalPart = 'Enter Local Part (no space or @)';
