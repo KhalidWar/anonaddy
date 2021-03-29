@@ -3,7 +3,6 @@ import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/shimmer_loading.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
-import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
@@ -174,24 +173,6 @@ class AliasTab extends ConsumerWidget {
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           label: '$error',
-        );
-      },
-    );
-  }
-
-  IconButton buildSearch(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.search, color: Colors.white),
-      onPressed: () {
-        final aliasStateManager = context.read(aliasStateManagerProvider);
-        showSearch(
-          context: context,
-          delegate: SearchService(
-            [
-              ...aliasStateManager.availableAliasList,
-              ...aliasStateManager.deletedAliasList,
-            ],
-          ),
         );
       },
     );

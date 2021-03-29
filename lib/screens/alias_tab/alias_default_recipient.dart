@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
-import 'package:anonaddy/screens/more_tab/more_tab.dart';
+import 'package:anonaddy/screens/account_tab/recipients.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

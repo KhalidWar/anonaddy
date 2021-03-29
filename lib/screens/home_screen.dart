@@ -1,7 +1,7 @@
+import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
-import 'package:anonaddy/services/search/search_service.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:anonaddy/widgets/no_internet_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ import '../constants.dart';
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'alias_tab/create_new_alias.dart';
-import 'more_tab/more_tab.dart';
+import 'app_settings/app_settings.dart';
 
 final connectivityStreamProvider =
     StreamProvider.autoDispose<ConnectionStatus>((ref) {
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 AccountTab(),
                 AliasTab(),
-                MoreTab(),
+                SearchTab(),
               ],
             ),
             bottomNavigationBar: Column(
@@ -80,8 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: 'Aliases',
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.more_horiz_rounded),
-                      label: 'More',
+                      icon: Icon(Icons.search_outlined),
+                      label: 'Search',
                     ),
                   ],
                 ),
@@ -127,19 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.search, color: Colors.white),
-          onPressed: () {
-            final aliasStateManager = context.read(aliasStateManagerProvider);
-            showSearch(
-              context: context,
-              delegate: SearchService(
-                [
-                  ...aliasStateManager.availableAliasList,
-                  ...aliasStateManager.deletedAliasList,
-                ],
-              ),
-            );
-          },
+          icon: Icon(Icons.settings),
+          onPressed: () =>
+              Navigator.push(context, CustomPageRoute(AppSettings())),
         ),
       ],
     );

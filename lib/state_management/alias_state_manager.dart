@@ -40,6 +40,8 @@ class AliasStateManager extends ChangeNotifier {
   List<int> repliedList = [];
   List<int> sentList = [];
 
+  List<AliasDataModel> recentSearchesList = [];
+
   bool get isToggleLoading => _isToggleLoading;
   bool get switchValue => _switchValue;
   String get aliasDomain => _aliasDomain;

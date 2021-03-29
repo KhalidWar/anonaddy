@@ -29,6 +29,9 @@ class _AppSettingsState extends State<AppSettings> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // todo implement feedback mechanism.
+            // todo Give dev email to receive feedback and suggestions
+            // todo encourage users to get into beta program
             ListTile(
               title: Text(
                 'Dark Theme',

@@ -3,10 +3,8 @@ import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class SearchService extends SearchDelegate {
-  SearchService(this._aliasDataList);
-  final List<AliasDataModel> _aliasDataList;
-
-  final List<AliasDataModel> _recentSearches = [];
+  SearchService(this.searchAliasList);
+  final List<AliasDataModel> searchAliasList;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -34,28 +32,28 @@ class SearchService extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<AliasDataModel> _resultList = [];
+    List<AliasDataModel> resultAliasList = [];
 
-    _aliasDataList.forEach((element) {
+    searchAliasList.forEach((element) {
       if (element.email.toLowerCase().contains(query.toLowerCase()) ||
           element.emailDescription
               .toLowerCase()
               .contains(query.toLowerCase())) {
-        _resultList.add(element);
+        resultAliasList.add(element);
       }
     });
 
-    final initialList = query.isEmpty ? _recentSearches : _resultList;
+    final List<AliasDataModel> initialList =
+        query.isEmpty ? [] : resultAliasList;
 
     return ListView.builder(
       itemCount: initialList.length,
       itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () {
-            _recentSearches.add(initialList[index]);
-          },
-          child: AliasListTile(aliasData: initialList[index]),
-        );
+        // context
+        //       .read(aliasStateManagerProvider)
+        //       .recentSearchesList
+        //       .add(aliasData);
+        return AliasListTile(aliasData: initialList[index]);
       },
     );
   }
