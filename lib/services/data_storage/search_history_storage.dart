@@ -13,6 +13,7 @@ class SearchHistoryStorage extends ChangeNotifier {
     _aliasList.add(alias);
     final encodedAlias = AliasDataModel.encode(_aliasList);
     await _secureStorage.write(key: _key, value: encodedAlias);
+    updateUI();
   }
 
   Future<List<AliasDataModel>> loadData() async {
@@ -24,6 +25,10 @@ class SearchHistoryStorage extends ChangeNotifier {
   Future<void> clearSearchHistory(BuildContext context) async {
     context.read(aliasStateManagerProvider).recentSearchesList.clear();
     await _secureStorage.delete(key: _key);
+    updateUI();
+  }
+
+  updateUI() {
     notifyListeners();
   }
 }

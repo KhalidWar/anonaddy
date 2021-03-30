@@ -12,11 +12,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
 
-class SearchTab extends StatelessWidget {
-  final searchHistory = FutureProvider<List<AliasDataModel>>((ref) async {
-    return await ref.watch(searchHistoryProvider).loadData();
-  });
+final searchHistory = FutureProvider<List<AliasDataModel>>((ref) async {
+  return await ref.watch(searchHistoryProvider).loadData();
+});
 
+class SearchTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final aliasManager = context.read(aliasStateManagerProvider);

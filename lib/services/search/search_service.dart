@@ -25,7 +25,7 @@ class SearchService extends SearchDelegate {
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {
-        close(context, null);
+        close(context, context.read(searchHistoryProvider).updateUI());
       },
     );
   }
