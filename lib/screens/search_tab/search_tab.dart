@@ -1,6 +1,9 @@
+import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
+import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -8,11 +11,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
 
-class SearchTab extends ConsumerWidget {
+class SearchTab extends StatelessWidget {
+  final searchHistory = FutureProvider<List<AliasDataModel>>((ref) async {
+    return await ref.read(storageProvider).loadData();
+  });
+
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context) {
     final aliasManager = context.read(aliasStateManagerProvider);
-    final recentSearch = aliasManager.recentSearchesList;
     final availableAliasList = aliasManager.availableAliasList;
     final deletedAliasList = aliasManager.deletedAliasList;
 
@@ -62,19 +68,27 @@ class SearchTab extends ConsumerWidget {
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Divider(),
-                if (recentSearch == null)
-                  buildEmptyListWidget()
-                else if (recentSearch.isEmpty)
-                  buildEmptyListWidget()
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: recentSearch.length,
-                    itemBuilder: (context, index) {
-                      return AliasListTile(aliasData: recentSearch[index]);
-                    },
-                  ),
+                Consumer(
+                  builder: (_, watch, __) {
+                    final search = watch(searchHistory);
+                    return search.when(
+                      loading: () => LoadingIndicator(),
+                      data: (data) {
+                        if (data.isEmpty)
+                          return buildEmptyListWidget();
+                        else
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return AliasListTile(aliasData: data[index]);
+                            },
+                          );
+                      },
+                      error: (error, stackTrace) => Text(error),
+                    );
+                  },
+                ),
               ],
             ),
           ),

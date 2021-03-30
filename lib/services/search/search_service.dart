@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,7 @@ class SearchService extends SearchDelegate {
           child: IgnorePointer(
               child: AliasListTile(aliasData: initialList[index])),
           onTap: () {
+            context.read(storageProvider).saveData(initialList[index]);
             aliasState.recentSearchesList.add(initialList[index]);
             aliasState.aliasDataModel = initialList[index];
             aliasState.switchValue = initialList[index].isAliasActive;
