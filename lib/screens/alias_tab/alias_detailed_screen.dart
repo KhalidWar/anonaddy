@@ -119,11 +119,11 @@ class AliasDetailScreen extends ConsumerWidget {
                       },
                     ),
                   ),
-            Divider(height: 10),
+            aliasDataModel.recipients == null
+                ? Container()
+                : Divider(height: 10),
             if (aliasDataModel.recipients == null)
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text('Failed to load recipients'))
+              Container()
             else
               Column(
                 children: [
