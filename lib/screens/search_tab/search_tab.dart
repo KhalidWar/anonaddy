@@ -4,6 +4,7 @@ import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
+import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -13,7 +14,7 @@ import '../../constants.dart';
 
 class SearchTab extends StatelessWidget {
   final searchHistory = FutureProvider<List<AliasDataModel>>((ref) async {
-    return await ref.read(storageProvider).loadData();
+    return await ref.watch(searchHistoryProvider).loadData();
   });
 
   @override
@@ -63,9 +64,20 @@ class SearchTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Search History',
-                  style: Theme.of(context).textTheme.headline6,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Search History',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    TextButton(
+                      child: Text('Clear History'),
+                      onPressed: () => context
+                          .read(searchHistoryProvider)
+                          .clearSearchHistory(context),
+                    ),
+                  ],
                 ),
                 Divider(),
                 Consumer(
@@ -85,7 +97,13 @@ class SearchTab extends StatelessWidget {
                             },
                           );
                       },
-                      error: (error, stackTrace) => Text(error),
+                      error: (error, stackTrace) {
+                        return LottieWidget(
+                          lottie: 'assets/lottie/errorCone.json',
+                          lottieHeight: size.height * 0.3,
+                          label: error.toString(),
+                        );
+                      },
                     );
                   },
                 ),

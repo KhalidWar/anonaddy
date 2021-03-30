@@ -21,4 +21,5 @@ final domainsServiceProvider = Provider((ref) => DomainsService());
 final biometricAuthServiceProvider = Provider((ref) => BiometricAuthService());
 final connectivityServiceProvider = Provider((ref) => ConnectivityService());
 final offlineDataProvider = Provider((ref) => OfflineData());
-final storageProvider = Provider((ref) => SearchHistoryStorage());
+final searchHistoryProvider =
+    ChangeNotifierProvider((ref) => SearchHistoryStorage());

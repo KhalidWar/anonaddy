@@ -59,7 +59,7 @@ class SearchService extends SearchDelegate {
           child: IgnorePointer(
               child: AliasListTile(aliasData: initialList[index])),
           onTap: () {
-            context.read(storageProvider).saveData(initialList[index]);
+            context.read(searchHistoryProvider).saveData(initialList[index]);
             aliasState.recentSearchesList.add(initialList[index]);
             aliasState.aliasDataModel = initialList[index];
             aliasState.switchValue = initialList[index].isAliasActive;
