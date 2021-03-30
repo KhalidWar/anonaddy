@@ -16,10 +16,8 @@ class AliasCreatedAtWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         children: [
-          Icon(iconData),
-          SizedBox(width: 12),
           Text(label),
-          SizedBox(width: 12),
+          SizedBox(width: 5),
           Text('${NicheMethod().fixDateTime(dateTime)}'),
         ],
       ),

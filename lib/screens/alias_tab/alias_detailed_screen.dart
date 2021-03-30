@@ -32,6 +32,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final editDescription = aliasDataProvider.editDescription;
 
     final _textEditingController = TextEditingController();
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -40,25 +41,8 @@ class AliasDetailScreen extends ConsumerWidget {
         child: Column(
           children: [
             AliasPieChart(aliasDataModel: aliasDataModel),
-            Divider(height: 20),
-            AliasCreatedAtWidget(
-              label: 'Created at:',
-              dateTime: aliasDataModel.createdAt,
-              iconData: Icons.access_time_outlined,
-            ),
-            SizedBox(height: 6),
-            aliasDataModel.deletedAt == null
-                ? AliasCreatedAtWidget(
-                    label: 'Updated at:',
-                    dateTime: aliasDataModel.updatedAt,
-                    iconData: Icons.av_timer_outlined,
-                  )
-                : AliasCreatedAtWidget(
-                    label: 'Deleted at:',
-                    dateTime: aliasDataModel.deletedAt,
-                    iconData: Icons.auto_delete_outlined,
-                  ),
-            Divider(height: 10),
+            SizedBox(height: size.height * 0.015),
+            Divider(),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
               title: aliasDataModel.email,
@@ -135,20 +119,22 @@ class AliasDetailScreen extends ConsumerWidget {
                       },
                     ),
                   ),
-            Divider(height: 0),
+            Divider(height: 10),
             if (aliasDataModel.recipients == null)
-              Container()
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('Failed to load recipients'))
             else
               Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                         IconButton(
                           icon: Icon(Icons.edit),
@@ -161,7 +147,8 @@ class AliasDetailScreen extends ConsumerWidget {
                   if (aliasDataModel.recipients.isEmpty)
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(children: [Text('No recipients found')]),
+                      child:
+                          Row(children: [Text('No default recipient set yet')]),
                     )
                   else
                     ListView.builder(
@@ -177,7 +164,29 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                 ],
               ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            Divider(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                AliasCreatedAtWidget(
+                  label: 'Created:',
+                  dateTime: aliasDataModel.createdAt,
+                  iconData: Icons.access_time_outlined,
+                ),
+                aliasDataModel.deletedAt == null
+                    ? AliasCreatedAtWidget(
+                        label: 'Updated:',
+                        dateTime: aliasDataModel.updatedAt,
+                        iconData: Icons.av_timer_outlined,
+                      )
+                    : AliasCreatedAtWidget(
+                        label: 'Deleted:',
+                        dateTime: aliasDataModel.deletedAt,
+                        iconData: Icons.auto_delete_outlined,
+                      ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.05),
           ],
         ),
       ),

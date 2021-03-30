@@ -48,7 +48,7 @@ class AccountWidget extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10),
+          Divider(),
           AccountListTile(
             title:
                 '${(userModel.bandwidth / 1000000).toStringAsFixed(2)} MB / ${NicheMethod().isUnlimited(userModel.bandwidthLimit / 1000000, 'MB')}',

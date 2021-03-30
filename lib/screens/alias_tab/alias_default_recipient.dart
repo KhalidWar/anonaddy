@@ -100,15 +100,14 @@ class _AliasDefaultRecipientScreenState
                 style: Theme.of(context).textTheme.headline6),
           )
         else
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: _verifiedRecipients.length,
-            itemBuilder: (context, index) {
-              final verifiedRecipient = _verifiedRecipients[index];
-
-              return Padding(
-                padding: EdgeInsets.all(2),
-                child: ListTile(
+          Container(
+            height: MediaQuery.of(context).size.height * 0.35,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _verifiedRecipients.length,
+              itemBuilder: (context, index) {
+                final verifiedRecipient = _verifiedRecipients[index];
+                return ListTile(
                   selected: _isDefaultRecipient(verifiedRecipient),
                   selectedTileColor: kBlueNavyColor,
                   horizontalTitleGap: 0,
@@ -118,9 +117,9 @@ class _AliasDefaultRecipientScreenState
                       _toggleRecipient(verifiedRecipient);
                     });
                   },
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         SizedBox(height: size.height * 0.02),
         RaisedButton(
