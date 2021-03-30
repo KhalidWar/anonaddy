@@ -3,20 +3,23 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class OfflineData {
   final _secureStorage = FlutterSecureStorage();
 
-  String _aliasDataKey = 'aliasDataKey';
+  final _aliasDataKey = 'aliasDataKey';
   String _aliasData = '';
 
-  String _accountDataKey = 'accountDataKey';
+  final _accountDataKey = 'accountDataKey';
   String _accountData = '';
 
-  String _usernameDataKey = 'usernameDataKey';
+  final _usernameDataKey = 'usernameDataKey';
   String _usernameData = '';
 
-  String _recipientsDataKey = 'recipientsDataKey';
+  final _recipientsDataKey = 'recipientsDataKey';
   String _recipientData = '';
 
-  String _domainOptionsDataKey = 'domainOptionsDataKey';
+  final _domainOptionsDataKey = 'domainOptionsDataKey';
   String _domainOptionsData = '';
+
+  final _domainDataKey = 'domainDataKey';
+  String _domainData = '';
 
   Future<void> writeAliasOfflineData(String data) async {
     if (_aliasData.compareTo(data) != 0) {
@@ -96,6 +99,22 @@ class OfflineData {
       return _domainOptionsData;
     } else {
       return _domainOptionsData;
+    }
+  }
+
+  Future<void> writeDomainOfflineData(String data) async {
+    if (_domainData.compareTo(data) != 0) {
+      _domainData = data;
+      await _secureStorage.write(key: _domainDataKey, value: data);
+    }
+  }
+
+  Future<String> readDomainOfflineData() async {
+    if (_domainData.isEmpty) {
+      _domainData = await _secureStorage.read(key: _domainDataKey);
+      return _domainData;
+    } else {
+      return _domainData;
     }
   }
 }

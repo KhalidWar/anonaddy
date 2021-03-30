@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsStreamProvider =
     FutureProvider.autoDispose<DomainModel>((ref) async {
-  return await ref.read(domainsServiceProvider).getAllDomains();
+  final offlineData = ref.read(offlineDataProvider);
+  return await ref.read(domainsServiceProvider).getAllDomains(offlineData);
 });
 
 class Domains extends ConsumerWidget {
