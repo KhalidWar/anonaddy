@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/state_management/providers.dart';
-import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
+import 'package:anonaddy/widgets/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,7 +18,7 @@ class Recipients extends ConsumerWidget {
     final recipientStream = watch(recipientStreamProvider);
 
     return recipientStream.when(
-      loading: () => LoadingIndicator(),
+      loading: () => RecipientsShimmerLoading(),
       data: (data) {
         final recipientList = data.recipientDataList;
         if (recipientList.isEmpty)

@@ -2,8 +2,8 @@ import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/widgets/custom_page_route.dart';
-import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
+import 'package:anonaddy/widgets/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,7 +22,7 @@ class AdditionalUsername extends ConsumerWidget {
     final usernameStream = watch(additionalUsernameStreamProvider);
 
     return usernameStream.when(
-      loading: () => LoadingIndicator(),
+      loading: () => RecipientsShimmerLoading(),
       data: (usernameData) {
         final usernameList = usernameData.usernameDataList;
         if (usernameList.isEmpty)

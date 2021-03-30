@@ -1,13 +1,13 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/state_management/providers.dart';
-import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
+import 'package:anonaddy/widgets/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsStreamProvider =
-    StreamProvider.autoDispose<DomainModel>((ref) async* {
-  yield* Stream.fromFuture(ref.read(domainsServiceProvider).getAllDomains());
+    FutureProvider.autoDispose<DomainModel>((ref) async {
+  return await ref.read(domainsServiceProvider).getAllDomains();
 });
 
 class Domains extends ConsumerWidget {
@@ -16,7 +16,7 @@ class Domains extends ConsumerWidget {
     final domainsStream = watch(domainsStreamProvider);
 
     return domainsStream.when(
-      loading: () => LoadingIndicator(),
+      loading: () => RecipientsShimmerLoading(),
       data: (data) {
         if (data.domainDataList.isEmpty)
           return Center(
