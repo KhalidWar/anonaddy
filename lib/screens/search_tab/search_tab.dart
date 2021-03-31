@@ -86,6 +86,7 @@ class SearchTab extends StatelessWidget {
                         else
                           return ListView.builder(
                             shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
                             itemCount: data.length,
                             itemBuilder: (context, index) {
                               return AliasListTile(aliasData: data[index]);
