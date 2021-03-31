@@ -1,7 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
@@ -25,12 +26,13 @@ class AliasDetailScreen extends ConsumerWidget {
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final switchValue = aliasDataProvider.switchValue;
     final toggleAlias = aliasDataProvider.toggleAlias;
-    final isLoading = aliasDataProvider.isLoading;
+    final isToggleLoading = aliasDataProvider.isToggleLoading;
     final copyOnTap = aliasDataProvider.copyToClipboard;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
 
     final _textEditingController = TextEditingController();
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -39,25 +41,8 @@ class AliasDetailScreen extends ConsumerWidget {
         child: Column(
           children: [
             AliasPieChart(aliasDataModel: aliasDataModel),
-            Divider(height: 20),
-            AliasCreatedAtWidget(
-              label: 'Created at:',
-              dateTime: aliasDataModel.createdAt,
-              iconData: Icons.access_time_outlined,
-            ),
-            SizedBox(height: 6),
-            aliasDataModel.deletedAt == null
-                ? AliasCreatedAtWidget(
-                    label: 'Updated at:',
-                    dateTime: aliasDataModel.updatedAt,
-                    iconData: Icons.av_timer_outlined,
-                  )
-                : AliasCreatedAtWidget(
-                    label: 'Deleted at:',
-                    dateTime: aliasDataModel.deletedAt,
-                    iconData: Icons.auto_delete_outlined,
-                  ),
-            Divider(height: 10),
+            SizedBox(height: size.height * 0.015),
+            Divider(),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
               title: aliasDataModel.email,
@@ -69,14 +54,18 @@ class AliasDetailScreen extends ConsumerWidget {
               leadingIconData: Icons.flaky_outlined,
               title: 'Alias is ${switchValue ? 'active' : 'inactive'}',
               subtitle: 'Activity',
-              trailing: isLoading
-                  ? CustomLoadingIndicator().customLoadingIndicator()
-                  : Switch.adaptive(
-                      value: switchValue,
-                      onChanged: (toggle) {
-                        toggleAlias(context, aliasDataModel.aliasID);
-                      },
-                    ),
+              trailing: Row(
+                children: [
+                  isToggleLoading
+                      ? CustomLoadingIndicator().customLoadingIndicator()
+                      : Container(),
+                  Switch.adaptive(
+                    value: switchValue,
+                    onChanged: (toggle) =>
+                        toggleAlias(context, aliasDataModel.aliasID),
+                  ),
+                ],
+              ),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.comment,
@@ -130,56 +119,36 @@ class AliasDetailScreen extends ConsumerWidget {
                       },
                     ),
                   ),
-            Divider(height: 0),
+            aliasDataModel.recipients == null
+                ? Container()
+                : Divider(height: 10),
             if (aliasDataModel.recipients == null)
               Container()
             else
               Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
-                        // IconButton(
-                        //   icon: Icon(Icons.edit),
-                        //   onPressed: () {
-                        //     showModalBottomSheet(
-                        //       context: context,
-                        //       isScrollControlled: true,
-                        //       shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.vertical(
-                        //             top: Radius.circular(20)),
-                        //       ),
-                        //       builder: (context) {
-                        //         return SingleChildScrollView(
-                        //           padding: EdgeInsets.only(
-                        //               left: 20, right: 20, top: 0, bottom: 10),
-                        //           child: Container(
-                        //             padding: EdgeInsets.only(
-                        //                 bottom: MediaQuery.of(context)
-                        //                     .viewInsets
-                        //                     .bottom),
-                        //             child: UpdateAliasRecipient(
-                        //               aliasDataModel: aliasDataModel,
-                        //             ),
-                        //           ),
-                        //         );
-                        //       },
-                        //     );
-                        //   },
-                        // ),
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () => buildUpdateDefaultRecipient(
+                              context, aliasDataModel),
+                        ),
                       ],
                     ),
                   ),
                   if (aliasDataModel.recipients.isEmpty)
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(children: [Text('No recipients found')]),
+                      child:
+                          Row(children: [Text('No default recipient set yet')]),
                     )
                   else
                     ListView.builder(
@@ -195,13 +164,57 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                 ],
               ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            Divider(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                AliasCreatedAtWidget(
+                  label: 'Created:',
+                  dateTime: aliasDataModel.createdAt,
+                  iconData: Icons.access_time_outlined,
+                ),
+                aliasDataModel.deletedAt == null
+                    ? AliasCreatedAtWidget(
+                        label: 'Updated:',
+                        dateTime: aliasDataModel.updatedAt,
+                        iconData: Icons.av_timer_outlined,
+                      )
+                    : AliasCreatedAtWidget(
+                        label: 'Deleted:',
+                        dateTime: aliasDataModel.deletedAt,
+                        iconData: Icons.auto_delete_outlined,
+                      ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.05),
           ],
         ),
       ),
     );
   }
 
+  Future buildUpdateDefaultRecipient(
+      BuildContext context, AliasDataModel aliasDataModel) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: AliasDefaultRecipientScreen(aliasDataModel),
+          ),
+        );
+      },
+    );
+  }
+
+  //todo combine both delete and restore dialogs
   Future buildDeleteAliasDialog(BuildContext context,
       Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
     deleteAlias() {
@@ -210,7 +223,6 @@ class AliasDetailScreen extends ConsumerWidget {
         aliasDataModel.deletedAt,
         aliasDataModel.aliasID,
       );
-      Navigator.pop(context);
       Navigator.pop(context);
     }
 
@@ -234,7 +246,6 @@ class AliasDetailScreen extends ConsumerWidget {
         aliasDataModel.deletedAt,
         aliasDataModel.aliasID,
       );
-      Navigator.pop(context);
       Navigator.pop(context);
     }
 
@@ -308,7 +319,7 @@ class AliasDetailScreen extends ConsumerWidget {
               ),
               SizedBox(height: size.height * 0.02),
               RaisedButton(
-                child: Text('Update'),
+                child: Text('Update description'),
                 onPressed: () => editDesc(),
               ),
             ],

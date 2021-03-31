@@ -17,7 +17,7 @@ class RecipientDataModel {
   final String userId;
   final String email;
   final bool shouldEncrypt;
-  dynamic fingerprint;
+  String fingerprint;
   final DateTime emailVerifiedAt;
   final List<AliasDataModel> aliases;
   final DateTime createdAt;

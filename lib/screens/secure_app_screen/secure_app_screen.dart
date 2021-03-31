@@ -1,5 +1,5 @@
 import 'package:anonaddy/screens/login_screen/initial_screen.dart';
-import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';

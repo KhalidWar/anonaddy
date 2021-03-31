@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 const String kBaseURL = 'https://app.anonaddy.com/api/v1';
 const String kAccountDetailsURL = 'account-details';
 const String kActiveAliasURL = 'active-aliases';
+const String kAliasURL = 'alias';
 const String kAliasesURL = 'aliases';
 const String kEncryptedRecipient = 'encrypted-recipients';
 const String kRecipientsURL = 'recipients';
@@ -67,9 +68,10 @@ const kFailedToDeleteGPGKey = 'Failed to Delete GPG Key';
 const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
 const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 const kOnlyAvailableToPaid = 'Only available to paid users';
+const kComingSoon = 'Coming Soon';
 
 /// UI Strings
-const kSearchHintText = 'Search aliases, descriptions ...';
+const kSearchHintText = 'Search aliases by email or description';
 const kLoadingText = 'Loading';
 const kDescriptionInputText = 'Description (optional)';
 const kEnterLocalPart = 'Enter Local Part (no space or @)';
@@ -90,6 +92,8 @@ const kEnterPublicKeyData =
 const kSignOutAlertDialog = 'Are you sure you want to sign out?';
 const kUnverifiedRecipient =
     'Unverified recipient emails can NOT be set as default recipient for aliases.';
+const kUpdateAliasRecipientFailed = 'Failed to update description';
+const kUpdateAliasRecipientSuccessful = 'Successfully updated alias recipients';
 
 /// Colors
 const kBlueNavyColor = Color(0xFF19216C);

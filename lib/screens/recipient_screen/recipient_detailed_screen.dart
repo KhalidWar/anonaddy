@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
-import 'package:anonaddy/state_management/recipient_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
@@ -10,7 +10,7 @@ import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../constants.dart';
@@ -104,14 +104,19 @@ class RecipientDetailedScreen extends ConsumerWidget {
               title: '${encryptionSwitch ? 'Encrypted' : 'Not Encrypted'}',
               subtitle: 'Encryption',
               trailing: recipientData.fingerprint == null
-                  ? null
-                  : isLoading
-                      ? CustomLoadingIndicator().customLoadingIndicator()
-                      : Switch.adaptive(
+                  ? Container()
+                  : Row(
+                      children: [
+                        isLoading
+                            ? CustomLoadingIndicator().customLoadingIndicator()
+                            : Container(),
+                        Switch.adaptive(
                           value: encryptionSwitch,
                           onChanged: (toggle) =>
                               toggleEncryption(context, recipientData.id),
                         ),
+                      ],
+                    ),
             ),
             recipientData.emailVerifiedAt == null
                 ? AliasDetailListTile(
@@ -212,7 +217,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
     void addPublicKey() {
       addPublicGPGKey(context, recipientData.id, _texEditingController.text);
-      _texEditingController.clear();
     }
 
     return showModalBottomSheet(
@@ -251,7 +255,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                   controller: _texEditingController,
                   validator: (input) =>
                       FormValidator().validatePGPKeyField(input),
-                  minLines: 3,
+                  minLines: 4,
                   maxLines: 8,
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (submit) => addPublicKey(),
@@ -264,11 +268,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
               SizedBox(height: size.height * 0.01),
               RaisedButton(
                 child: Text('Add Key'),
-                onPressed: () => addPublicGPGKey(
-                  context,
-                  recipientData.id,
-                  _texEditingController.text,
-                ),
+                onPressed: () => addPublicKey(),
               ),
             ],
           ),

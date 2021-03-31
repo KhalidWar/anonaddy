@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/services/offline_data/offline_data.dart';
+import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,9 +14,8 @@ import '../access_token/access_token_service.dart';
 class AliasService {
   final _accessTokenService = AccessTokenService();
 
-  Stream<AliasModel> getAllAliasesData() async* {
+  Future<AliasModel> getAllAliasesData(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
-    final offlineData = OfflineData();
 
     try {
       final response = await http.get(
@@ -32,20 +31,20 @@ class AliasService {
       if (response.statusCode == 200) {
         print('getAllAliasesData ${response.statusCode}');
         await offlineData.writeAliasOfflineData(response.body);
-        yield AliasModel.fromJson(jsonDecode(response.body));
+        return AliasModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllAliasesData ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } on SocketException {
       final securedData = await offlineData.readAliasOfflineData();
-      yield AliasModel.fromJson(jsonDecode(securedData));
+      return AliasModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
   }
 
-  Future createNewAlias(
+  Future<AliasDataModel> createNewAlias(
       String desc, String domain, String format, String localPart) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
@@ -68,10 +67,10 @@ class AliasService {
 
       if (response.statusCode == 201) {
         print("createNewAlias ${response.statusCode}");
-        return 201;
+        return AliasDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print("createNewAlias ${response.statusCode}");
-        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -95,13 +94,13 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('Network activateAlias ${response.statusCode}');
-        return jsonDecode(response.body);
+        return 200;
       } else {
         print('Network activateAlias ${response.statusCode}');
-        return null;
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 
@@ -121,13 +120,13 @@ class AliasService {
 
       if (response.statusCode == 204) {
         print('Network deactivateAlias ${response.statusCode}');
-        return response.body;
+        return 204;
       } else {
         print('Network deactivateAlias ${response.statusCode}');
-        return null;
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 
@@ -211,19 +210,20 @@ class AliasService {
     }
   }
 
-  Future editAliasRecipient(String aliasID, List<String> recipients) async {
+  Future<AliasDataModel> updateAliasDefaultRecipient(
+      String aliasID, List<String> recipients) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
-      final response = await http.patch(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+      final response = await http.post(
+        Uri.encodeFull('$kBaseURL/$kAliasURL-$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: jsonEncode({"recipient_ids": recipients}),
+        body: jsonEncode({"alias_id": aliasID, "recipient_ids": recipients}),
       );
 
       if (response.statusCode == 200) {

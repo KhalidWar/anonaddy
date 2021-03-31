@@ -1,12 +1,14 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
+import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SearchService extends SearchDelegate {
-  SearchService(this._aliasDataList);
-  final List<AliasDataModel> _aliasDataList;
-
-  final List<AliasDataModel> _recentSearches = [];
+  SearchService(this.searchAliasList);
+  final List<AliasDataModel> searchAliasList;
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -22,7 +24,7 @@ class SearchService extends SearchDelegate {
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {
-        close(context, null);
+        close(context, context.read(searchHistoryProvider).updateUI());
       },
     );
   }
@@ -34,27 +36,34 @@ class SearchService extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<AliasDataModel> _resultList = [];
+    final aliasState = context.read(aliasStateManagerProvider);
+    List<AliasDataModel> resultAliasList = [];
 
-    _aliasDataList.forEach((element) {
+    searchAliasList.forEach((element) {
       if (element.email.toLowerCase().contains(query.toLowerCase()) ||
           element.emailDescription
               .toLowerCase()
               .contains(query.toLowerCase())) {
-        _resultList.add(element);
+        resultAliasList.add(element);
       }
     });
 
-    final initialList = query.isEmpty ? _recentSearches : _resultList;
+    final initialList =
+        query.isEmpty ? aliasState.recentSearchesList : resultAliasList;
 
     return ListView.builder(
       itemCount: initialList.length,
       itemBuilder: (context, index) {
         return InkWell(
+          child: IgnorePointer(
+              child: AliasListTile(aliasData: initialList[index])),
           onTap: () {
-            _recentSearches.add(initialList[index]);
+            context.read(searchHistoryProvider).saveData(initialList[index]);
+            aliasState.recentSearchesList.add(initialList[index]);
+            aliasState.aliasDataModel = initialList[index];
+            aliasState.switchValue = initialList[index].isAliasActive;
+            Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
           },
-          child: AliasListTile(aliasData: initialList[index]),
         );
       },
     );

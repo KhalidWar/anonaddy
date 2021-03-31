@@ -30,27 +30,29 @@ class LottieWidget extends StatelessWidget {
         showLoading ?? false
             ? LinearProgressIndicator(backgroundColor: Colors.transparent)
             : Container(),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            lottie == null
-                ? Container()
-                : Lottie.asset(
-                    lottie,
-                    height: lottieHeight,
-                    fit: BoxFit.fitHeight,
-                    repeat: repeat ?? false,
-                  ),
-            label == null
-                ? Container()
-                : Text(
-                    '$label',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(fontWeight: FontWeight.normal),
-                  ),
-          ],
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              lottie == null
+                  ? Container()
+                  : Lottie.asset(
+                      lottie,
+                      height: lottieHeight,
+                      fit: BoxFit.fitHeight,
+                      repeat: repeat ?? false,
+                    ),
+              label == null
+                  ? Container()
+                  : Text(
+                      '$label',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(fontWeight: FontWeight.normal),
+                    ),
+            ],
+          ),
         ),
       ],
     );

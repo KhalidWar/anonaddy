@@ -1,15 +1,11 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final accessTokenManager = FutureProvider(
-  (ref) => ref.watch(accessTokenServiceProvider).getAccessToken(),
-);
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class InitialScreen extends ConsumerWidget {
@@ -19,7 +15,7 @@ class InitialScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     /// Use [watch] method to access different providers
     /// and returns AsyncValue of same type.
-    final accessToken = watch(accessTokenManager);
+    final accessToken = watch(accessTokenProvider);
 
     /// Customize Status Bar and Bottom Navigator Bar colors.
     return AnnotatedRegion<SystemUiOverlayStyle>(

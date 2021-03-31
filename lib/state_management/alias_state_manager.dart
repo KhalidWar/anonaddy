@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,16 +9,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../constants.dart';
 
-final aliasStateManagerProvider =
-    ChangeNotifierProvider((ref) => AliasStateManager());
-
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager() {
-    _isLoading = false;
+    isToggleLoading = false;
   }
 
   AliasDataModel aliasDataModel;
-  bool _isLoading;
+  bool _isToggleLoading;
   bool _switchValue;
   String _aliasDomain;
   String _aliasFormat;
@@ -39,7 +37,9 @@ class AliasStateManager extends ChangeNotifier {
   List<int> repliedList = [];
   List<int> sentList = [];
 
-  bool get isLoading => _isLoading;
+  List<AliasDataModel> recentSearchesList = [];
+
+  bool get isToggleLoading => _isToggleLoading;
   bool get switchValue => _switchValue;
   String get aliasDomain => _aliasDomain;
   String get aliasFormat => _aliasFormat;
@@ -54,12 +54,12 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setIsLoading(bool value) {
-    _isLoading = value;
+  set isToggleLoading(bool input) {
+    _isToggleLoading = input;
     notifyListeners();
   }
 
-  void setSwitchValue(bool value) {
+  set switchValue(bool value) {
     _switchValue = value;
     notifyListeners();
   }
@@ -74,11 +74,9 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isAliasDeleted(dynamic input) {
-    if (input == null)
-      return false;
-    else
-      return true;
+  void setAliasRecipients(List<RecipientDataModel> recipients) {
+    aliasDataModel.recipients = recipients;
+    notifyListeners();
   }
 
   void clearAllLists() {
@@ -91,23 +89,20 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   void createNewAlias(BuildContext context, String desc, String domain,
-      String format, String localPart) async {
+      String format, String localPart) {
     void createAlias() async {
-      setIsLoading(true);
-      final aliasService = context.read(aliasServiceProvider);
-      await aliasService
+      isToggleLoading = true;
+      await context
+          .read(aliasServiceProvider)
           .createNewAlias(desc, domain, format, localPart)
           .then((value) {
-        if (value == 201) {
-          setIsLoading(false);
-          showToast('Alias created successfully!');
-        } else {
-          setIsLoading(false);
-          showToast(value);
-        }
-        descFieldController.clear();
-        customFieldController.clear();
+        showToast('Alias created successfully!');
+      }).catchError((error) {
+        showToast(error.toString());
       });
+      descFieldController.clear();
+      customFieldController.clear();
+      isToggleLoading = false;
       Navigator.pop(context);
       notifyListeners();
     }
@@ -121,86 +116,78 @@ class AliasStateManager extends ChangeNotifier {
     }
   }
 
-  void deleteOrRestoreAlias(
-      BuildContext context, DateTime input, String aliasID) async {
-    setIsLoading(true);
+  Future<void> deleteOrRestoreAlias(
+      BuildContext context, DateTime aliasDeletedAt, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
-    isAliasDeleted(input)
-        ? await aliasService.restoreAlias(aliasID).then((response) {
-            response == 200
-                ? showToast(kAliasRestoredSuccessfully)
-                : showToast(kFailedToRestoreAlias);
-            setIsLoading(false);
-          })
-        : await aliasService.deleteAlias(aliasID).then((response) {
-            response == 204
-                ? showToast(kAliasDeletedSuccessfully)
-                : showToast(kFailedToDeleteAlias);
-            setIsLoading(false);
-          });
+
+    if (aliasDeletedAt == null) {
+      await aliasService.deleteAlias(aliasID).then((value) {
+        showToast(kAliasDeletedSuccessfully);
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+      Navigator.pop(context);
+    } else {
+      await aliasService.restoreAlias(aliasID).then((value) {
+        showToast(kAliasRestoredSuccessfully);
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+      Navigator.pop(context);
+    }
     notifyListeners();
   }
 
-  void toggleAlias(BuildContext context, String aliasID) async {
+  Future<void> toggleAlias(BuildContext context, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
-    setIsLoading(true);
+    isToggleLoading = true;
     if (_switchValue) {
-      dynamic deactivateResult = await aliasService.deactivateAlias(aliasID);
-      if (deactivateResult == null) {
-        showToast('Failed to deactivate alias');
+      await aliasService.deactivateAlias(aliasID).then((value) {
+        showToast('Alias Deactivated Successfully!');
         toggleSwitchValue();
-        setIsLoading(false);
-      } else {
-        showToast('Alias deactivated');
-        toggleSwitchValue();
-        setIsLoading(false);
-      }
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+      isToggleLoading = false;
     } else {
-      dynamic activateResult = await aliasService.activateAlias(aliasID);
-      if (activateResult == null) {
-        showToast('Failed to activate alias');
+      await aliasService.activateAlias(aliasID).then((value) {
+        showToast('Alias Activated Successfully!');
         toggleSwitchValue();
-        setIsLoading(false);
-      } else {
-        showToast('Alias activated');
-        toggleSwitchValue();
-        setIsLoading(false);
-      }
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+      isToggleLoading = false;
     }
   }
 
-  void editDescription(
+  Future<void> editDescription(
       BuildContext context, String aliasID, String input) async {
     if (descriptionFormKey.currentState.validate()) {
-      Navigator.pop(context);
       await context
           .read(aliasServiceProvider)
           .editAliasDescription(aliasID, input)
           .then((value) {
-        if (value.emailDescription == null) {
-          showToast(kEditDescFailed);
-        } else {
-          showToast(kEditDescSuccessful);
-          setEmailDescription(value.emailDescription);
-        }
+        showToast(kEditDescSuccessful);
+        setEmailDescription(value.emailDescription);
+      }).catchError((error) {
+        showToast(error.toString());
       });
+      Navigator.pop(context);
     }
   }
 
-  void editAliasRecipient(
+  Future<void> updateAliasDefaultRecipient(
       BuildContext context, String aliasID, List<String> recipients) async {
-    Navigator.pop(context);
     await context
         .read(aliasServiceProvider)
-        .editAliasRecipient(aliasID, recipients)
+        .updateAliasDefaultRecipient(aliasID, recipients)
         .then((value) {
-      if (value.emailDescription == null) {
-        showToast(kEditDescFailed);
-      } else {
-        showToast(kEditDescSuccessful);
-        setEmailDescription(value.emailDescription);
-      }
+      setAliasRecipients(value.recipients);
+      showToast(kUpdateAliasRecipientSuccessful);
+    }).catchError((error) {
+      showToast(error.toString());
     });
+    Navigator.pop(context);
   }
 
   void copyToClipboard(String input) {

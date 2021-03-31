@@ -1,46 +1,38 @@
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-final usernameStateManagerProvider =
-    ChangeNotifierProvider((ref) => UsernameStateManager());
 
 class UsernameStateManager extends ChangeNotifier {
   final usernameFormKey = GlobalKey<FormState>();
 
-  Future<void> createNewUsername(BuildContext context, String username,
-      TextEditingController textEditController) async {
+  Future<void> createNewUsername(BuildContext context, String username) async {
     if (usernameFormKey.currentState.validate()) {
       await context
           .read(usernameServiceProvider)
           .createNewUsername(username)
           .then((value) {
-        if (value == 201) {
-          showToast('Username added successfully!');
-        } else {
-          showToast('Failed to add username!');
-        }
-        textEditController.clear();
+        print(value);
+        showToast('Username added successfully!');
+        Navigator.pop(context);
+      }).catchError((error) {
+        showToast(error.toString());
       });
-      Navigator.pop(context);
     }
   }
 
   Future<void> deleteUsername(BuildContext context, String usernameID) async {
+    Navigator.pop(context);
     await context
         .read(usernameServiceProvider)
         .deleteUsername(usernameID)
         .then((value) {
-      if (value == 204) {
-        showToast('Username deleted successfully!');
-      } else {
-        showToast('Failed to delete username!');
-      }
+      Navigator.pop(context);
+      showToast('Username deleted successfully!');
+    }).catchError((error) {
+      showToast(error.toString());
     });
-    Navigator.pop(context);
-    Navigator.pop(context);
   }
 
   showToast(String input) {

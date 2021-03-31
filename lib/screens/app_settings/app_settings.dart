@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/app_settings/about_app_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/custom_page_route.dart';
@@ -29,6 +30,9 @@ class _AppSettingsState extends State<AppSettings> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // todo implement feedback mechanism.
+            // todo Give dev email to receive feedback and suggestions
+            // todo encourage users to get into beta program
             ListTile(
               title: Text(
                 'Dark Theme',
@@ -69,10 +73,7 @@ class _AppSettingsState extends State<AppSettings> {
               subtitle: Text('View AddyManager details'),
               trailing: Icon(Icons.help_outline),
               onTap: () {
-                Navigator.push(
-                  context,
-                  CustomPageRoute().customPageRouteBuilder(AboutAppScreen()),
-                );
+                Navigator.push(context, CustomPageRoute(AboutAppScreen()));
               },
             ),
             Spacer(),

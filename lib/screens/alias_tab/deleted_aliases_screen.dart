@@ -1,8 +1,5 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/services/search/search_service.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
 
 import '../../constants.dart';
 import '../../widgets/alias_list_tile.dart';
@@ -82,25 +79,6 @@ class DeletedAliasesScreen extends StatelessWidget {
           color: Colors.white,
           onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            color: Colors.white,
-            onPressed: () {
-              final aliasStateManager = context.read(aliasStateManagerProvider);
-
-              showSearch(
-                context: context,
-                delegate: SearchService(
-                  [
-                    ...aliasStateManager.availableAliasList,
-                    ...aliasStateManager.deletedAliasList,
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
       ),
     );
   }

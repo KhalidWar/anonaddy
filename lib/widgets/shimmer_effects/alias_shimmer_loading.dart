@@ -4,7 +4,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../constants.dart';
 
-class ShimmerLoading extends StatelessWidget {
+class AliasShimmerLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -63,7 +63,7 @@ class ShimmerLoading extends StatelessWidget {
           body: TabBarView(
             children: [
               Shimmer.fromColors(
-                baseColor: isDark ? Colors.grey : Colors.grey[300],
+                baseColor: isDark ? Colors.grey : Colors.grey[400],
                 highlightColor: Colors.grey[100],
                 enabled: true,
                 child: ListView.builder(

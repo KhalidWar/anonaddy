@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
-import 'package:anonaddy/services/offline_data/offline_data.dart';
+import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,9 +12,8 @@ import '../../constants.dart';
 class UsernameService {
   final _accessTokenService = AccessTokenService();
 
-  Future<UsernameModel> getUsernameData() async {
+  Future<UsernameModel> getUsernameData(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
-    final offlineData = OfflineData();
 
     try {
       final response = await http.get(
@@ -43,9 +42,8 @@ class UsernameService {
     }
   }
 
-  Future createNewUsername(String username) async {
+  Future<UsernameModel> createNewUsername(String username) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.post(
         Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
@@ -60,10 +58,10 @@ class UsernameService {
 
       if (response.statusCode == 201) {
         print("createNewUsername ${response.statusCode}");
-        return 201;
+        return UsernameModel.fromJson(jsonDecode(response.body));
       } else {
         print("createNewUsername ${response.statusCode}");
-        return APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -72,17 +70,15 @@ class UsernameService {
 
   Future deleteUsername(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
-
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
+          Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $accessToken",
+          });
 
       if (response.statusCode == 204) {
         print("deleteUsername ${response.statusCode}");

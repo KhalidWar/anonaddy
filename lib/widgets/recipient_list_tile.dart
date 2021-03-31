@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
-import 'package:anonaddy/state_management/recipient_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,15 +50,13 @@ class RecipientListTile extends StatelessWidget {
       ),
       onTap: () {
         recipientDataProvider.recipientDataModel = recipientDataModel;
-        recipientDataProvider
-            .setEncryptionSwitch(recipientDataModel.shouldEncrypt);
+        recipientDataProvider.encryptionSwitch =
+            recipientDataModel.shouldEncrypt;
 
         Navigator.push(
-          context,
-          CustomPageRoute().customPageRouteBuilder(
-            RecipientDetailedScreen(recipientData: recipientDataModel),
-          ),
-        );
+            context,
+            CustomPageRoute(
+                RecipientDetailedScreen(recipientData: recipientDataModel)));
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -20,10 +22,13 @@ class AccessTokenService {
           "Authorization": "Bearer $accessToken",
         },
       );
-      if (response.statusCode == 200)
+      if (response.statusCode == 200) {
         return 200;
-      else
+      } else {
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } on SocketException {
+      throw 'No Internet connection';
     } catch (e) {
       throw e;
     }
@@ -40,9 +45,5 @@ class AccessTokenService {
     } else {
       return _accessTokenValue;
     }
-  }
-
-  Future<void> deleteAccessToken() async {
-    await _secureStorage.delete(key: _accessTokenKey);
   }
 }

@@ -1,6 +1,5 @@
-import 'package:anonaddy/screens/account_tab/main_account_card.dart';
-import 'package:anonaddy/services/domain_options/domain_options_service.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
@@ -19,7 +18,7 @@ class CreateNewAlias extends ConsumerWidget {
     final isIOS = TargetedPlatform().isIOS();
 
     final aliasStateProvider = watch(aliasStateManagerProvider);
-    final isLoading = aliasStateProvider.isLoading;
+    final isLoading = aliasStateProvider.isToggleLoading;
     final createNewAlias = aliasStateProvider.createNewAlias;
     final descFieldController = aliasStateProvider.descFieldController;
     final customFieldController = aliasStateProvider.customFieldController;

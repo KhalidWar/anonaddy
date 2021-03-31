@@ -1,154 +1,142 @@
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../constants.dart';
 
-final recipientStateManagerProvider =
-    ChangeNotifierProvider((ref) => RecipientStateManager());
-
 class RecipientStateManager extends ChangeNotifier {
+  RecipientStateManager() {
+    isLoading = false;
+  }
+
   RecipientDataModel recipientDataModel;
   bool _encryptionSwitch;
-  bool _isLoading = false;
+  bool _isLoading;
 
   final textEditController = TextEditingController();
   final recipientFormKey = GlobalKey<FormState>();
   final pgpKeyFormKey = GlobalKey<FormState>();
 
-  get encryptionSwitch => _encryptionSwitch;
   get isLoading => _isLoading;
+  get encryptionSwitch => _encryptionSwitch;
 
-  void setEncryptionSwitch(bool value) {
-    _encryptionSwitch = value;
-    notifyListeners();
-  }
-
-  void _toggleEncryptionSwitch() {
-    _encryptionSwitch = !_encryptionSwitch;
-    notifyListeners();
-  }
-
-  void setIsLoading(bool value) {
+  set isLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
 
-  void setFingerprint(dynamic input) {
+  set encryptionSwitch(bool value) {
+    _encryptionSwitch = value;
+    notifyListeners();
+  }
+
+  void setFingerprint(String input) {
     recipientDataModel.fingerprint = input;
     notifyListeners();
   }
 
-  void toggleEncryption(BuildContext context, String recipientID) async {
-    setIsLoading(true);
+  Future<void> toggleEncryption(
+      BuildContext context, String recipientID) async {
+    isLoading = true;
     if (_encryptionSwitch) {
       await context
           .read(recipientServiceProvider)
           .disableEncryption(recipientID)
           .then((value) {
-        if (value == 204) {
-          setIsLoading(false);
-          _toggleEncryptionSwitch();
-          _showToast(kEncryptionDisabled);
-        } else {
-          setIsLoading(false);
-          _showToast('$kFailedToDisableEncryption: $value');
-        }
+        encryptionSwitch = false;
+        _showToast(kEncryptionDisabled);
+      }).catchError((error) {
+        _showToast(error.toString());
       });
     } else {
       await context
           .read(recipientServiceProvider)
           .enableEncryption(recipientID)
           .then((value) {
-        if (value == 200) {
-          setIsLoading(false);
-          _toggleEncryptionSwitch();
-          _showToast(kEncryptionEnabled);
-        } else {
-          setIsLoading(false);
-          _showToast('$kFailedToEnableEncryption: $value');
-        }
+        encryptionSwitch = value.shouldEncrypt;
+        _showToast(kEncryptionEnabled);
+      }).catchError((error) {
+        _showToast(error.toString());
       });
     }
+    isLoading = false;
   }
 
-  void addPublicGPGKey(
+  Future<void> addPublicGPGKey(
       BuildContext context, String recipientID, String keyData) async {
     if (pgpKeyFormKey.currentState.validate()) {
-      Navigator.pop(context);
       await context
           .read(recipientServiceProvider)
           .addPublicGPGKey(recipientID, keyData)
           .then((value) {
         _showToast(kGPGKeyAddedSuccessfully);
         setFingerprint(value.fingerprint);
-        setEncryptionSwitch(value.shouldEncrypt);
-      }).catchError((error, stackTrace) {
-        _showToast(error);
+        encryptionSwitch = value.shouldEncrypt;
+        Navigator.pop(context);
+      }).catchError((error) {
+        _showToast(error.toString());
       });
     }
   }
 
-  void removePublicGPGKey(BuildContext context, String recipientID) async {
-    Navigator.pop(context);
+  Future<void> removePublicGPGKey(
+      BuildContext context, String recipientID) async {
     await context
         .read(recipientServiceProvider)
         .removePublicGPGKey(recipientID)
         .then((value) {
       _showToast(kGPGKeyDeletedSuccessfully);
-      setEncryptionSwitch(false);
       setFingerprint(null);
-    }).catchError((error, stackTrace) {
-      _showToast('$kFailedToDeleteGPGKey: $error');
+      encryptionSwitch = false;
+    }).catchError((error) {
+      _showToast(error.toString());
     });
+    Navigator.pop(context);
+    notifyListeners();
   }
 
-  void verifyEmail(BuildContext context, String recipientID) async {
+  Future<void> verifyEmail(BuildContext context, String recipientID) async {
     await context
         .read(recipientServiceProvider)
         .sendVerificationEmail(recipientID)
         .then((value) {
-      if (value == 200) {
-        _showToast('Verification email is sent');
-      } else {
-        _showToast('Failed to send verification email');
-      }
+      _showToast('Verification email is sent');
+    }).catchError((error) {
+      _showToast(error.toString());
     });
   }
 
-  void addRecipient(BuildContext context, String email) async {
+  Future<void> addRecipient(BuildContext context, String email) async {
     if (recipientFormKey.currentState.validate()) {
+      isLoading = true;
       await context
           .read(recipientServiceProvider)
           .addRecipient(email)
           .then((value) {
         _showToast('Recipient added successfully!');
-        Navigator.pop(context);
-        textEditController.clear();
-      }).catchError((error, stackTrace) {
-        return _showToast(error);
+      }).catchError((error) {
+        _showToast(error.toString());
       });
+      isLoading = false;
+      textEditController.clear();
+      Navigator.pop(context);
     }
   }
 
-  void removeRecipient(BuildContext context, String recipientID) async {
+  Future<void> removeRecipient(BuildContext context, String recipientID) async {
     await context
         .read(recipientServiceProvider)
         .removeRecipient(recipientID)
         .then((value) {
-      if (value == 204) {
-        _showToast('Recipient deleted successfully!');
-      } else {
-        _showToast('Failed to delete recipient!');
-      }
-      Navigator.pop(context);
-    }).catchError((error, stackTrace) {
-      return _showToast(error);
+      _showToast('Recipient deleted successfully!');
+    }).catchError((error) {
+      _showToast(error.toString());
     });
+    Navigator.pop(context);
   }
 
   void copyOnTap(String input) {

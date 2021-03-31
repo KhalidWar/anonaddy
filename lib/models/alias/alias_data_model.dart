@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 
 class AliasDataModel {
@@ -36,7 +38,7 @@ class AliasDataModel {
   final int emailsBlocked;
   final int emailsReplied;
   final int emailsSent;
-  final List<RecipientDataModel> recipients;
+  List<RecipientDataModel> recipients;
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime deletedAt;
@@ -96,6 +98,11 @@ class AliasDataModel {
   }
 
   factory AliasDataModel.fromJsonData(Map<String, dynamic> json) {
+    List list = json["data"]['recipients'];
+    List<RecipientDataModel> recipientList = list
+        .map((i) => RecipientDataModel.fromJsonRecipientNoAliases(i))
+        .toList();
+
     return AliasDataModel(
       aliasID: json['data']["id"],
       userId: json['data']["user_id"],
@@ -111,11 +118,48 @@ class AliasDataModel {
       emailsBlocked: json['data']["emails_blocked"],
       emailsReplied: json['data']["emails_replied"],
       emailsSent: json['data']["emails_sent"],
+      recipients: recipientList,
       createdAt: DateTime.parse(json['data']["created_at"]),
       updatedAt: DateTime.parse(json['data']["updated_at"]),
       deletedAt: json["deleted_at"] == null
           ? null
           : DateTime.parse(json['data']["deleted_at"]),
     );
+  }
+
+  static String encode(List<AliasDataModel> aliasList) {
+    return json.encode(
+      aliasList
+          .map<Map<String, dynamic>>((alias) => AliasDataModel.toMap(alias))
+          .toList(),
+    );
+  }
+
+  static List<AliasDataModel> decode(String encodedData) {
+    return (json.decode(encodedData) as List<dynamic>)
+        .map<AliasDataModel>((item) => AliasDataModel.fromJson(item))
+        .toList();
+  }
+
+  static Map<String, dynamic> toMap(AliasDataModel alias) {
+    return {
+      "id": alias.aliasID,
+      "user_id": alias.userId,
+      "aliasable_id": alias.aliasableId,
+      "aliasable_type": alias.aliasableType,
+      "local_part": alias.localPart,
+      "extension": alias.extension,
+      "domain": alias.domain,
+      "email": alias.email,
+      "active": alias.isAliasActive,
+      "description": alias.emailDescription,
+      "emails_forwarded": alias.emailsForwarded,
+      "emails_blocked": alias.emailsBlocked,
+      "emails_replied": alias.emailsReplied,
+      "emails_sent": alias.emailsSent,
+      // "recipients": List<dynamic>.from(recipients.map((x) => x)),
+      "created_at": alias.createdAt.toIso8601String(),
+      "updated_at": alias.updatedAt.toIso8601String(),
+    };
   }
 }
