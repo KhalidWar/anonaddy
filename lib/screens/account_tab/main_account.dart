@@ -44,7 +44,7 @@ class MainAccount extends StatelessWidget {
           Divider(),
           AccountListTile(
             title:
-                '${(userModel.bandwidth / 1000000).toStringAsFixed(2)} MB / ${NicheMethod().isUnlimited(userModel.bandwidthLimit / 1000000, 'MB')}',
+                '${(userModel.bandwidth / 1000000).toStringAsFixed(2)} MB out of ${NicheMethod().isUnlimited(userModel.bandwidthLimit / 1000000, 'MB')}',
             subtitle: 'Monthly Bandwidth',
             leadingIconData: Icons.speed_outlined,
           ),
@@ -76,7 +76,7 @@ class MainAccount extends StatelessWidget {
             title:
                 '${userModel.usernameCount} out of ${userModel.usernameLimit} used',
             subtitle: 'Usernames',
-            leadingIconData: Icons.email_outlined,
+            leadingIconData: Icons.account_circle_outlined,
             trailingIconData: Icons.add_circle_outline_outlined,
             method: subscription == 'free'
                 ? () => showToast(kOnlyAvailableToPaid)

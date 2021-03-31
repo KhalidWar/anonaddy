@@ -44,7 +44,7 @@ class AdditionalUsername extends ConsumerWidget {
 
               return InkWell(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
