@@ -6,16 +6,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
 
-class AddNewRecipient extends ConsumerWidget {
+class AddNewRecipient extends StatelessWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final size = MediaQuery.of(context).size;
-
-    final recipientManager = watch(recipientStateManagerProvider);
+  Widget build(BuildContext context) {
+    final recipientManager = context.read(recipientStateManagerProvider);
     final recipientFormKey = recipientManager.recipientFormKey;
     final textEditController = recipientManager.textEditController;
     final addRecipient = recipientManager.addRecipient;
     final isLoading = recipientManager.isLoading;
+
+    final size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
       padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),

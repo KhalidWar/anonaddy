@@ -1,8 +1,7 @@
 import 'package:anonaddy/models/user/user_model.dart';
-import 'package:anonaddy/screens/search_tab/add_new_recipient.dart';
+import 'package:anonaddy/screens/account_tab/add_new_recipient.dart';
 import 'package:anonaddy/state_management/providers.dart';
 import 'package:anonaddy/state_management/username_state_manager.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/account_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
+import 'add_new_username.dart';
 
 final accountStreamProvider =
     StreamProvider.autoDispose<UserModel>((ref) async* {
@@ -121,12 +121,6 @@ class AccountWidget extends StatelessWidget {
   }
 
   Future buildAddNewUsername(BuildContext context) {
-    final usernameManager = context.read(usernameStateManagerProvider);
-    final createNewUsername = usernameManager.createNewUsername;
-    final usernameFormKey = usernameManager.usernameFormKey;
-
-    final textEditController = TextEditingController();
-
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -134,52 +128,7 @@ class AccountWidget extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
-        final size = MediaQuery.of(context).size;
-
-        void createUsername() {
-          createNewUsername(
-              context, textEditController.text.trim(), textEditController);
-        }
-
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
-          child: Column(
-            children: [
-              Divider(
-                thickness: 3,
-                indent: size.width * 0.4,
-                endIndent: size.width * 0.4,
-              ),
-              SizedBox(height: size.height * 0.01),
-              Text(
-                'Add new username',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Divider(thickness: 1),
-              SizedBox(height: size.height * 0.01),
-              Text(kAddNewUsernameText),
-              SizedBox(height: size.height * 0.02),
-              Form(
-                key: usernameFormKey,
-                child: TextFormField(
-                  autofocus: true,
-                  controller: textEditController,
-                  validator: (input) =>
-                      FormValidator().validateUsernameInput(input),
-                  onFieldSubmitted: (toggle) => createUsername(),
-                  decoration: kTextFormFieldDecoration.copyWith(
-                    hintText: 'johndoe',
-                  ),
-                ),
-              ),
-              SizedBox(height: size.height * 0.02),
-              RaisedButton(
-                child: Text('Update'),
-                onPressed: () => createUsername(),
-              ),
-            ],
-          ),
-        );
+        return AddNewUsername();
       },
     );
   }

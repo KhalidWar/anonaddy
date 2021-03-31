@@ -10,8 +10,7 @@ final usernameStateManagerProvider =
 class UsernameStateManager extends ChangeNotifier {
   final usernameFormKey = GlobalKey<FormState>();
 
-  Future<void> createNewUsername(BuildContext context, String username,
-      TextEditingController textEditController) async {
+  Future<void> createNewUsername(BuildContext context, String username) async {
     if (usernameFormKey.currentState.validate()) {
       await context
           .read(usernameServiceProvider)
@@ -23,7 +22,6 @@ class UsernameStateManager extends ChangeNotifier {
       }).catchError((error) {
         showToast(error.toString());
       });
-      textEditController.clear();
     }
   }
 
