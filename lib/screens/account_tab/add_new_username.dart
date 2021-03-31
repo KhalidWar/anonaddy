@@ -1,4 +1,4 @@
-import 'package:anonaddy/state_management/username_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

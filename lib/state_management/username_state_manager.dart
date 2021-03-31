@@ -1,11 +1,8 @@
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-final usernameStateManagerProvider =
-    ChangeNotifierProvider((ref) => UsernameStateManager());
 
 class UsernameStateManager extends ChangeNotifier {
   final usernameFormKey = GlobalKey<FormState>();

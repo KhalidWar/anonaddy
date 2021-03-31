@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
-import 'package:anonaddy/state_management/recipient_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';

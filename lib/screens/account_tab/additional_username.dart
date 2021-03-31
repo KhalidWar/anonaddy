@@ -1,7 +1,6 @@
 import 'package:anonaddy/constants.dart';
-import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:anonaddy/widgets/shimmer_effects/recipients_shimmer_loading.dart';
@@ -9,20 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'account_tab.dart';
-
-final additionalUsernameStreamProvider =
-    FutureProvider.autoDispose<UsernameModel>((ref) {
-  final offlineData = ref.read(offlineDataProvider);
-  return ref.read(usernameServiceProvider).getUsernameData(offlineData);
-});
-
 class AdditionalUsername extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final usernameStream = watch(additionalUsernameStreamProvider);
+    final usernameStream = watch(usernamesProvider);
 
     final subscription = watch(accountStreamProvider).data.value.subscription;
     if (subscription == 'free') {

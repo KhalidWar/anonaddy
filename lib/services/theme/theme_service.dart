@@ -1,9 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-final themeServiceProvider =
-    ChangeNotifierProvider<ThemeService>((ref) => ThemeService());
 
 class ThemeService extends ChangeNotifier {
   ThemeService() {

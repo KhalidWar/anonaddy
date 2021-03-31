@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/screens/account_tab/add_new_recipient.dart';
-import 'package:anonaddy/state_management/username_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/widgets/account_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
-import 'account_tab.dart';
 import 'add_new_username.dart';
 
-class AccountWidget extends StatelessWidget {
-  const AccountWidget({Key key, this.userModel}) : super(key: key);
+class MainAccount extends StatelessWidget {
+  const MainAccount({Key key, this.userModel}) : super(key: key);
 
   final UserModel userModel;
 

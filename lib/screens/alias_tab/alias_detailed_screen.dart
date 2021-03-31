@@ -2,7 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';

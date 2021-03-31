@@ -1,7 +1,6 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/services/search/search_service.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
@@ -11,10 +10,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
-
-final searchHistory = FutureProvider<List<AliasDataModel>>((ref) async {
-  return await ref.watch(searchHistoryProvider).loadData();
-});
 
 class SearchTab extends StatelessWidget {
   @override
@@ -82,7 +77,7 @@ class SearchTab extends StatelessWidget {
                 Divider(),
                 Consumer(
                   builder: (_, watch, __) {
-                    final search = watch(searchHistory);
+                    final search = watch(searchHistoryFuture);
                     return search.when(
                       loading: () => LoadingIndicator(),
                       data: (data) {

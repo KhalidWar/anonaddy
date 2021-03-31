@@ -1,5 +1,5 @@
 import 'package:anonaddy/screens/home_screen.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

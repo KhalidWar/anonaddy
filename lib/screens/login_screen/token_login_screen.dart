@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/state_management/login_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,9 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
-
-final loginStateManagerProvider =
-    ChangeNotifierProvider((ref) => LoginStateManager());
 
 class TokenLoginScreen extends ConsumerWidget {
   final _textEditingController = TextEditingController();

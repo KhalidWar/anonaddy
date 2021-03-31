@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

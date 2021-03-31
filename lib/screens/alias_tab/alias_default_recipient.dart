@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
-import 'package:anonaddy/screens/account_tab/recipients.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +46,7 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final allRecipients = context.read(recipientStreamProvider).data.value;
+    final allRecipients = context.read(recipientsProvider).data.value;
     for (RecipientDataModel recipient in allRecipients.recipientDataList) {
       if (recipient.emailVerifiedAt != null) {
         _verifiedRecipients.add(recipient);

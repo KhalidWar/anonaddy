@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,9 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../constants.dart';
-
-final aliasStateManagerProvider =
-    ChangeNotifierProvider((ref) => AliasStateManager());
 
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager() {

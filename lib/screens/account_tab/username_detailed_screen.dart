@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/username/username_data_model.dart';
-import 'package:anonaddy/state_management/username_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';

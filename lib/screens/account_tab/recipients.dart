@@ -1,21 +1,14 @@
-import 'package:anonaddy/models/recipient/recipient_model.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:anonaddy/widgets/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final recipientStreamProvider =
-    FutureProvider.autoDispose<RecipientModel>((ref) {
-  final offlineData = ref.read(offlineDataProvider);
-  return ref.read(recipientServiceProvider).getAllRecipient(offlineData);
-});
-
 class Recipients extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final recipientStream = watch(recipientStreamProvider);
+    final recipientStream = watch(recipientsProvider);
 
     return recipientStream.when(
       loading: () => RecipientsShimmerLoading(),

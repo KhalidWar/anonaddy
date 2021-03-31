@@ -1,4 +1,4 @@
-import 'package:anonaddy/state_management/recipient_state_manager.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/material.dart';

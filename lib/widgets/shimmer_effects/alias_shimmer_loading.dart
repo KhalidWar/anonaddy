@@ -4,7 +4,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../constants.dart';
 
-class ShimmerLoading extends StatelessWidget {
+class AliasShimmerLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

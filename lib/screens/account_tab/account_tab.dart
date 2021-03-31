@@ -1,25 +1,14 @@
 import 'package:anonaddy/constants.dart';
-import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/screens/account_tab/domains.dart';
 import 'package:anonaddy/screens/account_tab/recipients.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/widgets/loading_indicator.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'additional_username.dart';
-import 'main_account_card.dart';
-
-final accountStreamProvider =
-    StreamProvider.autoDispose<UserModel>((ref) async* {
-  final offlineData = ref.read(offlineDataProvider);
-  while (true) {
-    yield* Stream.fromFuture(
-        ref.read(userServiceProvider).getUserData(offlineData));
-    await Future.delayed(Duration(seconds: 5));
-  }
-});
+import 'main_account.dart';
 
 class AccountTab extends StatelessWidget {
   @override
@@ -48,7 +37,7 @@ class AccountTab extends StatelessWidget {
                         final accountStream = watch(accountStreamProvider);
                         return accountStream.when(
                           loading: () => LoadingIndicator(),
-                          data: (data) => AccountWidget(userModel: data),
+                          data: (data) => MainAccount(userModel: data),
                           error: (error, stackTrace) {
                             return LottieWidget(
                               showLoading: true,

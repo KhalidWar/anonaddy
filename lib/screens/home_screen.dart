@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:anonaddy/widgets/no_internet_alert.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,11 +14,6 @@ import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'alias_tab/create_new_alias.dart';
 import 'app_settings/app_settings.dart';
-
-final connectivityStreamProvider =
-    StreamProvider.autoDispose<ConnectionStatus>((ref) {
-  return ref.read(connectivityServiceProvider).streamController.stream;
-});
 
 class HomeScreen extends StatefulWidget {
   @override

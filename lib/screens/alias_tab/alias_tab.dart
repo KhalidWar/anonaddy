@@ -1,27 +1,16 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/screens/alias_tab/shimmer_loading.dart';
-import 'package:anonaddy/services/domain_options/domain_options_service.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/alias_tab_pie_chart.dart';
 import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
+import 'package:anonaddy/widgets/shimmer_effects/alias_shimmer_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'deleted_aliases_screen.dart';
-
-final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
-  final offlineData = ref.read(offlineDataProvider);
-  while (true) {
-    yield* Stream.fromFuture(
-        ref.read(aliasServiceProvider).getAllAliasesData(offlineData));
-    await Future.delayed(Duration(seconds: 1));
-  }
-});
 
 class AliasTab extends ConsumerWidget {
   @override
@@ -42,7 +31,7 @@ class AliasTab extends ConsumerWidget {
     final sentList = aliasDataProvider.sentList;
 
     return aliasStream.when(
-      loading: () => ShimmerLoading(),
+      loading: () => AliasShimmerLoading(),
       data: (data) {
         clearAllLists();
 

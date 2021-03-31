@@ -1,16 +1,8 @@
-import 'package:anonaddy/models/domain/domain_model.dart';
-import 'package:anonaddy/state_management/providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
-import 'account_tab.dart';
-
-final domainsStreamProvider =
-    FutureProvider.autoDispose<DomainModel>((ref) async {
-  final offlineData = ref.read(offlineDataProvider);
-  return await ref.read(domainsServiceProvider).getAllDomains(offlineData);
-});
 
 class Domains extends ConsumerWidget {
   @override

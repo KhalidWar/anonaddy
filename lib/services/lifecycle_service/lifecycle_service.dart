@@ -1,7 +1,6 @@
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../state_management/lifecycle_state_manager.dart';
 
 class LifecycleService extends StatefulWidget {
   const LifecycleService({Key key, this.child}) : super(key: key);
