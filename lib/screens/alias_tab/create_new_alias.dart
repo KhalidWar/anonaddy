@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/account_tab/main_account_card.dart';
+import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/utilities/form_validator.dart';

@@ -42,7 +42,7 @@ class Recipients extends ConsumerWidget {
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           lottieHeight: MediaQuery.of(context).size.height * 0.1,
-          label: '$error',
+          label: error.toString(),
         );
       },
     );

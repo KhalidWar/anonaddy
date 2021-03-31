@@ -319,7 +319,7 @@ class AliasDetailScreen extends ConsumerWidget {
               ),
               SizedBox(height: size.height * 0.02),
               RaisedButton(
-                child: Text('Update'),
+                child: Text('Update description'),
                 onPressed: () => editDesc(),
               ),
             ],

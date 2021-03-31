@@ -68,6 +68,7 @@ const kFailedToDeleteGPGKey = 'Failed to Delete GPG Key';
 const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
 const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 const kOnlyAvailableToPaid = 'Only available to paid users';
+const kComingSoon = 'Coming Soon';
 
 /// UI Strings
 const kSearchHintText = 'Search aliases by email or description';

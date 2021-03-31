@@ -1,3 +1,4 @@
+import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
 import 'package:anonaddy/state_management/providers.dart';
@@ -7,6 +8,8 @@ import 'package:anonaddy/widgets/shimmer_effects/recipients_shimmer_loading.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'account_tab.dart';
 
 final additionalUsernameStreamProvider =
     FutureProvider.autoDispose<UsernameModel>((ref) {
@@ -20,6 +23,16 @@ class AdditionalUsername extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final usernameStream = watch(additionalUsernameStreamProvider);
+
+    final subscription = watch(accountStreamProvider).data.value.subscription;
+    if (subscription == 'free') {
+      return Center(
+        child: Text(
+          kOnlyAvailableToPaid,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+      );
+    }
 
     return usernameStream.when(
       loading: () => RecipientsShimmerLoading(),

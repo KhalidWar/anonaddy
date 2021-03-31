@@ -72,7 +72,7 @@ class SearchTab extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     TextButton(
-                      child: Text('Clear History'),
+                      child: Text('Clear'),
                       onPressed: () => context
                           .read(searchHistoryProvider)
                           .clearSearchHistory(context),

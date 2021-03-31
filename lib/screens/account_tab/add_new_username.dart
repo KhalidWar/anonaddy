@@ -53,7 +53,7 @@ class AddNewUsername extends StatelessWidget {
           ),
           SizedBox(height: size.height * 0.02),
           RaisedButton(
-            child: Text('Update'),
+            child: Text('Add Username'),
             onPressed: () => createUsername(),
           ),
         ],
