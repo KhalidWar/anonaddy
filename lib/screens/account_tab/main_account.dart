@@ -23,11 +23,10 @@ class MainAccount extends StatelessWidget {
     final showToast = context.read(usernameStateManagerProvider).showToast;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+      padding: EdgeInsets.only(top: 5, left: 15, right: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

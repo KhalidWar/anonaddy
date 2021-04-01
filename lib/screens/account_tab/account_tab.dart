@@ -30,25 +30,22 @@ class AccountTab extends StatelessWidget {
                 pinned: true,
                 backgroundColor: isDark ? Colors.black : Colors.white,
                 flexibleSpace: FlexibleSpaceBar(
-                  background: Padding(
-                    padding: EdgeInsets.only(bottom: 30),
-                    child: Consumer(
-                      builder: (_, watch, __) {
-                        final accountStream = watch(accountStreamProvider);
-                        return accountStream.when(
-                          loading: () => LoadingIndicator(),
-                          data: (data) => MainAccount(userModel: data),
-                          error: (error, stackTrace) {
-                            return LottieWidget(
-                              showLoading: true,
-                              lottie: 'assets/lottie/errorCone.json',
-                              lottieHeight: size.height * 0.1,
-                              label: error.toString(),
-                            );
-                          },
-                        );
-                      },
-                    ),
+                  background: Consumer(
+                    builder: (_, watch, __) {
+                      final accountStream = watch(accountStreamProvider);
+                      return accountStream.when(
+                        loading: () => LoadingIndicator(),
+                        data: (data) => MainAccount(userModel: data),
+                        error: (error, stackTrace) {
+                          return LottieWidget(
+                            showLoading: true,
+                            lottie: 'assets/lottie/errorCone.json',
+                            lottieHeight: size.height * 0.1,
+                            label: error.toString(),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
                 bottom: TabBar(
