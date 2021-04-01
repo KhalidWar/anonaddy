@@ -14,7 +14,7 @@ Your support will help the continuous development of this project.
 
 ## Screenshots
 <img src="assets/screenshots/addymanager.png" width="200"> <img src="assets/screenshots/account.png" width="200"> <img src="assets/screenshots/aliases.png" width="200"> 
-<img src="assets/screenshots/login.png" width="200"> <img src="assets/screenshots/create_alias.png" width="200"> <img src="assets/screenshots/search.png" width="200">
+<img src="assets/screenshots/login.png" width="200"> <img src="assets/screenshots/create_alias.png" width="200"> <img src="assets/screenshots/search.png" width="200"> <img src="assets/screenshots/settings.png" width="200">
 
 
 ## Features
