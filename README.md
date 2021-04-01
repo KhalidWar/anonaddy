@@ -13,8 +13,8 @@ Your support will help the continuous development of this project.
 
 
 ## Screenshots
-<img src="assets/screenshots/addymanager.png" width="200"> <img src="assets/screenshots/account.png" width="200"> <img src="assets/screenshots/aliases.png" width="200"> 
-<img src="assets/screenshots/login.png" width="200"> <img src="assets/screenshots/create_alias.png" width="200"> <img src="assets/screenshots/search.png" width="200"> <img src="assets/screenshots/settings.png" width="200">
+<img src="assets/screenshots/addymanager.jpg" width="200"> <img src="assets/screenshots/account.jpg" width="200"> <img src="assets/screenshots/aliases.jpg" width="200"> 
+<img src="assets/screenshots/login.jpg" width="200"> <img src="assets/screenshots/create_alias.jpg" width="200"> <img src="assets/screenshots/search.jpg" width="200"> <img src="assets/screenshots/settings.jpg" width="200">
 
 
 ## Features
