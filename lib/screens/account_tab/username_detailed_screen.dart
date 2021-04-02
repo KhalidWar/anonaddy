@@ -4,6 +4,7 @@ import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/account_card_header.dart';
+import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
@@ -27,6 +28,8 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
   @override
   Widget build(BuildContext context) {
     final username = widget.username;
+
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: buildAppBar(context, username.id),
@@ -55,26 +58,6 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
                     titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
                     subtitle: 'Is catch all?',
                     leadingIconData: Icons.repeat,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: username.createdAt,
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Created at',
-                    leadingIconData: Icons.access_time_outlined,
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: username.updatedAt,
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Updated at',
-                    leadingIconData: Icons.av_timer_outlined,
                   ),
                 ),
               ],
@@ -119,31 +102,24 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
                       ),
               ],
             ),
-            Divider(height: 0),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            SizedBox(height: size.height * 0.02),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                AliasCreatedAtWidget(
+                  label: 'Created:',
+                  dateTime: username.createdAt,
+                ),
+                AliasCreatedAtWidget(
+                  label: 'Updated:',
+                  dateTime: username.updatedAt,
+                ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.05),
           ],
         ),
       ),
-    );
-  }
-
-  PageRouteBuilder buildPageRouteBuilder(Widget child) {
-    return PageRouteBuilder(
-      transitionsBuilder: (context, animation, secondAnimation, child) {
-        animation =
-            CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut);
-
-        return SlideTransition(
-          position: Tween(
-            begin: Offset(1.0, 0.0),
-            end: Offset(0.0, 0.0),
-          ).animate(animation),
-          child: child,
-        );
-      },
-      pageBuilder: (context, animation, secondAnimation) {
-        return child;
-      },
     );
   }
 

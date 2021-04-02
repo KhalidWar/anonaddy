@@ -2,13 +2,11 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 
 class AliasCreatedAtWidget extends StatelessWidget {
-  const AliasCreatedAtWidget(
-      {Key key, this.label, this.dateTime, this.iconData})
+  const AliasCreatedAtWidget({Key key, this.label, this.dateTime})
       : super(key: key);
 
   final String label;
   final DateTime dateTime;
-  final IconData iconData;
 
   @override
   Widget build(BuildContext context) {

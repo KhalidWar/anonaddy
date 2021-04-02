@@ -171,18 +171,15 @@ class AliasDetailScreen extends ConsumerWidget {
                 AliasCreatedAtWidget(
                   label: 'Created:',
                   dateTime: aliasDataModel.createdAt,
-                  iconData: Icons.access_time_outlined,
                 ),
                 aliasDataModel.deletedAt == null
                     ? AliasCreatedAtWidget(
                         label: 'Updated:',
                         dateTime: aliasDataModel.updatedAt,
-                        iconData: Icons.av_timer_outlined,
                       )
                     : AliasCreatedAtWidget(
                         label: 'Deleted:',
                         dateTime: aliasDataModel.deletedAt,
-                        iconData: Icons.auto_delete_outlined,
                       ),
               ],
             ),

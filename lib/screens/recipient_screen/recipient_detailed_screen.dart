@@ -4,6 +4,7 @@ import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
+import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
 import 'package:anonaddy/widgets/custom_app_bar.dart';
@@ -49,25 +50,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 height: size.height * 0.2,
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.access_time_outlined,
-                    title: recipientData.createdAt,
-                    subtitle: 'Created At',
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.av_timer_outlined,
-                    title: recipientData.updatedAt,
-                    subtitle: 'Updated at',
-                  ),
-                )
-              ],
-            ),
-            Divider(height: 10),
+            Divider(),
             AliasDetailListTile(
               leadingIconData: Icons.email_outlined,
               title: recipientData.email,
@@ -178,7 +161,20 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     ),
                 ],
               ),
-            SizedBox(height: size.height * 0.05),
+            SizedBox(height: size.height * 0.01),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                AliasCreatedAtWidget(
+                  label: 'Created:',
+                  dateTime: recipientData.createdAt,
+                ),
+                AliasCreatedAtWidget(
+                  label: 'Updated:',
+                  dateTime: recipientData.updatedAt,
+                ),
+              ],
+            ),
           ],
         ),
       ),
