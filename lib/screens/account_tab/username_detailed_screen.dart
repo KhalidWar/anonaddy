@@ -7,7 +7,6 @@ import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +123,6 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
   }
 
   Widget buildAppBar(BuildContext context, String usernameID) {
-    final customAppBar = CustomAppBar();
     final isIOS = TargetedPlatform().isIOS();
     final confirmationDialog = ConfirmationDialog();
 
@@ -142,9 +140,16 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
         onPressed: () => Navigator.pop(context),
       ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () {
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) {
+            return ['Delete username'].map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+          onSelected: (String choice) {
             showModal(
               context: context,
               builder: (context) {
@@ -159,10 +164,5 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
         ),
       ],
     );
-
-    //todo fix CupertinoNavigationBar causing build failure
-    // return TargetedPlatform().isIOS()
-    //     ? customAppBar.iOSAppBar(context, 'Additional Username')
-    //     : customAppBar.androidAppBar(context, 'Additional Username');
   }
 }

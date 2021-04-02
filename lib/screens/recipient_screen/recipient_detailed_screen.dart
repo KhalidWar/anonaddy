@@ -7,7 +7,6 @@ import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -274,7 +273,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
   }
 
   Widget buildAppBar(BuildContext context, Function removeRecipient) {
-    final customAppBar = CustomAppBar();
     final confirmationDialog = ConfirmationDialog();
 
     void remove() {
@@ -290,25 +288,29 @@ class RecipientDetailedScreen extends ConsumerWidget {
         onPressed: () => Navigator.pop(context),
       ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () => showModal(
-            context: context,
-            builder: (context) {
-              return isIOS
-                  ? confirmationDialog.iOSAlertDialog(context,
-                      kDeleteRecipientDialogText, remove, 'Delete recipient')
-                  : confirmationDialog.androidAlertDialog(context,
-                      kDeleteRecipientDialogText, remove, 'Delete recipient');
-            },
-          ),
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) {
+            return ['Delete recipient'].map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+          onSelected: (String choice) {
+            showModal(
+              context: context,
+              builder: (context) {
+                return isIOS
+                    ? confirmationDialog.iOSAlertDialog(context,
+                        kDeleteRecipientDialogText, remove, 'Delete recipient')
+                    : confirmationDialog.androidAlertDialog(context,
+                        kDeleteRecipientDialogText, remove, 'Delete recipient');
+              },
+            );
+          },
         ),
       ],
     );
-
-    //todo fix CupertinoNavigationBar causing build failure
-    // return isIOS
-    //     ? customAppBar.iOSAppBar(context, 'Recipient')
-    //     : customAppBar.androidAppBar(context, 'Recipient');
   }
 }
