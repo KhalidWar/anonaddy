@@ -9,7 +9,6 @@ import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_pie_chart.dart';
-import 'package:anonaddy/widgets/custom_app_bar.dart';
 import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -326,14 +325,14 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildAppBar(BuildContext context) {
-    final customAppBar = CustomAppBar();
-
-    return customAppBar.androidAppBar(context, 'Alias');
-
-    //todo fix CupertinoNavigationBar causing build failure
-    // return isIOS
-    //     ? customAppBar.iOSAppBar(context, 'Alias')
-    //     : customAppBar.androidAppBar(context, 'Alias');
+  PreferredSizeWidget buildAppBar(BuildContext context) {
+    return AppBar(
+      title: Text('Alias', style: TextStyle(color: Colors.white)),
+      leading: IconButton(
+        icon: Icon(isIOS ? CupertinoIcons.back : Icons.arrow_back),
+        color: Colors.white,
+        onPressed: () => Navigator.pop(context),
+      ),
+    );
   }
 }
