@@ -34,28 +34,25 @@ class UsernameDetailedScreen extends ConsumerWidget {
     return Scaffold(
       appBar: buildAppBar(context, username.id),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(4),
+        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: size.width * 0.03),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.account_circle_outlined,
-                    size: size.height * 0.035,
-                  ),
-                  SizedBox(width: size.width * 0.02),
-                  Text(
-                    username.username,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                Icon(
+                  Icons.account_circle_outlined,
+                  size: size.height * 0.035,
+                ),
+                SizedBox(width: size.width * 0.02),
+                Text(
+                  username.username,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
             Divider(height: size.height * 0.01),
             AliasDetailListTile(
@@ -102,47 +99,64 @@ class UsernameDetailedScreen extends ConsumerWidget {
                     context, textEditingController, username),
               ),
             ),
-            Divider(height: 0),
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: Text(
-                'Default Recipient',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
+            Divider(height: size.height * 0.02),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Default Recipient',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
                 if (username.defaultRecipient == null)
                   Container(
-                    padding: EdgeInsets.all(20),
-                    child: Text('No default recipient found'),
-                  )
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text('No default recipient found'))
                 else
                   RecipientListTile(
                     recipientDataModel: username.defaultRecipient,
                   ),
               ],
             ),
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: Text('Associated Aliases',
-                  style: Theme.of(context).textTheme.bodyText1),
+            Divider(height: size.height * 0.02),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                username.aliases.isEmpty
-                    ? Container(
-                        padding: EdgeInsets.all(20),
-                        child: Text('No aliases found'))
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: username.aliases.length,
-                        itemBuilder: (context, index) {
-                          return AliasListTile(
-                            aliasData: username.aliases[index],
-                          );
-                        },
-                      ),
+                Row(
+                  children: [
+                    Text(
+                      'Associated Aliases',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Container(height: 36),
+                  ],
+                ),
+                if (username.aliases.isEmpty)
+                  Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text('No aliases found'))
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: username.aliases.length,
+                    itemBuilder: (context, index) {
+                      return AliasListTile(
+                        aliasData: username.aliases[index],
+                      );
+                    },
+                  ),
               ],
             ),
-            SizedBox(height: size.height * 0.02),
+            Divider(height: size.height * 0.03),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
