@@ -60,8 +60,8 @@ class UsernameStateManager extends ChangeNotifier {
       activeSwitchLoading = false;
     } else {
       await usernameProvider.activateUsername(usernameID).then((value) {
+        activeSwitchValue = value.active;
         showToast('Username Activated Successfully!');
-        activeSwitchValue = true;
       }).catchError((error) {
         showToast(error.toString());
       });
@@ -83,8 +83,8 @@ class UsernameStateManager extends ChangeNotifier {
       catchAllSwitchLoading = false;
     } else {
       await usernameProvider.activateCatchAll(usernameID).then((value) {
+        catchAllSwitchValue = value.catchAll;
         showToast('Catch All Activated Successfully!');
-        catchAllSwitchValue = true;
       }).catchError((error) {
         showToast(error.toString());
       });

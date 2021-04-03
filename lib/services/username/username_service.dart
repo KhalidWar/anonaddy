@@ -120,7 +120,7 @@ class UsernameService {
     }
   }
 
-  Future activateUsername(String usernameID) async {
+  Future<UsernameDataModel> activateUsername(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
@@ -136,7 +136,7 @@ class UsernameService {
 
       if (response.statusCode == 200) {
         print("activateUsername ${response.statusCode}");
-        return 200;
+        return UsernameDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print("activateUsername ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -170,7 +170,7 @@ class UsernameService {
     }
   }
 
-  Future activateCatchAll(String usernameID) async {
+  Future<UsernameDataModel> activateCatchAll(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
@@ -186,7 +186,7 @@ class UsernameService {
 
       if (response.statusCode == 200) {
         print("activateCatchAll ${response.statusCode}");
-        return 200;
+        return UsernameDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print("activateCatchAll ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);

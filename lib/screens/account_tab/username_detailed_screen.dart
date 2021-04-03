@@ -36,35 +36,28 @@ class UsernameDetailedScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: EdgeInsets.only(left: size.width * 0.03),
               child: Row(
                 children: [
-                  Icon(Icons.account_circle_outlined),
+                  Icon(
+                    Icons.account_circle_outlined,
+                    size: size.height * 0.035,
+                  ),
                   SizedBox(width: size.width * 0.02),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        username.username,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Text(username.description ?? 'No description'),
-                      Divider(
-                        height: 0,
-                        indent: size.width * 0.4,
-                        endIndent: size.width * 0.4,
-                        thickness: 2,
-                      ),
-                    ],
+                  Text(
+                    username.username,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
             ),
+            Divider(height: size.height * 0.01),
             AliasDetailListTile(
               title:
                   activeSwitch ? 'Username is active' : 'Username is inactive',
