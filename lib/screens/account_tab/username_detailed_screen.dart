@@ -1,6 +1,8 @@
 import 'package:animations/animations.dart';
+import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
@@ -18,7 +20,6 @@ class UsernameDetailedScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final usernameProvider = watch(usernameStateManagerProvider);
     final username = usernameProvider.usernameModel;
-
     final activeSwitch = usernameProvider.activeSwitchValue;
     final activeSwitchLoading = usernameProvider.activeSwitchLoading;
     final catchAllSwitch = usernameProvider.catchAllSwitchValue;
@@ -27,6 +28,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
     final toggleCatchAllAlias = usernameProvider.toggleCatchAllAlias;
 
     final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+    final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -96,6 +98,17 @@ class UsernameDetailedScreen extends ConsumerWidget {
                 ],
               ),
             ),
+            AliasDetailListTile(
+              title: username.description ?? 'No description',
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Username description',
+              leadingIconData: Icons.comment,
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () => buildEditDescriptionDialog(
+                    context, textEditingController, username),
+              ),
+            ),
             Divider(height: 0),
             ExpansionTile(
               initiallyExpanded: true,
@@ -154,6 +167,71 @@ class UsernameDetailedScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future buildEditDescriptionDialog(BuildContext context,
+      TextEditingController textEditingController, UsernameDataModel username) {
+    void editDesc() {
+      context.read(usernameStateManagerProvider).editDescription(
+          context, username.id, textEditingController.text.trim());
+    }
+
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final size = MediaQuery.of(context).size;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Column(
+            children: [
+              Divider(
+                thickness: 3,
+                indent: size.width * 0.4,
+                endIndent: size.width * 0.4,
+              ),
+              SizedBox(height: size.height * 0.01),
+              Text(
+                'Update description',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Divider(thickness: 1),
+              SizedBox(height: size.height * 0.01),
+              Text('Update description for'),
+              Text(
+                '${username.username}',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              SizedBox(height: size.height * 0.02),
+              Form(
+                key: context
+                    .read(usernameStateManagerProvider)
+                    .editDescriptionFormKey,
+                child: TextFormField(
+                  autofocus: true,
+                  controller: textEditingController,
+                  validator: (input) =>
+                      FormValidator().validateDescriptionField(input),
+                  onFieldSubmitted: (toggle) => editDesc(),
+                  decoration: kTextFormFieldDecoration.copyWith(
+                    hintText: '${username.description}',
+                  ),
+                ),
+              ),
+              SizedBox(height: size.height * 0.02),
+              RaisedButton(
+                child: Text('Update description'),
+                onPressed: () => editDesc(),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

@@ -2,7 +2,7 @@ import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 
 class UsernameDataModel {
-  const UsernameDataModel({
+  UsernameDataModel({
     this.id,
     this.userId,
     this.username,
@@ -18,7 +18,7 @@ class UsernameDataModel {
   final String id;
   final String userId;
   final String username;
-  final String description;
+  String description;
   final List<AliasDataModel> aliases;
   final RecipientDataModel defaultRecipient;
   final bool active;
@@ -45,6 +45,19 @@ class UsernameDataModel {
       catchAll: json["catch_all"],
       createdAt: DateTime.parse(json["created_at"]),
       updatedAt: DateTime.parse(json["updated_at"]),
+    );
+  }
+
+  factory UsernameDataModel.fromJsonData(Map<String, dynamic> json) {
+    return UsernameDataModel(
+      id: json['data']["id"],
+      userId: json['data']["user_id"],
+      username: json['data']["username"],
+      description: json['data']["description"],
+      active: json['data']["active"],
+      catchAll: json['data']["catch_all"],
+      createdAt: DateTime.parse(json['data']["created_at"]),
+      updatedAt: DateTime.parse(json['data']["updated_at"]),
     );
   }
 }

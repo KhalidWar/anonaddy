@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
@@ -61,6 +62,33 @@ class UsernameService {
         return UsernameModel.fromJson(jsonDecode(response.body));
       } else {
         print("createNewUsername ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<UsernameDataModel> editUsernameDescription(
+      String usernameID, String description) async {
+    final accessToken = await _accessTokenService.getAccessToken();
+    try {
+      final response = await http.patch(
+        Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+        body: jsonEncode({"description": description}),
+      );
+
+      if (response.statusCode == 200) {
+        print("editUsernameDescription ${response.statusCode}");
+        return UsernameDataModel.fromJsonData(jsonDecode(response.body));
+      } else {
+        print("editUsernameDescription ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
     } catch (e) {

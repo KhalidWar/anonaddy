@@ -12,7 +12,7 @@ class AddNewUsername extends StatelessWidget {
   Widget build(BuildContext context) {
     final usernameManager = context.read(usernameStateManagerProvider);
     final createNewUsername = usernameManager.createNewUsername;
-    final usernameFormKey = usernameManager.usernameFormKey;
+    final usernameFormKey = usernameManager.createUsernameFormKey;
 
     final size = MediaQuery.of(context).size;
 

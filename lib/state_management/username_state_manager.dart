@@ -18,7 +18,8 @@ class UsernameStateManager extends ChangeNotifier {
   bool _activeSwitchLoading;
   bool _catchAllSwitchLoading;
 
-  final usernameFormKey = GlobalKey<FormState>();
+  final createUsernameFormKey = GlobalKey<FormState>();
+  final editDescriptionFormKey = GlobalKey<FormState>();
 
   get activeSwitchValue => _activeSwitchValue;
   get catchAllSwitchValue => _catchAllSwitchValue;
@@ -92,7 +93,7 @@ class UsernameStateManager extends ChangeNotifier {
   }
 
   Future<void> createNewUsername(BuildContext context, String username) async {
-    if (usernameFormKey.currentState.validate()) {
+    if (createUsernameFormKey.currentState.validate()) {
       await context
           .read(usernameServiceProvider)
           .createNewUsername(username)
@@ -100,6 +101,21 @@ class UsernameStateManager extends ChangeNotifier {
         print(value);
         showToast('Username added successfully!');
         Navigator.pop(context);
+      }).catchError((error) {
+        showToast(error.toString());
+      });
+    }
+  }
+
+  Future editDescription(BuildContext context, usernameID, description) async {
+    if (editDescriptionFormKey.currentState.validate()) {
+      await context
+          .read(usernameServiceProvider)
+          .editUsernameDescription(usernameID, description)
+          .then((value) {
+        Navigator.pop(context);
+        usernameModel.description = value.description;
+        showToast('Description updated successfully!');
       }).catchError((error) {
         showToast(error.toString());
       });
