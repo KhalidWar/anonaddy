@@ -1,5 +1,6 @@
 import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
@@ -69,9 +70,15 @@ class AdditionalUsername extends ConsumerWidget {
                   ),
                 ),
                 onTap: () {
+                  final usernameStateProvider =
+                      context.read(usernameStateManagerProvider);
+                  usernameStateProvider.usernameModel = username;
+                  usernameStateProvider.activeSwitchValue = username.active;
+                  usernameStateProvider.catchAllSwitchValue = username.catchAll;
+
                   Navigator.push(
                     context,
-                    CustomPageRoute(UsernameDetailedScreen(username: username)),
+                    CustomPageRoute(UsernameDetailedScreen()),
                   );
                 },
               );

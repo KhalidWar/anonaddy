@@ -9,7 +9,9 @@ const String kAliasesURL = 'aliases';
 const String kEncryptedRecipient = 'encrypted-recipients';
 const String kRecipientsURL = 'recipients';
 const String kRecipientKeys = 'recipient-keys';
+const kActiveUsernamesURL = 'active-usernames';
 const kUsernamesURL = 'usernames';
+const kCatchAllUsernameURL = 'catch-all-usernames';
 const kDomainsURL = 'domains';
 
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';

@@ -1,12 +1,11 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/account_card_header.dart';
 import 'package:anonaddy/widgets/alias_created_at_widget.dart';
 import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
 import 'package:anonaddy/widgets/alias_list_tile.dart';
+import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,20 +13,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
 
-class UsernameDetailedScreen extends StatefulWidget {
-  const UsernameDetailedScreen({Key key, this.username}) : super(key: key);
-
-  final UsernameDataModel username;
-
+class UsernameDetailedScreen extends ConsumerWidget {
   @override
-  _UsernameDetailedScreenState createState() => _UsernameDetailedScreenState();
-}
+  Widget build(BuildContext context, ScopedReader watch) {
+    final usernameProvider = watch(usernameStateManagerProvider);
+    final username = usernameProvider.usernameModel;
 
-class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
-  @override
-  Widget build(BuildContext context) {
-    final username = widget.username;
+    final activeSwitch = usernameProvider.activeSwitchValue;
+    final activeSwitchLoading = usernameProvider.activeSwitchLoading;
+    final catchAllSwitch = usernameProvider.catchAllSwitchValue;
+    final catchAllSwitchLoading = usernameProvider.catchAllSwitchLoading;
+    final toggleActiveAlias = usernameProvider.toggleActiveAlias;
+    final toggleCatchAllAlias = usernameProvider.toggleCatchAllAlias;
 
+    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -36,30 +35,66 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
         padding: EdgeInsets.all(4),
         child: Column(
           children: [
-            AccountCardHeader(
-              title: username.username,
-              subtitle: username.description ?? 'No description',
+            Padding(
+              padding: EdgeInsets.only(left: size.width * 0.03),
+              child: Row(
+                children: [
+                  Icon(Icons.account_circle_outlined),
+                  SizedBox(width: size.width * 0.02),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        username.username,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Text(username.description ?? 'No description'),
+                      Divider(
+                        height: 0,
+                        indent: size.width * 0.4,
+                        endIndent: size.width * 0.4,
+                        thickness: 2,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: username.active == true ? 'Yes' : 'No',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Is active?',
-                    leadingIconData: Icons.toggle_off_outlined,
+            AliasDetailListTile(
+              title:
+                  activeSwitch ? 'Username is active' : 'Username is inactive',
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Activity',
+              leadingIconData: Icons.toggle_off_outlined,
+              trailing: Row(
+                children: [
+                  activeSwitchLoading ? customLoading : Container(),
+                  Switch.adaptive(
+                    value: activeSwitch,
+                    onChanged: (toggle) =>
+                        toggleActiveAlias(context, username.id),
                   ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: username.catchAll == true ? 'Yes' : 'No',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Is catch all?',
-                    leadingIconData: Icons.repeat,
+                ],
+              ),
+            ),
+            AliasDetailListTile(
+              title: catchAllSwitch ? 'Enabled' : 'Disabled',
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Catch All',
+              leadingIconData: Icons.repeat,
+              trailing: Row(
+                children: [
+                  catchAllSwitchLoading ? customLoading : Container(),
+                  Switch.adaptive(
+                    value: catchAllSwitch,
+                    onChanged: (toggle) =>
+                        toggleCatchAllAlias(context, username.id),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Divider(height: 0),
             ExpansionTile(

@@ -91,4 +91,104 @@ class UsernameService {
       throw e;
     }
   }
+
+  Future activateUsername(String usernameID) async {
+    final accessToken = await _accessTokenService.getAccessToken();
+    try {
+      final response = await http.post(
+        Uri.encodeFull('$kBaseURL/$kActiveUsernamesURL'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+        body: json.encode({"id": "$usernameID"}),
+      );
+
+      if (response.statusCode == 200) {
+        print("activateUsername ${response.statusCode}");
+        return 200;
+      } else {
+        print("activateUsername ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future deactivateUsername(String usernameID) async {
+    final accessToken = await _accessTokenService.getAccessToken();
+    try {
+      final response = await http.delete(
+          Uri.encodeFull('$kBaseURL/$kActiveUsernamesURL/$usernameID'),
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $accessToken",
+          });
+
+      if (response.statusCode == 204) {
+        print("deactivateUsername ${response.statusCode}");
+        return 204;
+      } else {
+        print("deactivateUsername ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future activateCatchAll(String usernameID) async {
+    final accessToken = await _accessTokenService.getAccessToken();
+    try {
+      final response = await http.post(
+        Uri.encodeFull('$kBaseURL/$kCatchAllUsernameURL'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+        body: json.encode({"id": "$usernameID"}),
+      );
+
+      if (response.statusCode == 200) {
+        print("activateCatchAll ${response.statusCode}");
+        return 200;
+      } else {
+        print("activateCatchAll ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future deactivateCatchAll(String usernameID) async {
+    final accessToken = await _accessTokenService.getAccessToken();
+    try {
+      final response = await http.delete(
+          Uri.encodeFull('$kBaseURL/$kCatchAllUsernameURL/$usernameID'),
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $accessToken",
+          });
+
+      if (response.statusCode == 204) {
+        print("deactivateCatchAll ${response.statusCode}");
+        return 204;
+      } else {
+        print("deactivateCatchAll ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 }
