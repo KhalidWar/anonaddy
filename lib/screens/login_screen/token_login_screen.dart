@@ -184,7 +184,7 @@ class TokenLoginScreen extends ConsumerWidget {
           title: Text('How to get Access Token?'),
           content: Text(kGetAccessToken),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text('Get Token Now!'),
               onPressed: () async {
                 await launch(kAnonAddySettingsAPIURL)
@@ -198,7 +198,7 @@ class TokenLoginScreen extends ConsumerWidget {
                 });
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Cancel'),
               onPressed: () => Navigator.pop(context),
             ),

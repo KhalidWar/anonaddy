@@ -136,7 +136,8 @@ class AliasTab extends ConsumerWidget {
                             },
                           ),
                           Divider(),
-                          FlatButton(
+                          TextButton(
+                            style: TextButton.styleFrom(),
                             child: Text('View all deleted aliases'),
                             onPressed: () {
                               Navigator.push(
