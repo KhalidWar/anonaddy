@@ -86,13 +86,12 @@ class _AliasDefaultRecipientScreenState
         ),
         SizedBox(height: size.height * 0.01),
         Text(
-          ' Update Alias Recipients',
+          'Update Alias Recipients',
           style: Theme.of(context).textTheme.headline6,
         ),
-        Divider(thickness: 1),
-        SizedBox(height: size.height * 0.01),
+        Divider(thickness: 1, height: size.height * 0.03),
         Text(kUpdateAliasRecipients),
-        SizedBox(height: size.height * 0.01),
+        Divider(height: size.height * 0.02),
         if (_verifiedRecipients.isEmpty)
           Padding(
             padding: EdgeInsets.all(20),
