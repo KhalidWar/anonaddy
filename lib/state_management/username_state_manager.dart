@@ -122,6 +122,21 @@ class UsernameStateManager extends ChangeNotifier {
     }
   }
 
+  Future updateDefaultRecipient(
+      BuildContext context, usernameID, recipientID) async {
+    await context
+        .read(usernameServiceProvider)
+        .updateDefaultRecipient(usernameID, recipientID)
+        .then((value) {
+      usernameModel.defaultRecipient = value.defaultRecipient;
+      notifyListeners();
+      showToast('Default recipient updated successfully!');
+      Navigator.pop(context);
+    }).catchError((error) {
+      showToast(error.toString());
+    });
+  }
+
   Future<void> deleteUsername(BuildContext context, String usernameID) async {
     Navigator.pop(context);
     await context

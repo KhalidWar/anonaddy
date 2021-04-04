@@ -120,6 +120,34 @@ class UsernameService {
     }
   }
 
+  Future<UsernameDataModel> updateDefaultRecipient(
+      String usernameID, String recipientID) async {
+    final accessToken = await _accessTokenService.getAccessToken();
+    try {
+      final response = await http.patch(
+        Uri.encodeFull(
+            '$kBaseURL/$kUsernamesURL/$usernameID/$kDefaultRecipientURL'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+        body: jsonEncode({"default_recipient": recipientID}),
+      );
+
+      if (response.statusCode == 200) {
+        print("updateDefaultRecipient ${response.statusCode}");
+        return UsernameDataModel.fromJsonData(jsonDecode(response.body));
+      } else {
+        print("updateDefaultRecipient ${response.statusCode}");
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<UsernameDataModel> activateUsername(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {

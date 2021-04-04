@@ -20,7 +20,7 @@ class UsernameDataModel {
   final String username;
   String description;
   final List<AliasDataModel> aliases;
-  final RecipientDataModel defaultRecipient;
+  RecipientDataModel defaultRecipient;
   final bool active;
   final bool catchAll;
   final DateTime createdAt;
@@ -54,6 +54,10 @@ class UsernameDataModel {
       userId: json['data']["user_id"],
       username: json['data']["username"],
       description: json['data']["description"],
+      defaultRecipient: json['data']["default_recipient"] == null
+          ? null
+          : RecipientDataModel.fromJsonRecipientNoAliases(
+              json['data']["default_recipient"]),
       active: json['data']["active"],
       catchAll: json['data']["catch_all"],
       createdAt: DateTime.parse(json['data']["created_at"]),

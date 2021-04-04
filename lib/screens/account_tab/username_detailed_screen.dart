@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/screens/account_tab/username_default_recipient.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -56,6 +57,17 @@ class UsernameDetailedScreen extends ConsumerWidget {
             ),
             Divider(height: size.height * 0.01),
             AliasDetailListTile(
+              title: username.description ?? 'No description',
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Username description',
+              leadingIconData: Icons.comment,
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () => buildEditDescriptionDialog(
+                    context, textEditingController, username),
+              ),
+            ),
+            AliasDetailListTile(
               title:
                   activeSwitch ? 'Username is active' : 'Username is inactive',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
@@ -88,17 +100,6 @@ class UsernameDetailedScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            AliasDetailListTile(
-              title: username.description ?? 'No description',
-              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-              subtitle: 'Username description',
-              leadingIconData: Icons.comment,
-              trailing: IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () => buildEditDescriptionDialog(
-                    context, textEditingController, username),
-              ),
-            ),
             Divider(height: size.height * 0.02),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +113,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.edit),
-                      onPressed: () {},
+                      onPressed: () =>
+                          buildUpdateDefaultRecipient(context, username),
                     ),
                   ],
                 ),
@@ -236,6 +238,27 @@ class UsernameDetailedScreen extends ConsumerWidget {
                 onPressed: () => editDesc(),
               ),
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future buildUpdateDefaultRecipient(
+      BuildContext context, UsernameDataModel username) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: UsernameDefaultRecipientScreen(username),
           ),
         );
       },

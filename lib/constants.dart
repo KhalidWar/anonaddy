@@ -12,6 +12,7 @@ const String kRecipientKeys = 'recipient-keys';
 const kActiveUsernamesURL = 'active-usernames';
 const kUsernamesURL = 'usernames';
 const kCatchAllUsernameURL = 'catch-all-usernames';
+const kDefaultRecipientURL = 'default-recipient';
 const kDomainsURL = 'domains';
 
 const kAnonAddySettingsAPIURL = 'https://app.anonaddy.com/settings';
@@ -54,6 +55,8 @@ const kDeleteUsername =
     'Are you sure you want to delete this username? This will also delete all aliases associated with this username.\n\nYou will no longer be able to receive any emails at this username subdomain.\n\nThis will still count towards your additional username limit even once deleted.';
 const kReachedUsernameLimit = 'You have reached your additional username limit';
 const kReachedRecipientLimit = 'You have reached your recipient limit';
+const kUpdateUsernameDefaultRecipient =
+    'Select the default recipient for this username. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
 
 /// Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
