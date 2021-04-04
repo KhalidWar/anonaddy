@@ -1,6 +1,5 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants.dart';
 
 ThemeData lightTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,

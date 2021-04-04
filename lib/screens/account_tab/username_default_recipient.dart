@@ -1,12 +1,12 @@
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
 
 class UsernameDefaultRecipientScreen extends StatefulWidget {
   const UsernameDefaultRecipientScreen(this.username);

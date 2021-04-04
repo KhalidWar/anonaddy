@@ -1,20 +1,20 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/screens/account_tab/username_default_recipient.dart';
+import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
+import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
+import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
+import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/alias_created_at_widget.dart';
-import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
-import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/custom_loading_indicator.dart';
-import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
 
 class UsernameDetailedScreen extends ConsumerWidget {
   @override

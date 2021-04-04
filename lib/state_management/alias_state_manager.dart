@@ -1,13 +1,14 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/toast_messages.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../constants.dart';
 
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager() {
@@ -206,14 +207,14 @@ class AliasStateManager extends ChangeNotifier {
 
   String correctAliasString(String input) {
     switch (input) {
-      case 'uuid':
-        return 'UUID';
       case 'random_characters':
         return 'Random Characters';
       case 'random_words':
         return 'Random Words';
       case 'custom':
         return 'Custom (not available on shared domains)';
+      default:
+        return 'UUID';
     }
   }
 }

@@ -1,8 +1,7 @@
+import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
 
 class Domains extends ConsumerWidget {
   @override

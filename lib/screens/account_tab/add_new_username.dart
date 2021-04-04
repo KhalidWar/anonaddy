@@ -1,9 +1,9 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
 
 class AddNewUsername extends StatelessWidget {
   final _textEditController = TextEditingController();

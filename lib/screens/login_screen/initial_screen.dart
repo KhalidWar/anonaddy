@@ -1,8 +1,8 @@
-import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
-import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

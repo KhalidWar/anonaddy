@@ -1,19 +1,20 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
+import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
+import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/alias_created_at_widget.dart';
-import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
-import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../constants.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
   RecipientDetailedScreen({this.recipientData});

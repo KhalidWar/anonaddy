@@ -1,14 +1,14 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/loading_indicator.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/loading_indicator.dart';
-import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
 
 class CreateNewAlias extends ConsumerWidget {
   @override
@@ -39,7 +39,8 @@ class CreateNewAlias extends ConsumerWidget {
     List<DropdownMenuItem<String>> dropdownMenuItems() {
       if (aliasStateProvider.aliasDomain == '4wrd.cc' ||
           aliasStateProvider.aliasDomain == 'anonaddy.me' ||
-          aliasStateProvider.aliasDomain == 'mailer.me') {
+          aliasStateProvider.aliasDomain == 'mailer.me' ||
+          aliasStateProvider.aliasDomain == 'addymail.com') {
         if (subscription == 'free') {
           return freeTierWithSharedDomain
               .map<DropdownMenuItem<String>>((value) {

@@ -1,4 +1,7 @@
 import 'package:animations/animations.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../constants.dart';
 
 class TokenLoginScreen extends ConsumerWidget {
   final _textEditingController = TextEditingController();
@@ -187,7 +188,7 @@ class TokenLoginScreen extends ConsumerWidget {
             TextButton(
               child: Text('Get Token Now!'),
               onPressed: () async {
-                await launch(kAnonAddySettingsAPIURL)
+                await launch(kAnonAddySettingsURL)
                     .catchError((error, stackTrace) {
                   throw Fluttertoast.showToast(
                     msg: error.message,

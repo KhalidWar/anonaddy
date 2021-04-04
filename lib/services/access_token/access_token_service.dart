@@ -1,10 +1,9 @@
 import 'dart:io';
 
+import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-
-import '../../constants.dart';
 
 class AccessTokenService {
   final _secureStorage = FlutterSecureStorage();

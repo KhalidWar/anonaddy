@@ -1,15 +1,15 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/screens/app_settings/about_app_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
 
 class AppSettings extends StatefulWidget {
   @override

@@ -4,10 +4,9 @@ import 'dart:io';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
-
-import '../../constants.dart';
 
 class DomainOptionsService {
   final _accessTokenService = AccessTokenService();
@@ -17,7 +16,7 @@ class DomainOptionsService {
 
     try {
       final response = await http.get(
-        Uri.encodeFull('$kBaseURL/domain-options'),
+        Uri.encodeFull('$kBaseURL/$kDomainsOptionsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

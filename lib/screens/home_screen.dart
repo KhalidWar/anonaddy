@@ -1,15 +1,15 @@
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/custom_page_route.dart';
+import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
-import 'package:anonaddy/widgets/custom_page_route.dart';
-import 'package:anonaddy/widgets/no_internet_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../constants.dart';
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'alias_tab/create_new_alias.dart';

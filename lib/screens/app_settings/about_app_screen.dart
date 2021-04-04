@@ -1,3 +1,5 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -6,8 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../constants.dart';
 
 class AboutAppScreen extends StatelessWidget {
   final packageInfoProvider =
@@ -72,14 +72,14 @@ class AboutAppScreen extends StatelessWidget {
                 title: Text('Khalid Warsame'),
                 subtitle: Text('AddyManager developer'),
                 trailing: Icon(Icons.open_in_new_outlined),
-                onTap: () => launchUrl(kKhalidWarGithub),
+                onTap: () => launchUrl(kKhalidWarGithubURL),
               ),
               Divider(height: 0),
               ListTile(
                 title: Text('Will Browning (AnonAddy team)'),
                 subtitle: Text('Contributor'),
                 trailing: Icon(Icons.open_in_new_outlined),
-                onTap: () => launchUrl(kWillBrowningGithub),
+                onTap: () => launchUrl(kWillBrowningGithubURL),
               ),
               Divider(height: 0),
               ListTile(
@@ -88,14 +88,14 @@ class AboutAppScreen extends StatelessWidget {
                   'Open an issue for bugs, feature requests, and suggestions.',
                 ),
                 trailing: Icon(Icons.bug_report_outlined),
-                onTap: () => launchUrl(kAddyManagerIssue),
+                onTap: () => launchUrl(kAddyManagerIssuesURL),
               ),
               Divider(height: 0),
               ListTile(
                 title: Text('AddyManager License'),
                 subtitle: Text('MIT License'),
                 trailing: Icon(Icons.description),
-                onTap: () => launchUrl(kAddyManagerLicense),
+                onTap: () => launchUrl(kAddyManagerLicenseURL),
               ),
               Divider(height: 0),
               ListTile(

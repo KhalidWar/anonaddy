@@ -1,13 +1,12 @@
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
-import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
 import 'package:secure_application/secure_gate.dart';
-
-import '../../constants.dart';
 
 class SecureGateScreen extends StatefulWidget {
   const SecureGateScreen({Key key, this.child}) : super(key: key);
