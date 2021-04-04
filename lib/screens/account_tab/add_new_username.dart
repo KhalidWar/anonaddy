@@ -52,7 +52,10 @@ class AddNewUsername extends StatelessWidget {
             ),
           ),
           SizedBox(height: size.height * 0.02),
-          RaisedButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom().copyWith(
+              minimumSize: MaterialStateProperty.all(Size(200, 50)),
+            ),
             child: Text('Add Username'),
             onPressed: () => createUsername(),
           ),

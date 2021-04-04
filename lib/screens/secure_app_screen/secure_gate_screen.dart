@@ -1,5 +1,4 @@
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
-import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +89,8 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    RaisedButton(
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(),
                       child: Container(
                         height: 40,
                         child: Center(
@@ -102,7 +102,8 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
                       ),
                       onPressed: () => authenticate(),
                     ),
-                    RaisedButton(
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(),
                       child: Container(
                         height: 40,
                         child: Center(

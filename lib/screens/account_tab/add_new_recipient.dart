@@ -52,7 +52,10 @@ class AddNewRecipient extends StatelessWidget {
               SizedBox(height: 10),
               isLoading
                   ? CustomLoadingIndicator().customLoadingIndicator()
-                  : RaisedButton(
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom().copyWith(
+                        minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                      ),
                       child: Text('Add Recipient'),
                       onPressed: () =>
                           addRecipient(context, textEditController.text.trim()),

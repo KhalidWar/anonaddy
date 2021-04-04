@@ -233,7 +233,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: size.height * 0.02),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(),
                 child: Text('Update description'),
                 onPressed: () => editDesc(),
               ),

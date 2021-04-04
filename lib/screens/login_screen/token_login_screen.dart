@@ -140,7 +140,8 @@ class TokenLoginScreen extends ConsumerWidget {
                         ),
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-                        child: RaisedButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(),
                           key: Key('loginButton'),
                           child: isLoading
                               ? CircularProgressIndicator(
@@ -183,7 +184,7 @@ class TokenLoginScreen extends ConsumerWidget {
           title: Text('How to get Access Token?'),
           content: Text(kGetAccessToken),
           actions: [
-            RaisedButton(
+            FlatButton(
               child: Text('Get Token Now!'),
               onPressed: () async {
                 await launch(kAnonAddySettingsAPIURL)
@@ -197,7 +198,7 @@ class TokenLoginScreen extends ConsumerWidget {
                 });
               },
             ),
-            RaisedButton(
+            FlatButton(
               child: Text('Cancel'),
               onPressed: () => Navigator.pop(context),
             ),

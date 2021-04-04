@@ -123,7 +123,8 @@ class _AliasDefaultRecipientScreenState
             ),
           ),
         SizedBox(height: size.height * 0.02),
-        RaisedButton(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(),
           child: Text('Update Default Recipients'),
           onPressed: () =>
               context.read(usernameStateManagerProvider).updateDefaultRecipient(

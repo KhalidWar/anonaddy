@@ -261,7 +261,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: size.height * 0.01),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(),
                 child: Text('Add Key'),
                 onPressed: () => addPublicKey(),
               ),

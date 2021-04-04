@@ -23,7 +23,7 @@ void main() {
     // Arrange
     final loginState = LoginStateManager();
     final textEditingController = TextEditingController();
-    final mockHttp = MockHttp();
+    // final mockHttp = MockHttp();
 
     // Act
     await Clipboard.setData(ClipboardData(text: 'data'));
