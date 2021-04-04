@@ -31,13 +31,7 @@ class AliasStateManager extends ChangeNotifier {
   final paidTierWithSharedDomain = [kUUID, kRandomChars, kRandomWords];
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
 
-  List<AliasDataModel> availableAliasList = [];
-  List<AliasDataModel> deletedAliasList = [];
-  List<int> forwardedList = [];
-  List<int> blockedList = [];
-  List<int> repliedList = [];
-  List<int> sentList = [];
-
+  List<AliasDataModel> allAliasesList = [];
   List<AliasDataModel> recentSearchesList = [];
 
   bool get isToggleLoading => _isToggleLoading;
@@ -78,15 +72,6 @@ class AliasStateManager extends ChangeNotifier {
   void setAliasRecipients(List<RecipientDataModel> recipients) {
     aliasDataModel.recipients = recipients;
     notifyListeners();
-  }
-
-  void clearAllLists() {
-    availableAliasList.clear();
-    deletedAliasList.clear();
-    forwardedList.clear();
-    blockedList.clear();
-    repliedList.clear();
-    sentList.clear();
   }
 
   void createNewAlias(BuildContext context, String desc, String domain,

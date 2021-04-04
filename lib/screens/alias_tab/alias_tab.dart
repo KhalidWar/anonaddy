@@ -15,25 +15,25 @@ import 'deleted_aliases_screen.dart';
 class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final size = MediaQuery.of(context).size;
     final aliasStream = watch(aliasDataStream);
 
     /// preloads domainOptions for create new alias screen
     watch(domainOptionsProvider);
 
-    final aliasDataProvider = watch(aliasStateManagerProvider);
-    final clearAllLists = aliasDataProvider.clearAllLists;
-    final availableAliasList = aliasDataProvider.availableAliasList;
-    final deletedAliasList = aliasDataProvider.deletedAliasList;
-    final forwardedList = aliasDataProvider.forwardedList;
-    final blockedList = aliasDataProvider.blockedList;
-    final repliedList = aliasDataProvider.repliedList;
-    final sentList = aliasDataProvider.sentList;
+    final aliasStateProvider = context.read(aliasStateManagerProvider);
+    final size = MediaQuery.of(context).size;
+
+    final List<AliasDataModel> availableAliasList = [];
+    final List<AliasDataModel> deletedAliasList = [];
+    final List<int> forwardedList = [];
+    final List<int> blockedList = [];
+    final List<int> repliedList = [];
+    final List<int> sentList = [];
 
     return aliasStream.when(
       loading: () => AliasShimmerLoading(),
       data: (data) {
-        clearAllLists();
+        aliasStateProvider.allAliasesList = data.aliasDataList;
 
         for (AliasDataModel alias in data.aliasDataList) {
           forwardedList.add(alias.emailsForwarded);

@@ -14,10 +14,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SearchTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final aliasManager = context.read(aliasStateManagerProvider);
-    final availableAliasList = aliasManager.availableAliasList;
-    final deletedAliasList = aliasManager.deletedAliasList;
-
     final size = MediaQuery.of(context).size;
 
     return Stack(
@@ -40,10 +36,9 @@ class SearchTab extends StatelessWidget {
               onTap: () {
                 showSearch(
                   context: context,
-                  delegate: SearchService([
-                    ...availableAliasList,
-                    ...deletedAliasList,
-                  ]),
+                  delegate: SearchService(
+                    context.read(aliasStateManagerProvider).allAliasesList,
+                  ),
                 );
               },
             ),
