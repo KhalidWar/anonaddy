@@ -34,17 +34,17 @@ final connectivityStreamProvider = StreamProvider.autoDispose<ConnectionStatus>(
     (ref) => ref.read(connectivityServiceProvider).streamController.stream);
 
 /// Future Providers
-final recipientsProvider = FutureProvider<RecipientModel>((ref) {
+final recipientsProvider = FutureProvider.autoDispose<RecipientModel>((ref) {
   final offlineData = ref.read(offlineDataProvider);
   return ref.read(recipientServiceProvider).getAllRecipient(offlineData);
 });
 
-final usernamesProvider = FutureProvider<UsernameModel>((ref) {
+final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
   final offlineData = ref.read(offlineDataProvider);
   return ref.read(usernameServiceProvider).getUsernameData(offlineData);
 });
 
-final domainsProvider = FutureProvider<DomainModel>((ref) async {
+final domainsProvider = FutureProvider.autoDispose<DomainModel>((ref) async {
   final offlineData = ref.read(offlineDataProvider);
   return await ref.read(domainsServiceProvider).getAllDomains(offlineData);
 });
