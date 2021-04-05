@@ -21,9 +21,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final usernameProvider = watch(usernameStateManagerProvider);
     final username = usernameProvider.usernameModel;
-    final activeSwitch = usernameProvider.activeSwitchValue;
     final activeSwitchLoading = usernameProvider.activeSwitchLoading;
-    final catchAllSwitch = usernameProvider.catchAllSwitchValue;
     final catchAllSwitchLoading = usernameProvider.catchAllSwitchLoading;
     final toggleActiveAlias = usernameProvider.toggleActiveAlias;
     final toggleCatchAllAlias = usernameProvider.toggleCatchAllAlias;
@@ -68,8 +66,9 @@ class UsernameDetailedScreen extends ConsumerWidget {
               ),
             ),
             AliasDetailListTile(
-              title:
-                  activeSwitch ? 'Username is active' : 'Username is inactive',
+              title: username.active
+                  ? 'Username is active'
+                  : 'Username is inactive',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Activity',
               leadingIconData: Icons.toggle_off_outlined,
@@ -77,7 +76,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                 children: [
                   activeSwitchLoading ? customLoading : Container(),
                   Switch.adaptive(
-                    value: activeSwitch,
+                    value: username.active,
                     onChanged: (toggle) =>
                         toggleActiveAlias(context, username.id),
                   ),
@@ -85,7 +84,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
               ),
             ),
             AliasDetailListTile(
-              title: catchAllSwitch ? 'Enabled' : 'Disabled',
+              title: username.catchAll ? 'Enabled' : 'Disabled',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Catch All',
               leadingIconData: Icons.repeat,
@@ -93,7 +92,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                 children: [
                   catchAllSwitchLoading ? customLoading : Container(),
                   Switch.adaptive(
-                    value: catchAllSwitch,
+                    value: username.catchAll,
                     onChanged: (toggle) =>
                         toggleCatchAllAlias(context, username.id),
                   ),

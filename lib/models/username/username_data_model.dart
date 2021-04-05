@@ -21,8 +21,8 @@ class UsernameDataModel {
   String description;
   final List<AliasDataModel> aliases;
   RecipientDataModel defaultRecipient;
-  final bool active;
-  final bool catchAll;
+  bool active;
+  bool catchAll;
   final DateTime createdAt;
   final DateTime updatedAt;
 

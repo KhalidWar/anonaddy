@@ -70,11 +70,8 @@ class AdditionalUsername extends ConsumerWidget {
                   ),
                 ),
                 onTap: () {
-                  final usernameStateProvider =
-                      context.read(usernameStateManagerProvider);
-                  usernameStateProvider.usernameModel = username;
-                  usernameStateProvider.activeSwitchValue = username.active;
-                  usernameStateProvider.catchAllSwitchValue = username.catchAll;
+                  context.read(usernameStateManagerProvider).usernameModel =
+                      username;
 
                   Navigator.push(
                     context,

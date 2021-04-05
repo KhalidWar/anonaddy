@@ -13,28 +13,14 @@ class UsernameStateManager extends ChangeNotifier {
 
   UsernameDataModel usernameModel;
 
-  bool _activeSwitchValue;
-  bool _catchAllSwitchValue;
   bool _activeSwitchLoading;
   bool _catchAllSwitchLoading;
 
   final createUsernameFormKey = GlobalKey<FormState>();
   final editDescriptionFormKey = GlobalKey<FormState>();
 
-  get activeSwitchValue => _activeSwitchValue;
-  get catchAllSwitchValue => _catchAllSwitchValue;
   get activeSwitchLoading => _activeSwitchLoading;
   get catchAllSwitchLoading => _catchAllSwitchLoading;
-
-  set activeSwitchValue(bool input) {
-    _activeSwitchValue = input;
-    notifyListeners();
-  }
-
-  set catchAllSwitchValue(bool input) {
-    _catchAllSwitchValue = input;
-    notifyListeners();
-  }
 
   set activeSwitchLoading(bool input) {
     _activeSwitchLoading = input;
@@ -50,17 +36,17 @@ class UsernameStateManager extends ChangeNotifier {
       BuildContext context, String usernameID) async {
     final usernameProvider = context.read(usernameServiceProvider);
     activeSwitchLoading = true;
-    if (_activeSwitchValue) {
+    if (usernameModel.active) {
       await usernameProvider.deactivateUsername(usernameID).then((value) {
         showToast('Username Deactivated Successfully!');
-        activeSwitchValue = false;
+        usernameModel.active = false;
       }).catchError((error) {
         showToast(error.toString());
       });
       activeSwitchLoading = false;
     } else {
       await usernameProvider.activateUsername(usernameID).then((value) {
-        activeSwitchValue = value.active;
+        usernameModel.active = true;
         showToast('Username Activated Successfully!');
       }).catchError((error) {
         showToast(error.toString());
@@ -73,17 +59,17 @@ class UsernameStateManager extends ChangeNotifier {
       BuildContext context, String usernameID) async {
     final usernameProvider = context.read(usernameServiceProvider);
     catchAllSwitchLoading = true;
-    if (_catchAllSwitchValue) {
+    if (usernameModel.catchAll) {
       await usernameProvider.deactivateCatchAll(usernameID).then((value) {
         showToast('Catch All Deactivated Successfully!');
-        catchAllSwitchValue = false;
+        usernameModel.catchAll = false;
       }).catchError((error) {
         showToast(error.toString());
       });
       catchAllSwitchLoading = false;
     } else {
       await usernameProvider.activateCatchAll(usernameID).then((value) {
-        catchAllSwitchValue = value.catchAll;
+        usernameModel.catchAll = true;
         showToast('Catch All Activated Successfully!');
       }).catchError((error) {
         showToast(error.toString());
