@@ -69,8 +69,6 @@ class AliasListTile extends ConsumerWidget {
       ),
       onTap: () {
         aliasDataProvider.aliasDataModel = aliasData;
-        aliasDataProvider.switchValue = aliasData.isAliasActive;
-
         Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
       },
     );

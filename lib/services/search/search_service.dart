@@ -61,7 +61,6 @@ class SearchService extends SearchDelegate {
             context.read(searchHistoryProvider).saveData(initialList[index]);
             aliasState.recentSearchesList.add(initialList[index]);
             aliasState.aliasDataModel = initialList[index];
-            aliasState.switchValue = initialList[index].isAliasActive;
             Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
           },
         );

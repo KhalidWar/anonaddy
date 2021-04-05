@@ -1,5 +1,4 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -17,7 +16,6 @@ class AliasStateManager extends ChangeNotifier {
 
   AliasDataModel aliasDataModel;
   bool _isToggleLoading;
-  bool _switchValue;
   String _aliasDomain;
   String _aliasFormat;
 
@@ -35,7 +33,6 @@ class AliasStateManager extends ChangeNotifier {
   List<AliasDataModel> recentSearchesList = [];
 
   bool get isToggleLoading => _isToggleLoading;
-  bool get switchValue => _switchValue;
   String get aliasDomain => _aliasDomain;
   String get aliasFormat => _aliasFormat;
 
@@ -51,26 +48,6 @@ class AliasStateManager extends ChangeNotifier {
 
   set isToggleLoading(bool input) {
     _isToggleLoading = input;
-    notifyListeners();
-  }
-
-  set switchValue(bool value) {
-    _switchValue = value;
-    notifyListeners();
-  }
-
-  void toggleSwitchValue() {
-    _switchValue = !_switchValue;
-    notifyListeners();
-  }
-
-  void setEmailDescription(String input) {
-    aliasDataModel.emailDescription = input;
-    notifyListeners();
-  }
-
-  void setAliasRecipients(List<RecipientDataModel> recipients) {
-    aliasDataModel.recipients = recipients;
     notifyListeners();
   }
 
@@ -127,10 +104,10 @@ class AliasStateManager extends ChangeNotifier {
   Future<void> toggleAlias(BuildContext context, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
     isToggleLoading = true;
-    if (_switchValue) {
+    if (aliasDataModel.isAliasActive) {
       await aliasService.deactivateAlias(aliasID).then((value) {
         showToast('Alias Deactivated Successfully!');
-        toggleSwitchValue();
+        aliasDataModel.isAliasActive = false;
       }).catchError((error) {
         showToast(error.toString());
       });
@@ -138,7 +115,7 @@ class AliasStateManager extends ChangeNotifier {
     } else {
       await aliasService.activateAlias(aliasID).then((value) {
         showToast('Alias Activated Successfully!');
-        toggleSwitchValue();
+        aliasDataModel.isAliasActive = true;
       }).catchError((error) {
         showToast(error.toString());
       });
@@ -154,7 +131,8 @@ class AliasStateManager extends ChangeNotifier {
           .editAliasDescription(aliasID, input)
           .then((value) {
         showToast(kEditDescSuccessful);
-        setEmailDescription(value.emailDescription);
+        aliasDataModel.emailDescription = value.emailDescription;
+        notifyListeners();
       }).catchError((error) {
         showToast(error.toString());
       });
@@ -168,7 +146,8 @@ class AliasStateManager extends ChangeNotifier {
         .read(aliasServiceProvider)
         .updateAliasDefaultRecipient(aliasID, recipients)
         .then((value) {
-      setAliasRecipients(value.recipients);
+      aliasDataModel.recipients = value.recipients;
+      notifyListeners();
       showToast(kUpdateAliasRecipientSuccessful);
     }).catchError((error) {
       showToast(error.toString());

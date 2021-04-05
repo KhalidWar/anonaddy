@@ -24,7 +24,6 @@ class AliasDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasDataProvider = watch(aliasStateManagerProvider);
     final aliasDataModel = aliasDataProvider.aliasDataModel;
-    final switchValue = aliasDataProvider.switchValue;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isToggleLoading = aliasDataProvider.isToggleLoading;
     final copyOnTap = aliasDataProvider.copyToClipboard;
@@ -52,7 +51,8 @@ class AliasDetailScreen extends ConsumerWidget {
             ),
             AliasDetailListTile(
               leadingIconData: Icons.flaky_outlined,
-              title: 'Alias is ${switchValue ? 'active' : 'inactive'}',
+              title:
+                  'Alias is ${aliasDataModel.isAliasActive ? 'active' : 'inactive'}',
               subtitle: 'Activity',
               trailing: Row(
                 children: [
@@ -60,7 +60,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       ? CustomLoadingIndicator().customLoadingIndicator()
                       : Container(),
                   Switch.adaptive(
-                    value: switchValue,
+                    value: aliasDataModel.isAliasActive,
                     onChanged: (toggle) =>
                         toggleAlias(context, aliasDataModel.aliasID),
                   ),
