@@ -26,7 +26,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final recipientStateProvider = watch(recipientStateManagerProvider);
-    final encryptionSwitch = recipientStateProvider.encryptionSwitch;
     final isLoading = recipientStateProvider.isLoading;
 
     final size = MediaQuery.of(context).size;
@@ -83,9 +82,12 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     ),
             ),
             AliasDetailListTile(
-              leadingIconData: encryptionSwitch ? Icons.lock : Icons.lock_open,
-              leadingIconColor: encryptionSwitch ? Colors.green : null,
-              title: '${encryptionSwitch ? 'Encrypted' : 'Not Encrypted'}',
+              leadingIconData:
+                  recipientData.shouldEncrypt ? Icons.lock : Icons.lock_open,
+              leadingIconColor:
+                  recipientData.shouldEncrypt ? Colors.green : null,
+              title:
+                  '${recipientData.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
               subtitle: 'Encryption',
               trailing: recipientData.fingerprint == null
                   ? Container()
@@ -95,7 +97,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                             ? CustomLoadingIndicator().customLoadingIndicator()
                             : Container(),
                         Switch.adaptive(
-                          value: encryptionSwitch,
+                          value: recipientData.shouldEncrypt,
                           onChanged: (toggle) => context
                               .read(recipientStateManagerProvider)
                               .toggleEncryption(context, recipientData.id),
@@ -118,7 +120,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         : null,
                   )
                 : Container(),
-            Divider(height: size.height * 0.03),
             if (recipientData.aliases == null)
               Container()
             else if (recipientData.emailVerifiedAt == null)
@@ -127,10 +128,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Associated Aliases',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+                  Divider(height: size.height * 0.03),
+                  Text('Aliases', style: Theme.of(context).textTheme.headline6),
                   SizedBox(height: size.height * 0.01),
                   if (recipientData.aliases.isEmpty)
                     Text('No aliases found')

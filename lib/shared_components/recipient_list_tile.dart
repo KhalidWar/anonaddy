@@ -50,9 +50,6 @@ class RecipientListTile extends StatelessWidget {
       ),
       onTap: () {
         recipientDataProvider.recipientDataModel = recipientDataModel;
-        recipientDataProvider.encryptionSwitch =
-            recipientDataModel.shouldEncrypt;
-
         Navigator.push(
             context,
             CustomPageRoute(
