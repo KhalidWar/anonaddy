@@ -30,14 +30,19 @@ final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
   }
 });
 
+final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
+  final offlineData = ref.read(offlineDataProvider);
+  while (true) {
+    yield* Stream.fromFuture(
+        ref.read(recipientServiceProvider).getAllRecipient(offlineData));
+    await Future.delayed(Duration(seconds: 5));
+  }
+});
+
 final connectivityStreamProvider = StreamProvider.autoDispose<ConnectionStatus>(
     (ref) => ref.read(connectivityServiceProvider).streamController.stream);
 
 /// Future Providers
-final recipientsProvider = FutureProvider.autoDispose<RecipientModel>((ref) {
-  final offlineData = ref.read(offlineDataProvider);
-  return ref.read(recipientServiceProvider).getAllRecipient(offlineData);
-});
 
 final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
   final offlineData = ref.read(offlineDataProvider);
