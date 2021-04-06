@@ -43,7 +43,6 @@ final connectivityStreamProvider = StreamProvider.autoDispose<ConnectionStatus>(
     (ref) => ref.read(connectivityServiceProvider).streamController.stream);
 
 /// Future Providers
-
 final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
   final offlineData = ref.read(offlineDataProvider);
   return ref.read(usernameServiceProvider).getUsernameData(offlineData);

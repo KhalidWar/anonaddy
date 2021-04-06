@@ -37,7 +37,7 @@ class SearchTab extends StatelessWidget {
                 showSearch(
                   context: context,
                   delegate: SearchService(
-                    context.read(aliasStateManagerProvider).allAliasesList,
+                    context.read(aliasDataStream).data.value.aliasDataList,
                   ),
                 );
               },

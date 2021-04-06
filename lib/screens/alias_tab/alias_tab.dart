@@ -33,8 +33,6 @@ class AliasTab extends ConsumerWidget {
     return aliasStream.when(
       loading: () => AliasShimmerLoading(),
       data: (data) {
-        aliasStateProvider.allAliasesList = data.aliasDataList;
-
         for (AliasDataModel alias in data.aliasDataList) {
           forwardedList.add(alias.emailsForwarded);
           blockedList.add(alias.emailsBlocked);

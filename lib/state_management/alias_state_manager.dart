@@ -29,9 +29,6 @@ class AliasStateManager extends ChangeNotifier {
   final paidTierWithSharedDomain = [kUUID, kRandomChars, kRandomWords];
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
 
-  List<AliasDataModel> allAliasesList = [];
-  List<AliasDataModel> recentSearchesList = [];
-
   bool get isToggleLoading => _isToggleLoading;
   String get aliasDomain => _aliasDomain;
   String get aliasFormat => _aliasFormat;
