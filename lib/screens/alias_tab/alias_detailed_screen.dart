@@ -37,11 +37,13 @@ class AliasDetailScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AliasPieChart(aliasDataModel: aliasDataModel),
-            SizedBox(height: size.height * 0.015),
-            Divider(),
+            Divider(height: size.height * 0.03),
+            Text('Actions', style: Theme.of(context).textTheme.headline6),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
               title: aliasDataModel.email,
@@ -92,7 +94,7 @@ class AliasDetailScreen extends ConsumerWidget {
                 ? AliasDetailListTile(
                     leadingIconData: Icons.delete_outline,
                     title: 'Delete Alias',
-                    subtitle: 'Deleted alias will reject all emails sent to it',
+                    subtitle: 'Alias will reject all emails sent to it',
                     trailing: IconButton(
                       icon: Icon(Icons.delete_outline, color: Colors.red),
                       onPressed: () {
@@ -107,7 +109,7 @@ class AliasDetailScreen extends ConsumerWidget {
                 : AliasDetailListTile(
                     leadingIconData: Icons.restore_outlined,
                     title: 'Restore Alias',
-                    subtitle: 'Restored alias will be able to receive emails',
+                    subtitle: 'Alias will be able to receive emails',
                     trailing: IconButton(
                       icon: Icon(Icons.restore_outlined, color: Colors.green),
                       onPressed: () {
@@ -119,37 +121,30 @@ class AliasDetailScreen extends ConsumerWidget {
                       },
                     ),
                   ),
-            aliasDataModel.recipients == null
-                ? Container()
-                : Divider(height: 10),
             if (aliasDataModel.recipients == null)
               Container()
             else
               Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => buildUpdateDefaultRecipient(
-                              context, aliasDataModel),
-                        ),
-                      ],
-                    ),
+                  Divider(height: size.height * 0.03),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () => buildUpdateDefaultRecipient(
+                            context, aliasDataModel),
+                      ),
+                    ],
                   ),
                   if (aliasDataModel.recipients.isEmpty)
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child:
-                          Row(children: [Text('No default recipient set yet')]),
-                    )
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Text('No default recipient set yet'))
                   else
                     ListView.builder(
                       shrinkWrap: true,
@@ -164,7 +159,7 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                 ],
               ),
-            Divider(height: 30),
+            Divider(height: size.height * 0.03),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

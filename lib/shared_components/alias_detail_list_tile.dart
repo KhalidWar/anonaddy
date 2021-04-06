@@ -32,7 +32,7 @@ class AliasDetailListTile extends StatelessWidget {
     return title == null
         ? Container()
         : Container(
-            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
             child: Row(
               children: [
                 Icon(

@@ -10,6 +10,8 @@ class Recipients extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final recipientStream = watch(recipientsProvider);
 
+    final size = MediaQuery.of(context).size;
+
     return recipientStream.when(
       loading: () => RecipientsShimmerLoading(),
       data: (data) {
@@ -22,6 +24,7 @@ class Recipients extends ConsumerWidget {
         else
           return ListView.builder(
             shrinkWrap: true,
+            padding: EdgeInsets.symmetric(horizontal: size.height * 0.004),
             itemCount: recipientList.length,
             itemBuilder: (context, index) {
               return RecipientListTile(
@@ -34,7 +37,7 @@ class Recipients extends ConsumerWidget {
         return LottieWidget(
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
-          lottieHeight: MediaQuery.of(context).size.height * 0.1,
+          lottieHeight: size.height * 0.1,
           label: error.toString(),
         );
       },
