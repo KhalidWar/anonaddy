@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/screens/app_settings/about_app_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -11,12 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AppSettings extends StatefulWidget {
+import 'about_app_screen.dart';
+
+class SettingsScreen extends StatefulWidget {
   @override
-  _AppSettingsState createState() => _AppSettingsState();
+  _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _AppSettingsState extends State<AppSettings> {
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

@@ -1,4 +1,5 @@
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
+import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
@@ -13,7 +14,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'alias_tab/create_new_alias.dart';
-import 'app_settings/app_settings.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
         IconButton(
           icon: Icon(Icons.settings),
           onPressed: () =>
-              Navigator.push(context, CustomPageRoute(AppSettings())),
+              Navigator.push(context, CustomPageRoute(SettingsScreen())),
         ),
       ],
     );
