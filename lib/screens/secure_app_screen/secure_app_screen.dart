@@ -9,8 +9,7 @@ class SecureAppScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     /// Use [watch] method to access different providers
-    final securedApp = watch(secureAppProvider);
-    final isAppSecured = securedApp.isAppSecured;
+    final isAppSecured = watch(settingsStateManagerProvider).isAppSecured;
 
     return SecureApplication(
       nativeRemoveDelay: 1000,

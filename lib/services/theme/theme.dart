@@ -1,6 +1,5 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants.dart';
 
 ThemeData lightTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,
@@ -14,6 +13,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
   floatingActionButtonTheme: fabThemeData,
   cardTheme: cardTheme,
   dialogTheme: dialogTheme,
+  elevatedButtonTheme: elevatedButtonThemeData,
 );
 
 ThemeData darkTheme = ThemeData.dark().copyWith(
@@ -32,6 +32,19 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
   dialogTheme: dialogTheme,
   bottomNavigationBarTheme:
       BottomNavigationBarThemeData(backgroundColor: Colors.black),
+  elevatedButtonTheme: elevatedButtonThemeData,
+);
+
+ElevatedButtonThemeData elevatedButtonThemeData = ElevatedButtonThemeData(
+  style: ButtonStyle(
+    foregroundColor: MaterialStateProperty.all(Colors.black),
+    overlayColor: MaterialStateProperty.all(kBlueNavyColor),
+    backgroundColor: MaterialStateProperty.all(kAccentColor),
+    minimumSize: MaterialStateProperty.all(Size(180, 50)),
+    shape: MaterialStateProperty.all(
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+    ),
+  ),
 );
 
 ButtonThemeData buttonThemeData = ButtonThemeData().copyWith(

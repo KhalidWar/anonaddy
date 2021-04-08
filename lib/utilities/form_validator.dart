@@ -55,8 +55,8 @@ class FormValidator {
   }
 
   String validateLocalPart(String input) {
-    final anonAddyPattern =
-        r'(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))\$/)';
+    // final anonAddyPattern =
+    //     r'(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))\$/)';
 
     // todo fix pattern validation
     final regExp = RegExp('');

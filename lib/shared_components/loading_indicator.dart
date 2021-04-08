@@ -1,7 +1,8 @@
-import 'package:anonaddy/constants.dart';
-import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'constants/ui_strings.dart';
+import 'custom_loading_indicator.dart';
 
 class LoadingIndicator extends StatelessWidget {
   final customLoading = CustomLoadingIndicator().customLoadingIndicator();

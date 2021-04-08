@@ -1,17 +1,17 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/constants.dart';
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
+import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
+import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
+import 'package:anonaddy/shared_components/alias_pie_chart.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
+import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/alias_created_at_widget.dart';
-import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
-import 'package:anonaddy/widgets/alias_pie_chart.dart';
-import 'package:anonaddy/widgets/custom_app_bar.dart';
-import 'package:anonaddy/widgets/custom_loading_indicator.dart';
-import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +24,6 @@ class AliasDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasDataProvider = watch(aliasStateManagerProvider);
     final aliasDataModel = aliasDataProvider.aliasDataModel;
-    final switchValue = aliasDataProvider.switchValue;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isToggleLoading = aliasDataProvider.isToggleLoading;
     final copyOnTap = aliasDataProvider.copyToClipboard;
@@ -38,11 +37,13 @@ class AliasDetailScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AliasPieChart(aliasDataModel: aliasDataModel),
-            SizedBox(height: size.height * 0.015),
-            Divider(),
+            Divider(height: size.height * 0.03),
+            Text('Actions', style: Theme.of(context).textTheme.headline6),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
               title: aliasDataModel.email,
@@ -52,7 +53,8 @@ class AliasDetailScreen extends ConsumerWidget {
             ),
             AliasDetailListTile(
               leadingIconData: Icons.flaky_outlined,
-              title: 'Alias is ${switchValue ? 'active' : 'inactive'}',
+              title:
+                  'Alias is ${aliasDataModel.isAliasActive ? 'active' : 'inactive'}',
               subtitle: 'Activity',
               trailing: Row(
                 children: [
@@ -60,7 +62,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       ? CustomLoadingIndicator().customLoadingIndicator()
                       : Container(),
                   Switch.adaptive(
-                    value: switchValue,
+                    value: aliasDataModel.isAliasActive,
                     onChanged: (toggle) =>
                         toggleAlias(context, aliasDataModel.aliasID),
                   ),
@@ -92,7 +94,7 @@ class AliasDetailScreen extends ConsumerWidget {
                 ? AliasDetailListTile(
                     leadingIconData: Icons.delete_outline,
                     title: 'Delete Alias',
-                    subtitle: 'Deleted alias will reject all emails sent to it',
+                    subtitle: 'Alias will reject all emails sent to it',
                     trailing: IconButton(
                       icon: Icon(Icons.delete_outline, color: Colors.red),
                       onPressed: () {
@@ -107,7 +109,7 @@ class AliasDetailScreen extends ConsumerWidget {
                 : AliasDetailListTile(
                     leadingIconData: Icons.restore_outlined,
                     title: 'Restore Alias',
-                    subtitle: 'Restored alias will be able to receive emails',
+                    subtitle: 'Alias will be able to receive emails',
                     trailing: IconButton(
                       icon: Icon(Icons.restore_outlined, color: Colors.green),
                       onPressed: () {
@@ -119,37 +121,30 @@ class AliasDetailScreen extends ConsumerWidget {
                       },
                     ),
                   ),
-            aliasDataModel.recipients == null
-                ? Container()
-                : Divider(height: 10),
             if (aliasDataModel.recipients == null)
               Container()
             else
               Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => buildUpdateDefaultRecipient(
-                              context, aliasDataModel),
-                        ),
-                      ],
-                    ),
+                  Divider(height: size.height * 0.03),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () => buildUpdateDefaultRecipient(
+                            context, aliasDataModel),
+                      ),
+                    ],
                   ),
                   if (aliasDataModel.recipients.isEmpty)
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child:
-                          Row(children: [Text('No default recipient set yet')]),
-                    )
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Text('No default recipient set yet'))
                   else
                     ListView.builder(
                       shrinkWrap: true,
@@ -164,25 +159,22 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                 ],
               ),
-            Divider(height: 30),
+            Divider(height: size.height * 0.03),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 AliasCreatedAtWidget(
                   label: 'Created:',
                   dateTime: aliasDataModel.createdAt,
-                  iconData: Icons.access_time_outlined,
                 ),
                 aliasDataModel.deletedAt == null
                     ? AliasCreatedAtWidget(
                         label: 'Updated:',
                         dateTime: aliasDataModel.updatedAt,
-                        iconData: Icons.av_timer_outlined,
                       )
                     : AliasCreatedAtWidget(
                         label: 'Deleted:',
                         dateTime: aliasDataModel.deletedAt,
-                        iconData: Icons.auto_delete_outlined,
                       ),
               ],
             ),
@@ -318,7 +310,8 @@ class AliasDetailScreen extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: size.height * 0.02),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(),
                 child: Text('Update description'),
                 onPressed: () => editDesc(),
               ),
@@ -329,14 +322,14 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildAppBar(BuildContext context) {
-    final customAppBar = CustomAppBar();
-
-    return customAppBar.androidAppBar(context, 'Alias');
-
-    //todo fix CupertinoNavigationBar causing build failure
-    // return isIOS
-    //     ? customAppBar.iOSAppBar(context, 'Alias')
-    //     : customAppBar.androidAppBar(context, 'Alias');
+  PreferredSizeWidget buildAppBar(BuildContext context) {
+    return AppBar(
+      title: Text('Alias', style: TextStyle(color: Colors.white)),
+      leading: IconButton(
+        icon: Icon(isIOS ? CupertinoIcons.back : Icons.arrow_back),
+        color: Colors.white,
+        onPressed: () => Navigator.pop(context),
+      ),
+    );
   }
 }

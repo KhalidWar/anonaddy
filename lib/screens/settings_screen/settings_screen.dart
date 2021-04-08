@@ -1,37 +1,33 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/screens/app_settings/about_app_screen.dart';
 import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
-import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
-import 'package:anonaddy/services/theme/theme_service.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants.dart';
+import 'about_app_screen.dart';
 
-class AppSettings extends StatefulWidget {
+class SettingsScreen extends StatefulWidget {
   @override
-  _AppSettingsState createState() => _AppSettingsState();
+  _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _AppSettingsState extends State<AppSettings> {
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(statusBarColor: kBlueNavyColor),
-      child: Scaffold(
-        appBar: AppBar(title: Text('App Settings')),
-        body: Column(
+    return Scaffold(
+      appBar: AppBar(title: Text('App Settings')),
+      body: Consumer(builder: (_, watch, __) {
+        final settings = watch(settingsStateManagerProvider);
+
+        return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // todo implement feedback mechanism.
-            // todo Give dev email to receive feedback and suggestions
             // todo encourage users to get into beta program
             ListTile(
               title: Text(
@@ -39,31 +35,39 @@ class _AppSettingsState extends State<AppSettings> {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               subtitle: Text('App follows system by default'),
-              trailing: Switch.adaptive(
-                value: context.read(themeServiceProvider).isDarkTheme,
-                onChanged: (toggle) =>
-                    context.read(themeServiceProvider).toggleTheme(),
+              trailing: IgnorePointer(
+                child: Switch.adaptive(
+                    value: settings.isDarkTheme, onChanged: (toggle) {}),
               ),
-              onTap: () => context.read(themeServiceProvider).toggleTheme(),
+              onTap: () => settings.toggleTheme(),
             ),
-            Consumer(
-              builder: (_, watch, __) {
-                final secureApp = watch(secureAppProvider);
-                return ListTile(
-                  title: Text(
-                    'Secure App',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  subtitle: Text(
-                    'Blocks screenshots, screen recording, and app switcher view',
-                  ),
-                  trailing: Switch.adaptive(
-                    value: secureApp.isAppSecured,
-                    onChanged: (toggle) => secureApp.toggleSecureApp(),
-                  ),
-                  onTap: () => secureApp.toggleSecureApp(),
-                );
-              },
+            ListTile(
+              title: Text(
+                'Secure App',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              subtitle: Text(
+                'Block screenshot and screen recording',
+              ),
+              trailing: IgnorePointer(
+                child: Switch.adaptive(
+                    value: settings.isAppSecured, onChanged: (toggle) {}),
+              ),
+              onTap: () => settings.toggleSecureApp(),
+            ),
+            ListTile(
+              title: Text(
+                'Auto Copy Email',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              subtitle: Text(
+                'Automatically copy email after alias creation',
+              ),
+              trailing: IgnorePointer(
+                child: Switch.adaptive(
+                    value: settings.isAutoCopy, onChanged: (toggle) {}),
+              ),
+              onTap: () => settings.toggleAutoCopy(),
             ),
             ListTile(
               title: Text(
@@ -92,8 +96,8 @@ class _AppSettingsState extends State<AppSettings> {
             ),
             SizedBox(height: size.height * 0.01),
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 

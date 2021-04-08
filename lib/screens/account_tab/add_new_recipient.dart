@@ -1,10 +1,10 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
 
 class AddNewRecipient extends StatelessWidget {
   @override
@@ -52,7 +52,10 @@ class AddNewRecipient extends StatelessWidget {
               SizedBox(height: 10),
               isLoading
                   ? CustomLoadingIndicator().customLoadingIndicator()
-                  : RaisedButton(
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom().copyWith(
+                        minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                      ),
                       child: Text('Add Recipient'),
                       onPressed: () =>
                           addRecipient(context, textEditController.text.trim()),

@@ -1,7 +1,5 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SearchHistoryStorage extends ChangeNotifier {
@@ -13,7 +11,7 @@ class SearchHistoryStorage extends ChangeNotifier {
     _aliasList.add(alias);
     final encodedAlias = AliasDataModel.encode(_aliasList);
     await _secureStorage.write(key: _key, value: encodedAlias);
-    updateUI();
+    notifyListeners();
   }
 
   Future<List<AliasDataModel>> loadData() async {
@@ -23,12 +21,7 @@ class SearchHistoryStorage extends ChangeNotifier {
   }
 
   Future<void> clearSearchHistory(BuildContext context) async {
-    context.read(aliasStateManagerProvider).recentSearchesList.clear();
     await _secureStorage.delete(key: _key);
-    updateUI();
-  }
-
-  updateUI() {
     notifyListeners();
   }
 }

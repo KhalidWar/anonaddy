@@ -1,8 +1,7 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:flutter/material.dart';
-
-import '../../constants.dart';
-import '../../widgets/alias_list_tile.dart';
 
 class DeletedAliasesScreen extends StatelessWidget {
   const DeletedAliasesScreen({Key key, this.aliasDataModel}) : super(key: key);

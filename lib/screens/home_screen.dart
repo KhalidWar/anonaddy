@@ -1,19 +1,19 @@
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
+import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/custom_page_route.dart';
+import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
-import 'package:anonaddy/widgets/custom_page_route.dart';
-import 'package:anonaddy/widgets/no_internet_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../constants.dart';
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'alias_tab/create_new_alias.dart';
-import 'app_settings/app_settings.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -31,60 +31,55 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      child: Consumer(
-        builder: (_, watch, __) {
-          final connectivityAsyncValue = watch(connectivityStreamProvider);
-          bool isOffline = false;
+    return Consumer(
+      builder: (_, watch, __) {
+        final connectivityAsyncValue = watch(connectivityStreamProvider);
+        bool isOffline = false;
 
-          connectivityAsyncValue.whenData((data) {
-            if (data == ConnectionStatus.offline) {
-              isOffline = true;
-            } else {
-              isOffline = false;
-            }
-          });
-          return Scaffold(
-            appBar: buildAppBar(context, isOffline),
-            body: IndexedStack(
-              index: _selectedIndex,
-              children: [
-                AccountTab(),
-                AliasTab(),
-                SearchTab(),
-              ],
-            ),
-            bottomNavigationBar: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                isOffline ? NoInternetAlert() : Container(),
-                BottomNavigationBar(
-                  onTap: _selectedTab,
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: isDark ? kAccentColor : kBlueNavyColor,
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.account_circle),
-                      label: 'Account',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.alternate_email_sharp),
-                      label: 'Aliases',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.search_outlined),
-                      label: 'Search',
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+        connectivityAsyncValue.whenData((data) {
+          if (data == ConnectionStatus.offline) {
+            isOffline = true;
+          } else {
+            isOffline = false;
+          }
+        });
+        return Scaffold(
+          appBar: buildAppBar(context, isOffline),
+          body: IndexedStack(
+            index: _selectedIndex,
+            children: [
+              AccountTab(),
+              AliasTab(),
+              SearchTab(),
+            ],
+          ),
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              isOffline ? NoInternetAlert() : Container(),
+              BottomNavigationBar(
+                onTap: _selectedTab,
+                currentIndex: _selectedIndex,
+                selectedItemColor: isDark ? kAccentColor : kBlueNavyColor,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.account_circle),
+                    label: 'Account',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.alternate_email_sharp),
+                    label: 'Aliases',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search_outlined),
+                    label: 'Search',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -124,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
         IconButton(
           icon: Icon(Icons.settings),
           onPressed: () =>
-              Navigator.push(context, CustomPageRoute(AppSettings())),
+              Navigator.push(context, CustomPageRoute(SettingsScreen())),
         ),
       ],
     );

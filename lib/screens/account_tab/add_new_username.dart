@@ -1,9 +1,9 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../constants.dart';
 
 class AddNewUsername extends StatelessWidget {
   final _textEditController = TextEditingController();
@@ -12,7 +12,7 @@ class AddNewUsername extends StatelessWidget {
   Widget build(BuildContext context) {
     final usernameManager = context.read(usernameStateManagerProvider);
     final createNewUsername = usernameManager.createNewUsername;
-    final usernameFormKey = usernameManager.usernameFormKey;
+    final usernameFormKey = usernameManager.createUsernameFormKey;
 
     final size = MediaQuery.of(context).size;
 
@@ -52,7 +52,10 @@ class AddNewUsername extends StatelessWidget {
             ),
           ),
           SizedBox(height: size.height * 0.02),
-          RaisedButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom().copyWith(
+              minimumSize: MaterialStateProperty.all(Size(200, 50)),
+            ),
             child: Text('Add Username'),
             onPressed: () => createUsername(),
           ),

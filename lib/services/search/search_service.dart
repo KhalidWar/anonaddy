@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
-import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/custom_page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,9 +23,7 @@ class SearchService extends SearchDelegate {
   Widget buildLeading(BuildContext context) {
     return IconButton(
       icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, context.read(searchHistoryProvider).updateUI());
-      },
+      onPressed: () => close(context, null),
     );
   }
 
@@ -36,8 +34,8 @@ class SearchService extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final aliasState = context.read(aliasStateManagerProvider);
     List<AliasDataModel> resultAliasList = [];
+    List<AliasDataModel> recentSearchesList = [];
 
     searchAliasList.forEach((element) {
       if (element.email.toLowerCase().contains(query.toLowerCase()) ||
@@ -48,8 +46,7 @@ class SearchService extends SearchDelegate {
       }
     });
 
-    final initialList =
-        query.isEmpty ? aliasState.recentSearchesList : resultAliasList;
+    final initialList = query.isEmpty ? recentSearchesList : resultAliasList;
 
     return ListView.builder(
       itemCount: initialList.length,
@@ -59,9 +56,8 @@ class SearchService extends SearchDelegate {
               child: AliasListTile(aliasData: initialList[index])),
           onTap: () {
             context.read(searchHistoryProvider).saveData(initialList[index]);
-            aliasState.recentSearchesList.add(initialList[index]);
-            aliasState.aliasDataModel = initialList[index];
-            aliasState.switchValue = initialList[index].isAliasActive;
+            context.read(aliasStateManagerProvider).aliasDataModel =
+                initialList[index];
             Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
           },
         );

@@ -32,7 +32,7 @@ class AliasDataModel {
   final dynamic extension;
   final String domain;
   final String email;
-  final bool isAliasActive;
+  bool isAliasActive;
   String emailDescription;
   final int emailsForwarded;
   final int emailsBlocked;

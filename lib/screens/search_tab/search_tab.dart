@@ -1,23 +1,19 @@
 import 'package:anonaddy/services/search/search_service.dart';
+import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/loading_indicator.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
-import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/loading_indicator.dart';
-import 'package:anonaddy/widgets/lottie_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants.dart';
-
 class SearchTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final aliasManager = context.read(aliasStateManagerProvider);
-    final availableAliasList = aliasManager.availableAliasList;
-    final deletedAliasList = aliasManager.deletedAliasList;
-
     final size = MediaQuery.of(context).size;
 
     return Stack(
@@ -38,13 +34,17 @@ class SearchTab extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                showSearch(
-                  context: context,
-                  delegate: SearchService([
-                    ...availableAliasList,
-                    ...deletedAliasList,
-                  ]),
-                );
+                final aliasProvider = context.read(aliasDataStream).data;
+                if (aliasProvider == null) {
+                  context
+                      .read(aliasStateManagerProvider)
+                      .showToast('Loading...');
+                } else {
+                  showSearch(
+                    context: context,
+                    delegate: SearchService(aliasProvider.value.aliasDataList),
+                  );
+                }
               },
             ),
           ),

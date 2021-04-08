@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,15 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../constants.dart';
-
 class RecipientStateManager extends ChangeNotifier {
   RecipientStateManager() {
     isLoading = false;
   }
 
   RecipientDataModel recipientDataModel;
-  bool _encryptionSwitch;
   bool _isLoading;
 
   final textEditController = TextEditingController();
@@ -22,15 +20,9 @@ class RecipientStateManager extends ChangeNotifier {
   final pgpKeyFormKey = GlobalKey<FormState>();
 
   get isLoading => _isLoading;
-  get encryptionSwitch => _encryptionSwitch;
 
   set isLoading(bool value) {
     _isLoading = value;
-    notifyListeners();
-  }
-
-  set encryptionSwitch(bool value) {
-    _encryptionSwitch = value;
     notifyListeners();
   }
 
@@ -42,12 +34,12 @@ class RecipientStateManager extends ChangeNotifier {
   Future<void> toggleEncryption(
       BuildContext context, String recipientID) async {
     isLoading = true;
-    if (_encryptionSwitch) {
+    if (recipientDataModel.shouldEncrypt) {
       await context
           .read(recipientServiceProvider)
           .disableEncryption(recipientID)
           .then((value) {
-        encryptionSwitch = false;
+        recipientDataModel.shouldEncrypt = false;
         _showToast(kEncryptionDisabled);
       }).catchError((error) {
         _showToast(error.toString());
@@ -57,7 +49,7 @@ class RecipientStateManager extends ChangeNotifier {
           .read(recipientServiceProvider)
           .enableEncryption(recipientID)
           .then((value) {
-        encryptionSwitch = value.shouldEncrypt;
+        recipientDataModel.shouldEncrypt = value.shouldEncrypt;
         _showToast(kEncryptionEnabled);
       }).catchError((error) {
         _showToast(error.toString());
@@ -75,7 +67,7 @@ class RecipientStateManager extends ChangeNotifier {
           .then((value) {
         _showToast(kGPGKeyAddedSuccessfully);
         setFingerprint(value.fingerprint);
-        encryptionSwitch = value.shouldEncrypt;
+        recipientDataModel.shouldEncrypt = value.shouldEncrypt;
         Navigator.pop(context);
       }).catchError((error) {
         _showToast(error.toString());
@@ -91,7 +83,7 @@ class RecipientStateManager extends ChangeNotifier {
         .then((value) {
       _showToast(kGPGKeyDeletedSuccessfully);
       setFingerprint(null);
-      encryptionSwitch = false;
+      recipientDataModel.shouldEncrypt = false;
     }).catchError((error) {
       _showToast(error.toString());
     });

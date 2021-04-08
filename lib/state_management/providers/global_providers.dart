@@ -30,15 +30,19 @@ final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
   }
 });
 
+final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
+  final offlineData = ref.read(offlineDataProvider);
+  while (true) {
+    yield* Stream.fromFuture(
+        ref.read(recipientServiceProvider).getAllRecipient(offlineData));
+    await Future.delayed(Duration(seconds: 5));
+  }
+});
+
 final connectivityStreamProvider = StreamProvider.autoDispose<ConnectionStatus>(
     (ref) => ref.read(connectivityServiceProvider).streamController.stream);
 
 /// Future Providers
-final recipientsProvider = FutureProvider.autoDispose<RecipientModel>((ref) {
-  final offlineData = ref.read(offlineDataProvider);
-  return ref.read(recipientServiceProvider).getAllRecipient(offlineData);
-});
-
 final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
   final offlineData = ref.read(offlineDataProvider);
   return ref.read(usernameServiceProvider).getUsernameData(offlineData);
@@ -49,13 +53,13 @@ final domainsProvider = FutureProvider.autoDispose<DomainModel>((ref) async {
   return await ref.read(domainsServiceProvider).getAllDomains(offlineData);
 });
 
-final domainOptionsProvider = FutureProvider.autoDispose<DomainOptions>((ref) {
+final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
   final offlineData = ref.read(offlineDataProvider);
   return ref.read(domainOptionsServiceProvider).getDomainOptions(offlineData);
 });
 
-final accessTokenProvider = FutureProvider.autoDispose<String>((ref) async =>
+final accessTokenProvider = FutureProvider<String>((ref) async =>
     await ref.watch(accessTokenServiceProvider).getAccessToken());
 
-final searchHistoryFuture = FutureProvider.autoDispose<List<AliasDataModel>>(
+final searchHistoryFuture = FutureProvider<List<AliasDataModel>>(
     (ref) async => await ref.watch(searchHistoryProvider).loadData());

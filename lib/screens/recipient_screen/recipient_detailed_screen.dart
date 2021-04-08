@@ -1,19 +1,20 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
+import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
+import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
-import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/custom_app_bar.dart';
-import 'package:anonaddy/widgets/custom_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../constants.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
   RecipientDetailedScreen({this.recipientData});
@@ -24,57 +25,40 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final size = MediaQuery.of(context).size;
-
     final recipientStateProvider = watch(recipientStateManagerProvider);
-    final encryptionSwitch = recipientStateProvider.encryptionSwitch;
     final isLoading = recipientStateProvider.isLoading;
-    final copyOnTap = recipientStateProvider.copyOnTap;
-    final toggleEncryption = recipientStateProvider.toggleEncryption;
-    final addPublicGPGKey = recipientStateProvider.addPublicGPGKey;
-    final removePublicGPGKey = recipientStateProvider.removePublicGPGKey;
-    final verifyEmail = recipientStateProvider.verifyEmail;
-    final removeRecipient = recipientStateProvider.removeRecipient;
+
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context, removeRecipient),
+      appBar: buildAppBar(context),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.only(top: 20, bottom: 50),
-              child: SvgPicture.asset(
-                'assets/images/envelope.svg',
-                height: size.height * 0.2,
+            Center(
+              child: Container(
+                padding: EdgeInsets.only(top: 20, bottom: 50),
+                child: SvgPicture.asset(
+                  'assets/images/envelope.svg',
+                  height: size.height * 0.2,
+                ),
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.access_time_outlined,
-                    title: recipientData.createdAt,
-                    subtitle: 'Created At',
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    leadingIconData: Icons.av_timer_outlined,
-                    title: recipientData.updatedAt,
-                    subtitle: 'Updated at',
-                  ),
-                )
-              ],
-            ),
-            Divider(height: 10),
+            Divider(height: size.height * 0.03),
+            Text('Actions', style: Theme.of(context).textTheme.headline6),
+            SizedBox(height: size.height * 0.01),
             AliasDetailListTile(
               leadingIconData: Icons.email_outlined,
               title: recipientData.email,
               subtitle: 'Recipient Email',
               trailing: IconButton(
                 icon: Icon(Icons.copy),
-                onPressed: () => copyOnTap(recipientData.email),
+                onPressed: () => context
+                    .read(recipientStateManagerProvider)
+                    .copyOnTap(recipientData.email),
               ),
             ),
             AliasDetailListTile(
@@ -86,22 +70,24 @@ class RecipientDetailedScreen extends ConsumerWidget {
               trailing: recipientData.fingerprint == null
                   ? IconButton(
                       icon: Icon(Icons.add_circle_outline_outlined),
-                      onPressed: () => buildAddPGPKeyDialog(
-                          context, recipientData, addPublicGPGKey),
+                      onPressed: () =>
+                          buildAddPGPKeyDialog(context, recipientData),
                     )
                   : IconButton(
                       icon: Icon(
                         Icons.delete_outline_outlined,
                         color: Colors.red,
                       ),
-                      onPressed: () =>
-                          buildRemovePGPKeyDialog(context, removePublicGPGKey),
+                      onPressed: () => buildRemovePGPKeyDialog(context),
                     ),
             ),
             AliasDetailListTile(
-              leadingIconData: encryptionSwitch ? Icons.lock : Icons.lock_open,
-              leadingIconColor: encryptionSwitch ? Colors.green : null,
-              title: '${encryptionSwitch ? 'Encrypted' : 'Not Encrypted'}',
+              leadingIconData:
+                  recipientData.shouldEncrypt ? Icons.lock : Icons.lock_open,
+              leadingIconColor:
+                  recipientData.shouldEncrypt ? Colors.green : null,
+              title:
+                  '${recipientData.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
               subtitle: 'Encryption',
               trailing: recipientData.fingerprint == null
                   ? Container()
@@ -111,9 +97,10 @@ class RecipientDetailedScreen extends ConsumerWidget {
                             ? CustomLoadingIndicator().customLoadingIndicator()
                             : Container(),
                         Switch.adaptive(
-                          value: encryptionSwitch,
-                          onChanged: (toggle) =>
-                              toggleEncryption(context, recipientData.id),
+                          value: recipientData.shouldEncrypt,
+                          onChanged: (toggle) => context
+                              .read(recipientStateManagerProvider)
+                              .toggleEncryption(context, recipientData.id),
                         ),
                       ],
                     ),
@@ -124,45 +111,26 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
                     subtitle: 'Is Email Verified?',
                     trailing: recipientData.emailVerifiedAt == null
-                        ? ElevatedButton(
+                        ? TextButton(
                             child: Text('Verify now!'),
-                            onPressed: () =>
-                                verifyEmail(context, recipientData.id),
+                            onPressed: () => context
+                                .read(recipientStateManagerProvider)
+                                .verifyEmail(context, recipientData.id),
                           )
                         : null,
                   )
                 : Container(),
-            SizedBox(height: 10),
-            Divider(height: 0),
             if (recipientData.aliases == null)
               Container()
             else if (recipientData.emailVerifiedAt == null)
-              Container(
-                height: size.height * 0.05,
-                width: double.infinity,
-                color: Colors.amber,
-                padding: EdgeInsets.symmetric(horizontal: 14),
-                child: Row(
-                  children: [
-                    Icon(Icons.warning_amber_outlined, color: Colors.black),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: Text(kUnverifiedRecipient,
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                    Container(),
-                  ],
-                ),
-              )
+              buildUnverifiedEmailWarning(size)
             else
-              ExpansionTile(
-                initiallyExpanded: true,
-                title: Text(
-                  'Associated Aliases',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                childrenPadding: EdgeInsets.symmetric(horizontal: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Divider(height: size.height * 0.03),
+                  Text('Aliases', style: Theme.of(context).textTheme.headline6),
+                  SizedBox(height: size.height * 0.01),
                   if (recipientData.aliases.isEmpty)
                     Text('No aliases found')
                   else
@@ -178,19 +146,56 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     ),
                 ],
               ),
-            SizedBox(height: size.height * 0.05),
+            Divider(height: size.height * 0.03),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                AliasCreatedAtWidget(
+                  label: 'Created:',
+                  dateTime: recipientData.createdAt,
+                ),
+                AliasCreatedAtWidget(
+                  label: 'Updated:',
+                  dateTime: recipientData.updatedAt,
+                ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.03),
           ],
         ),
       ),
     );
   }
 
-  Future buildRemovePGPKeyDialog(
-      BuildContext context, Function removePublicGPGKey) {
+  Container buildUnverifiedEmailWarning(Size size) {
+    return Container(
+      height: size.height * 0.05,
+      width: double.infinity,
+      color: Colors.amber,
+      padding: EdgeInsets.symmetric(horizontal: 14),
+      child: Row(
+        children: [
+          Icon(Icons.warning_amber_outlined, color: Colors.black),
+          SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              kUnverifiedRecipient,
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+          Container(),
+        ],
+      ),
+    );
+  }
+
+  Future buildRemovePGPKeyDialog(BuildContext context) {
     final confirmationDialog = ConfirmationDialog();
 
     void removePublicKey() {
-      removePublicGPGKey(context, recipientData.id);
+      context
+          .read(recipientStateManagerProvider)
+          .removePublicGPGKey(context, recipientData.id);
     }
 
     return showModal(
@@ -211,12 +216,13 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildAddPGPKeyDialog(BuildContext context,
-      RecipientDataModel recipientData, Function addPublicGPGKey) {
+  Future buildAddPGPKeyDialog(
+      BuildContext context, RecipientDataModel recipientData) {
     final _texEditingController = TextEditingController();
 
     void addPublicKey() {
-      addPublicGPGKey(context, recipientData.id, _texEditingController.text);
+      context.read(recipientStateManagerProvider).addPublicGPGKey(
+          context, recipientData.id, _texEditingController.text);
     }
 
     return showModalBottomSheet(
@@ -266,7 +272,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: size.height * 0.01),
-              RaisedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(),
                 child: Text('Add Key'),
                 onPressed: () => addPublicKey(),
               ),
@@ -277,12 +284,13 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildAppBar(BuildContext context, Function removeRecipient) {
-    final customAppBar = CustomAppBar();
+  Widget buildAppBar(BuildContext context) {
     final confirmationDialog = ConfirmationDialog();
 
     void remove() {
-      removeRecipient(context, recipientData.id);
+      context
+          .read(recipientStateManagerProvider)
+          .removeRecipient(context, recipientData.id);
       Navigator.pop(context);
     }
 
@@ -294,25 +302,29 @@ class RecipientDetailedScreen extends ConsumerWidget {
         onPressed: () => Navigator.pop(context),
       ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () => showModal(
-            context: context,
-            builder: (context) {
-              return isIOS
-                  ? confirmationDialog.iOSAlertDialog(context,
-                      kDeleteRecipientDialogText, remove, 'Delete recipient')
-                  : confirmationDialog.androidAlertDialog(context,
-                      kDeleteRecipientDialogText, remove, 'Delete recipient');
-            },
-          ),
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) {
+            return ['Delete recipient'].map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+          onSelected: (String choice) {
+            showModal(
+              context: context,
+              builder: (context) {
+                return isIOS
+                    ? confirmationDialog.iOSAlertDialog(context,
+                        kDeleteRecipientDialogText, remove, 'Delete recipient')
+                    : confirmationDialog.androidAlertDialog(context,
+                        kDeleteRecipientDialogText, remove, 'Delete recipient');
+              },
+            );
+          },
         ),
       ],
     );
-
-    //todo fix CupertinoNavigationBar causing build failure
-    // return isIOS
-    //     ? customAppBar.iOSAppBar(context, 'Recipient')
-    //     : customAppBar.androidAppBar(context, 'Recipient');
   }
 }

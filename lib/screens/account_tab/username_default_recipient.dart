@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasDefaultRecipientScreen extends StatefulWidget {
-  const AliasDefaultRecipientScreen(this.aliasDataModel);
+class UsernameDefaultRecipientScreen extends StatefulWidget {
+  const UsernameDefaultRecipientScreen(this.username);
 
-  final AliasDataModel aliasDataModel;
+  final UsernameDataModel username;
 
   @override
   _AliasDefaultRecipientScreenState createState() =>
@@ -19,30 +19,31 @@ class AliasDefaultRecipientScreen extends StatefulWidget {
 }
 
 class _AliasDefaultRecipientScreenState
-    extends State<AliasDefaultRecipientScreen> {
+    extends State<UsernameDefaultRecipientScreen> {
   final _verifiedRecipients = <RecipientDataModel>[];
-  final _defaultRecipients = <RecipientDataModel>[];
-  final _selectedRecipientsID = <String>[];
+  RecipientDataModel selectedRecipient;
 
   void _toggleRecipient(RecipientDataModel verifiedRecipient) {
-    if (_defaultRecipients.contains(verifiedRecipient)) {
-      _defaultRecipients
-          .removeWhere((element) => element.email == verifiedRecipient.email);
-      _selectedRecipientsID
-          .removeWhere((element) => element == verifiedRecipient.id);
+    if (selectedRecipient == null) {
+      selectedRecipient = verifiedRecipient;
     } else {
-      _defaultRecipients.add(verifiedRecipient);
-      _selectedRecipientsID.add(verifiedRecipient.id);
+      if (verifiedRecipient.email == selectedRecipient.email) {
+        selectedRecipient = null;
+      } else {
+        selectedRecipient = verifiedRecipient;
+      }
     }
   }
 
   bool _isDefaultRecipient(RecipientDataModel verifiedRecipient) {
-    for (RecipientDataModel defaultRecipient in _defaultRecipients) {
-      if (defaultRecipient.email == verifiedRecipient.email) {
+    if (selectedRecipient == null) {
+      return false;
+    } else {
+      if (verifiedRecipient.email == selectedRecipient.email) {
         return true;
       }
+      return false;
     }
-    return false;
   }
 
   void _setVerifiedRecipients() {
@@ -54,13 +55,14 @@ class _AliasDefaultRecipientScreenState
     }
   }
 
-  void _setDefaultRecipients() {
-    final aliasDefaultRecipients = widget.aliasDataModel.recipients;
+  void _setDefaultRecipient() {
+    final defaultRecipient = widget.username.defaultRecipient;
     for (RecipientDataModel verifiedRecipient in _verifiedRecipients) {
-      for (RecipientDataModel recipient in aliasDefaultRecipients) {
-        if (recipient.email == verifiedRecipient.email) {
-          _defaultRecipients.add(recipient);
-          _selectedRecipientsID.add(recipient.id);
+      if (defaultRecipient == null) {
+        selectedRecipient = null;
+      } else {
+        if (defaultRecipient.email == verifiedRecipient.email) {
+          selectedRecipient = verifiedRecipient;
         }
       }
     }
@@ -70,7 +72,7 @@ class _AliasDefaultRecipientScreenState
   void initState() {
     super.initState();
     _setVerifiedRecipients();
-    _setDefaultRecipients();
+    _setDefaultRecipient();
   }
 
   @override
@@ -86,11 +88,11 @@ class _AliasDefaultRecipientScreenState
         ),
         SizedBox(height: size.height * 0.01),
         Text(
-          'Update Alias Recipients',
+          'Update Default Recipient',
           style: Theme.of(context).textTheme.headline6,
         ),
         Divider(thickness: 1, height: size.height * 0.03),
-        Text(kUpdateAliasRecipients),
+        Text(kUpdateUsernameDefaultRecipient),
         Divider(height: size.height * 0.02),
         if (_verifiedRecipients.isEmpty)
           Padding(
@@ -123,14 +125,13 @@ class _AliasDefaultRecipientScreenState
         SizedBox(height: size.height * 0.02),
         ElevatedButton(
           style: ElevatedButton.styleFrom(),
-          child: Text('Update Recipients'),
-          onPressed: () => context
-              .read(aliasStateManagerProvider)
-              .updateAliasDefaultRecipient(
-                context,
-                widget.aliasDataModel.aliasID,
-                _selectedRecipientsID,
-              ),
+          child: Text('Update Default Recipients'),
+          onPressed: () =>
+              context.read(usernameStateManagerProvider).updateDefaultRecipient(
+                    context,
+                    widget.username.id,
+                    selectedRecipient == null ? '' : selectedRecipient.id,
+                  ),
         ),
       ],
     );

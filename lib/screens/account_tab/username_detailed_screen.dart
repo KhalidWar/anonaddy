@@ -1,154 +1,271 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/screens/account_tab/username_default_recipient.dart';
+import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
+import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
+import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
+import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:anonaddy/widgets/account_card_header.dart';
-import 'package:anonaddy/widgets/alias_detail_list_tile.dart';
-import 'package:anonaddy/widgets/alias_list_tile.dart';
-import 'package:anonaddy/widgets/custom_app_bar.dart';
-import 'package:anonaddy/widgets/recipient_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../constants.dart';
-
-class UsernameDetailedScreen extends StatefulWidget {
-  const UsernameDetailedScreen({Key key, this.username}) : super(key: key);
-
-  final UsernameDataModel username;
-
+class UsernameDetailedScreen extends ConsumerWidget {
   @override
-  _UsernameDetailedScreenState createState() => _UsernameDetailedScreenState();
-}
+  Widget build(BuildContext context, ScopedReader watch) {
+    final usernameProvider = watch(usernameStateManagerProvider);
+    final username = usernameProvider.usernameModel;
+    final activeSwitchLoading = usernameProvider.activeSwitchLoading;
+    final catchAllSwitchLoading = usernameProvider.catchAllSwitchLoading;
+    final toggleActiveAlias = usernameProvider.toggleActiveAlias;
+    final toggleCatchAllAlias = usernameProvider.toggleCatchAllAlias;
 
-class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
-  @override
-  Widget build(BuildContext context) {
-    final username = widget.username;
+    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+    final textEditingController = TextEditingController();
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: buildAppBar(context, username.id),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(4),
+        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AccountCardHeader(
-              title: username.username,
-              subtitle: username.description ?? 'No description',
-            ),
-            SizedBox(height: 10),
             Row(
               children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: username.active == true ? 'Yes' : 'No',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Is active?',
-                    leadingIconData: Icons.toggle_off_outlined,
-                  ),
+                Icon(
+                  Icons.account_circle_outlined,
+                  size: size.height * 0.035,
                 ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: username.catchAll == true ? 'Yes' : 'No',
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Is catch all?',
-                    leadingIconData: Icons.repeat,
-                  ),
+                SizedBox(width: size.width * 0.02),
+                Text(
+                  username.username,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: username.createdAt,
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Created at',
-                    leadingIconData: Icons.access_time_outlined,
-                  ),
-                ),
-                Expanded(
-                  child: AliasDetailListTile(
-                    title: username.updatedAt,
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    subtitle: 'Updated at',
-                    leadingIconData: Icons.av_timer_outlined,
-                  ),
-                ),
-              ],
-            ),
-            Divider(height: 0),
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: Text(
-                'Default Recipient',
-                style: Theme.of(context).textTheme.bodyText1,
+            Divider(height: size.height * 0.01),
+            AliasDetailListTile(
+              title: username.description ?? 'No description',
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Username description',
+              leadingIconData: Icons.comment,
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () => buildEditDescriptionDialog(
+                    context, textEditingController, username),
               ),
+            ),
+            AliasDetailListTile(
+              title: username.active
+                  ? 'Username is active'
+                  : 'Username is inactive',
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Activity',
+              leadingIconData: Icons.toggle_off_outlined,
+              trailing: Row(
+                children: [
+                  activeSwitchLoading ? customLoading : Container(),
+                  Switch.adaptive(
+                    value: username.active,
+                    onChanged: (toggle) =>
+                        toggleActiveAlias(context, username.id),
+                  ),
+                ],
+              ),
+            ),
+            AliasDetailListTile(
+              title: username.catchAll ? 'Enabled' : 'Disabled',
+              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+              subtitle: 'Catch All',
+              leadingIconData: Icons.repeat,
+              trailing: Row(
+                children: [
+                  catchAllSwitchLoading ? customLoading : Container(),
+                  Switch.adaptive(
+                    value: username.catchAll,
+                    onChanged: (toggle) =>
+                        toggleCatchAllAlias(context, username.id),
+                  ),
+                ],
+              ),
+            ),
+            Divider(height: size.height * 0.02),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Default Recipient',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () =>
+                          buildUpdateDefaultRecipient(context, username),
+                    ),
+                  ],
+                ),
                 if (username.defaultRecipient == null)
                   Container(
-                    padding: EdgeInsets.all(20),
-                    child: Text('No default recipient found'),
-                  )
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text('No default recipient found'))
                 else
                   RecipientListTile(
                     recipientDataModel: username.defaultRecipient,
                   ),
               ],
             ),
-            ExpansionTile(
-              initiallyExpanded: true,
-              title: Text('Associated Aliases',
-                  style: Theme.of(context).textTheme.bodyText1),
+            Divider(height: size.height * 0.02),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                username.aliases.isEmpty
-                    ? Container(
-                        padding: EdgeInsets.all(20),
-                        child: Text('No aliases found'))
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: username.aliases.length,
-                        itemBuilder: (context, index) {
-                          return AliasListTile(
-                            aliasData: username.aliases[index],
-                          );
-                        },
-                      ),
+                Row(
+                  children: [
+                    Text(
+                      'Associated Aliases',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Container(height: 36),
+                  ],
+                ),
+                if (username.aliases.isEmpty)
+                  Container(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text('No aliases found'))
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: username.aliases.length,
+                    itemBuilder: (context, index) {
+                      return AliasListTile(
+                        aliasData: username.aliases[index],
+                      );
+                    },
+                  ),
               ],
             ),
-            Divider(height: 0),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            Divider(height: size.height * 0.03),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                AliasCreatedAtWidget(
+                  label: 'Created:',
+                  dateTime: username.createdAt,
+                ),
+                AliasCreatedAtWidget(
+                  label: 'Updated:',
+                  dateTime: username.updatedAt,
+                ),
+              ],
+            ),
+            SizedBox(height: size.height * 0.05),
           ],
         ),
       ),
     );
   }
 
-  PageRouteBuilder buildPageRouteBuilder(Widget child) {
-    return PageRouteBuilder(
-      transitionsBuilder: (context, animation, secondAnimation, child) {
-        animation =
-            CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut);
+  Future buildEditDescriptionDialog(BuildContext context,
+      TextEditingController textEditingController, UsernameDataModel username) {
+    void editDesc() {
+      context.read(usernameStateManagerProvider).editDescription(
+          context, username.id, textEditingController.text.trim());
+    }
 
-        return SlideTransition(
-          position: Tween(
-            begin: Offset(1.0, 0.0),
-            end: Offset(0.0, 0.0),
-          ).animate(animation),
-          child: child,
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        final size = MediaQuery.of(context).size;
+
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Column(
+            children: [
+              Divider(
+                thickness: 3,
+                indent: size.width * 0.4,
+                endIndent: size.width * 0.4,
+              ),
+              SizedBox(height: size.height * 0.01),
+              Text(
+                'Update description',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Divider(thickness: 1),
+              SizedBox(height: size.height * 0.01),
+              Text('Update description for'),
+              Text(
+                '${username.username}',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              SizedBox(height: size.height * 0.02),
+              Form(
+                key: context
+                    .read(usernameStateManagerProvider)
+                    .editDescriptionFormKey,
+                child: TextFormField(
+                  autofocus: true,
+                  controller: textEditingController,
+                  validator: (input) =>
+                      FormValidator().validateDescriptionField(input),
+                  onFieldSubmitted: (toggle) => editDesc(),
+                  decoration: kTextFormFieldDecoration.copyWith(
+                    hintText: '${username.description}',
+                  ),
+                ),
+              ),
+              SizedBox(height: size.height * 0.02),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(),
+                child: Text('Update description'),
+                onPressed: () => editDesc(),
+              ),
+            ],
+          ),
         );
       },
-      pageBuilder: (context, animation, secondAnimation) {
-        return child;
+    );
+  }
+
+  Future buildUpdateDefaultRecipient(
+      BuildContext context, UsernameDataModel username) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: UsernameDefaultRecipientScreen(username),
+          ),
+        );
       },
     );
   }
 
   Widget buildAppBar(BuildContext context, String usernameID) {
-    final customAppBar = CustomAppBar();
     final isIOS = TargetedPlatform().isIOS();
     final confirmationDialog = ConfirmationDialog();
 
@@ -166,9 +283,16 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
         onPressed: () => Navigator.pop(context),
       ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () {
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) {
+            return ['Delete username'].map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+          onSelected: (String choice) {
             showModal(
               context: context,
               builder: (context) {
@@ -183,10 +307,5 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
         ),
       ],
     );
-
-    //todo fix CupertinoNavigationBar causing build failure
-    // return TargetedPlatform().isIOS()
-    //     ? customAppBar.iOSAppBar(context, 'Additional Username')
-    //     : customAppBar.androidAppBar(context, 'Additional Username');
   }
 }
