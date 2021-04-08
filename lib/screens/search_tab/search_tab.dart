@@ -34,12 +34,17 @@ class SearchTab extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                showSearch(
-                  context: context,
-                  delegate: SearchService(
-                    context.read(aliasDataStream).data.value.aliasDataList,
-                  ),
-                );
+                final aliasProvider = context.read(aliasDataStream).data;
+                if (aliasProvider == null) {
+                  context
+                      .read(aliasStateManagerProvider)
+                      .showToast('Loading...');
+                } else {
+                  showSearch(
+                    context: context,
+                    delegate: SearchService(aliasProvider.value.aliasDataList),
+                  );
+                }
               },
             ),
           ),
