@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               subtitle: Text(
-                'Blocks screenshot, screen recording, and app switcher view',
+                'Block screenshot and screen recording',
               ),
               trailing: IgnorePointer(
                 child: Switch.adaptive(

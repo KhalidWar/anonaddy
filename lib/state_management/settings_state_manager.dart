@@ -6,9 +6,7 @@ class SettingsStateManager extends ChangeNotifier {
     isAutoCopy = false;
     isAppSecured = false;
     isDarkTheme = false;
-    loadAutoCopy();
-    loadSecureApp();
-    loadDarkTheme();
+    _loadSavedData();
   }
 
   final _settingsStorage = SettingsDataStorage();
@@ -20,14 +18,17 @@ class SettingsStateManager extends ChangeNotifier {
   bool isAppSecured;
   bool isDarkTheme;
 
+  void _loadSavedData() async {
+    isDarkTheme = await _settingsStorage.loadBoolState(_darkThemeKey);
+    isAppSecured = await _settingsStorage.loadBoolState(_secureAppKey);
+    isAutoCopy = await _settingsStorage.loadBoolState(_autoCopyKey);
+    notifyListeners();
+  }
+
   void toggleAutoCopy() {
     isAutoCopy = !isAutoCopy;
     _settingsStorage.saveBoolState(_autoCopyKey, isAutoCopy);
     notifyListeners();
-  }
-
-  void loadAutoCopy() async {
-    isAutoCopy = await _settingsStorage.loadBoolState(_autoCopyKey);
   }
 
   void toggleSecureApp() {
@@ -36,17 +37,9 @@ class SettingsStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loadSecureApp() async {
-    isAppSecured = await _settingsStorage.loadBoolState(_secureAppKey);
-  }
-
   void toggleTheme() {
     isDarkTheme = !isDarkTheme;
     _settingsStorage.saveBoolState(_darkThemeKey, isDarkTheme);
     notifyListeners();
-  }
-
-  void loadDarkTheme() async {
-    isDarkTheme = await _settingsStorage.loadBoolState(_darkThemeKey);
   }
 }
