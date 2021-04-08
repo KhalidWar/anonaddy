@@ -19,7 +19,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     /// Use [watch] method to access different providers
-    final themeProvider = watch(themeServiceProvider);
+    final themeProvider = watch(settingsStateManagerProvider);
 
     return LifecycleService(
       child: MaterialApp(

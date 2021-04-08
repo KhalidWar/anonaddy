@@ -5,16 +5,20 @@ class SettingsStateManager extends ChangeNotifier {
   SettingsStateManager() {
     isAutoCopy = false;
     isAppSecured = false;
+    isDarkTheme = false;
     loadAutoCopy();
     loadSecureApp();
+    loadDarkTheme();
   }
 
   final _settingsStorage = SettingsDataStorage();
   final _autoCopyKey = 'autoCopyKey';
   final _secureAppKey = 'secureApp';
+  final _darkThemeKey = 'darkTheme';
 
   bool isAutoCopy;
   bool isAppSecured;
+  bool isDarkTheme;
 
   void toggleAutoCopy() {
     isAutoCopy = !isAutoCopy;
@@ -34,5 +38,15 @@ class SettingsStateManager extends ChangeNotifier {
 
   void loadSecureApp() async {
     isAppSecured = await _settingsStorage.loadBoolState(_secureAppKey);
+  }
+
+  void toggleTheme() {
+    isDarkTheme = !isDarkTheme;
+    _settingsStorage.saveBoolState(_darkThemeKey, isDarkTheme);
+    notifyListeners();
+  }
+
+  void loadDarkTheme() async {
+    isDarkTheme = await _settingsStorage.loadBoolState(_darkThemeKey);
   }
 }
