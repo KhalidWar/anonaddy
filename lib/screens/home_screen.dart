@@ -31,60 +31,55 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      child: Consumer(
-        builder: (_, watch, __) {
-          final connectivityAsyncValue = watch(connectivityStreamProvider);
-          bool isOffline = false;
+    return Consumer(
+      builder: (_, watch, __) {
+        final connectivityAsyncValue = watch(connectivityStreamProvider);
+        bool isOffline = false;
 
-          connectivityAsyncValue.whenData((data) {
-            if (data == ConnectionStatus.offline) {
-              isOffline = true;
-            } else {
-              isOffline = false;
-            }
-          });
-          return Scaffold(
-            appBar: buildAppBar(context, isOffline),
-            body: IndexedStack(
-              index: _selectedIndex,
-              children: [
-                AccountTab(),
-                AliasTab(),
-                SearchTab(),
-              ],
-            ),
-            bottomNavigationBar: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                isOffline ? NoInternetAlert() : Container(),
-                BottomNavigationBar(
-                  onTap: _selectedTab,
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: isDark ? kAccentColor : kBlueNavyColor,
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.account_circle),
-                      label: 'Account',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.alternate_email_sharp),
-                      label: 'Aliases',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.search_outlined),
-                      label: 'Search',
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+        connectivityAsyncValue.whenData((data) {
+          if (data == ConnectionStatus.offline) {
+            isOffline = true;
+          } else {
+            isOffline = false;
+          }
+        });
+        return Scaffold(
+          appBar: buildAppBar(context, isOffline),
+          body: IndexedStack(
+            index: _selectedIndex,
+            children: [
+              AccountTab(),
+              AliasTab(),
+              SearchTab(),
+            ],
+          ),
+          bottomNavigationBar: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              isOffline ? NoInternetAlert() : Container(),
+              BottomNavigationBar(
+                onTap: _selectedTab,
+                currentIndex: _selectedIndex,
+                selectedItemColor: isDark ? kAccentColor : kBlueNavyColor,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.account_circle),
+                    label: 'Account',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.alternate_email_sharp),
+                    label: 'Aliases',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search_outlined),
+                    label: 'Search',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
