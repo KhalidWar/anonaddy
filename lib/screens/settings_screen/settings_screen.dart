@@ -49,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             Consumer(
               builder: (_, watch, __) {
-                final secureApp = watch(secureAppProvider);
+                final settings = watch(settingsStateManagerProvider);
                 return ListTile(
                   title: Text(
                     'Secure App',
@@ -60,9 +60,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   trailing: IgnorePointer(
                     child: Switch.adaptive(
-                        value: secureApp.isAppSecured, onChanged: (toggle) {}),
+                        value: settings.isAppSecured, onChanged: (toggle) {}),
                   ),
-                  onTap: () => secureApp.toggleSecureApp(),
+                  onTap: () => settings.toggleSecureApp(),
                 );
               },
             ),

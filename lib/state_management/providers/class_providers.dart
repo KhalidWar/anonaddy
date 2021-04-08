@@ -7,7 +7,6 @@ import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/domains/domains_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
-import 'package:anonaddy/services/secure_app_service/secure_app_service.dart';
 import 'package:anonaddy/services/theme/theme_service.dart';
 import 'package:anonaddy/services/user/user_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
@@ -47,9 +46,6 @@ final loginStateManagerProvider =
 
 final recipientStateManagerProvider =
     ChangeNotifierProvider((ref) => RecipientStateManager());
-
-final secureAppProvider =
-    ChangeNotifierProvider<SecureAppService>((ref) => SecureAppService());
 
 final lifecycleStateManagerProvider =
     ChangeNotifierProvider((ref) => LifecycleStateManager());

@@ -35,7 +35,7 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
 
   void authenticate() {
     final biometricAuth = context.read(biometricAuthServiceProvider);
-    final isAppSecure = context.read(secureAppProvider).isAppSecured;
+    final isAppSecure = context.read(settingsStateManagerProvider).isAppSecured;
     if (isAppSecure == true) {
       biometricAuth
           .canCheckBiometrics()
