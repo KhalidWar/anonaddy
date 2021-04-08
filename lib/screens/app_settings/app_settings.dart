@@ -29,18 +29,22 @@ class _AppSettingsState extends State<AppSettings> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // todo encourage users to get into beta program
-            ListTile(
-              title: Text(
-                'Dark Theme',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: Text('App follows system by default'),
-              trailing: Switch.adaptive(
-                value: context.read(themeServiceProvider).isDarkTheme,
-                onChanged: (toggle) =>
-                    context.read(themeServiceProvider).toggleTheme(),
-              ),
-              onTap: () => context.read(themeServiceProvider).toggleTheme(),
+            Consumer(
+              builder: (_, watch, __) {
+                final theme = watch(themeServiceProvider);
+                return ListTile(
+                  title: Text(
+                    'Dark Theme',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  subtitle: Text('App follows system by default'),
+                  trailing: IgnorePointer(
+                    child: Switch.adaptive(
+                        value: theme.isDarkTheme, onChanged: (toggle) {}),
+                  ),
+                  onTap: () => theme.toggleTheme(),
+                );
+              },
             ),
             Consumer(
               builder: (_, watch, __) {
@@ -51,13 +55,32 @@ class _AppSettingsState extends State<AppSettings> {
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   subtitle: Text(
-                    'Blocks screenshots, screen recording, and app switcher view',
+                    'Blocks screenshot, screen recording, and app switcher view',
                   ),
-                  trailing: Switch.adaptive(
-                    value: secureApp.isAppSecured,
-                    onChanged: (toggle) => secureApp.toggleSecureApp(),
+                  trailing: IgnorePointer(
+                    child: Switch.adaptive(
+                        value: secureApp.isAppSecured, onChanged: (toggle) {}),
                   ),
                   onTap: () => secureApp.toggleSecureApp(),
+                );
+              },
+            ),
+            Consumer(
+              builder: (_, watch, __) {
+                final settings = watch(settingsStateManagerProvider);
+                return ListTile(
+                  title: Text(
+                    'Auto Copy Email',
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  subtitle: Text(
+                    'Automatically copy email after alias creation',
+                  ),
+                  trailing: IgnorePointer(
+                    child: Switch.adaptive(
+                        value: settings.isAutoCopy, onChanged: (toggle) {}),
+                  ),
+                  onTap: () => settings.toggleAutoCopy(),
                 );
               },
             ),

@@ -50,13 +50,19 @@ class AliasStateManager extends ChangeNotifier {
 
   void createNewAlias(BuildContext context, String desc, String domain,
       String format, String localPart) {
+    final settings = context.read(settingsStateManagerProvider);
     void createAlias() async {
       isToggleLoading = true;
       await context
           .read(aliasServiceProvider)
           .createNewAlias(desc, domain, format, localPart)
           .then((value) {
-        showToast('Alias created successfully!');
+        if (settings.isAutoCopy) {
+          Clipboard.setData(ClipboardData(text: value.email));
+          showToast('Alias created and email copied!');
+        } else {
+          showToast('Alias created successfully!');
+        }
       }).catchError((error) {
         showToast(error.toString());
       });

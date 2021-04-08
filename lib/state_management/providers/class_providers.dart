@@ -17,6 +17,7 @@ import '../alias_state_manager.dart';
 import '../lifecycle_state_manager.dart';
 import '../login_state_manager.dart';
 import '../recipient_state_manager.dart';
+import '../settings_state_manager.dart';
 import '../username_state_manager.dart';
 
 /// Class Providers
@@ -55,3 +56,6 @@ final lifecycleStateManagerProvider =
 
 final themeServiceProvider =
     ChangeNotifierProvider<ThemeService>((ref) => ThemeService());
+
+final settingsStateManagerProvider =
+    ChangeNotifierProvider((ref) => SettingsStateManager());
