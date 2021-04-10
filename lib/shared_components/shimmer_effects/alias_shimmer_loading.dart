@@ -2,7 +2,7 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../alias_tab_pie_chart.dart';
+import '../pie_chart/alias_tab_pie_chart.dart';
 
 class AliasShimmerLoading extends StatelessWidget {
   @override
