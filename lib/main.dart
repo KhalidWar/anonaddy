@@ -1,7 +1,6 @@
 import 'package:anonaddy/screens/secure_app_screen/secure_app_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +24,7 @@ class MyApp extends ConsumerWidget {
 
     /// Sets StatusBarColor across the app
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: kBlueNavyColor),
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
 
     return LifecycleService(
