@@ -37,6 +37,7 @@ dependencies:
 
   # State Management
   flutter_riverpod: ^0.12.1
+  flutter_phoenix: ^1.0.0
 
   # Testing
   mockito: ^4.1.3

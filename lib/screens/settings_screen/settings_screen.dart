@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
+import 'package:anonaddy/screens/login_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -90,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   elevation: 0,
                   primary: Colors.red,
                 ),
-                child: Text('Log out'),
+                child: Text('Logout'),
                 onPressed: () => buildLogoutDialog(context),
               ),
             ),
@@ -102,23 +102,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future buildLogoutDialog(BuildContext context) {
-    final logout = context.read(loginStateManagerProvider).logout;
     final confirmationDialog = ConfirmationDialog();
 
-    signOut() async {
-      await logout(context).whenComplete(() {
-        Navigator.pop(context);
-        Navigator.pop(context);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return TokenLoginScreen();
-            },
-          ),
-        );
-      });
+    logout() async {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LogoutScreen()),
+      );
     }
 
     return showModal(
@@ -126,9 +118,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (context) {
         return TargetedPlatform().isIOS()
             ? confirmationDialog.iOSAlertDialog(
-                context, kSignOutAlertDialog, signOut, 'Sign out')
+                context, kSignOutAlertDialog, logout, 'Logout')
             : confirmationDialog.androidAlertDialog(
-                context, kSignOutAlertDialog, signOut, 'Sign out');
+                context, kSignOutAlertDialog, logout, 'Logout');
       },
     );
   }

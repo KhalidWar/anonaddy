@@ -1,5 +1,7 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LogoutScreen extends StatefulWidget {
   @override
@@ -7,16 +9,10 @@ class LogoutScreen extends StatefulWidget {
 }
 
 class _LogoutScreenState extends State<LogoutScreen> {
-  //todo delete all app data
   @override
   void initState() {
     super.initState();
-  }
-
-  //todo dispose of all providers and navigate to login screen
-  @override
-  void dispose() {
-    super.dispose();
+    context.read(loginStateManagerProvider).logout(context);
   }
 
   @override

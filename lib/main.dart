@@ -4,13 +4,17 @@ import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   runApp(
-    /// Riverpod base widget to store provider state
-    ProviderScope(
-      child: MyApp(),
+    /// Phoenix restarts app upon logout
+    Phoenix(
+      /// Riverpod base widget to store provider state
+      child: ProviderScope(
+        child: MyApp(),
+      ),
     ),
   );
 }

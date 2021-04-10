@@ -3,6 +3,7 @@ import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,8 +45,9 @@ class LoginStateManager extends ChangeNotifier {
   }
 
   Future<void> logout(BuildContext context) async {
-    //todo logout should clear all app data
-    await FlutterSecureStorage().deleteAll();
+    await FlutterSecureStorage()
+        .deleteAll()
+        .whenComplete(() => Phoenix.rebirth(context));
   }
 
   void pasteFromClipboard(TextEditingController controller) async {
