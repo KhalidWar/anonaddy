@@ -5,6 +5,7 @@ import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_pie_chart.dart';
 import 'package:anonaddy/shared_components/recipient_list_tile.dart';
@@ -32,6 +33,8 @@ class AliasDetailScreen extends ConsumerWidget {
 
     final _textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
+
+    final isDeleted = aliasDataModel.deletedAt == null;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -90,37 +93,26 @@ class AliasDetailScreen extends ConsumerWidget {
               trailingIconData: Icons.edit,
               trailingIconOnPress: () {},
             ),
-            aliasDataModel.deletedAt == null
-                ? AliasDetailListTile(
-                    leadingIconData: Icons.delete_outline,
-                    title: 'Delete Alias',
-                    subtitle: 'Alias will reject all emails sent to it',
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete_outline, color: Colors.red),
-                      onPressed: () {
-                        buildDeleteAliasDialog(
-                          context,
-                          deleteOrRestoreAlias,
-                          aliasDataModel,
-                        );
-                      },
-                    ),
-                  )
-                : AliasDetailListTile(
-                    leadingIconData: Icons.restore_outlined,
-                    title: 'Restore Alias',
-                    subtitle: 'Alias will be able to receive emails',
-                    trailing: IconButton(
-                      icon: Icon(Icons.restore_outlined, color: Colors.green),
-                      onPressed: () {
-                        buildRestoreAliasDialog(
-                          context,
-                          deleteOrRestoreAlias,
-                          aliasDataModel,
-                        );
-                      },
-                    ),
-                  ),
+            AliasDetailListTile(
+              leadingIconData:
+                  isDeleted ? Icons.delete_outline : Icons.restore_outlined,
+              title: '${isDeleted ? 'Delete' : 'Restore'} Alias',
+              subtitle:
+                  isDeleted ? kDeletedAliasUIString : kRestoreAliasUIString,
+              trailing: IconButton(
+                icon: isDeleted
+                    ? Icon(Icons.delete_outline, color: Colors.red)
+                    : Icon(Icons.restore_outlined, color: Colors.green),
+                onPressed: () {
+                  buildDeleteOrRestoreAliasDialog(
+                    context,
+                    isDeleted,
+                    deleteOrRestoreAlias,
+                    aliasDataModel,
+                  );
+                },
+              ),
+            ),
             if (aliasDataModel.recipients == null)
               Container()
             else
@@ -206,10 +198,9 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  //todo combine both delete and restore dialogs
-  Future buildDeleteAliasDialog(BuildContext context,
+  Future buildDeleteOrRestoreAliasDialog(BuildContext context, bool isDeleted,
       Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
-    deleteAlias() {
+    deleteOrRestore() {
       deleteOrRestoreAlias(
         context,
         aliasDataModel.deletedAt,
@@ -223,32 +214,15 @@ class AliasDetailScreen extends ConsumerWidget {
       builder: (context) {
         return isIOS
             ? confirmationDialog.iOSAlertDialog(
-                context, kDeleteAliasConfirmation, deleteAlias, 'Delete Alias')
+                context,
+                isDeleted ? kDeleteAliasConfirmation : kRestoreAliasText,
+                deleteOrRestore,
+                '${isDeleted ? 'Delete' : 'Restore'} Alias')
             : confirmationDialog.androidAlertDialog(
-                context, kDeleteAliasConfirmation, deleteAlias, 'Delete Alias');
-      },
-    );
-  }
-
-  Future buildRestoreAliasDialog(BuildContext context,
-      Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
-    restoreAlias() {
-      deleteOrRestoreAlias(
-        context,
-        aliasDataModel.deletedAt,
-        aliasDataModel.aliasID,
-      );
-      Navigator.pop(context);
-    }
-
-    return showModal(
-      context: context,
-      builder: (context) {
-        return isIOS
-            ? confirmationDialog.iOSAlertDialog(
-                context, kRestoreAliasText, restoreAlias, 'Restore Alias')
-            : confirmationDialog.androidAlertDialog(
-                context, kRestoreAliasText, restoreAlias, 'Restore Alias');
+                context,
+                isDeleted ? kDeleteAliasConfirmation : kRestoreAliasText,
+                deleteOrRestore,
+                '${isDeleted ? 'Delete' : 'Restore'} Alias');
       },
     );
   }
