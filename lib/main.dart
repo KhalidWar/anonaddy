@@ -26,7 +26,7 @@ class MyApp extends ConsumerWidget {
     /// Use [watch] method to access different providers
     final themeProvider = watch(settingsStateManagerProvider);
 
-    /// Sets StatusBarColor across the app
+    /// Sets StatusBarColor for the whole app
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );

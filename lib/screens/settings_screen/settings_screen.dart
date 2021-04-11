@@ -21,14 +21,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: Text('App Settings')),
+      appBar: AppBar(title: Text('Settings')),
       body: Consumer(builder: (_, watch, __) {
         final settings = watch(settingsStateManagerProvider);
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // todo encourage users to get into beta program
             ListTile(
               title: Text(
                 'Dark Theme',
@@ -46,9 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'Secure App',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              subtitle: Text(
-                'Block screenshot and screen recording',
-              ),
+              subtitle: Text('Block screenshot and screen recording'),
               trailing: IgnorePointer(
                 child: Switch.adaptive(
                     value: settings.isAppSecured, onChanged: (toggle) {}),
@@ -57,12 +54,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             ListTile(
               title: Text(
+                'Biometric Authentication',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              subtitle: Text('Require biometric authentication'),
+              trailing: IgnorePointer(
+                child: Switch.adaptive(
+                  value: settings.isAppSecured
+                      ? settings.isBiometricAuth
+                      : settings.isBiometricAuth = false,
+                  onChanged: settings.isAppSecured ? (toggle) {} : null,
+                ),
+              ),
+              onTap: () {
+                if (settings.isAppSecured) {
+                  settings.toggleBiometricRequired();
+                } else {
+                  context
+                      .read(aliasStateManagerProvider)
+                      .showToast('Secure App must be enabled');
+                }
+              },
+            ),
+            ListTile(
+              title: Text(
                 'Auto Copy Email',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              subtitle: Text(
-                'Automatically copy email after alias creation',
-              ),
+              subtitle: Text('Automatically copy email after alias creation'),
               trailing: IgnorePointer(
                 child: Switch.adaptive(
                     value: settings.isAutoCopy, onChanged: (toggle) {}),
@@ -118,9 +137,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (context) {
         return TargetedPlatform().isIOS()
             ? confirmationDialog.iOSAlertDialog(
-                context, kSignOutAlertDialog, logout, 'Logout')
+                context, kLogOutAlertDialog, logout, 'Logout')
             : confirmationDialog.androidAlertDialog(
-                context, kSignOutAlertDialog, logout, 'Logout');
+                context, kLogOutAlertDialog, logout, 'Logout');
       },
     );
   }

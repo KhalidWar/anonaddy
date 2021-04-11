@@ -8,8 +8,11 @@ class SettingsDataStorage {
   }
 
   Future<bool> loadBoolState(String key) async {
-    return await _secureStorage.read(key: key).then((value) {
-      return value == 'true' ? true : false;
-    });
+    final boolValue = await _secureStorage.read(key: key);
+    if (boolValue == null) {
+      return null;
+    } else {
+      return boolValue == 'true' ? true : false;
+    }
   }
 }
