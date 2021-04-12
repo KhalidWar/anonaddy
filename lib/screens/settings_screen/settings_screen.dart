@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
+import 'package:anonaddy/screens/login_screen/logout_screen.dart';
+import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -21,14 +22,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: Text('App Settings')),
+      appBar: AppBar(title: Text('Settings')),
       body: Consumer(builder: (_, watch, __) {
         final settings = watch(settingsStateManagerProvider);
+        final biometricAuth = context.read(biometricAuthServiceProvider);
+        final showToast = context.read(aliasStateManagerProvider).showToast;
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // todo encourage users to get into beta program
             ListTile(
               title: Text(
                 'Dark Theme',
@@ -46,9 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'Secure App',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              subtitle: Text(
-                'Block screenshot and screen recording',
-              ),
+              subtitle: Text('Block screenshot and screen recording'),
               trailing: IgnorePointer(
                 child: Switch.adaptive(
                     value: settings.isAppSecured, onChanged: (toggle) {}),
@@ -57,12 +57,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             ListTile(
               title: Text(
+                'Biometric Authentication',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              subtitle: Text('Require biometric authentication'),
+              trailing: IgnorePointer(
+                child: Switch.adaptive(
+                  value: settings.isAppSecured
+                      ? settings.isBiometricAuth
+                      : settings.toggleAndDeleteSavedSwitch(),
+                  onChanged: settings.isAppSecured ? (toggle) {} : null,
+                ),
+              ),
+              onTap: () {
+                if (settings.isAppSecured) {
+                  biometricAuth.canEnableBiometric().then((canCheckBio) {
+                    biometricAuth
+                        .authenticate(canCheckBio)
+                        .then((isAuthSuccess) {
+                      if (isAuthSuccess) {
+                        settings.toggleBiometricRequired();
+                      } else {
+                        showToast(kFailedToAuthenticate);
+                      }
+                    }).catchError((error) => showToast(error.toString()));
+                  }).catchError((error) => showToast(error.toString()));
+                } else {
+                  showToast(kSecureAppMustBeEnable);
+                }
+              },
+            ),
+            ListTile(
+              title: Text(
                 'Auto Copy Email',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              subtitle: Text(
-                'Automatically copy email after alias creation',
-              ),
+              subtitle: Text('Automatically copy email after alias creation'),
               trailing: IgnorePointer(
                 child: Switch.adaptive(
                     value: settings.isAutoCopy, onChanged: (toggle) {}),
@@ -90,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   elevation: 0,
                   primary: Colors.red,
                 ),
-                child: Text('Log out'),
+                child: Text('Logout'),
                 onPressed: () => buildLogoutDialog(context),
               ),
             ),
@@ -102,23 +132,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future buildLogoutDialog(BuildContext context) {
-    final logout = context.read(loginStateManagerProvider).logout;
     final confirmationDialog = ConfirmationDialog();
 
-    signOut() async {
-      await logout(context).whenComplete(() {
-        Navigator.pop(context);
-        Navigator.pop(context);
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return TokenLoginScreen();
-            },
-          ),
-        );
-      });
+    logout() async {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LogoutScreen()),
+      );
     }
 
     return showModal(
@@ -126,9 +148,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (context) {
         return TargetedPlatform().isIOS()
             ? confirmationDialog.iOSAlertDialog(
-                context, kSignOutAlertDialog, signOut, 'Sign out')
+                context, kLogOutAlertDialog, logout, 'Logout')
             : confirmationDialog.androidAlertDialog(
-                context, kSignOutAlertDialog, signOut, 'Sign out');
+                context, kLogOutAlertDialog, logout, 'Logout');
       },
     );
   }

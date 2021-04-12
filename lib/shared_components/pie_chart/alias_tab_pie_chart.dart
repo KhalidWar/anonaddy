@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/pie_chart_indicator.dart';
+import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 

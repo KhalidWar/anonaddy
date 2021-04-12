@@ -1,4 +1,5 @@
 import 'package:anonaddy/screens/login_screen/initial_screen.dart';
+import 'package:anonaddy/screens/secure_app_screen/secure_gate_screen.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,30 +10,31 @@ class SecureAppScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     /// Use [watch] method to access different providers
-    final isAppSecured = watch(settingsStateManagerProvider).isAppSecured;
+    final settings = watch(settingsStateManagerProvider);
+    final isAppSecured = settings.isAppSecured;
+    final isBiometricAuth = settings.isBiometricAuth;
 
     return SecureApplication(
       nativeRemoveDelay: 1000,
       child: Builder(
         builder: (context) {
-          /// Access SecureApplication provider to control secure app state
+          /// Access secureApp provider to control its state
           final secureAppProvider = SecureApplicationProvider.of(context);
 
           if (isAppSecured) {
-            /// Lock app by activating SecureGate and requiring authentication to
-            /// access content behind SecureGate.
-            secureAppProvider.lock();
-
-            /// Secure = prevent screenshot and block app switcher view
-            /// Does NOT lock app or requires authentication
+            /// .secure() prevents screenshot and block app switcher view
+            /// but it does NOT require authentication
             secureAppProvider.secure();
             secureAppProvider.pause();
-          } else {
-            /// Disables SecureApp and screenshots are permitted
-            secureAppProvider.open();
-            secureAppProvider.pause();
-          }
 
+            if (isBiometricAuth) {
+              /// .lock() locks app by activating SecureGate and requiring
+              /// authentication to access content behind SecureGate.
+              secureAppProvider.lock();
+              return SecureGateScreen(child: InitialScreen());
+            }
+            return InitialScreen();
+          }
           return InitialScreen();
         },
       ),

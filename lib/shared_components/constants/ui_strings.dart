@@ -17,8 +17,11 @@ const kPublicGPGKeyHintText =
     'Begins with \'-----BEGIN PGP PUBLIC KEY BLOCK-----\'';
 const kEnterPublicKeyData =
     'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
-const kSignOutAlertDialog = 'Are you sure you want to sign out?';
+const kLogOutAlertDialog =
+    'Are you sure you want to log out?\n\nAll app data will be deleted.';
 const kUnverifiedRecipient =
     'Unverified recipient emails can NOT be set as default recipient for aliases.';
 const kUpdateAliasRecipientFailed = 'Failed to update description';
 const kUpdateAliasRecipientSuccessful = 'Successfully updated alias recipients';
+const kDeletedAliasUIString = 'Alias will reject all emails sent to it';
+const kRestoreAliasUIString = 'Alias will be able to receive emails';

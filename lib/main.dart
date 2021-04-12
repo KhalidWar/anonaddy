@@ -1,17 +1,20 @@
 import 'package:anonaddy/screens/secure_app_screen/secure_app_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   runApp(
-    /// Riverpod base widget to store provider state
-    ProviderScope(
-      child: MyApp(),
+    /// Phoenix restarts app upon logout
+    Phoenix(
+      /// Riverpod base widget to store provider state
+      child: ProviderScope(
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -23,9 +26,9 @@ class MyApp extends ConsumerWidget {
     /// Use [watch] method to access different providers
     final themeProvider = watch(settingsStateManagerProvider);
 
-    /// Sets StatusBarColor across the app
+    /// Sets StatusBarColor for the whole app
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: kBlueNavyColor),
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
 
     return LifecycleService(

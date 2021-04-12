@@ -2,11 +2,11 @@
 const kDeletedAliasText =
     'Deleted aliases reject all emails sent to them. However, they can be restored to start receiving emails again.';
 const kDeleteAliasConfirmation =
-    'Are you sure you want to delete this alias? You can restore this alias if you later change your mind. Once deleted, this alias will reject any emails sent to it.';
+    'Are you sure you want to delete this alias? You can restore this alias if you later change your mind.\n\nOnce deleted, this alias will reject any emails sent to it.';
 const kCreateNewAliasText =
     'Other aliases e.g. alias@khalidwar.anonaddy.com or .me can also be created automatically when they receive their first email.';
 const kRestoreAliasText =
-    'Are you sure you want to restore this alias? Once restored, this alias will be able to receive emails again.';
+    'Are you sure you want to restore this alias?\n\nOnce restored, this alias will be able to receive emails again.';
 const kRemoveRecipientPublicKey = 'Remove recipient public key';
 const kRemoveRecipientPublicKeyBody =
     'Are you sure you want to remove the public key for this recipient?\nIt will also be removed from any other recipients using the same key.';
