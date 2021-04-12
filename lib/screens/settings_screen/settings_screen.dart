@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/screens/login_screen/logout_screen.dart';
+import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -24,6 +25,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(title: Text('Settings')),
       body: Consumer(builder: (_, watch, __) {
         final settings = watch(settingsStateManagerProvider);
+        final biometricAuth = context.read(biometricAuthServiceProvider);
+        final showToast = context.read(aliasStateManagerProvider).showToast;
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,11 +71,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               onTap: () {
                 if (settings.isAppSecured) {
-                  settings.toggleBiometricRequired();
+                  biometricAuth.canEnableBiometric().then((canCheckBio) {
+                    biometricAuth
+                        .authenticate(canCheckBio)
+                        .then((isAuthSuccess) {
+                      if (isAuthSuccess) {
+                        settings.toggleBiometricRequired();
+                      } else {
+                        showToast(kFailedToAuthenticate);
+                      }
+                    }).catchError((error) => showToast(error.toString()));
+                  }).catchError((error) => showToast(error.toString()));
                 } else {
-                  context
-                      .read(aliasStateManagerProvider)
-                      .showToast('Secure App must be enabled');
+                  showToast(kSecureAppMustBeEnable);
                 }
               },
             ),

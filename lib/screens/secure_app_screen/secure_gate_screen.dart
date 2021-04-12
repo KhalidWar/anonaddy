@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/screens/login_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -23,15 +24,20 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
   bool _didAuthenticate = false;
 
   Future<void> authenticate() async {
+    final showToast = context.read(aliasStateManagerProvider).showToast;
     final biometricAuth = context.read(biometricAuthServiceProvider);
-    await biometricAuth
-        .canCheckBiometrics()
-        .then((value) => biometricAuth.authenticate(value))
-        .then((value) {
-      setState(() {
-        _didAuthenticate = value;
-      });
-    });
+
+    await biometricAuth.canEnableBiometric().then((canCheckBio) async {
+      await biometricAuth.authenticate(canCheckBio).then((isAuthSuccess) {
+        if (isAuthSuccess) {
+          setState(() {
+            _didAuthenticate = isAuthSuccess;
+          });
+        } else {
+          showToast(kFailedToAuthenticate);
+        }
+      }).catchError((error) => showToast(error));
+    }).catchError((error) => showToast(error));
   }
 
   @override

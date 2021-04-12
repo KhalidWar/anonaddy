@@ -14,3 +14,8 @@ const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
 const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 const kOnlyAvailableToPaid = 'Only available to paid users';
 const kComingSoon = 'Coming Soon';
+
+/// Biometric Auth Messages
+const kAuthToProceed = 'Authenticate to proceed';
+const kFailedToAuthenticate = 'Failed to authenticate';
+const kSecureAppMustBeEnable = 'Secure App must be enabled';
