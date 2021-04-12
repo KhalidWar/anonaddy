@@ -1,5 +1,6 @@
 import 'package:anonaddy/services/data_storage/settings_data_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SettingsStateManager extends ChangeNotifier {
   SettingsStateManager() {
@@ -46,6 +47,11 @@ class SettingsStateManager extends ChangeNotifier {
     isBiometricAuth = !isBiometricAuth;
     _settingsStorage.saveBoolState(_biometricAuthKey, isBiometricAuth);
     notifyListeners();
+  }
+
+  bool toggleAndDeleteSavedSwitch() {
+    FlutterSecureStorage().delete(key: _biometricAuthKey);
+    return isBiometricAuth = false;
   }
 
   void toggleAutoCopy() {

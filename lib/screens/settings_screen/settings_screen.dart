@@ -65,7 +65,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Switch.adaptive(
                   value: settings.isAppSecured
                       ? settings.isBiometricAuth
-                      : settings.isBiometricAuth = false,
+                      : settings.toggleAndDeleteSavedSwitch(),
                   onChanged: settings.isAppSecured ? (toggle) {} : null,
                 ),
               ),
