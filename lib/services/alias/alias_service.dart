@@ -19,7 +19,7 @@ class AliasService {
 
     try {
       final response = await http.get(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
+        Uri.parse('$kBaseURL/$kAliasesURL?deleted=with'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -50,7 +50,7 @@ class AliasService {
 
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL'),
+        Uri.parse('$kBaseURL/$kAliasesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -82,7 +82,7 @@ class AliasService {
 
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kActiveAliasURL'),
+        Uri.parse('$kBaseURL/$kActiveAliasURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -109,7 +109,7 @@ class AliasService {
 
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kActiveAliasURL/$aliasID'),
+        Uri.parse('$kBaseURL/$kActiveAliasURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -136,7 +136,7 @@ class AliasService {
 
     try {
       final response = await http.patch(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        Uri.parse('$kBaseURL/$kAliasesURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -163,7 +163,7 @@ class AliasService {
 
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        Uri.parse('$kBaseURL/$kAliasesURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -189,7 +189,7 @@ class AliasService {
 
     try {
       final response = await http.patch(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID/restore'),
+        Uri.parse('$kBaseURL/$kAliasesURL/$aliasID/restore'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -216,7 +216,7 @@ class AliasService {
 
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kAliasURL-$kRecipientsURL'),
+        Uri.parse('$kBaseURL/$kAliasURL-$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

@@ -16,7 +16,7 @@ class DomainOptionsService {
 
     try {
       final response = await http.get(
-        Uri.encodeFull('$kBaseURL/$kDomainsOptionsURL'),
+        Uri.parse('$kBaseURL/$kDomainsOptionsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

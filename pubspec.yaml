@@ -24,7 +24,7 @@ dependencies:
   fl_chart: ^0.20.0-nullsafety1
 
   # Internet Connectivity
-  http: ^0.12.2
+  http: ^0.13.1
   url_launcher: ^6.0.3
   connectivity: ^3.0.2
 
