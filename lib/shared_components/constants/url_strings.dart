@@ -15,6 +15,10 @@ const kDomainsURL = 'domains';
 const kDomainsOptionsURL = 'domain-options';
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
 
+/// HTTPS URLs
+const kAuthorityURL = 'app.anonaddy.com';
+const kUnEncodedBaseURL = '/api/v1';
+
 /// AddyManager URLs
 const kAddyManagerRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAddyManagerIssuesURL = 'https://github.com/KhalidWar/anonaddy/issues';
