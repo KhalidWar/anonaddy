@@ -1,16 +1,13 @@
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutAppScreen extends StatelessWidget {
-  final packageInfoProvider =
-      FutureProvider<PackageInfo>((ref) => PackageInfo.fromPlatform());
-
   Future launchUrl(String url) async {
     await launch(url).catchError((error, stackTrace) {
       throw Fluttertoast.showToast(

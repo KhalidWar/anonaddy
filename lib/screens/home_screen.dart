@@ -4,6 +4,7 @@ import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
+import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _selectedTab(int index) {
     setState(() => _selectedIndex = index);
+  }
+
+  void checkIfAppUpdated() {
+    context.read(changelogServiceProvider).isAppUpdated().then((value) {
+      print(value.toString() * 100);
+      if (value) buildUpdateNews(context);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfAppUpdated();
   }
 
   @override
@@ -122,6 +136,58 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(context, CustomPageRoute(SettingsScreen())),
         ),
       ],
+    );
+  }
+
+  Future buildUpdateNews(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      builder: (context) {
+        return Container(
+          height: size.height * 0.5,
+          width: double.infinity,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'What\'s new?',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Consumer(
+                builder: (_, watch, __) {
+                  final appInfo = watch(packageInfoProvider);
+                  return appInfo.when(
+                    data: (data) => Text('Version: ${data.version}'),
+                    loading: () => CircularProgressIndicator(),
+                    error: (error, stackTrace) => Text(error.toString()),
+                  );
+                },
+              ),
+              Divider(height: size.height * 0.05),
+              //todo automate changelog fetching
+              Text('1. Added this widget'),
+              SizedBox(height: size.height * 0.01),
+              Text('2. Lots of under the hood improvements'),
+              SizedBox(height: size.height * 0.01),
+              Spacer(),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(),
+                  child: Text('Continue to AddyManager'),
+                  onPressed: () {
+                    context.read(changelogServiceProvider).markAppUpdated();
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info/package_info.dart';
 
 import 'class_providers.dart';
 
@@ -63,3 +64,6 @@ final accessTokenProvider = FutureProvider<String>((ref) async =>
 
 final searchHistoryFuture = FutureProvider<List<AliasDataModel>>(
     (ref) async => await ref.watch(searchHistoryProvider).loadData());
+
+final packageInfoProvider =
+    FutureProvider<PackageInfo>((ref) => PackageInfo.fromPlatform());
