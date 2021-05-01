@@ -30,6 +30,7 @@ class AccountTab extends StatelessWidget {
                 pinned: true,
                 backgroundColor: isDark ? Colors.black : Colors.white,
                 flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.pin,
                   background: Consumer(
                     builder: (_, watch, __) {
                       final accountStream = watch(accountStreamProvider);

@@ -57,6 +57,7 @@ class AliasTab extends ConsumerWidget {
                     floating: true,
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
+                      collapseMode: CollapseMode.pin,
                       background: Padding(
                         padding: EdgeInsets.only(bottom: 30),
                         child: AliasTabPieChart(
