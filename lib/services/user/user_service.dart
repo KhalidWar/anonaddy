@@ -16,7 +16,7 @@ class UserService {
 
     try {
       final response = await http.get(
-        Uri.encodeFull('$kBaseURL/$kAccountDetailsURL'),
+        Uri.parse('$kBaseURL/$kAccountDetailsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

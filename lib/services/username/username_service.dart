@@ -17,7 +17,7 @@ class UsernameService {
 
     try {
       final response = await http.get(
-        Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
+        Uri.parse('$kBaseURL/$kUsernamesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -46,7 +46,7 @@ class UsernameService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kUsernamesURL'),
+        Uri.parse('$kBaseURL/$kUsernamesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -73,7 +73,7 @@ class UsernameService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.patch(
-        Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
+        Uri.parse('$kBaseURL/$kUsernamesURL/$usernameID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -99,13 +99,14 @@ class UsernameService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kUsernamesURL/$usernameID'),
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "Accept": "application/json",
-            "Authorization": "Bearer $accessToken",
-          });
+        Uri.parse('$kBaseURL/$kUsernamesURL/$usernameID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 204) {
         print("deleteUsername ${response.statusCode}");
@@ -124,8 +125,7 @@ class UsernameService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.patch(
-        Uri.encodeFull(
-            '$kBaseURL/$kUsernamesURL/$usernameID/$kDefaultRecipientURL'),
+        Uri.parse('$kBaseURL/$kUsernamesURL/$usernameID/$kDefaultRecipientURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -151,7 +151,7 @@ class UsernameService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kActiveUsernamesURL'),
+        Uri.parse('$kBaseURL/$kActiveUsernamesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -177,7 +177,7 @@ class UsernameService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kActiveUsernamesURL/$usernameID'),
+          Uri.parse('$kBaseURL/$kActiveUsernamesURL/$usernameID'),
           headers: {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
@@ -201,7 +201,7 @@ class UsernameService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kCatchAllUsernameURL'),
+        Uri.parse('$kBaseURL/$kCatchAllUsernameURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -227,7 +227,7 @@ class UsernameService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kCatchAllUsernameURL/$usernameID'),
+          Uri.parse('$kBaseURL/$kCatchAllUsernameURL/$usernameID'),
           headers: {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",

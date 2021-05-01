@@ -1,6 +1,7 @@
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
+import 'package:anonaddy/services/changelog_service/changelog_service.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
@@ -29,6 +30,7 @@ final domainsServiceProvider = Provider((ref) => DomainsService());
 final biometricAuthServiceProvider = Provider((ref) => BiometricAuthService());
 final connectivityServiceProvider = Provider((ref) => ConnectivityService());
 final offlineDataProvider = Provider((ref) => OfflineData());
+final changelogServiceProvider = Provider((ref) => ChangelogService());
 
 /// Notifier Providers
 final aliasStateManagerProvider =

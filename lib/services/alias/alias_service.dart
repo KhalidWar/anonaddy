@@ -19,7 +19,8 @@ class AliasService {
 
     try {
       final response = await http.get(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL?deleted=with'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL',
+            {'deleted': 'with'}),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -50,7 +51,7 @@ class AliasService {
 
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -82,7 +83,7 @@ class AliasService {
 
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kActiveAliasURL'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kActiveAliasURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -109,7 +110,8 @@ class AliasService {
 
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kActiveAliasURL/$aliasID'),
+        Uri.https(
+            kAuthorityURL, '$kUnEncodedBaseURL/$kActiveAliasURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -136,7 +138,7 @@ class AliasService {
 
     try {
       final response = await http.patch(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -163,7 +165,7 @@ class AliasService {
 
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -189,7 +191,8 @@ class AliasService {
 
     try {
       final response = await http.patch(
-        Uri.encodeFull('$kBaseURL/$kAliasesURL/$aliasID/restore'),
+        Uri.https(
+            kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID/restore'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -216,7 +219,8 @@ class AliasService {
 
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kAliasURL-$kRecipientsURL'),
+        Uri.https(
+            kAuthorityURL, '$kUnEncodedBaseURL/$kAliasURL-$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

@@ -17,7 +17,7 @@ class RecipientService {
 
     try {
       final response = await http.get(
-        Uri.encodeFull('$kBaseURL/$kRecipientsURL'),
+        Uri.parse('$kBaseURL/$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -46,7 +46,7 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kEncryptedRecipient'),
+        Uri.parse('$kBaseURL/$kEncryptedRecipient'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -72,7 +72,7 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-        Uri.encodeFull('$kBaseURL/$kEncryptedRecipient/$recipientID'),
+        Uri.parse('$kBaseURL/$kEncryptedRecipient/$recipientID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -98,14 +98,15 @@ class RecipientService {
 
     try {
       final response = await http.patch(
-          Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "Accept": "application/json",
-            "Authorization": "Bearer $accessToken",
-          },
-          body: jsonEncode({"key_data": "$keyData"}));
+        Uri.parse('$kBaseURL/$kRecipientKeys/$recipientID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+        body: jsonEncode({"key_data": "$keyData"}),
+      );
 
       if (response.statusCode == 200) {
         print("addPublicGPGKey ${response.statusCode}");
@@ -123,7 +124,7 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kRecipientKeys/$recipientID'),
+          Uri.parse('$kBaseURL/$kRecipientKeys/$recipientID'),
           headers: {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
@@ -147,7 +148,7 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kRecipientsURL'),
+        Uri.parse('$kBaseURL/$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -173,7 +174,7 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-          Uri.encodeFull('$kBaseURL/$kRecipientsURL/$recipientID'),
+          Uri.parse('$kBaseURL/$kRecipientsURL/$recipientID'),
           headers: {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
@@ -197,7 +198,7 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.encodeFull('$kBaseURL/$kRecipientsURL/email/resend'),
+        Uri.parse('$kBaseURL/$kRecipientsURL/email/resend'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
