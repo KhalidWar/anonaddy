@@ -28,10 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _selectedIndex = index);
   }
 
-  void checkIfAppUpdated() {
-    context.read(changelogServiceProvider).isAppUpdated().then((value) {
-      print(value.toString() * 100);
-      if (value) buildUpdateNews(context);
+  void checkIfAppUpdated() async {
+    final changeLog = context.read(changelogServiceProvider);
+    await changeLog.checkIfAppUpdated(context).whenComplete(() async {
+      await changeLog.isAppUpdated().then((value) {
+        if (value) buildUpdateNews(context);
+      });
     });
   }
 
@@ -179,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: ElevatedButton.styleFrom(),
                   child: Text('Continue to AddyManager'),
                   onPressed: () {
-                    context.read(changelogServiceProvider).markAppUpdated();
+                    context.read(changelogServiceProvider).dismissChangeLog();
                     Navigator.pop(context);
                   },
                 ),
