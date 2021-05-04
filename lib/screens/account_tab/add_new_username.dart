@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -21,43 +22,38 @@ class AddNewUsername extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
       child: Column(
         children: [
-          Divider(
-            thickness: 3,
-            indent: size.width * 0.4,
-            endIndent: size.width * 0.4,
-          ),
-          SizedBox(height: size.height * 0.01),
-          Text(
-            'Add new username',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          Divider(thickness: 1),
-          SizedBox(height: size.height * 0.01),
-          Text(kAddNewUsernameText),
-          SizedBox(height: size.height * 0.02),
-          Form(
-            key: usernameFormKey,
-            child: TextFormField(
-              autofocus: true,
-              controller: _textEditController,
-              validator: (input) =>
-                  FormValidator().validateUsernameInput(input),
-              onFieldSubmitted: (toggle) => createUsername(),
-              decoration: kTextFormFieldDecoration.copyWith(
-                hintText: 'johndoe',
-              ),
+          BottomSheetHeader(headerLabel: 'Add New Username'),
+          Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            child: Column(
+              children: [
+                Text(kAddNewUsernameText),
+                SizedBox(height: size.height * 0.02),
+                Form(
+                  key: usernameFormKey,
+                  child: TextFormField(
+                    autofocus: true,
+                    controller: _textEditController,
+                    validator: (input) =>
+                        FormValidator().validateUsernameInput(input),
+                    onFieldSubmitted: (toggle) => createUsername(),
+                    decoration: kTextFormFieldDecoration.copyWith(
+                      hintText: 'johndoe',
+                    ),
+                  ),
+                ),
+                SizedBox(height: size.height * 0.02),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom().copyWith(
+                    minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                  ),
+                  child: Text('Add Username'),
+                  onPressed: () => createUsername(),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: size.height * 0.02),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom().copyWith(
-              minimumSize: MaterialStateProperty.all(Size(200, 50)),
-            ),
-            child: Text('Add Username'),
-            onPressed: () => createUsername(),
           ),
         ],
       ),

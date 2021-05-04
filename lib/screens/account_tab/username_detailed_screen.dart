@@ -4,6 +4,7 @@ import 'package:anonaddy/screens/account_tab/username_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
@@ -195,47 +196,43 @@ class UsernameDetailedScreen extends ConsumerWidget {
         final size = MediaQuery.of(context).size;
 
         return SingleChildScrollView(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
           child: Column(
             children: [
-              Divider(
-                thickness: 3,
-                indent: size.width * 0.4,
-                endIndent: size.width * 0.4,
-              ),
-              SizedBox(height: size.height * 0.01),
-              Text(
-                'Update description',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Divider(thickness: 1),
-              SizedBox(height: size.height * 0.01),
-              Text('Update description for'),
-              Text(
-                '${username.username}',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              SizedBox(height: size.height * 0.02),
-              Form(
-                key: context
-                    .read(usernameStateManagerProvider)
-                    .editDescriptionFormKey,
-                child: TextFormField(
-                  autofocus: true,
-                  controller: textEditingController,
-                  validator: (input) =>
-                      FormValidator().validateDescriptionField(input),
-                  onFieldSubmitted: (toggle) => editDesc(),
-                  decoration: kTextFormFieldDecoration.copyWith(
-                    hintText: '${username.description}',
-                  ),
+              BottomSheetHeader(headerLabel: 'Update Description'),
+              Container(
+                height: size.height * 0.25,
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Update description for'),
+                    Text(
+                      '${username.username}',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    Form(
+                      key: context
+                          .read(usernameStateManagerProvider)
+                          .editDescriptionFormKey,
+                      child: TextFormField(
+                        autofocus: true,
+                        controller: textEditingController,
+                        validator: (input) =>
+                            FormValidator().validateDescriptionField(input),
+                        onFieldSubmitted: (toggle) => editDesc(),
+                        decoration: kTextFormFieldDecoration.copyWith(
+                          hintText: '${username.description}',
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(),
+                      child: Text('Update description'),
+                      onPressed: () => editDesc(),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: size.height * 0.02),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(),
-                child: Text('Update description'),
-                onPressed: () => editDesc(),
               ),
             ],
           ),
@@ -254,7 +251,6 @@ class UsernameDetailedScreen extends ConsumerWidget {
       ),
       builder: (context) {
         return SingleChildScrollView(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
           child: Container(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),

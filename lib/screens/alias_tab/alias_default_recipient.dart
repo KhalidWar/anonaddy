@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -79,58 +80,55 @@ class _AliasDefaultRecipientScreenState
 
     return Column(
       children: [
-        Divider(
-          thickness: 3,
-          indent: size.width * 0.4,
-          endIndent: size.width * 0.4,
-        ),
-        SizedBox(height: size.height * 0.01),
-        Text(
-          'Update Alias Recipients',
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        Divider(thickness: 1, height: size.height * 0.03),
-        Text(kUpdateAliasRecipients),
-        Divider(height: size.height * 0.02),
-        if (_verifiedRecipients.isEmpty)
-          Padding(
-            padding: EdgeInsets.all(20),
-            child: Text('No recipients found',
-                style: Theme.of(context).textTheme.headline6),
-          )
-        else
-          Container(
-            height: MediaQuery.of(context).size.height * 0.35,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: _verifiedRecipients.length,
-              itemBuilder: (context, index) {
-                final verifiedRecipient = _verifiedRecipients[index];
-                return ListTile(
-                  selected: _isDefaultRecipient(verifiedRecipient),
-                  selectedTileColor: kBlueNavyColor,
-                  horizontalTitleGap: 0,
-                  title: Text(verifiedRecipient.email),
-                  onTap: () {
-                    setState(() {
-                      _toggleRecipient(verifiedRecipient);
-                    });
-                  },
-                );
-              },
-            ),
-          ),
-        SizedBox(height: size.height * 0.02),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(),
-          child: Text('Update Recipients'),
-          onPressed: () => context
-              .read(aliasStateManagerProvider)
-              .updateAliasDefaultRecipient(
-                context,
-                widget.aliasDataModel.aliasID,
-                _selectedRecipientsID,
+        BottomSheetHeader(headerLabel: 'Update Alias Recipients'),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+          child: Column(
+            children: [
+              Text(kUpdateAliasRecipients),
+              Divider(height: size.height * 0.02),
+              if (_verifiedRecipients.isEmpty)
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text('No recipients found',
+                      style: Theme.of(context).textTheme.headline6),
+                )
+              else
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.35,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _verifiedRecipients.length,
+                    itemBuilder: (context, index) {
+                      final verifiedRecipient = _verifiedRecipients[index];
+                      return ListTile(
+                        selected: _isDefaultRecipient(verifiedRecipient),
+                        selectedTileColor: kBlueNavyColor,
+                        horizontalTitleGap: 0,
+                        title: Text(verifiedRecipient.email),
+                        onTap: () {
+                          setState(() {
+                            _toggleRecipient(verifiedRecipient);
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+              SizedBox(height: size.height * 0.02),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(),
+                child: Text('Update Recipients'),
+                onPressed: () => context
+                    .read(aliasStateManagerProvider)
+                    .updateAliasDefaultRecipient(
+                      context,
+                      widget.aliasDataModel.aliasID,
+                      _selectedRecipientsID,
+                    ),
               ),
+            ],
+          ),
         ),
       ],
     );
