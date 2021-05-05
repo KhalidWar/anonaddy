@@ -12,8 +12,8 @@ class BottomSheetHeader extends StatelessWidget {
       children: [
         Divider(
           thickness: 3,
-          indent: size.width * 0.4,
-          endIndent: size.width * 0.4,
+          indent: size.width * 0.44,
+          endIndent: size.width * 0.44,
         ),
         SizedBox(height: size.height * 0.01),
         Text(

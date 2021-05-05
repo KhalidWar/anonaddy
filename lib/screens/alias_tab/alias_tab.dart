@@ -74,7 +74,6 @@ class AliasTab extends ConsumerWidget {
                     ),
                     bottom: TabBar(
                       indicatorColor: kAccentColor,
-                      indicatorSize: TabBarIndicatorSize.label,
                       tabs: [
                         Tab(
                           child: Row(

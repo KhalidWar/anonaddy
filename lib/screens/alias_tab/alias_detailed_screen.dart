@@ -32,7 +32,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
 
-    final _textEditingController = TextEditingController();
+    final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
     final isDeleted = aliasDataModel.deletedAt == null;
@@ -81,7 +81,7 @@ class AliasDetailScreen extends ConsumerWidget {
               trailingIconOnPress: () {
                 buildEditDescriptionDialog(
                   context,
-                  _textEditingController,
+                  textEditingController,
                   editDescription,
                   aliasDataModel,
                 );
@@ -255,7 +255,7 @@ class AliasDetailScreen extends ConsumerWidget {
               Container(
                 height: size.height * 0.25,
                 padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

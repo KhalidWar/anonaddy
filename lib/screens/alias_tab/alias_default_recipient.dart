@@ -86,7 +86,8 @@ class _AliasDefaultRecipientScreenState
           child: Column(
             children: [
               Text(kUpdateAliasRecipients),
-              Divider(height: size.height * 0.02),
+              SizedBox(height: size.height * 0.02),
+              Divider(height: 0),
               if (_verifiedRecipients.isEmpty)
                 Padding(
                   padding: EdgeInsets.all(20),
