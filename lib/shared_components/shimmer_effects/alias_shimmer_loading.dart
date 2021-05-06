@@ -18,7 +18,6 @@ class AliasShimmerLoading extends StatelessWidget {
             return [
               SliverAppBar(
                 expandedHeight: size.height * 0.25,
-                snap: true,
                 elevation: 0,
                 floating: true,
                 pinned: true,

@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildAppBar(BuildContext context, bool isOffline) {
     final showToast = context.read(aliasStateManagerProvider).showToast;
     //todo handle null event
-    final isAccountNull = context.read(accountStreamProvider).data == null;
+    // final isAccountNull = context.read(accountStreamProvider).data == null;
 
     return AppBar(
       elevation: 0,
