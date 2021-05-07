@@ -20,10 +20,6 @@ class AliasListTile extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final aliasDataProvider = context.read(aliasStateManagerProvider);
 
-    Color themedColor() {
-      return isDark ? Colors.white : Colors.grey;
-    }
-
     bool isAliasDeleted() {
       return aliasData.deletedAt == null ? false : true;
     }
@@ -60,7 +56,7 @@ class AliasListTile extends ConsumerWidget {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.copy, color: themedColor()),
+              icon: Icon(Icons.copy),
               onPressed:
                   isAliasDeleted() ? null : () => copyAlias(aliasData.email),
             ),

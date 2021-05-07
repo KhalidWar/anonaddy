@@ -3,6 +3,7 @@ import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -237,45 +238,41 @@ class RecipientDetailedScreen extends ConsumerWidget {
             context.read(recipientStateManagerProvider).pgpKeyFormKey;
 
         return SingleChildScrollView(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
           child: Column(
             children: [
-              Divider(
-                thickness: 3,
-                indent: size.width * 0.4,
-                endIndent: size.width * 0.4,
-              ),
-              SizedBox(height: size.height * 0.01),
-              Text(
-                'Add new recipient',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Divider(thickness: 1),
-              SizedBox(height: size.height * 0.01),
-              Text(kEnterPublicKeyData),
-              SizedBox(height: size.height * 0.01),
-              Form(
-                key: pgpKeyFormKey,
-                child: TextFormField(
-                  autofocus: true,
-                  controller: _texEditingController,
-                  validator: (input) =>
-                      FormValidator().validatePGPKeyField(input),
-                  minLines: 4,
-                  maxLines: 8,
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (submit) => addPublicKey(),
-                  decoration: kTextFormFieldDecoration.copyWith(
-                    contentPadding: EdgeInsets.all(5),
-                    hintText: kPublicGPGKeyHintText,
-                  ),
+              BottomSheetHeader(headerLabel: 'Add GPG Key'),
+              Container(
+                height: size.height * 0.25,
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(kEnterPublicKeyData),
+                    Form(
+                      key: pgpKeyFormKey,
+                      child: TextFormField(
+                        autofocus: true,
+                        controller: _texEditingController,
+                        validator: (input) =>
+                            FormValidator().validatePGPKeyField(input),
+                        minLines: 4,
+                        maxLines: 5,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (submit) => addPublicKey(),
+                        decoration: kTextFormFieldDecoration.copyWith(
+                          contentPadding: EdgeInsets.all(5),
+                          hintText: kPublicGPGKeyHintText,
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(),
+                      child: Text('Add Key'),
+                      onPressed: () => addPublicKey(),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: size.height * 0.01),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(),
-                child: Text('Add Key'),
-                onPressed: () => addPublicKey(),
               ),
             ],
           ),

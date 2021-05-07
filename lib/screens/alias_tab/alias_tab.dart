@@ -52,7 +52,6 @@ class AliasTab extends ConsumerWidget {
                 return [
                   SliverAppBar(
                     expandedHeight: size.height * 0.25,
-                    snap: true,
                     elevation: 0,
                     floating: true,
                     pinned: true,
@@ -74,7 +73,6 @@ class AliasTab extends ConsumerWidget {
                     ),
                     bottom: TabBar(
                       indicatorColor: kAccentColor,
-                      indicatorSize: TabBarIndicatorSize.label,
                       tabs: [
                         Tab(
                           child: Row(

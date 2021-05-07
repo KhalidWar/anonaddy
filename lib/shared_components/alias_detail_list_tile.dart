@@ -23,22 +23,13 @@ class AliasDetailListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    Color themedColor() {
-      return isDark ? Colors.white : Colors.grey;
-    }
-
     return title == null
         ? Container()
         : Container(
-            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
             child: Row(
               children: [
-                Icon(
-                  leadingIconData,
-                  color: leadingIconColor ?? themedColor(),
-                ),
+                Icon(leadingIconData, color: leadingIconColor),
                 SizedBox(width: 15),
                 Expanded(
                   child: Column(
@@ -61,10 +52,7 @@ class AliasDetailListTile extends StatelessWidget {
                 trailingIconData == null
                     ? trailing ?? Container()
                     : IconButton(
-                        icon: Icon(
-                          trailingIconData,
-                          color: themedColor(),
-                        ),
+                        icon: Icon(trailingIconData),
                         onPressed: trailingIconOnPress,
                       ),
               ],

@@ -10,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
@@ -100,6 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildAppBar(BuildContext context, bool isOffline) {
+    final showToast = context.read(aliasStateManagerProvider).showToast;
+    //todo handle null event
+    // final isAccountNull = context.read(accountStreamProvider).data == null;
+
     return AppBar(
       elevation: 0,
       title: Text('AddyManager', style: TextStyle(color: Colors.white)),
@@ -107,12 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leading: IconButton(
         icon: Icon(Icons.add_circle_outline_outlined),
         onPressed: isOffline
-            ? () => Fluttertoast.showToast(
-                  msg: 'Can not create alias while offline',
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
-                  backgroundColor: Colors.grey[600],
-                )
+            ? () => showToast('Can not create alias while offline')
             : () {
                 showModalBottomSheet(
                   context: context,
@@ -122,11 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         BorderRadius.vertical(top: Radius.circular(20)),
                   ),
                   builder: (context) {
-                    return SingleChildScrollView(
-                      padding: EdgeInsets.only(
-                          left: 20, right: 20, top: 0, bottom: 20),
-                      child: CreateNewAlias(),
-                    );
+                    return SingleChildScrollView(child: CreateNewAlias());
                   },
                 );
               },

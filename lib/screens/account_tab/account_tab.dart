@@ -24,7 +24,6 @@ class AccountTab extends StatelessWidget {
             return [
               SliverAppBar(
                 expandedHeight: size.height * 0.38,
-                snap: true,
                 elevation: 0,
                 floating: true,
                 pinned: true,
