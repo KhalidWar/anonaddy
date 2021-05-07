@@ -165,11 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Divider(height: size.height * 0.05),
               //todo automate changelog fetching
-              Text('1. Added this widget'),
-              SizedBox(height: size.height * 0.01),
-              Text('2. Minor UI updates'),
-              SizedBox(height: size.height * 0.01),
-              Text('3. Lots of under the hood improvements'),
+              Text('1. Several UI improvements'),
               SizedBox(height: size.height * 0.01),
               Spacer(),
               Center(
