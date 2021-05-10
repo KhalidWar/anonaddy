@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
@@ -40,6 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     checkIfAppUpdated();
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
   }
 
   @override

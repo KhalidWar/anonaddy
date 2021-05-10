@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/screens/secure_app_screen/secure_app_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/services/theme/theme.dart';
@@ -6,8 +10,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(AliasDataModelAdapter());
+  Hive.registerAdapter(RecipientDataModelAdapter());
+
+  final secureStorage = const FlutterSecureStorage();
+  const secureKey = 'hiveSecureKey';
+
+  final containsEncryptionKey = await secureStorage.containsKey(key: secureKey);
+  if (!containsEncryptionKey) {
+    final key = Hive.generateSecureKey();
+    await secureStorage.write(key: secureKey, value: base64UrlEncode(key));
+  }
+
+  final encryptionKey =
+      base64Url.decode(await secureStorage.read(key: secureKey));
+  await Hive.openBox<AliasDataModel>('searchHistoryBox',
+      encryptionCipher: HiveAesCipher(encryptionKey));
+
   runApp(
     /// Phoenix restarts app upon logout
     Phoenix(

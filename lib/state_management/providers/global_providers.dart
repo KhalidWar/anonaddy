@@ -1,4 +1,3 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
@@ -61,9 +60,6 @@ final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
 
 final accessTokenProvider = FutureProvider<String>((ref) async =>
     await ref.watch(accessTokenServiceProvider).getAccessToken());
-
-final searchHistoryFuture = FutureProvider<List<AliasDataModel>>(
-    (ref) async => await ref.watch(searchHistoryProvider).loadData());
 
 final packageInfoProvider =
     FutureProvider<PackageInfo>((ref) => PackageInfo.fromPlatform());

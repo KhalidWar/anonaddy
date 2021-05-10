@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -55,7 +56,7 @@ class SearchService extends SearchDelegate {
           child: IgnorePointer(
               child: AliasListTile(aliasData: initialList[index])),
           onTap: () {
-            context.read(searchHistoryProvider).saveData(initialList[index]);
+            SearchHistoryStorage.getAliasBoxes().add(initialList[index]);
             context.read(aliasStateManagerProvider).aliasDataModel =
                 initialList[index];
             Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
