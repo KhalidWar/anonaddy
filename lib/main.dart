@@ -14,6 +14,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'shared_components/constants/hive_constants.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -22,18 +24,20 @@ void main() async {
   Hive.registerAdapter(RecipientDataModelAdapter());
 
   final secureStorage = const FlutterSecureStorage();
-  const secureKey = 'hiveSecureKey';
 
-  final containsEncryptionKey = await secureStorage.containsKey(key: secureKey);
+  final containsEncryptionKey =
+      await secureStorage.containsKey(key: kHiveSecureKey);
   if (!containsEncryptionKey) {
     final key = Hive.generateSecureKey();
-    await secureStorage.write(key: secureKey, value: base64UrlEncode(key));
+    await secureStorage.write(key: kHiveSecureKey, value: base64UrlEncode(key));
   }
 
   final encryptionKey =
-      base64Url.decode(await secureStorage.read(key: secureKey));
-  await Hive.openBox<AliasDataModel>('searchHistoryBox',
-      encryptionCipher: HiveAesCipher(encryptionKey));
+      base64Url.decode(await secureStorage.read(key: kHiveSecureKey));
+  await Hive.openBox<AliasDataModel>(
+    kSearchHistoryBox,
+    encryptionCipher: HiveAesCipher(encryptionKey),
+  );
 
   runApp(
     /// Phoenix restarts app upon logout
