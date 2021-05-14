@@ -41,13 +41,19 @@ class AliasDetailScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AliasPieChart(aliasDataModel: aliasDataModel),
             Divider(height: size.height * 0.03),
-            Text('Actions', style: Theme.of(context).textTheme.headline6),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+              child: Text(
+                'Actions',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+            SizedBox(height: size.height * 0.005),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
               title: aliasDataModel.email,
@@ -72,6 +78,8 @@ class AliasDetailScreen extends ConsumerWidget {
                   ),
                 ],
               ),
+              trailingIconOnPress: () =>
+                  toggleAlias(context, aliasDataModel.aliasID),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.comment,
@@ -104,40 +112,42 @@ class AliasDetailScreen extends ConsumerWidget {
                 icon: isDeleted
                     ? Icon(Icons.delete_outline, color: Colors.red)
                     : Icon(Icons.restore_outlined, color: Colors.green),
-                onPressed: () {
-                  buildDeleteOrRestoreAliasDialog(
-                    context,
-                    isDeleted,
-                    deleteOrRestoreAlias,
-                    aliasDataModel,
-                  );
-                },
+                onPressed: null,
               ),
+              trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(
+                  context, isDeleted, deleteOrRestoreAlias, aliasDataModel),
             ),
             if (aliasDataModel.recipients == null)
               Container()
             else
               Column(
                 children: [
-                  Divider(height: size.height * 0.03),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () => buildUpdateDefaultRecipient(
-                            context, aliasDataModel),
-                      ),
-                    ],
+                  Divider(height: size.height * 0.01),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () => buildUpdateDefaultRecipient(
+                              context, aliasDataModel),
+                        ),
+                      ],
+                    ),
                   ),
                   if (aliasDataModel.recipients.isEmpty)
                     Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        child: Text('No default recipient set yet'))
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                      child:
+                          Row(children: [Text('No default recipient set yet')]),
+                    )
                   else
                     ListView.builder(
                       shrinkWrap: true,

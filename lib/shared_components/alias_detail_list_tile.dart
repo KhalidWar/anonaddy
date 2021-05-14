@@ -25,37 +25,40 @@ class AliasDetailListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return title == null
         ? Container()
-        : Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-            child: Row(
-              children: [
-                Icon(leadingIconData, color: leadingIconColor),
-                SizedBox(width: 15),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${NicheMethod().fixDateTime(title)}',
-                        style: titleTextStyle ?? null,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 2),
-                        child: Text(
-                          '$subtitle',
-                          style: TextStyle(color: Colors.grey),
+        : InkWell(
+            onTap: trailingIconOnPress,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              child: Row(
+                children: [
+                  Icon(leadingIconData, color: leadingIconColor),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${NicheMethod().fixDateTime(title)}',
+                          style: titleTextStyle ?? null,
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: EdgeInsets.only(top: 2),
+                          child: Text(
+                            '$subtitle',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                trailingIconData == null
-                    ? trailing ?? Container()
-                    : IconButton(
-                        icon: Icon(trailingIconData),
-                        onPressed: trailingIconOnPress,
-                      ),
-              ],
+                  trailingIconData == null
+                      ? trailing ?? Container()
+                      : IconButton(
+                          icon: Icon(trailingIconData),
+                          onPressed: trailingIconOnPress,
+                        ),
+                ],
+              ),
             ),
           );
   }
