@@ -51,12 +51,14 @@ class AliasDetailListTile extends StatelessWidget {
                       ],
                     ),
                   ),
-                  trailingIconData == null
-                      ? trailing ?? Container()
-                      : IconButton(
-                          icon: Icon(trailingIconData),
-                          onPressed: trailingIconOnPress,
-                        ),
+                  IgnorePointer(
+                    child: trailingIconData == null
+                        ? trailing ?? Container()
+                        : IconButton(
+                            icon: Icon(trailingIconData),
+                            onPressed: trailingIconOnPress,
+                          ),
+                  ),
                 ],
               ),
             ),

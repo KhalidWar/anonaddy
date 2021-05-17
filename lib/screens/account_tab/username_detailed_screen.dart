@@ -27,44 +27,43 @@ class UsernameDetailedScreen extends ConsumerWidget {
     final toggleActiveAlias = usernameProvider.toggleActiveAlias;
     final toggleCatchAllAlias = usernameProvider.toggleCatchAllAlias;
 
-    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
     final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: buildAppBar(context, username.id),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.account_circle_outlined,
-                  size: size.height * 0.035,
-                ),
-                SizedBox(width: size.width * 0.02),
-                Text(
-                  username.username,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ],
+            Padding(
+              padding: EdgeInsets.all(size.height * 0.01),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.account_circle_outlined,
+                    size: size.height * 0.035,
+                  ),
+                  SizedBox(width: size.width * 0.02),
+                  Text(
+                    username.username,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
-            Divider(height: size.height * 0.01),
+            Divider(height: size.height * 0.02),
             AliasDetailListTile(
               title: username.description ?? 'No description',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Username description',
               leadingIconData: Icons.comment,
-              trailing: IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () => buildEditDescriptionDialog(
-                    context, textEditingController, username),
-              ),
+              trailing: IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+              trailingIconOnPress: () => buildEditDescriptionDialog(
+                  context, textEditingController, username),
             ),
             AliasDetailListTile(
               title: username.active
@@ -73,55 +72,45 @@ class UsernameDetailedScreen extends ConsumerWidget {
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Activity',
               leadingIconData: Icons.toggle_off_outlined,
-              trailing: Row(
-                children: [
-                  activeSwitchLoading ? customLoading : Container(),
-                  Switch.adaptive(
-                    value: username.active,
-                    onChanged: (toggle) =>
-                        toggleActiveAlias(context, username.id),
-                  ),
-                ],
-              ),
+              trailing: buildSwitch(activeSwitchLoading, username.active),
+              trailingIconOnPress: () =>
+                  toggleActiveAlias(context, username.id),
             ),
             AliasDetailListTile(
               title: username.catchAll ? 'Enabled' : 'Disabled',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Catch All',
               leadingIconData: Icons.repeat,
-              trailing: Row(
-                children: [
-                  catchAllSwitchLoading ? customLoading : Container(),
-                  Switch.adaptive(
-                    value: username.catchAll,
-                    onChanged: (toggle) =>
-                        toggleCatchAllAlias(context, username.id),
-                  ),
-                ],
-              ),
+              trailing: buildSwitch(catchAllSwitchLoading, username.catchAll),
+              trailingIconOnPress: () =>
+                  toggleCatchAllAlias(context, username.id),
             ),
             Divider(height: size.height * 0.02),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Default Recipient',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () =>
-                          buildUpdateDefaultRecipient(context, username),
-                    ),
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Default Recipient',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () =>
+                            buildUpdateDefaultRecipient(context, username),
+                      ),
+                    ],
+                  ),
                 ),
                 if (username.defaultRecipient == null)
                   Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Text('No default recipient found'))
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text('No default recipient found'),
+                  )
                 else
                   RecipientListTile(
                     recipientDataModel: username.defaultRecipient,
@@ -132,19 +121,23 @@ class UsernameDetailedScreen extends ConsumerWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      'Associated Aliases',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    Container(height: 36),
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Associated Aliases',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      Container(height: 36),
+                    ],
+                  ),
                 ),
                 if (username.aliases.isEmpty)
                   Container(
-                      padding: EdgeInsets.only(top: 10),
-                      child: Text('No aliases found'))
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text('No aliases found'),
+                  )
                 else
                   ListView.builder(
                     shrinkWrap: true,
@@ -176,6 +169,19 @@ class UsernameDetailedScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildSwitch(bool switchLoading, bool switchValue) {
+    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+    return Row(
+      children: [
+        switchLoading ? customLoading : Container(),
+        Switch.adaptive(
+          value: switchValue,
+          onChanged: (toggle) {},
+        ),
+      ],
     );
   }
 
