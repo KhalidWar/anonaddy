@@ -11,6 +11,7 @@ import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,6 @@ import 'package:flutter_svg/svg.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
   const RecipientDetailedScreen({this.recipientData});
-
   final RecipientDataModel recipientData;
 
   @override
@@ -28,10 +28,10 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final isLoading = recipientStateProvider.isLoading;
 
     final recipientProvider = context.read(recipientStateManagerProvider);
-    final copyOnTap = recipientProvider.copyOnTap;
     final toggleEncryption = recipientProvider.toggleEncryption;
     final verifyEmail = recipientProvider.verifyEmail;
 
+    final copyOnTap = NicheMethod().copyOnTap;
     final size = MediaQuery.of(context).size;
 
     return Scaffold(

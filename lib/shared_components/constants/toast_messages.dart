@@ -1,5 +1,6 @@
 /// Toast Messages
 const kCopiedToClipboard = 'Copied to Clipboard';
+const kFailedToCopy = 'Failed to copy';
 const kAliasRestoredSuccessfully = 'Alias Restored Successfully';
 const kFailedToRestoreAlias = 'Failed to Restore Alias';
 const kAliasDeletedSuccessfully = 'Alias Deleted Successfully';

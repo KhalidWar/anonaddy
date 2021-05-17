@@ -1,4 +1,6 @@
+import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,6 +21,16 @@ class NicheMethod {
     }
   }
 
+  Future<void> copyOnTap(String input) async {
+    await Clipboard.setData(
+      ClipboardData(text: input),
+    ).catchError((error) {
+      showToast("$kFailedToCopy: $error");
+    }).whenComplete(() {
+      showToast(kCopiedToClipboard);
+    });
+  }
+
   Future<void> showToast(String message) async {
     await Fluttertoast.showToast(
       msg: message,
@@ -28,7 +40,7 @@ class NicheMethod {
     );
   }
 
-  Future launchURL(String url) async {
+  Future<void> launchURL(String url) async {
     await launch(url).catchError((error, stackTrace) {
       throw showToast(error.toString());
     });
