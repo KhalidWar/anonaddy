@@ -60,10 +60,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
               leadingIconData: Icons.email_outlined,
               title: recipientData.email,
               subtitle: 'Recipient Email',
-              trailing: IconButton(
-                icon: Icon(Icons.copy),
-                onPressed: () => copyOnTap(recipientData.email),
-              ),
+              trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
               trailingIconOnPress: () => copyOnTap(recipientData.email),
             ),
             AliasDetailListTile(
@@ -75,14 +72,11 @@ class RecipientDetailedScreen extends ConsumerWidget {
               trailing: recipientData.fingerprint == null
                   ? IconButton(
                       icon: Icon(Icons.add_circle_outline_outlined),
-                      onPressed: () =>
-                          buildAddPGPKeyDialog(context, recipientData),
-                    )
+                      onPressed: () {})
                   : IconButton(
                       icon: Icon(Icons.delete_outline_outlined,
                           color: Colors.red),
-                      onPressed: () => buildRemovePGPKeyDialog(context),
-                    ),
+                      onPressed: () {}),
               trailingIconOnPress: recipientData.fingerprint == null
                   ? () => buildAddPGPKeyDialog(context, recipientData)
                   : () => buildRemovePGPKeyDialog(context),
