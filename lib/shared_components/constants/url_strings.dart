@@ -14,6 +14,7 @@ const kDefaultRecipientURL = 'default-recipient';
 const kDomainsURL = 'domains';
 const kDomainsOptionsURL = 'domain-options';
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
+const kAnonAddyFAQURL = 'https://anonaddy.com/faq/';
 
 /// HTTPS URLs
 const kAuthorityURL = 'app.anonaddy.com';

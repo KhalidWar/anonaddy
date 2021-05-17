@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 class NicheMethod {
   String fixDateTime(dynamic input) {
     if (input.runtimeType == DateTime) {
@@ -13,5 +17,20 @@ class NicheMethod {
     } else {
       return '$input $unit';
     }
+  }
+
+  Future<void> showToast(String message) async {
+    await Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.grey[600],
+    );
+  }
+
+  Future launchURL(String url) async {
+    await launch(url).catchError((error, stackTrace) {
+      throw showToast(error.toString());
+    });
   }
 }
