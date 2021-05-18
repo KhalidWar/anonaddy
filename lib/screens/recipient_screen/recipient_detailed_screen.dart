@@ -31,7 +31,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final toggleEncryption = recipientProvider.toggleEncryption;
     final verifyEmail = recipientProvider.verifyEmail;
 
-    final copyOnTap = NicheMethod().copyOnTap;
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -61,7 +60,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
               title: recipientData.email,
               subtitle: 'Recipient Email',
               trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
-              trailingIconOnPress: () => copyOnTap(recipientData.email),
+              trailingIconOnPress: () =>
+                  NicheMethod().copyOnTap(recipientData.email),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.fingerprint_outlined,

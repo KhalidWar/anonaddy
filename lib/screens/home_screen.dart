@@ -6,6 +6,7 @@ import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -106,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildAppBar(BuildContext context, bool isOffline) {
-    final showToast = context.read(aliasStateManagerProvider).showToast;
+    final showToast = NicheMethod().showToast;
     //todo handle null event
     // final isAccountNull = context.read(accountStreamProvider).data == null;
 

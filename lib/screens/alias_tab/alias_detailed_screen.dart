@@ -13,6 +13,7 @@ import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isToggleLoading = aliasDataProvider.isToggleLoading;
-    final copyOnTap = aliasDataProvider.copyToClipboard;
+    final copyOnTap = NicheMethod().copyOnTap;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
 
