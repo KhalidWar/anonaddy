@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class UsernameStateManager extends ChangeNotifier {
   UsernameStateManager() {
@@ -18,6 +18,7 @@ class UsernameStateManager extends ChangeNotifier {
 
   final createUsernameFormKey = GlobalKey<FormState>();
   final editDescriptionFormKey = GlobalKey<FormState>();
+  final _showToast = NicheMethod().showToast;
 
   get activeSwitchLoading => _activeSwitchLoading;
   get catchAllSwitchLoading => _catchAllSwitchLoading;
@@ -38,18 +39,18 @@ class UsernameStateManager extends ChangeNotifier {
     activeSwitchLoading = true;
     if (usernameModel.active) {
       await usernameProvider.deactivateUsername(usernameID).then((value) {
-        showToast('Username Deactivated Successfully!');
+        _showToast('Username Deactivated Successfully!');
         usernameModel.active = false;
       }).catchError((error) {
-        showToast(error.toString());
+        _showToast(error.toString());
       });
       activeSwitchLoading = false;
     } else {
       await usernameProvider.activateUsername(usernameID).then((value) {
         usernameModel.active = true;
-        showToast('Username Activated Successfully!');
+        _showToast('Username Activated Successfully!');
       }).catchError((error) {
-        showToast(error.toString());
+        _showToast(error.toString());
       });
       activeSwitchLoading = false;
     }
@@ -61,18 +62,18 @@ class UsernameStateManager extends ChangeNotifier {
     catchAllSwitchLoading = true;
     if (usernameModel.catchAll) {
       await usernameProvider.deactivateCatchAll(usernameID).then((value) {
-        showToast('Catch All Deactivated Successfully!');
+        _showToast('Catch All Deactivated Successfully!');
         usernameModel.catchAll = false;
       }).catchError((error) {
-        showToast(error.toString());
+        _showToast(error.toString());
       });
       catchAllSwitchLoading = false;
     } else {
       await usernameProvider.activateCatchAll(usernameID).then((value) {
         usernameModel.catchAll = true;
-        showToast('Catch All Activated Successfully!');
+        _showToast('Catch All Activated Successfully!');
       }).catchError((error) {
-        showToast(error.toString());
+        _showToast(error.toString());
       });
       catchAllSwitchLoading = false;
     }
@@ -85,10 +86,10 @@ class UsernameStateManager extends ChangeNotifier {
           .createNewUsername(username)
           .then((value) {
         print(value);
-        showToast('Username added successfully!');
+        _showToast('Username added successfully!');
         Navigator.pop(context);
       }).catchError((error) {
-        showToast(error.toString());
+        _showToast(error.toString());
       });
     }
   }
@@ -101,9 +102,9 @@ class UsernameStateManager extends ChangeNotifier {
           .then((value) {
         Navigator.pop(context);
         usernameModel.description = value.description;
-        showToast('Description updated successfully!');
+        _showToast('Description updated successfully!');
       }).catchError((error) {
-        showToast(error.toString());
+        _showToast(error.toString());
       });
     }
   }
@@ -116,10 +117,10 @@ class UsernameStateManager extends ChangeNotifier {
         .then((value) {
       usernameModel.defaultRecipient = value.defaultRecipient;
       notifyListeners();
-      showToast('Default recipient updated successfully!');
+      _showToast('Default recipient updated successfully!');
       Navigator.pop(context);
     }).catchError((error) {
-      showToast(error.toString());
+      _showToast(error.toString());
     });
   }
 
@@ -130,18 +131,9 @@ class UsernameStateManager extends ChangeNotifier {
         .deleteUsername(usernameID)
         .then((value) {
       Navigator.pop(context);
-      showToast('Username deleted successfully!');
+      _showToast('Username deleted successfully!');
     }).catchError((error) {
-      showToast(error.toString());
+      _showToast(error.toString());
     });
-  }
-
-  showToast(String input) {
-    Fluttertoast.showToast(
-      msg: input,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.grey[600],
-    );
   }
 }

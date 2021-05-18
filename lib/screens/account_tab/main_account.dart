@@ -4,25 +4,23 @@ import 'package:anonaddy/shared_components/account_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'add_new_username.dart';
 
 class MainAccount extends StatelessWidget {
   const MainAccount({Key key, this.userModel}) : super(key: key);
-
   final UserModel userModel;
 
   @override
   Widget build(BuildContext context) {
     final subscription =
         context.read(accountStreamProvider).data.value.subscription;
-    final showToast = context.read(usernameStateManagerProvider).showToast;
+    final nicheMethod = NicheMethod();
+    final showToast = nicheMethod.showToast;
 
     return Padding(
       padding: EdgeInsets.only(top: 5, left: 15, right: 15),
@@ -54,14 +52,14 @@ class MainAccount extends StatelessWidget {
             subtitle: 'Default Alias Domain',
             leadingIconData: Icons.dns,
             trailingIconData: Icons.open_in_new_outlined,
-            method: () => updateDefaultAliasFormatDomain(context, showToast),
+            method: () => updateDefaultAliasFormatDomain(nicheMethod),
           ),
           AccountListTile(
             title: userModel.defaultAliasFormat,
             subtitle: 'Default Alias Format',
             leadingIconData: Icons.alternate_email,
             trailingIconData: Icons.open_in_new_outlined,
-            method: () => updateDefaultAliasFormatDomain(context, showToast),
+            method: () => updateDefaultAliasFormatDomain(nicheMethod),
           ),
           AccountListTile(
             title:
@@ -90,11 +88,8 @@ class MainAccount extends StatelessWidget {
     );
   }
 
-  Future updateDefaultAliasFormatDomain(
-      BuildContext context, Function showToast) async {
-    await launch(kAnonAddySettingsURL).catchError((error, stackTrace) {
-      throw showToast(error.toString());
-    });
+  Future updateDefaultAliasFormatDomain(NicheMethod nicheMethod) async {
+    await nicheMethod.launchURL(kAnonAddySettingsURL);
   }
 
   Future buildAddNewRecipient(BuildContext context) {
@@ -115,9 +110,7 @@ class MainAccount extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) {
-        return AddNewUsername();
-      },
+      builder: (context) => AddNewUsername(),
     );
   }
 }
