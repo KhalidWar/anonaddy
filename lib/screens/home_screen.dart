@@ -26,7 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
 
   void _selectedTab(int index) {
-    setState(() => _selectedIndex = index);
+    if (_selectedIndex == 2 && index == 2) {
+      SearchTab().search(context);
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   void checkIfAppUpdated() async {
