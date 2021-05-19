@@ -1,6 +1,10 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:hive/hive.dart';
 
-class RecipientDataModel {
+part 'recipient_data_model.g.dart';
+
+@HiveType(typeId: 1)
+class RecipientDataModel extends HiveObject {
   RecipientDataModel({
     this.id,
     this.userId,
@@ -13,15 +17,24 @@ class RecipientDataModel {
     this.updatedAt,
   });
 
-  final String id;
-  final String userId;
-  final String email;
+  @HiveField(0)
+  String id;
+  @HiveField(1)
+  String userId;
+  @HiveField(2)
+  String email;
+  @HiveField(3)
   bool shouldEncrypt;
+  @HiveField(4)
   String fingerprint;
-  final DateTime emailVerifiedAt;
-  final List<AliasDataModel> aliases;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  @HiveField(5)
+  DateTime emailVerifiedAt;
+  @HiveField(6)
+  List<AliasDataModel> aliases;
+  @HiveField(7)
+  DateTime createdAt;
+  @HiveField(8)
+  DateTime updatedAt;
 
   factory RecipientDataModel.fromJson(Map<String, dynamic> json) {
     List list = json['aliases'];

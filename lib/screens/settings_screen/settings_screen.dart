@@ -2,9 +2,11 @@ import 'package:animations/animations.dart';
 import 'package:anonaddy/screens/login_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,16 +19,19 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  final _nicheMethods = NicheMethod();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    final showToast = _nicheMethods.showToast;
 
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
       body: Consumer(builder: (_, watch, __) {
         final settings = watch(settingsStateManagerProvider);
         final biometricAuth = context.read(biometricAuthServiceProvider);
-        final showToast = context.read(aliasStateManagerProvider).showToast;
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,6 +47,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: settings.isDarkTheme, onChanged: (toggle) {}),
               ),
               onTap: () => settings.toggleTheme(),
+            ),
+            ListTile(
+              title: Text(
+                'Auto Copy Email',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              subtitle: Text('Automatically copy email after alias creation'),
+              trailing: IgnorePointer(
+                child: Switch.adaptive(
+                  value: settings.isAutoCopy,
+                  onChanged: (toggle) {},
+                ),
+              ),
+              onTap: () => settings.toggleAutoCopy(),
             ),
             ListTile(
               title: Text(
@@ -89,15 +108,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             ListTile(
               title: Text(
-                'Auto Copy Email',
+                'AnonAddy FAQ',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              subtitle: Text('Automatically copy email after alias creation'),
-              trailing: IgnorePointer(
-                child: Switch.adaptive(
-                    value: settings.isAutoCopy, onChanged: (toggle) {}),
-              ),
-              onTap: () => settings.toggleAutoCopy(),
+              subtitle: Text('Learn more about AnonAddy'),
+              trailing: Icon(Icons.open_in_new_outlined),
+              onTap: () => _nicheMethods.launchURL(kAnonAddyFAQURL),
             ),
             ListTile(
               title: Text(

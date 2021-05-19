@@ -13,6 +13,7 @@ import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,26 +29,35 @@ class AliasDetailScreen extends ConsumerWidget {
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isToggleLoading = aliasDataProvider.isToggleLoading;
-    final copyOnTap = aliasDataProvider.copyToClipboard;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
+
+    final nicheMethod = NicheMethod();
+    final showToast = nicheMethod.showToast;
+    final copyOnTap = nicheMethod.copyOnTap;
 
     final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
-    final isDeleted = aliasDataModel.deletedAt == null;
+    final isAliasDeleted = aliasDataModel.deletedAt != null;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context),
+      appBar: buildAppBar(context, aliasDataModel.aliasID),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AliasPieChart(aliasDataModel: aliasDataModel),
             Divider(height: size.height * 0.03),
-            Text('Actions', style: Theme.of(context).textTheme.headline6),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+              child: Text(
+                'Actions',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+            SizedBox(height: size.height * 0.005),
             AliasDetailListTile(
               leadingIconData: Icons.alternate_email,
               title: aliasDataModel.email,
@@ -67,11 +77,15 @@ class AliasDetailScreen extends ConsumerWidget {
                       : Container(),
                   Switch.adaptive(
                     value: aliasDataModel.isAliasActive,
-                    onChanged: (toggle) =>
-                        toggleAlias(context, aliasDataModel.aliasID),
+                    onChanged: isAliasDeleted ? null : (toggle) {},
                   ),
                 ],
               ),
+              trailingIconOnPress: () {
+                isAliasDeleted
+                    ? showToast(kRestoreBeforeActivate)
+                    : toggleAlias(context, aliasDataModel.aliasID);
+              },
             ),
             AliasDetailListTile(
               leadingIconData: Icons.comment,
@@ -95,49 +109,56 @@ class AliasDetailScreen extends ConsumerWidget {
               trailingIconOnPress: () {},
             ),
             AliasDetailListTile(
-              leadingIconData:
-                  isDeleted ? Icons.delete_outline : Icons.restore_outlined,
-              title: '${isDeleted ? 'Delete' : 'Restore'} Alias',
-              subtitle:
-                  isDeleted ? kDeletedAliasUIString : kRestoreAliasUIString,
+              leadingIconData: isAliasDeleted
+                  ? Icons.restore_outlined
+                  : Icons.delete_outline,
+              title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
+              subtitle: isAliasDeleted
+                  ? kRestoreAliasUIString
+                  : kDeletedAliasUIString,
               trailing: IconButton(
-                icon: isDeleted
-                    ? Icon(Icons.delete_outline, color: Colors.red)
-                    : Icon(Icons.restore_outlined, color: Colors.green),
-                onPressed: () {
-                  buildDeleteOrRestoreAliasDialog(
-                    context,
-                    isDeleted,
-                    deleteOrRestoreAlias,
-                    aliasDataModel,
-                  );
-                },
+                icon: isAliasDeleted
+                    ? Icon(Icons.restore_outlined, color: Colors.green)
+                    : Icon(Icons.delete_outline, color: Colors.red),
+                onPressed: null,
               ),
+              trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(
+                  context,
+                  isAliasDeleted,
+                  deleteOrRestoreAlias,
+                  aliasDataModel),
             ),
             if (aliasDataModel.recipients == null)
               Container()
             else
               Column(
                 children: [
-                  Divider(height: size.height * 0.03),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () => buildUpdateDefaultRecipient(
-                            context, aliasDataModel),
-                      ),
-                    ],
+                  Divider(height: size.height * 0.01),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () => buildUpdateDefaultRecipient(
+                              context, aliasDataModel),
+                        ),
+                      ],
+                    ),
                   ),
                   if (aliasDataModel.recipients.isEmpty)
                     Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        child: Text('No default recipient set yet'))
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                      child:
+                          Row(children: [Text('No default recipient set yet')]),
+                    )
                   else
                     ListView.builder(
                       shrinkWrap: true,
@@ -215,14 +236,14 @@ class AliasDetailScreen extends ConsumerWidget {
         return isIOS
             ? confirmationDialog.iOSAlertDialog(
                 context,
-                isDeleted ? kDeleteAliasConfirmation : kRestoreAliasText,
+                isDeleted ? kRestoreAliasText : kDeleteAliasConfirmation,
                 deleteOrRestore,
-                '${isDeleted ? 'Delete' : 'Restore'} Alias')
+                '${isDeleted ? 'Restore' : 'Delete'} Alias')
             : confirmationDialog.androidAlertDialog(
                 context,
-                isDeleted ? kDeleteAliasConfirmation : kRestoreAliasText,
+                isDeleted ? kRestoreAliasText : kDeleteAliasConfirmation,
                 deleteOrRestore,
-                '${isDeleted ? 'Delete' : 'Restore'} Alias');
+                '${isDeleted ? 'Restore' : 'Delete'} Alias');
       },
     );
   }
@@ -292,7 +313,15 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  PreferredSizeWidget buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context, String aliasID) {
+    final confirmationDialog = ConfirmationDialog();
+    final isIOS = TargetedPlatform().isIOS();
+
+    void forget() {
+      context.read(aliasStateManagerProvider).forgetAlias(context, aliasID);
+      Navigator.pop(context);
+    }
+
     return AppBar(
       title: Text('Alias', style: TextStyle(color: Colors.white)),
       leading: IconButton(
@@ -300,6 +329,30 @@ class AliasDetailScreen extends ConsumerWidget {
         color: Colors.white,
         onPressed: () => Navigator.pop(context),
       ),
+      actions: [
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) {
+            return ['Forget alias'].map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+          onSelected: (String choice) {
+            showModal(
+              context: context,
+              builder: (context) {
+                return isIOS
+                    ? confirmationDialog.iOSAlertDialog(
+                        context, kForgetAliasDialogText, forget, 'Forget alias')
+                    : confirmationDialog.androidAlertDialog(context,
+                        kForgetAliasDialogText, forget, 'Forget alias');
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 }

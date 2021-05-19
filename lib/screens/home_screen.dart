@@ -6,10 +6,12 @@ import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
@@ -24,7 +26,13 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
 
   void _selectedTab(int index) {
-    setState(() => _selectedIndex = index);
+    if (_selectedIndex == 2 && index == 2) {
+      SearchTab().search(context);
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   void checkIfAppUpdated() async {
@@ -40,6 +48,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     checkIfAppUpdated();
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
   }
 
   @override
@@ -99,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildAppBar(BuildContext context, bool isOffline) {
-    final showToast = context.read(aliasStateManagerProvider).showToast;
+    final showToast = NicheMethod().showToast;
     //todo handle null event
     // final isAccountNull = context.read(accountStreamProvider).data == null;
 
@@ -165,7 +179,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Divider(height: size.height * 0.05),
               //todo automate changelog fetching
-              Text('1. Several UI improvements'),
+              Text('1. Added Forget Alias feature'),
+              SizedBox(height: size.height * 0.01),
+              Text('2. Improved Search functionality'),
+              SizedBox(height: size.height * 0.01),
+              Text('3. Overhauled Search History storage'),
+              SizedBox(height: size.height * 0.01),
+              Text('4. Search quicker by double tapping Search Icon'),
+              SizedBox(height: size.height * 0.01),
+              Text('5. Deleted aliases now come in RED'),
+              SizedBox(height: size.height * 0.01),
+              Text('6. AnonAddy FAQs can be found under Settings'),
+              SizedBox(height: size.height * 0.01),
+              Text('7. Several UI and under the hood improvements'),
               SizedBox(height: size.height * 0.01),
               Spacer(),
               Center(

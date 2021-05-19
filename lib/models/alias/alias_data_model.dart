@@ -1,8 +1,12 @@
 import 'dart:convert';
 
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:hive/hive.dart';
 
-class AliasDataModel {
+part 'alias_data_model.g.dart';
+
+@HiveType(typeId: 0)
+class AliasDataModel extends HiveObject {
   AliasDataModel({
     this.aliasID,
     this.userId,
@@ -24,24 +28,42 @@ class AliasDataModel {
     this.deletedAt,
   });
 
-  final String aliasID;
-  final String userId;
-  final dynamic aliasableId;
-  final dynamic aliasableType;
-  final String localPart;
-  final dynamic extension;
-  final String domain;
-  final String email;
+  @HiveField(0)
+  String aliasID;
+  @HiveField(1)
+  String userId;
+  @HiveField(2)
+  dynamic aliasableId;
+  @HiveField(3)
+  dynamic aliasableType;
+  @HiveField(4)
+  String localPart;
+  @HiveField(5)
+  dynamic extension;
+  @HiveField(6)
+  String domain;
+  @HiveField(7)
+  String email;
+  @HiveField(8)
   bool isAliasActive;
+  @HiveField(9)
   String emailDescription;
-  final int emailsForwarded;
-  final int emailsBlocked;
-  final int emailsReplied;
-  final int emailsSent;
+  @HiveField(10)
+  int emailsForwarded;
+  @HiveField(11)
+  int emailsBlocked;
+  @HiveField(12)
+  int emailsReplied;
+  @HiveField(13)
+  int emailsSent;
+  @HiveField(14)
   List<RecipientDataModel> recipients;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime deletedAt;
+  @HiveField(15)
+  DateTime createdAt;
+  @HiveField(16)
+  DateTime updatedAt;
+  @HiveField(17)
+  DateTime deletedAt;
 
   factory AliasDataModel.fromJson(Map<String, dynamic> json) {
     return AliasDataModel(

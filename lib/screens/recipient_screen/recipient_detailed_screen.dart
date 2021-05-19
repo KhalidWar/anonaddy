@@ -11,6 +11,7 @@ import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,16 +19,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
-  RecipientDetailedScreen({this.recipientData});
-
+  const RecipientDetailedScreen({this.recipientData});
   final RecipientDataModel recipientData;
-
-  final isIOS = TargetedPlatform().isIOS();
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final recipientStateProvider = watch(recipientStateManagerProvider);
     final isLoading = recipientStateProvider.isLoading;
+
+    final recipientProvider = context.read(recipientStateManagerProvider);
+    final toggleEncryption = recipientProvider.toggleEncryption;
+    final verifyEmail = recipientProvider.verifyEmail;
 
     final size = MediaQuery.of(context).size;
 
@@ -35,7 +37,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(size.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,18 +50,18 @@ class RecipientDetailedScreen extends ConsumerWidget {
               ),
             ),
             Divider(height: size.height * 0.03),
-            Text('Actions', style: Theme.of(context).textTheme.headline6),
-            SizedBox(height: size.height * 0.01),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+              child:
+                  Text('Actions', style: Theme.of(context).textTheme.headline6),
+            ),
             AliasDetailListTile(
               leadingIconData: Icons.email_outlined,
               title: recipientData.email,
               subtitle: 'Recipient Email',
-              trailing: IconButton(
-                icon: Icon(Icons.copy),
-                onPressed: () => context
-                    .read(recipientStateManagerProvider)
-                    .copyOnTap(recipientData.email),
-              ),
+              trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
+              trailingIconOnPress: () =>
+                  NicheMethod().copyOnTap(recipientData.email),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.fingerprint_outlined,
@@ -71,16 +72,14 @@ class RecipientDetailedScreen extends ConsumerWidget {
               trailing: recipientData.fingerprint == null
                   ? IconButton(
                       icon: Icon(Icons.add_circle_outline_outlined),
-                      onPressed: () =>
-                          buildAddPGPKeyDialog(context, recipientData),
-                    )
+                      onPressed: () {})
                   : IconButton(
-                      icon: Icon(
-                        Icons.delete_outline_outlined,
-                        color: Colors.red,
-                      ),
-                      onPressed: () => buildRemovePGPKeyDialog(context),
-                    ),
+                      icon: Icon(Icons.delete_outline_outlined,
+                          color: Colors.red),
+                      onPressed: () {}),
+              trailingIconOnPress: recipientData.fingerprint == null
+                  ? () => buildAddPGPKeyDialog(context, recipientData)
+                  : () => buildRemovePGPKeyDialog(context),
             ),
             AliasDetailListTile(
               leadingIconData:
@@ -92,33 +91,19 @@ class RecipientDetailedScreen extends ConsumerWidget {
               subtitle: 'Encryption',
               trailing: recipientData.fingerprint == null
                   ? Container()
-                  : Row(
-                      children: [
-                        isLoading
-                            ? CustomLoadingIndicator().customLoadingIndicator()
-                            : Container(),
-                        Switch.adaptive(
-                          value: recipientData.shouldEncrypt,
-                          onChanged: (toggle) => context
-                              .read(recipientStateManagerProvider)
-                              .toggleEncryption(context, recipientData.id),
-                        ),
-                      ],
-                    ),
+                  : buildSwitch(isLoading),
+              trailingIconOnPress: () =>
+                  toggleEncryption(context, recipientData.id),
             ),
             recipientData.emailVerifiedAt == null
                 ? AliasDetailListTile(
                     leadingIconData: Icons.verified_outlined,
                     title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
                     subtitle: 'Is Email Verified?',
-                    trailing: recipientData.emailVerifiedAt == null
-                        ? TextButton(
-                            child: Text('Verify now!'),
-                            onPressed: () => context
-                                .read(recipientStateManagerProvider)
-                                .verifyEmail(context, recipientData.id),
-                          )
-                        : null,
+                    trailing: TextButton(
+                        child: Text('Verify now!'), onPressed: () {}),
+                    trailingIconOnPress: () =>
+                        verifyEmail(context, recipientData.id),
                   )
                 : Container(),
             if (recipientData.aliases == null)
@@ -130,10 +115,18 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Divider(height: size.height * 0.03),
-                  Text('Aliases', style: Theme.of(context).textTheme.headline6),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                    child: Text('Aliases',
+                        style: Theme.of(context).textTheme.headline6),
+                  ),
                   SizedBox(height: size.height * 0.01),
                   if (recipientData.aliases.isEmpty)
-                    Text('No aliases found')
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: size.height * 0.01),
+                        child: Text('No aliases found'))
                   else
                     ListView.builder(
                       shrinkWrap: true,
@@ -168,6 +161,20 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
+  Row buildSwitch(bool isLoading) {
+    return Row(
+      children: [
+        isLoading
+            ? CustomLoadingIndicator().customLoadingIndicator()
+            : Container(),
+        Switch.adaptive(
+          value: recipientData.shouldEncrypt,
+          onChanged: (toggle) {},
+        ),
+      ],
+    );
+  }
+
   Container buildUnverifiedEmailWarning(Size size) {
     return Container(
       height: size.height * 0.05,
@@ -192,6 +199,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
   Future buildRemovePGPKeyDialog(BuildContext context) {
     final confirmationDialog = ConfirmationDialog();
+    final isIOS = TargetedPlatform().isIOS();
 
     void removePublicKey() {
       context
@@ -283,6 +291,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
   Widget buildAppBar(BuildContext context) {
     final confirmationDialog = ConfirmationDialog();
+    final isIOS = TargetedPlatform().isIOS();
 
     void remove() {
       context

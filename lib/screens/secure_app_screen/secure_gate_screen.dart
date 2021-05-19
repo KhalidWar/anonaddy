@@ -6,6 +6,7 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +25,7 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
   bool _didAuthenticate = false;
 
   Future<void> authenticate() async {
-    final showToast = context.read(aliasStateManagerProvider).showToast;
+    final showToast = NicheMethod().showToast;
     final biometricAuth = context.read(biometricAuthServiceProvider);
 
     await biometricAuth.canEnableBiometric().then((canCheckBio) async {

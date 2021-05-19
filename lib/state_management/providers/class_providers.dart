@@ -4,7 +4,6 @@ import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/domains/domains_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
@@ -35,9 +34,6 @@ final changelogServiceProvider = Provider((ref) => ChangelogService());
 /// Notifier Providers
 final aliasStateManagerProvider =
     ChangeNotifierProvider((ref) => AliasStateManager());
-
-final searchHistoryProvider =
-    ChangeNotifierProvider((ref) => SearchHistoryStorage());
 
 final usernameStateManagerProvider =
     ChangeNotifierProvider((ref) => UsernameStateManager());

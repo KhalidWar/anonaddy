@@ -8,7 +8,8 @@ class AliasListTileLeading extends StatelessWidget {
   final bool isDeleted, isActive;
 
   final activeGradient = [Color(0xff31b237), Colors.white];
-  final deletedGradient = [Colors.grey, Colors.white];
+  final deactivatedGradient = [Colors.grey, Colors.white];
+  final deletedGradient = [Colors.red, Colors.white];
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class AliasListTileLeading extends StatelessWidget {
               ? deletedGradient
               : isActive
                   ? activeGradient
-                  : deletedGradient,
+                  : deactivatedGradient,
         ),
       ),
     );
