@@ -13,6 +13,8 @@ const kCatchAllUsernameURL = 'catch-all-usernames';
 const kDefaultRecipientURL = 'default-recipient';
 const kDomainsURL = 'domains';
 const kDomainsOptionsURL = 'domain-options';
+const kForgetURL = 'forget';
+
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
 const kAnonAddyFAQURL = 'https://anonaddy.com/faq/';
 

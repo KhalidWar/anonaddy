@@ -25,3 +25,4 @@ const kUpdateAliasRecipientFailed = 'Failed to update description';
 const kUpdateAliasRecipientSuccessful = 'Successfully updated alias recipients';
 const kDeletedAliasUIString = 'Alias will reject all emails sent to it';
 const kRestoreAliasUIString = 'Alias will be able to receive emails';
+const kForgetAliasUIString = 'Successfully forgotten an alias';

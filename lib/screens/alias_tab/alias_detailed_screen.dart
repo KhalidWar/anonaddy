@@ -43,7 +43,7 @@ class AliasDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context),
+      appBar: buildAppBar(context, aliasDataModel.aliasID),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +313,15 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  PreferredSizeWidget buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context, String aliasID) {
+    final confirmationDialog = ConfirmationDialog();
+    final isIOS = TargetedPlatform().isIOS();
+
+    void forget() {
+      context.read(aliasStateManagerProvider).forgetAlias(context, aliasID);
+      Navigator.pop(context);
+    }
+
     return AppBar(
       title: Text('Alias', style: TextStyle(color: Colors.white)),
       leading: IconButton(
@@ -321,6 +329,30 @@ class AliasDetailScreen extends ConsumerWidget {
         color: Colors.white,
         onPressed: () => Navigator.pop(context),
       ),
+      actions: [
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) {
+            return ['Forget alias'].map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+          onSelected: (String choice) {
+            showModal(
+              context: context,
+              builder: (context) {
+                return isIOS
+                    ? confirmationDialog.iOSAlertDialog(
+                        context, kForgetAliasDialogText, forget, 'Forget alias')
+                    : confirmationDialog.androidAlertDialog(context,
+                        kForgetAliasDialogText, forget, 'Forget alias');
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 }

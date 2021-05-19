@@ -159,6 +159,15 @@ class AliasStateManager extends ChangeNotifier {
     Navigator.pop(context);
   }
 
+  Future<void> forgetAlias(BuildContext context, String aliasID) async {
+    await context.read(aliasServiceProvider).forgetAlias(aliasID).then((value) {
+      _showToast(kForgetAliasUIString);
+    }).catchError((error) {
+      _showToast(error.toString());
+    });
+    Navigator.pop(context);
+  }
+
   String correctAliasString(String input) {
     switch (input) {
       case 'random_characters':

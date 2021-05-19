@@ -241,4 +241,31 @@ class AliasService {
       throw e;
     }
   }
+
+  Future forgetAlias(String aliasID) async {
+    final accessToken = await _accessTokenService.getAccessToken();
+
+    try {
+      final response = await http.delete(
+        Uri.https(kAuthorityURL,
+            '$kUnEncodedBaseURL/$kAliasesURL/$aliasID/$kForgetURL'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+
+      if (response.statusCode == 204) {
+        print('forgetAlias ${response.statusCode}');
+        return 204;
+      } else {
+        print('forgetAlias ${response.statusCode}');
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 }

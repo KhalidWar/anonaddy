@@ -26,6 +26,8 @@ const kUpdateUsernameDefaultRecipient =
     'Select the default recipient for this username. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
 const kRestoreBeforeActivate =
     'You need to restore this alias before you can activate it';
+const kForgetAliasDialogText =
+    'Are you sure you want to forget this alias?\n\nForgetting an alias will disassociate it from your account.\n\nNote: If this alias uses a shared domain then it can never be restored or used again so make sure you are certain. If it is a standard alias then it can be created again since it will be as if it never existed.';
 
 /// Official AnonAddy Code Strings
 const kUUID = 'uuid';
