@@ -2,7 +2,7 @@ name: anonaddy
 description: A new Flutter application.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 2.5.4+19
+version: 2.6.0+20
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
