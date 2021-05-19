@@ -2,14 +2,14 @@
 const kDeletedAliasText =
     'Deleted aliases reject all emails sent to them. However, they can be restored to start receiving emails again.';
 const kDeleteAliasConfirmation =
-    'Are you sure you want to delete this alias? You can restore this alias if you later change your mind.\n\nOnce deleted, this alias will reject any emails sent to it.';
+    'Are you sure you want to delete this alias?\n\nYou can restore this alias if you later change your mind.\n\nOnce deleted, this alias will reject any emails sent to it.';
 const kCreateNewAliasText =
     'Other aliases e.g. alias@khalidwar.anonaddy.com or .me can also be created automatically when they receive their first email.';
 const kRestoreAliasText =
     'Are you sure you want to restore this alias?\n\nOnce restored, this alias will be able to receive emails again.';
 const kRemoveRecipientPublicKey = 'Remove recipient public key';
 const kRemoveRecipientPublicKeyBody =
-    'Are you sure you want to remove the public key for this recipient?\nIt will also be removed from any other recipients using the same key.';
+    'Are you sure you want to remove the public key for this recipient?\n\nIt will also be removed from any other recipients using the same key.';
 const kDeleteRecipientDialogText =
     'Are you sure you want to delete this recipient?';
 const kAddRecipientText =
@@ -19,7 +19,7 @@ const kUpdateAliasRecipients =
 const kAddNewUsernameText =
     'Please choose additional usernames carefully as you can only add a maximum of three.\n\nYou cannot login with these usernames, only the one you originally signed up with.';
 const kDeleteUsername =
-    'Are you sure you want to delete this username? This will also delete all aliases associated with this username.\n\nYou will no longer be able to receive any emails at this username subdomain.\n\nThis will still count towards your additional username limit even once deleted.';
+    'Are you sure you want to delete this username?\n\nThis will also delete all aliases associated with this username.\n\nYou will no longer be able to receive any emails at this username subdomain.\n\nThis will still count towards your additional username limit even once deleted.';
 const kReachedUsernameLimit = 'You have reached your additional username limit';
 const kReachedRecipientLimit = 'You have reached your recipient limit';
 const kUpdateUsernameDefaultRecipient =
