@@ -24,6 +24,8 @@ const kReachedUsernameLimit = 'You have reached your additional username limit';
 const kReachedRecipientLimit = 'You have reached your recipient limit';
 const kUpdateUsernameDefaultRecipient =
     'Select the default recipient for this username. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
+const kRestoreBeforeActivate =
+    'You need to restore this alias before you can activate it';
 
 /// Official AnonAddy Code Strings
 const kUUID = 'uuid';

@@ -29,14 +29,17 @@ class AliasDetailScreen extends ConsumerWidget {
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isToggleLoading = aliasDataProvider.isToggleLoading;
-    final copyOnTap = NicheMethod().copyOnTap;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
+
+    final nicheMethod = NicheMethod();
+    final showToast = nicheMethod.showToast;
+    final copyOnTap = nicheMethod.copyOnTap;
 
     final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
-    final isDeleted = aliasDataModel.deletedAt == null;
+    final isAliasDeleted = aliasDataModel.deletedAt != null;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -74,13 +77,15 @@ class AliasDetailScreen extends ConsumerWidget {
                       : Container(),
                   Switch.adaptive(
                     value: aliasDataModel.isAliasActive,
-                    onChanged: (toggle) =>
-                        toggleAlias(context, aliasDataModel.aliasID),
+                    onChanged: isAliasDeleted ? null : (toggle) {},
                   ),
                 ],
               ),
-              trailingIconOnPress: () =>
-                  toggleAlias(context, aliasDataModel.aliasID),
+              trailingIconOnPress: () {
+                isAliasDeleted
+                    ? showToast(kRestoreBeforeActivate)
+                    : toggleAlias(context, aliasDataModel.aliasID);
+              },
             ),
             AliasDetailListTile(
               leadingIconData: Icons.comment,
@@ -104,19 +109,24 @@ class AliasDetailScreen extends ConsumerWidget {
               trailingIconOnPress: () {},
             ),
             AliasDetailListTile(
-              leadingIconData:
-                  isDeleted ? Icons.delete_outline : Icons.restore_outlined,
-              title: '${isDeleted ? 'Delete' : 'Restore'} Alias',
-              subtitle:
-                  isDeleted ? kDeletedAliasUIString : kRestoreAliasUIString,
+              leadingIconData: isAliasDeleted
+                  ? Icons.restore_outlined
+                  : Icons.delete_outline,
+              title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
+              subtitle: isAliasDeleted
+                  ? kRestoreAliasUIString
+                  : kDeletedAliasUIString,
               trailing: IconButton(
-                icon: isDeleted
-                    ? Icon(Icons.delete_outline, color: Colors.red)
-                    : Icon(Icons.restore_outlined, color: Colors.green),
+                icon: isAliasDeleted
+                    ? Icon(Icons.restore_outlined, color: Colors.green)
+                    : Icon(Icons.delete_outline, color: Colors.red),
                 onPressed: null,
               ),
               trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(
-                  context, isDeleted, deleteOrRestoreAlias, aliasDataModel),
+                  context,
+                  isAliasDeleted,
+                  deleteOrRestoreAlias,
+                  aliasDataModel),
             ),
             if (aliasDataModel.recipients == null)
               Container()
@@ -226,14 +236,14 @@ class AliasDetailScreen extends ConsumerWidget {
         return isIOS
             ? confirmationDialog.iOSAlertDialog(
                 context,
-                isDeleted ? kDeleteAliasConfirmation : kRestoreAliasText,
+                isDeleted ? kRestoreAliasText : kDeleteAliasConfirmation,
                 deleteOrRestore,
-                '${isDeleted ? 'Delete' : 'Restore'} Alias')
+                '${isDeleted ? 'Restore' : 'Delete'} Alias')
             : confirmationDialog.androidAlertDialog(
                 context,
-                isDeleted ? kDeleteAliasConfirmation : kRestoreAliasText,
+                isDeleted ? kRestoreAliasText : kDeleteAliasConfirmation,
                 deleteOrRestore,
-                '${isDeleted ? 'Delete' : 'Restore'} Alias');
+                '${isDeleted ? 'Restore' : 'Delete'} Alias');
       },
     );
   }
