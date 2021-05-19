@@ -1,5 +1,5 @@
 /// UI Strings
-const kSearchHintText = 'Search aliases by email or description';
+const kSearchHintText = 'Search';
 const kLoadingText = 'Loading';
 const kDescriptionInputText = 'Description (optional)';
 const kEnterLocalPart = 'Enter Local Part (no space or @)';
