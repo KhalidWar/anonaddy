@@ -169,6 +169,7 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   String correctAliasString(String input) {
+    if (input == null) return null;
     switch (input) {
       case 'random_characters':
         return 'Random Characters';

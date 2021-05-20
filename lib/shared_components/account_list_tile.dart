@@ -7,38 +7,46 @@ class AccountListTile extends StatelessWidget {
       this.subtitle,
       this.leadingIconData,
       this.trailingIconData,
-      this.method})
+      this.onTap})
       : super(key: key);
 
   final String title, subtitle;
   final IconData leadingIconData, trailingIconData;
-  final Function method;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Icon(leadingIconData),
-        SizedBox(width: 20),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title ?? 'No default selected',
-              style: Theme.of(context).textTheme.bodyText1,
+            Icon(leadingIconData),
+            SizedBox(width: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title ?? 'No default selected',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                Text(subtitle),
+              ],
             ),
-            Text(subtitle),
+            Spacer(),
+            IgnorePointer(
+              child: trailingIconData == null
+                  ? Container()
+                  : IconButton(
+                      icon: Icon(trailingIconData),
+                      onPressed: () {},
+                    ),
+            ),
           ],
         ),
-        Spacer(),
-        trailingIconData == null
-            ? Container()
-            : IconButton(
-                icon: Icon(trailingIconData),
-                onPressed: method,
-              ),
-      ],
+      ),
     );
   }
 }

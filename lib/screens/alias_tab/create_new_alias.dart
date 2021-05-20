@@ -159,7 +159,8 @@ class CreateNewAlias extends ConsumerWidget {
                         isDense: true,
                         value: aliasStateProvider.aliasFormat,
                         hint: Text(
-                          '${data.defaultAliasFormat ?? 'Choose Alias Format'}',
+                          correctAliasString(data.defaultAliasFormat) ??
+                              'Choose Alias Format',
                         ),
                         items: dropdownMenuItems(),
                         onChanged: (String value) {
