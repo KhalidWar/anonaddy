@@ -21,6 +21,17 @@ class MainAccount extends StatelessWidget {
     return input.replaceFirst(firstLetter, firstLetter.toUpperCase());
   }
 
+  String _calculateBandWidth() {
+    String isUnlimited(dynamic input, String unit) {
+      return input == 0 ? 'unlimited' : '${input.hashCode.round()} $unit';
+    }
+
+    final bandwidth = (userModel.bandwidth / 1048576).toStringAsFixed(2);
+    final bandwidthLimit =
+        isUnlimited(userModel.bandwidthLimit / 1048576, 'MB');
+    return '$bandwidth MB out of $bandwidthLimit';
+  }
+
   @override
   Widget build(BuildContext context) {
     final subscription =
@@ -48,8 +59,7 @@ class MainAccount extends StatelessWidget {
         ),
         Divider(height: 8),
         AccountListTile(
-          title:
-              '${(userModel.bandwidth / 1000000).toStringAsFixed(2)} MB out of ${NicheMethod().isUnlimited(userModel.bandwidthLimit / 1000000, 'MB')}',
+          title: _calculateBandWidth(),
           subtitle: 'Monthly Bandwidth',
           leadingIconData: Icons.speed_outlined,
         ),
