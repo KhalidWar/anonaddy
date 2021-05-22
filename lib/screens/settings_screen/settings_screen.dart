@@ -33,6 +33,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
         final settings = watch(settingsStateManagerProvider);
         final biometricAuth = context.read(biometricAuthServiceProvider);
 
+        Future<void> enableBiometricAuth() async {
+          await biometricAuth.canEnableBiometric().then((canCheckBio) async {
+            await biometricAuth.authenticate(canCheckBio).then((isAuthSuccess) {
+              if (isAuthSuccess) {
+                settings.toggleBiometricRequired();
+              } else {
+                showToast(kFailedToAuthenticate);
+              }
+            }).catchError((error) => showToast(error.toString()));
+          }).catchError((error) => showToast(error.toString()));
+        }
+
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -64,47 +76,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             ListTile(
               title: Text(
-                'Secure App',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: Text('Block screenshot and screen recording'),
-              trailing: IgnorePointer(
-                child: Switch.adaptive(
-                    value: settings.isAppSecured, onChanged: (toggle) {}),
-              ),
-              onTap: () => settings.toggleSecureApp(),
-            ),
-            ListTile(
-              title: Text(
                 'Biometric Authentication',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               subtitle: Text('Require biometric authentication'),
               trailing: IgnorePointer(
                 child: Switch.adaptive(
-                  value: settings.isAppSecured
-                      ? settings.isBiometricAuth
-                      : settings.toggleAndDeleteSavedSwitch(),
-                  onChanged: settings.isAppSecured ? (toggle) {} : null,
+                  value: settings.isBiometricAuth,
+                  onChanged: (toggle) {},
                 ),
               ),
-              onTap: () {
-                if (settings.isAppSecured) {
-                  biometricAuth.canEnableBiometric().then((canCheckBio) {
-                    biometricAuth
-                        .authenticate(canCheckBio)
-                        .then((isAuthSuccess) {
-                      if (isAuthSuccess) {
-                        settings.toggleBiometricRequired();
-                      } else {
-                        showToast(kFailedToAuthenticate);
-                      }
-                    }).catchError((error) => showToast(error.toString()));
-                  }).catchError((error) => showToast(error.toString()));
-                } else {
-                  showToast(kSecureAppMustBeEnable);
-                }
-              },
+              onTap: () => enableBiometricAuth(),
             ),
             ListTile(
               title: Text(
