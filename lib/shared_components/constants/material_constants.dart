@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 const kBlueNavyColor = Color(0xFF19216C);
 const kAccentColor = Color(0xFF62F4EB);
 
+const kFirstPieChartColor = Color(0xff0293ee);
+const kSecondPieChartColor = Color(0xfff8b250);
+const kThirdPieChartColor = Color(0xff845bef);
+const kFourthPieChartColor = Color(0xff13d38e);
+
 /// UI Decoration
 const kTextFormFieldDecoration = InputDecoration(
   border: OutlineInputBorder(),
