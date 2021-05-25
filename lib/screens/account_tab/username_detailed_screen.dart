@@ -201,8 +201,11 @@ class UsernameDetailedScreen extends ConsumerWidget {
       builder: (context) {
         final size = MediaQuery.of(context).size;
 
-        return SingleChildScrollView(
+        return Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               BottomSheetHeader(headerLabel: 'Update Description'),
               Container(

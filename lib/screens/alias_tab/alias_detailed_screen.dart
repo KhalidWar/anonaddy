@@ -8,7 +8,7 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
-import 'package:anonaddy/shared_components/pie_chart/alias_pie_chart.dart';
+import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
@@ -48,7 +48,7 @@ class AliasDetailScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AliasPieChart(aliasDataModel: aliasDataModel),
+            AliasScreenPieChart(aliasDataModel: aliasDataModel),
             Divider(height: size.height * 0.03),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -269,8 +269,11 @@ class AliasDetailScreen extends ConsumerWidget {
       builder: (context) {
         final size = MediaQuery.of(context).size;
 
-        return SingleChildScrollView(
+        return Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               BottomSheetHeader(headerLabel: 'Update Description'),
               Container(

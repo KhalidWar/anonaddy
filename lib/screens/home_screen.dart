@@ -135,9 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20)),
                   ),
-                  builder: (context) {
-                    return SingleChildScrollView(child: CreateNewAlias());
-                  },
+                  builder: (context) => CreateNewAlias(),
                 );
               },
       ),

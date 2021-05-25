@@ -245,8 +245,11 @@ class RecipientDetailedScreen extends ConsumerWidget {
         final pgpKeyFormKey =
             context.read(recipientStateManagerProvider).pgpKeyFormKey;
 
-        return SingleChildScrollView(
+        return Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               BottomSheetHeader(headerLabel: 'Add GPG Key'),
               Container(

@@ -95,112 +95,120 @@ class CreateNewAlias extends ConsumerWidget {
     return domainOptions.when(
       loading: () => LoadingIndicator(),
       data: (data) {
-        return Column(
-          children: [
-            BottomSheetHeader(headerLabel: 'Create New Alias'),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Text(createAliasText),
-                      SizedBox(height: size.height * 0.02),
-                      TextFormField(
-                        controller: descFieldController,
-                        textInputAction: TextInputAction.next,
-                        decoration: kTextFormFieldDecoration.copyWith(
-                            hintText: kDescriptionInputText),
-                      ),
-                      buildCustomInputField(),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: size.height * 0.02),
-                      Text(
-                        'Alias domain',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      DropdownButton<String>(
-                        isExpanded: true,
-                        isDense: true,
-                        value: aliasStateProvider.aliasDomain,
-                        hint: Text(
-                          '${data.defaultAliasDomain ?? 'Choose Alias Domain'}',
+        return Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              BottomSheetHeader(headerLabel: 'Create New Alias'),
+              Padding(
+                padding:
+                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text(createAliasText),
+                        SizedBox(height: size.height * 0.02),
+                        TextFormField(
+                          controller: descFieldController,
+                          textInputAction: TextInputAction.next,
+                          decoration: kTextFormFieldDecoration.copyWith(
+                              hintText: kDescriptionInputText),
                         ),
-                        items: data.sharedDomainsList
-                            .map<DropdownMenuItem<String>>((value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String value) {
-                          aliasStateProvider.setAliasDomain = value;
-                          aliasStateProvider.setAliasFormat =
-                              data.defaultAliasFormat;
-                        },
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: size.height * 0.02),
-                      Text(
-                        'Alias format',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      DropdownButton<String>(
-                        isExpanded: true,
-                        isDense: true,
-                        value: aliasStateProvider.aliasFormat,
-                        hint: Text(
-                          correctAliasString(data.defaultAliasFormat) ??
-                              'Choose Alias Format',
+                        buildCustomInputField(),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: size.height * 0.02),
+                        Text(
+                          'Alias domain',
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
-                        items: dropdownMenuItems(),
-                        onChanged: (String value) {
-                          aliasStateProvider.setAliasFormat = value;
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: size.height * 0.02),
-                  isLoading
-                      ? isIOS
-                          ? CupertinoActivityIndicator()
-                          : CircularProgressIndicator()
-                      : ElevatedButton(
-                          style: ElevatedButton.styleFrom(),
-                          child: Text('Create Alias'),
-                          onPressed: isLoading
-                              ? () {}
-                              : () {
-                                  if (aliasStateProvider.aliasDomain == null &&
-                                          data.defaultAliasDomain == null ||
-                                      aliasStateProvider.aliasFormat == null &&
-                                          data.defaultAliasFormat == null) {
-                                  } else {
-                                    createNewAlias(
-                                      context,
-                                      descFieldController.text.trim(),
-                                      aliasStateProvider.aliasDomain ??
-                                          data.defaultAliasDomain,
-                                      aliasStateProvider.aliasFormat ??
-                                          data.defaultAliasFormat,
-                                      customFieldController.text.trim(),
-                                    );
-                                  }
-                                },
+                        DropdownButton<String>(
+                          isExpanded: true,
+                          isDense: true,
+                          value: aliasStateProvider.aliasDomain,
+                          hint: Text(
+                            '${data.defaultAliasDomain ?? 'Choose Alias Domain'}',
+                          ),
+                          items: data.sharedDomainsList
+                              .map<DropdownMenuItem<String>>((value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String value) {
+                            aliasStateProvider.setAliasDomain = value;
+                            aliasStateProvider.setAliasFormat =
+                                data.defaultAliasFormat;
+                          },
                         ),
-                ],
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: size.height * 0.02),
+                        Text(
+                          'Alias format',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        DropdownButton<String>(
+                          isExpanded: true,
+                          isDense: true,
+                          value: aliasStateProvider.aliasFormat,
+                          hint: Text(
+                            correctAliasString(data.defaultAliasFormat) ??
+                                'Choose Alias Format',
+                          ),
+                          items: dropdownMenuItems(),
+                          onChanged: (String value) {
+                            aliasStateProvider.setAliasFormat = value;
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    isLoading
+                        ? isIOS
+                            ? CupertinoActivityIndicator()
+                            : CircularProgressIndicator()
+                        : ElevatedButton(
+                            style: ElevatedButton.styleFrom(),
+                            child: Text('Create Alias'),
+                            onPressed: isLoading
+                                ? () {}
+                                : () {
+                                    if (aliasStateProvider.aliasDomain ==
+                                                null &&
+                                            data.defaultAliasDomain == null ||
+                                        aliasStateProvider.aliasFormat ==
+                                                null &&
+                                            data.defaultAliasFormat == null) {
+                                    } else {
+                                      createNewAlias(
+                                        context,
+                                        descFieldController.text.trim(),
+                                        aliasStateProvider.aliasDomain ??
+                                            data.defaultAliasDomain,
+                                        aliasStateProvider.aliasFormat ??
+                                            data.defaultAliasFormat,
+                                        customFieldController.text.trim(),
+                                      );
+                                    }
+                                  },
+                          ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
       error: (error, stackTrade) {
