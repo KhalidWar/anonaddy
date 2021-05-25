@@ -74,7 +74,6 @@ class CreateNewAlias extends ConsumerWidget {
       if (aliasStateProvider.aliasFormat == 'custom') {
         return Column(
           children: [
-            SizedBox(height: size.height * 0.02),
             Form(
               key: customFormKey,
               child: TextFormField(
@@ -111,20 +110,21 @@ class CreateNewAlias extends ConsumerWidget {
                     Column(
                       children: [
                         Text(createAliasText),
-                        SizedBox(height: size.height * 0.02),
+                        SizedBox(height: size.height * 0.01),
                         TextFormField(
                           controller: descFieldController,
                           textInputAction: TextInputAction.next,
                           decoration: kTextFormFieldDecoration.copyWith(
                               hintText: kDescriptionInputText),
                         ),
+                        SizedBox(height: size.height * 0.01),
                         buildCustomInputField(),
                       ],
                     ),
+                    SizedBox(height: size.height * 0.02),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: size.height * 0.02),
                         Text(
                           'Alias domain',
                           style: Theme.of(context).textTheme.bodyText1,
@@ -151,10 +151,10 @@ class CreateNewAlias extends ConsumerWidget {
                         ),
                       ],
                     ),
+                    SizedBox(height: size.height * 0.02),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: size.height * 0.02),
                         Text(
                           'Alias format',
                           style: Theme.of(context).textTheme.bodyText1,

@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/screens/account_tab/add_new_recipient.dart';
 import 'package:anonaddy/shared_components/account_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
@@ -111,7 +112,8 @@ class MainAccount extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) => AddNewRecipient(),
     );
@@ -122,7 +124,8 @@ class MainAccount extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) => AddNewUsername(),
     );

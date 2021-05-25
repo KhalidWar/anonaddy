@@ -10,6 +10,7 @@ const kThirdPieChartColor = Color(0xff845bef);
 const kFourthPieChartColor = Color(0xff13d38e);
 
 /// UI Decoration
+const kBottomSheetBorderRadius = 12.0;
 const kTextFormFieldDecoration = InputDecoration(
   border: OutlineInputBorder(),
   focusedBorder:

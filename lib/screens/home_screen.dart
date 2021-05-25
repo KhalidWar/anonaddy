@@ -132,8 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   context: context,
                   isScrollControlled: true,
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(kBottomSheetBorderRadius)),
                   ),
                   builder: (context) => CreateNewAlias(),
                 );

@@ -196,7 +196,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
@@ -256,7 +257,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         return SingleChildScrollView(
