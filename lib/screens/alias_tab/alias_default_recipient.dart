@@ -104,7 +104,7 @@ class _AliasDefaultRecipientScreenState
                       final verifiedRecipient = _verifiedRecipients[index];
                       return ListTile(
                         selected: _isDefaultRecipient(verifiedRecipient),
-                        selectedTileColor: kBlueNavyColor,
+                        selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
                         title: Text(verifiedRecipient.email),
                         onTap: () {
