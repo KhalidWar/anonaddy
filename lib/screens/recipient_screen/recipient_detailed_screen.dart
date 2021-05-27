@@ -314,7 +314,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
       actions: [
         PopupMenuButton(
           itemBuilder: (BuildContext context) {
-            return ['Delete recipient'].map((String choice) {
+            return ['Delete Recipient'].map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
                 child: Text(choice),
@@ -327,9 +327,9 @@ class RecipientDetailedScreen extends ConsumerWidget {
               builder: (context) {
                 return isIOS
                     ? confirmationDialog.iOSAlertDialog(context,
-                        kDeleteRecipientDialogText, remove, 'Delete recipient')
+                        kDeleteRecipientDialogText, remove, 'Delete Recipient')
                     : confirmationDialog.androidAlertDialog(context,
-                        kDeleteRecipientDialogText, remove, 'Delete recipient');
+                        kDeleteRecipientDialogText, remove, 'Delete Recipient');
               },
             );
           },

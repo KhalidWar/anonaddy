@@ -7,6 +7,7 @@ import 'package:anonaddy/shared_components/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -209,18 +210,13 @@ class UsernameDetailedScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               BottomSheetHeader(headerLabel: 'Update Description'),
-              Container(
-                height: size.height * 0.25,
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Update description for'),
-                    Text(
-                      '${username.username}',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
+                    Text(kUpdateDescriptionString),
+                    SizedBox(height: size.height * 0.015),
                     Form(
                       key: context
                           .read(usernameStateManagerProvider)
@@ -236,11 +232,13 @@ class UsernameDetailedScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    SizedBox(height: size.height * 0.015),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(),
-                      child: Text('Update description'),
+                      child: Text('Update Description'),
                       onPressed: () => editDesc(),
                     ),
+                    SizedBox(height: size.height * 0.015),
                   ],
                 ),
               ),
@@ -292,7 +290,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
       actions: [
         PopupMenuButton(
           itemBuilder: (BuildContext context) {
-            return ['Delete username'].map((String choice) {
+            return ['Delete Username'].map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
                 child: Text(choice),
@@ -305,9 +303,9 @@ class UsernameDetailedScreen extends ConsumerWidget {
               builder: (context) {
                 return isIOS
                     ? confirmationDialog.iOSAlertDialog(context,
-                        kDeleteUsername, deleteUsername, 'Delete username')
+                        kDeleteUsername, deleteUsername, 'Delete Username')
                     : confirmationDialog.androidAlertDialog(context,
-                        kDeleteUsername, deleteUsername, 'Delete username');
+                        kDeleteUsername, deleteUsername, 'Delete Username');
               },
             );
           },

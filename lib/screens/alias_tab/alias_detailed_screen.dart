@@ -141,7 +141,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                          'Default Recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         IconButton(
@@ -278,18 +278,13 @@ class AliasDetailScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               BottomSheetHeader(headerLabel: 'Update Description'),
-              Container(
-                height: size.height * 0.25,
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Update description for'),
-                    Text(
-                      '${aliasDataModel.email}',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
+                    Text(kUpdateDescriptionString),
+                    SizedBox(height: size.height * 0.015),
                     Form(
                       key: formKey,
                       child: TextFormField(
@@ -303,11 +298,13 @@ class AliasDetailScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    SizedBox(height: size.height * 0.015),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(),
                       child: Text('Update Description'),
                       onPressed: () => editDesc(),
                     ),
+                    SizedBox(height: size.height * 0.015),
                   ],
                 ),
               ),
@@ -337,7 +334,7 @@ class AliasDetailScreen extends ConsumerWidget {
       actions: [
         PopupMenuButton(
           itemBuilder: (BuildContext context) {
-            return ['Forget alias'].map((String choice) {
+            return ['Forget Alias'].map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
                 child: Text(choice),
@@ -350,9 +347,9 @@ class AliasDetailScreen extends ConsumerWidget {
               builder: (context) {
                 return isIOS
                     ? confirmationDialog.iOSAlertDialog(
-                        context, kForgetAliasDialogText, forget, 'Forget alias')
+                        context, kForgetAliasDialogText, forget, 'Forget Alias')
                     : confirmationDialog.androidAlertDialog(context,
-                        kForgetAliasDialogText, forget, 'Forget alias');
+                        kForgetAliasDialogText, forget, 'Forget Alias');
               },
             );
           },

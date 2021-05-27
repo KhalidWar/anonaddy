@@ -14,7 +14,9 @@ const kFailedToDeleteGPGKey = 'Failed to Delete GPG Key';
 const kGPGKeyAddedSuccessfully = 'GPG Key Added Successfully';
 const kFailedToAddGPGKey = 'Failed to Add GPG Key';
 const kOnlyAvailableToPaid = 'Only available to paid users';
-const kComingSoon = 'Coming Soon';
+const kForgetAliasUIString = 'Successfully forgotten an alias';
+const kUpdateAliasRecipientFailed = 'Failed to update description';
+const kUpdateAliasRecipientSuccessful = 'Successfully updated alias recipients';
 
 /// Biometric Auth Messages
 const kAuthToProceed = 'Authenticate to proceed';

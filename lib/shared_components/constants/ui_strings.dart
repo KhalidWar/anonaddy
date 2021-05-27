@@ -21,8 +21,8 @@ const kLogOutAlertDialog =
     'Are you sure you want to log out?\n\nAll app data will be deleted.';
 const kUnverifiedRecipient =
     'Unverified recipient emails can NOT be set as default recipient for aliases.';
-const kUpdateAliasRecipientFailed = 'Failed to update description';
-const kUpdateAliasRecipientSuccessful = 'Successfully updated alias recipients';
 const kDeletedAliasUIString = 'Alias will reject all emails sent to it';
 const kRestoreAliasUIString = 'Alias will be able to receive emails';
-const kForgetAliasUIString = 'Successfully forgotten an alias';
+const kComingSoon = 'Coming Soon';
+const kUpdateDescriptionString =
+    'Enter new description or enter empty whitespace remove current description';
