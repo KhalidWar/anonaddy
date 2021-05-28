@@ -97,6 +97,7 @@ class AliasStateManager extends ChangeNotifier {
     } else {
       await aliasService.restoreAlias(aliasID).then((value) {
         _showToast(kAliasRestoredSuccessfully);
+        aliasDataModel = value;
       }).catchError((error) {
         _showToast(error.toString());
       });

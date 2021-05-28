@@ -43,7 +43,7 @@ class AliasDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context, aliasDataModel.aliasID),
+      appBar: buildAppBar(context, aliasDataModel.aliasID, isAliasDeleted),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,7 +228,7 @@ class AliasDetailScreen extends ConsumerWidget {
         aliasDataModel.deletedAt,
         aliasDataModel.aliasID,
       );
-      Navigator.pop(context);
+      if (!isDeleted) Navigator.pop(context);
     }
 
     return showModal(
@@ -315,7 +315,7 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  AppBar buildAppBar(BuildContext context, String aliasID) {
+  AppBar buildAppBar(BuildContext context, String aliasID, bool isDeleted) {
     final confirmationDialog = ConfirmationDialog();
     final isIOS = TargetedPlatform().isIOS();
 
@@ -325,7 +325,10 @@ class AliasDetailScreen extends ConsumerWidget {
     }
 
     return AppBar(
-      title: Text('Alias', style: TextStyle(color: Colors.white)),
+      title: Text(
+        isDeleted ? 'Alias [DELETED]' : 'Alias',
+        style: TextStyle(color: Colors.white),
+      ),
       leading: IconButton(
         icon: Icon(isIOS ? CupertinoIcons.back : Icons.arrow_back),
         color: Colors.white,
