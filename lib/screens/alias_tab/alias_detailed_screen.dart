@@ -48,7 +48,12 @@ class AliasDetailScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AliasScreenPieChart(aliasDataModel: aliasDataModel),
+            AliasScreenPieChart(
+              emailsForwarded: aliasDataModel.emailsForwarded,
+              emailsBlocked: aliasDataModel.emailsBlocked,
+              emailsReplied: aliasDataModel.emailsReplied,
+              emailsSent: aliasDataModel.emailsSent,
+            ),
             Divider(height: size.height * 0.03),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),

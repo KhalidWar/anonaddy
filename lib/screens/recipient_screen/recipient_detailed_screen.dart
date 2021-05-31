@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/alias_detail_list_tile.dart';
@@ -8,6 +9,7 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
+import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -19,8 +21,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
-  const RecipientDetailedScreen({this.recipientData});
+  RecipientDetailedScreen({this.recipientData});
   final RecipientDataModel recipientData;
+
+  int calculateTotal(List<int> list) {
+    if (list.isEmpty) {
+      return 0;
+    } else {
+      final total = list.reduce((value, element) => value + element);
+      return total;
+    }
+  }
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -33,6 +44,19 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
     final size = MediaQuery.of(context).size;
 
+    final List<int> forwardedList = [];
+    final List<int> blockedList = [];
+    final List<int> repliedList = [];
+    final List<int> sentList = [];
+    if (recipientData.aliases != null) {
+      for (AliasDataModel alias in recipientData.aliases) {
+        forwardedList.add(alias.emailsForwarded);
+        blockedList.add(alias.emailsBlocked);
+        repliedList.add(alias.emailsReplied);
+        sentList.add(alias.emailsSent);
+      }
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
@@ -40,15 +64,23 @@ class RecipientDetailedScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Container(
-                padding: EdgeInsets.only(top: 20, bottom: 50),
+            if (recipientData.aliases == null ||
+                recipientData.emailVerifiedAt == null)
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(vertical: 40),
                 child: SvgPicture.asset(
                   'assets/images/envelope.svg',
-                  height: size.height * 0.2,
+                  height: size.height * 0.22,
                 ),
+              )
+            else
+              AliasScreenPieChart(
+                emailsForwarded: calculateTotal(forwardedList),
+                emailsBlocked: calculateTotal(blockedList),
+                emailsReplied: calculateTotal(repliedList),
+                emailsSent: calculateTotal(sentList),
               ),
-            ),
             Divider(height: size.height * 0.03),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),

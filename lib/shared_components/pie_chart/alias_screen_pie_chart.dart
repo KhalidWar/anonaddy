@@ -1,28 +1,30 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class AliasScreenPieChart extends StatelessWidget {
-  const AliasScreenPieChart({Key key, this.aliasDataModel}) : super(key: key);
+  const AliasScreenPieChart({
+    this.emailsForwarded,
+    this.emailsBlocked,
+    this.emailsSent,
+    this.emailsReplied,
+  });
 
-  final AliasDataModel aliasDataModel;
+  final int emailsForwarded;
+  final int emailsBlocked;
+  final int emailsSent;
+  final int emailsReplied;
 
   @override
   Widget build(BuildContext context) {
     final pieChartSectionRadius = 60.0;
 
-    final emailsForwarded = aliasDataModel.emailsForwarded.toDouble();
-    final emailsBlocked = aliasDataModel.emailsBlocked.toDouble();
-    final emailsSent = aliasDataModel.emailsSent.toDouble();
-    final emailsReplied = aliasDataModel.emailsReplied.toDouble();
-
     bool isPieChartEmpty() {
-      if (emailsForwarded == 0.0 &&
-          emailsBlocked == 0.0 &&
-          emailsForwarded == 0.0 &&
-          emailsSent == 0.0) {
+      if (emailsForwarded == 0 &&
+          emailsBlocked == 0 &&
+          emailsForwarded == 0 &&
+          emailsSent == 0) {
         return true;
       } else {
         return false;
@@ -53,25 +55,25 @@ class AliasScreenPieChart extends StatelessWidget {
                         showTitle: false,
                         radius: pieChartSectionRadius,
                         color: kFirstPieChartColor,
-                        value: emailsForwarded,
+                        value: emailsForwarded.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
                         color: kSecondPieChartColor,
-                        value: emailsBlocked,
+                        value: emailsBlocked.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
                         color: kThirdPieChartColor,
-                        value: emailsSent,
+                        value: emailsSent.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
                         color: kFourthPieChartColor,
-                        value: emailsReplied,
+                        value: emailsReplied.toDouble(),
                       ),
                     ],
             ),
@@ -86,12 +88,12 @@ class AliasScreenPieChart extends StatelessWidget {
                 PieChartIndicator(
                   color: kFirstPieChartColor,
                   label: 'emails forwarded',
-                  count: aliasDataModel.emailsForwarded,
+                  count: emailsForwarded,
                 ),
                 PieChartIndicator(
                   color: kSecondPieChartColor,
                   label: 'emails blocked',
-                  count: aliasDataModel.emailsBlocked,
+                  count: emailsBlocked,
                 ),
               ],
             ),
@@ -101,12 +103,12 @@ class AliasScreenPieChart extends StatelessWidget {
                 PieChartIndicator(
                   color: kFourthPieChartColor,
                   label: 'emails replied',
-                  count: aliasDataModel.emailsReplied,
+                  count: emailsReplied,
                 ),
                 PieChartIndicator(
                   color: kThirdPieChartColor,
                   label: 'emails sent',
-                  count: aliasDataModel.emailsSent,
+                  count: emailsSent,
                 ),
               ],
             ),
