@@ -286,14 +286,12 @@ class RecipientDetailedScreen extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               BottomSheetHeader(headerLabel: 'Add GPG Key'),
-              Container(
-                height: size.height * 0.25,
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(kEnterPublicKeyData),
+                    SizedBox(height: size.height * 0.015),
                     Form(
                       key: pgpKeyFormKey,
                       child: TextFormField(
@@ -311,11 +309,13 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    SizedBox(height: size.height * 0.015),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(),
                       child: Text('Add Key'),
                       onPressed: () => addPublicKey(),
                     ),
+                    SizedBox(height: size.height * 0.015),
                   ],
                 ),
               ),
