@@ -142,7 +142,14 @@ class _AliasDefaultRecipientScreenState
                         selected: _isDefaultRecipient(verifiedRecipient),
                         selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
-                        title: Text(verifiedRecipient.email),
+                        title: Text(
+                          verifiedRecipient.email,
+                          style: TextStyle(
+                            color: _isDefaultRecipient(verifiedRecipient)
+                                ? Colors.black
+                                : Theme.of(context).textTheme.bodyText1.color,
+                          ),
+                        ),
                         onTap: () {
                           setState(() {
                             _toggleRecipient(verifiedRecipient);

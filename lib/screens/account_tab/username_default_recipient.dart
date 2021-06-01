@@ -106,9 +106,16 @@ class _AliasDefaultRecipientScreenState
                       final verifiedRecipient = _verifiedRecipients[index];
                       return ListTile(
                         selected: _isDefaultRecipient(verifiedRecipient),
-                        selectedTileColor: kBlueNavyColor,
+                        selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
-                        title: Text(verifiedRecipient.email),
+                        title: Text(
+                          verifiedRecipient.email,
+                          style: TextStyle(
+                            color: _isDefaultRecipient(verifiedRecipient)
+                                ? Colors.black
+                                : Theme.of(context).textTheme.bodyText1.color,
+                          ),
+                        ),
                         onTap: () {
                           setState(() {
                             _toggleRecipient(verifiedRecipient);
