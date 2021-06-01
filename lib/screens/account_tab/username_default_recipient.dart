@@ -121,7 +121,16 @@ class _AliasDefaultRecipientScreenState
                         children: [
                           Text(kUpdateUsernameDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
-                          Divider(height: 0),
+                          Consumer(
+                            builder: (_, watch, __) {
+                              final isLoading =
+                                  watch(usernameStateManagerProvider)
+                                      .updateRecipientLoading;
+                              return isLoading
+                                  ? LinearProgressIndicator(color: kAccentColor)
+                                  : Divider(height: 0);
+                            },
+                          ),
                         ],
                       ),
                     ),
