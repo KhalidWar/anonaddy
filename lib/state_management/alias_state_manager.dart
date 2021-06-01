@@ -12,10 +12,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager() {
     isToggleLoading = false;
+    updateRecipientLoading = false;
   }
 
   AliasDataModel aliasDataModel;
   bool _isToggleLoading;
+  bool _updateRecipientLoading;
   String _aliasDomain;
   String _aliasFormat;
 
@@ -31,6 +33,7 @@ class AliasStateManager extends ChangeNotifier {
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
 
   bool get isToggleLoading => _isToggleLoading;
+  bool get updateRecipientLoading => _updateRecipientLoading;
   String get aliasDomain => _aliasDomain;
   String get aliasFormat => _aliasFormat;
 
@@ -46,6 +49,11 @@ class AliasStateManager extends ChangeNotifier {
 
   set isToggleLoading(bool input) {
     _isToggleLoading = input;
+    notifyListeners();
+  }
+
+  set updateRecipientLoading(bool input) {
+    _updateRecipientLoading = input;
     notifyListeners();
   }
 
@@ -147,6 +155,7 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> updateAliasDefaultRecipient(
       BuildContext context, String aliasID, List<String> recipients) async {
+    updateRecipientLoading = true;
     await context
         .read(aliasServiceProvider)
         .updateAliasDefaultRecipient(aliasID, recipients)
@@ -154,10 +163,12 @@ class AliasStateManager extends ChangeNotifier {
       aliasDataModel.recipients = value.recipients;
       notifyListeners();
       _showToast(kUpdateAliasRecipientSuccessful);
+      updateRecipientLoading = false;
+      Navigator.pop(context);
     }).catchError((error) {
       _showToast(error.toString());
+      updateRecipientLoading = false;
     });
-    Navigator.pop(context);
   }
 
   Future<void> forgetAlias(BuildContext context, String aliasID) async {

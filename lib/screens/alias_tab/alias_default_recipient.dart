@@ -113,14 +113,23 @@ class _AliasDefaultRecipientScreenState
                   children: [
                     BottomSheetHeader(headerLabel: 'Update Alias Recipients'),
                     Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          children: [
-                            Text(kUpdateAliasRecipients),
-                            SizedBox(height: size.height * 0.01),
-                            Divider(height: 0),
-                          ],
-                        )),
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          Text(kUpdateAliasRecipients),
+                          SizedBox(height: size.height * 0.01),
+                          Consumer(
+                            builder: (_, watch, __) {
+                              final isLoading = watch(aliasStateManagerProvider)
+                                  .updateRecipientLoading;
+                              return isLoading
+                                  ? LinearProgressIndicator(color: kAccentColor)
+                                  : Divider(height: 0);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: size.height * 0.01),
