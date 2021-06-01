@@ -3,6 +3,7 @@ import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDefaultRecipientScreen extends StatefulWidget {
   const AliasDefaultRecipientScreen(this.aliasDataModel);
-
   final AliasDataModel aliasDataModel;
 
   @override
@@ -24,6 +24,9 @@ class _AliasDefaultRecipientScreenState
   final _verifiedRecipients = <RecipientDataModel>[];
   final _defaultRecipients = <RecipientDataModel>[];
   final _selectedRecipientsID = <String>[];
+
+  double initialChildSize;
+  double maxChildSize;
 
   void _toggleRecipient(RecipientDataModel verifiedRecipient) {
     if (_defaultRecipients.contains(verifiedRecipient)) {
@@ -67,38 +70,71 @@ class _AliasDefaultRecipientScreenState
     }
   }
 
+  void _setScrollSheetSizes() {
+    setState(() {
+      if (_verifiedRecipients.length <= 3) {
+        initialChildSize = 0.5;
+        maxChildSize = 0.6;
+      } else if (_verifiedRecipients.length > 3 &&
+          _verifiedRecipients.length <= 6) {
+        initialChildSize = 0.55;
+        maxChildSize = 0.7;
+      } else {
+        initialChildSize = 0.7;
+        maxChildSize = 0.9;
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _setVerifiedRecipients();
     _setDefaultRecipients();
+    _setScrollSheetSizes();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Column(
-      children: [
-        BottomSheetHeader(headerLabel: 'Update Alias Recipients'),
-        Container(
-          padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
-          child: Column(
-            children: [
-              Text(kUpdateAliasRecipients),
-              SizedBox(height: size.height * 0.02),
-              Divider(height: 0),
-              if (_verifiedRecipients.isEmpty)
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text('No recipients found',
-                      style: Theme.of(context).textTheme.headline6),
-                )
-              else
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.35,
-                  child: ListView.builder(
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: initialChildSize,
+      minChildSize: initialChildSize,
+      maxChildSize: maxChildSize,
+      builder: (context, controller) {
+        return Stack(
+          children: [
+            ListView(
+              controller: controller,
+              children: [
+                Column(
+                  children: [
+                    BottomSheetHeader(headerLabel: 'Update Alias Recipients'),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        child: Column(
+                          children: [
+                            Text(kUpdateAliasRecipients),
+                            SizedBox(height: size.height * 0.01),
+                            Divider(height: 0),
+                          ],
+                        )),
+                  ],
+                ),
+                SizedBox(height: size.height * 0.01),
+                if (_verifiedRecipients.isEmpty)
+                  Center(
+                    child: Text(
+                      'No recipients found',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  )
+                else
+                  ListView.builder(
                     shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: _verifiedRecipients.length,
                     itemBuilder: (context, index) {
                       final verifiedRecipient = _verifiedRecipients[index];
@@ -115,9 +151,25 @@ class _AliasDefaultRecipientScreenState
                       );
                     },
                   ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Divider(height: 0),
+                      SizedBox(height: size.height * 0.01),
+                      Text(kUpdateAliasRecipientsNote),
+                    ],
+                  ),
                 ),
-              SizedBox(height: size.height * 0.02),
-              ElevatedButton(
+                SizedBox(height: size.height * 0.1),
+              ],
+            ),
+            Positioned(
+              bottom: 15,
+              left: 15,
+              right: 15,
+              child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
                 child: Text('Update Recipients'),
                 onPressed: () => context
@@ -128,10 +180,10 @@ class _AliasDefaultRecipientScreenState
                       _selectedRecipientsID,
                     ),
               ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

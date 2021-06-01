@@ -214,13 +214,7 @@ class AliasDetailScreen extends ConsumerWidget {
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
-        return SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: AliasDefaultRecipientScreen(aliasDataModel),
-          ),
-        );
+        return AliasDefaultRecipientScreen(aliasDataModel);
       },
     );
   }
