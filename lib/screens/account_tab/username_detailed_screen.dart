@@ -259,13 +259,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
-        return SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: UsernameDefaultRecipientScreen(username),
-          ),
-        );
+        return UsernameDefaultRecipientScreen(username);
       },
     );
   }

@@ -27,4 +27,4 @@ const kComingSoon = 'Coming Soon';
 const kUpdateDescriptionString =
     'Enter new description or enter empty whitespace remove current description';
 const kUpdateAliasRecipientsNote =
-    'Note: only verified recipients can be used as default recipients for aliases.';
+    'Note: only verified recipients can be used as default recipients.';
