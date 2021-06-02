@@ -202,7 +202,7 @@ class AliasStateManager extends ChangeNotifier {
       case 'random_words':
         return 'Random Words';
       case 'custom':
-        return 'Custom (not available on shared domains)';
+        return 'Custom';
       default:
         return 'UUID';
     }
