@@ -29,6 +29,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isToggleLoading = aliasDataProvider.isToggleLoading;
+    final deleteAliasLoading = aliasDataProvider.deleteAliasLoading;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
 
@@ -36,6 +37,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final showToast = nicheMethod.showToast;
     final copyOnTap = nicheMethod.copyOnTap;
 
+    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
     final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
@@ -77,9 +79,7 @@ class AliasDetailScreen extends ConsumerWidget {
               subtitle: 'Activity',
               trailing: Row(
                 children: [
-                  isToggleLoading
-                      ? CustomLoadingIndicator().customLoadingIndicator()
-                      : Container(),
+                  isToggleLoading ? customLoading : Container(),
                   Switch.adaptive(
                     value: aliasDataModel.isAliasActive,
                     onChanged: isAliasDeleted ? null : (toggle) {},
@@ -121,11 +121,16 @@ class AliasDetailScreen extends ConsumerWidget {
               subtitle: isAliasDeleted
                   ? kRestoreAliasUIString
                   : kDeletedAliasUIString,
-              trailing: IconButton(
-                icon: isAliasDeleted
-                    ? Icon(Icons.restore_outlined, color: Colors.green)
-                    : Icon(Icons.delete_outline, color: Colors.red),
-                onPressed: null,
+              trailing: Row(
+                children: [
+                  deleteAliasLoading ? customLoading : Container(),
+                  IconButton(
+                    icon: isAliasDeleted
+                        ? Icon(Icons.restore_outlined, color: Colors.green)
+                        : Icon(Icons.delete_outline, color: Colors.red),
+                    onPressed: null,
+                  ),
+                ],
               ),
               trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(
                   context,
@@ -227,7 +232,6 @@ class AliasDetailScreen extends ConsumerWidget {
         aliasDataModel.deletedAt,
         aliasDataModel.aliasID,
       );
-      if (!isDeleted) Navigator.pop(context);
     }
 
     return showModal(

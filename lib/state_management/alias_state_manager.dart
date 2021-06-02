@@ -12,11 +12,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager() {
     isToggleLoading = false;
+    deleteAliasLoading = false;
     updateRecipientLoading = false;
   }
 
   AliasDataModel aliasDataModel;
   bool _isToggleLoading;
+  bool _deleteAliasLoading;
   bool _updateRecipientLoading;
   String _aliasDomain;
   String _aliasFormat;
@@ -33,6 +35,7 @@ class AliasStateManager extends ChangeNotifier {
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
 
   bool get isToggleLoading => _isToggleLoading;
+  bool get deleteAliasLoading => _deleteAliasLoading;
   bool get updateRecipientLoading => _updateRecipientLoading;
   String get aliasDomain => _aliasDomain;
   String get aliasFormat => _aliasFormat;
@@ -49,6 +52,11 @@ class AliasStateManager extends ChangeNotifier {
 
   set isToggleLoading(bool input) {
     _isToggleLoading = input;
+    notifyListeners();
+  }
+
+  set deleteAliasLoading(bool input) {
+    _deleteAliasLoading = input;
     notifyListeners();
   }
 
@@ -94,22 +102,27 @@ class AliasStateManager extends ChangeNotifier {
   Future<void> deleteOrRestoreAlias(
       BuildContext context, DateTime aliasDeletedAt, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
-
+    deleteAliasLoading = true;
     if (aliasDeletedAt == null) {
+      Navigator.pop(context);
       await aliasService.deleteAlias(aliasID).then((value) {
         _showToast(kAliasDeletedSuccessfully);
+        deleteAliasLoading = false;
+        Navigator.pop(context);
       }).catchError((error) {
         _showToast(error.toString());
+        deleteAliasLoading = false;
       });
-      Navigator.pop(context);
     } else {
+      Navigator.pop(context);
       await aliasService.restoreAlias(aliasID).then((value) {
         _showToast(kAliasRestoredSuccessfully);
+        deleteAliasLoading = false;
         aliasDataModel = value;
       }).catchError((error) {
         _showToast(error.toString());
+        deleteAliasLoading = false;
       });
-      Navigator.pop(context);
     }
     notifyListeners();
   }
