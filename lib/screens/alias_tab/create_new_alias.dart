@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
@@ -26,6 +27,8 @@ class CreateNewAlias extends ConsumerWidget {
     final customFieldController = aliasStateProvider.customFieldController;
     final customFormKey = aliasStateProvider.customFormKey;
     final correctAliasString = aliasStateProvider.correctAliasString;
+    final sharedDomains = aliasStateProvider.sharedDomains;
+
     final freeTierNoSharedDomain = aliasStateProvider.freeTierNoSharedDomain;
     final freeTierWithSharedDomain =
         aliasStateProvider.freeTierWithSharedDomain;
@@ -39,10 +42,7 @@ class CreateNewAlias extends ConsumerWidget {
         'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
     List<DropdownMenuItem<String>> dropdownMenuItems() {
-      if (aliasStateProvider.aliasDomain == '4wrd.cc' ||
-          aliasStateProvider.aliasDomain == 'anonaddy.me' ||
-          aliasStateProvider.aliasDomain == 'mailer.me' ||
-          aliasStateProvider.aliasDomain == 'addymail.com') {
+      if (sharedDomains.contains(aliasStateProvider.aliasDomain)) {
         if (subscription == 'free') {
           return freeTierWithSharedDomain
               .map<DropdownMenuItem<String>>((value) {
@@ -107,6 +107,15 @@ class CreateNewAlias extends ConsumerWidget {
       }
     }
 
+    void setAliasDomain(String value, DomainOptions data) {
+      aliasStateProvider.setAliasDomain = value;
+      if (sharedDomains.contains(value)) {
+        aliasStateProvider.setAliasFormat = kUUID;
+      } else {
+        aliasStateProvider.setAliasFormat = data.defaultAliasFormat;
+      }
+    }
+
     return domainOptions.when(
       loading: () => LoadingIndicator(),
       data: (data) {
@@ -152,11 +161,7 @@ class CreateNewAlias extends ConsumerWidget {
                           child: Text(value),
                         );
                       }).toList(),
-                      onChanged: (String value) {
-                        aliasStateProvider.setAliasDomain = value;
-                        aliasStateProvider.setAliasFormat =
-                            data.defaultAliasFormat;
-                      },
+                      onChanged: (String value) => setAliasDomain(value, data),
                     ),
                     SizedBox(height: size.height * 0.02),
                     Text(

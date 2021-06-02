@@ -34,3 +34,9 @@ const kUUID = 'uuid';
 const kRandomChars = 'random_characters';
 const kCustom = 'custom';
 const kRandomWords = 'random_words';
+
+/// Official Shared Domains
+const kAnonAddyMe = 'anonaddy.me';
+const kAddyMail = 'addymail.com';
+const k4wrd = '4wrd.cc';
+const kMailerMe = 'mailer.me';

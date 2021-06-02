@@ -33,6 +33,7 @@ class AliasStateManager extends ChangeNotifier {
   final freeTierNoSharedDomain = [kUUID, kRandomChars, kCustom];
   final paidTierWithSharedDomain = [kUUID, kRandomChars, kRandomWords];
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
+  final sharedDomains = [kAnonAddyMe, kAddyMail, k4wrd, kMailerMe];
 
   bool get isToggleLoading => _isToggleLoading;
   bool get deleteAliasLoading => _deleteAliasLoading;
