@@ -28,6 +28,8 @@ class CreateNewAlias extends ConsumerWidget {
     final customFormKey = aliasStateProvider.customFormKey;
     final correctAliasString = aliasStateProvider.correctAliasString;
     final sharedDomains = aliasStateProvider.sharedDomains;
+    String aliasFormat = aliasStateProvider.aliasFormat;
+    String aliasDomain = aliasStateProvider.aliasDomain;
 
     final freeTierNoSharedDomain = aliasStateProvider.freeTierNoSharedDomain;
     final freeTierWithSharedDomain =
@@ -36,13 +38,13 @@ class CreateNewAlias extends ConsumerWidget {
     final paidTierWithSharedDomain =
         aliasStateProvider.paidTierWithSharedDomain;
 
-    final userModel = watch(accountStreamProvider).data.value;
+    final userModel = context.read(accountStreamProvider).data.value;
     final subscription = userModel.subscription;
     final createAliasText =
         'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
     List<DropdownMenuItem<String>> dropdownMenuItems() {
-      if (sharedDomains.contains(aliasStateProvider.aliasDomain)) {
+      if (sharedDomains.contains(aliasDomain)) {
         if (subscription == 'free') {
           return freeTierWithSharedDomain
               .map<DropdownMenuItem<String>>((value) {
@@ -71,43 +73,20 @@ class CreateNewAlias extends ConsumerWidget {
       }
     }
 
-    Widget buildCustomInputField() {
-      if (aliasStateProvider.aliasFormat == 'custom') {
-        return Column(
-          children: [
-            Form(
-              key: customFormKey,
-              child: TextFormField(
-                controller: customFieldController,
-                validator: (input) => FormValidator().validateLocalPart(input),
-                textInputAction: TextInputAction.next,
-                decoration: kTextFormFieldDecoration.copyWith(
-                  hintText: kEnterLocalPart,
-                ),
-              ),
-            ),
-          ],
-        );
-      }
-      return Container();
-    }
-
     void createAliasButtonOnPress(DomainOptions data) {
-      if (aliasStateProvider.aliasDomain != null &&
-              data.defaultAliasDomain != null ||
-          aliasStateProvider.aliasFormat != null &&
-              data.defaultAliasFormat != null) {
+      if (aliasDomain != null && data.defaultAliasDomain != null ||
+          aliasFormat != null && data.defaultAliasFormat != null) {
         createNewAlias(
           context,
           descFieldController.text.trim(),
-          aliasStateProvider.aliasDomain ?? data.defaultAliasDomain,
-          aliasStateProvider.aliasFormat ?? data.defaultAliasFormat,
+          aliasDomain ?? data.defaultAliasDomain,
+          aliasFormat ?? data.defaultAliasFormat,
           customFieldController.text.trim(),
         );
       }
     }
 
-    void setAliasDomain(String value, DomainOptions data) {
+    void setsAliasDomain(String value, DomainOptions data) {
       aliasStateProvider.setAliasDomain = value;
       if (sharedDomains.contains(value)) {
         aliasStateProvider.setAliasFormat = kUUID;
@@ -119,6 +98,9 @@ class CreateNewAlias extends ConsumerWidget {
     return domainOptions.when(
       loading: () => LoadingIndicator(),
       data: (data) {
+        if (aliasFormat == null) aliasFormat = data.defaultAliasFormat;
+        if (aliasDomain == null) aliasDomain = data.defaultAliasDomain;
+
         return Container(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -141,7 +123,18 @@ class CreateNewAlias extends ConsumerWidget {
                           hintText: kDescriptionInputText),
                     ),
                     SizedBox(height: size.height * 0.01),
-                    buildCustomInputField(),
+                    if (aliasFormat == kCustom)
+                      Form(
+                        key: customFormKey,
+                        child: TextFormField(
+                          controller: customFieldController,
+                          validator: (input) =>
+                              FormValidator().validateLocalPart(input),
+                          textInputAction: TextInputAction.next,
+                          decoration: kTextFormFieldDecoration.copyWith(
+                              hintText: kEnterLocalPart),
+                        ),
+                      ),
                     SizedBox(height: size.height * 0.02),
                     Text(
                       'Alias domain',
@@ -150,7 +143,7 @@ class CreateNewAlias extends ConsumerWidget {
                     DropdownButton<String>(
                       isExpanded: true,
                       isDense: true,
-                      value: aliasStateProvider.aliasDomain,
+                      value: aliasDomain,
                       hint: Text(
                         '${data.defaultAliasDomain ?? 'Choose Alias Domain'}',
                       ),
@@ -161,7 +154,7 @@ class CreateNewAlias extends ConsumerWidget {
                           child: Text(value),
                         );
                       }).toList(),
-                      onChanged: (String value) => setAliasDomain(value, data),
+                      onChanged: (String value) => setsAliasDomain(value, data),
                     ),
                     SizedBox(height: size.height * 0.02),
                     Text(
@@ -171,7 +164,7 @@ class CreateNewAlias extends ConsumerWidget {
                     DropdownButton<String>(
                       isExpanded: true,
                       isDense: true,
-                      value: aliasStateProvider.aliasFormat,
+                      value: aliasFormat,
                       hint: Text(
                         correctAliasString(data.defaultAliasFormat) ??
                             'Choose Alias Format',
@@ -181,6 +174,8 @@ class CreateNewAlias extends ConsumerWidget {
                         aliasStateProvider.setAliasFormat = value;
                       },
                     ),
+                    if (aliasFormat == kCustom)
+                      Text('Note: not available on shared domains'),
                     SizedBox(height: size.height * 0.02),
                     Center(
                       child: ElevatedButton(

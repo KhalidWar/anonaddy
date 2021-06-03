@@ -88,7 +88,8 @@ class AliasStateManager extends ChangeNotifier {
       customFieldController.clear();
       isToggleLoading = false;
       Navigator.pop(context);
-      notifyListeners();
+      _aliasFormat = null;
+      _aliasDomain = null;
     }
 
     if (format == 'custom') {
