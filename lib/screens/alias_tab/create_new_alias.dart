@@ -104,92 +104,96 @@ class CreateNewAlias extends ConsumerWidget {
         return Container(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              BottomSheetHeader(headerLabel: 'Create New Alias'),
-              Padding(
-                padding:
-                    EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(createAliasText),
-                    SizedBox(height: size.height * 0.01),
-                    TextFormField(
-                      controller: descFieldController,
-                      textInputAction: TextInputAction.next,
-                      decoration: kTextFormFieldDecoration.copyWith(
-                          hintText: kDescriptionInputText),
-                    ),
-                    SizedBox(height: size.height * 0.01),
-                    if (aliasFormat == kCustom)
-                      Form(
-                        key: customFormKey,
-                        child: TextFormField(
-                          controller: customFieldController,
-                          validator: (input) =>
-                              FormValidator().validateLocalPart(input),
-                          textInputAction: TextInputAction.next,
-                          decoration: kTextFormFieldDecoration.copyWith(
-                              hintText: kEnterLocalPart),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                BottomSheetHeader(headerLabel: 'Create New Alias'),
+                Padding(
+                  padding:
+                      EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(createAliasText),
+                      SizedBox(height: size.height * 0.01),
+                      TextFormField(
+                        controller: descFieldController,
+                        textInputAction: TextInputAction.next,
+                        decoration: kTextFormFieldDecoration.copyWith(
+                            hintText: kDescriptionInputText),
+                      ),
+                      SizedBox(height: size.height * 0.01),
+                      if (aliasFormat == kCustom)
+                        Form(
+                          key: customFormKey,
+                          child: TextFormField(
+                            controller: customFieldController,
+                            validator: (input) =>
+                                FormValidator().validateLocalPart(input),
+                            textInputAction: TextInputAction.next,
+                            decoration: kTextFormFieldDecoration.copyWith(
+                                hintText: kEnterLocalPart),
+                          ),
+                        ),
+                      SizedBox(height: size.height * 0.02),
+                      Text(
+                        'Alias domain',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      DropdownButton<String>(
+                        isExpanded: true,
+                        isDense: true,
+                        value: aliasDomain,
+                        hint: Text(
+                          '${data.defaultAliasDomain ?? 'Choose Alias Domain'}',
+                        ),
+                        items: data.sharedDomainsList
+                            .map<DropdownMenuItem<String>>((value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String value) =>
+                            setsAliasDomain(value, data),
+                      ),
+                      SizedBox(height: size.height * 0.02),
+                      Text(
+                        'Alias format',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      DropdownButton<String>(
+                        isExpanded: true,
+                        isDense: true,
+                        value: aliasFormat,
+                        hint: Text(
+                          correctAliasString(data.defaultAliasFormat) ??
+                              'Choose Alias Format',
+                        ),
+                        items: dropdownMenuItems(),
+                        onChanged: (String value) {
+                          aliasStateProvider.setAliasFormat = value;
+                        },
+                      ),
+                      if (aliasFormat == kCustom)
+                        Text('Note: not available on shared domains'),
+                      SizedBox(height: size.height * 0.02),
+                      Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(),
+                          child:
+                              isLoading ? customLoading : Text('Create Alias'),
+                          onPressed: isLoading
+                              ? () {}
+                              : () => createAliasButtonOnPress(data),
                         ),
                       ),
-                    SizedBox(height: size.height * 0.02),
-                    Text(
-                      'Alias domain',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    DropdownButton<String>(
-                      isExpanded: true,
-                      isDense: true,
-                      value: aliasDomain,
-                      hint: Text(
-                        '${data.defaultAliasDomain ?? 'Choose Alias Domain'}',
-                      ),
-                      items: data.sharedDomainsList
-                          .map<DropdownMenuItem<String>>((value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String value) => setsAliasDomain(value, data),
-                    ),
-                    SizedBox(height: size.height * 0.02),
-                    Text(
-                      'Alias format',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    DropdownButton<String>(
-                      isExpanded: true,
-                      isDense: true,
-                      value: aliasFormat,
-                      hint: Text(
-                        correctAliasString(data.defaultAliasFormat) ??
-                            'Choose Alias Format',
-                      ),
-                      items: dropdownMenuItems(),
-                      onChanged: (String value) {
-                        aliasStateProvider.setAliasFormat = value;
-                      },
-                    ),
-                    if (aliasFormat == kCustom)
-                      Text('Note: not available on shared domains'),
-                    SizedBox(height: size.height * 0.02),
-                    Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(),
-                        child: isLoading ? customLoading : Text('Create Alias'),
-                        onPressed: isLoading
-                            ? () {}
-                            : () => createAliasButtonOnPress(data),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
