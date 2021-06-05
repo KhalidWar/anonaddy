@@ -14,15 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateNewAlias extends ConsumerWidget {
-  int aliasDomainIndex;
-  int aliasFormatIndex;
-
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final domainOptions = watch(domainOptionsProvider);
     final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+
+    int aliasDomainIndex = 0;
+    int aliasFormatIndex = 0;
 
     final aliasStateProvider = watch(aliasStateManagerProvider);
     final isLoading = aliasStateProvider.isToggleLoading;
@@ -277,7 +277,7 @@ class CreateNewAlias extends ConsumerWidget {
                                       onPressed: () {
                                         aliasStateProvider.setAliasFormat =
                                             getAliasFormatList()[
-                                                aliasFormatIndex ?? 0];
+                                                aliasFormatIndex];
                                         Navigator.pop(context);
                                       },
                                     ),
