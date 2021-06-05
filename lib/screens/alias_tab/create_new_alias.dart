@@ -14,10 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateNewAlias extends ConsumerWidget {
+  int aliasDomainIndex;
+  int aliasFormatIndex;
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final domainOptions = watch(domainOptionsProvider);
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final customLoading = CustomLoadingIndicator().customLoadingIndicator();
 
     final aliasStateProvider = watch(aliasStateManagerProvider);
@@ -28,8 +32,8 @@ class CreateNewAlias extends ConsumerWidget {
     final customFormKey = aliasStateProvider.customFormKey;
     final correctAliasString = aliasStateProvider.correctAliasString;
     final sharedDomains = aliasStateProvider.sharedDomains;
-    String aliasFormat = aliasStateProvider.aliasFormat;
     String aliasDomain = aliasStateProvider.aliasDomain;
+    String aliasFormat = aliasStateProvider.aliasFormat;
 
     final freeTierNoSharedDomain = aliasStateProvider.freeTierNoSharedDomain;
     final freeTierWithSharedDomain =
@@ -43,63 +47,67 @@ class CreateNewAlias extends ConsumerWidget {
     final createAliasText =
         'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
-    List<DropdownMenuItem<String>> dropdownMenuItems() {
+    List<String> getAliasFormatList() {
       if (sharedDomains.contains(aliasDomain)) {
         if (subscription == 'free') {
-          return freeTierWithSharedDomain
-              .map<DropdownMenuItem<String>>((value) {
-            return DropdownMenuItem<String>(
-                value: value, child: Text(correctAliasString(value)));
-          }).toList();
+          return freeTierWithSharedDomain;
         } else {
-          return paidTierWithSharedDomain
-              .map<DropdownMenuItem<String>>((value) {
-            return DropdownMenuItem<String>(
-                value: value, child: Text(correctAliasString(value)));
-          }).toList();
+          return paidTierWithSharedDomain;
         }
       } else {
         if (subscription == 'free') {
-          return freeTierNoSharedDomain.map<DropdownMenuItem<String>>((value) {
-            return DropdownMenuItem<String>(
-                value: value, child: Text(correctAliasString(value)));
-          }).toList();
+          return freeTierNoSharedDomain;
         } else {
-          return paidTierNoSharedDomain.map<DropdownMenuItem<String>>((value) {
-            return DropdownMenuItem<String>(
-                value: value, child: Text(correctAliasString(value)));
-          }).toList();
+          return paidTierNoSharedDomain;
         }
       }
     }
 
     void createAliasButtonOnPress(DomainOptions data) {
-      if (aliasDomain != null && data.defaultAliasDomain != null ||
-          aliasFormat != null && data.defaultAliasFormat != null) {
-        createNewAlias(
-          context,
-          descFieldController.text.trim(),
-          aliasDomain ?? data.defaultAliasDomain,
-          aliasFormat ?? data.defaultAliasFormat,
-          customFieldController.text.trim(),
-        );
+      final isDomainNull =
+          aliasDomain == null && data.defaultAliasDomain == null;
+      final isFormatNull =
+          aliasFormat == null && data.defaultAliasFormat == null;
+
+      if (!isDomainNull) {
+        if (!isFormatNull) {
+          createNewAlias(
+            context,
+            descFieldController.text.trim(),
+            aliasDomain ?? data.defaultAliasDomain,
+            aliasFormat ?? data.defaultAliasFormat,
+            customFieldController.text.trim(),
+          );
+        } else {
+          print('Alias Format cannot be null');
+        }
+      } else {
+        print('Alias Domain cannot be null');
       }
     }
 
-    void setsAliasDomain(String value, DomainOptions data) {
-      aliasStateProvider.setAliasDomain = value;
-      if (sharedDomains.contains(value)) {
-        aliasStateProvider.setAliasFormat = kUUID;
+    void setAliasDomain(DomainOptions domainOptions) {
+      final selectedDomain = domainOptions.sharedDomainsList[aliasDomainIndex];
+      print(selectedDomain);
+      aliasStateProvider.setAliasDomain = selectedDomain;
+
+      if (domainOptions.defaultAliasFormat == null) {
+        aliasFormat = null;
       } else {
-        aliasStateProvider.setAliasFormat = data.defaultAliasFormat;
+        if (sharedDomains.contains(selectedDomain)) {
+          aliasStateProvider.setAliasFormat =
+              getAliasFormatList()[aliasFormatIndex];
+        } else {
+          aliasStateProvider.setAliasFormat = domainOptions.defaultAliasFormat;
+        }
       }
     }
 
     return domainOptions.when(
       loading: () => LoadingIndicator(),
       data: (data) {
-        if (aliasFormat == null) aliasFormat = data.defaultAliasFormat;
         if (aliasDomain == null) aliasDomain = data.defaultAliasDomain;
+        if (aliasFormat == null) aliasFormat = data.defaultAliasFormat;
 
         return Container(
           padding:
@@ -141,39 +149,143 @@ class CreateNewAlias extends ConsumerWidget {
                         'Alias domain',
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      DropdownButton<String>(
-                        isExpanded: true,
-                        isDense: true,
-                        value: aliasDomain,
-                        hint: Text(
-                          '${data.defaultAliasDomain ?? 'Choose Alias Domain'}',
+                      InkWell(
+                        child: Container(
+                          height: size.height * 0.05,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(aliasDomain ?? 'Choose Alias Domain',
+                                  style: TextStyle(fontSize: 18)),
+                              Icon(Icons.keyboard_arrow_down_rounded),
+                            ],
+                          ),
                         ),
-                        items: data.sharedDomainsList
-                            .map<DropdownMenuItem<String>>((value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(
+                                      kBottomSheetBorderRadius)),
+                            ),
+                            builder: (context) {
+                              aliasDomainIndex = 0;
+                              return Column(
+                                children: [
+                                  BottomSheetHeader(
+                                      headerLabel: 'Select Alias Domain'),
+                                  Container(
+                                    height: size.height * 0.4,
+                                    child: CupertinoPicker(
+                                      itemExtent: 50,
+                                      diameterRatio: 10,
+                                      squeeze: 1,
+                                      selectionOverlay: Container(),
+                                      backgroundColor: Colors.transparent,
+                                      onSelectedItemChanged: (index) {
+                                        aliasDomainIndex = index;
+                                      },
+                                      children: data.sharedDomainsList
+                                          .map<Widget>((value) {
+                                        return Text(
+                                          value,
+                                          style: TextStyle(
+                                            color: isDark ? Colors.white : null,
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(),
+                                    child: Text('Done'),
+                                    onPressed: () {
+                                      setAliasDomain(data);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
                           );
-                        }).toList(),
-                        onChanged: (String value) =>
-                            setsAliasDomain(value, data),
+                        },
                       ),
                       SizedBox(height: size.height * 0.02),
                       Text(
                         'Alias format',
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      DropdownButton<String>(
-                        isExpanded: true,
-                        isDense: true,
-                        value: aliasFormat,
-                        hint: Text(
-                          correctAliasString(data.defaultAliasFormat) ??
-                              'Choose Alias Format',
+                      InkWell(
+                        child: Container(
+                          height: size.height * 0.05,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                aliasFormat == null
+                                    ? 'Choose Alias Format'
+                                    : correctAliasString(aliasFormat),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              Icon(Icons.keyboard_arrow_down_rounded),
+                            ],
+                          ),
                         ),
-                        items: dropdownMenuItems(),
-                        onChanged: (String value) {
-                          aliasStateProvider.setAliasFormat = value;
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(
+                                      kBottomSheetBorderRadius)),
+                            ),
+                            builder: (context) {
+                              return Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  BottomSheetHeader(
+                                      headerLabel: 'Select Alias Format'),
+                                  Expanded(
+                                    child: CupertinoPicker(
+                                      itemExtent: 50,
+                                      diameterRatio: 10,
+                                      squeeze: 1,
+                                      selectionOverlay: Container(),
+                                      useMagnifier: false,
+                                      backgroundColor: Colors.transparent,
+                                      onSelectedItemChanged: (index) {
+                                        aliasFormatIndex = index;
+                                      },
+                                      children: getAliasFormatList()
+                                          .map<Widget>((value) {
+                                        return Text(
+                                          correctAliasString(value),
+                                          style: TextStyle(
+                                            color: isDark ? Colors.white : null,
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 15),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(),
+                                      child: Text('Done'),
+                                      onPressed: () {
+                                        aliasStateProvider.setAliasFormat =
+                                            getAliasFormatList()[
+                                                aliasFormatIndex ?? 0];
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                       ),
                       if (aliasFormat == kCustom)
