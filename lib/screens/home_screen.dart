@@ -179,20 +179,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Divider(height: size.height * 0.05),
               //todo automate changelog fetching
-              Text('1. Added Forget Alias feature'),
+              Text('1. Fixed several bugs on Create New Alias'),
               SizedBox(height: size.height * 0.01),
-              Text('2. Improved Search functionality'),
+              Text('2. Redesigned Alias Domain and Format selection popup'),
               SizedBox(height: size.height * 0.01),
-              Text('3. Overhauled Search History storage'),
+              Text('3. Redesigned Update Alias Recipients popup'),
               SizedBox(height: size.height * 0.01),
-              Text('4. Search quicker by double tapping Search Icon'),
+              Text('4. Redesigned Update Username Recipients popup'),
               SizedBox(height: size.height * 0.01),
-              Text('5. Deleted aliases now come in RED'),
+              Text('5. Removed SecureApp toggle (AppSecure is on by default)'),
               SizedBox(height: size.height * 0.01),
-              Text('6. AnonAddy FAQs can be found under Settings'),
+              Text('6. Improved several UI elements'),
               SizedBox(height: size.height * 0.01),
-              Text('7. Several UI and under the hood improvements'),
-              SizedBox(height: size.height * 0.01),
+
               Spacer(),
               Center(
                 child: ElevatedButton(
