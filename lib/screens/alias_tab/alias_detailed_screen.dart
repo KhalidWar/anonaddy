@@ -8,7 +8,7 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
-import 'package:anonaddy/shared_components/pie_chart/alias_pie_chart.dart';
+import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
@@ -29,6 +29,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final aliasDataModel = aliasDataProvider.aliasDataModel;
     final toggleAlias = aliasDataProvider.toggleAlias;
     final isToggleLoading = aliasDataProvider.isToggleLoading;
+    final deleteAliasLoading = aliasDataProvider.deleteAliasLoading;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
 
@@ -36,6 +37,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final showToast = nicheMethod.showToast;
     final copyOnTap = nicheMethod.copyOnTap;
 
+    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
     final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
@@ -43,12 +45,17 @@ class AliasDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context, aliasDataModel.aliasID),
+      appBar: buildAppBar(context, aliasDataModel.aliasID, isAliasDeleted),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AliasPieChart(aliasDataModel: aliasDataModel),
+            AliasScreenPieChart(
+              emailsForwarded: aliasDataModel.emailsForwarded,
+              emailsBlocked: aliasDataModel.emailsBlocked,
+              emailsReplied: aliasDataModel.emailsReplied,
+              emailsSent: aliasDataModel.emailsSent,
+            ),
             Divider(height: size.height * 0.03),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -72,9 +79,7 @@ class AliasDetailScreen extends ConsumerWidget {
               subtitle: 'Activity',
               trailing: Row(
                 children: [
-                  isToggleLoading
-                      ? CustomLoadingIndicator().customLoadingIndicator()
-                      : Container(),
+                  isToggleLoading ? customLoading : Container(),
                   Switch.adaptive(
                     value: aliasDataModel.isAliasActive,
                     onChanged: isAliasDeleted ? null : (toggle) {},
@@ -116,11 +121,16 @@ class AliasDetailScreen extends ConsumerWidget {
               subtitle: isAliasDeleted
                   ? kRestoreAliasUIString
                   : kDeletedAliasUIString,
-              trailing: IconButton(
-                icon: isAliasDeleted
-                    ? Icon(Icons.restore_outlined, color: Colors.green)
-                    : Icon(Icons.delete_outline, color: Colors.red),
-                onPressed: null,
+              trailing: Row(
+                children: [
+                  deleteAliasLoading ? customLoading : Container(),
+                  IconButton(
+                    icon: isAliasDeleted
+                        ? Icon(Icons.restore_outlined, color: Colors.green)
+                        : Icon(Icons.delete_outline, color: Colors.red),
+                    onPressed: null,
+                  ),
+                ],
               ),
               trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(
                   context,
@@ -141,7 +151,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Default recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                          'Default Recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         IconButton(
@@ -205,16 +215,11 @@ class AliasDetailScreen extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
-        return SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: AliasDefaultRecipientScreen(aliasDataModel),
-          ),
-        );
+        return AliasDefaultRecipientScreen(aliasDataModel);
       },
     );
   }
@@ -227,7 +232,6 @@ class AliasDetailScreen extends ConsumerWidget {
         aliasDataModel.deletedAt,
         aliasDataModel.aliasID,
       );
-      Navigator.pop(context);
     }
 
     return showModal(
@@ -264,27 +268,26 @@ class AliasDetailScreen extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
 
-        return SingleChildScrollView(
+        return Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               BottomSheetHeader(headerLabel: 'Update Description'),
-              Container(
-                height: size.height * 0.25,
-                padding:
-                    EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Update description for'),
-                    Text(
-                      '${aliasDataModel.email}',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
+                    Text(kUpdateDescriptionString),
+                    SizedBox(height: size.height * 0.015),
                     Form(
                       key: formKey,
                       child: TextFormField(
@@ -298,11 +301,13 @@ class AliasDetailScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    SizedBox(height: size.height * 0.015),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(),
                       child: Text('Update Description'),
                       onPressed: () => editDesc(),
                     ),
+                    SizedBox(height: size.height * 0.015),
                   ],
                 ),
               ),
@@ -313,7 +318,7 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  AppBar buildAppBar(BuildContext context, String aliasID) {
+  AppBar buildAppBar(BuildContext context, String aliasID, bool isDeleted) {
     final confirmationDialog = ConfirmationDialog();
     final isIOS = TargetedPlatform().isIOS();
 
@@ -323,7 +328,10 @@ class AliasDetailScreen extends ConsumerWidget {
     }
 
     return AppBar(
-      title: Text('Alias', style: TextStyle(color: Colors.white)),
+      title: Text(
+        isDeleted ? 'Alias [DELETED]' : 'Alias',
+        style: TextStyle(color: Colors.white),
+      ),
       leading: IconButton(
         icon: Icon(isIOS ? CupertinoIcons.back : Icons.arrow_back),
         color: Colors.white,
@@ -332,7 +340,7 @@ class AliasDetailScreen extends ConsumerWidget {
       actions: [
         PopupMenuButton(
           itemBuilder: (BuildContext context) {
-            return ['Forget alias'].map((String choice) {
+            return ['Forget Alias'].map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
                 child: Text(choice),
@@ -345,9 +353,9 @@ class AliasDetailScreen extends ConsumerWidget {
               builder: (context) {
                 return isIOS
                     ? confirmationDialog.iOSAlertDialog(
-                        context, kForgetAliasDialogText, forget, 'Forget alias')
+                        context, kForgetAliasDialogText, forget, 'Forget Alias')
                     : confirmationDialog.androidAlertDialog(context,
-                        kForgetAliasDialogText, forget, 'Forget alias');
+                        kForgetAliasDialogText, forget, 'Forget Alias');
               },
             );
           },

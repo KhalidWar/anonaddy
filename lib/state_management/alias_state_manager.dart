@@ -12,10 +12,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager() {
     isToggleLoading = false;
+    deleteAliasLoading = false;
+    updateRecipientLoading = false;
   }
 
   AliasDataModel aliasDataModel;
   bool _isToggleLoading;
+  bool _deleteAliasLoading;
+  bool _updateRecipientLoading;
   String _aliasDomain;
   String _aliasFormat;
 
@@ -29,8 +33,11 @@ class AliasStateManager extends ChangeNotifier {
   final freeTierNoSharedDomain = [kUUID, kRandomChars, kCustom];
   final paidTierWithSharedDomain = [kUUID, kRandomChars, kRandomWords];
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
+  final sharedDomains = [kAnonAddyMe, kAddyMail, k4wrd, kMailerMe];
 
   bool get isToggleLoading => _isToggleLoading;
+  bool get deleteAliasLoading => _deleteAliasLoading;
+  bool get updateRecipientLoading => _updateRecipientLoading;
   String get aliasDomain => _aliasDomain;
   String get aliasFormat => _aliasFormat;
 
@@ -46,6 +53,16 @@ class AliasStateManager extends ChangeNotifier {
 
   set isToggleLoading(bool input) {
     _isToggleLoading = input;
+    notifyListeners();
+  }
+
+  set deleteAliasLoading(bool input) {
+    _deleteAliasLoading = input;
+    notifyListeners();
+  }
+
+  set updateRecipientLoading(bool input) {
+    _updateRecipientLoading = input;
     notifyListeners();
   }
 
@@ -71,7 +88,8 @@ class AliasStateManager extends ChangeNotifier {
       customFieldController.clear();
       isToggleLoading = false;
       Navigator.pop(context);
-      notifyListeners();
+      _aliasFormat = null;
+      _aliasDomain = null;
     }
 
     if (format == 'custom') {
@@ -86,21 +104,27 @@ class AliasStateManager extends ChangeNotifier {
   Future<void> deleteOrRestoreAlias(
       BuildContext context, DateTime aliasDeletedAt, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
-
+    deleteAliasLoading = true;
     if (aliasDeletedAt == null) {
+      Navigator.pop(context);
       await aliasService.deleteAlias(aliasID).then((value) {
         _showToast(kAliasDeletedSuccessfully);
+        deleteAliasLoading = false;
+        Navigator.pop(context);
       }).catchError((error) {
         _showToast(error.toString());
+        deleteAliasLoading = false;
       });
-      Navigator.pop(context);
     } else {
+      Navigator.pop(context);
       await aliasService.restoreAlias(aliasID).then((value) {
         _showToast(kAliasRestoredSuccessfully);
+        deleteAliasLoading = false;
+        aliasDataModel = value;
       }).catchError((error) {
         _showToast(error.toString());
+        deleteAliasLoading = false;
       });
-      Navigator.pop(context);
     }
     notifyListeners();
   }
@@ -146,6 +170,7 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> updateAliasDefaultRecipient(
       BuildContext context, String aliasID, List<String> recipients) async {
+    updateRecipientLoading = true;
     await context
         .read(aliasServiceProvider)
         .updateAliasDefaultRecipient(aliasID, recipients)
@@ -153,10 +178,12 @@ class AliasStateManager extends ChangeNotifier {
       aliasDataModel.recipients = value.recipients;
       notifyListeners();
       _showToast(kUpdateAliasRecipientSuccessful);
+      updateRecipientLoading = false;
+      Navigator.pop(context);
     }).catchError((error) {
       _showToast(error.toString());
+      updateRecipientLoading = false;
     });
-    Navigator.pop(context);
   }
 
   Future<void> forgetAlias(BuildContext context, String aliasID) async {
@@ -169,13 +196,14 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   String correctAliasString(String input) {
+    if (input == null) return null;
     switch (input) {
       case 'random_characters':
         return 'Random Characters';
       case 'random_words':
         return 'Random Words';
       case 'custom':
-        return 'Custom (not available on shared domains)';
+        return 'Custom';
       default:
         return 'UUID';
     }

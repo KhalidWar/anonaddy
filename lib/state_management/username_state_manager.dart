@@ -9,12 +9,14 @@ class UsernameStateManager extends ChangeNotifier {
   UsernameStateManager() {
     activeSwitchLoading = false;
     catchAllSwitchLoading = false;
+    updateRecipientLoading = false;
   }
 
   UsernameDataModel usernameModel;
 
   bool _activeSwitchLoading;
   bool _catchAllSwitchLoading;
+  bool _updateRecipientLoading;
 
   final createUsernameFormKey = GlobalKey<FormState>();
   final editDescriptionFormKey = GlobalKey<FormState>();
@@ -22,6 +24,7 @@ class UsernameStateManager extends ChangeNotifier {
 
   get activeSwitchLoading => _activeSwitchLoading;
   get catchAllSwitchLoading => _catchAllSwitchLoading;
+  get updateRecipientLoading => _updateRecipientLoading;
 
   set activeSwitchLoading(bool input) {
     _activeSwitchLoading = input;
@@ -30,6 +33,11 @@ class UsernameStateManager extends ChangeNotifier {
 
   set catchAllSwitchLoading(bool input) {
     _catchAllSwitchLoading = input;
+    notifyListeners();
+  }
+
+  set updateRecipientLoading(bool input) {
+    _updateRecipientLoading = input;
     notifyListeners();
   }
 
@@ -111,16 +119,19 @@ class UsernameStateManager extends ChangeNotifier {
 
   Future updateDefaultRecipient(
       BuildContext context, usernameID, recipientID) async {
+    updateRecipientLoading = true;
     await context
         .read(usernameServiceProvider)
         .updateDefaultRecipient(usernameID, recipientID)
         .then((value) {
+      updateRecipientLoading = false;
       usernameModel.defaultRecipient = value.defaultRecipient;
       notifyListeners();
       _showToast('Default recipient updated successfully!');
       Navigator.pop(context);
     }).catchError((error) {
       _showToast(error.toString());
+      updateRecipientLoading = false;
     });
   }
 

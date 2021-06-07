@@ -13,14 +13,6 @@ class NicheMethod {
     }
   }
 
-  String isUnlimited(dynamic input, String unit) {
-    if (input == 0) {
-      return 'unlimited';
-    } else {
-      return '$input $unit';
-    }
-  }
-
   Future<void> copyOnTap(String input) async {
     await Clipboard.setData(
       ClipboardData(text: input),

@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,19 @@ class AliasTabPieChart extends StatelessWidget {
 
   final int emailsForwarded, emailsBlocked, emailsReplied, emailsSent;
 
+  bool _isPieChartEmpty() {
+    if (emailsForwarded == 0 &&
+        emailsBlocked == 0 &&
+        emailsForwarded == 0 &&
+        emailsSent == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final firstPieceColor = Color(0xff0293ee);
-    final secondPieceColor = Color(0xfff8b250);
-    final thirdPieceColor = Color(0xff845bef);
-    final fourthPieceColor = Color(0xff13d38e);
     final pieChartSectionRadius = 50.0;
 
     return Row(
@@ -29,28 +37,28 @@ class AliasTabPieChart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             PieChartIndicator(
-              color: firstPieceColor,
+              color: kFirstPieChartColor,
               label: 'emails forwarded',
               count: emailsForwarded,
               textColor: Colors.white,
             ),
             SizedBox(height: 20),
             PieChartIndicator(
-              color: secondPieceColor,
+              color: kSecondPieChartColor,
               label: 'emails blocked',
               count: emailsBlocked,
               textColor: Colors.white,
             ),
             SizedBox(height: 20),
             PieChartIndicator(
-              color: fourthPieceColor,
+              color: kFourthPieChartColor,
               label: 'emails replied',
               count: emailsReplied,
               textColor: Colors.white,
             ),
             SizedBox(height: 20),
             PieChartIndicator(
-              color: thirdPieceColor,
+              color: kThirdPieChartColor,
               label: 'emails sent',
               count: emailsSent,
               textColor: Colors.white,
@@ -64,32 +72,41 @@ class AliasTabPieChart extends StatelessWidget {
             PieChartData(
               borderData: FlBorderData(show: false),
               sectionsSpace: 0,
-              sections: [
-                PieChartSectionData(
-                  showTitle: false,
-                  radius: pieChartSectionRadius,
-                  color: firstPieceColor,
-                  value: emailsForwarded.toDouble(),
-                ),
-                PieChartSectionData(
-                  showTitle: false,
-                  radius: pieChartSectionRadius,
-                  color: secondPieceColor,
-                  value: emailsBlocked.toDouble(),
-                ),
-                PieChartSectionData(
-                  showTitle: false,
-                  radius: pieChartSectionRadius,
-                  color: thirdPieceColor,
-                  value: emailsSent.toDouble(),
-                ),
-                PieChartSectionData(
-                  showTitle: false,
-                  radius: pieChartSectionRadius,
-                  color: fourthPieceColor,
-                  value: emailsReplied.toDouble(),
-                ),
-              ],
+              sections: _isPieChartEmpty()
+                  ? [
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: Colors.white54,
+                        value: 1,
+                      ),
+                    ]
+                  : [
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: kFirstPieChartColor,
+                        value: emailsForwarded.toDouble(),
+                      ),
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: kSecondPieChartColor,
+                        value: emailsBlocked.toDouble(),
+                      ),
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: kThirdPieChartColor,
+                        value: emailsSent.toDouble(),
+                      ),
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: kFourthPieChartColor,
+                        value: emailsReplied.toDouble(),
+                      ),
+                    ],
             ),
           ),
         ),

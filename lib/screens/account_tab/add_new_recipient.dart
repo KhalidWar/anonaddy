@@ -18,8 +18,11 @@ class AddNewRecipient extends StatelessWidget {
 
     final size = MediaQuery.of(context).size;
 
-    return SingleChildScrollView(
+    return Container(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           BottomSheetHeader(headerLabel: 'Add New Recipient'),
           Padding(

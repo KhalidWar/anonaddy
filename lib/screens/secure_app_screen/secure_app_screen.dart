@@ -11,7 +11,6 @@ class SecureAppScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     /// Use [watch] method to access different providers
     final settings = watch(settingsStateManagerProvider);
-    final isAppSecured = settings.isAppSecured;
     final isBiometricAuth = settings.isBiometricAuth;
 
     return SecureApplication(
@@ -21,21 +20,17 @@ class SecureAppScreen extends ConsumerWidget {
           /// Access secureApp provider to control its state
           final secureAppProvider = SecureApplicationProvider.of(context);
 
-          if (isAppSecured) {
-            /// .secure() prevents screenshot and block app switcher view
-            /// but it does NOT require authentication
-            secureAppProvider.secure();
-            secureAppProvider.pause();
+          secureAppProvider.secure();
+          secureAppProvider.pause();
 
-            if (isBiometricAuth) {
-              /// .lock() locks app by activating SecureGate and requiring
-              /// authentication to access content behind SecureGate.
-              secureAppProvider.lock();
-              return SecureGateScreen(child: InitialScreen());
-            }
+          if (isBiometricAuth) {
+            /// .lock() locks app by activating SecureGate and requiring
+            /// authentication to access content behind SecureGate.
+            secureAppProvider.lock();
+            return SecureGateScreen(child: InitialScreen());
+          } else {
             return InitialScreen();
           }
-          return InitialScreen();
         },
       ),
     );

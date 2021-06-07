@@ -186,7 +186,7 @@ class AliasService {
     }
   }
 
-  Future restoreAlias(String aliasID) async {
+  Future<AliasDataModel> restoreAlias(String aliasID) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
@@ -203,7 +203,7 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('Network restoreAlias ${response.statusCode}');
-        return 200;
+        return AliasDataModel.fromJsonData(jsonDecode(response.body));
       } else {
         print('Network restoreAlias ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
