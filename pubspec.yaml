@@ -13,7 +13,6 @@ dependencies:
 
   # Icons
   cupertino_icons: ^1.0.1
-  font_awesome_flutter: ^9.0.0
 
   # UI Components
   flutter_svg: ^0.22.0
