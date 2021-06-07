@@ -28,3 +28,7 @@ const kUpdateDescriptionString =
     'Enter new description or enter empty whitespace remove current description';
 const kUpdateAliasRecipientsNote =
     'Note: only verified recipients can be used as default recipients.';
+const kAliasDomain = 'Alias Domain';
+const kChooseAliasDomain = 'Choose Alias Domain';
+const kAliasFormat = 'Alias Format';
+const kChooseAliasFormat = 'Choose Alias Format';
