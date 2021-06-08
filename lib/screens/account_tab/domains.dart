@@ -15,7 +15,7 @@ class Domains extends ConsumerWidget {
         lottieHeight: MediaQuery.of(context).size.height * 0.2,
         label: kFailedLoadAccountData,
       );
-    } else
+    } else {
       return Center(
         child: Text(
           account.value.subscription == 'free'
@@ -24,6 +24,7 @@ class Domains extends ConsumerWidget {
           style: Theme.of(context).textTheme.bodyText1,
         ),
       );
+    }
 
     // final domainsStream = watch(domainsStreamProvider);
     // return domainsStream.when(

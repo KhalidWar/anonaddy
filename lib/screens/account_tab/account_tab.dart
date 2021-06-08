@@ -40,7 +40,7 @@ class AccountTab extends StatelessWidget {
                           return LottieWidget(
                             showLoading: true,
                             lottie: 'assets/lottie/errorCone.json',
-                            lottieHeight: size.height * 0.1,
+                            lottieHeight: size.height * 0.2,
                             label: error.toString(),
                           );
                         },

@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -28,7 +29,10 @@ class LottieWidget extends StatelessWidget {
     return Stack(
       children: <Widget>[
         showLoading ?? false
-            ? LinearProgressIndicator(backgroundColor: Colors.transparent)
+            ? LinearProgressIndicator(
+                backgroundColor: Colors.transparent,
+                color: kAccentColor,
+              )
             : Container(),
         Center(
           child: Column(
