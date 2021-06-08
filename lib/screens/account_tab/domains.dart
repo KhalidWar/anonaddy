@@ -1,5 +1,6 @@
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,17 +8,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class Domains extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final account = watch(accountStreamProvider).data;
+    if (account == null) {
+      return LottieWidget(
+        lottie: 'assets/lottie/errorCone.json',
+        lottieHeight: MediaQuery.of(context).size.height * 0.2,
+        label: kFailedLoadAccountData,
+      );
+    } else
+      return Center(
+        child: Text(
+          account.value.subscription == 'free'
+              ? kOnlyAvailableToPaid
+              : kComingSoon,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+      );
+
     // final domainsStream = watch(domainsStreamProvider);
-
-    final subscription = watch(accountStreamProvider).data.value.subscription;
-    final isFreeAccount = subscription == 'free';
-    return Center(
-      child: Text(
-        isFreeAccount ? kOnlyAvailableToPaid : kComingSoon,
-        style: Theme.of(context).textTheme.bodyText1,
-      ),
-    );
-
     // return domainsStream.when(
     //   loading: () => RecipientsShimmerLoading(),
     //   data: (data) {
