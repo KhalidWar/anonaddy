@@ -2,7 +2,9 @@ import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,18 +27,17 @@ class SearchService extends SearchDelegate {
   }
 
   Widget _buildResult(List<AliasDataModel> resultAliasList) {
-    Widget buildEmpty(String text) {
+    if (query.isEmpty)
       return Container(
         alignment: Alignment.topCenter,
         margin: EdgeInsets.only(top: 20),
-        child: Text(text),
+        child: Text(kSearchAliasByEmailOrDesc),
       );
-    }
-
-    if (query.isEmpty)
-      return buildEmpty('Search for aliases by email or description');
     else if (resultAliasList.isEmpty)
-      return buildEmpty('No matching alias found');
+      return LottieWidget(
+        lottie: 'assets/lottie/empty.json',
+        lottieHeight: 150,
+      );
     else
       return ListView.builder(
         itemCount: resultAliasList.length,

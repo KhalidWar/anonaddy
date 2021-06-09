@@ -33,3 +33,4 @@ const kChooseAliasDomain = 'Choose Alias Domain';
 const kAliasFormat = 'Alias Format';
 const kChooseAliasFormat = 'Choose Alias Format';
 const kFailedLoadAccountData = 'Failed to Load Account Data';
+const kSearchAliasByEmailOrDesc = 'Search for aliases by email or description';
