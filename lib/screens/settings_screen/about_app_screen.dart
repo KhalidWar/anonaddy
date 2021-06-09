@@ -1,23 +1,15 @@
+import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AboutAppScreen extends StatelessWidget {
-  Future launchUrl(String url) async {
-    await launch(url).catchError((error, stackTrace) {
-      throw Fluttertoast.showToast(
-        msg: error.message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.grey[600],
-      );
-    });
-  }
+  final _launchURL = NicheMethod().launchURL;
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +54,14 @@ class AboutAppScreen extends StatelessWidget {
               title: Text('Khalid Warsame'),
               subtitle: Text('AddyManager developer'),
               trailing: Icon(Icons.open_in_new_outlined),
-              onTap: () => launchUrl(kKhalidWarGithubURL),
+              onTap: () => _launchURL(kKhalidWarGithubURL),
             ),
             Divider(height: 0),
             ListTile(
               title: Text('Will Browning (AnonAddy team)'),
               subtitle: Text('Contributor'),
               trailing: Icon(Icons.open_in_new_outlined),
-              onTap: () => launchUrl(kWillBrowningGithubURL),
+              onTap: () => _launchURL(kWillBrowningGithubURL),
             ),
             Divider(height: 0),
             ListTile(
@@ -78,14 +70,14 @@ class AboutAppScreen extends StatelessWidget {
                 'Open an issue for bugs, feature requests, and suggestions.',
               ),
               trailing: Icon(Icons.bug_report_outlined),
-              onTap: () => launchUrl(kAddyManagerIssuesURL),
+              onTap: () => _launchURL(kAddyManagerIssuesURL),
             ),
             Divider(height: 0),
             ListTile(
               title: Text('AddyManager License'),
               subtitle: Text('MIT License'),
               trailing: Icon(Icons.description),
-              onTap: () => launchUrl(kAddyManagerLicenseURL),
+              onTap: () => _launchURL(kAddyManagerLicenseURL),
             ),
             Divider(height: 0),
             ListTile(
@@ -100,6 +92,15 @@ class AboutAppScreen extends StatelessWidget {
                   child: buildAppLogo(size),
                 ),
               ),
+            ),
+            Divider(height: 0),
+            ListTile(
+              title: Text('Credits'),
+              subtitle: Text('Credits for assets in AddyManager'),
+              trailing: Icon(Icons.image_outlined),
+              onTap: () {
+                Navigator.push(context, CustomPageRoute(CreditsScreen()));
+              },
             ),
             Divider(height: 0),
           ],
