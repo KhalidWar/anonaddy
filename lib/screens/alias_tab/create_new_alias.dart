@@ -156,18 +156,18 @@ class CreateNewAlias extends ConsumerWidget {
                       ),
                       if (aliasFormat == kCustom)
                         Text('Note: not available on shared domains'),
-                      SizedBox(height: size.height * 0.02),
-                      Center(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(),
-                          child:
-                              isLoading ? customLoading : Text('Create Alias'),
-                          onPressed: isLoading
-                              ? () {}
-                              : () => createAliasButtonOnPress(data),
-                        ),
-                      ),
                     ],
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(),
+                    child: isLoading ? customLoading : Text('Create Alias'),
+                    onPressed: isLoading
+                        ? () {}
+                        : () => createAliasButtonOnPress(data),
                   ),
                 ),
               ],
@@ -264,13 +264,17 @@ class CreateNewAlias extends ConsumerWidget {
                 }).toList(),
               ),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(),
-              child: Text('Done'),
-              onPressed: () {
-                setAliasDomain(data);
-                Navigator.pop(context);
-              },
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(),
+                child: Text('Done'),
+                onPressed: () {
+                  setAliasDomain(data);
+                  Navigator.pop(context);
+                },
+              ),
             ),
           ],
         );
@@ -320,7 +324,8 @@ class CreateNewAlias extends ConsumerWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 15),
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
                 child: Text('Done'),

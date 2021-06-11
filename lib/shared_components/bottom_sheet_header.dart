@@ -21,7 +21,6 @@ class BottomSheetHeader extends StatelessWidget {
           style: Theme.of(context).textTheme.headline6,
         ),
         Divider(thickness: 1),
-        SizedBox(height: size.height * 0.01),
       ],
     );
   }
