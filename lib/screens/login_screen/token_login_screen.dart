@@ -4,11 +4,10 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class TokenLoginScreen extends ConsumerWidget {
   final _textEditingController = TextEditingController();
@@ -35,31 +34,14 @@ class TokenLoginScreen extends ConsumerWidget {
             child: Card(
               child: Container(
                 height: size.height * 0.6,
-                width: size.width * 0.8,
+                width: size.width * 0.88,
                 padding: EdgeInsets.only(top: 25),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          'AddyManager',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: size.height * 0.02),
-                        Divider(
-                          color: Color(0xFFE4E7EB),
-                          thickness: 2,
-                          indent: size.width * 0.30,
-                          endIndent: size.width * 0.30,
-                        ),
-                      ],
-                    ),
+                    buildHeader(context, size),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: EdgeInsets.only(left: 15),
                       child: Form(
                         key: _formKey,
                         child: Column(
@@ -93,7 +75,7 @@ class TokenLoginScreen extends ConsumerWidget {
                                         ),
                                       ),
                                       border: OutlineInputBorder(),
-                                      hintText: 'Paste here!',
+                                      hintText: 'Enter Access Token!',
                                     ),
                                   ),
                                 ),
@@ -118,9 +100,7 @@ class TokenLoginScreen extends ConsumerWidget {
                                       decoration: TextDecoration.underline,
                                     ),
                               ),
-                              onTap: () {
-                                buildShowModal(context);
-                              },
+                              onTap: () => buildShowModal(context),
                             ),
                           ],
                         ),
@@ -172,7 +152,28 @@ class TokenLoginScreen extends ConsumerWidget {
     );
   }
 
-  buildShowModal(BuildContext context) async {
+  Widget buildHeader(BuildContext context, Size size) {
+    return Column(
+      children: [
+        Text(
+          'AddyManager',
+          style: Theme.of(context)
+              .textTheme
+              .headline5
+              .copyWith(fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: size.height * 0.01),
+        Divider(
+          color: Color(0xFFE4E7EB),
+          thickness: 2,
+          indent: size.width * 0.30,
+          endIndent: size.width * 0.30,
+        ),
+      ],
+    );
+  }
+
+  Future buildShowModal(BuildContext context) async {
     showModal(
       context: context,
       builder: (context) {
@@ -183,16 +184,8 @@ class TokenLoginScreen extends ConsumerWidget {
           actions: [
             TextButton(
               child: Text('Get Token Now!'),
-              onPressed: () async {
-                await launch(kAnonAddySettingsURL)
-                    .catchError((error, stackTrace) {
-                  throw Fluttertoast.showToast(
-                    msg: error.message,
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    backgroundColor: Colors.grey[600],
-                  );
-                });
+              onPressed: () {
+                NicheMethod().launchURL(kAnonAddySettingsURL);
               },
             ),
             TextButton(
