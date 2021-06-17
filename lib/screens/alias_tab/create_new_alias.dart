@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/domain_options/domain_options.dart';
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -64,12 +65,17 @@ class CreateNewAlias extends ConsumerWidget {
 
       if (!isDomainNull) {
         if (!isFormatNull) {
+          final recipientsIDs = <String>[];
+          aliasStateProvider.createAliasRecipients.forEach((element) {
+            recipientsIDs.add(element.id);
+          });
           createNewAlias(
             context,
             descFieldController.text.trim(),
             aliasDomain ?? data.defaultAliasDomain,
             aliasFormat ?? data.defaultAliasFormat,
             customFieldController.text.trim(),
+            recipientsIDs,
           );
         } else {
           print('Alias Format cannot be null');
@@ -156,6 +162,8 @@ class CreateNewAlias extends ConsumerWidget {
                       ),
                       if (aliasFormat == kCustom)
                         Text('Note: not available on shared domains'),
+                      SizedBox(height: size.height * 0.02),
+                      recipientsDropdown(context)
                     ],
                   ),
                 ),
@@ -339,6 +347,189 @@ class CreateNewAlias extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget recipientsDropdown(BuildContext context) {
+    final createAliasRecipients =
+        context.read(aliasStateManagerProvider).createAliasRecipients;
+    return InkWell(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Recipients'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (createAliasRecipients == null ||
+                  createAliasRecipients.isEmpty)
+                Text('Select recipient(s) (optional)')
+              else
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: createAliasRecipients.length,
+                    itemBuilder: (context, index) {
+                      final recipient = createAliasRecipients[index];
+                      return Text(
+                        recipient.email,
+                        style: Theme.of(context).textTheme.headline6,
+                      );
+                    },
+                  ),
+                ),
+              Icon(Icons.keyboard_arrow_down_rounded),
+            ],
+          ),
+        ],
+      ),
+      onTap: () => showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(kBottomSheetBorderRadius)),
+        ),
+        builder: (context) => CreateAliasRecipientSelection(),
+      ),
+    );
+  }
+}
+
+class CreateAliasRecipientSelection extends StatefulWidget {
+  @override
+  _CreateAliasRecipientSelectionState createState() =>
+      _CreateAliasRecipientSelectionState();
+}
+
+class _CreateAliasRecipientSelectionState
+    extends State<CreateAliasRecipientSelection> {
+  final verifiedRecipients = <RecipientDataModel>[];
+  final selectedRecipients = <RecipientDataModel>[];
+
+  double initialChildSize = 0.55;
+  double maxChildSize = 0.7;
+
+  void _setDefaultRecipients() {
+    final allRecipients =
+        context.read(recipientsProvider).data.value.recipientDataList;
+    for (RecipientDataModel recipient in allRecipients) {
+      if (recipient.emailVerifiedAt != null) {
+        verifiedRecipients.add(recipient);
+      }
+    }
+  }
+
+  bool isRecipientSelected(RecipientDataModel verifiedRecipient) {
+    for (RecipientDataModel recipient in selectedRecipients) {
+      if (recipient.email == verifiedRecipient.email) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void toggleRecipient(RecipientDataModel verifiedRecipient) {
+    if (selectedRecipients.contains(verifiedRecipient)) {
+      selectedRecipients
+          .removeWhere((element) => element.email == verifiedRecipient.email);
+    } else {
+      selectedRecipients.add(verifiedRecipient);
+    }
+  }
+
+  @override
+  void initState() {
+    _setDefaultRecipients();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: initialChildSize,
+      minChildSize: initialChildSize,
+      maxChildSize: maxChildSize,
+      builder: (context, controller) {
+        return Stack(
+          children: [
+            ListView(
+              controller: controller,
+              children: [
+                BottomSheetHeader(headerLabel: 'Select Default Recipients'),
+                if (verifiedRecipients.isEmpty)
+                  Center(
+                    child: Text(
+                      'No recipients found',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  )
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: verifiedRecipients.length,
+                    itemBuilder: (context, index) {
+                      final verifiedRecipient = verifiedRecipients[index];
+                      return ListTile(
+                        selected: isRecipientSelected(verifiedRecipient),
+                        selectedTileColor: kAccentColor,
+                        horizontalTitleGap: 0,
+                        title: Text(
+                          verifiedRecipient.email,
+                          style: TextStyle(
+                            color: isRecipientSelected(verifiedRecipient)
+                                ? Colors.black
+                                : Theme.of(context).textTheme.bodyText1.color,
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            toggleRecipient(verifiedRecipient);
+                          });
+                        },
+                      );
+                    },
+                  ),
+                buildNote(size),
+              ],
+            ),
+            Positioned(
+              bottom: 15,
+              left: 15,
+              right: 15,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(),
+                child: Text('Select Recipient(s)'),
+                onPressed: () {
+                  context
+                      .read(aliasStateManagerProvider)
+                      .createAliasRecipients
+                      .addAll(selectedRecipients);
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Padding buildNote(Size size) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Divider(height: 0),
+          SizedBox(height: size.height * 0.01),
+          Text(kUpdateAliasRecipientsNote),
+        ],
+      ),
     );
   }
 }

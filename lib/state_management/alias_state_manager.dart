@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -27,6 +28,7 @@ class AliasStateManager extends ChangeNotifier {
   final customFieldController = TextEditingController();
   final customFormKey = GlobalKey<FormState>();
   final descriptionFormKey = GlobalKey<FormState>();
+  final createAliasRecipients = <RecipientDataModel>[];
   final _showToast = NicheMethod().showToast;
 
   final freeTierWithSharedDomain = [kUUID, kRandomChars];
@@ -67,13 +69,13 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   void createNewAlias(BuildContext context, String desc, String domain,
-      String format, String localPart) {
+      String format, String localPart, List<String> recipients) {
     final settings = context.read(settingsStateManagerProvider);
     void createAlias() async {
       isToggleLoading = true;
       await context
           .read(aliasServiceProvider)
-          .createNewAlias(desc, domain, format, localPart)
+          .createNewAlias(desc, domain, format, localPart, recipients)
           .then((value) {
         if (settings.isAutoCopy) {
           Clipboard.setData(ClipboardData(text: value.email));
@@ -81,6 +83,7 @@ class AliasStateManager extends ChangeNotifier {
         } else {
           _showToast('Alias created successfully!');
         }
+        createAliasRecipients.clear();
       }).catchError((error) {
         _showToast(error.toString());
       });
