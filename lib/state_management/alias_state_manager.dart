@@ -23,7 +23,7 @@ class AliasStateManager extends ChangeNotifier {
   bool _updateRecipientLoading;
   String _aliasDomain;
   String _aliasFormat;
-  List<RecipientDataModel> createAliasRecipients;
+  List<RecipientDataModel> createAliasRecipients = [];
 
   final descFieldController = TextEditingController();
   final customFieldController = TextEditingController();

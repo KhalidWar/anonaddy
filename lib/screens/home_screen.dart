@@ -16,7 +16,7 @@ import 'package:hive/hive.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
-import 'alias_tab/create_new_alias.dart';
+import 'alias_tab/create_new_alias/create_new_alias.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
