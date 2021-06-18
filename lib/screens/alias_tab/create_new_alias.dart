@@ -408,7 +408,23 @@ class _CreateAliasRecipientSelectionState
   final selectedRecipients = <RecipientDataModel>[];
 
   double initialChildSize = 0.55;
+  double minChildSize = 0.3;
   double maxChildSize = 0.7;
+
+  void _setScrollSheetSizes() {
+    if (verifiedRecipients.length <= 3) {
+      initialChildSize = 0.5;
+      maxChildSize = 0.6;
+    } else if (verifiedRecipients.length > 3 &&
+        verifiedRecipients.length <= 6) {
+      initialChildSize = 0.55;
+      maxChildSize = 0.7;
+    } else {
+      initialChildSize = 0.7;
+      maxChildSize = 0.9;
+    }
+    setState(() {});
+  }
 
   void _setDefaultRecipients() {
     final allRecipients =
@@ -420,26 +436,26 @@ class _CreateAliasRecipientSelectionState
     }
   }
 
-  bool isRecipientSelected(RecipientDataModel verifiedRecipient) {
-    for (RecipientDataModel recipient in selectedRecipients) {
-      if (recipient.email == verifiedRecipient.email) {
-        return true;
-      }
+  bool _isRecipientSelected(RecipientDataModel verifiedRecipient) {
+    if (selectedRecipients.contains(verifiedRecipient)) {
+      return true;
     }
     return false;
   }
 
-  void toggleRecipient(RecipientDataModel verifiedRecipient) {
+  void _toggleRecipient(RecipientDataModel verifiedRecipient) {
     if (selectedRecipients.contains(verifiedRecipient)) {
       selectedRecipients
           .removeWhere((element) => element.email == verifiedRecipient.email);
     } else {
       selectedRecipients.add(verifiedRecipient);
     }
+    setState(() {});
   }
 
   @override
   void initState() {
+    _setScrollSheetSizes();
     _setDefaultRecipients();
     super.initState();
   }
@@ -451,7 +467,7 @@ class _CreateAliasRecipientSelectionState
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: initialChildSize,
-      minChildSize: initialChildSize,
+      minChildSize: minChildSize,
       maxChildSize: maxChildSize,
       builder: (context, controller) {
         return Stack(
@@ -475,26 +491,23 @@ class _CreateAliasRecipientSelectionState
                     itemBuilder: (context, index) {
                       final verifiedRecipient = verifiedRecipients[index];
                       return ListTile(
-                        selected: isRecipientSelected(verifiedRecipient),
+                        selected: _isRecipientSelected(verifiedRecipient),
                         selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
                         title: Text(
                           verifiedRecipient.email,
                           style: TextStyle(
-                            color: isRecipientSelected(verifiedRecipient)
+                            color: _isRecipientSelected(verifiedRecipient)
                                 ? Colors.black
                                 : Theme.of(context).textTheme.bodyText1.color,
                           ),
                         ),
-                        onTap: () {
-                          setState(() {
-                            toggleRecipient(verifiedRecipient);
-                          });
-                        },
+                        onTap: () => _toggleRecipient(verifiedRecipient),
                       );
                     },
                   ),
                 buildNote(size),
+                SizedBox(height: size.height * 0.1),
               ],
             ),
             Positioned(
@@ -503,12 +516,11 @@ class _CreateAliasRecipientSelectionState
               right: 15,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
-                child: Text('Select Recipient(s)'),
+                child: Text('Done'),
                 onPressed: () {
                   context
                       .read(aliasStateManagerProvider)
-                      .createAliasRecipients
-                      .addAll(selectedRecipients);
+                      .setCreateAliasRecipients = selectedRecipients;
                   Navigator.pop(context);
                 },
               ),

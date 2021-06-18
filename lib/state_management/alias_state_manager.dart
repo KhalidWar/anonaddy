@@ -23,12 +23,12 @@ class AliasStateManager extends ChangeNotifier {
   bool _updateRecipientLoading;
   String _aliasDomain;
   String _aliasFormat;
+  List<RecipientDataModel> createAliasRecipients;
 
   final descFieldController = TextEditingController();
   final customFieldController = TextEditingController();
   final customFormKey = GlobalKey<FormState>();
   final descriptionFormKey = GlobalKey<FormState>();
-  final createAliasRecipients = <RecipientDataModel>[];
   final _showToast = NicheMethod().showToast;
 
   final freeTierWithSharedDomain = [kUUID, kRandomChars];
@@ -65,6 +65,11 @@ class AliasStateManager extends ChangeNotifier {
 
   set updateRecipientLoading(bool input) {
     _updateRecipientLoading = input;
+    notifyListeners();
+  }
+
+  set setCreateAliasRecipients(List<RecipientDataModel> input) {
+    createAliasRecipients = input;
     notifyListeners();
   }
 
