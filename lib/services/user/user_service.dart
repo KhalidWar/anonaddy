@@ -16,7 +16,7 @@ class UserService {
 
     try {
       final response = await http.get(
-        Uri.parse('$kBaseURL/$kAccountDetailsURL'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAccountDetailsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

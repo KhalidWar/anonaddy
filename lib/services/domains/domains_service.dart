@@ -16,7 +16,7 @@ class DomainsService {
 
     try {
       final response = await http.get(
-        Uri.parse('$kBaseURL/$kDomainsURL'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kDomainsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
