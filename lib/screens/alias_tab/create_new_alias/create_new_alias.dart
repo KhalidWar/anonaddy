@@ -127,11 +127,12 @@ class CreateNewAlias extends ConsumerWidget {
                                 hintText: kEnterLocalPart),
                           ),
                         ),
-                      SizedBox(height: size.height * 0.02),
+                      SizedBox(height: size.height * 0.01),
                       aliasDomainFormatDropdown(
                         context: context,
                         title: kAliasDomain,
                         label: aliasDomain ?? kChooseAliasDomain,
+                        size: size,
                         onPress: () {
                           buildDomainSelection(
                               context,
@@ -144,13 +145,13 @@ class CreateNewAlias extends ConsumerWidget {
                               getAliasFormatList);
                         },
                       ),
-                      SizedBox(height: size.height * 0.02),
                       aliasDomainFormatDropdown(
                         context: context,
                         title: kAliasFormat,
                         label: aliasFormat == null
                             ? kChooseAliasFormat
                             : correctAliasString(aliasFormat),
+                        size: size,
                         onPress: () {
                           buildFormatSelection(
                               context,
@@ -195,23 +196,30 @@ class CreateNewAlias extends ConsumerWidget {
   }
 
   Widget aliasDomainFormatDropdown(
-      {BuildContext context, String title, String label, Function onPress}) {
+      {BuildContext context,
+      String title,
+      String label,
+      Size size,
+      Function onPress}) {
     return InkWell(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                label,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Icon(Icons.keyboard_arrow_down_rounded),
-            ],
-          ),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Icon(Icons.keyboard_arrow_down_rounded),
+              ],
+            ),
+          ],
+        ),
       ),
       onTap: onPress,
     );
