@@ -25,7 +25,6 @@ class CreateNewAlias extends ConsumerWidget {
 
     final aliasStateProvider = watch(aliasStateManagerProvider);
     final isLoading = aliasStateProvider.isToggleLoading;
-    final createNewAlias = aliasStateProvider.createNewAlias;
     final descFieldController = aliasStateProvider.descFieldController;
     final customFieldController = aliasStateProvider.customFieldController;
     final customFormKey = aliasStateProvider.customFormKey;
@@ -66,17 +65,12 @@ class CreateNewAlias extends ConsumerWidget {
 
       if (!isDomainNull) {
         if (!isFormatNull) {
-          final recipientsIDs = <String>[];
-          aliasStateProvider.createAliasRecipients.forEach((element) {
-            recipientsIDs.add(element.id);
-          });
-          createNewAlias(
+          aliasStateProvider.createNewAlias(
             context,
             descFieldController.text.trim(),
             aliasDomain ?? data.defaultAliasDomain,
             aliasFormat ?? data.defaultAliasFormat,
             customFieldController.text.trim(),
-            recipientsIDs,
           );
         } else {
           print('Alias Format cannot be null');

@@ -71,8 +71,11 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   void createNewAlias(BuildContext context, String desc, String domain,
-      String format, String localPart, List<String> recipients) {
+      String format, String localPart) {
     final settings = context.read(settingsStateManagerProvider);
+    final recipients = <String>[];
+    createAliasRecipients.forEach((element) => recipients.add(element.id));
+
     void createAlias() async {
       setToggleLoading = true;
       await context
