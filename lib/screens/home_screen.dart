@@ -179,19 +179,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Divider(height: size.height * 0.05),
               //todo automate changelog fetching
-              Text('1. Fixed several bugs on Create New Alias'),
+              Text('1. Choose default recipient when creating aliases'),
               SizedBox(height: size.height * 0.01),
-              Text('2. Redesigned Alias Domain and Format selection popup'),
+              Text('2. Added Credits to About App'),
               SizedBox(height: size.height * 0.01),
-              Text('3. Redesigned Update Alias Recipients popup'),
+              Text('3. Several UI improvements'),
               SizedBox(height: size.height * 0.01),
-              Text('4. Redesigned Update Username Recipients popup'),
+              Text('4. Fixed some bugs'),
               SizedBox(height: size.height * 0.01),
-              Text('5. Removed SecureApp toggle (AppSecure is on by default)'),
+              Text('5. Several under the hood improvements'),
               SizedBox(height: size.height * 0.01),
-              Text('6. Improved several UI elements'),
-              SizedBox(height: size.height * 0.01),
-
               Spacer(),
               Center(
                 child: ElevatedButton(
