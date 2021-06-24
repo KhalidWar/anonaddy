@@ -45,8 +45,8 @@ class AliasService {
     }
   }
 
-  Future<AliasDataModel> createNewAlias(
-      String desc, String domain, String format, String localPart) async {
+  Future<AliasDataModel> createNewAlias(String desc, String domain,
+      String format, String localPart, List<String> recipients) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
@@ -59,10 +59,11 @@ class AliasService {
           "Authorization": "Bearer $accessToken",
         },
         body: json.encode({
-          "domain": "$domain",
-          "format": "$format",
-          "description": "$desc",
-          if (format == 'custom') "local_part": "$localPart",
+          "domain": domain,
+          "format": format,
+          "description": desc,
+          "recipient_ids": recipients,
+          if (format == 'custom') "local_part": localPart,
         }),
       );
 

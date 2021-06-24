@@ -14,6 +14,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'create_alias_recipient_selection.dart';
+
 class CreateNewAlias extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -23,7 +25,6 @@ class CreateNewAlias extends ConsumerWidget {
 
     final aliasStateProvider = watch(aliasStateManagerProvider);
     final isLoading = aliasStateProvider.isToggleLoading;
-    final createNewAlias = aliasStateProvider.createNewAlias;
     final descFieldController = aliasStateProvider.descFieldController;
     final customFieldController = aliasStateProvider.customFieldController;
     final customFormKey = aliasStateProvider.customFormKey;
@@ -64,7 +65,7 @@ class CreateNewAlias extends ConsumerWidget {
 
       if (!isDomainNull) {
         if (!isFormatNull) {
-          createNewAlias(
+          aliasStateProvider.createNewAlias(
             context,
             descFieldController.text.trim(),
             aliasDomain ?? data.defaultAliasDomain,
@@ -120,11 +121,12 @@ class CreateNewAlias extends ConsumerWidget {
                                 hintText: kEnterLocalPart),
                           ),
                         ),
-                      SizedBox(height: size.height * 0.02),
+                      SizedBox(height: size.height * 0.01),
                       aliasDomainFormatDropdown(
                         context: context,
                         title: kAliasDomain,
                         label: aliasDomain ?? kChooseAliasDomain,
+                        size: size,
                         onPress: () {
                           buildDomainSelection(
                               context,
@@ -137,13 +139,13 @@ class CreateNewAlias extends ConsumerWidget {
                               getAliasFormatList);
                         },
                       ),
-                      SizedBox(height: size.height * 0.02),
                       aliasDomainFormatDropdown(
                         context: context,
                         title: kAliasFormat,
                         label: aliasFormat == null
                             ? kChooseAliasFormat
                             : correctAliasString(aliasFormat),
+                        size: size,
                         onPress: () {
                           buildFormatSelection(
                               context,
@@ -156,6 +158,8 @@ class CreateNewAlias extends ConsumerWidget {
                       ),
                       if (aliasFormat == kCustom)
                         Text('Note: not available on shared domains'),
+                      SizedBox(height: size.height * 0.02),
+                      recipientsDropdown(context)
                     ],
                   ),
                 ),
@@ -186,23 +190,30 @@ class CreateNewAlias extends ConsumerWidget {
   }
 
   Widget aliasDomainFormatDropdown(
-      {BuildContext context, String title, String label, Function onPress}) {
+      {BuildContext context,
+      String title,
+      String label,
+      Size size,
+      Function onPress}) {
     return InkWell(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                label,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Icon(Icons.keyboard_arrow_down_rounded),
-            ],
-          ),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Icon(Icons.keyboard_arrow_down_rounded),
+              ],
+            ),
+          ],
+        ),
       ),
       onTap: onPress,
     );
@@ -339,6 +350,50 @@ class CreateNewAlias extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget recipientsDropdown(BuildContext context) {
+    final createAliasRecipients =
+        context.read(aliasStateManagerProvider).createAliasRecipients;
+    return InkWell(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Recipients'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (createAliasRecipients.isEmpty)
+                Text('Select recipient(s) (optional)')
+              else
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: createAliasRecipients.length,
+                    itemBuilder: (context, index) {
+                      final recipient = createAliasRecipients[index];
+                      return Text(
+                        recipient.email,
+                        style: Theme.of(context).textTheme.headline6,
+                      );
+                    },
+                  ),
+                ),
+              Icon(Icons.keyboard_arrow_down_rounded),
+            ],
+          ),
+        ],
+      ),
+      onTap: () => showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(kBottomSheetBorderRadius)),
+        ),
+        builder: (context) => CreateAliasRecipientSelection(),
+      ),
     );
   }
 }

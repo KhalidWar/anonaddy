@@ -17,7 +17,7 @@ class RecipientService {
 
     try {
       final response = await http.get(
-        Uri.parse('$kBaseURL/$kRecipientsURL'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -46,7 +46,7 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.parse('$kBaseURL/$kEncryptedRecipient'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kEncryptedRecipient'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -72,7 +72,8 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-        Uri.parse('$kBaseURL/$kEncryptedRecipient/$recipientID'),
+        Uri.https(kAuthorityURL,
+            '$kUnEncodedBaseURL/$kEncryptedRecipient/$recipientID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -98,7 +99,8 @@ class RecipientService {
 
     try {
       final response = await http.patch(
-        Uri.parse('$kBaseURL/$kRecipientKeys/$recipientID'),
+        Uri.https(
+            kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientKeys/$recipientID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -124,7 +126,8 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-          Uri.parse('$kBaseURL/$kRecipientKeys/$recipientID'),
+          Uri.https(
+              kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientKeys/$recipientID'),
           headers: {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
@@ -148,7 +151,7 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.parse('$kBaseURL/$kRecipientsURL'),
+        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -174,7 +177,8 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
-          Uri.parse('$kBaseURL/$kRecipientsURL/$recipientID'),
+          Uri.https(
+              kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientsURL/$recipientID'),
           headers: {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
@@ -198,7 +202,8 @@ class RecipientService {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
-        Uri.parse('$kBaseURL/$kRecipientsURL/email/resend'),
+        Uri.https(
+            kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientsURL/email/resend'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

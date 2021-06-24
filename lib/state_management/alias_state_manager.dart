@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -17,11 +18,12 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   AliasDataModel aliasDataModel;
-  bool _isToggleLoading;
-  bool _deleteAliasLoading;
-  bool _updateRecipientLoading;
+  bool isToggleLoading;
+  bool deleteAliasLoading;
+  bool updateRecipientLoading;
   String _aliasDomain;
   String _aliasFormat;
+  List<RecipientDataModel> createAliasRecipients = [];
 
   final descFieldController = TextEditingController();
   final customFieldController = TextEditingController();
@@ -35,9 +37,6 @@ class AliasStateManager extends ChangeNotifier {
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
   final sharedDomains = [kAnonAddyMe, kAddyMail, k4wrd, kMailerMe];
 
-  bool get isToggleLoading => _isToggleLoading;
-  bool get deleteAliasLoading => _deleteAliasLoading;
-  bool get updateRecipientLoading => _updateRecipientLoading;
   String get aliasDomain => _aliasDomain;
   String get aliasFormat => _aliasFormat;
 
@@ -51,29 +50,37 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  set isToggleLoading(bool input) {
-    _isToggleLoading = input;
+  set setToggleLoading(bool input) {
+    isToggleLoading = input;
     notifyListeners();
   }
 
-  set deleteAliasLoading(bool input) {
-    _deleteAliasLoading = input;
+  set setDeleteAliasLoading(bool input) {
+    deleteAliasLoading = input;
     notifyListeners();
   }
 
-  set updateRecipientLoading(bool input) {
-    _updateRecipientLoading = input;
+  set setUpdateRecipientLoading(bool input) {
+    updateRecipientLoading = input;
+    notifyListeners();
+  }
+
+  set setCreateAliasRecipients(List<RecipientDataModel> input) {
+    createAliasRecipients = input;
     notifyListeners();
   }
 
   void createNewAlias(BuildContext context, String desc, String domain,
       String format, String localPart) {
     final settings = context.read(settingsStateManagerProvider);
+    final recipients = <String>[];
+    createAliasRecipients.forEach((element) => recipients.add(element.id));
+
     void createAlias() async {
-      isToggleLoading = true;
+      setToggleLoading = true;
       await context
           .read(aliasServiceProvider)
-          .createNewAlias(desc, domain, format, localPart)
+          .createNewAlias(desc, domain, format, localPart, recipients)
           .then((value) {
         if (settings.isAutoCopy) {
           Clipboard.setData(ClipboardData(text: value.email));
@@ -81,15 +88,16 @@ class AliasStateManager extends ChangeNotifier {
         } else {
           _showToast('Alias created successfully!');
         }
+        createAliasRecipients.clear();
       }).catchError((error) {
         _showToast(error.toString());
       });
       descFieldController.clear();
       customFieldController.clear();
-      isToggleLoading = false;
+      setToggleLoading = false;
       Navigator.pop(context);
-      _aliasFormat = null;
       _aliasDomain = null;
+      _aliasFormat = null;
     }
 
     if (format == 'custom') {
@@ -104,26 +112,26 @@ class AliasStateManager extends ChangeNotifier {
   Future<void> deleteOrRestoreAlias(
       BuildContext context, DateTime aliasDeletedAt, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
-    deleteAliasLoading = true;
+    setDeleteAliasLoading = true;
     if (aliasDeletedAt == null) {
       Navigator.pop(context);
       await aliasService.deleteAlias(aliasID).then((value) {
         _showToast(kAliasDeletedSuccessfully);
-        deleteAliasLoading = false;
+        setDeleteAliasLoading = false;
         Navigator.pop(context);
       }).catchError((error) {
         _showToast(error.toString());
-        deleteAliasLoading = false;
+        setDeleteAliasLoading = false;
       });
     } else {
       Navigator.pop(context);
       await aliasService.restoreAlias(aliasID).then((value) {
         _showToast(kAliasRestoredSuccessfully);
-        deleteAliasLoading = false;
+        setDeleteAliasLoading = false;
         aliasDataModel = value;
       }).catchError((error) {
         _showToast(error.toString());
-        deleteAliasLoading = false;
+        setDeleteAliasLoading = false;
       });
     }
     notifyListeners();
@@ -131,7 +139,7 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> toggleAlias(BuildContext context, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
-    isToggleLoading = true;
+    setToggleLoading = true;
     if (aliasDataModel.isAliasActive) {
       await aliasService.deactivateAlias(aliasID).then((value) {
         _showToast('Alias Deactivated Successfully!');
@@ -139,7 +147,7 @@ class AliasStateManager extends ChangeNotifier {
       }).catchError((error) {
         _showToast(error.toString());
       });
-      isToggleLoading = false;
+      setToggleLoading = false;
     } else {
       await aliasService.activateAlias(aliasID).then((value) {
         _showToast('Alias Activated Successfully!');
@@ -147,7 +155,7 @@ class AliasStateManager extends ChangeNotifier {
       }).catchError((error) {
         _showToast(error.toString());
       });
-      isToggleLoading = false;
+      setToggleLoading = false;
     }
   }
 
@@ -170,7 +178,7 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> updateAliasDefaultRecipient(
       BuildContext context, String aliasID, List<String> recipients) async {
-    updateRecipientLoading = true;
+    setUpdateRecipientLoading = true;
     await context
         .read(aliasServiceProvider)
         .updateAliasDefaultRecipient(aliasID, recipients)
@@ -178,11 +186,11 @@ class AliasStateManager extends ChangeNotifier {
       aliasDataModel.recipients = value.recipients;
       notifyListeners();
       _showToast(kUpdateAliasRecipientSuccessful);
-      updateRecipientLoading = false;
+      setUpdateRecipientLoading = false;
       Navigator.pop(context);
     }).catchError((error) {
       _showToast(error.toString());
-      updateRecipientLoading = false;
+      setUpdateRecipientLoading = false;
     });
   }
 
