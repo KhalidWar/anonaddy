@@ -65,7 +65,7 @@ class RecipientStateManager extends ChangeNotifier {
           .read(recipientServiceProvider)
           .addPublicGPGKey(recipientID, keyData)
           .then((value) {
-        _showToast(kGPGKeyAddedSuccessfully);
+        _showToast(kAddGPGKeySuccess);
         setFingerprint(value.fingerprint);
         recipientDataModel.shouldEncrypt = value.shouldEncrypt;
         Navigator.pop(context);
@@ -81,7 +81,7 @@ class RecipientStateManager extends ChangeNotifier {
         .read(recipientServiceProvider)
         .removePublicGPGKey(recipientID)
         .then((value) {
-      _showToast(kGPGKeyDeletedSuccessfully);
+      _showToast(kDeleteGPGKeySuccess);
       setFingerprint(null);
       recipientDataModel.shouldEncrypt = false;
     }).catchError((error) {

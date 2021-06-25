@@ -5,8 +5,6 @@ const kDescriptionInputText = 'Description (optional)';
 const kEnterLocalPart = 'Enter Local Part (no space or @)';
 const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
-const kEditDescSuccessful = 'Description Updated Successfully';
-const kEditDescFailed = 'Failed to update description';
 const kGetAccessToken =
     'To access your AnonAddy account, you have to obtain an API Access Token.'
     '\n\nLogin to your AnonAddy account, head to settings, and navigate to API section.'

@@ -2,7 +2,6 @@ import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,9 +83,9 @@ class AliasStateManager extends ChangeNotifier {
           .then((value) {
         if (settings.isAutoCopy) {
           Clipboard.setData(ClipboardData(text: value.email));
-          _showToast('Alias created and email copied!');
+          _showToast(kCreateAliasAndCopyEmail);
         } else {
-          _showToast('Alias created successfully!');
+          _showToast(kCreateAliasSuccess);
         }
         createAliasRecipients.clear();
       }).catchError((error) {
@@ -116,7 +115,7 @@ class AliasStateManager extends ChangeNotifier {
     if (aliasDeletedAt == null) {
       Navigator.pop(context);
       await aliasService.deleteAlias(aliasID).then((value) {
-        _showToast(kAliasDeletedSuccessfully);
+        _showToast(kDeleteAliasSuccess);
         setDeleteAliasLoading = false;
         Navigator.pop(context);
       }).catchError((error) {
@@ -126,7 +125,7 @@ class AliasStateManager extends ChangeNotifier {
     } else {
       Navigator.pop(context);
       await aliasService.restoreAlias(aliasID).then((value) {
-        _showToast(kAliasRestoredSuccessfully);
+        _showToast(kRestoreAliasSuccess);
         setDeleteAliasLoading = false;
         aliasDataModel = value;
       }).catchError((error) {
@@ -142,7 +141,7 @@ class AliasStateManager extends ChangeNotifier {
     setToggleLoading = true;
     if (aliasDataModel.isAliasActive) {
       await aliasService.deactivateAlias(aliasID).then((value) {
-        _showToast('Alias Deactivated Successfully!');
+        _showToast(kDeactivateAliasSuccess);
         aliasDataModel.isAliasActive = false;
       }).catchError((error) {
         _showToast(error.toString());
@@ -150,7 +149,7 @@ class AliasStateManager extends ChangeNotifier {
       setToggleLoading = false;
     } else {
       await aliasService.activateAlias(aliasID).then((value) {
-        _showToast('Alias Activated Successfully!');
+        _showToast(kActivateAliasSuccess);
         aliasDataModel.isAliasActive = true;
       }).catchError((error) {
         _showToast(error.toString());
@@ -166,7 +165,7 @@ class AliasStateManager extends ChangeNotifier {
           .read(aliasServiceProvider)
           .editAliasDescription(aliasID, input)
           .then((value) {
-        _showToast(kEditDescSuccessful);
+        _showToast(kEditDescriptionSuccess);
         aliasDataModel.emailDescription = value.emailDescription;
         notifyListeners();
       }).catchError((error) {
@@ -185,7 +184,7 @@ class AliasStateManager extends ChangeNotifier {
         .then((value) {
       aliasDataModel.recipients = value.recipients;
       notifyListeners();
-      _showToast(kUpdateAliasRecipientSuccessful);
+      _showToast(kUpdateAliasRecipientSuccess);
       setUpdateRecipientLoading = false;
       Navigator.pop(context);
     }).catchError((error) {
@@ -196,7 +195,7 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> forgetAlias(BuildContext context, String aliasID) async {
     await context.read(aliasServiceProvider).forgetAlias(aliasID).then((value) {
-      _showToast(kForgetAliasUIString);
+      _showToast(kForgetAliasSuccess);
     }).catchError((error) {
       _showToast(error.toString());
     });
