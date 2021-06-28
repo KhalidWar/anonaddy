@@ -18,7 +18,7 @@ class _LogoutScreenState extends State<LogoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBlueNavyColor,
+      backgroundColor: kPrimaryColor,
       body: Center(
         child: Container(
           child: CircularProgressIndicator(),

@@ -28,7 +28,7 @@ class TokenLoginScreen extends ConsumerWidget {
       child: Scaffold(
         key: Key('loginScreenScaffold'),
         appBar: AppBar(elevation: 0, brightness: Brightness.dark),
-        backgroundColor: kBlueNavyColor,
+        backgroundColor: kPrimaryColor,
         body: Center(
           child: SingleChildScrollView(
             child: Card(
@@ -124,7 +124,7 @@ class TokenLoginScreen extends ConsumerWidget {
                         child: isLoading
                             ? CircularProgressIndicator(
                                 key: Key('loginLoadingIndicator'),
-                                backgroundColor: kBlueNavyColor,
+                                backgroundColor: kPrimaryColor,
                               )
                             : Text(
                                 'Login',

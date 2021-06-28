@@ -65,7 +65,7 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
         return Container(
           height: size.height,
           width: double.infinity,
-          color: kBlueNavyColor,
+          color: kPrimaryColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

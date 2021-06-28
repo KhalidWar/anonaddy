@@ -38,7 +38,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
 ElevatedButtonThemeData elevatedButtonThemeData = ElevatedButtonThemeData(
   style: ButtonStyle(
     foregroundColor: MaterialStateProperty.all(Colors.black),
-    overlayColor: MaterialStateProperty.all(kBlueNavyColor),
+    overlayColor: MaterialStateProperty.all(kPrimaryColor),
     backgroundColor: MaterialStateProperty.all(kAccentColor),
     minimumSize: MaterialStateProperty.all(Size(180, 50)),
     shape: MaterialStateProperty.all(
@@ -64,7 +64,7 @@ DialogTheme dialogTheme = DialogTheme().copyWith(
 );
 
 AppBarTheme appBarTheme = AppBarTheme().copyWith(
-  color: kBlueNavyColor,
+  color: kPrimaryColor,
   brightness: Brightness.dark,
 );
 

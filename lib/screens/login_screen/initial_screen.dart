@@ -19,7 +19,7 @@ class InitialScreen extends ConsumerWidget {
     /// Customize Status Bar and Bottom Navigator Bar colors.
     return Scaffold(
       key: Key('initialScreenScaffold'),
-      backgroundColor: kBlueNavyColor,
+      backgroundColor: kPrimaryColor,
 
       /// AsyncValue's [when] function returns 3 states:
       body: accessToken.when(

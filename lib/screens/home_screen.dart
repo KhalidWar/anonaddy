@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               BottomNavigationBar(
                 onTap: _selectedTab,
                 currentIndex: _selectedIndex,
-                selectedItemColor: isDark ? kAccentColor : kBlueNavyColor,
+                selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
                 items: [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.account_circle),
