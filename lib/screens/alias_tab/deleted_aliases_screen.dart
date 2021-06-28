@@ -24,7 +24,7 @@ class DeletedAliasesScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(kDeletedAliasText),
+                    Text(kDeleteAliasString),
                     SizedBox(height: size.height * 0.02),
                     Row(
                       children: [

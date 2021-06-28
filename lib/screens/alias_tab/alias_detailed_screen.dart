@@ -239,12 +239,16 @@ class AliasDetailScreen extends ConsumerWidget {
         return isIOS
             ? confirmationDialog.iOSAlertDialog(
                 context,
-                isDeleted ? kRestoreAliasText : kDeleteAliasConfirmation,
+                isDeleted
+                    ? kRestoreAliasConfirmation
+                    : kDeleteAliasConfirmation,
                 deleteOrRestore,
                 '${isDeleted ? 'Restore' : 'Delete'} Alias')
             : confirmationDialog.androidAlertDialog(
                 context,
-                isDeleted ? kRestoreAliasText : kDeleteAliasConfirmation,
+                isDeleted
+                    ? kRestoreAliasConfirmation
+                    : kDeleteAliasConfirmation,
                 deleteOrRestore,
                 '${isDeleted ? 'Restore' : 'Delete'} Alias');
       },
@@ -351,10 +355,10 @@ class AliasDetailScreen extends ConsumerWidget {
               context: context,
               builder: (context) {
                 return isIOS
-                    ? confirmationDialog.iOSAlertDialog(
-                        context, kForgetAliasDialogText, forget, 'Forget Alias')
+                    ? confirmationDialog.iOSAlertDialog(context,
+                        kForgetAliasConfirmation, forget, 'Forget Alias')
                     : confirmationDialog.androidAlertDialog(context,
-                        kForgetAliasDialogText, forget, 'Forget Alias');
+                        kForgetAliasConfirmation, forget, 'Forget Alias');
               },
             );
           },

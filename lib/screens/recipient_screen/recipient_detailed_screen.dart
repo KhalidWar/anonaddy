@@ -246,12 +246,12 @@ class RecipientDetailedScreen extends ConsumerWidget {
         return isIOS
             ? confirmationDialog.iOSAlertDialog(
                 context,
-                kRemoveRecipientPublicKeyBody,
+                kRemoveRecipientPublicKeyConfirmation,
                 removePublicKey,
                 'Remove Public Key')
             : confirmationDialog.androidAlertDialog(
                 context,
-                kRemoveRecipientPublicKeyBody,
+                kRemoveRecipientPublicKeyConfirmation,
                 removePublicKey,
                 'Remove Public Key');
       },
@@ -359,10 +359,16 @@ class RecipientDetailedScreen extends ConsumerWidget {
               context: context,
               builder: (context) {
                 return isIOS
-                    ? confirmationDialog.iOSAlertDialog(context,
-                        kDeleteRecipientDialogText, remove, 'Delete Recipient')
-                    : confirmationDialog.androidAlertDialog(context,
-                        kDeleteRecipientDialogText, remove, 'Delete Recipient');
+                    ? confirmationDialog.iOSAlertDialog(
+                        context,
+                        kDeleteRecipientConfirmation,
+                        remove,
+                        'Delete Recipient')
+                    : confirmationDialog.androidAlertDialog(
+                        context,
+                        kDeleteRecipientConfirmation,
+                        remove,
+                        'Delete Recipient');
               },
             );
           },

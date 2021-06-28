@@ -296,10 +296,16 @@ class UsernameDetailedScreen extends ConsumerWidget {
               context: context,
               builder: (context) {
                 return isIOS
-                    ? confirmationDialog.iOSAlertDialog(context,
-                        kDeleteUsername, deleteUsername, 'Delete Username')
-                    : confirmationDialog.androidAlertDialog(context,
-                        kDeleteUsername, deleteUsername, 'Delete Username');
+                    ? confirmationDialog.iOSAlertDialog(
+                        context,
+                        kDeleteUsernameConfirmation,
+                        deleteUsername,
+                        'Delete Username')
+                    : confirmationDialog.androidAlertDialog(
+                        context,
+                        kDeleteUsernameConfirmation,
+                        deleteUsername,
+                        'Delete Username');
               },
             );
           },

@@ -32,7 +32,7 @@ class AddNewUsername extends StatelessWidget {
             padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Column(
               children: [
-                Text(kAddNewUsernameText),
+                Text(kAddNewUsernameString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: usernameFormKey,
