@@ -99,7 +99,7 @@ class AliasStateManager extends ChangeNotifier {
       _aliasFormat = null;
     }
 
-    if (format == 'custom') {
+    if (format == kCustom) {
       if (customFormKey.currentState.validate()) {
         createAlias();
       }

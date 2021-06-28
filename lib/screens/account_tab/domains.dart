@@ -13,7 +13,7 @@ class Domains extends ConsumerWidget {
       return LottieWidget(
         lottie: 'assets/lottie/errorCone.json',
         lottieHeight: MediaQuery.of(context).size.height * 0.2,
-        label: kFailedLoadAccountData,
+        label: kLoadAccountDataFailed,
       );
     } else {
       return Center(

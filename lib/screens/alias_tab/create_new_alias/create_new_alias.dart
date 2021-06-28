@@ -106,7 +106,7 @@ class CreateNewAlias extends ConsumerWidget {
                         controller: descFieldController,
                         textInputAction: TextInputAction.next,
                         decoration: kTextFormFieldDecoration.copyWith(
-                            hintText: kDescriptionInputText),
+                            hintText: kDescriptionFieldHint),
                       ),
                       SizedBox(height: size.height * 0.01),
                       if (aliasFormat == kCustom)
@@ -118,7 +118,7 @@ class CreateNewAlias extends ConsumerWidget {
                                 FormValidator().validateLocalPart(input),
                             textInputAction: TextInputAction.next,
                             decoration: kTextFormFieldDecoration.copyWith(
-                                hintText: kEnterLocalPart),
+                                hintText: kLocalPartFieldHint),
                           ),
                         ),
                       SizedBox(height: size.height * 0.01),

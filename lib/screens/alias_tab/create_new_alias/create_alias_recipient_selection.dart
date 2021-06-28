@@ -150,7 +150,7 @@ class _CreateAliasRecipientSelectionState
         children: [
           Divider(height: 0),
           SizedBox(height: size.height * 0.01),
-          Text(kUpdateAliasRecipientsNote),
+          Text(kUpdateAliasRecipientNote),
         ],
       ),
     );

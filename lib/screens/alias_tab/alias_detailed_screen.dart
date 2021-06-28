@@ -118,9 +118,8 @@ class AliasDetailScreen extends ConsumerWidget {
                   ? Icons.restore_outlined
                   : Icons.delete_outline,
               title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
-              subtitle: isAliasDeleted
-                  ? kRestoreAliasUIString
-                  : kDeletedAliasUIString,
+              subtitle:
+                  isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
               trailing: Row(
                 children: [
                   deleteAliasLoading ? customLoading : Container(),

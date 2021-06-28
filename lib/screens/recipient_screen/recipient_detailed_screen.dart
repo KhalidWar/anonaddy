@@ -220,7 +220,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
           SizedBox(width: 16),
           Expanded(
             child: Text(
-              kUnverifiedRecipient,
+              kUnverifiedRecipientNote,
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -290,7 +290,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   children: [
-                    Text(kEnterPublicKeyData),
+                    Text(kAddPublicKeyNote),
                     SizedBox(height: size.height * 0.015),
                     Form(
                       key: pgpKeyFormKey,
@@ -305,7 +305,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         onFieldSubmitted: (submit) => addPublicKey(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           contentPadding: EdgeInsets.all(5),
-                          hintText: kPublicGPGKeyHintText,
+                          hintText: kPublicKeyFieldHint,
                         ),
                       ),
                     ),

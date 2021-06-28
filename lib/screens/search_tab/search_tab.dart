@@ -38,7 +38,7 @@ class SearchTab extends StatelessWidget {
             child: IgnorePointer(
               child: TextFormField(
                 decoration: kTextFormFieldDecoration.copyWith(
-                  hintText: kSearchHintText,
+                  hintText: kSearchFieldHint,
                   suffixIcon: Icon(Icons.search),
                 ),
               ),
