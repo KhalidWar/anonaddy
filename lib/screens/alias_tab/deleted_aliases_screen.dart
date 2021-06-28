@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/shared_components/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class DeletedAliasesScreen extends StatelessWidget {

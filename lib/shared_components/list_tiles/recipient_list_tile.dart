@@ -4,7 +4,7 @@ import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'custom_page_route.dart';
+import '../custom_page_route.dart';
 
 class RecipientListTile extends StatelessWidget {
   const RecipientListTile({Key key, this.recipientDataModel}) : super(key: key);

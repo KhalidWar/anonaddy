@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/shared_components/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
+import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_tab_pie_chart.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/alias_shimmer_loading.dart';

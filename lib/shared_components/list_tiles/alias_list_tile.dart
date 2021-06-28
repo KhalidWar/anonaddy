@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../custom_page_route.dart';
 import 'alias_list_tile_leading.dart';
-import 'custom_page_route.dart';
 
 class AliasListTile extends StatelessWidget {
   const AliasListTile({Key key, this.aliasData}) : super(key: key);

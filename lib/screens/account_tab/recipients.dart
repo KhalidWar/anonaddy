@@ -1,5 +1,5 @@
+import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/shared_components/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/material.dart';

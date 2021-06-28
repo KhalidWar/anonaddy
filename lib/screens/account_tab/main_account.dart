@@ -1,10 +1,10 @@
 import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/screens/account_tab/add_new_recipient.dart';
-import 'package:anonaddy/shared_components/account_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
