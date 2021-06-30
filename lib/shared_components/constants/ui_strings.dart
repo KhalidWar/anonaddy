@@ -27,12 +27,21 @@ const kSearchAliasByEmailOrDesc = 'Search for aliases by email or description';
 const kSearchFieldHint = 'Search';
 
 /// Login Screen
-const kGetAccessToken =
-    'To access your AnonAddy account, you have to obtain an API Access Token.'
-    '\n\nLogin to your AnonAddy account, head to settings, and navigate to API section.'
-    '\n\nGenerate a new access token.'
-    '\n\nAccess Token is a long string of alphabets, numbers, and special characters.'
-    '\n\nPaste it here as is!';
+const kEnterAccessToken = 'Enter Access Token';
+const kWhatsAccessToken = 'What is Access Token?';
+const kAccessTokenDefinition =
+    'Access Token is a long string of alphanumeric characters used to access an account without giving away the account\'s username and password.';
+const kAccessTokenRequired =
+    'To access your AnonAddy account, you\'ll have to provide your own Access Token.';
+const kHowToGetAccessToken = 'How to get Access Token?';
+const kHowToGetAccessToken1 = '1. Login to your AnonAddy account';
+const kHowToGetAccessToken2 = '2. Go to Settings';
+const kHowToGetAccessToken3 = '3. Scroll down to API section';
+const kHowToGetAccessToken4 = '4. Click on Generate New Token';
+const kHowToGetAccessToken5 = '5. Paste it as is in Login field';
+const kAccessTokenSecurityNotice =
+    'Security Notice: do NOT re-use Access Tokens. Make sure to generate a new token for every service you use.';
+const kGetAccessToken = 'Get Access Token';
 
 /// Error
 const kLoadAccountDataFailed = 'Failed to Load Account Data';

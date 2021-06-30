@@ -1,5 +1,6 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -78,7 +79,7 @@ class TokenLoginScreen extends ConsumerWidget {
                                       ),
                                     ),
                                     border: OutlineInputBorder(),
-                                    hintText: 'Enter Access Token!',
+                                    hintText: kEnterAccessToken,
                                   ),
                                 ),
                               ),
@@ -98,12 +99,10 @@ class TokenLoginScreen extends ConsumerWidget {
                   GestureDetector(
                     key: Key('loginGetAccessToken'),
                     child: Text(
-                      'What is Access Token?',
-                      style: Theme.of(context).textTheme.bodyText2.copyWith(
-                            decoration: TextDecoration.underline,
-                          ),
+                      kWhatsAccessToken,
+                      style: Theme.of(context).textTheme.bodyText1,
                     ),
-                    onTap: () => buildShowModal(context),
+                    onTap: () => buildAccessTokenInfoSheet(context),
                   ),
                   Container(
                     height: size.height * 0.1,
@@ -170,7 +169,7 @@ class TokenLoginScreen extends ConsumerWidget {
     );
   }
 
-  Future buildShowModal(BuildContext context) async {
+  Future buildAccessTokenInfoSheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -180,39 +179,37 @@ class TokenLoginScreen extends ConsumerWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BottomSheetHeader(headerLabel: 'What is Access Token?'),
+            BottomSheetHeader(headerLabel: kWhatsAccessToken),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'What\'s Access Token?',
+                    kWhatsAccessToken,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: 5),
+                  Text(kAccessTokenDefinition),
+                  SizedBox(height: 20),
                   Text(
-                    'Access Token is a long string of alphanumeric characters used to access your account without giving away account\'s username and password.',
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    'To access your AnonAddy account, you\'ll have to provide your own Access Token.',
+                    kAccessTokenRequired,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'How to get Access Token?',
+                    kHowToGetAccessToken,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: 5),
-                  Text('1. Login to your AnonAddy account'),
-                  Text('2. Go to Settings'),
-                  Text('3. Scroll down to API section'),
-                  Text('4. Click on Generate New Token'),
-                  Text('5. Paste it as is in Login field'),
+                  Text(kHowToGetAccessToken1),
+                  Text(kHowToGetAccessToken2),
+                  Text(kHowToGetAccessToken3),
+                  Text(kHowToGetAccessToken4),
+                  Text(kHowToGetAccessToken5),
                   SizedBox(height: 20),
                   Text(
-                    'Security Notice: do NOT re-use Access Tokens. Make sure to generate a new token for every service you use.',
+                    kAccessTokenSecurityNotice,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -222,7 +219,7 @@ class TokenLoginScreen extends ConsumerWidget {
               padding: EdgeInsets.only(bottom: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
-                child: Text('Get Access Token'),
+                child: Text(kGetAccessToken),
                 onPressed: () => NicheMethod().launchURL(kAnonAddySettingsURL),
               ),
             ),
