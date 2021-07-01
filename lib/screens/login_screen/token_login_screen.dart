@@ -1,7 +1,9 @@
+import 'package:anonaddy/screens/login_screen/self_host_set_up.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/login_state_manager.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -43,13 +45,26 @@ class TokenLoginScreen extends ConsumerWidget {
                   buildHeader(context, size),
                   Container(),
                   buildTokenInputField(context, loginManager),
-                  GestureDetector(
-                    key: Key('loginGetAccessToken'),
-                    child: Text(
-                      kWhatsAccessToken,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    onTap: () => buildAccessTokenInfoSheet(context),
+                  Column(
+                    children: [
+                      GestureDetector(
+                        key: Key('loginGetAccessToken'),
+                        child: Text(
+                          kWhatsAccessToken,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        onTap: () => buildAccessTokenInfoSheet(context),
+                      ),
+                      SizedBox(height: size.height * 0.01),
+                      GestureDetector(
+                        child: Text(
+                          'Self Hosted? Set up here!',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                        onTap: () => Navigator.push(
+                            context, CustomPageRoute(SelfHostSetUp())),
+                      ),
+                    ],
                   ),
                   buildFooter(context, isDark, loginManager),
                 ],
