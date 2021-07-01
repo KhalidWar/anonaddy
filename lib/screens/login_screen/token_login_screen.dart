@@ -2,6 +2,7 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/state_management/login_state_manager.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -17,9 +18,6 @@ class TokenLoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     final size = MediaQuery.of(context).size;
     final loginManager = watch(loginStateManagerProvider);
-    final isLoading = loginManager.isLoading;
-    final login = loginManager.login;
-    final pasteFromClipboard = loginManager.pasteFromClipboard;
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -44,58 +42,7 @@ class TokenLoginScreen extends ConsumerWidget {
                 children: [
                   buildHeader(context, size),
                   Container(),
-                  Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Login with Access Token',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        SizedBox(height: size.height * 0.01),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Form(
-                                key: _formKey,
-                                child: TextFormField(
-                                  key: Key('loginTextField'),
-                                  validator: (input) => FormValidator()
-                                      .accessTokenValidator(input),
-                                  controller: _textEditingController,
-                                  onFieldSubmitted: (input) => login(
-                                      context,
-                                      _textEditingController.text.trim(),
-                                      _formKey),
-                                  textInputAction: TextInputAction.go,
-                                  keyboardType: TextInputType.multiline,
-                                  minLines: 3,
-                                  maxLines: 6,
-                                  decoration: InputDecoration(
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Theme.of(context).accentColor,
-                                      ),
-                                    ),
-                                    border: OutlineInputBorder(),
-                                    hintText: kEnterAccessToken,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              key: Key('pasteFromClipboard'),
-                              icon: Icon(Icons.paste),
-                              onPressed: () => pasteFromClipboard(
-                                _textEditingController,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  buildTokenInputField(context, loginManager),
                   GestureDetector(
                     key: Key('loginGetAccessToken'),
                     child: Text(
@@ -104,41 +51,7 @@ class TokenLoginScreen extends ConsumerWidget {
                     ),
                     onTap: () => buildAccessTokenInfoSheet(context),
                   ),
-                  Container(
-                    height: size.height * 0.1,
-                    width: size.width,
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.black : Color(0xFFF5F7FA),
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(15),
-                        bottomLeft: Radius.circular(15),
-                      ),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(),
-                      key: Key('loginButton'),
-                      child: isLoading
-                          ? CircularProgressIndicator(
-                              key: Key('loginLoadingIndicator'),
-                              backgroundColor: kPrimaryColor,
-                            )
-                          : Text(
-                              'Login',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5
-                                  .copyWith(color: Colors.black),
-                            ),
-                      onPressed: () {
-                        login(
-                          context,
-                          _textEditingController.text.trim(),
-                          _formKey,
-                        );
-                      },
-                    ),
-                  ),
+                  buildFooter(context, isDark, loginManager),
                 ],
               ),
             ),
@@ -166,6 +79,61 @@ class TokenLoginScreen extends ConsumerWidget {
           endIndent: size.width * 0.30,
         ),
       ],
+    );
+  }
+
+  Widget buildTokenInputField(
+      BuildContext context, LoginStateManager loginManager) {
+    final size = MediaQuery.of(context).size;
+    return Padding(
+      padding: EdgeInsets.only(left: 15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Login with Access Token',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          SizedBox(height: size.height * 0.01),
+          Row(
+            children: [
+              Expanded(
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    key: Key('loginTextField'),
+                    validator: (input) =>
+                        FormValidator().accessTokenValidator(input),
+                    controller: _textEditingController,
+                    onFieldSubmitted: (input) => loginManager.login(
+                        context, _textEditingController.text.trim(), _formKey),
+                    textInputAction: TextInputAction.go,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 3,
+                    maxLines: 6,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                      border: OutlineInputBorder(),
+                      hintText: kEnterAccessToken,
+                    ),
+                  ),
+                ),
+              ),
+              IconButton(
+                key: Key('pasteFromClipboard'),
+                icon: Icon(Icons.paste),
+                onPressed: () => loginManager.pasteFromClipboard(
+                  _textEditingController,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -226,6 +194,41 @@ class TokenLoginScreen extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget buildFooter(
+      BuildContext context, bool isDark, LoginStateManager loginManager) {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height * 0.1,
+      width: size.width,
+      decoration: BoxDecoration(
+        color: isDark ? Colors.black : Color(0xFFF5F7FA),
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(15),
+          bottomLeft: Radius.circular(15),
+        ),
+      ),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(),
+        key: Key('loginButton'),
+        child: loginManager.isLoading
+            ? CircularProgressIndicator(
+                key: Key('loginLoadingIndicator'),
+                backgroundColor: kPrimaryColor,
+              )
+            : Text(
+                'Login',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .copyWith(color: Colors.black),
+              ),
+        onPressed: () => loginManager.login(
+            context, _textEditingController.text.trim(), _formKey),
+      ),
     );
   }
 }
