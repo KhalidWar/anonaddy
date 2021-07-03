@@ -69,4 +69,11 @@ class FormValidator {
       return null;
     }
   }
+
+  String validateInstanceURL(String input) {
+    if (input.isEmpty || input == null) {
+      return 'Provide a valid URL';
+    }
+    return null;
+  }
 }

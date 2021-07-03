@@ -17,6 +17,7 @@ const kForgetURL = 'forget';
 
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
 const kAnonAddyFAQURL = 'https://anonaddy.com/faq/';
+const kAnonAddySelfHostingURL = 'https://anonaddy.com/self-hosting/';
 
 /// HTTPS URLs
 const kAuthorityURL = 'app.anonaddy.com';

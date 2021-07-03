@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/login_screen/self_host_set_up.dart';
+import 'package:anonaddy/screens/login_screen/change_instance_screen.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -58,11 +58,11 @@ class TokenLoginScreen extends ConsumerWidget {
                       SizedBox(height: size.height * 0.01),
                       GestureDetector(
                         child: Text(
-                          'Self Hosted? Set up here!',
+                          'Self Hosting? Change Instance!',
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                         onTap: () => Navigator.push(
-                            context, CustomPageRoute(SelfHostSetUp())),
+                            context, CustomPageRoute(ChangeInstanceScreen())),
                       ),
                     ],
                   ),
