@@ -1,5 +1,6 @@
-/// AnonAddy URLs
-const kBaseURL = 'https://app.anonaddy.com/api/v1';
+/// HTTP URLs
+const kAuthorityURL = 'app.anonaddy.com';
+const kUnEncodedBaseURL = '/api/v1';
 const kAccountDetailsURL = 'account-details';
 const kActiveAliasURL = 'active-aliases';
 const kAliasURL = 'alias';
@@ -15,13 +16,10 @@ const kDomainsURL = 'domains';
 const kDomainsOptionsURL = 'domain-options';
 const kForgetURL = 'forget';
 
+/// AnonAddy URLs
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
 const kAnonAddyFAQURL = 'https://anonaddy.com/faq/';
 const kAnonAddySelfHostingURL = 'https://anonaddy.com/self-hosting/';
-
-/// HTTPS URLs
-const kAuthorityURL = 'app.anonaddy.com';
-const kUnEncodedBaseURL = '/api/v1';
 
 /// AddyManager URLs
 const kAddyManagerRepoURL = 'https://github.com/KhalidWar/anonaddy';
