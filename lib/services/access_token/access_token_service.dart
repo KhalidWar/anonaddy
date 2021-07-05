@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -10,10 +8,11 @@ class AccessTokenService {
   final _accessTokenKey = 'accessToken';
   String _accessTokenValue;
 
-  Future validateAccessToken(String accessToken) async {
+  Future validateAccessToken(String accessToken, {String instanceURL}) async {
     try {
       final response = await http.get(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAccountDetailsURL'),
+        Uri.https(instanceURL ?? kAuthorityURL,
+            '$kUnEncodedBaseURL/$kAccountDetailsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -26,8 +25,6 @@ class AccessTokenService {
       } else {
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
       }
-    } on SocketException {
-      throw 'No Internet connection';
     } catch (e) {
       throw e;
     }

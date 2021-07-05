@@ -39,7 +39,35 @@ class LoginStateManager extends ChangeNotifier {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => HomeScreen()));
         }
-      }).catchError((error, stackTrade) {
+      }).catchError((error, stackTrace) {
+        isLoading = false;
+        _showToast(error.toString());
+      });
+    }
+  }
+
+  void selfHostLogin(
+      BuildContext context,
+      String instanceURL,
+      String accessToken,
+      GlobalKey<FormState> urlFormKey,
+      GlobalKey<FormState> tokenFormKey) async {
+    if (urlFormKey.currentState.validate() &&
+        tokenFormKey.currentState.validate()) {
+      isLoading = true;
+      await context
+          .read(accessTokenServiceProvider)
+          .validateAccessToken(accessToken, instanceURL: instanceURL)
+          .then((value) async {
+        if (value == 200) {
+          await context
+              .read(accessTokenServiceProvider)
+              .saveAccessToken(accessToken);
+          isLoading = false;
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        }
+      }).catchError((error, stackTrace) {
         isLoading = false;
         _showToast(error.toString());
       });
