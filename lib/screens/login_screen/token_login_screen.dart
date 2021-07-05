@@ -58,7 +58,7 @@ class TokenLoginScreen extends ConsumerWidget {
                       SizedBox(height: size.height * 0.01),
                       GestureDetector(
                         child: Text(
-                          'Self Hosting? Change Instance!',
+                          'Self Hosted? Change Instance',
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                         onTap: () => Navigator.push(
@@ -101,7 +101,7 @@ class TokenLoginScreen extends ConsumerWidget {
       BuildContext context, LoginStateManager loginManager) {
     final size = MediaQuery.of(context).size;
     return Padding(
-      padding: EdgeInsets.only(left: 15),
+      padding: EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -110,43 +110,35 @@ class TokenLoginScreen extends ConsumerWidget {
             style: Theme.of(context).textTheme.headline6,
           ),
           SizedBox(height: size.height * 0.01),
-          Row(
-            children: [
-              Expanded(
-                child: Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    key: Key('loginTextField'),
-                    validator: (input) =>
-                        FormValidator().accessTokenValidator(input),
-                    controller: _textEditingController,
-                    onFieldSubmitted: (input) => loginManager.login(
-                        context, _textEditingController.text.trim(), _formKey),
-                    textInputAction: TextInputAction.go,
-                    keyboardType: TextInputType.multiline,
-                    minLines: 3,
-                    maxLines: 6,
-                    decoration: InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ),
-                      border: OutlineInputBorder(),
-                      hintText: kEnterAccessToken,
-                    ),
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              key: Key('loginTextField'),
+              validator: (input) => FormValidator().accessTokenValidator(input),
+              controller: _textEditingController,
+              onFieldSubmitted: (input) => loginManager.login(
+                  context, _textEditingController.text.trim(), _formKey),
+              textInputAction: TextInputAction.go,
+              keyboardType: TextInputType.multiline,
+              minLines: 3,
+              maxLines: 6,
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).accentColor,
                   ),
                 ),
+                border: OutlineInputBorder(),
+                hintText: kEnterAccessToken,
               ),
-              IconButton(
-                key: Key('pasteFromClipboard'),
-                icon: Icon(Icons.paste),
-                onPressed: () => loginManager.pasteFromClipboard(
-                  _textEditingController,
-                ),
-              ),
-            ],
+            ),
           ),
+          // IconButton(
+          //   key: Key('pasteFromClipboard'),
+          //   icon: Icon(Icons.paste),
+          //   onPressed: () =>
+          //       loginManager.pasteFromClipboard(_textEditingController),
+          // ),
         ],
       ),
     );
@@ -221,8 +213,8 @@ class TokenLoginScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: isDark ? Colors.black : Color(0xFFF5F7FA),
         borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(15),
-          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
         ),
       ),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
