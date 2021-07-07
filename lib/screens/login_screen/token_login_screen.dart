@@ -47,21 +47,16 @@ class TokenLoginScreen extends ConsumerWidget {
                   buildTokenInputField(context, loginManager),
                   Column(
                     children: [
-                      GestureDetector(
+                      TextButton(
                         key: Key('loginGetAccessToken'),
-                        child: Text(
-                          kWhatsAccessToken,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        onTap: () => buildAccessTokenInfoSheet(context),
+                        style: TextButton.styleFrom(),
+                        child: Text(kWhatsAccessToken),
+                        onPressed: () => buildAccessTokenInfoSheet(context),
                       ),
-                      SizedBox(height: size.height * 0.01),
-                      GestureDetector(
-                        child: Text(
-                          'Self Hosted? Change Instance',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        onTap: () => Navigator.push(
+                      TextButton(
+                        style: TextButton.styleFrom(),
+                        child: Text('Self Hosted? Change Instance'),
+                        onPressed: () => Navigator.push(
                             context, CustomPageRoute(ChangeInstanceScreen())),
                       ),
                     ],
@@ -120,7 +115,7 @@ class TokenLoginScreen extends ConsumerWidget {
                   context, _textEditingController.text.trim(), _formKey),
               textInputAction: TextInputAction.go,
               keyboardType: TextInputType.multiline,
-              minLines: 3,
+              minLines: 5,
               maxLines: 6,
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
@@ -133,12 +128,6 @@ class TokenLoginScreen extends ConsumerWidget {
               ),
             ),
           ),
-          // IconButton(
-          //   key: Key('pasteFromClipboard'),
-          //   icon: Icon(Icons.paste),
-          //   onPressed: () =>
-          //       loginManager.pasteFromClipboard(_textEditingController),
-          // ),
         ],
       ),
     );

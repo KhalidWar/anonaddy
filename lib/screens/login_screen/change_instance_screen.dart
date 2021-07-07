@@ -105,12 +105,11 @@ class ChangeInstanceScreen extends StatelessWidget {
                   ),
                 ),
                 Container(),
-                GestureDetector(
-                  child: Text(
-                    'How to self-host AnonAddy?',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  onTap: () => NicheMethod().launchURL(kAnonAddySelfHostingURL),
+                TextButton(
+                  style: TextButton.styleFrom(),
+                  child: Text('How to self-host AnonAddy?'),
+                  onPressed: () =>
+                      NicheMethod().launchURL(kAnonAddySelfHostingURL),
                 ),
                 Consumer(
                   builder: (_, watch, __) {
