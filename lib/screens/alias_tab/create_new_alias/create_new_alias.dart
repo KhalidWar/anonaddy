@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'alias_format_selection.dart';
 import 'create_alias_recipient_selection.dart';
 
 class CreateNewAlias extends ConsumerWidget {
@@ -126,7 +127,6 @@ class CreateNewAlias extends ConsumerWidget {
                         context: context,
                         title: kAliasDomain,
                         label: aliasDomain ?? kChooseAliasDomain,
-                        size: size,
                         onPress: () {
                           buildDomainSelection(
                               context,
@@ -145,15 +145,20 @@ class CreateNewAlias extends ConsumerWidget {
                         label: aliasFormat == null
                             ? kChooseAliasFormat
                             : correctAliasString(aliasFormat),
-                        size: size,
                         onPress: () {
-                          buildFormatSelection(
-                              context,
-                              data,
-                              aliasFormatIndex,
-                              aliasStateProvider,
-                              getAliasFormatList,
-                              correctAliasString);
+                          showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(kBottomSheetBorderRadius),
+                              ),
+                            ),
+                            builder: (context) {
+                              return AliasFormatSelection(
+                                aliasFormatList: getAliasFormatList(),
+                              );
+                            },
+                          );
                         },
                       ),
                       if (aliasFormat == kCustom)
@@ -190,11 +195,9 @@ class CreateNewAlias extends ConsumerWidget {
   }
 
   Widget aliasDomainFormatDropdown(
-      {BuildContext context,
-      String title,
-      String label,
-      Size size,
-      Function onPress}) {
+      {BuildContext context, String title, String label, Function onPress}) {
+    final size = MediaQuery.of(context).size;
+
     return InkWell(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
@@ -283,66 +286,6 @@ class CreateNewAlias extends ConsumerWidget {
                 child: Text('Done'),
                 onPressed: () {
                   setAliasDomain(data);
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future buildFormatSelection(
-      BuildContext context,
-      DomainOptions data,
-      int aliasFormatIndex,
-      AliasStateManager aliasStateProvider,
-      Function getAliasFormatList,
-      Function correctAliasString) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
-      ),
-      builder: (context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            BottomSheetHeader(headerLabel: 'Select Alias Format'),
-            Expanded(
-              child: CupertinoPicker(
-                itemExtent: 50,
-                diameterRatio: 10,
-                squeeze: 1,
-                selectionOverlay: Container(),
-                useMagnifier: false,
-                backgroundColor: Colors.transparent,
-                onSelectedItemChanged: (index) {
-                  aliasFormatIndex = index;
-                },
-                children: getAliasFormatList().map<Widget>((value) {
-                  return Text(
-                    correctAliasString(value),
-                    style: TextStyle(
-                      color: isDark ? Colors.white : null,
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(),
-                child: Text('Done'),
-                onPressed: () {
-                  aliasStateProvider.setAliasFormat =
-                      getAliasFormatList()[aliasFormatIndex];
                   Navigator.pop(context);
                 },
               ),
