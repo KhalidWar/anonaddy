@@ -23,9 +23,8 @@ class HostInstance {
   }
 
   Future<Instance> getHostInstance() async {
-    String savedURL;
-    if (_instanceURL == null) {
-      savedURL = await _secureStorage.read(key: _hostInstanceKey);
+    if (instance == null) {
+      final savedURL = await _secureStorage.read(key: _hostInstanceKey);
       if (savedURL == kAuthorityURL) {
         instance = Instance.AnonAddy;
         return Instance.AnonAddy;

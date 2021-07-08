@@ -165,8 +165,7 @@ class AliasDetailScreen extends ConsumerWidget {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                      child:
-                          Row(children: [Text('No default recipient set yet')]),
+                      child: Row(children: [Text(kNoDefaultRecipientSet)]),
                     )
                   else
                     ListView.builder(
@@ -283,7 +282,7 @@ class AliasDetailScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              BottomSheetHeader(headerLabel: 'Update Description'),
+              BottomSheetHeader(headerLabel: kUpdateDescription),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
@@ -307,7 +306,7 @@ class AliasDetailScreen extends ConsumerWidget {
                     SizedBox(height: size.height * 0.015),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(),
-                      child: Text('Update Description'),
+                      child: Text(kUpdateDescription),
                       onPressed: () => editDesc(),
                     ),
                     SizedBox(height: size.height * 0.015),
@@ -343,7 +342,7 @@ class AliasDetailScreen extends ConsumerWidget {
       actions: [
         PopupMenuButton(
           itemBuilder: (BuildContext context) {
-            return ['Forget Alias'].map((String choice) {
+            return [kForgetAlias].map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
                 child: Text(choice),
@@ -355,10 +354,10 @@ class AliasDetailScreen extends ConsumerWidget {
               context: context,
               builder: (context) {
                 return isIOS
-                    ? confirmationDialog.iOSAlertDialog(context,
-                        kForgetAliasConfirmation, forget, 'Forget Alias')
+                    ? confirmationDialog.iOSAlertDialog(
+                        context, kForgetAliasConfirmation, forget, kForgetAlias)
                     : confirmationDialog.androidAlertDialog(context,
-                        kForgetAliasConfirmation, forget, 'Forget Alias');
+                        kForgetAliasConfirmation, forget, kForgetAlias);
               },
             );
           },

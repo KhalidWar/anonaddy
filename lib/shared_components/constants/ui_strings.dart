@@ -5,6 +5,9 @@ const kDeleteAliasSubtitle = 'Alias will reject all emails sent to it';
 const kRestoreAliasSubtitle = 'Alias will be able to receive emails';
 const kUpdateDescriptionString =
     'Enter new description or enter empty whitespace remove current description';
+const kForgetAlias = 'Forget Alias';
+const kUpdateDescription = 'Update Description';
+const kNoDefaultRecipientSet = 'No default recipient set yet';
 
 /// Create Alias
 const kAliasDomain = 'Alias Domain';

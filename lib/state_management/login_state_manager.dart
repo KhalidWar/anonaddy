@@ -23,7 +23,7 @@ class LoginStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void login(BuildContext context, String accessToken,
+  Future<void> login(BuildContext context, String accessToken,
       GlobalKey<FormState> formKey) async {
     if (formKey.currentState.validate()) {
       isLoading = true;
@@ -46,7 +46,7 @@ class LoginStateManager extends ChangeNotifier {
     }
   }
 
-  void selfHostLogin(
+  Future<void> selfHostLogin(
       BuildContext context,
       String instanceURL,
       String accessToken,
@@ -80,7 +80,7 @@ class LoginStateManager extends ChangeNotifier {
         .whenComplete(() => Phoenix.rebirth(context));
   }
 
-  void pasteFromClipboard(TextEditingController controller) async {
+  Future<void> pasteFromClipboard(TextEditingController controller) async {
     final data = await Clipboard.getData('text/plain');
     if (data == null || data.text.isEmpty) {
       _showToast('Nothing to paste. Clipboard is empty.');
