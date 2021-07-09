@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -116,8 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildAppBar(BuildContext context, bool isOffline) {
     final showToast = NicheMethod().showToast;
-    //todo handle null event
-    // final isAccountNull = context.read(accountStreamProvider).data == null;
 
     return AppBar(
       elevation: 0,
@@ -128,15 +127,20 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: isOffline
             ? () => showToast('Can not create alias while offline')
             : () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(kBottomSheetBorderRadius)),
-                  ),
-                  builder: (context) => CreateNewAlias(),
-                );
+                final userModel = context.read(accountStreamProvider).data;
+                if (userModel == null) {
+                  showToast(kLoadingText);
+                } else {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(kBottomSheetBorderRadius)),
+                    ),
+                    builder: (context) => CreateNewAlias(),
+                  );
+                }
               },
       ),
       actions: [
