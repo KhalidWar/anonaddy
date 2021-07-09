@@ -24,9 +24,6 @@ class AliasStateManager extends ChangeNotifier {
   String _aliasFormat;
   List<RecipientDataModel> createAliasRecipients = [];
 
-  final descFieldController = TextEditingController();
-  final customFieldController = TextEditingController();
-  final customFormKey = GlobalKey<FormState>();
   final descriptionFormKey = GlobalKey<FormState>();
   final _showToast = NicheMethod().showToast;
 
@@ -69,8 +66,13 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createNewAlias(BuildContext context, String desc, String domain,
-      String format, String localPart) async {
+  Future<void> createNewAlias(
+      BuildContext context,
+      String desc,
+      String domain,
+      String format,
+      String localPart,
+      GlobalKey<FormState> customFormKey) async {
     final settings = context.read(settingsStateManagerProvider);
     final recipients = <String>[];
     createAliasRecipients.forEach((element) => recipients.add(element.id));
@@ -91,8 +93,6 @@ class AliasStateManager extends ChangeNotifier {
       }).catchError((error) {
         _showToast(error.toString());
       });
-      descFieldController.clear();
-      customFieldController.clear();
       setToggleLoading = false;
       Navigator.pop(context);
       _aliasDomain = null;

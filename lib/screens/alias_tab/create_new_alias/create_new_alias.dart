@@ -17,165 +17,195 @@ import 'alias_domain_selection.dart';
 import 'alias_format_selection.dart';
 import 'create_alias_recipient_selection.dart';
 
-class CreateNewAlias extends ConsumerWidget {
+class CreateNewAlias extends StatefulWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final domainOptionsAsync = watch(domainOptionsProvider);
-    final size = MediaQuery.of(context).size;
-    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+  _CreateNewAliasState createState() => _CreateNewAliasState();
+}
 
-    final aliasStateProvider = watch(aliasStateManagerProvider);
-    final isLoading = aliasStateProvider.isToggleLoading;
-    final descFieldController = aliasStateProvider.descFieldController;
-    final customFieldController = aliasStateProvider.customFieldController;
-    String aliasDomain = aliasStateProvider.aliasDomain;
-    String aliasFormat = aliasStateProvider.aliasFormat;
+class _CreateNewAliasState extends State<CreateNewAlias> {
+  final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+  final descFieldController = TextEditingController();
+  final customFieldController = TextEditingController();
+  final customFormKey = GlobalKey<FormState>();
+
+  bool isAliasDomainError = false;
+  bool isAliasFormatError = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
 
     final userModel = context.read(accountStreamProvider).data.value;
     final subscription = userModel.subscription;
     final createAliasText =
         'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
-    List<String> getAliasFormatList() {
-      if (aliasStateProvider.sharedDomains.contains(aliasDomain)) {
-        if (subscription == kFreeSubscription) {
-          return aliasStateProvider.freeTierWithSharedDomain;
-        } else {
-          return aliasStateProvider.paidTierWithSharedDomain;
+    return Consumer(
+      builder: (_, watch, __) {
+        final domainOptionsAsync = watch(domainOptionsProvider);
+
+        final aliasStateProvider = watch(aliasStateManagerProvider);
+        final isLoading = aliasStateProvider.isToggleLoading;
+        String aliasDomain = aliasStateProvider.aliasDomain;
+        String aliasFormat = aliasStateProvider.aliasFormat;
+
+        List<String> getAliasFormatList() {
+          if (aliasStateProvider.sharedDomains.contains(aliasDomain)) {
+            if (subscription == kFreeSubscription) {
+              return aliasStateProvider.freeTierWithSharedDomain;
+            } else {
+              return aliasStateProvider.paidTierWithSharedDomain;
+            }
+          } else {
+            if (subscription == kFreeSubscription) {
+              return aliasStateProvider.freeTierNoSharedDomain;
+            } else {
+              return aliasStateProvider.paidTierNoSharedDomain;
+            }
+          }
         }
-      } else {
-        if (subscription == kFreeSubscription) {
-          return aliasStateProvider.freeTierNoSharedDomain;
-        } else {
-          return aliasStateProvider.paidTierNoSharedDomain;
+
+        Future<void> createAlias(DomainOptions domainOptions) async {
+          final isDomainNull =
+              aliasDomain == null && domainOptions.defaultAliasDomain == null;
+          final isFormatNull =
+              aliasFormat == null && domainOptions.defaultAliasFormat == null;
+
+          if (!isDomainNull) {
+            if (!isFormatNull) {
+              await aliasStateProvider.createNewAlias(
+                  context,
+                  descFieldController.text.trim(),
+                  aliasDomain ?? domainOptions.defaultAliasDomain,
+                  aliasFormat ?? domainOptions.defaultAliasFormat,
+                  customFieldController.text.trim(),
+                  customFormKey);
+            } else {
+              setState(() {
+                isAliasFormatError = true;
+              });
+            }
+          } else {
+            setState(() {
+              isAliasDomainError = true;
+            });
+          }
         }
-      }
-    }
 
-    Future<void> createAliasButtonOnPress(DomainOptions domainOptions) async {
-      final isDomainNull =
-          aliasDomain == null && domainOptions.defaultAliasDomain == null;
-      final isFormatNull =
-          aliasFormat == null && domainOptions.defaultAliasFormat == null;
+        return domainOptionsAsync.when(
+          loading: () => LoadingIndicator(),
+          data: (domainOptions) {
+            if (aliasDomain == null)
+              aliasDomain = domainOptions.defaultAliasDomain;
+            if (aliasFormat == null)
+              aliasFormat = domainOptions.defaultAliasFormat;
 
-      if (!isDomainNull) {
-        if (!isFormatNull) {
-          await aliasStateProvider.createNewAlias(
-            context,
-            descFieldController.text.trim(),
-            aliasDomain ?? domainOptions.defaultAliasDomain,
-            aliasFormat ?? domainOptions.defaultAliasFormat,
-            customFieldController.text.trim(),
-          );
-        } else {
-          print('Alias Format cannot be null');
-        }
-      } else {
-        print('Alias Domain cannot be null');
-      }
-    }
-
-    return domainOptionsAsync.when(
-      loading: () => LoadingIndicator(),
-      data: (domainOptions) {
-        if (aliasDomain == null) aliasDomain = domainOptions.defaultAliasDomain;
-        if (aliasFormat == null) aliasFormat = domainOptions.defaultAliasFormat;
-
-        return Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                BottomSheetHeader(headerLabel: 'Create New Alias'),
-                Padding(
-                  padding:
-                      EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(createAliasText),
-                      SizedBox(height: size.height * 0.01),
-                      TextFormField(
-                        controller: descFieldController,
-                        textInputAction: TextInputAction.next,
-                        decoration: kTextFormFieldDecoration.copyWith(
-                            hintText: kDescriptionFieldHint),
-                      ),
-                      SizedBox(height: size.height * 0.01),
-                      if (aliasFormat == kCustom)
-                        Form(
-                          key: aliasStateProvider.customFormKey,
-                          child: TextFormField(
-                            controller: customFieldController,
-                            validator: (input) =>
-                                FormValidator().validateLocalPart(input),
+            return Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BottomSheetHeader(headerLabel: 'Create New Alias'),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 15, right: 15, top: 0, bottom: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(createAliasText),
+                          SizedBox(height: size.height * 0.01),
+                          TextFormField(
+                            controller: descFieldController,
                             textInputAction: TextInputAction.next,
                             decoration: kTextFormFieldDecoration.copyWith(
-                                hintText: kLocalPartFieldHint),
+                                hintText: kDescriptionFieldHint),
                           ),
-                        ),
-                      SizedBox(height: size.height * 0.01),
-                      aliasDomainFormatDropdown(
-                        context: context,
-                        title: kAliasDomain,
-                        label: aliasDomain ?? kChooseAliasDomain,
-                        child: AliasDomainSelection(
-                          aliasFormatList: getAliasFormatList(),
-                          domainOptions: domainOptions,
-                        ),
+                          SizedBox(height: size.height * 0.01),
+                          if (aliasFormat == kCustom)
+                            Form(
+                              key: customFormKey,
+                              child: TextFormField(
+                                controller: customFieldController,
+                                validator: (input) =>
+                                    FormValidator().validateLocalPart(input),
+                                textInputAction: TextInputAction.next,
+                                decoration: kTextFormFieldDecoration.copyWith(
+                                    hintText: kLocalPartFieldHint),
+                              ),
+                            ),
+                          SizedBox(height: size.height * 0.01),
+                          aliasDomainFormatDropdown(
+                            context: context,
+                            title: kAliasDomain,
+                            label: aliasDomain ?? kSelectAliasDomain,
+                            isError: isAliasDomainError,
+                            child: AliasDomainSelection(
+                              aliasFormatList: getAliasFormatList(),
+                              domainOptions: domainOptions,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          aliasDomainFormatDropdown(
+                            context: context,
+                            title: kAliasFormat,
+                            label: aliasFormat == null
+                                ? kSelectAliasFormat
+                                : aliasStateProvider
+                                    .correctAliasString(aliasFormat),
+                            isError: isAliasFormatError,
+                            child: AliasFormatSelection(
+                              aliasFormatList: getAliasFormatList(),
+                            ),
+                          ),
+                          if (aliasFormat == kCustom)
+                            Text('Note: not available on shared domains'),
+                          SizedBox(height: size.height * 0.02),
+                          recipientsDropdown(context)
+                        ],
                       ),
-                      aliasDomainFormatDropdown(
-                        context: context,
-                        title: kAliasFormat,
-                        label: aliasFormat == null
-                            ? kChooseAliasFormat
-                            : aliasStateProvider
-                                .correctAliasString(aliasFormat),
-                        child: AliasFormatSelection(
-                          aliasFormatList: getAliasFormatList(),
-                        ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(),
+                        child: isLoading ? customLoading : Text('Create Alias'),
+                        onPressed: isLoading
+                            ? () {}
+                            : () => createAlias(domainOptions),
                       ),
-                      if (aliasFormat == kCustom)
-                        Text('Note: not available on shared domains'),
-                      SizedBox(height: size.height * 0.02),
-                      recipientsDropdown(context)
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(),
-                    child: isLoading ? customLoading : Text('Create Alias'),
-                    onPressed: isLoading
-                        ? () {}
-                        : () => createAliasButtonOnPress(domainOptions),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      error: (error, stackTrade) {
-        return LottieWidget(
-          lottie: 'assets/lottie/errorCone.json',
-          label: error,
-          lottieHeight: MediaQuery.of(context).size.height * 0.2,
+              ),
+            );
+          },
+          error: (error, stackTrade) {
+            return LottieWidget(
+              lottie: 'assets/lottie/errorCone.json',
+              label: error,
+              lottieHeight: MediaQuery.of(context).size.height * 0.2,
+            );
+          },
         );
       },
     );
   }
 
   Widget aliasDomainFormatDropdown(
-      {BuildContext context, String title, String label, Widget child}) {
+      {BuildContext context,
+      String title,
+      String label,
+      bool isError,
+      Widget child}) {
     final size = MediaQuery.of(context).size;
 
     return InkWell(
-      child: Padding(
+      child: Container(
+        color: isError ? Colors.red : null,
         padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,6 +225,8 @@ class CreateNewAlias extends ConsumerWidget {
         ),
       ),
       onTap: () {
+        isAliasDomainError = false;
+        isAliasFormatError = false;
         showModalBottomSheet(
           context: context,
           shape: RoundedRectangleBorder(

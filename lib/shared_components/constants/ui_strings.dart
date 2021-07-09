@@ -12,8 +12,8 @@ const kNoDefaultRecipientSet = 'No default recipient set yet';
 /// Create Alias
 const kAliasDomain = 'Alias Domain';
 const kAliasFormat = 'Alias Format';
-const kChooseAliasDomain = 'Choose Alias Domain';
-const kChooseAliasFormat = 'Choose Alias Format';
+const kSelectAliasDomain = 'Select Alias Domain';
+const kSelectAliasFormat = 'Select Alias Format';
 const kDescriptionFieldHint = 'Description (optional)';
 const kLocalPartFieldHint = 'Enter Local Part (no space or @)';
 
