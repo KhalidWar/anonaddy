@@ -38,13 +38,13 @@ class CreateNewAlias extends ConsumerWidget {
 
     List<String> getAliasFormatList() {
       if (aliasStateProvider.sharedDomains.contains(aliasDomain)) {
-        if (subscription == 'free') {
+        if (subscription == kFreeSubscription) {
           return aliasStateProvider.freeTierWithSharedDomain;
         } else {
           return aliasStateProvider.paidTierWithSharedDomain;
         }
       } else {
-        if (subscription == 'free') {
+        if (subscription == kFreeSubscription) {
           return aliasStateProvider.freeTierNoSharedDomain;
         } else {
           return aliasStateProvider.paidTierNoSharedDomain;
