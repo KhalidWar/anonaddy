@@ -69,13 +69,13 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createNewAlias(BuildContext context, String desc, String domain,
-      String format, String localPart) {
+  Future<void> createNewAlias(BuildContext context, String desc, String domain,
+      String format, String localPart) async {
     final settings = context.read(settingsStateManagerProvider);
     final recipients = <String>[];
     createAliasRecipients.forEach((element) => recipients.add(element.id));
 
-    void createAlias() async {
+    Future<void> createAlias() async {
       setToggleLoading = true;
       await context
           .read(aliasServiceProvider)
@@ -101,10 +101,10 @@ class AliasStateManager extends ChangeNotifier {
 
     if (format == kCustom) {
       if (customFormKey.currentState.validate()) {
-        createAlias();
+        await createAlias();
       }
     } else {
-      createAlias();
+      await createAlias();
     }
   }
 

@@ -20,7 +20,7 @@ import 'create_alias_recipient_selection.dart';
 class CreateNewAlias extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final domainOptions = watch(domainOptionsProvider);
+    final domainOptionsAsync = watch(domainOptionsProvider);
     final size = MediaQuery.of(context).size;
     final customLoading = CustomLoadingIndicator().customLoadingIndicator();
 
@@ -28,9 +28,6 @@ class CreateNewAlias extends ConsumerWidget {
     final isLoading = aliasStateProvider.isToggleLoading;
     final descFieldController = aliasStateProvider.descFieldController;
     final customFieldController = aliasStateProvider.customFieldController;
-    final customFormKey = aliasStateProvider.customFormKey;
-    final correctAliasString = aliasStateProvider.correctAliasString;
-    final sharedDomains = aliasStateProvider.sharedDomains;
     String aliasDomain = aliasStateProvider.aliasDomain;
     String aliasFormat = aliasStateProvider.aliasFormat;
 
@@ -40,7 +37,7 @@ class CreateNewAlias extends ConsumerWidget {
         'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
     List<String> getAliasFormatList() {
-      if (sharedDomains.contains(aliasDomain)) {
+      if (aliasStateProvider.sharedDomains.contains(aliasDomain)) {
         if (subscription == 'free') {
           return aliasStateProvider.freeTierWithSharedDomain;
         } else {
@@ -55,19 +52,19 @@ class CreateNewAlias extends ConsumerWidget {
       }
     }
 
-    void createAliasButtonOnPress(DomainOptions data) {
+    Future<void> createAliasButtonOnPress(DomainOptions domainOptions) async {
       final isDomainNull =
-          aliasDomain == null && data.defaultAliasDomain == null;
+          aliasDomain == null && domainOptions.defaultAliasDomain == null;
       final isFormatNull =
-          aliasFormat == null && data.defaultAliasFormat == null;
+          aliasFormat == null && domainOptions.defaultAliasFormat == null;
 
       if (!isDomainNull) {
         if (!isFormatNull) {
-          aliasStateProvider.createNewAlias(
+          await aliasStateProvider.createNewAlias(
             context,
             descFieldController.text.trim(),
-            aliasDomain ?? data.defaultAliasDomain,
-            aliasFormat ?? data.defaultAliasFormat,
+            aliasDomain ?? domainOptions.defaultAliasDomain,
+            aliasFormat ?? domainOptions.defaultAliasFormat,
             customFieldController.text.trim(),
           );
         } else {
@@ -78,11 +75,11 @@ class CreateNewAlias extends ConsumerWidget {
       }
     }
 
-    return domainOptions.when(
+    return domainOptionsAsync.when(
       loading: () => LoadingIndicator(),
-      data: (data) {
-        if (aliasDomain == null) aliasDomain = data.defaultAliasDomain;
-        if (aliasFormat == null) aliasFormat = data.defaultAliasFormat;
+      data: (domainOptions) {
+        if (aliasDomain == null) aliasDomain = domainOptions.defaultAliasDomain;
+        if (aliasFormat == null) aliasFormat = domainOptions.defaultAliasFormat;
 
         return Container(
           padding:
@@ -109,7 +106,7 @@ class CreateNewAlias extends ConsumerWidget {
                       SizedBox(height: size.height * 0.01),
                       if (aliasFormat == kCustom)
                         Form(
-                          key: customFormKey,
+                          key: aliasStateProvider.customFormKey,
                           child: TextFormField(
                             controller: customFieldController,
                             validator: (input) =>
@@ -126,7 +123,7 @@ class CreateNewAlias extends ConsumerWidget {
                         label: aliasDomain ?? kChooseAliasDomain,
                         child: AliasDomainSelection(
                           aliasFormatList: getAliasFormatList(),
-                          domainOptions: data,
+                          domainOptions: domainOptions,
                         ),
                       ),
                       aliasDomainFormatDropdown(
@@ -134,7 +131,8 @@ class CreateNewAlias extends ConsumerWidget {
                         title: kAliasFormat,
                         label: aliasFormat == null
                             ? kChooseAliasFormat
-                            : correctAliasString(aliasFormat),
+                            : aliasStateProvider
+                                .correctAliasString(aliasFormat),
                         child: AliasFormatSelection(
                           aliasFormatList: getAliasFormatList(),
                         ),
@@ -154,7 +152,7 @@ class CreateNewAlias extends ConsumerWidget {
                     child: isLoading ? customLoading : Text('Create Alias'),
                     onPressed: isLoading
                         ? () {}
-                        : () => createAliasButtonOnPress(data),
+                        : () => createAliasButtonOnPress(domainOptions),
                   ),
                 ),
               ],

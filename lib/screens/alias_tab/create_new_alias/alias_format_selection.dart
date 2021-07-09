@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasFormatSelection extends ConsumerWidget {
+class AliasFormatSelection extends StatelessWidget {
   const AliasFormatSelection({this.aliasFormatList});
   final List<String> aliasFormatList;
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final aliasStateProvider = watch(aliasStateManagerProvider);
+  Widget build(BuildContext context) {
+    final aliasStateProvider = context.read(aliasStateManagerProvider);
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
