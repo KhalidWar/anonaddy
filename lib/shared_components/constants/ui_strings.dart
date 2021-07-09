@@ -1,4 +1,10 @@
-/// Alias Tab
+/// Home Screen
+const kAppBarTitle = 'AddyManager';
+const kAccountBotNavLabel = 'Account';
+const kAliasesBotNavLabel = 'Aliases';
+const kSearchBotNavLabel = 'Search';
+
+/// Aliases Tab
 const kUpdateAliasRecipientNote =
     'Note: only verified recipients can be used as default recipients.';
 const kDeleteAliasSubtitle = 'Alias will reject all emails sent to it';
@@ -10,12 +16,16 @@ const kUpdateDescription = 'Update Description';
 const kNoDefaultRecipientSet = 'No default recipient set yet';
 
 /// Create Alias
+const kCreateNewAlias = 'Create New Alias';
+const kCreateAlias = 'Create Alias';
 const kAliasDomain = 'Alias Domain';
 const kAliasFormat = 'Alias Format';
 const kSelectAliasDomain = 'Select Alias Domain';
 const kSelectAliasFormat = 'Select Alias Format';
 const kDescriptionFieldHint = 'Description (optional)';
 const kLocalPartFieldHint = 'Enter Local Part (no space or @)';
+const kCreateAliasWhileOffline = 'Can not create alias while offline';
+const kCreateAliasCustomFieldNote = 'Note: not available on shared domains';
 
 /// Recipient
 const kPublicKeyFieldHint =
@@ -28,6 +38,7 @@ const kUnverifiedRecipientNote =
 /// Search Tab
 const kSearchAliasByEmailOrDesc = 'Search for aliases by email or description';
 const kSearchFieldHint = 'Search';
+const kSearchHistory = 'Search History';
 
 /// Login Screen
 const kEnterAccessToken = 'Enter Access Token';

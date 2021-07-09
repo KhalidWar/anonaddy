@@ -96,15 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 items: [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.account_circle),
-                    label: 'Account',
+                    label: kAccountBotNavLabel,
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.alternate_email_sharp),
-                    label: 'Aliases',
+                    label: kAliasesBotNavLabel,
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.search_outlined),
-                    label: 'Search',
+                    label: kSearchBotNavLabel,
                   ),
                 ],
               ),
@@ -120,12 +120,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return AppBar(
       elevation: 0,
-      title: Text('AddyManager', style: TextStyle(color: Colors.white)),
+      title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
       centerTitle: true,
       leading: IconButton(
         icon: Icon(Icons.add_circle_outline_outlined),
         onPressed: isOffline
-            ? () => showToast('Can not create alias while offline')
+            ? () => showToast(kCreateAliasWhileOffline)
             : () {
                 final userModel = context.read(accountStreamProvider).data;
                 if (userModel == null) {

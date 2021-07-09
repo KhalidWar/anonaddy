@@ -107,7 +107,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    BottomSheetHeader(headerLabel: 'Create New Alias'),
+                    BottomSheetHeader(headerLabel: kCreateNewAlias),
                     Padding(
                       padding: EdgeInsets.only(
                           left: 15, right: 15, top: 0, bottom: 10),
@@ -160,7 +160,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                             ),
                           ),
                           if (aliasFormat == kCustom)
-                            Text('Note: not available on shared domains'),
+                            Text(kCreateAliasCustomFieldNote),
                           SizedBox(height: size.height * 0.02),
                           recipientsDropdown(context)
                         ],
@@ -172,7 +172,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                           EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(),
-                        child: isLoading ? customLoading : Text('Create Alias'),
+                        child: isLoading ? customLoading : Text(kCreateAlias),
                         onPressed: isLoading
                             ? () {}
                             : () => createAlias(domainOptions),

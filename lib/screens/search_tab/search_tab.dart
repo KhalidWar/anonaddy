@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/services/search/search_service.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +17,7 @@ class SearchTab extends StatelessWidget {
   void search(BuildContext context) {
     final aliasProvider = context.read(aliasDataStream).data;
     if (aliasProvider == null) {
-      NicheMethod().showToast('Loading...');
+      NicheMethod().showToast(kLoadingText);
     } else {
       showSearch(
         context: context,
@@ -52,7 +52,7 @@ class SearchTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Search History',
+                kSearchHistory,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextButton(
