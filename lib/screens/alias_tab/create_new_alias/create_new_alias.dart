@@ -6,7 +6,6 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/state_management/alias_state_manager.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -14,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'alias_domain_selection.dart';
 import 'alias_format_selection.dart';
 import 'create_alias_recipient_selection.dart';
 
@@ -38,9 +38,6 @@ class CreateNewAlias extends ConsumerWidget {
     final subscription = userModel.subscription;
     final createAliasText =
         'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
-
-    int aliasDomainIndex = 0;
-    int aliasFormatIndex = 0;
 
     List<String> getAliasFormatList() {
       if (sharedDomains.contains(aliasDomain)) {
@@ -127,17 +124,10 @@ class CreateNewAlias extends ConsumerWidget {
                         context: context,
                         title: kAliasDomain,
                         label: aliasDomain ?? kChooseAliasDomain,
-                        onPress: () {
-                          buildDomainSelection(
-                              context,
-                              data,
-                              aliasDomainIndex,
-                              aliasFormatIndex,
-                              aliasFormat,
-                              aliasStateProvider,
-                              sharedDomains,
-                              getAliasFormatList);
-                        },
+                        child: AliasDomainSelection(
+                          aliasFormatList: getAliasFormatList(),
+                          domainOptions: data,
+                        ),
                       ),
                       aliasDomainFormatDropdown(
                         context: context,
@@ -145,21 +135,9 @@ class CreateNewAlias extends ConsumerWidget {
                         label: aliasFormat == null
                             ? kChooseAliasFormat
                             : correctAliasString(aliasFormat),
-                        onPress: () {
-                          showModalBottomSheet(
-                            context: context,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(kBottomSheetBorderRadius),
-                              ),
-                            ),
-                            builder: (context) {
-                              return AliasFormatSelection(
-                                aliasFormatList: getAliasFormatList(),
-                              );
-                            },
-                          );
-                        },
+                        child: AliasFormatSelection(
+                          aliasFormatList: getAliasFormatList(),
+                        ),
                       ),
                       if (aliasFormat == kCustom)
                         Text('Note: not available on shared domains'),
@@ -195,7 +173,7 @@ class CreateNewAlias extends ConsumerWidget {
   }
 
   Widget aliasDomainFormatDropdown(
-      {BuildContext context, String title, String label, Function onPress}) {
+      {BuildContext context, String title, String label, Widget child}) {
     final size = MediaQuery.of(context).size;
 
     return InkWell(
@@ -218,79 +196,15 @@ class CreateNewAlias extends ConsumerWidget {
           ],
         ),
       ),
-      onTap: onPress,
-    );
-  }
-
-  Future buildDomainSelection(
-      BuildContext context,
-      DomainOptions data,
-      int aliasDomainIndex,
-      int aliasFormatIndex,
-      String aliasFormat,
-      AliasStateManager aliasStateProvider,
-      List<String> sharedDomains,
-      Function getAliasFormatList) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    void setAliasDomain(DomainOptions domainOptions) {
-      final selectedDomain = domainOptions.sharedDomainsList[aliasDomainIndex];
-      aliasStateProvider.setAliasDomain = selectedDomain;
-      if (domainOptions.defaultAliasFormat == null) {
-        aliasFormat = null;
-      } else {
-        if (sharedDomains.contains(selectedDomain)) {
-          aliasStateProvider.setAliasFormat =
-              getAliasFormatList()[aliasFormatIndex];
-        } else {
-          aliasStateProvider.setAliasFormat = domainOptions.defaultAliasFormat;
-        }
-      }
-    }
-
-    return showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
-      ),
-      builder: (context) {
-        return Column(
-          children: [
-            BottomSheetHeader(headerLabel: 'Select Alias Domain'),
-            Expanded(
-              child: CupertinoPicker(
-                itemExtent: 50,
-                diameterRatio: 10,
-                squeeze: 1,
-                selectionOverlay: Container(),
-                backgroundColor: Colors.transparent,
-                onSelectedItemChanged: (index) {
-                  aliasDomainIndex = index;
-                },
-                children: data.sharedDomainsList.map<Widget>((value) {
-                  return Text(
-                    value,
-                    style: TextStyle(
-                      color: isDark ? Colors.white : null,
-                    ),
-                  );
-                }).toList(),
-              ),
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(kBottomSheetBorderRadius),
             ),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(),
-                child: Text('Done'),
-                onPressed: () {
-                  setAliasDomain(data);
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ],
+          ),
+          builder: (context) => child,
         );
       },
     );
