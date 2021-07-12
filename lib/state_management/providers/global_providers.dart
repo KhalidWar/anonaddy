@@ -14,7 +14,10 @@ import 'class_providers.dart';
 final accountStreamProvider =
     StreamProvider.autoDispose<UserModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  while (true) {
+  final isAppInForeground =
+      ref.watch(lifecycleStateManagerProvider).isAppInForeground;
+
+  while (isAppInForeground) {
     yield* Stream.fromFuture(
         ref.read(userServiceProvider).getUserData(offlineData));
     await Future.delayed(Duration(seconds: 5));
@@ -23,7 +26,10 @@ final accountStreamProvider =
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  while (true) {
+  final isAppInForeground =
+      ref.watch(lifecycleStateManagerProvider).isAppInForeground;
+
+  while (isAppInForeground) {
     yield* Stream.fromFuture(
         ref.read(aliasServiceProvider).getAllAliasesData(offlineData));
     await Future.delayed(Duration(seconds: 1));
@@ -32,7 +38,10 @@ final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
 
 final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  while (true) {
+  final isAppInForeground =
+      ref.watch(lifecycleStateManagerProvider).isAppInForeground;
+
+  while (isAppInForeground) {
     yield* Stream.fromFuture(
         ref.read(recipientServiceProvider).getAllRecipient(offlineData));
     await Future.delayed(Duration(seconds: 5));
