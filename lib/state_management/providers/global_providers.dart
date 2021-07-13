@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
@@ -17,6 +20,11 @@ final accountStreamProvider =
   final isAppInForeground =
       ref.watch(lifecycleStateManagerProvider).isAppInForeground;
 
+  final securedData = await offlineData.readAccountOfflineData();
+  if (securedData.isNotEmpty) {
+    yield UserModel.fromJson(jsonDecode(securedData));
+  }
+
   while (isAppInForeground) {
     yield* Stream.fromFuture(
         ref.read(userServiceProvider).getUserData(offlineData));
@@ -29,6 +37,11 @@ final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
   final isAppInForeground =
       ref.watch(lifecycleStateManagerProvider).isAppInForeground;
 
+  final securedData = await offlineData.readAliasOfflineData();
+  if (securedData.isNotEmpty) {
+    yield AliasModel.fromJson(jsonDecode(securedData));
+  }
+
   while (isAppInForeground) {
     yield* Stream.fromFuture(
         ref.read(aliasServiceProvider).getAllAliasesData(offlineData));
@@ -40,6 +53,11 @@ final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
   final isAppInForeground =
       ref.watch(lifecycleStateManagerProvider).isAppInForeground;
+
+  final securedData = await offlineData.readRecipientsOfflineData();
+  if (securedData.isNotEmpty) {
+    yield RecipientModel.fromJson(jsonDecode(securedData));
+  }
 
   while (isAppInForeground) {
     yield* Stream.fromFuture(
