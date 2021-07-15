@@ -1,9 +1,7 @@
-import 'package:anonaddy/screens/login_screen/change_instance_screen.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/login_state_manager.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -53,12 +51,12 @@ class TokenLoginScreen extends ConsumerWidget {
                         child: Text(kWhatsAccessToken),
                         onPressed: () => buildAccessTokenInfoSheet(context),
                       ),
-                      TextButton(
-                        style: TextButton.styleFrom(),
-                        child: Text('Self Hosted? Change Instance'),
-                        onPressed: () => Navigator.push(
-                            context, CustomPageRoute(ChangeInstanceScreen())),
-                      ),
+                      // TextButton(
+                      //   style: TextButton.styleFrom(),
+                      //   child: Text('Self Hosted? Change Instance'),
+                      //   onPressed: () => Navigator.push(
+                      //       context, CustomPageRoute(ChangeInstanceScreen())),
+                      // ),
                     ],
                   ),
                   buildFooter(context, isDark, loginManager),
