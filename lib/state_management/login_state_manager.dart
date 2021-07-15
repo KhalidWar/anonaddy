@@ -23,7 +23,7 @@ class LoginStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void login(BuildContext context, String accessToken,
+  Future<void> login(BuildContext context, String accessToken,
       GlobalKey<FormState> formKey) async {
     if (formKey.currentState.validate()) {
       isLoading = true;
@@ -39,7 +39,35 @@ class LoginStateManager extends ChangeNotifier {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => HomeScreen()));
         }
-      }).catchError((error, stackTrade) {
+      }).catchError((error, stackTrace) {
+        isLoading = false;
+        _showToast(error.toString());
+      });
+    }
+  }
+
+  Future<void> selfHostLogin(
+      BuildContext context,
+      String instanceURL,
+      String accessToken,
+      GlobalKey<FormState> urlFormKey,
+      GlobalKey<FormState> tokenFormKey) async {
+    if (urlFormKey.currentState.validate() &&
+        tokenFormKey.currentState.validate()) {
+      isLoading = true;
+      await context
+          .read(accessTokenServiceProvider)
+          .validateAccessToken(accessToken, instanceURL: instanceURL)
+          .then((value) async {
+        if (value == 200) {
+          await context
+              .read(accessTokenServiceProvider)
+              .saveAccessToken(accessToken);
+          isLoading = false;
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        }
+      }).catchError((error, stackTrace) {
         isLoading = false;
         _showToast(error.toString());
       });
@@ -52,7 +80,7 @@ class LoginStateManager extends ChangeNotifier {
         .whenComplete(() => Phoenix.rebirth(context));
   }
 
-  void pasteFromClipboard(TextEditingController controller) async {
+  Future<void> pasteFromClipboard(TextEditingController controller) async {
     final data = await Clipboard.getData('text/plain');
     if (data == null || data.text.isEmpty) {
       _showToast('Nothing to paste. Clipboard is empty.');

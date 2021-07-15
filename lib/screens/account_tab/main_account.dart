@@ -93,7 +93,7 @@ class MainAccount extends StatelessWidget {
           subtitle: 'Usernames',
           leadingIconData: Icons.account_circle_outlined,
           trailingIconData: Icons.add_circle_outline_outlined,
-          onTap: subscription == 'free'
+          onTap: subscription == kFreeSubscription
               ? () => showToast(kOnlyAvailableToPaid)
               : userModel.usernameCount == userModel.usernameLimit
                   ? () => showToast(kReachedUsernameLimit)

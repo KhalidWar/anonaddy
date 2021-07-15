@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -95,15 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 items: [
                   BottomNavigationBarItem(
                     icon: Icon(Icons.account_circle),
-                    label: 'Account',
+                    label: kAccountBotNavLabel,
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.alternate_email_sharp),
-                    label: 'Aliases',
+                    label: kAliasesBotNavLabel,
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.search_outlined),
-                    label: 'Search',
+                    label: kSearchBotNavLabel,
                   ),
                 ],
               ),
@@ -116,27 +117,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildAppBar(BuildContext context, bool isOffline) {
     final showToast = NicheMethod().showToast;
-    //todo handle null event
-    // final isAccountNull = context.read(accountStreamProvider).data == null;
 
     return AppBar(
       elevation: 0,
-      title: Text('AddyManager', style: TextStyle(color: Colors.white)),
+      title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
       centerTitle: true,
       leading: IconButton(
         icon: Icon(Icons.add_circle_outline_outlined),
         onPressed: isOffline
-            ? () => showToast('Can not create alias while offline')
+            ? () => showToast(kCreateAliasWhileOffline)
             : () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(kBottomSheetBorderRadius)),
-                  ),
-                  builder: (context) => CreateNewAlias(),
-                );
+                final userModel = context.read(accountStreamProvider).data;
+                if (userModel == null) {
+                  showToast(kLoadingText);
+                } else {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(kBottomSheetBorderRadius)),
+                    ),
+                    builder: (context) => CreateNewAlias(),
+                  );
+                }
               },
       ),
       actions: [
@@ -179,15 +183,19 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Divider(height: size.height * 0.05),
               //todo automate changelog fetching
-              Text('1. Choose default recipient when creating aliases'),
+              Text(
+                  '1. Improved background services which should eliminate "too many requests" error'),
               SizedBox(height: size.height * 0.01),
-              Text('2. Added Credits to About App'),
+              Text(
+                  '2. Improved initial loading times by loading data from disk'),
               SizedBox(height: size.height * 0.01),
-              Text('3. Several UI improvements'),
+              Text('3. Fixed Create New Alias bug on app start'),
               SizedBox(height: size.height * 0.01),
-              Text('4. Fixed some bugs'),
+              Text('4. Added error indicator to Alias Domain and Alias Format'),
               SizedBox(height: size.height * 0.01),
-              Text('5. Several under the hood improvements'),
+              Text('5. Several UI improvements'),
+              SizedBox(height: size.height * 0.01),
+              Text('6. Several under the hood improvements'),
               SizedBox(height: size.height * 0.01),
               Spacer(),
               Center(

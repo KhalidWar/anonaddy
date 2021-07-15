@@ -33,7 +33,7 @@ const kReachedUsernameLimit = 'You have reached your additional username limit';
 const kUpdateUsernameDefaultRecipient =
     'Select the default recipient for this username. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
 
-/// AnonAddy Code Strings
+/// Alias Format
 const kUUID = 'uuid';
 const kRandomChars = 'random_characters';
 const kCustom = 'custom';
@@ -44,3 +44,8 @@ const kAnonAddyMe = 'anonaddy.me';
 const kAddyMail = 'addymail.com';
 const k4wrd = '4wrd.cc';
 const kMailerMe = 'mailer.me';
+
+/// AnonAddy Subscription Levels
+const kFreeSubscription = 'free';
+const kLiteSubscription = 'lite';
+const kProSubscription = 'pro';

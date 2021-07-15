@@ -1,4 +1,5 @@
 import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
@@ -21,7 +22,7 @@ class AdditionalUsername extends ConsumerWidget {
         label: kLoadAccountDataFailed,
       );
     }
-    if (account.value.subscription == 'free') {
+    if (account.value.subscription == kFreeSubscription) {
       return Center(
         child: Text(
           kOnlyAvailableToPaid,

@@ -30,7 +30,7 @@ class OfflineData {
 
   Future<String> readAliasOfflineData() async {
     if (_aliasData.isEmpty) {
-      _aliasData = await _secureStorage.read(key: _aliasDataKey);
+      _aliasData = await _secureStorage.read(key: _aliasDataKey) ?? '';
       return _aliasData;
     } else {
       return _aliasData;
@@ -46,7 +46,7 @@ class OfflineData {
 
   Future<String> readAccountOfflineData() async {
     if (_accountData.isEmpty) {
-      _accountData = await _secureStorage.read(key: _accountDataKey);
+      _accountData = await _secureStorage.read(key: _accountDataKey) ?? '';
       return _accountData;
     } else {
       return _accountData;
@@ -78,7 +78,7 @@ class OfflineData {
 
   Future<String> readRecipientsOfflineData() async {
     if (_recipientData.isEmpty) {
-      _recipientData = await _secureStorage.read(key: _recipientsDataKey);
+      _recipientData = await _secureStorage.read(key: _recipientsDataKey) ?? '';
       return _recipientData;
     } else {
       return _recipientData;

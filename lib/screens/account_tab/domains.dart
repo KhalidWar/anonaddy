@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -18,7 +19,7 @@ class Domains extends ConsumerWidget {
     } else {
       return Center(
         child: Text(
-          account.value.subscription == 'free'
+          account.value.subscription == kFreeSubscription
               ? kOnlyAvailableToPaid
               : kComingSoon,
           style: Theme.of(context).textTheme.bodyText1,
