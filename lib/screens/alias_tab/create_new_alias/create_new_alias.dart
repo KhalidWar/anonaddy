@@ -93,7 +93,10 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
         }
 
         return domainOptionsAsync.when(
-          loading: () => LoadingIndicator(),
+          loading: () => Container(
+            height: size.height * 0.5,
+            child: LoadingIndicator(),
+          ),
           data: (domainOptions) {
             if (aliasDomain == null)
               aliasDomain = domainOptions.defaultAliasDomain;
