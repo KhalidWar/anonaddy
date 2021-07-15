@@ -193,9 +193,9 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: size.height * 0.01),
               Text('4. Added error indicator to Alias Domain and Alias Format'),
               SizedBox(height: size.height * 0.01),
-              Text('4. Several UI improvements'),
+              Text('5. Several UI improvements'),
               SizedBox(height: size.height * 0.01),
-              Text('5. Several under the hood improvements'),
+              Text('6. Several under the hood improvements'),
               SizedBox(height: size.height * 0.01),
               Spacer(),
               Center(
