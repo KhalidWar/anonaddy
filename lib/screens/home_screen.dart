@@ -183,13 +183,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Divider(height: size.height * 0.05),
               //todo automate changelog fetching
-              Text('1. Choose default recipient when creating aliases'),
+              Text(
+                  '1. Improved background services which should eliminate "too many requests" error'),
               SizedBox(height: size.height * 0.01),
-              Text('2. Added Credits to About App'),
+              Text(
+                  '2. Improved initial loading times by loading data from disk'),
               SizedBox(height: size.height * 0.01),
-              Text('3. Several UI improvements'),
+              Text('3. Fixed Create New Alias bug on app start'),
               SizedBox(height: size.height * 0.01),
-              Text('4. Fixed some bugs'),
+              Text('4. Added error indicator to Alias Domain and Alias Format'),
+              SizedBox(height: size.height * 0.01),
+              Text('4. Several UI improvements'),
               SizedBox(height: size.height * 0.01),
               Text('5. Several under the hood improvements'),
               SizedBox(height: size.height * 0.01),
