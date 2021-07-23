@@ -32,8 +32,8 @@ void main() async {
     await secureStorage.write(key: kHiveSecureKey, value: base64UrlEncode(key));
   }
 
-  final encryptionKey =
-      base64Url.decode(await secureStorage.read(key: kHiveSecureKey));
+  final data = await secureStorage.read(key: kHiveSecureKey);
+  final encryptionKey = base64Url.decode(data!);
   await Hive.openBox<AliasDataModel>(
     kSearchHistoryBox,
     encryptionCipher: HiveAesCipher(encryptionKey),

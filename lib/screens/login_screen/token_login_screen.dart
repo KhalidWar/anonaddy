@@ -76,7 +76,7 @@ class TokenLoginScreen extends ConsumerWidget {
           'AddyManager',
           style: Theme.of(context)
               .textTheme
-              .headline5
+              .headline5!
               .copyWith(fontWeight: FontWeight.bold),
         ),
         SizedBox(height: size.height * 0.01),
@@ -107,7 +107,8 @@ class TokenLoginScreen extends ConsumerWidget {
             key: _formKey,
             child: TextFormField(
               key: Key('loginTextField'),
-              validator: (input) => FormValidator().accessTokenValidator(input),
+              validator: (input) =>
+                  FormValidator().accessTokenValidator(input!),
               controller: _textEditingController,
               onFieldSubmitted: (input) => loginManager.login(
                   context, _textEditingController.text.trim(), _formKey),
@@ -217,7 +218,7 @@ class TokenLoginScreen extends ConsumerWidget {
                 'Login',
                 style: Theme.of(context)
                     .textTheme
-                    .headline5
+                    .headline5!
                     .copyWith(color: Colors.black),
               ),
         onPressed: () => loginManager.login(

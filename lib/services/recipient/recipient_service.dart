@@ -68,7 +68,7 @@ class RecipientService {
     }
   }
 
-  Future disableEncryption(String recipientID) async {
+  Future disableEncryption(String? recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(

@@ -2,7 +2,8 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 
 class AliasCreatedAtWidget extends StatelessWidget {
-  const AliasCreatedAtWidget({Key key, this.label, this.dateTime})
+  const AliasCreatedAtWidget(
+      {Key? key, required this.label, required this.dateTime})
       : super(key: key);
 
   final String label;
@@ -16,7 +17,9 @@ class AliasCreatedAtWidget extends StatelessWidget {
         children: [
           Text(label),
           SizedBox(width: 5),
-          Text('${NicheMethod().fixDateTime(dateTime)}'),
+          Text(
+            NicheMethod().fixDateTime(dateTime).toString(),
+          ),
         ],
       ),
     );

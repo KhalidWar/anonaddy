@@ -25,8 +25,8 @@ class _AliasDefaultRecipientScreenState
   final _defaultRecipients = <RecipientDataModel>[];
   final _selectedRecipientsID = <String>[];
 
-  double initialChildSize;
-  double maxChildSize;
+  late double initialChildSize;
+  late double maxChildSize;
 
   void _toggleRecipient(RecipientDataModel verifiedRecipient) {
     if (_defaultRecipients.contains(verifiedRecipient)) {
@@ -50,8 +50,8 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final allRecipients = context.read(recipientsProvider).data.value;
-    for (RecipientDataModel recipient in allRecipients.recipientDataList) {
+    final allRecipients = context.read(recipientsProvider).data!.value;
+    for (RecipientDataModel recipient in allRecipients.recipientDataList!) {
       if (recipient.emailVerifiedAt != null) {
         _verifiedRecipients.add(recipient);
       }
@@ -61,7 +61,7 @@ class _AliasDefaultRecipientScreenState
   void _setDefaultRecipients() {
     final aliasDefaultRecipients = widget.aliasDataModel.recipients;
     for (RecipientDataModel verifiedRecipient in _verifiedRecipients) {
-      for (RecipientDataModel recipient in aliasDefaultRecipients) {
+      for (RecipientDataModel recipient in aliasDefaultRecipients!) {
         if (recipient.email == verifiedRecipient.email) {
           _defaultRecipients.add(recipient);
           _selectedRecipientsID.add(recipient.id);
@@ -152,11 +152,11 @@ class _AliasDefaultRecipientScreenState
                         selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
                         title: Text(
-                          verifiedRecipient.email,
+                          verifiedRecipient.email!,
                           style: TextStyle(
                             color: _isDefaultRecipient(verifiedRecipient)
                                 ? Colors.black
-                                : Theme.of(context).textTheme.bodyText1.color,
+                                : Theme.of(context).textTheme.bodyText1!.color,
                           ),
                         ),
                         onTap: () {

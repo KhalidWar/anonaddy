@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class AliasTabPieChart extends StatelessWidget {
   const AliasTabPieChart(
-      {Key key,
-      this.emailsForwarded,
-      this.emailsBlocked,
-      this.emailsReplied,
-      this.emailsSent})
+      {Key? key,
+      required this.emailsForwarded,
+      required this.emailsBlocked,
+      required this.emailsReplied,
+      required this.emailsSent})
       : super(key: key);
 
   final int emailsForwarded, emailsBlocked, emailsReplied, emailsSent;

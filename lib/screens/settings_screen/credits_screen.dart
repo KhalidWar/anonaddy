@@ -42,11 +42,11 @@ class CreditsScreen extends StatelessWidget {
   }
 
   Widget buildTile(
-      {BuildContext context,
-      String lottieFile,
-      String title,
-      String creator,
-      String lottieURL}) {
+      {required BuildContext context,
+      required String lottieFile,
+      required String title,
+      required String creator,
+      required lottieURL}) {
     final size = MediaQuery.of(context).size;
 
     return InkWell(

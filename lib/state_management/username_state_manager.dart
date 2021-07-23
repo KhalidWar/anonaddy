@@ -12,19 +12,19 @@ class UsernameStateManager extends ChangeNotifier {
     updateRecipientLoading = false;
   }
 
-  UsernameDataModel usernameModel;
+  late UsernameDataModel usernameModel;
 
-  bool _activeSwitchLoading;
-  bool _catchAllSwitchLoading;
-  bool _updateRecipientLoading;
+  late bool _activeSwitchLoading;
+  late bool _catchAllSwitchLoading;
+  late bool _updateRecipientLoading;
 
   final createUsernameFormKey = GlobalKey<FormState>();
   final editDescriptionFormKey = GlobalKey<FormState>();
   final _showToast = NicheMethod().showToast;
 
-  get activeSwitchLoading => _activeSwitchLoading;
-  get catchAllSwitchLoading => _catchAllSwitchLoading;
-  get updateRecipientLoading => _updateRecipientLoading;
+  bool get activeSwitchLoading => _activeSwitchLoading;
+  bool get catchAllSwitchLoading => _catchAllSwitchLoading;
+  bool get updateRecipientLoading => _updateRecipientLoading;
 
   set activeSwitchLoading(bool input) {
     _activeSwitchLoading = input;
@@ -45,7 +45,7 @@ class UsernameStateManager extends ChangeNotifier {
       BuildContext context, String usernameID) async {
     final usernameProvider = context.read(usernameServiceProvider);
     activeSwitchLoading = true;
-    if (usernameModel.active) {
+    if (usernameModel.active!) {
       await usernameProvider.deactivateUsername(usernameID).then((value) {
         _showToast('Username Deactivated Successfully!');
         usernameModel.active = false;
@@ -68,7 +68,7 @@ class UsernameStateManager extends ChangeNotifier {
       BuildContext context, String usernameID) async {
     final usernameProvider = context.read(usernameServiceProvider);
     catchAllSwitchLoading = true;
-    if (usernameModel.catchAll) {
+    if (usernameModel.catchAll!) {
       await usernameProvider.deactivateCatchAll(usernameID).then((value) {
         _showToast('Catch All Deactivated Successfully!');
         usernameModel.catchAll = false;
@@ -88,7 +88,7 @@ class UsernameStateManager extends ChangeNotifier {
   }
 
   Future<void> createNewUsername(BuildContext context, String username) async {
-    if (createUsernameFormKey.currentState.validate()) {
+    if (createUsernameFormKey.currentState!.validate()) {
       await context
           .read(usernameServiceProvider)
           .createNewUsername(username)
@@ -103,7 +103,7 @@ class UsernameStateManager extends ChangeNotifier {
   }
 
   Future editDescription(BuildContext context, usernameID, description) async {
-    if (editDescriptionFormKey.currentState.validate()) {
+    if (editDescriptionFormKey.currentState!.validate()) {
       await context
           .read(usernameServiceProvider)
           .editUsernameDescription(usernameID, description)

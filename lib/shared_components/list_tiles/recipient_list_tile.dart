@@ -7,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../custom_page_route.dart';
 
 class RecipientListTile extends StatelessWidget {
-  const RecipientListTile({Key key, this.recipientDataModel}) : super(key: key);
+  const RecipientListTile({Key? key, required this.recipientDataModel})
+      : super(key: key);
 
   final RecipientDataModel recipientDataModel;
 
@@ -32,7 +33,7 @@ class RecipientListTile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(recipientDataModel.email),
+                Text(recipientDataModel.email!),
                 SizedBox(height: 2),
                 recipientDataModel.emailVerifiedAt == null
                     ? Text(

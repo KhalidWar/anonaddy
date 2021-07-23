@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BottomSheetHeader extends StatelessWidget {
-  const BottomSheetHeader({Key key, this.headerLabel}) : super(key: key);
+  const BottomSheetHeader({Key? key, required this.headerLabel})
+      : super(key: key);
   final String headerLabel;
 
   @override

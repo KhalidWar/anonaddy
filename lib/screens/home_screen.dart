@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildAppBar(BuildContext context, bool isOffline) {
+  AppBar buildAppBar(BuildContext context, bool isOffline) {
     final showToast = NicheMethod().showToast;
 
     return AppBar(

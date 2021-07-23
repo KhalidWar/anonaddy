@@ -39,7 +39,7 @@ class _CreateAliasRecipientSelectionState
 
   void _setDefaultRecipients() {
     final allRecipients =
-        context.read(recipientsProvider).data.value.recipientDataList;
+        context.read(recipientsProvider).data!.value.recipientDataList!;
     for (RecipientDataModel recipient in allRecipients) {
       if (recipient.emailVerifiedAt != null) {
         verifiedRecipients.add(recipient);
@@ -106,11 +106,11 @@ class _CreateAliasRecipientSelectionState
                         selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
                         title: Text(
-                          verifiedRecipient.email,
+                          verifiedRecipient.email!,
                           style: TextStyle(
                             color: _isRecipientSelected(verifiedRecipient)
                                 ? Colors.black
-                                : Theme.of(context).textTheme.bodyText1.color,
+                                : Theme.of(context).textTheme.bodyText1!.color,
                           ),
                         ),
                         onTap: () => _toggleRecipient(verifiedRecipient),

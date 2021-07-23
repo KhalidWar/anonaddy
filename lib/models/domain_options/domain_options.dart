@@ -1,13 +1,13 @@
 class DomainOptions {
   const DomainOptions({
-    this.sharedDomainsList,
+    required this.sharedDomainsList,
     this.defaultAliasDomain,
     this.defaultAliasFormat,
   });
 
   final List<String> sharedDomainsList;
-  final String defaultAliasDomain;
-  final String defaultAliasFormat;
+  final String? defaultAliasDomain;
+  final String? defaultAliasFormat;
 
   factory DomainOptions.fromJson(Map<String, dynamic> json) {
     return DomainOptions(

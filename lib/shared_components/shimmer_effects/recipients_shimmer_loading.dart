@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class RecipientsShimmerLoading extends StatelessWidget {
-  const RecipientsShimmerLoading({Key key}) : super(key: key);
+  const RecipientsShimmerLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,8 +10,8 @@ class RecipientsShimmerLoading extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Shimmer.fromColors(
-      baseColor: isDark ? Colors.grey : Colors.grey[400],
-      highlightColor: Colors.grey[100],
+      baseColor: isDark ? Colors.grey : Colors.grey[400]!,
+      highlightColor: Colors.grey[100]!,
       enabled: true,
       child: ListView.builder(
         padding: EdgeInsets.all(0),

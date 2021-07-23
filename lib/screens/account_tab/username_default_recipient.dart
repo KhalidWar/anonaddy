@@ -23,16 +23,16 @@ class UsernameDefaultRecipientScreen extends StatefulWidget {
 class _AliasDefaultRecipientScreenState
     extends State<UsernameDefaultRecipientScreen> {
   final _verifiedRecipients = <RecipientDataModel>[];
-  RecipientDataModel selectedRecipient;
+  RecipientDataModel? selectedRecipient;
 
-  double initialChildSize;
-  double maxChildSize;
+  late double initialChildSize;
+  late double maxChildSize;
 
   void _toggleRecipient(RecipientDataModel verifiedRecipient) {
     if (selectedRecipient == null) {
       selectedRecipient = verifiedRecipient;
     } else {
-      if (verifiedRecipient.email == selectedRecipient.email) {
+      if (verifiedRecipient.email == selectedRecipient!.email) {
         selectedRecipient = null;
       } else {
         selectedRecipient = verifiedRecipient;
@@ -44,7 +44,7 @@ class _AliasDefaultRecipientScreenState
     if (selectedRecipient == null) {
       return false;
     } else {
-      if (verifiedRecipient.email == selectedRecipient.email) {
+      if (verifiedRecipient.email == selectedRecipient!.email) {
         return true;
       }
       return false;
@@ -52,8 +52,8 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final allRecipients = context.read(recipientsProvider).data.value;
-    for (RecipientDataModel recipient in allRecipients.recipientDataList) {
+    final allRecipients = context.read(recipientsProvider).data!.value;
+    for (RecipientDataModel recipient in allRecipients.recipientDataList!) {
       if (recipient.emailVerifiedAt != null) {
         _verifiedRecipients.add(recipient);
       }
@@ -156,11 +156,11 @@ class _AliasDefaultRecipientScreenState
                         selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
                         title: Text(
-                          verifiedRecipient.email,
+                          verifiedRecipient.email!,
                           style: TextStyle(
                             color: _isDefaultRecipient(verifiedRecipient)
                                 ? Colors.black
-                                : Theme.of(context).textTheme.bodyText1.color,
+                                : Theme.of(context).textTheme.bodyText1!.color,
                           ),
                         ),
                         onTap: () {
@@ -197,7 +197,7 @@ class _AliasDefaultRecipientScreenState
                     .updateDefaultRecipient(
                       context,
                       widget.username.id,
-                      selectedRecipient == null ? '' : selectedRecipient.id,
+                      selectedRecipient == null ? '' : selectedRecipient!.id,
                     ),
               ),
             ),

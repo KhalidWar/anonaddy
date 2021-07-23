@@ -8,38 +8,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RecipientStateManager extends ChangeNotifier {
   RecipientStateManager() {
-    isLoading = false;
+    _isLoading = false;
   }
 
-  RecipientDataModel recipientDataModel;
-  bool _isLoading;
+  RecipientDataModel? recipientDataModel;
+  late bool _isLoading;
 
   final _showToast = NicheMethod().showToast;
   final textEditController = TextEditingController();
   final recipientFormKey = GlobalKey<FormState>();
   final pgpKeyFormKey = GlobalKey<FormState>();
 
-  get isLoading => _isLoading;
+  bool get isLoading => _isLoading;
 
   set isLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
 
-  void setFingerprint(String input) {
-    recipientDataModel.fingerprint = input;
+  void setFingerprint(String? input) {
+    recipientDataModel!.fingerprint = input;
     notifyListeners();
   }
 
   Future<void> toggleEncryption(
       BuildContext context, String recipientID) async {
     isLoading = true;
-    if (recipientDataModel.shouldEncrypt) {
+    if (recipientDataModel!.shouldEncrypt!) {
       await context
           .read(recipientServiceProvider)
           .disableEncryption(recipientID)
           .then((value) {
-        recipientDataModel.shouldEncrypt = false;
+        recipientDataModel!.shouldEncrypt = false;
         _showToast(kEncryptionDisabled);
       }).catchError((error) {
         _showToast(error.toString());
@@ -49,7 +49,7 @@ class RecipientStateManager extends ChangeNotifier {
           .read(recipientServiceProvider)
           .enableEncryption(recipientID)
           .then((value) {
-        recipientDataModel.shouldEncrypt = value.shouldEncrypt;
+        recipientDataModel!.shouldEncrypt = value.shouldEncrypt;
         _showToast(kEncryptionEnabled);
       }).catchError((error) {
         _showToast(error.toString());
@@ -60,14 +60,14 @@ class RecipientStateManager extends ChangeNotifier {
 
   Future<void> addPublicGPGKey(
       BuildContext context, String recipientID, String keyData) async {
-    if (pgpKeyFormKey.currentState.validate()) {
+    if (pgpKeyFormKey.currentState!.validate()) {
       await context
           .read(recipientServiceProvider)
           .addPublicGPGKey(recipientID, keyData)
           .then((value) {
         _showToast(kAddGPGKeySuccess);
         setFingerprint(value.fingerprint);
-        recipientDataModel.shouldEncrypt = value.shouldEncrypt;
+        recipientDataModel!.shouldEncrypt = value.shouldEncrypt;
         Navigator.pop(context);
       }).catchError((error) {
         _showToast(error.toString());
@@ -83,7 +83,7 @@ class RecipientStateManager extends ChangeNotifier {
         .then((value) {
       _showToast(kDeleteGPGKeySuccess);
       setFingerprint(null);
-      recipientDataModel.shouldEncrypt = false;
+      recipientDataModel!.shouldEncrypt = false;
     }).catchError((error) {
       _showToast(error.toString());
     });
@@ -103,7 +103,7 @@ class RecipientStateManager extends ChangeNotifier {
   }
 
   Future<void> addRecipient(BuildContext context, String email) async {
-    if (recipientFormKey.currentState.validate()) {
+    if (recipientFormKey.currentState!.validate()) {
       isLoading = true;
       await context
           .read(recipientServiceProvider)

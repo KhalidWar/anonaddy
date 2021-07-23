@@ -16,9 +16,9 @@ class SearchService extends SearchDelegate {
   void _searchAliases(List<AliasDataModel> resultAliasList) {
     searchAliasList.forEach((element) {
       final filterByEmail =
-          element.email.toLowerCase().contains(query.toLowerCase());
+          element.email!.toLowerCase().contains(query.toLowerCase());
       final filterByDescription =
-          element.emailDescription.toLowerCase().contains(query.toLowerCase());
+          element.emailDescription!.toLowerCase().contains(query.toLowerCase());
 
       if (filterByEmail || filterByDescription) {
         resultAliasList.add(element);

@@ -6,9 +6,9 @@ import 'package:http/http.dart' as http;
 class AccessTokenService {
   final _secureStorage = FlutterSecureStorage();
   final _accessTokenKey = 'accessToken';
-  String _accessTokenValue;
+  String? _accessTokenValue;
 
-  Future validateAccessToken(String accessToken, {String instanceURL}) async {
+  Future validateAccessToken(String accessToken, {String? instanceURL}) async {
     try {
       final response = await http.get(
         Uri.https(instanceURL ?? kAuthorityURL,
@@ -34,7 +34,7 @@ class AccessTokenService {
     await _secureStorage.write(key: _accessTokenKey, value: value);
   }
 
-  Future<String> getAccessToken() async {
+  Future<String?> getAccessToken() async {
     if (_accessTokenValue == null) {
       _accessTokenValue = await _secureStorage.read(key: _accessTokenKey);
       return _accessTokenValue;

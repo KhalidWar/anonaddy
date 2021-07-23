@@ -22,6 +22,7 @@ class AdditionalUsername extends ConsumerWidget {
         label: kLoadAccountDataFailed,
       );
     }
+
     if (account.value.subscription == kFreeSubscription) {
       return Center(
         child: Text(
@@ -37,14 +38,14 @@ class AdditionalUsername extends ConsumerWidget {
         loading: () => RecipientsShimmerLoading(),
         data: (usernameData) {
           final usernameList = usernameData.usernameDataList;
-          if (usernameList.isEmpty)
+          if (usernameList.isEmpty) {
             return Center(
               child: Text(
                 'No additional usernames found',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             );
-          else
+          } else {
             return ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(vertical: 0),
@@ -88,12 +89,13 @@ class AdditionalUsername extends ConsumerWidget {
                 );
               },
             );
+          }
         },
         error: (error, stackTrace) {
           return LottieWidget(
             lottie: 'assets/lottie/errorCone.json',
             lottieHeight: MediaQuery.of(context).size.height * 0.1,
-            label: '$error',
+            label: error.toString(),
           );
         },
       );

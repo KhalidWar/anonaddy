@@ -3,7 +3,7 @@ import 'alias_data_model.dart';
 class AliasModel {
   const AliasModel({this.aliasDataList});
 
-  final List<AliasDataModel> aliasDataList;
+  final List<AliasDataModel>? aliasDataList;
 
   factory AliasModel.fromJson(Map<String, dynamic> json) {
     List list = json['data'];

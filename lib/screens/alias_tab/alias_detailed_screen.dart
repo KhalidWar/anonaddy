@@ -70,7 +70,7 @@ class AliasDetailScreen extends ConsumerWidget {
               title: aliasDataModel.email,
               subtitle: 'Email',
               trailingIconData: Icons.copy,
-              trailingIconOnPress: () => copyOnTap(aliasDataModel.email),
+              trailingIconOnPress: () => copyOnTap(aliasDataModel.email!),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.flaky_outlined,
@@ -150,7 +150,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Default Recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                          'Default Recipient${aliasDataModel.recipients!.length >= 2 ? 's' : ''}',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         IconButton(
@@ -161,7 +161,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  if (aliasDataModel.recipients.isEmpty)
+                  if (aliasDataModel.recipients!.isEmpty)
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -171,9 +171,9 @@ class AliasDetailScreen extends ConsumerWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: aliasDataModel.recipients.length,
+                      itemCount: aliasDataModel.recipients!.length,
                       itemBuilder: (context, index) {
-                        final recipients = aliasDataModel.recipients;
+                        final recipients = aliasDataModel.recipients!;
                         return RecipientListTile(
                           recipientDataModel: recipients[index],
                         );
@@ -187,16 +187,16 @@ class AliasDetailScreen extends ConsumerWidget {
               children: [
                 AliasCreatedAtWidget(
                   label: 'Created:',
-                  dateTime: aliasDataModel.createdAt,
+                  dateTime: aliasDataModel.createdAt!,
                 ),
                 aliasDataModel.deletedAt == null
                     ? AliasCreatedAtWidget(
                         label: 'Updated:',
-                        dateTime: aliasDataModel.updatedAt,
+                        dateTime: aliasDataModel.updatedAt!,
                       )
                     : AliasCreatedAtWidget(
                         label: 'Deleted:',
-                        dateTime: aliasDataModel.deletedAt,
+                        dateTime: aliasDataModel.deletedAt!,
                       ),
               ],
             ),
@@ -227,7 +227,7 @@ class AliasDetailScreen extends ConsumerWidget {
     deleteOrRestore() {
       deleteOrRestoreAlias(
         context,
-        aliasDataModel.deletedAt,
+        isDeleted,
         aliasDataModel.aliasID,
       );
     }
@@ -296,7 +296,7 @@ class AliasDetailScreen extends ConsumerWidget {
                         autofocus: true,
                         controller: _textEditingController,
                         validator: (input) =>
-                            FormValidator().validateDescriptionField(input),
+                            FormValidator().validateDescriptionField(input!),
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: '${aliasDataModel.emailDescription}',

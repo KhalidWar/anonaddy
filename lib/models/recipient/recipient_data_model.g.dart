@@ -18,14 +18,14 @@ class RecipientDataModelAdapter extends TypeAdapter<RecipientDataModel> {
     };
     return RecipientDataModel(
       id: fields[0] as String,
-      userId: fields[1] as String,
-      email: fields[2] as String,
-      shouldEncrypt: fields[3] as bool,
-      fingerprint: fields[4] as String,
-      emailVerifiedAt: fields[5] as DateTime,
-      aliases: (fields[6] as List)?.cast<AliasDataModel>(),
-      createdAt: fields[7] as DateTime,
-      updatedAt: fields[8] as DateTime,
+      userId: fields[1] as String?,
+      email: fields[2] as String?,
+      shouldEncrypt: fields[3] as bool?,
+      fingerprint: fields[4] as String?,
+      emailVerifiedAt: fields[5] as DateTime?,
+      aliases: (fields[6] as List?)?.cast<AliasDataModel>(),
+      createdAt: fields[7] as DateTime?,
+      updatedAt: fields[8] as DateTime?,
     );
   }
 

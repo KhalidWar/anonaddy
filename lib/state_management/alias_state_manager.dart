@@ -16,12 +16,12 @@ class AliasStateManager extends ChangeNotifier {
     updateRecipientLoading = false;
   }
 
-  AliasDataModel aliasDataModel;
-  bool isToggleLoading;
-  bool deleteAliasLoading;
-  bool updateRecipientLoading;
-  String _aliasDomain;
-  String _aliasFormat;
+  late AliasDataModel aliasDataModel;
+  late bool isToggleLoading;
+  late bool deleteAliasLoading;
+  late bool updateRecipientLoading;
+  String? _aliasDomain;
+  String? _aliasFormat;
   List<RecipientDataModel> createAliasRecipients = [];
 
   final descriptionFormKey = GlobalKey<FormState>();
@@ -33,15 +33,15 @@ class AliasStateManager extends ChangeNotifier {
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
   final sharedDomains = [kAnonAddyMe, kAddyMail, k4wrd, kMailerMe];
 
-  String get aliasDomain => _aliasDomain;
-  String get aliasFormat => _aliasFormat;
+  String? get aliasDomain => _aliasDomain;
+  String? get aliasFormat => _aliasFormat;
 
   set setAliasDomain(String input) {
     _aliasDomain = input;
     notifyListeners();
   }
 
-  set setAliasFormat(String input) {
+  set setAliasFormat(String? input) {
     _aliasFormat = input;
     notifyListeners();
   }
@@ -100,7 +100,7 @@ class AliasStateManager extends ChangeNotifier {
     }
 
     if (format == kCustom) {
-      if (customFormKey.currentState.validate()) {
+      if (customFormKey.currentState!.validate()) {
         await createAlias();
       }
     } else {
@@ -109,10 +109,10 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> deleteOrRestoreAlias(
-      BuildContext context, DateTime aliasDeletedAt, String aliasID) async {
+      BuildContext context, bool isAliasDeleted, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
     setDeleteAliasLoading = true;
-    if (aliasDeletedAt == null) {
+    if (!isAliasDeleted) {
       Navigator.pop(context);
       await aliasService.deleteAlias(aliasID).then((value) {
         _showToast(kDeleteAliasSuccess);
@@ -160,7 +160,7 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> editDescription(
       BuildContext context, String aliasID, String input) async {
-    if (descriptionFormKey.currentState.validate()) {
+    if (descriptionFormKey.currentState!.validate()) {
       await context
           .read(aliasServiceProvider)
           .editAliasDescription(aliasID, input)
@@ -202,7 +202,7 @@ class AliasStateManager extends ChangeNotifier {
     Navigator.pop(context);
   }
 
-  String correctAliasString(String input) {
+  String? correctAliasString(String? input) {
     if (input == null) return null;
     switch (input) {
       case 'random_characters':

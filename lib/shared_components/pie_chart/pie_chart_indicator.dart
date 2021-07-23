@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 class PieChartIndicator extends StatelessWidget {
   const PieChartIndicator({
-    Key key,
-    this.label,
-    this.color,
-    this.count,
+    Key? key,
+    required this.label,
+    required this.color,
+    required this.count,
     this.textColor,
   }) : super(key: key);
 
   final String label;
-  final Color color, textColor;
+  final Color color;
+  final Color? textColor;
   final int count;
 
   @override

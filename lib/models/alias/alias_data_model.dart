@@ -8,7 +8,7 @@ part 'alias_data_model.g.dart';
 @HiveType(typeId: 0)
 class AliasDataModel extends HiveObject {
   AliasDataModel({
-    this.aliasID,
+    required this.aliasID,
     this.userId,
     this.aliasableId,
     this.aliasableType,
@@ -16,12 +16,12 @@ class AliasDataModel extends HiveObject {
     this.extension,
     this.domain,
     this.email,
-    this.isAliasActive,
+    required this.isAliasActive,
     this.emailDescription,
-    this.emailsForwarded,
-    this.emailsBlocked,
-    this.emailsReplied,
-    this.emailsSent,
+    required this.emailsForwarded,
+    required this.emailsBlocked,
+    required this.emailsReplied,
+    required this.emailsSent,
     this.recipients,
     this.createdAt,
     this.updatedAt,
@@ -31,23 +31,23 @@ class AliasDataModel extends HiveObject {
   @HiveField(0)
   String aliasID;
   @HiveField(1)
-  String userId;
+  String? userId;
   @HiveField(2)
   dynamic aliasableId;
   @HiveField(3)
   dynamic aliasableType;
   @HiveField(4)
-  String localPart;
+  String? localPart;
   @HiveField(5)
   dynamic extension;
   @HiveField(6)
-  String domain;
+  String? domain;
   @HiveField(7)
-  String email;
+  String? email;
   @HiveField(8)
   bool isAliasActive;
   @HiveField(9)
-  String emailDescription;
+  String? emailDescription;
   @HiveField(10)
   int emailsForwarded;
   @HiveField(11)
@@ -57,13 +57,13 @@ class AliasDataModel extends HiveObject {
   @HiveField(13)
   int emailsSent;
   @HiveField(14)
-  List<RecipientDataModel> recipients;
+  List<RecipientDataModel>? recipients;
   @HiveField(15)
-  DateTime createdAt;
+  DateTime? createdAt;
   @HiveField(16)
-  DateTime updatedAt;
+  DateTime? updatedAt;
   @HiveField(17)
-  DateTime deletedAt;
+  DateTime? deletedAt;
 
   factory AliasDataModel.fromJson(Map<String, dynamic> json) {
     return AliasDataModel(
@@ -180,8 +180,8 @@ class AliasDataModel extends HiveObject {
       "emails_replied": alias.emailsReplied,
       "emails_sent": alias.emailsSent,
       // "recipients": List<dynamic>.from(recipients.map((x) => x)),
-      "created_at": alias.createdAt.toIso8601String(),
-      "updated_at": alias.updatedAt.toIso8601String(),
+      "created_at": alias.createdAt!.toIso8601String(),
+      "updated_at": alias.updatedAt!.toIso8601String(),
     };
   }
 }

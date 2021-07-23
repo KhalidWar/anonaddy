@@ -32,7 +32,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: buildAppBar(context, username.id),
+      appBar: buildAppBar(context, username.id!),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +50,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                     username.username,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .headline6!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -67,24 +67,24 @@ class UsernameDetailedScreen extends ConsumerWidget {
                   context, textEditingController, username),
             ),
             AliasDetailListTile(
-              title: username.active
+              title: username.active!
                   ? 'Username is active'
                   : 'Username is inactive',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Activity',
               leadingIconData: Icons.toggle_off_outlined,
-              trailing: buildSwitch(activeSwitchLoading, username.active),
+              trailing: buildSwitch(activeSwitchLoading, username.active!),
               trailingIconOnPress: () =>
-                  toggleActiveAlias(context, username.id),
+                  toggleActiveAlias(context, username.id!),
             ),
             AliasDetailListTile(
-              title: username.catchAll ? 'Enabled' : 'Disabled',
+              title: username.catchAll! ? 'Enabled' : 'Disabled',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Catch All',
               leadingIconData: Icons.repeat,
-              trailing: buildSwitch(catchAllSwitchLoading, username.catchAll),
+              trailing: buildSwitch(catchAllSwitchLoading, username.catchAll!),
               trailingIconOnPress: () =>
-                  toggleCatchAllAlias(context, username.id),
+                  toggleCatchAllAlias(context, username.id!),
             ),
             Divider(height: size.height * 0.02),
             Column(
@@ -114,7 +114,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                   )
                 else
                   RecipientListTile(
-                    recipientDataModel: username.defaultRecipient,
+                    recipientDataModel: username.defaultRecipient!,
                   ),
               ],
             ),
@@ -134,7 +134,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                if (username.aliases.isEmpty)
+                if (username.aliases!.isEmpty)
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text('No aliases found'),
@@ -143,10 +143,10 @@ class UsernameDetailedScreen extends ConsumerWidget {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: username.aliases.length,
+                    itemCount: username.aliases!.length,
                     itemBuilder: (context, index) {
                       return AliasListTile(
-                        aliasData: username.aliases[index],
+                        aliasData: username.aliases![index],
                       );
                     },
                   ),
@@ -158,11 +158,11 @@ class UsernameDetailedScreen extends ConsumerWidget {
               children: [
                 AliasCreatedAtWidget(
                   label: 'Created:',
-                  dateTime: username.createdAt,
+                  dateTime: username.createdAt!,
                 ),
                 AliasCreatedAtWidget(
                   label: 'Updated:',
-                  dateTime: username.updatedAt,
+                  dateTime: username.updatedAt!,
                 ),
               ],
             ),
@@ -225,7 +225,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                         autofocus: true,
                         controller: textEditingController,
                         validator: (input) =>
-                            FormValidator().validateDescriptionField(input),
+                            FormValidator().validateDescriptionField(input!),
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: '${username.description}',
@@ -264,7 +264,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildAppBar(BuildContext context, String usernameID) {
+  AppBar buildAppBar(BuildContext context, String usernameID) {
     final isIOS = TargetedPlatform().isIOS();
     final confirmationDialog = ConfirmationDialog();
 

@@ -10,7 +10,7 @@ class BiometricAuthService {
     try {
       return await _localAuth.canCheckBiometrics;
     } on PlatformException catch (e) {
-      throw e.message;
+      throw e.message!;
     }
   }
 
@@ -25,9 +25,9 @@ class BiometricAuthService {
       } on PlatformException catch (e) {
         print(e);
         if (e.code == auth_error.notAvailable) {
-          throw e.message;
+          throw e.message!;
         }
-        throw e.message;
+        throw e.message!;
       }
     }
     return false;

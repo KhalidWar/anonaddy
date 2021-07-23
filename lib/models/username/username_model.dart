@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/username/username_data_model.dart';
 
 class UsernameModel {
-  const UsernameModel({this.usernameDataList});
+  const UsernameModel({required this.usernameDataList});
 
   final List<UsernameDataModel> usernameDataList;
 

@@ -6,7 +6,7 @@ part 'recipient_data_model.g.dart';
 @HiveType(typeId: 1)
 class RecipientDataModel extends HiveObject {
   RecipientDataModel({
-    this.id,
+    required this.id,
     this.userId,
     this.email,
     this.shouldEncrypt,
@@ -20,21 +20,21 @@ class RecipientDataModel extends HiveObject {
   @HiveField(0)
   String id;
   @HiveField(1)
-  String userId;
+  String? userId;
   @HiveField(2)
-  String email;
+  String? email;
   @HiveField(3)
-  bool shouldEncrypt;
+  bool? shouldEncrypt;
   @HiveField(4)
-  String fingerprint;
+  String? fingerprint;
   @HiveField(5)
-  DateTime emailVerifiedAt;
+  DateTime? emailVerifiedAt;
   @HiveField(6)
-  List<AliasDataModel> aliases;
+  List<AliasDataModel>? aliases;
   @HiveField(7)
-  DateTime createdAt;
+  DateTime? createdAt;
   @HiveField(8)
-  DateTime updatedAt;
+  DateTime? updatedAt;
 
   factory RecipientDataModel.fromJson(Map<String, dynamic> json) {
     List list = json['aliases'];
@@ -75,6 +75,7 @@ class RecipientDataModel extends HiveObject {
 
   factory RecipientDataModel.fromJsonData(Map<String, dynamic> json) {
     return RecipientDataModel(
+      id: json["data"]["id"],
       shouldEncrypt: json["data"]["should_encrypt"],
       fingerprint: json["data"]["fingerprint"],
     );

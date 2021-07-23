@@ -23,27 +23,27 @@ class UserModel {
     this.lastUpdated,
   });
 
-  final String id;
-  final String username;
+  final String? id;
+  final String? username;
   final dynamic fromName;
   final dynamic emailSubject;
-  final String bannerLocation;
-  final int bandwidth;
-  final int usernameCount;
-  final int usernameLimit;
-  final String defaultRecipientId;
-  final String defaultAliasDomain;
-  final String defaultAliasFormat;
-  final String subscription;
-  final int bandwidthLimit;
-  final int recipientCount;
-  final int recipientLimit;
-  final int activeDomainCount;
-  final int activeDomainLimit;
-  final int aliasCount;
-  final int aliasLimit;
-  final DateTime createdAt;
-  final DateTime lastUpdated;
+  final String? bannerLocation;
+  final int? bandwidth;
+  final int? usernameCount;
+  final int? usernameLimit;
+  final String? defaultRecipientId;
+  final String? defaultAliasDomain;
+  final String? defaultAliasFormat;
+  final String? subscription;
+  final int? bandwidthLimit;
+  final int? recipientCount;
+  final int? recipientLimit;
+  final int? activeDomainCount;
+  final int? activeDomainLimit;
+  final int? aliasCount;
+  final int? aliasLimit;
+  final DateTime? createdAt;
+  final DateTime? lastUpdated;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(

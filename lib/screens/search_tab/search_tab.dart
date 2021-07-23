@@ -21,7 +21,7 @@ class SearchTab extends StatelessWidget {
     } else {
       showSearch(
         context: context,
-        delegate: SearchService(aliasProvider.value.aliasDataList),
+        delegate: SearchService(aliasProvider.value.aliasDataList!),
       );
     }
   }

@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 
 class LottieWidget extends StatelessWidget {
   const LottieWidget({
-    Key key,
+    Key? key,
     this.label,
     this.iconData,
     this.buttonLabel,
@@ -17,12 +17,12 @@ class LottieWidget extends StatelessWidget {
     this.repeat,
   }) : super(key: key);
 
-  final String label, buttonLabel, lottie;
-  final IconData iconData;
-  final Function buttonOnPress;
-  final Color iconColor, scaffoldColor;
-  final double lottieHeight;
-  final bool showLoading, repeat;
+  final String? label, buttonLabel, lottie;
+  final IconData? iconData;
+  final Function? buttonOnPress;
+  final Color? iconColor, scaffoldColor;
+  final double? lottieHeight;
+  final bool? showLoading, repeat;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class LottieWidget extends StatelessWidget {
               lottie == null
                   ? Container()
                   : Lottie.asset(
-                      lottie,
+                      lottie!,
                       height: lottieHeight,
                       fit: BoxFit.fitHeight,
                       repeat: repeat ?? false,
@@ -52,7 +52,7 @@ class LottieWidget extends StatelessWidget {
                       '$label',
                       style: Theme.of(context)
                           .textTheme
-                          .bodyText2
+                          .bodyText2!
                           .copyWith(fontWeight: FontWeight.normal),
                     ),
             ],

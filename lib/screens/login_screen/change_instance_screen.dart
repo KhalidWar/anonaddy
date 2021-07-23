@@ -47,7 +47,7 @@ class ChangeInstanceScreen extends StatelessWidget {
                         key: _urlFormKey,
                         child: TextFormField(
                           validator: (input) =>
-                              FormValidator().validateInstanceURL(input),
+                              FormValidator().validateInstanceURL(input!),
                           controller: _urlEditingController,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.multiline,
@@ -84,7 +84,7 @@ class ChangeInstanceScreen extends StatelessWidget {
                         key: _tokenFormKey,
                         child: TextFormField(
                           validator: (input) =>
-                              FormValidator().accessTokenValidator(input),
+                              FormValidator().accessTokenValidator(input!),
                           controller: _tokenEditingController,
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.multiline,
@@ -140,7 +140,7 @@ class ChangeInstanceScreen extends StatelessWidget {
                                 'Login',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline5
+                                    .headline5!
                                     .copyWith(color: Colors.black),
                               ),
                         onPressed: () => loginManager.selfHostLogin(

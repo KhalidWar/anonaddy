@@ -37,7 +37,7 @@ class AddNewRecipient extends StatelessWidget {
                     autofocus: true,
                     controller: textEditController,
                     validator: (input) =>
-                        FormValidator().validateRecipientEmail(input),
+                        FormValidator().validateRecipientEmail(input!),
                     textInputAction: TextInputAction.next,
                     decoration: kTextFormFieldDecoration.copyWith(
                         hintText: 'joedoe@example.com'),

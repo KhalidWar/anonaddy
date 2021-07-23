@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasFormatSelection extends StatelessWidget {
-  const AliasFormatSelection({this.aliasFormatList});
+  const AliasFormatSelection({required this.aliasFormatList});
   final List<String> aliasFormatList;
 
   @override
@@ -33,7 +33,7 @@ class AliasFormatSelection extends StatelessWidget {
             },
             children: aliasFormatList.map<Widget>((value) {
               return Text(
-                aliasStateProvider.correctAliasString(value),
+                aliasStateProvider.correctAliasString(value)!,
                 style: TextStyle(
                   color: isDark ? Colors.white : null,
                 ),

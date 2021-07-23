@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDomainSelection extends StatelessWidget {
-  const AliasDomainSelection({this.aliasFormatList, this.domainOptions});
+  const AliasDomainSelection(
+      {required this.aliasFormatList, required this.domainOptions});
   final List<String> aliasFormatList;
   final DomainOptions domainOptions;
 

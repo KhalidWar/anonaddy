@@ -21,7 +21,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
-  RecipientDetailedScreen({this.recipientData});
+  const RecipientDetailedScreen({required this.recipientData});
   final RecipientDataModel recipientData;
 
   int calculateTotal(List<int> list) {
@@ -48,8 +48,9 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final List<int> blockedList = [];
     final List<int> repliedList = [];
     final List<int> sentList = [];
+
     if (recipientData.aliases != null) {
-      for (AliasDataModel alias in recipientData.aliases) {
+      for (AliasDataModel alias in recipientData.aliases!) {
         forwardedList.add(alias.emailsForwarded);
         blockedList.add(alias.emailsBlocked);
         repliedList.add(alias.emailsReplied);
@@ -93,7 +94,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
               subtitle: 'Recipient Email',
               trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
               trailingIconOnPress: () =>
-                  NicheMethod().copyOnTap(recipientData.email),
+                  NicheMethod().copyOnTap(recipientData.email!),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.fingerprint_outlined,
@@ -115,11 +116,11 @@ class RecipientDetailedScreen extends ConsumerWidget {
             ),
             AliasDetailListTile(
               leadingIconData:
-                  recipientData.shouldEncrypt ? Icons.lock : Icons.lock_open,
+                  recipientData.shouldEncrypt! ? Icons.lock : Icons.lock_open,
               leadingIconColor:
-                  recipientData.shouldEncrypt ? Colors.green : null,
+                  recipientData.shouldEncrypt! ? Colors.green : null,
               title:
-                  '${recipientData.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
+                  '${recipientData.shouldEncrypt! ? 'Encrypted' : 'Not Encrypted'}',
               subtitle: 'Encryption',
               trailing: recipientData.fingerprint == null
                   ? Container()
@@ -155,7 +156,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         style: Theme.of(context).textTheme.headline6),
                   ),
                   SizedBox(height: size.height * 0.01),
-                  if (recipientData.aliases.isEmpty)
+                  if (recipientData.aliases!.isEmpty)
                     Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: size.height * 0.01),
@@ -164,10 +165,10 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: recipientData.aliases.length,
+                      itemCount: recipientData.aliases!.length,
                       itemBuilder: (context, index) {
                         return AliasListTile(
-                          aliasData: recipientData.aliases[index],
+                          aliasData: recipientData.aliases![index],
                         );
                       },
                     ),
@@ -179,11 +180,11 @@ class RecipientDetailedScreen extends ConsumerWidget {
               children: [
                 AliasCreatedAtWidget(
                   label: 'Created:',
-                  dateTime: recipientData.createdAt,
+                  dateTime: recipientData.createdAt!,
                 ),
                 AliasCreatedAtWidget(
                   label: 'Updated:',
-                  dateTime: recipientData.updatedAt,
+                  dateTime: recipientData.updatedAt!,
                 ),
               ],
             ),
@@ -201,7 +202,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             ? CustomLoadingIndicator().customLoadingIndicator()
             : Container(),
         Switch.adaptive(
-          value: recipientData.shouldEncrypt,
+          value: recipientData.shouldEncrypt!,
           onChanged: (toggle) {},
         ),
       ],
@@ -298,7 +299,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         autofocus: true,
                         controller: _texEditingController,
                         validator: (input) =>
-                            FormValidator().validatePGPKeyField(input),
+                            FormValidator().validatePGPKeyField(input!),
                         minLines: 4,
                         maxLines: 5,
                         textInputAction: TextInputAction.done,
@@ -326,7 +327,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context) {
     final confirmationDialog = ConfirmationDialog();
     final isIOS = TargetedPlatform().isIOS();
 

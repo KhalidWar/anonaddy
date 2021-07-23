@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LifecycleService extends StatefulWidget {
-  const LifecycleService({Key key, this.child}) : super(key: key);
+  const LifecycleService({Key? key, required this.child}) : super(key: key);
   final Widget child;
 
   @override
@@ -30,13 +30,13 @@ class _LifecycleServiceState extends State<LifecycleService>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
   }
 
   @override

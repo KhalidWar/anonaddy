@@ -63,8 +63,8 @@ class AliasShimmerLoading extends StatelessWidget {
           body: TabBarView(
             children: [
               Shimmer.fromColors(
-                baseColor: isDark ? Colors.grey : Colors.grey[400],
-                highlightColor: Colors.grey[100],
+                baseColor: isDark ? Colors.grey : Colors.grey[400]!,
+                highlightColor: Colors.grey[100]!,
                 enabled: true,
                 child: ListView.builder(
                   padding: EdgeInsets.all(0),
@@ -124,8 +124,8 @@ class AliasShimmerLoading extends StatelessWidget {
                 ),
               ),
               Shimmer.fromColors(
-                baseColor: isDark ? Colors.grey : Colors.grey[300],
-                highlightColor: Colors.grey[100],
+                baseColor: isDark ? Colors.grey : Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
                 enabled: true,
                 child: ListView.builder(
                   padding: EdgeInsets.all(0),

@@ -5,7 +5,7 @@ class UsernameDataModel {
   UsernameDataModel({
     this.id,
     this.userId,
-    this.username,
+    required this.username,
     this.description,
     this.aliases,
     this.defaultRecipient,
@@ -15,16 +15,16 @@ class UsernameDataModel {
     this.updatedAt,
   });
 
-  final String id;
-  final String userId;
+  final String? id;
+  final String? userId;
   final String username;
-  String description;
-  final List<AliasDataModel> aliases;
-  RecipientDataModel defaultRecipient;
-  bool active;
-  bool catchAll;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  String? description;
+  final List<AliasDataModel>? aliases;
+  RecipientDataModel? defaultRecipient;
+  bool? active;
+  bool? catchAll;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   factory UsernameDataModel.fromJson(Map<String, dynamic> json) {
     List list = json['aliases'];

@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'add_new_username.dart';
 
 class MainAccount extends StatelessWidget {
-  const MainAccount({Key key, this.userModel}) : super(key: key);
+  const MainAccount({Key? key, required this.userModel}) : super(key: key);
   final UserModel userModel;
 
   String _capitalize(String input) {
@@ -27,16 +27,16 @@ class MainAccount extends StatelessWidget {
       return input == 0 ? 'unlimited' : '${input.hashCode.round()} $unit';
     }
 
-    final bandwidth = (userModel.bandwidth / 1048576).toStringAsFixed(2);
+    final bandwidth = (userModel.bandwidth! / 1048576).toStringAsFixed(2);
     final bandwidthLimit =
-        isUnlimited(userModel.bandwidthLimit / 1048576, 'MB');
+        isUnlimited(userModel.bandwidthLimit! / 1048576, 'MB');
     return '$bandwidth MB out of $bandwidthLimit';
   }
 
   @override
   Widget build(BuildContext context) {
     final subscription =
-        context.read(accountStreamProvider).data.value.subscription;
+        context.read(accountStreamProvider).data!.value.subscription;
     final correctAliasString =
         context.read(aliasStateManagerProvider).correctAliasString;
     final nicheMethod = NicheMethod();
@@ -51,10 +51,10 @@ class MainAccount extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _capitalize(userModel.username),
+                _capitalize(userModel.username!),
                 style: Theme.of(context).textTheme.headline5,
               ),
-              Text(_capitalize(userModel.subscription)),
+              Text(_capitalize(userModel.subscription!)),
             ],
           ),
         ),

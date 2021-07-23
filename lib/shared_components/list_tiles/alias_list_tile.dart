@@ -10,7 +10,7 @@ import '../custom_page_route.dart';
 import 'alias_list_tile_leading.dart';
 
 class AliasListTile extends StatelessWidget {
-  const AliasListTile({Key key, this.aliasData}) : super(key: key);
+  const AliasListTile({Key? key, required this.aliasData}) : super(key: key);
   final AliasDataModel aliasData;
 
   @override
@@ -57,7 +57,7 @@ class AliasListTile extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.copy),
               onPressed:
-                  isAliasDeleted() ? null : () => copyOnTap(aliasData.email),
+                  isAliasDeleted() ? null : () => copyOnTap(aliasData.email!),
             ),
           ],
         ),

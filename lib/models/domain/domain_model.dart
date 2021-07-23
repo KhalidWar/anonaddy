@@ -3,7 +3,7 @@ import 'domain_data_model.dart';
 class DomainModel {
   const DomainModel({this.domainDataList});
 
-  final List<DomainDataModel> domainDataList;
+  final List<DomainDataModel>? domainDataList;
 
   factory DomainModel.fromJson(Map<String, dynamic> json) {
     List list = json['data'];

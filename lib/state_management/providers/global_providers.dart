@@ -85,7 +85,7 @@ final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
   return ref.read(domainOptionsServiceProvider).getDomainOptions(offlineData);
 });
 
-final accessTokenProvider = FutureProvider<String>((ref) async =>
+final accessTokenProvider = FutureProvider<String?>((ref) async =>
     await ref.watch(accessTokenServiceProvider).getAccessToken());
 
 final packageInfoProvider =

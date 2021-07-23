@@ -31,7 +31,7 @@ class AliasTab extends ConsumerWidget {
     return aliasStream.when(
       loading: () => AliasShimmerLoading(),
       data: (data) {
-        for (AliasDataModel alias in data.aliasDataList) {
+        for (AliasDataModel alias in data.aliasDataList!) {
           forwardedList.add(alias.emailsForwarded);
           blockedList.add(alias.emailsBlocked);
           repliedList.add(alias.emailsReplied);
@@ -138,8 +138,7 @@ class AliasTab extends ConsumerWidget {
                               Navigator.push(
                                 context,
                                 CustomPageRoute(
-                                  DeletedAliasesScreen(
-                                      aliasDataModel: deletedAliasList),
+                                  DeletedAliasesScreen(deletedAliasList),
                                 ),
                               );
                             },

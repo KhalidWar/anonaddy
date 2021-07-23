@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:anonaddy/models/alias/alias_data_model.dart';
@@ -14,7 +15,7 @@ class SearchHistoryStorage {
 
   Future<void> openSearchHiveBox() async {
     final secureKey = await _secureStorage.read(key: kHiveSecureKey);
-    final encryptionKey = base64Url.decode(secureKey);
+    final encryptionKey = base64Url.decode(secureKey!);
     await Hive.openBox<AliasDataModel>(
       kSearchHistoryBox,
       encryptionCipher: HiveAesCipher(encryptionKey),

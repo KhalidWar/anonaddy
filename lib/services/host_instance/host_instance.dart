@@ -7,8 +7,8 @@ class HostInstance {
   final _secureStorage = FlutterSecureStorage();
   final _hostInstanceKey = 'hostInstanceKey';
 
-  Instance instance;
-  String _instanceURL;
+  Instance? instance;
+  String? _instanceURL;
 
   Future<void> setHostInstance(String url) async {
     if (url == null) {
@@ -22,7 +22,7 @@ class HostInstance {
     }
   }
 
-  Future<Instance> getHostInstance() async {
+  Future<Instance?> getHostInstance() async {
     if (instance == null) {
       final savedURL = await _secureStorage.read(key: _hostInstanceKey);
       if (savedURL == kAuthorityURL) {
@@ -37,7 +37,7 @@ class HostInstance {
     }
   }
 
-  Future<String> getInstanceURL() async {
+  Future<String?> getInstanceURL() async {
     if (_instanceURL == null) {
       _instanceURL = await _secureStorage.read(key: _hostInstanceKey);
       return _instanceURL;

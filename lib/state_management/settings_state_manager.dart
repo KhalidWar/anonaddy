@@ -14,9 +14,9 @@ class SettingsStateManager extends ChangeNotifier {
   final _biometricAuthKey = 'biometricAuthKey';
   final _darkThemeKey = 'darkTheme';
 
-  bool isAutoCopy;
-  bool isBiometricAuth;
-  bool isDarkTheme;
+  late bool isAutoCopy;
+  late bool isBiometricAuth;
+  late bool isDarkTheme;
 
   void _loadSavedData() async {
     isDarkTheme = await _settingsStorage.loadBoolState(_darkThemeKey) ?? false;
