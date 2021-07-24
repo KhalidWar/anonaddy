@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -15,8 +15,8 @@ class CreateAliasRecipientSelection extends StatefulWidget {
 
 class _CreateAliasRecipientSelectionState
     extends State<CreateAliasRecipientSelection> {
-  final verifiedRecipients = <RecipientDataModel>[];
-  final selectedRecipients = <RecipientDataModel>[];
+  final verifiedRecipients = <Recipient>[];
+  final selectedRecipients = <Recipient>[];
 
   double initialChildSize = 0.55;
   double minChildSize = 0.3;
@@ -39,22 +39,22 @@ class _CreateAliasRecipientSelectionState
 
   void _setDefaultRecipients() {
     final allRecipients =
-        context.read(recipientsProvider).data!.value.recipientDataList!;
-    for (RecipientDataModel recipient in allRecipients) {
+        context.read(recipientsProvider).data!.value.recipients;
+    for (Recipient recipient in allRecipients) {
       if (recipient.emailVerifiedAt != null) {
         verifiedRecipients.add(recipient);
       }
     }
   }
 
-  bool _isRecipientSelected(RecipientDataModel verifiedRecipient) {
+  bool _isRecipientSelected(Recipient verifiedRecipient) {
     if (selectedRecipients.contains(verifiedRecipient)) {
       return true;
     }
     return false;
   }
 
-  void _toggleRecipient(RecipientDataModel verifiedRecipient) {
+  void _toggleRecipient(Recipient verifiedRecipient) {
     if (selectedRecipients.contains(verifiedRecipient)) {
       selectedRecipients
           .removeWhere((element) => element.email == verifiedRecipient.email);
@@ -106,7 +106,7 @@ class _CreateAliasRecipientSelectionState
                         selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
                         title: Text(
-                          verifiedRecipient.email!,
+                          verifiedRecipient.email,
                           style: TextStyle(
                             color: _isRecipientSelected(verifiedRecipient)
                                 ? Colors.black

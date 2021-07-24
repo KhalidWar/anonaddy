@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -21,7 +21,7 @@ class SearchTab extends StatelessWidget {
     } else {
       showSearch(
         context: context,
-        delegate: SearchService(aliasProvider.value.aliasDataList!),
+        delegate: SearchService(aliasProvider.value.aliases),
       );
     }
   }
@@ -63,10 +63,10 @@ class SearchTab extends StatelessWidget {
           ),
         ),
         Divider(height: 0),
-        ValueListenableBuilder<Box<AliasDataModel>>(
+        ValueListenableBuilder<Box<Alias>>(
           valueListenable: SearchHistoryStorage.getAliasBoxes().listenable(),
           builder: (context, box, __) {
-            final aliases = box.values.toList().cast<AliasDataModel>();
+            final aliases = box.values.toList().cast<Alias>();
 
             if (aliases.isEmpty)
               return Padding(

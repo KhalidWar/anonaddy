@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/screens/secure_app_screen/secure_app_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/services/theme/theme.dart';
@@ -14,14 +12,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'models/alias/alias_model.dart';
 import 'shared_components/constants/hive_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  Hive.registerAdapter(AliasDataModelAdapter());
-  Hive.registerAdapter(RecipientDataModelAdapter());
+  // Hive.registerAdapter(AliasDataModelAdapter());
+  // Hive.registerAdapter(RecipientDataModelAdapter());
 
   final secureStorage = const FlutterSecureStorage();
 
@@ -34,7 +33,7 @@ void main() async {
 
   final data = await secureStorage.read(key: kHiveSecureKey);
   final encryptionKey = base64Url.decode(data!);
-  await Hive.openBox<AliasDataModel>(
+  await Hive.openBox<Alias>(
     kSearchHistoryBox,
     encryptionCipher: HiveAesCipher(encryptionKey),
   );

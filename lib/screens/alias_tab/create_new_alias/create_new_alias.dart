@@ -262,7 +262,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                     itemBuilder: (context, index) {
                       final recipient = createAliasRecipients[index];
                       return Text(
-                        recipient.email!,
+                        recipient.email,
                         style: Theme.of(context).textTheme.headline6,
                       );
                     },

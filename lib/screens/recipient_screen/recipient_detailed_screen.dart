@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -22,7 +22,7 @@ import 'package:flutter_svg/svg.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
   const RecipientDetailedScreen({required this.recipientData});
-  final RecipientDataModel recipientData;
+  final Recipient recipientData;
 
   int calculateTotal(List<int> list) {
     if (list.isEmpty) {
@@ -50,7 +50,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final List<int> sentList = [];
 
     if (recipientData.aliases != null) {
-      for (AliasDataModel alias in recipientData.aliases!) {
+      for (Alias alias in recipientData.aliases!) {
         forwardedList.add(alias.emailsForwarded);
         blockedList.add(alias.emailsBlocked);
         repliedList.add(alias.emailsReplied);
@@ -94,7 +94,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
               subtitle: 'Recipient Email',
               trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
               trailingIconOnPress: () =>
-                  NicheMethod().copyOnTap(recipientData.email!),
+                  NicheMethod().copyOnTap(recipientData.email),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.fingerprint_outlined,
@@ -116,11 +116,11 @@ class RecipientDetailedScreen extends ConsumerWidget {
             ),
             AliasDetailListTile(
               leadingIconData:
-                  recipientData.shouldEncrypt! ? Icons.lock : Icons.lock_open,
+                  recipientData.shouldEncrypt ? Icons.lock : Icons.lock_open,
               leadingIconColor:
-                  recipientData.shouldEncrypt! ? Colors.green : null,
+                  recipientData.shouldEncrypt ? Colors.green : null,
               title:
-                  '${recipientData.shouldEncrypt! ? 'Encrypted' : 'Not Encrypted'}',
+                  '${recipientData.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
               subtitle: 'Encryption',
               trailing: recipientData.fingerprint == null
                   ? Container()
@@ -180,11 +180,11 @@ class RecipientDetailedScreen extends ConsumerWidget {
               children: [
                 AliasCreatedAtWidget(
                   label: 'Created:',
-                  dateTime: recipientData.createdAt!,
+                  dateTime: recipientData.createdAt,
                 ),
                 AliasCreatedAtWidget(
                   label: 'Updated:',
-                  dateTime: recipientData.updatedAt!,
+                  dateTime: recipientData.updatedAt,
                 ),
               ],
             ),
@@ -202,7 +202,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             ? CustomLoadingIndicator().customLoadingIndicator()
             : Container(),
         Switch.adaptive(
-          value: recipientData.shouldEncrypt!,
+          value: recipientData.shouldEncrypt,
           onChanged: (toggle) {},
         ),
       ],
@@ -259,8 +259,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildAddPGPKeyDialog(
-      BuildContext context, RecipientDataModel recipientData) {
+  Future buildAddPGPKeyDialog(BuildContext context, Recipient recipientData) {
     final _texEditingController = TextEditingController();
 
     void addPublicKey() {

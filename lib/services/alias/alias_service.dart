@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:anonaddy/models/alias/alias_data_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
@@ -45,8 +44,8 @@ class AliasService {
     }
   }
 
-  Future<AliasDataModel> createNewAlias(String desc, String domain,
-      String format, String localPart, List<String> recipients) async {
+  Future<Alias> createNewAlias(String desc, String domain, String format,
+      String localPart, List<String> recipients) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
@@ -69,7 +68,7 @@ class AliasService {
 
       if (response.statusCode == 201) {
         print("createNewAlias ${response.statusCode}");
-        return AliasDataModel.fromJsonData(jsonDecode(response.body));
+        return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("createNewAlias ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -133,8 +132,7 @@ class AliasService {
     }
   }
 
-  Future<AliasDataModel> editAliasDescription(
-      String aliasID, String newDesc) async {
+  Future<Alias> editAliasDescription(String aliasID, String newDesc) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
@@ -151,7 +149,7 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('Network editDescription ${response.statusCode}');
-        return AliasDataModel.fromJsonData(jsonDecode(response.body));
+        return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('Network editDescription ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -187,7 +185,7 @@ class AliasService {
     }
   }
 
-  Future<AliasDataModel> restoreAlias(String aliasID) async {
+  Future<Alias> restoreAlias(String aliasID) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
@@ -204,7 +202,7 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('Network restoreAlias ${response.statusCode}');
-        return AliasDataModel.fromJsonData(jsonDecode(response.body));
+        return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('Network restoreAlias ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -214,7 +212,7 @@ class AliasService {
     }
   }
 
-  Future<AliasDataModel> updateAliasDefaultRecipient(
+  Future<Alias> updateAliasDefaultRecipient(
       String aliasID, List<String> recipients) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
@@ -228,12 +226,15 @@ class AliasService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: jsonEncode({"alias_id": aliasID, "recipient_ids": recipients}),
+        body: jsonEncode({
+          "alias_id": aliasID,
+          "recipient_ids": recipients,
+        }),
       );
 
       if (response.statusCode == 200) {
         print('editAliasRecipient ${response.statusCode}');
-        return AliasDataModel.fromJsonData(jsonDecode(response.body));
+        return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('editAliasRecipient ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);

@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 
 class UsernameDataModel {
   UsernameDataModel({
@@ -19,8 +19,8 @@ class UsernameDataModel {
   final String? userId;
   final String username;
   String? description;
-  final List<AliasDataModel>? aliases;
-  RecipientDataModel? defaultRecipient;
+  final List<Alias>? aliases;
+  Recipient? defaultRecipient;
   bool? active;
   bool? catchAll;
   final DateTime? createdAt;
@@ -28,8 +28,7 @@ class UsernameDataModel {
 
   factory UsernameDataModel.fromJson(Map<String, dynamic> json) {
     List list = json['aliases'];
-    List<AliasDataModel> aliasesList =
-        list.map((i) => AliasDataModel.fromJson(i)).toList();
+    List<Alias> aliasesList = list.map((i) => Alias.fromJson(i)).toList();
 
     return UsernameDataModel(
       id: json["id"],
@@ -39,8 +38,7 @@ class UsernameDataModel {
       aliases: aliasesList,
       defaultRecipient: json["default_recipient"] == null
           ? null
-          : RecipientDataModel.fromJsonRecipientNoAliases(
-              json["default_recipient"]),
+          : Recipient.fromJson(json["default_recipient"]),
       active: json["active"],
       catchAll: json["catch_all"],
       createdAt: DateTime.parse(json["created_at"]),
@@ -56,8 +54,7 @@ class UsernameDataModel {
       description: json['data']["description"],
       defaultRecipient: json['data']["default_recipient"] == null
           ? null
-          : RecipientDataModel.fromJsonRecipientNoAliases(
-              json['data']["default_recipient"]),
+          : Recipient.fromJson(json['data']["default_recipient"]),
       active: json['data']["active"],
       catchAll: json['data']["catch_all"],
       createdAt: DateTime.parse(json['data']["created_at"]),

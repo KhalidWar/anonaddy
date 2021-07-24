@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDefaultRecipientScreen extends StatefulWidget {
   const AliasDefaultRecipientScreen(this.aliasDataModel);
-  final AliasDataModel aliasDataModel;
+  final Alias aliasDataModel;
 
   @override
   _AliasDefaultRecipientScreenState createState() =>
@@ -21,14 +21,14 @@ class AliasDefaultRecipientScreen extends StatefulWidget {
 
 class _AliasDefaultRecipientScreenState
     extends State<AliasDefaultRecipientScreen> {
-  final _verifiedRecipients = <RecipientDataModel>[];
-  final _defaultRecipients = <RecipientDataModel>[];
+  final _verifiedRecipients = <Recipient>[];
+  final _defaultRecipients = <Recipient>[];
   final _selectedRecipientsID = <String>[];
 
   late double initialChildSize;
   late double maxChildSize;
 
-  void _toggleRecipient(RecipientDataModel verifiedRecipient) {
+  void _toggleRecipient(Recipient verifiedRecipient) {
     if (_defaultRecipients.contains(verifiedRecipient)) {
       _defaultRecipients
           .removeWhere((element) => element.email == verifiedRecipient.email);
@@ -40,8 +40,8 @@ class _AliasDefaultRecipientScreenState
     }
   }
 
-  bool _isDefaultRecipient(RecipientDataModel verifiedRecipient) {
-    for (RecipientDataModel defaultRecipient in _defaultRecipients) {
+  bool _isDefaultRecipient(Recipient verifiedRecipient) {
+    for (Recipient defaultRecipient in _defaultRecipients) {
       if (defaultRecipient.email == verifiedRecipient.email) {
         return true;
       }
@@ -51,7 +51,7 @@ class _AliasDefaultRecipientScreenState
 
   void _setVerifiedRecipients() {
     final allRecipients = context.read(recipientsProvider).data!.value;
-    for (RecipientDataModel recipient in allRecipients.recipientDataList!) {
+    for (Recipient recipient in allRecipients.recipients) {
       if (recipient.emailVerifiedAt != null) {
         _verifiedRecipients.add(recipient);
       }
@@ -60,8 +60,8 @@ class _AliasDefaultRecipientScreenState
 
   void _setDefaultRecipients() {
     final aliasDefaultRecipients = widget.aliasDataModel.recipients;
-    for (RecipientDataModel verifiedRecipient in _verifiedRecipients) {
-      for (RecipientDataModel recipient in aliasDefaultRecipients!) {
+    for (Recipient verifiedRecipient in _verifiedRecipients) {
+      for (Recipient recipient in aliasDefaultRecipients!) {
         if (recipient.email == verifiedRecipient.email) {
           _defaultRecipients.add(recipient);
           _selectedRecipientsID.add(recipient.id);
@@ -152,7 +152,7 @@ class _AliasDefaultRecipientScreenState
                         selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
                         title: Text(
-                          verifiedRecipient.email!,
+                          verifiedRecipient.email,
                           style: TextStyle(
                             color: _isDefaultRecipient(verifiedRecipient)
                                 ? Colors.black
@@ -192,7 +192,7 @@ class _AliasDefaultRecipientScreenState
                     .read(aliasStateManagerProvider)
                     .updateAliasDefaultRecipient(
                       context,
-                      widget.aliasDataModel.aliasID,
+                      widget.aliasDataModel.id,
                       _selectedRecipientsID,
                     ),
               ),

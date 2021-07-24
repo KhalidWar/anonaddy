@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class RecipientListTile extends StatelessWidget {
   const RecipientListTile({Key? key, required this.recipientDataModel})
       : super(key: key);
 
-  final RecipientDataModel recipientDataModel;
+  final Recipient recipientDataModel;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class RecipientListTile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(recipientDataModel.email!),
+                Text(recipientDataModel.email),
                 SizedBox(height: 2),
                 recipientDataModel.emailVerifiedAt == null
                     ? Text(

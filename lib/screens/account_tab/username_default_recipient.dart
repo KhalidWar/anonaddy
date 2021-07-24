@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -22,13 +22,13 @@ class UsernameDefaultRecipientScreen extends StatefulWidget {
 
 class _AliasDefaultRecipientScreenState
     extends State<UsernameDefaultRecipientScreen> {
-  final _verifiedRecipients = <RecipientDataModel>[];
-  RecipientDataModel? selectedRecipient;
+  final _verifiedRecipients = <Recipient>[];
+  Recipient? selectedRecipient;
 
   late double initialChildSize;
   late double maxChildSize;
 
-  void _toggleRecipient(RecipientDataModel verifiedRecipient) {
+  void _toggleRecipient(Recipient verifiedRecipient) {
     if (selectedRecipient == null) {
       selectedRecipient = verifiedRecipient;
     } else {
@@ -40,7 +40,7 @@ class _AliasDefaultRecipientScreenState
     }
   }
 
-  bool _isDefaultRecipient(RecipientDataModel verifiedRecipient) {
+  bool _isDefaultRecipient(Recipient verifiedRecipient) {
     if (selectedRecipient == null) {
       return false;
     } else {
@@ -53,7 +53,7 @@ class _AliasDefaultRecipientScreenState
 
   void _setVerifiedRecipients() {
     final allRecipients = context.read(recipientsProvider).data!.value;
-    for (RecipientDataModel recipient in allRecipients.recipientDataList!) {
+    for (Recipient recipient in allRecipients.recipients) {
       if (recipient.emailVerifiedAt != null) {
         _verifiedRecipients.add(recipient);
       }
@@ -62,7 +62,7 @@ class _AliasDefaultRecipientScreenState
 
   void _setDefaultRecipient() {
     final defaultRecipient = widget.username.defaultRecipient;
-    for (RecipientDataModel verifiedRecipient in _verifiedRecipients) {
+    for (Recipient verifiedRecipient in _verifiedRecipients) {
       if (defaultRecipient == null) {
         selectedRecipient = null;
       } else {
@@ -156,7 +156,7 @@ class _AliasDefaultRecipientScreenState
                         selectedTileColor: kAccentColor,
                         horizontalTitleGap: 0,
                         title: Text(
-                          verifiedRecipient.email!,
+                          verifiedRecipient.email,
                           style: TextStyle(
                             color: _isDefaultRecipient(verifiedRecipient)
                                 ? Colors.black

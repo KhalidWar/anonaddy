@@ -40,6 +40,9 @@ dependencies:
   flutter_riverpod: ^0.14.0+1
   flutter_phoenix: ^1.0.0
 
+  # Data Modeling
+  json_annotation: ^4.0.1
+
   # Testing
   mockito: ^5.0.4
 
@@ -51,8 +54,9 @@ dev_dependencies:
     sdk: flutter
 
   test: ^1.16.8
-  build_runner: ^2.0.1
+  build_runner: ^2.0.6
   hive_generator: ^1.1.0
+  json_serializable: ^4.1.4
 
 # The following section is specific to Flutter.
 flutter:
