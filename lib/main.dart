@@ -13,14 +13,15 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'models/alias/alias_model.dart';
+import 'models/recipient/recipient_model.dart';
 import 'shared_components/constants/hive_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
-  // Hive.registerAdapter(AliasDataModelAdapter());
-  // Hive.registerAdapter(RecipientDataModelAdapter());
+  Hive.registerAdapter(AliasAdapter());
+  Hive.registerAdapter(RecipientAdapter());
 
   final secureStorage = const FlutterSecureStorage();
 

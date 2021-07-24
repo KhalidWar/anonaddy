@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'recipient_model.g.dart';
@@ -17,7 +18,8 @@ class RecipientModel {
 }
 
 @JsonSerializable(explicitToJson: true)
-class Recipient {
+@HiveType(typeId: 1)
+class Recipient extends HiveObject {
   Recipient({
     required this.id,
     required this.userId,
@@ -30,19 +32,36 @@ class Recipient {
     required this.updatedAt,
   });
 
+  @HiveField(0)
   String id;
+
   @JsonKey(name: 'user_id')
+  @HiveField(1)
   String userId;
+
+  @HiveField(2)
   String email;
+
   @JsonKey(name: 'should_encrypt')
+  @HiveField(3)
   bool shouldEncrypt;
+
+  @HiveField(4)
   String? fingerprint;
+
   @JsonKey(name: 'email_verified_at')
+  @HiveField(5)
   DateTime? emailVerifiedAt;
+
+  @HiveField(6)
   List<Alias>? aliases;
+
   @JsonKey(name: 'created_at')
+  @HiveField(7)
   DateTime createdAt;
+
   @JsonKey(name: 'updated_at')
+  @HiveField(8)
   DateTime updatedAt;
 
   factory Recipient.fromJson(Map<String, dynamic> json) =>
