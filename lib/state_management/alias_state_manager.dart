@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
@@ -16,13 +16,13 @@ class AliasStateManager extends ChangeNotifier {
     updateRecipientLoading = false;
   }
 
-  AliasDataModel aliasDataModel;
-  bool isToggleLoading;
-  bool deleteAliasLoading;
-  bool updateRecipientLoading;
-  String _aliasDomain;
-  String _aliasFormat;
-  List<RecipientDataModel> createAliasRecipients = [];
+  late Alias aliasDataModel;
+  late bool isToggleLoading;
+  late bool deleteAliasLoading;
+  late bool updateRecipientLoading;
+  String? _aliasDomain;
+  String? _aliasFormat;
+  List<Recipient> createAliasRecipients = [];
 
   final descriptionFormKey = GlobalKey<FormState>();
   final _showToast = NicheMethod().showToast;
@@ -33,15 +33,15 @@ class AliasStateManager extends ChangeNotifier {
   final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
   final sharedDomains = [kAnonAddyMe, kAddyMail, k4wrd, kMailerMe];
 
-  String get aliasDomain => _aliasDomain;
-  String get aliasFormat => _aliasFormat;
+  String? get aliasDomain => _aliasDomain;
+  String? get aliasFormat => _aliasFormat;
 
   set setAliasDomain(String input) {
     _aliasDomain = input;
     notifyListeners();
   }
 
-  set setAliasFormat(String input) {
+  set setAliasFormat(String? input) {
     _aliasFormat = input;
     notifyListeners();
   }
@@ -61,7 +61,7 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setCreateAliasRecipients(List<RecipientDataModel> input) {
+  set setCreateAliasRecipients(List<Recipient> input) {
     createAliasRecipients = input;
     notifyListeners();
   }
@@ -100,7 +100,7 @@ class AliasStateManager extends ChangeNotifier {
     }
 
     if (format == kCustom) {
-      if (customFormKey.currentState.validate()) {
+      if (customFormKey.currentState!.validate()) {
         await createAlias();
       }
     } else {
@@ -109,10 +109,10 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> deleteOrRestoreAlias(
-      BuildContext context, DateTime aliasDeletedAt, String aliasID) async {
+      BuildContext context, bool isAliasDeleted, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
     setDeleteAliasLoading = true;
-    if (aliasDeletedAt == null) {
+    if (!isAliasDeleted) {
       Navigator.pop(context);
       await aliasService.deleteAlias(aliasID).then((value) {
         _showToast(kDeleteAliasSuccess);
@@ -139,10 +139,10 @@ class AliasStateManager extends ChangeNotifier {
   Future<void> toggleAlias(BuildContext context, String aliasID) async {
     final aliasService = context.read(aliasServiceProvider);
     setToggleLoading = true;
-    if (aliasDataModel.isAliasActive) {
+    if (aliasDataModel.active) {
       await aliasService.deactivateAlias(aliasID).then((value) {
         _showToast(kDeactivateAliasSuccess);
-        aliasDataModel.isAliasActive = false;
+        aliasDataModel.active = false;
       }).catchError((error) {
         _showToast(error.toString());
       });
@@ -150,7 +150,7 @@ class AliasStateManager extends ChangeNotifier {
     } else {
       await aliasService.activateAlias(aliasID).then((value) {
         _showToast(kActivateAliasSuccess);
-        aliasDataModel.isAliasActive = true;
+        aliasDataModel.active = true;
       }).catchError((error) {
         _showToast(error.toString());
       });
@@ -160,13 +160,13 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> editDescription(
       BuildContext context, String aliasID, String input) async {
-    if (descriptionFormKey.currentState.validate()) {
+    if (descriptionFormKey.currentState!.validate()) {
       await context
           .read(aliasServiceProvider)
           .editAliasDescription(aliasID, input)
           .then((value) {
         _showToast(kEditDescriptionSuccess);
-        aliasDataModel.emailDescription = value.emailDescription;
+        aliasDataModel.description = value.description;
         notifyListeners();
       }).catchError((error) {
         _showToast(error.toString());
@@ -202,7 +202,7 @@ class AliasStateManager extends ChangeNotifier {
     Navigator.pop(context);
   }
 
-  String correctAliasString(String input) {
+  String? correctAliasString(String? input) {
     if (input == null) return null;
     switch (input) {
       case 'random_characters':

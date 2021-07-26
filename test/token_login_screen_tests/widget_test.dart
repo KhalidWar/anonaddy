@@ -9,7 +9,7 @@ import 'package:mockito/mockito.dart';
 
 class MockLoginStateManager extends Mock implements LoginStateManager {
   MockLoginStateManager(this._isLoading);
-  bool _isLoading;
+  late bool _isLoading;
 
   @override
   bool get isLoading => _isLoading;
@@ -22,7 +22,7 @@ class MockLoginStateManager extends Mock implements LoginStateManager {
 }
 
 void main() {
-  Widget rootWidget({Widget child}) {
+  Widget rootWidget({Widget? child}) {
     return ProviderScope(child: MaterialApp(home: child));
   }
 

@@ -67,3 +67,4 @@ const kNoInternetConnection =
     'No Internet Connection.\nMake sure you\'re online.';
 const kLogOutAlertDialog =
     'Are you sure you want to log out?\n\nAll app data will be deleted.';
+const kNoDescription = 'No description';

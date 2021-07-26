@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class InitialScreen extends ConsumerWidget {
-  const InitialScreen({Key key}) : super(key: key);
+  const InitialScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -40,7 +40,7 @@ class InitialScreen extends ConsumerWidget {
           return LottieWidget(
             key: Key('errorWidget'),
             lottie: 'assets/lottie/errorCone.json',
-            label: error,
+            label: error.toString(),
           );
         },
       ),

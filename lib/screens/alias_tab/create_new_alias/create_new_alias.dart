@@ -35,10 +35,10 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final userModel = context.read(accountStreamProvider).data.value;
-    final subscription = userModel.subscription;
+    final user = context.read(accountStreamProvider).data!.value.account;
+    final subscription = user.subscription;
     final createAliasText =
-        'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
+        'Other aliases e.g. alias@${user.username}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
     return Consumer(
       builder: (_, watch, __) {
@@ -46,8 +46,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
 
         final aliasStateProvider = watch(aliasStateManagerProvider);
         final isLoading = aliasStateProvider.isToggleLoading;
-        String aliasDomain = aliasStateProvider.aliasDomain;
-        String aliasFormat = aliasStateProvider.aliasFormat;
+        String? aliasDomain = aliasStateProvider.aliasDomain;
+        String? aliasFormat = aliasStateProvider.aliasFormat;
 
         List<String> getAliasFormatList() {
           if (aliasStateProvider.sharedDomains.contains(aliasDomain)) {
@@ -76,8 +76,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
               await aliasStateProvider.createNewAlias(
                   context,
                   descFieldController.text.trim(),
-                  aliasDomain ?? domainOptions.defaultAliasDomain,
-                  aliasFormat ?? domainOptions.defaultAliasFormat,
+                  aliasDomain ?? domainOptions.defaultAliasDomain!,
+                  aliasFormat ?? domainOptions.defaultAliasFormat!,
                   customFieldController.text.trim(),
                   customFormKey);
             } else {
@@ -132,7 +132,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                               child: TextFormField(
                                 controller: customFieldController,
                                 validator: (input) =>
-                                    FormValidator().validateLocalPart(input),
+                                    FormValidator().validateLocalPart(input!),
                                 textInputAction: TextInputAction.next,
                                 decoration: kTextFormFieldDecoration.copyWith(
                                     hintText: kLocalPartFieldHint),
@@ -145,9 +145,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                             label: aliasDomain ?? kSelectAliasDomain,
                             isError: isAliasDomainError,
                             child: AliasDomainSelection(
-                              aliasFormatList: getAliasFormatList(),
-                              domainOptions: domainOptions,
-                            ),
+                                aliasFormatList: getAliasFormatList(),
+                                domainOptions: domainOptions),
                           ),
                           SizedBox(height: 5),
                           aliasDomainFormatDropdown(
@@ -156,11 +155,10 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                             label: aliasFormat == null
                                 ? kSelectAliasFormat
                                 : aliasStateProvider
-                                    .correctAliasString(aliasFormat),
+                                    .correctAliasString(aliasFormat)!,
                             isError: isAliasFormatError,
                             child: AliasFormatSelection(
-                              aliasFormatList: getAliasFormatList(),
-                            ),
+                                aliasFormatList: getAliasFormatList()),
                           ),
                           if (aliasFormat == kCustom)
                             Text(kCreateAliasCustomFieldNote),
@@ -189,7 +187,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
           error: (error, stackTrade) {
             return LottieWidget(
               lottie: 'assets/lottie/errorCone.json',
-              label: error,
+              label: error.toString(),
               lottieHeight: MediaQuery.of(context).size.height * 0.2,
             );
           },
@@ -199,11 +197,11 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
   }
 
   Widget aliasDomainFormatDropdown(
-      {BuildContext context,
-      String title,
-      String label,
-      bool isError,
-      Widget child}) {
+      {required BuildContext context,
+      required String title,
+      required String label,
+      required bool isError,
+      required Widget child}) {
     final size = MediaQuery.of(context).size;
 
     return InkWell(

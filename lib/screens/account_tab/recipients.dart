@@ -15,7 +15,7 @@ class Recipients extends ConsumerWidget {
     return recipientStream.when(
       loading: () => RecipientsShimmerLoading(),
       data: (data) {
-        final recipientList = data.recipientDataList;
+        final recipientList = data.recipients;
         if (recipientList.isEmpty)
           return Center(
             child: Text('No recipients found',

@@ -18,7 +18,7 @@ class SecureAppScreen extends ConsumerWidget {
       child: Builder(
         builder: (context) {
           /// Access secureApp provider to control its state
-          final secureAppProvider = SecureApplicationProvider.of(context);
+          final secureAppProvider = SecureApplicationProvider.of(context)!;
 
           secureAppProvider.secure();
           secureAppProvider.pause();

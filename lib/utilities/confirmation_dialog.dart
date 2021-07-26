@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ConfirmationDialog {
   Widget androidAlertDialog(context, String content, Function method,
-      [String title, String yesButton, String noButton]) {
+      [String? title, String? yesButton, String? noButton]) {
     return AlertDialog(
       title: title == null ? null : Text(title),
       content: Text(content),
@@ -21,7 +21,7 @@ class ConfirmationDialog {
   }
 
   Widget iOSAlertDialog(context, String content, Function method,
-      [String title, String yesButton, String noButton]) {
+      [String? title, String? yesButton, String? noButton]) {
     return CupertinoAlertDialog(
       title: title == null ? null : Text(title),
       content: Text(content),

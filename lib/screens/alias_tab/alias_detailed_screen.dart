@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
@@ -45,7 +45,7 @@ class AliasDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context, aliasDataModel.aliasID, isAliasDeleted),
+      appBar: buildAppBar(context, aliasDataModel.id, isAliasDeleted),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,13 +75,13 @@ class AliasDetailScreen extends ConsumerWidget {
             AliasDetailListTile(
               leadingIconData: Icons.flaky_outlined,
               title:
-                  'Alias is ${aliasDataModel.isAliasActive ? 'active' : 'inactive'}',
+                  'Alias is ${aliasDataModel.active ? 'active' : 'inactive'}',
               subtitle: 'Activity',
               trailing: Row(
                 children: [
                   isToggleLoading ? customLoading : Container(),
                   Switch.adaptive(
-                    value: aliasDataModel.isAliasActive,
+                    value: aliasDataModel.active,
                     onChanged: isAliasDeleted ? null : (toggle) {},
                   ),
                 ],
@@ -89,12 +89,12 @@ class AliasDetailScreen extends ConsumerWidget {
               trailingIconOnPress: () {
                 isAliasDeleted
                     ? showToast(kRestoreBeforeActivate)
-                    : toggleAlias(context, aliasDataModel.aliasID);
+                    : toggleAlias(context, aliasDataModel.id);
               },
             ),
             AliasDetailListTile(
               leadingIconData: Icons.comment,
-              title: aliasDataModel.emailDescription,
+              title: aliasDataModel.description ?? 'No description',
               subtitle: 'Description',
               trailingIconData: Icons.edit,
               trailingIconOnPress: () {
@@ -150,7 +150,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Default Recipient${aliasDataModel.recipients.length >= 2 ? 's' : ''}',
+                          'Default Recipient${aliasDataModel.recipients!.length >= 2 ? 's' : ''}',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         IconButton(
@@ -161,7 +161,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  if (aliasDataModel.recipients.isEmpty)
+                  if (aliasDataModel.recipients!.isEmpty)
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -171,11 +171,11 @@ class AliasDetailScreen extends ConsumerWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: aliasDataModel.recipients.length,
+                      itemCount: aliasDataModel.recipients!.length,
                       itemBuilder: (context, index) {
                         final recipients = aliasDataModel.recipients;
                         return RecipientListTile(
-                          recipientDataModel: recipients[index],
+                          recipientDataModel: recipients![index],
                         );
                       },
                     ),
@@ -196,7 +196,7 @@ class AliasDetailScreen extends ConsumerWidget {
                       )
                     : AliasCreatedAtWidget(
                         label: 'Deleted:',
-                        dateTime: aliasDataModel.deletedAt,
+                        dateTime: aliasDataModel.deletedAt!,
                       ),
               ],
             ),
@@ -208,7 +208,7 @@ class AliasDetailScreen extends ConsumerWidget {
   }
 
   Future buildUpdateDefaultRecipient(
-      BuildContext context, AliasDataModel aliasDataModel) {
+      BuildContext context, Alias aliasDataModel) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -223,12 +223,12 @@ class AliasDetailScreen extends ConsumerWidget {
   }
 
   Future buildDeleteOrRestoreAliasDialog(BuildContext context, bool isDeleted,
-      Function deleteOrRestoreAlias, AliasDataModel aliasDataModel) {
+      Function deleteOrRestoreAlias, Alias aliasDataModel) {
     deleteOrRestore() {
       deleteOrRestoreAlias(
         context,
-        aliasDataModel.deletedAt,
-        aliasDataModel.aliasID,
+        isDeleted,
+        aliasDataModel.id,
       );
     }
 
@@ -258,12 +258,12 @@ class AliasDetailScreen extends ConsumerWidget {
       BuildContext context,
       TextEditingController _textEditingController,
       Function editDescription,
-      AliasDataModel aliasDataModel) {
+      Alias aliasDataModel) {
     final formKey = context.read(aliasStateManagerProvider).descriptionFormKey;
 
     void editDesc() {
       editDescription(
-          context, aliasDataModel.aliasID, _textEditingController.text.trim());
+          context, aliasDataModel.id, _textEditingController.text.trim());
     }
 
     return showModalBottomSheet(
@@ -296,10 +296,11 @@ class AliasDetailScreen extends ConsumerWidget {
                         autofocus: true,
                         controller: _textEditingController,
                         validator: (input) =>
-                            FormValidator().validateDescriptionField(input),
+                            FormValidator().validateDescriptionField(input!),
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
-                          hintText: '${aliasDataModel.emailDescription}',
+                          hintText:
+                              aliasDataModel.description ?? 'No description',
                         ),
                       ),
                     ),

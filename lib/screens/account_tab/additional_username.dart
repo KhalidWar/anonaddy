@@ -22,7 +22,8 @@ class AdditionalUsername extends ConsumerWidget {
         label: kLoadAccountDataFailed,
       );
     }
-    if (account.value.subscription == kFreeSubscription) {
+
+    if (account.value.account.subscription == kFreeSubscription) {
       return Center(
         child: Text(
           kOnlyAvailableToPaid,
@@ -36,21 +37,21 @@ class AdditionalUsername extends ConsumerWidget {
       return usernameStream.when(
         loading: () => RecipientsShimmerLoading(),
         data: (usernameData) {
-          final usernameList = usernameData.usernameDataList;
-          if (usernameList.isEmpty)
+          final usernamesList = usernameData.usernames;
+          if (usernamesList.isEmpty) {
             return Center(
               child: Text(
                 'No additional usernames found',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             );
-          else
+          } else {
             return ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(vertical: 0),
-              itemCount: usernameList.length,
+              itemCount: usernamesList.length,
               itemBuilder: (context, index) {
-                final username = usernameList[index];
+                final username = usernamesList[index];
                 return InkWell(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
@@ -69,7 +70,7 @@ class AdditionalUsername extends ConsumerWidget {
                             Text(username.username),
                             SizedBox(height: 2),
                             Text(
-                              username.description ?? 'No description',
+                              username.description ?? kNoDescription,
                               style: TextStyle(color: Colors.grey),
                             ),
                           ],
@@ -88,12 +89,13 @@ class AdditionalUsername extends ConsumerWidget {
                 );
               },
             );
+          }
         },
         error: (error, stackTrace) {
           return LottieWidget(
             lottie: 'assets/lottie/errorCone.json',
             lottieHeight: MediaQuery.of(context).size.height * 0.1,
-            label: '$error',
+            label: error.toString(),
           );
         },
       );

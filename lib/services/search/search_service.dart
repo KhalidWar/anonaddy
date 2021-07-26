@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -11,45 +11,52 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SearchService extends SearchDelegate {
   SearchService(this.searchAliasList);
-  final List<AliasDataModel> searchAliasList;
+  List<Alias> searchAliasList;
 
-  void _searchAliases(List<AliasDataModel> resultAliasList) {
+  void _searchAliases(List<Alias> resultsList) {
     searchAliasList.forEach((element) {
       final filterByEmail =
           element.email.toLowerCase().contains(query.toLowerCase());
-      final filterByDescription =
-          element.emailDescription.toLowerCase().contains(query.toLowerCase());
 
-      if (filterByEmail || filterByDescription) {
-        resultAliasList.add(element);
+      if (element.description == null) {
+        if (filterByEmail) {
+          resultsList.add(element);
+        }
+      } else {
+        final filterByDescription =
+            element.description!.toLowerCase().contains(query.toLowerCase());
+
+        if (filterByEmail || filterByDescription) {
+          resultsList.add(element);
+        }
       }
     });
   }
 
-  Widget _buildResult(List<AliasDataModel> resultAliasList) {
+  Widget _buildResult(List<Alias> resultsList) {
     if (query.isEmpty)
       return Container(
         alignment: Alignment.topCenter,
         margin: EdgeInsets.only(top: 20),
         child: Text(kSearchAliasByEmailOrDesc),
       );
-    else if (resultAliasList.isEmpty)
+    else if (resultsList.isEmpty)
       return LottieWidget(
         lottie: 'assets/lottie/empty.json',
         lottieHeight: 150,
       );
     else
       return ListView.builder(
-        itemCount: resultAliasList.length,
+        itemCount: resultsList.length,
         itemBuilder: (context, index) {
           return InkWell(
             child: IgnorePointer(
-              child: AliasListTile(aliasData: resultAliasList[index]),
+              child: AliasListTile(aliasData: resultsList[index]),
             ),
             onTap: () {
-              SearchHistoryStorage.getAliasBoxes().add(resultAliasList[index]);
+              SearchHistoryStorage.getAliasBoxes().add(resultsList[index]);
               context.read(aliasStateManagerProvider).aliasDataModel =
-                  resultAliasList[index];
+                  resultsList[index];
               Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
             },
           );
@@ -76,17 +83,17 @@ class SearchService extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    List<AliasDataModel> resultAliasList = [];
+    final resultsList = <Alias>[];
 
-    _searchAliases(resultAliasList);
-    return _buildResult(resultAliasList);
+    _searchAliases(resultsList);
+    return _buildResult(resultsList);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<AliasDataModel> resultAliasList = [];
+    final resultsList = <Alias>[];
 
-    _searchAliases(resultAliasList);
-    return _buildResult(resultAliasList);
+    _searchAliases(resultsList);
+    return _buildResult(resultsList);
   }
 }

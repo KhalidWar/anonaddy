@@ -35,7 +35,7 @@ class AccountTab extends StatelessWidget {
                       final accountStream = watch(accountStreamProvider);
                       return accountStream.when(
                         loading: () => LoadingIndicator(),
-                        data: (data) => MainAccount(userModel: data),
+                        data: (data) => MainAccount(account: data.account),
                         error: (error, stackTrace) {
                           return LottieWidget(
                             showLoading: true,

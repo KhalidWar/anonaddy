@@ -13,17 +13,17 @@ class DomainDataModel {
     this.updatedAt,
   });
 
-  final String id;
-  final String userId;
-  final String domain;
+  final String? id;
+  final String? userId;
+  final String? domain;
   final dynamic description;
-  final List<dynamic> aliases;
+  final List<dynamic>? aliases;
   final dynamic defaultRecipient;
-  final bool active;
-  final bool catchAll;
-  final DateTime domainVerifiedAt;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final bool? active;
+  final bool? catchAll;
+  final DateTime? domainVerifiedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   factory DomainDataModel.fromJson(Map<String, dynamic> json) {
     return DomainDataModel(

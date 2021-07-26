@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/models/alias/alias_data_model.dart';
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -21,8 +21,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
-  RecipientDetailedScreen({this.recipientData});
-  final RecipientDataModel recipientData;
+  const RecipientDetailedScreen({required this.recipientData});
+  final Recipient recipientData;
 
   int calculateTotal(List<int> list) {
     if (list.isEmpty) {
@@ -48,8 +48,9 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final List<int> blockedList = [];
     final List<int> repliedList = [];
     final List<int> sentList = [];
+
     if (recipientData.aliases != null) {
-      for (AliasDataModel alias in recipientData.aliases) {
+      for (Alias alias in recipientData.aliases!) {
         forwardedList.add(alias.emailsForwarded);
         blockedList.add(alias.emailsBlocked);
         repliedList.add(alias.emailsReplied);
@@ -155,7 +156,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         style: Theme.of(context).textTheme.headline6),
                   ),
                   SizedBox(height: size.height * 0.01),
-                  if (recipientData.aliases.isEmpty)
+                  if (recipientData.aliases!.isEmpty)
                     Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: size.height * 0.01),
@@ -164,10 +165,10 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: recipientData.aliases.length,
+                      itemCount: recipientData.aliases!.length,
                       itemBuilder: (context, index) {
                         return AliasListTile(
-                          aliasData: recipientData.aliases[index],
+                          aliasData: recipientData.aliases![index],
                         );
                       },
                     ),
@@ -258,8 +259,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildAddPGPKeyDialog(
-      BuildContext context, RecipientDataModel recipientData) {
+  Future buildAddPGPKeyDialog(BuildContext context, Recipient recipientData) {
     final _texEditingController = TextEditingController();
 
     void addPublicKey() {
@@ -298,7 +298,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                         autofocus: true,
                         controller: _texEditingController,
                         validator: (input) =>
-                            FormValidator().validatePGPKeyField(input),
+                            FormValidator().validatePGPKeyField(input!),
                         minLines: 4,
                         maxLines: 5,
                         textInputAction: TextInputAction.done,
@@ -326,7 +326,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildAppBar(BuildContext context) {
+  AppBar buildAppBar(BuildContext context) {
     final confirmationDialog = ConfirmationDialog();
     final isIOS = TargetedPlatform().isIOS();
 

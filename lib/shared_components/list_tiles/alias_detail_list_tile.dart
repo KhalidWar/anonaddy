@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class AliasDetailListTile extends StatelessWidget {
   const AliasDetailListTile({
-    Key key,
+    Key? key,
     this.trailingIconOnPress,
     this.trailingIconData,
     this.subtitle,
@@ -14,19 +14,19 @@ class AliasDetailListTile extends StatelessWidget {
     this.leadingIconColor,
   }) : super(key: key);
 
-  final Function trailingIconOnPress;
-  final IconData trailingIconData, leadingIconData;
-  final Color leadingIconColor;
+  final Function? trailingIconOnPress;
+  final IconData? trailingIconData, leadingIconData;
+  final Color? leadingIconColor;
   final dynamic title, subtitle;
-  final Widget trailing;
-  final TextStyle titleTextStyle;
+  final Widget? trailing;
+  final TextStyle? titleTextStyle;
 
   @override
   Widget build(BuildContext context) {
     return title == null
         ? Container()
         : InkWell(
-            onTap: trailingIconOnPress,
+            onTap: trailingIconOnPress as void Function()?,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
               child: Row(
@@ -56,7 +56,7 @@ class AliasDetailListTile extends StatelessWidget {
                         ? trailing ?? Container()
                         : IconButton(
                             icon: Icon(trailingIconData),
-                            onPressed: trailingIconOnPress,
+                            onPressed: trailingIconOnPress as void Function()?,
                           ),
                   ),
                 ],

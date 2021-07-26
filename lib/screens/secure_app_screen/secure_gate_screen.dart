@@ -14,7 +14,7 @@ import 'package:secure_application/secure_application.dart';
 import 'package:secure_application/secure_gate.dart';
 
 class SecureGateScreen extends StatefulWidget {
-  const SecureGateScreen({Key key, this.child}) : super(key: key);
+  const SecureGateScreen({Key? key, required this.child}) : super(key: key);
   final Widget child;
 
   @override
@@ -57,9 +57,9 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
       child: _didAuthenticate ? widget.child : Container(),
       lockedBuilder: (context, secureNotifier) {
         if (_didAuthenticate) {
-          secureNotifier.unlock();
+          secureNotifier!.unlock();
         } else {
-          secureNotifier.lock();
+          secureNotifier!.lock();
         }
 
         return Container(
@@ -119,12 +119,12 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
   }
 
   Future buildLogoutDialog(
-      BuildContext context, SecureApplicationController secureNotifier) {
+      BuildContext context, SecureApplicationController? secureNotifier) {
     final confirmationDialog = ConfirmationDialog();
     final targetedPlatform = TargetedPlatform();
 
     void logout() {
-      secureNotifier.unlock();
+      secureNotifier!.unlock();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LogoutScreen()),

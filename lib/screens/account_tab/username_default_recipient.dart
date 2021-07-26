@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
-import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class UsernameDefaultRecipientScreen extends StatefulWidget {
   const UsernameDefaultRecipientScreen(this.username);
 
-  final UsernameDataModel username;
+  final Username username;
 
   @override
   _AliasDefaultRecipientScreenState createState() =>
@@ -22,17 +22,17 @@ class UsernameDefaultRecipientScreen extends StatefulWidget {
 
 class _AliasDefaultRecipientScreenState
     extends State<UsernameDefaultRecipientScreen> {
-  final _verifiedRecipients = <RecipientDataModel>[];
-  RecipientDataModel selectedRecipient;
+  final _verifiedRecipients = <Recipient>[];
+  Recipient? selectedRecipient;
 
-  double initialChildSize;
-  double maxChildSize;
+  late double initialChildSize;
+  late double maxChildSize;
 
-  void _toggleRecipient(RecipientDataModel verifiedRecipient) {
+  void _toggleRecipient(Recipient verifiedRecipient) {
     if (selectedRecipient == null) {
       selectedRecipient = verifiedRecipient;
     } else {
-      if (verifiedRecipient.email == selectedRecipient.email) {
+      if (verifiedRecipient.email == selectedRecipient!.email) {
         selectedRecipient = null;
       } else {
         selectedRecipient = verifiedRecipient;
@@ -40,11 +40,11 @@ class _AliasDefaultRecipientScreenState
     }
   }
 
-  bool _isDefaultRecipient(RecipientDataModel verifiedRecipient) {
+  bool _isDefaultRecipient(Recipient verifiedRecipient) {
     if (selectedRecipient == null) {
       return false;
     } else {
-      if (verifiedRecipient.email == selectedRecipient.email) {
+      if (verifiedRecipient.email == selectedRecipient!.email) {
         return true;
       }
       return false;
@@ -52,8 +52,8 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final allRecipients = context.read(recipientsProvider).data.value;
-    for (RecipientDataModel recipient in allRecipients.recipientDataList) {
+    final allRecipients = context.read(recipientsProvider).data!.value;
+    for (Recipient recipient in allRecipients.recipients) {
       if (recipient.emailVerifiedAt != null) {
         _verifiedRecipients.add(recipient);
       }
@@ -62,7 +62,7 @@ class _AliasDefaultRecipientScreenState
 
   void _setDefaultRecipient() {
     final defaultRecipient = widget.username.defaultRecipient;
-    for (RecipientDataModel verifiedRecipient in _verifiedRecipients) {
+    for (Recipient verifiedRecipient in _verifiedRecipients) {
       if (defaultRecipient == null) {
         selectedRecipient = null;
       } else {
@@ -160,7 +160,7 @@ class _AliasDefaultRecipientScreenState
                           style: TextStyle(
                             color: _isDefaultRecipient(verifiedRecipient)
                                 ? Colors.black
-                                : Theme.of(context).textTheme.bodyText1.color,
+                                : Theme.of(context).textTheme.bodyText1!.color,
                           ),
                         ),
                         onTap: () {
@@ -197,7 +197,7 @@ class _AliasDefaultRecipientScreenState
                     .updateDefaultRecipient(
                       context,
                       widget.username.id,
-                      selectedRecipient == null ? '' : selectedRecipient.id,
+                      selectedRecipient == null ? '' : selectedRecipient!.id,
                     ),
               ),
             ),

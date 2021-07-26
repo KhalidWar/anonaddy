@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
@@ -42,7 +41,7 @@ class RecipientService {
     }
   }
 
-  Future<RecipientDataModel> enableEncryption(String recipientID) async {
+  Future<Recipient> enableEncryption(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
@@ -58,7 +57,7 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print('enableEncryption ${response.statusCode}');
-        return RecipientDataModel.fromJsonData(jsonDecode(response.body));
+        return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('enableEncryption ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -93,8 +92,7 @@ class RecipientService {
     }
   }
 
-  Future<RecipientDataModel> addPublicGPGKey(
-      String recipientID, String keyData) async {
+  Future<Recipient> addPublicGPGKey(String recipientID, String keyData) async {
     final accessToken = await _accessTokenService.getAccessToken();
 
     try {
@@ -112,7 +110,7 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print("addPublicGPGKey ${response.statusCode}");
-        return RecipientDataModel.fromJsonData(jsonDecode(response.body));
+        return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("addPublicGPGKey ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -147,7 +145,7 @@ class RecipientService {
     }
   }
 
-  Future<RecipientDataModel> addRecipient(String email) async {
+  Future<Recipient> addRecipient(String email) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
@@ -163,7 +161,7 @@ class RecipientService {
 
       if (response.statusCode == 201) {
         print("addRecipient ${response.statusCode}");
-        return RecipientDataModel.fromJsonData(jsonDecode(response.body));
+        return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("addRecipient ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);

@@ -10,10 +10,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginStateManager extends ChangeNotifier {
   LoginStateManager() {
-    isLoading = false;
+    _isLoading = false;
   }
 
-  bool _isLoading;
+  late bool _isLoading;
 
   final _showToast = NicheMethod().showToast;
 
@@ -25,7 +25,7 @@ class LoginStateManager extends ChangeNotifier {
 
   Future<void> login(BuildContext context, String accessToken,
       GlobalKey<FormState> formKey) async {
-    if (formKey.currentState.validate()) {
+    if (formKey.currentState!.validate()) {
       isLoading = true;
       await context
           .read(accessTokenServiceProvider)
@@ -52,8 +52,8 @@ class LoginStateManager extends ChangeNotifier {
       String accessToken,
       GlobalKey<FormState> urlFormKey,
       GlobalKey<FormState> tokenFormKey) async {
-    if (urlFormKey.currentState.validate() &&
-        tokenFormKey.currentState.validate()) {
+    if (urlFormKey.currentState!.validate() &&
+        tokenFormKey.currentState!.validate()) {
       isLoading = true;
       await context
           .read(accessTokenServiceProvider)
@@ -82,11 +82,11 @@ class LoginStateManager extends ChangeNotifier {
 
   Future<void> pasteFromClipboard(TextEditingController controller) async {
     final data = await Clipboard.getData('text/plain');
-    if (data == null || data.text.isEmpty) {
+    if (data == null || data.text!.isEmpty) {
       _showToast('Nothing to paste. Clipboard is empty.');
     } else {
       controller.clear();
-      controller.text = data.text;
+      controller.text = data.text!;
     }
   }
 }

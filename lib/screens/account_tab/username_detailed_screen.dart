@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/username_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
@@ -25,8 +25,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
     final username = usernameProvider.usernameModel;
     final activeSwitchLoading = usernameProvider.activeSwitchLoading;
     final catchAllSwitchLoading = usernameProvider.catchAllSwitchLoading;
-    final toggleActiveAlias = usernameProvider.toggleActiveAlias;
-    final toggleCatchAllAlias = usernameProvider.toggleCatchAllAlias;
+    final toggleActivity = usernameProvider.toggleActivity;
+    final toggleCatchAll = usernameProvider.toggleCatchAll;
 
     final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
@@ -50,7 +50,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                     username.username,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6
+                        .headline6!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -58,7 +58,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
             ),
             Divider(height: size.height * 0.02),
             AliasDetailListTile(
-              title: username.description ?? 'No description',
+              title: username.description ?? kNoDescription,
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Username description',
               leadingIconData: Icons.comment,
@@ -74,8 +74,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
               subtitle: 'Activity',
               leadingIconData: Icons.toggle_off_outlined,
               trailing: buildSwitch(activeSwitchLoading, username.active),
-              trailingIconOnPress: () =>
-                  toggleActiveAlias(context, username.id),
+              trailingIconOnPress: () => toggleActivity(context, username.id),
             ),
             AliasDetailListTile(
               title: username.catchAll ? 'Enabled' : 'Disabled',
@@ -83,8 +82,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
               subtitle: 'Catch All',
               leadingIconData: Icons.repeat,
               trailing: buildSwitch(catchAllSwitchLoading, username.catchAll),
-              trailingIconOnPress: () =>
-                  toggleCatchAllAlias(context, username.id),
+              trailingIconOnPress: () => toggleCatchAll(context, username.id),
             ),
             Divider(height: size.height * 0.02),
             Column(
@@ -114,7 +112,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                   )
                 else
                   RecipientListTile(
-                    recipientDataModel: username.defaultRecipient,
+                    recipientDataModel: username.defaultRecipient!,
                   ),
               ],
             ),
@@ -134,7 +132,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                if (username.aliases.isEmpty)
+                if (username.aliases!.isEmpty)
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text('No aliases found'),
@@ -143,10 +141,10 @@ class UsernameDetailedScreen extends ConsumerWidget {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: username.aliases.length,
+                    itemCount: username.aliases!.length,
                     itemBuilder: (context, index) {
                       return AliasListTile(
-                        aliasData: username.aliases[index],
+                        aliasData: username.aliases![index],
                       );
                     },
                   ),
@@ -187,7 +185,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
   }
 
   Future buildEditDescriptionDialog(BuildContext context,
-      TextEditingController textEditingController, UsernameDataModel username) {
+      TextEditingController textEditingController, Username username) {
     void editDesc() {
       context.read(usernameStateManagerProvider).editDescription(
           context, username.id, textEditingController.text.trim());
@@ -225,10 +223,10 @@ class UsernameDetailedScreen extends ConsumerWidget {
                         autofocus: true,
                         controller: textEditingController,
                         validator: (input) =>
-                            FormValidator().validateDescriptionField(input),
+                            FormValidator().validateDescriptionField(input!),
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
-                          hintText: '${username.description}',
+                          hintText: username.description ?? kNoDescription,
                         ),
                       ),
                     ),
@@ -249,8 +247,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildUpdateDefaultRecipient(
-      BuildContext context, UsernameDataModel username) {
+  Future buildUpdateDefaultRecipient(BuildContext context, Username username) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -264,7 +261,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildAppBar(BuildContext context, String usernameID) {
+  AppBar buildAppBar(BuildContext context, String usernameID) {
     final isIOS = TargetedPlatform().isIOS();
     final confirmationDialog = ConfirmationDialog();
 

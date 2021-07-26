@@ -1,12 +1,12 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class DeletedAliasesScreen extends StatelessWidget {
-  const DeletedAliasesScreen({Key key, this.aliasDataModel}) : super(key: key);
+  const DeletedAliasesScreen(this.aliasDataModel);
 
-  final List<AliasDataModel> aliasDataModel;
+  final List<Alias> aliasDataModel;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class DeletedAliasesScreen extends StatelessWidget {
     );
   }
 
-  Widget buildAppBar(BuildContext context) {
+  PreferredSizeWidget buildAppBar(BuildContext context) {
     return PreferredSize(
       preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
       child: AppBar(

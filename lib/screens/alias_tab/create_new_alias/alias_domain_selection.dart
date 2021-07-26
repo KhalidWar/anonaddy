@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDomainSelection extends StatelessWidget {
-  const AliasDomainSelection({this.aliasFormatList, this.domainOptions});
+  const AliasDomainSelection(
+      {required this.aliasFormatList, required this.domainOptions});
   final List<String> aliasFormatList;
   final DomainOptions domainOptions;
 
@@ -19,7 +20,7 @@ class AliasDomainSelection extends StatelessWidget {
     int aliasDomainIndex = 0;
 
     void setAliasDomain() {
-      final selectedDomain = domainOptions.sharedDomainsList[aliasDomainIndex];
+      final selectedDomain = domainOptions.domains[aliasDomainIndex];
       aliasStateProvider.setAliasDomain = selectedDomain;
       if (aliasStateProvider.sharedDomains.contains(selectedDomain)) {
         aliasStateProvider.setAliasFormat = aliasFormatList[0];
@@ -42,7 +43,7 @@ class AliasDomainSelection extends StatelessWidget {
             onSelectedItemChanged: (index) {
               aliasDomainIndex = index;
             },
-            children: domainOptions.sharedDomainsList.map<Widget>((value) {
+            children: domainOptions.domains.map<Widget>((value) {
               return Text(
                 value,
                 style: TextStyle(

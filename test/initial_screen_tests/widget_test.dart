@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Widget rootWidget({Widget child}) {
+  Widget rootWidget({Widget? child}) {
     return ProviderScope(child: MaterialApp(home: child));
   }
 

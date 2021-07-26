@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
@@ -21,8 +21,8 @@ class AliasTab extends ConsumerWidget {
 
     final size = MediaQuery.of(context).size;
 
-    final List<AliasDataModel> availableAliasList = [];
-    final List<AliasDataModel> deletedAliasList = [];
+    final List<Alias> availableAliasList = [];
+    final List<Alias> deletedAliasList = [];
     final List<int> forwardedList = [];
     final List<int> blockedList = [];
     final List<int> repliedList = [];
@@ -31,7 +31,7 @@ class AliasTab extends ConsumerWidget {
     return aliasStream.when(
       loading: () => AliasShimmerLoading(),
       data: (data) {
-        for (AliasDataModel alias in data.aliasDataList) {
+        for (Alias alias in data.aliases) {
           forwardedList.add(alias.emailsForwarded);
           blockedList.add(alias.emailsBlocked);
           repliedList.add(alias.emailsReplied);
@@ -138,8 +138,7 @@ class AliasTab extends ConsumerWidget {
                               Navigator.push(
                                 context,
                                 CustomPageRoute(
-                                  DeletedAliasesScreen(
-                                      aliasDataModel: deletedAliasList),
+                                  DeletedAliasesScreen(deletedAliasList),
                                 ),
                               );
                             },
@@ -157,7 +156,7 @@ class AliasTab extends ConsumerWidget {
         return LottieWidget(
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
-          label: '$error',
+          label: error.toString(),
         );
       },
     );

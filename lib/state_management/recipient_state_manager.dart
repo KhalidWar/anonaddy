@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -8,25 +8,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RecipientStateManager extends ChangeNotifier {
   RecipientStateManager() {
-    isLoading = false;
+    _isLoading = false;
   }
 
-  RecipientDataModel recipientDataModel;
-  bool _isLoading;
+  late Recipient recipientDataModel;
+  late bool _isLoading;
 
   final _showToast = NicheMethod().showToast;
   final textEditController = TextEditingController();
   final recipientFormKey = GlobalKey<FormState>();
   final pgpKeyFormKey = GlobalKey<FormState>();
 
-  get isLoading => _isLoading;
+  bool get isLoading => _isLoading;
 
   set isLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
 
-  void setFingerprint(String input) {
+  void setFingerprint(String? input) {
     recipientDataModel.fingerprint = input;
     notifyListeners();
   }
@@ -60,7 +60,7 @@ class RecipientStateManager extends ChangeNotifier {
 
   Future<void> addPublicGPGKey(
       BuildContext context, String recipientID, String keyData) async {
-    if (pgpKeyFormKey.currentState.validate()) {
+    if (pgpKeyFormKey.currentState!.validate()) {
       await context
           .read(recipientServiceProvider)
           .addPublicGPGKey(recipientID, keyData)
@@ -103,7 +103,7 @@ class RecipientStateManager extends ChangeNotifier {
   }
 
   Future<void> addRecipient(BuildContext context, String email) async {
-    if (recipientFormKey.currentState.validate()) {
+    if (recipientFormKey.currentState!.validate()) {
       isLoading = true;
       await context
           .read(recipientServiceProvider)

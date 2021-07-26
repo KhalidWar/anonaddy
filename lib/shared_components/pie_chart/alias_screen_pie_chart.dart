@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class AliasScreenPieChart extends StatelessWidget {
   const AliasScreenPieChart({
-    this.emailsForwarded,
-    this.emailsBlocked,
-    this.emailsSent,
-    this.emailsReplied,
+    required this.emailsForwarded,
+    required this.emailsBlocked,
+    required this.emailsSent,
+    required this.emailsReplied,
   });
 
   final int emailsForwarded;

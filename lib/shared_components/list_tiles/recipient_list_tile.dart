@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient_data_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../custom_page_route.dart';
 
 class RecipientListTile extends StatelessWidget {
-  const RecipientListTile({Key key, this.recipientDataModel}) : super(key: key);
+  const RecipientListTile({Key? key, required this.recipientDataModel})
+      : super(key: key);
 
-  final RecipientDataModel recipientDataModel;
+  final Recipient recipientDataModel;
 
   @override
   Widget build(BuildContext context) {

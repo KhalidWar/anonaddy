@@ -7,7 +7,7 @@ class SettingsDataStorage {
     await _secureStorage.write(key: key, value: bool.toString());
   }
 
-  Future<bool> loadBoolState(String key) async {
+  Future<bool?> loadBoolState(String key) async {
     final boolValue = await _secureStorage.read(key: key);
     if (boolValue == null) {
       return null;

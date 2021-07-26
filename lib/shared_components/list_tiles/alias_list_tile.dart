@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -10,8 +10,8 @@ import '../custom_page_route.dart';
 import 'alias_list_tile_leading.dart';
 
 class AliasListTile extends StatelessWidget {
-  const AliasListTile({Key key, this.aliasData}) : super(key: key);
-  final AliasDataModel aliasData;
+  const AliasListTile({Key? key, required this.aliasData}) : super(key: key);
+  final Alias aliasData;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class AliasListTile extends StatelessWidget {
           children: [
             AliasListTileLeading(
               isDeleted: isAliasDeleted(),
-              isActive: aliasData.isAliasActive,
+              isActive: aliasData.active,
             ),
             SizedBox(width: 10),
             Expanded(
@@ -38,7 +38,7 @@ class AliasListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${aliasData.email}',
+                    aliasData.email,
                     style: TextStyle(
                       color: isAliasDeleted()
                           ? Colors.grey
@@ -48,7 +48,7 @@ class AliasListTile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${aliasData.emailDescription}',
+                    aliasData.description ?? 'No description',
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],

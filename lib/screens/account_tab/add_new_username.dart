@@ -40,7 +40,7 @@ class AddNewUsername extends StatelessWidget {
                     autofocus: true,
                     controller: _textEditController,
                     validator: (input) =>
-                        FormValidator().validateUsernameInput(input),
+                        FormValidator().validateUsernameInput(input!),
                     onFieldSubmitted: (toggle) => createUsername(),
                     decoration: kTextFormFieldDecoration.copyWith(
                       hintText: 'johndoe',
