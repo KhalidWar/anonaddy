@@ -57,7 +57,7 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print('enableEncryption ${response.statusCode}');
-        return Recipient.fromJson(jsonDecode(response.body));
+        return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('enableEncryption ${response.statusCode}');
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -67,7 +67,7 @@ class RecipientService {
     }
   }
 
-  Future disableEncryption(String? recipientID) async {
+  Future disableEncryption(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.delete(
@@ -110,7 +110,7 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print("addPublicGPGKey ${response.statusCode}");
-        return Recipient.fromJson(jsonDecode(response.body));
+        return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("addPublicGPGKey ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -161,7 +161,7 @@ class RecipientService {
 
       if (response.statusCode == 201) {
         print("addRecipient ${response.statusCode}");
-        return Recipient.fromJson(jsonDecode(response.body));
+        return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("addRecipient ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
