@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +12,7 @@ class UsernameStateManager extends ChangeNotifier {
     updateRecipientLoading = false;
   }
 
-  late UsernameDataModel usernameModel;
+  late Username usernameModel;
 
   late bool _activeSwitchLoading;
   late bool _catchAllSwitchLoading;
@@ -41,12 +41,11 @@ class UsernameStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleActiveAlias(
-      BuildContext context, String usernameID) async {
+  Future<void> toggleActivity(BuildContext context, String usernameID) async {
     final usernameProvider = context.read(usernameServiceProvider);
     activeSwitchLoading = true;
-    if (usernameModel.active!) {
-      await usernameProvider.deactivateUsername(usernameID).then((value) {
+    if (usernameModel.active) {
+      await usernameProvider.deactivateUsername(usernameID).then((username) {
         _showToast('Username Deactivated Successfully!');
         usernameModel.active = false;
       }).catchError((error) {
@@ -54,8 +53,8 @@ class UsernameStateManager extends ChangeNotifier {
       });
       activeSwitchLoading = false;
     } else {
-      await usernameProvider.activateUsername(usernameID).then((value) {
-        usernameModel.active = true;
+      await usernameProvider.activateUsername(usernameID).then((username) {
+        usernameModel.active = username.active;
         _showToast('Username Activated Successfully!');
       }).catchError((error) {
         _showToast(error.toString());
@@ -64,12 +63,11 @@ class UsernameStateManager extends ChangeNotifier {
     }
   }
 
-  Future<void> toggleCatchAllAlias(
-      BuildContext context, String usernameID) async {
+  Future<void> toggleCatchAll(BuildContext context, String usernameID) async {
     final usernameProvider = context.read(usernameServiceProvider);
     catchAllSwitchLoading = true;
-    if (usernameModel.catchAll!) {
-      await usernameProvider.deactivateCatchAll(usernameID).then((value) {
+    if (usernameModel.catchAll) {
+      await usernameProvider.deactivateCatchAll(usernameID).then((username) {
         _showToast('Catch All Deactivated Successfully!');
         usernameModel.catchAll = false;
       }).catchError((error) {
@@ -77,8 +75,8 @@ class UsernameStateManager extends ChangeNotifier {
       });
       catchAllSwitchLoading = false;
     } else {
-      await usernameProvider.activateCatchAll(usernameID).then((value) {
-        usernameModel.catchAll = true;
+      await usernameProvider.activateCatchAll(usernameID).then((username) {
+        usernameModel.catchAll = username.catchAll;
         _showToast('Catch All Activated Successfully!');
       }).catchError((error) {
         _showToast(error.toString());
@@ -92,8 +90,7 @@ class UsernameStateManager extends ChangeNotifier {
       await context
           .read(usernameServiceProvider)
           .createNewUsername(username)
-          .then((value) {
-        print(value);
+          .then((username) {
         _showToast('Username added successfully!');
         Navigator.pop(context);
       }).catchError((error) {
@@ -107,9 +104,9 @@ class UsernameStateManager extends ChangeNotifier {
       await context
           .read(usernameServiceProvider)
           .editUsernameDescription(usernameID, description)
-          .then((value) {
+          .then((username) {
         Navigator.pop(context);
-        usernameModel.description = value.description;
+        usernameModel.description = username.description;
         _showToast('Description updated successfully!');
       }).catchError((error) {
         _showToast(error.toString());
@@ -123,9 +120,9 @@ class UsernameStateManager extends ChangeNotifier {
     await context
         .read(usernameServiceProvider)
         .updateDefaultRecipient(usernameID, recipientID)
-        .then((value) {
+        .then((username) {
       updateRecipientLoading = false;
-      usernameModel.defaultRecipient = value.defaultRecipient;
+      usernameModel.defaultRecipient = username.defaultRecipient;
       notifyListeners();
       _showToast('Default recipient updated successfully!');
       Navigator.pop(context);
@@ -140,7 +137,7 @@ class UsernameStateManager extends ChangeNotifier {
     await context
         .read(usernameServiceProvider)
         .deleteUsername(usernameID)
-        .then((value) {
+        .then((username) {
       Navigator.pop(context);
       _showToast('Username deleted successfully!');
     }).catchError((error) {

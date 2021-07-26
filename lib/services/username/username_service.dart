@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:anonaddy/models/username/username_data_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
@@ -69,7 +68,7 @@ class UsernameService {
     }
   }
 
-  Future<UsernameDataModel> editUsernameDescription(
+  Future<Username> editUsernameDescription(
       String usernameID, String description) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
@@ -87,7 +86,7 @@ class UsernameService {
 
       if (response.statusCode == 200) {
         print("editUsernameDescription ${response.statusCode}");
-        return UsernameDataModel.fromJsonData(jsonDecode(response.body));
+        return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("editUsernameDescription ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -123,7 +122,7 @@ class UsernameService {
     }
   }
 
-  Future<UsernameDataModel> updateDefaultRecipient(
+  Future<Username> updateDefaultRecipient(
       String usernameID, String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
@@ -141,7 +140,7 @@ class UsernameService {
 
       if (response.statusCode == 200) {
         print("updateDefaultRecipient ${response.statusCode}");
-        return UsernameDataModel.fromJsonData(jsonDecode(response.body));
+        return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("updateDefaultRecipient ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -151,7 +150,7 @@ class UsernameService {
     }
   }
 
-  Future<UsernameDataModel> activateUsername(String usernameID) async {
+  Future<Username> activateUsername(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
@@ -167,7 +166,7 @@ class UsernameService {
 
       if (response.statusCode == 200) {
         print("activateUsername ${response.statusCode}");
-        return UsernameDataModel.fromJsonData(jsonDecode(response.body));
+        return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("activateUsername ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
@@ -202,7 +201,7 @@ class UsernameService {
     }
   }
 
-  Future<UsernameDataModel> activateCatchAll(String usernameID) async {
+  Future<Username> activateCatchAll(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
@@ -218,7 +217,7 @@ class UsernameService {
 
       if (response.statusCode == 200) {
         print("activateCatchAll ${response.statusCode}");
-        return UsernameDataModel.fromJsonData(jsonDecode(response.body));
+        return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("activateCatchAll ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);

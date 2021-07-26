@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
-import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class UsernameDefaultRecipientScreen extends StatefulWidget {
   const UsernameDefaultRecipientScreen(this.username);
 
-  final UsernameDataModel username;
+  final Username username;
 
   @override
   _AliasDefaultRecipientScreenState createState() =>

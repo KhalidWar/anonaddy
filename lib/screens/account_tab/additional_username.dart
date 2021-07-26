@@ -37,8 +37,8 @@ class AdditionalUsername extends ConsumerWidget {
       return usernameStream.when(
         loading: () => RecipientsShimmerLoading(),
         data: (usernameData) {
-          final usernameList = usernameData.usernameDataList;
-          if (usernameList.isEmpty) {
+          final usernamesList = usernameData.usernames;
+          if (usernamesList.isEmpty) {
             return Center(
               child: Text(
                 'No additional usernames found',
@@ -49,9 +49,9 @@ class AdditionalUsername extends ConsumerWidget {
             return ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(vertical: 0),
-              itemCount: usernameList.length,
+              itemCount: usernamesList.length,
               itemBuilder: (context, index) {
-                final username = usernameList[index];
+                final username = usernamesList[index];
                 return InkWell(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
@@ -70,7 +70,7 @@ class AdditionalUsername extends ConsumerWidget {
                             Text(username.username),
                             SizedBox(height: 2),
                             Text(
-                              username.description ?? 'No description',
+                              username.description ?? kNoDescription,
                               style: TextStyle(color: Colors.grey),
                             ),
                           ],

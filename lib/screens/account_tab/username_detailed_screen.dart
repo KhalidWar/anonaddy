@@ -1,5 +1,5 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/username_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
@@ -25,14 +25,14 @@ class UsernameDetailedScreen extends ConsumerWidget {
     final username = usernameProvider.usernameModel;
     final activeSwitchLoading = usernameProvider.activeSwitchLoading;
     final catchAllSwitchLoading = usernameProvider.catchAllSwitchLoading;
-    final toggleActiveAlias = usernameProvider.toggleActiveAlias;
-    final toggleCatchAllAlias = usernameProvider.toggleCatchAllAlias;
+    final toggleActivity = usernameProvider.toggleActivity;
+    final toggleCatchAll = usernameProvider.toggleCatchAll;
 
     final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: buildAppBar(context, username.id!),
+      appBar: buildAppBar(context, username.id),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +58,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
             ),
             Divider(height: size.height * 0.02),
             AliasDetailListTile(
-              title: username.description ?? 'No description',
+              title: username.description ?? kNoDescription,
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Username description',
               leadingIconData: Icons.comment,
@@ -67,24 +67,22 @@ class UsernameDetailedScreen extends ConsumerWidget {
                   context, textEditingController, username),
             ),
             AliasDetailListTile(
-              title: username.active!
+              title: username.active
                   ? 'Username is active'
                   : 'Username is inactive',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Activity',
               leadingIconData: Icons.toggle_off_outlined,
-              trailing: buildSwitch(activeSwitchLoading, username.active!),
-              trailingIconOnPress: () =>
-                  toggleActiveAlias(context, username.id!),
+              trailing: buildSwitch(activeSwitchLoading, username.active),
+              trailingIconOnPress: () => toggleActivity(context, username.id),
             ),
             AliasDetailListTile(
-              title: username.catchAll! ? 'Enabled' : 'Disabled',
+              title: username.catchAll ? 'Enabled' : 'Disabled',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Catch All',
               leadingIconData: Icons.repeat,
-              trailing: buildSwitch(catchAllSwitchLoading, username.catchAll!),
-              trailingIconOnPress: () =>
-                  toggleCatchAllAlias(context, username.id!),
+              trailing: buildSwitch(catchAllSwitchLoading, username.catchAll),
+              trailingIconOnPress: () => toggleCatchAll(context, username.id),
             ),
             Divider(height: size.height * 0.02),
             Column(
@@ -158,11 +156,11 @@ class UsernameDetailedScreen extends ConsumerWidget {
               children: [
                 AliasCreatedAtWidget(
                   label: 'Created:',
-                  dateTime: username.createdAt!,
+                  dateTime: username.createdAt,
                 ),
                 AliasCreatedAtWidget(
                   label: 'Updated:',
-                  dateTime: username.updatedAt!,
+                  dateTime: username.updatedAt,
                 ),
               ],
             ),
@@ -187,7 +185,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
   }
 
   Future buildEditDescriptionDialog(BuildContext context,
-      TextEditingController textEditingController, UsernameDataModel username) {
+      TextEditingController textEditingController, Username username) {
     void editDesc() {
       context.read(usernameStateManagerProvider).editDescription(
           context, username.id, textEditingController.text.trim());
@@ -228,7 +226,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                             FormValidator().validateDescriptionField(input!),
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
-                          hintText: '${username.description}',
+                          hintText: username.description ?? kNoDescription,
                         ),
                       ),
                     ),
@@ -249,8 +247,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildUpdateDefaultRecipient(
-      BuildContext context, UsernameDataModel username) {
+  Future buildUpdateDefaultRecipient(BuildContext context, Username username) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,

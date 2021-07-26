@@ -1,17 +1,55 @@
-import 'package:anonaddy/models/username/username_data_model.dart';
+import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'username_model.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class UsernameModel {
-  const UsernameModel({required this.usernameDataList});
+  UsernameModel({required this.usernames});
 
-  final List<UsernameDataModel> usernameDataList;
+  @JsonKey(name: 'data')
+  List<Username> usernames;
 
-  factory UsernameModel.fromJson(Map<String, dynamic> json) {
-    List list = json['data'];
-    List<UsernameDataModel> usernameDataList =
-        list.map((i) => UsernameDataModel.fromJson(i)).toList();
+  factory UsernameModel.fromJson(Map<String, dynamic> json) =>
+      _$UsernameModelFromJson(json);
 
-    return UsernameModel(
-      usernameDataList: usernameDataList,
-    );
-  }
+  Map<String, dynamic> toJson() => _$UsernameModelToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Username {
+  Username({
+    required this.id,
+    required this.userId,
+    required this.username,
+    this.description,
+    required this.aliases,
+    this.defaultRecipient,
+    required this.active,
+    required this.catchAll,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  String id;
+  @JsonKey(name: 'user_id')
+  String userId;
+  String username;
+  String? description;
+  List<Alias>? aliases;
+  @JsonKey(name: 'default_recipient')
+  Recipient? defaultRecipient;
+  bool active;
+  @JsonKey(name: 'catch_all')
+  bool catchAll;
+  @JsonKey(name: 'created_at')
+  DateTime createdAt;
+  @JsonKey(name: 'updated_at')
+  DateTime updatedAt;
+
+  factory Username.fromJson(Map<String, dynamic> json) =>
+      _$UsernameFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UsernameToJson(this);
 }
