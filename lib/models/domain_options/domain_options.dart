@@ -1,19 +1,22 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'domain_options.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class DomainOptions {
-  const DomainOptions({
-    required this.sharedDomainsList,
+  DomainOptions({
+    required this.domains,
     this.defaultAliasDomain,
     this.defaultAliasFormat,
   });
 
-  final List<String> sharedDomainsList;
-  final String? defaultAliasDomain;
-  final String? defaultAliasFormat;
+  @JsonKey(name: 'data')
+  List<String> domains;
+  String? defaultAliasDomain;
+  String? defaultAliasFormat;
 
-  factory DomainOptions.fromJson(Map<String, dynamic> json) {
-    return DomainOptions(
-      sharedDomainsList: List<String>.from(json["data"].map((x) => x)),
-      defaultAliasDomain: json["defaultAliasDomain"],
-      defaultAliasFormat: json["defaultAliasFormat"],
-    );
-  }
+  factory DomainOptions.fromJson(Map<String, dynamic> json) =>
+      _$DomainOptionsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DomainOptionsToJson(this);
 }
