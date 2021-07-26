@@ -35,10 +35,10 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final userModel = context.read(accountStreamProvider).data!.value;
-    final subscription = userModel.subscription;
+    final user = context.read(accountStreamProvider).data!.value.account;
+    final subscription = user.subscription;
     final createAliasText =
-        'Other aliases e.g. alias@${userModel.username ?? 'username'}.anonaddy.com or .me can also be created automatically when they receive their first email.';
+        'Other aliases e.g. alias@${user.username}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
     return Consumer(
       builder: (_, watch, __) {

@@ -23,7 +23,7 @@ class AdditionalUsername extends ConsumerWidget {
       );
     }
 
-    if (account.value.subscription == kFreeSubscription) {
+    if (account.value.account.subscription == kFreeSubscription) {
       return Center(
         child: Text(
           kOnlyAvailableToPaid,

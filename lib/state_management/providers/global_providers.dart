@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
-import 'package:anonaddy/models/user/user_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,19 +15,19 @@ import 'class_providers.dart';
 
 /// Stream Providers
 final accountStreamProvider =
-    StreamProvider.autoDispose<UserModel>((ref) async* {
+    StreamProvider.autoDispose<AccountModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
   final isAppInForeground =
       ref.watch(lifecycleStateManagerProvider).isAppInForeground;
 
   final securedData = await offlineData.readAccountOfflineData();
   if (securedData.isNotEmpty) {
-    yield UserModel.fromJson(jsonDecode(securedData));
+    yield AccountModel.fromJson(jsonDecode(securedData));
   }
 
   while (isAppInForeground) {
     yield* Stream.fromFuture(
-        ref.read(userServiceProvider).getUserData(offlineData));
+        ref.read(userServiceProvider).getAccountData(offlineData));
     await Future.delayed(Duration(seconds: 5));
   }
 });

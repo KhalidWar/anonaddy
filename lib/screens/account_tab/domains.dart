@@ -19,7 +19,7 @@ class Domains extends ConsumerWidget {
     } else {
       return Center(
         child: Text(
-          account.value.subscription == kFreeSubscription
+          account.value.account.subscription == kFreeSubscription
               ? kOnlyAvailableToPaid
               : kComingSoon,
           style: Theme.of(context).textTheme.bodyText1,

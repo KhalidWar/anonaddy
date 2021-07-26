@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/user/user_model.dart';
+import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/screens/account_tab/add_new_recipient.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -14,8 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'add_new_username.dart';
 
 class MainAccount extends StatelessWidget {
-  const MainAccount({Key? key, required this.userModel}) : super(key: key);
-  final UserModel userModel;
+  const MainAccount({Key? key, required this.account}) : super(key: key);
+  final Account account;
 
   String _capitalize(String input) {
     final firstLetter = input[0];
@@ -27,16 +27,15 @@ class MainAccount extends StatelessWidget {
       return input == 0 ? 'unlimited' : '${input.hashCode.round()} $unit';
     }
 
-    final bandwidth = (userModel.bandwidth! / 1048576).toStringAsFixed(2);
-    final bandwidthLimit =
-        isUnlimited(userModel.bandwidthLimit! / 1048576, 'MB');
+    final bandwidth = (account.bandwidth / 1048576).toStringAsFixed(2);
+    final bandwidthLimit = isUnlimited(account.bandwidthLimit / 1048576, 'MB');
     return '$bandwidth MB out of $bandwidthLimit';
   }
 
   @override
   Widget build(BuildContext context) {
     final subscription =
-        context.read(accountStreamProvider).data!.value.subscription;
+        context.read(accountStreamProvider).data!.value.account.subscription;
     final correctAliasString =
         context.read(aliasStateManagerProvider).correctAliasString;
     final nicheMethod = NicheMethod();
@@ -51,10 +50,10 @@ class MainAccount extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _capitalize(userModel.username!),
+                _capitalize(account.username),
                 style: Theme.of(context).textTheme.headline5,
               ),
-              Text(_capitalize(userModel.subscription!)),
+              Text(_capitalize(account.subscription)),
             ],
           ),
         ),
@@ -65,37 +64,36 @@ class MainAccount extends StatelessWidget {
           leadingIconData: Icons.speed_outlined,
         ),
         AccountListTile(
-          title: userModel.defaultAliasDomain,
+          title: account.defaultAliasDomain,
           subtitle: 'Default Alias Domain',
           leadingIconData: Icons.dns,
           trailingIconData: Icons.open_in_new_outlined,
           onTap: () => updateDefaultAliasFormatDomain(nicheMethod),
         ),
         AccountListTile(
-          title: correctAliasString(userModel.defaultAliasFormat),
+          title: correctAliasString(account.defaultAliasFormat),
           subtitle: 'Default Alias Format',
           leadingIconData: Icons.alternate_email,
           trailingIconData: Icons.open_in_new_outlined,
           onTap: () => updateDefaultAliasFormatDomain(nicheMethod),
         ),
         AccountListTile(
-          title:
-              '${userModel.recipientCount} out of ${userModel.recipientLimit}',
+          title: '${account.recipientCount} out of ${account.recipientLimit}',
           subtitle: 'Recipients',
           leadingIconData: Icons.email_outlined,
           trailingIconData: Icons.add_circle_outline_outlined,
-          onTap: userModel.recipientCount == userModel.recipientLimit
+          onTap: account.recipientCount == account.recipientLimit
               ? () => showToast(kReachedRecipientLimit)
               : () => buildAddNewRecipient(context),
         ),
         AccountListTile(
-          title: '${userModel.usernameCount} out of ${userModel.usernameLimit}',
+          title: '${account.usernameCount} out of ${account.usernameLimit}',
           subtitle: 'Usernames',
           leadingIconData: Icons.account_circle_outlined,
           trailingIconData: Icons.add_circle_outline_outlined,
           onTap: subscription == kFreeSubscription
               ? () => showToast(kOnlyAvailableToPaid)
-              : userModel.usernameCount == userModel.usernameLimit
+              : account.usernameCount == account.usernameLimit
                   ? () => showToast(kReachedUsernameLimit)
                   : () => buildAddNewUsername(context),
         ),
