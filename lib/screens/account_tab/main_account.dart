@@ -28,7 +28,7 @@ class MainAccount extends StatelessWidget {
     }
 
     final bandwidth = (account.bandwidth / 1048576).toStringAsFixed(2);
-    final bandwidthLimit = isUnlimited(account.bandwidthLimit / 1048576, 'MB');
+    final bandwidthLimit = isUnlimited(account.bandwidthLimit! / 1048576, 'MB');
     return '$bandwidth MB out of $bandwidthLimit';
   }
 
@@ -53,7 +53,7 @@ class MainAccount extends StatelessWidget {
                 _capitalize(account.username),
                 style: Theme.of(context).textTheme.headline5,
               ),
-              Text(_capitalize(account.subscription)),
+              Text(_capitalize(account.subscription!)),
             ],
           ),
         ),
