@@ -82,13 +82,13 @@ class AliasDetailScreen extends ConsumerWidget {
                   context, sendFromAlias, aliasDataModel.email),
             ),
             AliasDetailListTile(
-              leadingIconData: Icons.flaky_outlined,
+              leadingIconData: Icons.toggle_on,
               title:
                   'Alias is ${aliasDataModel.active ? 'active' : 'inactive'}',
               subtitle: 'Activity',
               trailing: Row(
                 children: [
-                  isToggleLoading ? customLoading : Container(),
+                  if (isToggleLoading) customLoading,
                   Switch.adaptive(
                     value: aliasDataModel.active,
                     onChanged: isAliasDeleted ? null : (toggle) {},
@@ -131,7 +131,7 @@ class AliasDetailScreen extends ConsumerWidget {
                   isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
               trailing: Row(
                 children: [
-                  deleteAliasLoading ? customLoading : Container(),
+                  if (deleteAliasLoading) customLoading,
                   IconButton(
                     icon: isAliasDeleted
                         ? Icon(Icons.restore_outlined, color: Colors.green)
@@ -321,7 +321,7 @@ class AliasDetailScreen extends ConsumerWidget {
                         autofocus: true,
                         controller: textEditingController,
                         validator: (input) =>
-                            FormValidator().validateRecipientEmail(input!),
+                            FormValidator().validateEmailField(input!),
                         onFieldSubmitted: (toggle) => generateAddress(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: 'Enter email...',
