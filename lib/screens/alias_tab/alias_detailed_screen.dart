@@ -32,6 +32,7 @@ class AliasDetailScreen extends ConsumerWidget {
     final deleteAliasLoading = aliasDataProvider.deleteAliasLoading;
     final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
     final editDescription = aliasDataProvider.editDescription;
+    final sendFromAlias = aliasDataProvider.sendFromAlias;
 
     final nicheMethod = NicheMethod();
     final showToast = nicheMethod.showToast;
@@ -71,6 +72,14 @@ class AliasDetailScreen extends ConsumerWidget {
               subtitle: 'Email',
               trailingIconData: Icons.copy,
               trailingIconOnPress: () => copyOnTap(aliasDataModel.email),
+            ),
+            AliasDetailListTile(
+              leadingIconData: Icons.mail_outline,
+              title: 'Send email from this alias',
+              subtitle: 'Send from',
+              trailingIconData: Icons.send,
+              trailingIconOnPress: () => buildSendFromDialog(
+                  context, sendFromAlias, aliasDataModel.email),
             ),
             AliasDetailListTile(
               leadingIconData: Icons.flaky_outlined,
@@ -250,6 +259,92 @@ class AliasDetailScreen extends ConsumerWidget {
                     : kDeleteAliasConfirmation,
                 deleteOrRestore,
                 '${isDeleted ? 'Restore' : 'Delete'} Alias');
+      },
+    );
+  }
+
+  Future buildSendFromDialog(
+      BuildContext context, Function sendFromAlias, String aliasEmail) {
+    final textEditingController = TextEditingController();
+
+    final sendFromFormKey =
+        context.read(aliasStateManagerProvider).sendFromFormKey;
+
+    void generateAddress() {
+      sendFromAlias(
+        context,
+        aliasEmail,
+        textEditingController.text.trim(),
+      );
+    }
+
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kBottomSheetBorderRadius)),
+      ),
+      builder: (context) {
+        final size = MediaQuery.of(context).size;
+
+        return Container(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              BottomSheetHeader(headerLabel: kSendFromAlias),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(kSendFromAliasString),
+                    SizedBox(height: size.height * 0.01),
+                    TextFormField(
+                      enabled: false,
+                      decoration: kTextFormFieldDecoration.copyWith(
+                        hintText: aliasEmail,
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    Text(
+                      'Email destination',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    SizedBox(height: size.height * 0.01),
+                    Form(
+                      key: sendFromFormKey,
+                      child: TextFormField(
+                        autofocus: true,
+                        controller: textEditingController,
+                        validator: (input) =>
+                            FormValidator().validateRecipientEmail(input!),
+                        onFieldSubmitted: (toggle) => generateAddress(),
+                        decoration: kTextFormFieldDecoration.copyWith(
+                          hintText: 'Enter email...',
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.01),
+                    Text(kSendFromAliasNote),
+                    SizedBox(height: size.height * 0.01),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(),
+                        child: Text('Generate address'),
+                        onPressed: () => generateAddress(),
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.015),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }

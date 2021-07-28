@@ -2,6 +2,7 @@ import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +26,7 @@ class AliasStateManager extends ChangeNotifier {
   List<Recipient> createAliasRecipients = [];
 
   final descriptionFormKey = GlobalKey<FormState>();
+  final sendFromFormKey = GlobalKey<FormState>();
   final _showToast = NicheMethod().showToast;
 
   final freeTierWithSharedDomain = [kUUID, kRandomChars];
@@ -172,6 +174,26 @@ class AliasStateManager extends ChangeNotifier {
         _showToast(error.toString());
       });
       Navigator.pop(context);
+    }
+  }
+
+  Future<void> sendFromAlias(
+      BuildContext context, String aliasEmail, String destinationEmail) async {
+    if (sendFromFormKey.currentState!.validate()) {
+      /// https://anonaddy.com/help/sending-email-from-an-alias/
+      final leftPartOfAlias = aliasEmail.split('@')[0];
+      final rightPartOfAlias = aliasEmail.split('@')[1];
+      final recipientEmail = destinationEmail.replaceAll('@', '=');
+      final generatedAddress =
+          '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
+
+      await Clipboard.setData(ClipboardData(text: generatedAddress))
+          .then((value) {
+        _showToast(kSendFromAliasSuccess);
+        Navigator.pop(context);
+      }).catchError((error) {
+        _showToast(kSomethingWentWrong);
+      });
     }
   }
 
