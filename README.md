@@ -31,7 +31,7 @@ Your support will help the continuous development of this project.
 
 
 ## Security
-AddyManager requires [Access Token](https://app.anonaddy.com/settings) to access and manage your AnonAddy account. It utilizes secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token. Your access token is NEVER sent to us or any external server. 
+AddyManager requires [Access Token](https://app.anonaddy.com/settings) to access and manage your AnonAddy account. It utilizes secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token. Your Access Token is NEVER sent to us or any third party. 
 
 
 ## Privacy
@@ -56,13 +56,17 @@ AddyManager is free and open source software licensed under [MIT](https://github
 - [Secure Application](https://pub.dev/packages/secure_application)
 - [Local Auth](https://pub.dev/packages/local_auth)
 - [Package Info](https://pub.dev/packages/package_info)
+- [JSON Annotation](https://pub.dev/packages/json_annotation)
+- [JSON Serializable](https://pub.dev/packages/json_serializable)
 
 
 ## Development
 
 ### Contribution
+You can contribute by reporting bugs, suggesting improvements, or by helping out in code.
+UI/UX designers are always welcome.
 1. Feel free to fork this repo and help out
-2. Make small and concise commits.
+2. Make small, concise, and well documented commits.
 
 ### Getting Started
 Check out [Flutter's official guide](https://flutter.dev/docs/get-started/install) to installing and running flutter.
@@ -70,15 +74,15 @@ Check out [Flutter's official guide](https://flutter.dev/docs/get-started/instal
 ### Prerequisites
 - Download IDE either [Android Studio](https://developer.android.com/studio) or [VSC](https://code.visualstudio.com/)
 - Install Flutter SDK and Dart plugin.
-- Flutter channel master.
+- Flutter channel stable is used for development.
 - Mobile device (emulator or physical).
-- No special set up needed.
 
 ### Steps
 - Clone this repo to your machine: `https://github.com/KhalidWar/anonaddy.git`
+- Make sure you're on master branch.
+- Run main.dart on emulator or physical device.
 - Create AnonAddy account and generate your own [API Access Token](https://app.anonaddy.com/settings), found under API section.
-- Install App on Emulator or physical device.
-- Sign in with API Access Token.
+- Sign in with your API Access Token.
 - All set!
 
 ## License
@@ -88,4 +92,4 @@ This project is licensed under [MIT Licnese](https://github.com/KhalidWar/anonad
 Special thanks to AnonAddy's team for providing us with their free [API and excellent documentation](https://app.anonaddy.com/docs/).
 
 ## Disclaimer
-Disclaimer: AddyManager is independently created by [Khalid War](https://github.com/khalidwar) as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com project or team.
+AddyManager is independently created by [Khalid War](https://github.com/khalidwar) as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com project or team.
