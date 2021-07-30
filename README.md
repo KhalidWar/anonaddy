@@ -7,7 +7,7 @@ Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's 
 [<img src="assets/screenshots/play_store_badge.png" width="250">](https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy)  [<img src="assets/screenshots/app_store_badge.png" width="250">](https://apps.apple.com/us/app/addymanager/id1547461270)
 
 ## Support AddyManager
-Your support will help the continuous development of this project.
+Your support will help the continuous development of this project. Click on QR codes to get copy-able wallet address.
 
 [<img src="assets/screenshots/bmc.png" width="250">](https://www.buymeacoffee.com/khalidwar)
 
