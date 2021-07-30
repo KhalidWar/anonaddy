@@ -1,9 +1,9 @@
 import 'package:anonaddy/screens/home_screen.dart';
+import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -23,8 +23,9 @@ class LoginStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(BuildContext context, String accessToken,
-      GlobalKey<FormState> formKey) async {
+  Future<void> login(
+      BuildContext context, String accessToken, GlobalKey<FormState> formKey,
+      {String? instanceURL}) async {
     if (formKey.currentState!.validate()) {
       isLoading = true;
       await context
@@ -34,7 +35,7 @@ class LoginStateManager extends ChangeNotifier {
         if (value == 200) {
           await context
               .read(accessTokenServiceProvider)
-              .saveAccessToken(accessToken);
+              .saveLoginCredentials(accessToken, instanceURL ?? kAuthorityURL);
           isLoading = false;
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => HomeScreen()));

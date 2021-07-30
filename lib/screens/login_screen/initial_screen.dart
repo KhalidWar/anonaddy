@@ -14,7 +14,7 @@ class InitialScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     /// Use [watch] method to access different providers
     /// and returns AsyncValue of same type.
-    final accessToken = watch(accessTokenProvider);
+    final accessTokenAsync = watch(accessTokenProvider);
 
     /// Customize Status Bar and Bottom Navigator Bar colors.
     return Scaffold(
@@ -22,13 +22,13 @@ class InitialScreen extends ConsumerWidget {
       backgroundColor: kPrimaryColor,
 
       /// AsyncValue's [when] function returns 3 states:
-      body: accessToken.when(
+      body: accessTokenAsync.when(
         /// 1) future is loading
         loading: () => Container(),
 
         /// 2) data is obtained
-        data: (data) {
-          if (data == null) {
+        data: (accessToken) {
+          if (accessToken.isEmpty) {
             return TokenLoginScreen();
           } else {
             return HomeScreen();
