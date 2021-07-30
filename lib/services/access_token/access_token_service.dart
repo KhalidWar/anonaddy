@@ -48,6 +48,8 @@ class AccessTokenService {
   }
 
   Future<String> getInstanceURL() async {
+    final savedURL = await _secureStorage.read(key: _instanceURLKey);
+    if (savedURL == null) _instanceURL = kAuthorityURL;
     if (_instanceURL.isEmpty) {
       _instanceURL = await _secureStorage.read(key: _instanceURLKey) ?? '';
       return _instanceURL;
