@@ -14,10 +14,11 @@ class DomainOptionsService {
 
   Future<DomainOptions> getDomainOptions(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kDomainsOptionsURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kDomainsOptionsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

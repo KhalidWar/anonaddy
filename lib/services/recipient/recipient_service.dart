@@ -13,10 +13,11 @@ class RecipientService {
 
   Future<RecipientModel> getAllRecipient(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientsURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -43,9 +44,11 @@ class RecipientService {
 
   Future<Recipient> enableEncryption(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.post(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kEncryptedRecipient'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kEncryptedRecipient'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -69,9 +72,11 @@ class RecipientService {
 
   Future disableEncryption(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.delete(
-        Uri.https(kAuthorityURL,
+        Uri.https(instanceURL,
             '$kUnEncodedBaseURL/$kEncryptedRecipient/$recipientID'),
         headers: {
           "Content-Type": "application/json",
@@ -94,11 +99,12 @@ class RecipientService {
 
   Future<Recipient> addPublicGPGKey(String recipientID, String keyData) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
         Uri.https(
-            kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientKeys/$recipientID'),
+            instanceURL, '$kUnEncodedBaseURL/$kRecipientKeys/$recipientID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -122,16 +128,19 @@ class RecipientService {
 
   Future removePublicGPGKey(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.delete(
-          Uri.https(
-              kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientKeys/$recipientID'),
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "Accept": "application/json",
-            "Authorization": "Bearer $accessToken",
-          });
+        Uri.https(
+            instanceURL, '$kUnEncodedBaseURL/$kRecipientKeys/$recipientID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 204) {
         print('removePublicKey ${response.statusCode}');
@@ -147,9 +156,11 @@ class RecipientService {
 
   Future<Recipient> addRecipient(String email) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.post(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientsURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -173,16 +184,19 @@ class RecipientService {
 
   Future removeRecipient(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.delete(
-          Uri.https(
-              kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientsURL/$recipientID'),
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "Accept": "application/json",
-            "Authorization": "Bearer $accessToken",
-          });
+        Uri.https(
+            instanceURL, '$kUnEncodedBaseURL/$kRecipientsURL/$recipientID'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
 
       if (response.statusCode == 204) {
         print('removeRecipient ${response.statusCode}');
@@ -198,10 +212,12 @@ class RecipientService {
 
   Future sendVerificationEmail(String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.post(
         Uri.https(
-            kAuthorityURL, '$kUnEncodedBaseURL/$kRecipientsURL/email/resend'),
+            instanceURL, '$kUnEncodedBaseURL/$kRecipientsURL/email/resend'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",

@@ -143,12 +143,11 @@ class ChangeInstanceScreen extends StatelessWidget {
                                     .headline5!
                                     .copyWith(color: Colors.black),
                               ),
-                        onPressed: () => loginManager.selfHostLogin(
+                        onPressed: () => loginManager.login(
                           context,
-                          _urlEditingController.text.trim(),
                           _tokenEditingController.text.trim(),
                           _urlFormKey,
-                          _tokenFormKey,
+                          instanceURL: _urlEditingController.text.trim(),
                         ),
                       ),
                     );

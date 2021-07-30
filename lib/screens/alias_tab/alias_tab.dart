@@ -28,6 +28,14 @@ class AliasTab extends ConsumerWidget {
     final List<int> repliedList = [];
     final List<int> sentList = [];
 
+    int reduceList(List<int> list) {
+      if (list.isEmpty) {
+        return 0;
+      } else {
+        return list.reduce((value, element) => value + element);
+      }
+    }
+
     return aliasStream.when(
       loading: () => AliasShimmerLoading(),
       data: (data) {
@@ -60,14 +68,10 @@ class AliasTab extends ConsumerWidget {
                       background: Padding(
                         padding: EdgeInsets.only(bottom: 30),
                         child: AliasTabPieChart(
-                          emailsForwarded: forwardedList
-                              .reduce((value, element) => value + element),
-                          emailsBlocked: blockedList
-                              .reduce((value, element) => value + element),
-                          emailsReplied: repliedList
-                              .reduce((value, element) => value + element),
-                          emailsSent: sentList
-                              .reduce((value, element) => value + element),
+                          emailsForwarded: reduceList(forwardedList),
+                          emailsBlocked: reduceList(blockedList),
+                          emailsReplied: reduceList(repliedList),
+                          emailsSent: reduceList(sentList),
                         ),
                       ),
                     ),
@@ -100,7 +104,7 @@ class AliasTab extends ConsumerWidget {
               body: TabBarView(
                 children: [
                   if (availableAliasList.isEmpty)
-                    buildEmptyAliasList(context, 'available')
+                    buildEmptyAliasList(context)
                   else
                     ListView.builder(
                       shrinkWrap: true,
@@ -113,7 +117,7 @@ class AliasTab extends ConsumerWidget {
                       },
                     ),
                   if (deletedAliasList.isEmpty)
-                    buildEmptyAliasList(context, 'deleted')
+                    buildEmptyAliasList(context)
                   else
                     SingleChildScrollView(
                       child: Column(
@@ -162,13 +166,14 @@ class AliasTab extends ConsumerWidget {
     );
   }
 
-  Container buildEmptyAliasList(BuildContext context, String label) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+  Center buildEmptyAliasList(BuildContext context) {
+    return Center(
       child: Text(
-        'No $label aliases found',
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.headline6,
+        'It doesn\'t look like you have any aliases yet!',
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1!
+            .copyWith(color: kPrimaryColor),
       ),
     );
   }

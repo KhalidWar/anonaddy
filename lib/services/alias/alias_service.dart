@@ -15,10 +15,11 @@ class AliasService {
 
   Future<AliasModel> getAllAliasesData(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL',
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL',
             {'deleted': 'with'}),
         headers: {
           "Content-Type": "application/json",
@@ -47,10 +48,11 @@ class AliasService {
   Future<Alias> createNewAlias(String desc, String domain, String format,
       String localPart, List<String> recipients) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -80,10 +82,11 @@ class AliasService {
 
   Future activateAlias(String aliasID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kActiveAliasURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kActiveAliasURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -107,11 +110,11 @@ class AliasService {
 
   Future deactivateAlias(String aliasID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
-        Uri.https(
-            kAuthorityURL, '$kUnEncodedBaseURL/$kActiveAliasURL/$aliasID'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kActiveAliasURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -134,10 +137,11 @@ class AliasService {
 
   Future<Alias> editAliasDescription(String aliasID, String newDesc) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -161,10 +165,11 @@ class AliasService {
 
   Future deleteAlias(String aliasID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -187,11 +192,12 @@ class AliasService {
 
   Future<Alias> restoreAlias(String aliasID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
         Uri.https(
-            kAuthorityURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID/restore'),
+            instanceURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID/restore'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -215,11 +221,11 @@ class AliasService {
   Future<Alias> updateAliasDefaultRecipient(
       String aliasID, List<String> recipients) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
-        Uri.https(
-            kAuthorityURL, '$kUnEncodedBaseURL/$kAliasURL-$kRecipientsURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasURL-$kRecipientsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -246,10 +252,11 @@ class AliasService {
 
   Future forgetAlias(String aliasID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
-        Uri.https(kAuthorityURL,
+        Uri.https(instanceURL,
             '$kUnEncodedBaseURL/$kAliasesURL/$aliasID/$kForgetURL'),
         headers: {
           "Content-Type": "application/json",

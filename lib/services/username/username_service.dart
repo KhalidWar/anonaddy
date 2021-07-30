@@ -14,10 +14,11 @@ class UsernameService {
 
   Future<UsernameModel> getUsernameData(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kUsernamesURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kUsernamesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -44,9 +45,11 @@ class UsernameService {
 
   Future<Username> createNewUsername(String username) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.post(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kUsernamesURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kUsernamesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -71,10 +74,11 @@ class UsernameService {
   Future<Username> editUsernameDescription(
       String usernameID, String description) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.patch(
-        Uri.https(
-            kAuthorityURL, '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -98,10 +102,11 @@ class UsernameService {
 
   Future deleteUsername(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.delete(
-        Uri.https(
-            kAuthorityURL, '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -125,9 +130,11 @@ class UsernameService {
   Future<Username> updateDefaultRecipient(
       String usernameID, String recipientID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.patch(
-        Uri.https(kAuthorityURL,
+        Uri.https(instanceURL,
             '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID/$kDefaultRecipientURL'),
         headers: {
           "Content-Type": "application/json",
@@ -152,9 +159,11 @@ class UsernameService {
 
   Future<Username> activateUsername(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.post(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kActiveUsernamesURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kActiveUsernamesURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -178,9 +187,11 @@ class UsernameService {
 
   Future deactivateUsername(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.delete(
-          Uri.https(kAuthorityURL,
+          Uri.https(instanceURL,
               '$kUnEncodedBaseURL/$kActiveUsernamesURL/$usernameID'),
           headers: {
             "Content-Type": "application/json",
@@ -203,9 +214,11 @@ class UsernameService {
 
   Future<Username> activateCatchAll(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.post(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kCatchAllUsernameURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kCatchAllUsernameURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -229,9 +242,11 @@ class UsernameService {
 
   Future deactivateCatchAll(String usernameID) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
+
     try {
       final response = await http.delete(
-          Uri.https(kAuthorityURL,
+          Uri.https(instanceURL,
               '$kUnEncodedBaseURL/$kCatchAllUsernameURL/$usernameID'),
           headers: {
             "Content-Type": "application/json",
