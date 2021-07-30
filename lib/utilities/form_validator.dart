@@ -31,14 +31,14 @@ class FormValidator {
     }
   }
 
-  String? validateRecipientEmail(String input) {
+  String? validateEmailField(String input) {
     final emailPattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)';
     final regExp = RegExp(emailPattern);
 
     if (input.isEmpty) {
       return 'Field can not be empty';
     } else if (!regExp.hasMatch(input)) {
-      return 'Please enter a valid email';
+      return 'Enter a valid email';
     } else {
       return null;
     }

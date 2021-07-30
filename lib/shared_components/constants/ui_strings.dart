@@ -14,6 +14,11 @@ const kUpdateDescriptionString =
 const kForgetAlias = 'Forget Alias';
 const kUpdateDescription = 'Update Description';
 const kNoDefaultRecipientSet = 'No default recipient set yet';
+const kSendFromAlias = 'Send From Alias';
+const kSendFromAliasString =
+    'Use this to automatically create the correct address to send an email to in order to send an email from this alias.';
+const kSendFromAliasNote =
+    'Note: you must send the email from a verified recipient on your account.';
 
 /// Create Alias
 const kCreateNewAlias = 'Create New Alias';
@@ -68,3 +73,4 @@ const kNoInternetConnection =
 const kLogOutAlertDialog =
     'Are you sure you want to log out?\n\nAll app data will be deleted.';
 const kNoDescription = 'No description';
+const kSomethingWentWrong = 'Something went wrong';

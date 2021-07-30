@@ -34,6 +34,9 @@ const kForgetAliasFailed = 'Failed to Forget Alias';
 const kUpdateAliasRecipientSuccess = 'Updated Alias Recipients Successfully';
 const kUpdateAliasRecipientFailed = 'Failed to Update Description';
 
+/// Alias Send From
+const kSendFromAliasSuccess = 'Address is generated and copied to clipboard';
+
 /// Recipient Encryption
 const kEncryptionEnabled = 'Enabled Encryption Successfully';
 const kFailedToEnableEncryption = 'Failed to Enable Encryption';

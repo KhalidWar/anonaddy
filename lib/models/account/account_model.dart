@@ -22,12 +22,12 @@ class Account {
     required this.username,
     this.fromName,
     this.emailSubject,
-    this.bannerLocation,
+    required this.bannerLocation,
     required this.bandwidth,
     required this.bandwidthLimit,
     required this.usernameCount,
     required this.usernameLimit,
-    this.defaultRecipientId,
+    required this.defaultRecipientId,
     this.defaultAliasDomain,
     this.defaultAliasFormat,
     required this.subscription,
@@ -52,21 +52,21 @@ class Account {
   String? emailSubject;
 
   @JsonKey(name: 'banner_location')
-  String? bannerLocation;
+  String bannerLocation;
 
   int bandwidth;
 
   @JsonKey(name: 'bandwidth_limit')
-  int bandwidthLimit;
+  int? bandwidthLimit;
 
   @JsonKey(name: 'username_count')
-  int usernameCount;
+  int? usernameCount;
 
   @JsonKey(name: 'username_limit')
-  int usernameLimit;
+  int? usernameLimit;
 
   @JsonKey(name: 'default_recipient_id')
-  String? defaultRecipientId;
+  String defaultRecipientId;
 
   @JsonKey(name: 'default_alias_domain')
   String? defaultAliasDomain;
@@ -74,28 +74,28 @@ class Account {
   @JsonKey(name: 'default_alias_format')
   String? defaultAliasFormat;
 
-  String subscription;
+  String? subscription;
 
   @JsonKey(name: 'subscription_ends_at')
   DateTime? subscriptionEndAt;
 
   @JsonKey(name: 'recipient_count')
-  int recipientCount;
+  int? recipientCount;
 
   @JsonKey(name: 'recipient_limit')
-  int recipientLimit;
+  int? recipientLimit;
 
   @JsonKey(name: 'active_domain_count')
-  int activeDomainCount;
+  int? activeDomainCount;
 
   @JsonKey(name: 'active_domain_limit')
-  int activeDomainLimit;
+  int? activeDomainLimit;
 
   @JsonKey(name: 'active_shared_domain_alias_count')
-  int aliasCount;
+  int? aliasCount;
 
   @JsonKey(name: 'active_shared_domain_alias_limit')
-  int aliasLimit;
+  int? aliasLimit;
 
   @JsonKey(name: 'created_at')
   DateTime createdAt;

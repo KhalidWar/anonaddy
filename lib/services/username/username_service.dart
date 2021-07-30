@@ -42,7 +42,7 @@ class UsernameService {
     }
   }
 
-  Future<UsernameModel> createNewUsername(String username) async {
+  Future<Username> createNewUsername(String username) async {
     final accessToken = await _accessTokenService.getAccessToken();
     try {
       final response = await http.post(
@@ -58,7 +58,7 @@ class UsernameService {
 
       if (response.statusCode == 201) {
         print("createNewUsername ${response.statusCode}");
-        return UsernameModel.fromJson(jsonDecode(response.body));
+        return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("createNewUsername ${response.statusCode}");
         throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
