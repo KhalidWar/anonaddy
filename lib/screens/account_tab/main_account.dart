@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/screens/account_tab/add_new_recipient.dart';
+import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
-import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
@@ -14,8 +14,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'add_new_username.dart';
 
 class MainAccount extends StatelessWidget {
-  const MainAccount({Key? key, required this.account}) : super(key: key);
+  MainAccount({Key? key, required this.account}) : super(key: key) {
+    isSelfHosted =
+        account.recipientCount == null && account.recipientLimit == null;
+  }
+
   final Account account;
+  late final isSelfHosted;
+
+  final _nicheMethod = NicheMethod();
 
   String _capitalize(String input) {
     final firstLetter = input[0];
@@ -28,8 +35,49 @@ class MainAccount extends StatelessWidget {
     }
 
     final bandwidth = (account.bandwidth / 1048576).toStringAsFixed(2);
-    final bandwidthLimit = isUnlimited(account.bandwidthLimit! / 1048576, 'MB');
+    final bandwidthLimit =
+        isUnlimited(account.bandwidthLimit ?? 0 / 1048576, 'MB');
     return '$bandwidth MB out of $bandwidthLimit';
+  }
+
+  String _calculateRecipientsCount() {
+    if (isSelfHosted) {
+      return 'Unlimited';
+    } else {
+      return '${account.recipientCount} out of ${account.recipientLimit}';
+    }
+  }
+
+  String _calculateUsernamesCount() {
+    if (isSelfHosted) {
+      return 'Unlimited';
+    } else {
+      return '${account.usernameCount} out of ${account.usernameLimit}';
+    }
+  }
+
+  void _addNewRecipient(BuildContext context) {
+    if (isSelfHosted) {
+      buildAddNewRecipient(context);
+    } else {
+      account.recipientCount == account.recipientLimit
+          ? _nicheMethod.showToast(kReachedRecipientLimit)
+          : buildAddNewRecipient(context);
+    }
+  }
+
+  void _addNewUsername(BuildContext context, String? subscription) {
+    if (isSelfHosted) {
+      buildAddNewUsername(context);
+    } else {
+      if (subscription == kFreeSubscription) {
+        _nicheMethod.showToast(kOnlyAvailableToPaid);
+      } else {
+        account.usernameCount == account.usernameLimit
+            ? _nicheMethod.showToast(kReachedUsernameLimit)
+            : buildAddNewUsername(context);
+      }
+    }
   }
 
   @override
@@ -38,8 +86,6 @@ class MainAccount extends StatelessWidget {
         context.read(accountStreamProvider).data!.value.account.subscription;
     final correctAliasString =
         context.read(aliasStateManagerProvider).correctAliasString;
-    final nicheMethod = NicheMethod();
-    final showToast = nicheMethod.showToast;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +99,7 @@ class MainAccount extends StatelessWidget {
                 _capitalize(account.username),
                 style: Theme.of(context).textTheme.headline5,
               ),
-              Text(_capitalize(account.subscription!)),
+              Text(_capitalize(account.subscription ?? 'Self Hosted')),
             ],
           ),
         ),
@@ -68,41 +114,36 @@ class MainAccount extends StatelessWidget {
           subtitle: 'Default Alias Domain',
           leadingIconData: Icons.dns,
           trailingIconData: Icons.open_in_new_outlined,
-          onTap: () => updateDefaultAliasFormatDomain(nicheMethod),
+          onTap: () => updateDefaultAliasFormatDomain(),
         ),
         AccountListTile(
           title: correctAliasString(account.defaultAliasFormat),
           subtitle: 'Default Alias Format',
           leadingIconData: Icons.alternate_email,
           trailingIconData: Icons.open_in_new_outlined,
-          onTap: () => updateDefaultAliasFormatDomain(nicheMethod),
+          onTap: () => updateDefaultAliasFormatDomain(),
         ),
         AccountListTile(
-          title: '${account.recipientCount} out of ${account.recipientLimit}',
+          title: _calculateRecipientsCount(),
           subtitle: 'Recipients',
           leadingIconData: Icons.email_outlined,
           trailingIconData: Icons.add_circle_outline_outlined,
-          onTap: account.recipientCount == account.recipientLimit
-              ? () => showToast(kReachedRecipientLimit)
-              : () => buildAddNewRecipient(context),
+          onTap: () => _addNewRecipient(context),
         ),
         AccountListTile(
-          title: '${account.usernameCount} out of ${account.usernameLimit}',
+          title: _calculateUsernamesCount(),
           subtitle: 'Usernames',
           leadingIconData: Icons.account_circle_outlined,
           trailingIconData: Icons.add_circle_outline_outlined,
-          onTap: subscription == kFreeSubscription
-              ? () => showToast(kOnlyAvailableToPaid)
-              : account.usernameCount == account.usernameLimit
-                  ? () => showToast(kReachedUsernameLimit)
-                  : () => buildAddNewUsername(context),
+          onTap: () => _addNewUsername(context, subscription),
         ),
       ],
     );
   }
 
-  Future updateDefaultAliasFormatDomain(NicheMethod nicheMethod) async {
-    await nicheMethod.launchURL(kAnonAddySettingsURL);
+  Future<void> updateDefaultAliasFormatDomain() async {
+    final instanceURL = await AccessTokenService().getInstanceURL();
+    await _nicheMethod.launchURL('https://$instanceURL/settings');
   }
 
   Future buildAddNewRecipient(BuildContext context) {
