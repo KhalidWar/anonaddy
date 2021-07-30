@@ -1,5 +1,6 @@
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,15 +31,18 @@ class LoginStateManager extends ChangeNotifier {
       isLoading = true;
       await context
           .read(accessTokenServiceProvider)
-          .validateAccessToken(accessToken)
+          .validateAccessToken(accessToken, instanceURL)
           .then((value) async {
         if (value == 200) {
           await context
               .read(accessTokenServiceProvider)
               .saveLoginCredentials(accessToken, instanceURL ?? kAuthorityURL);
           isLoading = false;
+          if (instanceURL != null) Navigator.pop(context);
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            context,
+            CustomPageRoute(HomeScreen()),
+          );
         }
       }).catchError((error, stackTrace) {
         isLoading = false;

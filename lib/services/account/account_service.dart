@@ -13,10 +13,11 @@ class AccountService {
 
   Future<AccountModel> getAccountData(OfflineData offlineData) async {
     final accessToken = await _accessTokenService.getAccessToken();
+    final instanceURL = await _accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
-        Uri.https(kAuthorityURL, '$kUnEncodedBaseURL/$kAccountDetailsURL'),
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAccountDetailsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
