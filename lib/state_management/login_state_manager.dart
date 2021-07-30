@@ -51,47 +51,9 @@ class LoginStateManager extends ChangeNotifier {
     }
   }
 
-  Future<void> selfHostLogin(
-      BuildContext context,
-      String instanceURL,
-      String accessToken,
-      GlobalKey<FormState> urlFormKey,
-      GlobalKey<FormState> tokenFormKey) async {
-    if (urlFormKey.currentState!.validate() &&
-        tokenFormKey.currentState!.validate()) {
-      isLoading = true;
-      await context
-          .read(accessTokenServiceProvider)
-          .validateAccessToken(accessToken, instanceURL: instanceURL)
-          .then((value) async {
-        if (value == 200) {
-          await context
-              .read(accessTokenServiceProvider)
-              .saveAccessToken(accessToken);
-          isLoading = false;
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        }
-      }).catchError((error, stackTrace) {
-        isLoading = false;
-        _showToast(error.toString());
-      });
-    }
-  }
-
   Future<void> logout(BuildContext context) async {
     await FlutterSecureStorage()
         .deleteAll()
         .whenComplete(() => Phoenix.rebirth(context));
-  }
-
-  Future<void> pasteFromClipboard(TextEditingController controller) async {
-    final data = await Clipboard.getData('text/plain');
-    if (data == null || data.text!.isEmpty) {
-      _showToast('Nothing to paste. Clipboard is empty.');
-    } else {
-      controller.clear();
-      controller.text = data.text!;
-    }
   }
 }

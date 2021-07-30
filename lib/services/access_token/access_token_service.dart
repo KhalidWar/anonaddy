@@ -10,7 +10,7 @@ class AccessTokenService {
   String _accessTokenValue = '';
   String _instanceURL = '';
 
-  Future validateAccessToken(String accessToken, {String? instanceURL}) async {
+  Future validateAccessToken(String accessToken, String? instanceURL) async {
     try {
       final response = await http.get(
         Uri.https(instanceURL ?? kAuthorityURL,

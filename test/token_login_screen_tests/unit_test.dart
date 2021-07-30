@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:anonaddy/state_management/login_state_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,13 +20,13 @@ void main() {
       'When user is logs in, '
       'Then accessToken is stored in FlutterSecureStorage.', () async {
     // Arrange
-    final loginState = LoginStateManager();
+    // final loginState = LoginStateManager();
     final textEditingController = TextEditingController();
     // final mockHttp = MockHttp();
 
     // Act
     await Clipboard.setData(ClipboardData(text: 'data'));
-    loginState.pasteFromClipboard(textEditingController);
+    // loginState.pasteFromClipboard(textEditingController);
 
     //Assert
     expect(textEditingController.text, isEmpty);
