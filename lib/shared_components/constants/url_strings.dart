@@ -15,6 +15,7 @@ const kDefaultRecipientURL = 'default-recipient';
 const kDomainsURL = 'domains';
 const kDomainsOptionsURL = 'domain-options';
 const kForgetURL = 'forget';
+const kAppVersionURL = 'app-version';
 
 /// AnonAddy URLs
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
