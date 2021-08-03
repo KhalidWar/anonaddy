@@ -167,13 +167,14 @@ class AliasTab extends ConsumerWidget {
   }
 
   Center buildEmptyAliasList(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: Text(
         'It doesn\'t look like you have any aliases yet!',
         style: Theme.of(context)
             .textTheme
             .bodyText1!
-            .copyWith(color: kPrimaryColor),
+            .copyWith(color: isDark ? Colors.white : kPrimaryColor),
       ),
     );
   }
