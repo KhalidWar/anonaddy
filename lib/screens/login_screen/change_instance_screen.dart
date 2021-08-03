@@ -146,8 +146,9 @@ class ChangeInstanceScreen extends StatelessWidget {
                         onPressed: () => loginManager.login(
                           context,
                           _tokenEditingController.text.trim(),
-                          _urlFormKey,
+                          _tokenFormKey,
                           instanceURL: _urlEditingController.text.trim(),
+                          urlFormKey: _urlFormKey,
                         ),
                       ),
                     );
