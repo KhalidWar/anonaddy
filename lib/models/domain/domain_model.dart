@@ -40,7 +40,7 @@ class Domain {
 
   String domain;
   String? description;
-  List<Alias> aliases;
+  List<Alias>? aliases;
 
   @JsonKey(name: 'default_recipient')
   Recipient? defaultRecipient;

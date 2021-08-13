@@ -78,7 +78,7 @@ final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
 
 final domainsProvider = FutureProvider.autoDispose<DomainModel>((ref) async {
   final offlineData = ref.read(offlineDataProvider);
-  return await ref.read(domainsServiceProvider).getAllDomains(offlineData);
+  return await ref.read(domainServiceProvider).getAllDomains(offlineData);
 });
 
 final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
