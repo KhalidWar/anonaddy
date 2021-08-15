@@ -5,6 +5,7 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
+import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
@@ -109,6 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
             Spacer(),
+            buildAppVersion(context),
             Container(
               width: size.width,
               height: size.height * 0.05,
@@ -127,6 +129,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
       }),
     );
+  }
+
+  Widget buildAppVersion(BuildContext context) {
+    final accountData = context.read(accountStreamProvider).data;
+    if (accountData == null) {
+      return Container();
+    } else {
+      if (accountData.value.account.subscription == null) {
+        return Consumer(
+          builder: (_, watch, __) {
+            final appVersionData = watch(appVersionProvider);
+            return appVersionData.when(
+              loading: () => Text('...'),
+              data: (data) => Text('v' + data.version),
+              error: (error, stackTrace) => Container(),
+            );
+          },
+        );
+      } else {
+        return Container();
+      }
+    }
   }
 
   Future buildLogoutDialog(BuildContext context) {

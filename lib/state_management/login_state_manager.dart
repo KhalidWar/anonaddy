@@ -24,30 +24,39 @@ class LoginStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(
-      BuildContext context, String accessToken, GlobalKey<FormState> formKey,
-      {String? instanceURL}) async {
-    if (formKey.currentState!.validate()) {
-      isLoading = true;
-      await context
-          .read(accessTokenServiceProvider)
-          .validateAccessToken(accessToken, instanceURL)
-          .then((value) async {
-        if (value == 200) {
-          await context
-              .read(accessTokenServiceProvider)
-              .saveLoginCredentials(accessToken, instanceURL ?? kAuthorityURL);
+  Future<void> login(BuildContext context, String accessToken,
+      GlobalKey<FormState> tokenFormKey,
+      {String? instanceURL, GlobalKey<FormState>? urlFormKey}) async {
+    Future<void> login() async {
+      if (tokenFormKey.currentState!.validate()) {
+        isLoading = true;
+        await context
+            .read(accessTokenServiceProvider)
+            .validateAccessToken(accessToken, instanceURL)
+            .then((value) async {
+          if (value == 200) {
+            await context.read(accessTokenServiceProvider).saveLoginCredentials(
+                accessToken, instanceURL ?? kAuthorityURL);
+            isLoading = false;
+            if (instanceURL != null) Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              CustomPageRoute(HomeScreen()),
+            );
+          }
+        }).catchError((error, stackTrace) {
           isLoading = false;
-          if (instanceURL != null) Navigator.pop(context);
-          Navigator.pushReplacement(
-            context,
-            CustomPageRoute(HomeScreen()),
-          );
-        }
-      }).catchError((error, stackTrace) {
-        isLoading = false;
-        _showToast(error.toString());
-      });
+          _showToast(error.toString());
+        });
+      }
+    }
+
+    if (urlFormKey == null) {
+      login();
+    } else {
+      if (urlFormKey.currentState!.validate()) {
+        login();
+      }
     }
   }
 

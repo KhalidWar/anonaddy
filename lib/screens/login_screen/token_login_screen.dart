@@ -56,7 +56,7 @@ class TokenLoginScreen extends ConsumerWidget {
                       ),
                       TextButton(
                         style: TextButton.styleFrom(),
-                        child: Text('Self Hosted? Change Instance'),
+                        child: Text('Self Hosted? Change Instance!'),
                         onPressed: () => Navigator.push(
                             context, CustomPageRoute(ChangeInstanceScreen())),
                       ),
@@ -185,7 +185,14 @@ class TokenLoginScreen extends ConsumerWidget {
               padding: EdgeInsets.only(bottom: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
-                child: Text(kGetAccessToken),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(kGetAccessToken),
+                    SizedBox(width: 4),
+                    Icon(Icons.open_in_new_outlined),
+                  ],
+                ),
                 onPressed: () => NicheMethod().launchURL(kAnonAddySettingsURL),
               ),
             ),

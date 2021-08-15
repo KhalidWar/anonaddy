@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/app_version/app_version_model.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
@@ -77,7 +78,7 @@ final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
 
 final domainsProvider = FutureProvider.autoDispose<DomainModel>((ref) async {
   final offlineData = ref.read(offlineDataProvider);
-  return await ref.read(domainsServiceProvider).getAllDomains(offlineData);
+  return await ref.read(domainServiceProvider).getAllDomains(offlineData);
 });
 
 final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
@@ -90,3 +91,7 @@ final accessTokenProvider = FutureProvider<String>((ref) async =>
 
 final packageInfoProvider =
     FutureProvider<PackageInfo>((ref) => PackageInfo.fromPlatform());
+
+final appVersionProvider = FutureProvider.autoDispose<AppVersion>((ref) async {
+  return await ref.read(appVersionServiceProvider).getAppVersionData();
+});

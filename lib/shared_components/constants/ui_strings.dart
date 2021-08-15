@@ -40,6 +40,11 @@ const kAddPublicKeyNote =
 const kUnverifiedRecipientNote =
     'Unverified recipient emails can NOT be set as default recipient for aliases.';
 
+/// Domain
+const kUnverifiedDomainWarning = 'Unverified domain';
+const kInvalidDomainMXWarning =
+    'Domain MX records are NOT validated or set correctly.';
+
 /// Search Tab
 const kSearchAliasByEmailOrDesc = 'Search for aliases by email or description';
 const kSearchFieldHint = 'Search';

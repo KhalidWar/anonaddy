@@ -33,6 +33,12 @@ const kReachedUsernameLimit = 'You have reached your additional username limit';
 const kUpdateUsernameDefaultRecipient =
     'Select the default recipient for this username. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
 
+/// Domain
+const kDeleteDomainConfirmation =
+    'Are you sure you want to delete this domain? This will also delete all aliases associated with this domain. You will no longer be able to receive any emails at this domain.';
+const kUpdateDomainDefaultRecipient =
+    'Select the default recipient for this domain. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
+
 /// Alias Format
 const kUUID = 'uuid';
 const kRandomChars = 'random_characters';
