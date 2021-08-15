@@ -183,25 +183,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Divider(height: size.height * 0.05),
               //todo automate changelog fetching
-              Text(
-                  '1. Improved background services which should eliminate "too many requests" error'),
+              Text('1. [BETA] Added self hosted instance'),
               SizedBox(height: size.height * 0.01),
-              Text(
-                  '2. Improved initial loading times by loading data from disk'),
+              Text('2. [BETA] Added domains'),
               SizedBox(height: size.height * 0.01),
-              Text('3. Fixed Create New Alias bug on app start'),
+              Text('3. Added Send from to aliases'),
               SizedBox(height: size.height * 0.01),
-              Text('4. Added error indicator to Alias Domain and Alias Format'),
+              Text('4. Major overhaul to how data is handled'),
               SizedBox(height: size.height * 0.01),
-              Text('5. Several UI improvements'),
+              Text('5. Several under the hood improvements'),
               SizedBox(height: size.height * 0.01),
-              Text('6. Several under the hood improvements'),
+              Text('6. Minor UI tweaks'),
               SizedBox(height: size.height * 0.01),
               Spacer(),
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(),
-                  child: Text('Continue to AddyManager'),
+                  child: const Text('Continue to AddyManager'),
                   onPressed: () {
                     context.read(changelogServiceProvider).dismissChangeLog();
                     Navigator.pop(context);
