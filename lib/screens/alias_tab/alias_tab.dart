@@ -1,6 +1,5 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_tab_pie_chart.dart';
@@ -8,8 +7,6 @@ import 'package:anonaddy/shared_components/shimmer_effects/alias_shimmer_loading
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'deleted_aliases_screen.dart';
 
 class AliasTab extends ConsumerWidget {
   @override
@@ -119,36 +116,15 @@ class AliasTab extends ConsumerWidget {
                   if (deletedAliasList.isEmpty)
                     buildEmptyAliasList(context)
                   else
-                    SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: deletedAliasList.length >= 15
-                                ? 15
-                                : deletedAliasList.length,
-                            itemBuilder: (context, index) {
-                              return AliasListTile(
-                                aliasData: deletedAliasList[index],
-                              );
-                            },
-                          ),
-                          Divider(),
-                          TextButton(
-                            style: TextButton.styleFrom(),
-                            child: Text('View all deleted aliases'),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                CustomPageRoute(
-                                  DeletedAliasesScreen(deletedAliasList),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: deletedAliasList.length,
+                      itemBuilder: (context, index) {
+                        return AliasListTile(
+                          aliasData: deletedAliasList[index],
+                        );
+                      },
                     ),
                 ],
               ),
