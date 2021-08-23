@@ -4,6 +4,7 @@ import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
+import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
@@ -78,6 +79,8 @@ class SearchTab extends StatelessWidget {
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: aliases.length,
+                  controller:
+                      context.read(fabVisibilityProvider).searchController,
                   itemBuilder: (context, index) {
                     return AliasListTile(aliasData: aliases[index]);
                   },

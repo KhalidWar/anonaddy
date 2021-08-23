@@ -6,6 +6,7 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
+import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -76,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
         return Scaffold(
           appBar: buildAppBar(context, isOffline),
+          floatingActionButton: buildFab(context),
           body: IndexedStack(
             index: _selectedIndex,
             children: [
@@ -149,6 +151,30 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(context, CustomPageRoute(SettingsScreen())),
         ),
       ],
+    );
+  }
+
+  Widget buildFab(BuildContext context) {
+    return Consumer(
+      builder: (context, watch, child) {
+        final showFab = watch(fabVisibilityStateNotifier);
+        return showFab ? child! : Container();
+      },
+      child: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(kBottomSheetBorderRadius),
+              ),
+            ),
+            builder: (context) => CreateNewAlias(),
+          );
+        },
+      ),
     );
   }
 
