@@ -9,9 +9,11 @@ import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
+import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
 import 'package:anonaddy/state_management/domain_state_manager.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../alias_state_manager.dart';
@@ -34,6 +36,8 @@ final connectivityState = Provider((ref) => ConnectivityState(Connectivity()));
 final offlineDataProvider = Provider((ref) => OfflineData());
 final changelogServiceProvider = Provider((ref) => ChangelogService());
 final appVersionServiceProvider = Provider((ref) => AppVersionService());
+final fabVisibilityStateProvider = Provider(
+    (ref) => FabVisibilityState(ScrollController(), ScrollController()));
 
 /// Notifier Providers
 final aliasStateManagerProvider =

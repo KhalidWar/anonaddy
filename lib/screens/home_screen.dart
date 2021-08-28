@@ -53,12 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
     SearchHistoryStorage().openSearchHiveBox();
   }
 
-  // @override
-  // void dispose() {
-  //   Hive.close();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -165,16 +159,20 @@ class _HomeScreenState extends State<HomeScreen> {
       child: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(kBottomSheetBorderRadius),
+          final userModel = context.read(accountStreamProvider).data;
+          if (userModel == null) {
+            NicheMethod().showToast(kLoadingText);
+          } else {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(kBottomSheetBorderRadius)),
               ),
-            ),
-            builder: (context) => CreateNewAlias(),
-          );
+              builder: (context) => CreateNewAlias(),
+            );
+          }
         },
       ),
     );
