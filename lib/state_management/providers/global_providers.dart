@@ -8,7 +8,6 @@ import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
-import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info/package_info.dart';
 
@@ -66,9 +65,6 @@ final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
     await Future.delayed(Duration(seconds: 5));
   }
 });
-
-final connectivityStreamProvider = StreamProvider.autoDispose<ConnectionStatus>(
-    (ref) => ref.read(connectivityServiceProvider).streamController.stream);
 
 /// Future Providers
 final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {

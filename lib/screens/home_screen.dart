@@ -1,12 +1,12 @@
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
-import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
+import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
 import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -65,16 +65,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Consumer(
       builder: (_, watch, __) {
-        final connectivityAsyncValue = watch(connectivityStreamProvider);
-        bool isOffline = false;
+        final connectivityState = watch(connectivityStateProvider);
+        late bool isOffline;
 
-        connectivityAsyncValue.whenData((data) {
-          if (data == ConnectionStatus.offline) {
-            isOffline = true;
-          } else {
+        switch (connectivityState) {
+          case ConnectionStatus.online:
             isOffline = false;
-          }
-        });
+            break;
+          case ConnectionStatus.offline:
+            isOffline = true;
+            break;
+        }
+
         return Scaffold(
           appBar: buildAppBar(context, isOffline),
           floatingActionButton: buildFab(context),
