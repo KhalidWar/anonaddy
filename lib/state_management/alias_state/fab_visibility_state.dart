@@ -27,6 +27,10 @@ class FabVisibilityState extends StateNotifier<bool> {
   late final ScrollController aliasController;
   late final ScrollController searchController;
 
+  void showFab() {
+    if (state == false) state = true;
+  }
+
   void addListeners(ScrollController controller) {
     controller.addListener(() {
       switch (controller.position.userScrollDirection) {
