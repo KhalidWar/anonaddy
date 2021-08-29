@@ -74,6 +74,15 @@ class AboutAppScreen extends StatelessWidget {
             ),
             Divider(height: 0),
             ListTile(
+              title: Text('Exodus Privacy Report'),
+              subtitle: Text(
+                'View Exodus\'s privacy report of AddyManager',
+              ),
+              trailing: Icon(Icons.shield_outlined),
+              onTap: () => _launchURL(kExodusPrivacyURL),
+            ),
+            Divider(height: 0),
+            ListTile(
               title: Text('AddyManager License'),
               subtitle: Text('MIT License'),
               trailing: Icon(Icons.description),

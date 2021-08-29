@@ -29,6 +29,8 @@ const kAddyManagerRepoURL = 'https://github.com/KhalidWar/anonaddy';
 const kAddyManagerIssuesURL = 'https://github.com/KhalidWar/anonaddy/issues';
 const kAddyManagerLicenseURL =
     'https://github.com/KhalidWar/anonaddy/blob/master/LICENSE';
+const kExodusPrivacyURL =
+    'https://reports.exodus-privacy.eu.org/en/reports/com.khalidwar.anonaddy/latest/';
 
 /// Persons
 const kKhalidWarGithubURL = 'https://github.com/KhalidWar';
