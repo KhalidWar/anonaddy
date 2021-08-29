@@ -42,7 +42,7 @@ class AboutAppScreen extends StatelessWidget {
                       },
                       loading: () => CircularProgressIndicator(),
                       error: (error, stackTrace) =>
-                          Text('Failed to load  package info: $error'),
+                          Text('Failed to load package info: $error'),
                     );
                   },
                 ),
@@ -53,21 +53,21 @@ class AboutAppScreen extends StatelessWidget {
             ListTile(
               title: Text('Khalid Warsame'),
               subtitle: Text('AddyManager developer'),
-              trailing: Icon(Icons.open_in_new_outlined),
+              trailing: Icon(Icons.account_circle_outlined),
               onTap: () => _launchURL(kKhalidWarGithubURL),
             ),
             Divider(height: 0),
             ListTile(
               title: Text('Will Browning (AnonAddy team)'),
               subtitle: Text('Contributor'),
-              trailing: Icon(Icons.open_in_new_outlined),
+              trailing: Icon(Icons.account_circle_outlined),
               onTap: () => _launchURL(kWillBrowningGithubURL),
             ),
             Divider(height: 0),
             ListTile(
-              title: Text('How to contribute?'),
+              title: Text('Found a bug?'),
               subtitle: Text(
-                'Open an issue for bugs, feature requests, and suggestions.',
+                'Report bugs and request features',
               ),
               trailing: Icon(Icons.bug_report_outlined),
               onTap: () => _launchURL(kAddyManagerIssuesURL),
@@ -76,7 +76,7 @@ class AboutAppScreen extends StatelessWidget {
             ListTile(
               title: Text('Exodus Privacy Report'),
               subtitle: Text(
-                'View Exodus\'s privacy report of AddyManager',
+                'Exodus\'s privacy report of AddyManager',
               ),
               trailing: Icon(Icons.shield_outlined),
               onTap: () => _launchURL(kExodusPrivacyURL),
@@ -91,7 +91,7 @@ class AboutAppScreen extends StatelessWidget {
             Divider(height: 0),
             ListTile(
               title: Text('Packages Licenses'),
-              subtitle: Text('View used packages licenses'),
+              subtitle: Text('Third party packages\' licenses'),
               trailing: Icon(Icons.receipt_long),
               onTap: () => showLicensePage(
                 context: context,
