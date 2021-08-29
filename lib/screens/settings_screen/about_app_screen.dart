@@ -85,7 +85,7 @@ class AboutAppScreen extends StatelessWidget {
             ListTile(
               title: Text('AddyManager License'),
               subtitle: Text('MIT License'),
-              trailing: Icon(Icons.description),
+              trailing: Icon(Icons.description_outlined),
               onTap: () => _launchURL(kAddyManagerLicenseURL),
             ),
             Divider(height: 0),
