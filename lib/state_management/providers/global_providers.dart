@@ -11,21 +11,21 @@ import 'package:anonaddy/models/username/username_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info/package_info.dart';
 
+import '../lifecycle/lifecycle_state_manager.dart';
 import 'class_providers.dart';
 
 /// Stream Providers
 final accountStreamProvider =
     StreamProvider.autoDispose<AccountModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  final isAppInForeground =
-      ref.watch(lifecycleStateManagerProvider).isAppInForeground;
+  final lifecycleStatus = ref.watch(lifecycleStateProvider);
 
   final securedData = await offlineData.readAccountOfflineData();
   if (securedData.isNotEmpty) {
     yield AccountModel.fromJson(jsonDecode(securedData));
   }
 
-  while (isAppInForeground) {
+  while (lifecycleStatus == LifecycleStatus.foreground) {
     yield* Stream.fromFuture(
         ref.read(userServiceProvider).getAccountData(offlineData));
     await Future.delayed(Duration(seconds: 5));
@@ -34,15 +34,14 @@ final accountStreamProvider =
 
 final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  final isAppInForeground =
-      ref.watch(lifecycleStateManagerProvider).isAppInForeground;
+  final lifecycleStatus = ref.watch(lifecycleStateProvider);
 
   final securedData = await offlineData.readAliasOfflineData();
   if (securedData.isNotEmpty) {
     yield AliasModel.fromJson(jsonDecode(securedData));
   }
 
-  while (isAppInForeground) {
+  while (lifecycleStatus == LifecycleStatus.foreground) {
     yield* Stream.fromFuture(
         ref.read(aliasServiceProvider).getAllAliasesData(offlineData));
     await Future.delayed(Duration(seconds: 1));
@@ -51,15 +50,14 @@ final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
 
 final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  final isAppInForeground =
-      ref.watch(lifecycleStateManagerProvider).isAppInForeground;
+  final lifecycleStatus = ref.watch(lifecycleStateProvider);
 
   final securedData = await offlineData.readRecipientsOfflineData();
   if (securedData.isNotEmpty) {
     yield RecipientModel.fromJson(jsonDecode(securedData));
   }
 
-  while (isAppInForeground) {
+  while (lifecycleStatus == LifecycleStatus.foreground) {
     yield* Stream.fromFuture(
         ref.read(recipientServiceProvider).getAllRecipient(offlineData));
     await Future.delayed(Duration(seconds: 5));

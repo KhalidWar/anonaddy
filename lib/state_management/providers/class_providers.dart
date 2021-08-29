@@ -17,7 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../alias_state_manager.dart';
-import '../lifecycle_state_manager.dart';
+import '../lifecycle/lifecycle_state_manager.dart';
 import '../login_state_manager.dart';
 import '../recipient_state_manager.dart';
 import '../settings_state_manager.dart';
@@ -38,6 +38,7 @@ final changelogServiceProvider = Provider((ref) => ChangelogService());
 final appVersionServiceProvider = Provider((ref) => AppVersionService());
 final fabVisibilityStateProvider = Provider(
     (ref) => FabVisibilityState(ScrollController(), ScrollController()));
+final lifecycleState = Provider((ref) => LifecycleState());
 
 /// Notifier Providers
 final aliasStateManagerProvider =
@@ -51,9 +52,6 @@ final loginStateManagerProvider =
 
 final recipientStateManagerProvider =
     ChangeNotifierProvider((ref) => RecipientStateManager());
-
-final lifecycleStateManagerProvider =
-    ChangeNotifierProvider((ref) => LifecycleStateManager());
 
 final settingsStateManagerProvider =
     ChangeNotifierProvider((ref) => SettingsStateManager());

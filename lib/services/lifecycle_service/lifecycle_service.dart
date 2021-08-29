@@ -12,21 +12,6 @@ class LifecycleService extends StatefulWidget {
 
 class _LifecycleServiceState extends State<LifecycleService>
     with WidgetsBindingObserver {
-  bool _getLifecycleState(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.inactive:
-        return false;
-      case AppLifecycleState.detached:
-        return false;
-      case AppLifecycleState.paused:
-        return false;
-      case AppLifecycleState.resumed:
-        return true;
-      default:
-        return true;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -43,10 +28,7 @@ class _LifecycleServiceState extends State<LifecycleService>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    print(state);
-    context
-        .read(lifecycleStateManagerProvider)
-        .setForegroundState(_getLifecycleState(state));
+    context.read(lifecycleState).setLifecycleState(state);
   }
 
   @override
