@@ -17,113 +17,119 @@ class AboutAppScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text('About App')),
-      body: SingleChildScrollView(
+      body: ListView(
         padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-        child: Column(
-          children: [
-            Column(
-              children: [
-                buildAppLogo(size),
-                SizedBox(height: size.height * 0.01),
-                Consumer(
-                  builder: (_, watch, __) {
-                    final packageInfo = watch(packageInfoProvider);
-                    return packageInfo.when(
-                      data: (data) {
-                        return Column(
-                          children: [
-                            Text(
-                              data.appName,
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            Text('${data.version} (${data.buildNumber})'),
-                          ],
-                        );
-                      },
-                      loading: () => CircularProgressIndicator(),
-                      error: (error, stackTrace) =>
-                          Text('Failed to load package info: $error'),
-                    );
-                  },
-                ),
-                SizedBox(height: size.height * 0.03),
-              ],
-            ),
-            Divider(height: 0),
-            ListTile(
-              title: Text('Khalid Warsame'),
-              subtitle: Text('AddyManager developer'),
-              trailing: Icon(Icons.account_circle_outlined),
-              onTap: () => _launchURL(kKhalidWarGithubURL),
-            ),
-            Divider(height: 0),
-            ListTile(
-              title: Text('Will Browning (AnonAddy team)'),
-              subtitle: Text('Contributor'),
-              trailing: Icon(Icons.account_circle_outlined),
-              onTap: () => _launchURL(kWillBrowningGithubURL),
-            ),
-            Divider(height: 0),
-            ListTile(
-              title: Text('Found a bug?'),
-              subtitle: Text(
-                'Report bugs and request features',
-              ),
-              trailing: Icon(Icons.bug_report_outlined),
-              onTap: () => _launchURL(kAddyManagerIssuesURL),
-            ),
-            Divider(height: 0),
-            ListTile(
-              title: Text('Exodus Privacy Report'),
-              subtitle: Text(
-                'Exodus\'s privacy report of AddyManager',
-              ),
-              trailing: Icon(Icons.shield_outlined),
-              onTap: () => _launchURL(kExodusPrivacyURL),
-            ),
-            Divider(height: 0),
-            ListTile(
-              title: Text('AddyManager License'),
-              subtitle: Text('MIT License'),
-              trailing: Icon(Icons.description_outlined),
-              onTap: () => _launchURL(kAddyManagerLicenseURL),
-            ),
-            Divider(height: 0),
-            ListTile(
-              title: Text('Packages Licenses'),
-              subtitle: Text('Third party packages\' licenses'),
-              trailing: Icon(Icons.receipt_long),
-              onTap: () => showLicensePage(
-                context: context,
-                applicationName: 'AddyManager',
-                applicationIcon: Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: buildAppLogo(size),
-                ),
-              ),
-            ),
-            Divider(height: 0),
-            ListTile(
-              title: Text('Credits'),
-              subtitle: Text('Credits for assets in AddyManager'),
-              trailing: Icon(Icons.image_outlined),
-              onTap: () {
-                Navigator.push(context, CustomPageRoute(CreditsScreen()));
-              },
-            ),
-            Divider(height: 0),
-          ],
-        ),
+        children: [
+          buildHeader(context),
+          SizedBox(height: size.height * 0.03),
+          Divider(height: 0),
+          ListTile(
+            title: Text('Khalid Warsame'),
+            subtitle: Text('AddyManager developer'),
+            trailing: Icon(Icons.account_circle_outlined),
+            onTap: () => _launchURL(kKhalidWarGithubURL),
+          ),
+          Divider(height: 0),
+          ListTile(
+            title: Text('Will Browning (AnonAddy team)'),
+            subtitle: Text('Contributor'),
+            trailing: Icon(Icons.account_circle_outlined),
+            onTap: () => _launchURL(kWillBrowningGithubURL),
+          ),
+          Divider(height: 0),
+          ListTile(
+            title: Text('Exodus Privacy Report'),
+            subtitle: Text('Exodus\'s privacy report of AddyManager'),
+            trailing: Icon(Icons.shield_outlined),
+            onTap: () => _launchURL(kExodusPrivacyURL),
+          ),
+          Divider(height: 0),
+          ListTile(
+            title: Text('Found a bug?'),
+            subtitle: Text('Report bugs and request features'),
+            trailing: Icon(Icons.bug_report_outlined),
+            onTap: () => _launchURL(kAddyManagerIssuesURL),
+          ),
+          Divider(height: 0),
+          ListTile(
+            title: Text('Source Code'),
+            subtitle: Text('AddyManager\'s open source code'),
+            trailing: Icon(Icons.code_outlined),
+            onTap: () => _launchURL(kAddyManagerRepoURL),
+          ),
+          Divider(height: 0),
+          ListTile(
+            title: Text('AddyManager License'),
+            subtitle: Text('MIT License'),
+            trailing: Icon(Icons.description_outlined),
+            onTap: () => _launchURL(kAddyManagerLicenseURL),
+          ),
+          Divider(height: 0),
+          ListTile(
+            title: Text('Packages Licenses'),
+            subtitle: Text('Third party packages\' licenses'),
+            trailing: Icon(Icons.receipt_long),
+            onTap: () => buildLicensePage(context),
+          ),
+          Divider(height: 0),
+          ListTile(
+            title: Text('Credits'),
+            subtitle: Text('Credits for assets in AddyManager'),
+            trailing: Icon(Icons.image_outlined),
+            onTap: () {
+              Navigator.push(context, CustomPageRoute(CreditsScreen()));
+            },
+          ),
+          Divider(height: 0),
+        ],
       ),
     );
   }
 
-  Container buildAppLogo(Size size) {
-    return Container(
-      width: size.width * 0.4,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(shape: BoxShape.circle),
-      child: Image.asset('assets/images/app_logo.png'),
+  Widget buildHeader(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Column(
+      children: [
+        Container(
+          width: size.width * 0.4,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(shape: BoxShape.circle),
+          child: Image.asset('assets/images/app_logo.png'),
+        ),
+        SizedBox(height: size.height * 0.01),
+        Consumer(
+          builder: (_, watch, __) {
+            final packageInfo = watch(packageInfoProvider);
+            return packageInfo.when(
+              data: (data) {
+                return Column(
+                  children: [
+                    Text(
+                      data.appName,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    Text('${data.version} (${data.buildNumber})'),
+                  ],
+                );
+              },
+              loading: () => CircularProgressIndicator(),
+              error: (error, stackTrace) =>
+                  Text('Failed to load package info: $error'),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  void buildLicensePage(BuildContext context) {
+    return showLicensePage(
+      context: context,
+      applicationName: 'AddyManager',
+      applicationIcon: Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: buildHeader(context),
+      ),
     );
   }
 }
