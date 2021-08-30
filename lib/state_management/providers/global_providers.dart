@@ -6,6 +6,7 @@ import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/app_version/app_version_model.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
+import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -88,4 +89,9 @@ final packageInfoProvider =
 
 final appVersionProvider = FutureProvider.autoDispose<AppVersion>((ref) async {
   return await ref.read(appVersionServiceProvider).getAppVersionData();
+});
+
+final failedDeliveriesProvider =
+    FutureProvider.autoDispose<FailedDeliveriesModel>((ref) async {
+  return await ref.read(failedDeliveriesService).getFailedDeliveries();
 });

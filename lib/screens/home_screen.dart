@@ -121,25 +121,10 @@ class _HomeScreenState extends State<HomeScreen> {
       title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.add_circle_outline_outlined),
-        onPressed: isOffline
-            ? () => showToast(kCreateAliasWhileOffline)
-            : () {
-                final userModel = context.read(accountStreamProvider).data;
-                if (userModel == null) {
-                  showToast(kLoadingText);
-                } else {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(kBottomSheetBorderRadius)),
-                    ),
-                    builder: (context) => CreateNewAlias(),
-                  );
-                }
-              },
+        icon: Icon(Icons.error_outline),
+        onPressed: () {
+          Navigator.push(context, CustomPageRoute(FailedDeliveriesScreen()));
+        },
       ),
       actions: [
         IconButton(
