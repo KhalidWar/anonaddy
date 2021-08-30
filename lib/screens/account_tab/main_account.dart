@@ -1,6 +1,5 @@
 import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/screens/account_tab/add_new_recipient.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
@@ -114,14 +113,14 @@ class MainAccount extends StatelessWidget {
           subtitle: 'Default Alias Domain',
           leadingIconData: Icons.dns,
           trailingIconData: Icons.open_in_new_outlined,
-          onTap: () => updateDefaultAliasFormatDomain(),
+          onTap: () => updateDefaultAliasFormatDomain(context),
         ),
         AccountListTile(
           title: correctAliasString(account.defaultAliasFormat),
           subtitle: 'Default Alias Format',
           leadingIconData: Icons.alternate_email,
           trailingIconData: Icons.open_in_new_outlined,
-          onTap: () => updateDefaultAliasFormatDomain(),
+          onTap: () => updateDefaultAliasFormatDomain(context),
         ),
         AccountListTile(
           title: _calculateRecipientsCount(),
@@ -141,8 +140,8 @@ class MainAccount extends StatelessWidget {
     );
   }
 
-  Future<void> updateDefaultAliasFormatDomain() async {
-    final instanceURL = await AccessTokenService().getInstanceURL();
+  Future<void> updateDefaultAliasFormatDomain(BuildContext context) async {
+    final instanceURL = await context.read(accessTokenService).getInstanceURL();
     await _nicheMethod.launchURL('https://$instanceURL/settings');
   }
 

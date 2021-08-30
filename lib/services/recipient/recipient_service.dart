@@ -9,11 +9,12 @@ import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
 class RecipientService {
-  final _accessTokenService = AccessTokenService();
+  const RecipientService(this.accessTokenService);
+  final AccessTokenService accessTokenService;
 
   Future<RecipientModel> getAllRecipient(OfflineData offlineData) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
@@ -43,8 +44,8 @@ class RecipientService {
   }
 
   Future<Recipient> enableEncryption(String recipientID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -71,8 +72,8 @@ class RecipientService {
   }
 
   Future disableEncryption(String recipientID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -98,8 +99,8 @@ class RecipientService {
   }
 
   Future<Recipient> addPublicGPGKey(String recipientID, String keyData) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
@@ -127,8 +128,8 @@ class RecipientService {
   }
 
   Future removePublicGPGKey(String recipientID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -155,8 +156,8 @@ class RecipientService {
   }
 
   Future<Recipient> addRecipient(String email) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -183,8 +184,8 @@ class RecipientService {
   }
 
   Future removeRecipient(String recipientID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -211,8 +212,8 @@ class RecipientService {
   }
 
   Future sendVerificationEmail(String recipientID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(

@@ -10,11 +10,12 @@ import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
 class UsernameService {
-  final _accessTokenService = AccessTokenService();
+  const UsernameService(this.accessTokenService);
+  final AccessTokenService accessTokenService;
 
   Future<UsernameModel> getUsernameData(OfflineData offlineData) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
@@ -44,8 +45,8 @@ class UsernameService {
   }
 
   Future<Username> createNewUsername(String username) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -73,8 +74,8 @@ class UsernameService {
 
   Future<Username> editUsernameDescription(
       String usernameID, String description) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
@@ -101,8 +102,8 @@ class UsernameService {
   }
 
   Future deleteUsername(String usernameID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -129,8 +130,8 @@ class UsernameService {
 
   Future<Username> updateDefaultRecipient(
       String usernameID, String recipientID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
@@ -158,8 +159,8 @@ class UsernameService {
   }
 
   Future<Username> activateUsername(String usernameID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -186,8 +187,8 @@ class UsernameService {
   }
 
   Future deactivateUsername(String usernameID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -213,8 +214,8 @@ class UsernameService {
   }
 
   Future<Username> activateCatchAll(String usernameID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -241,8 +242,8 @@ class UsernameService {
   }
 
   Future deactivateCatchAll(String usernameID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(

@@ -3,12 +3,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info/package_info.dart';
 
 class ChangelogService {
-  final _secureStorage = FlutterSecureStorage();
+  const ChangelogService(this.secureStorage);
+  final FlutterSecureStorage secureStorage;
+
   final _changelogKey = 'changelogKey';
   final _appVersionKey = 'appVersionKey';
 
   Future<bool> isAppUpdated() async {
-    return await _secureStorage.read(key: _changelogKey).then((value) {
+    return await secureStorage.read(key: _changelogKey).then((value) {
       if (value == 'true' || value == null) {
         return true;
       } else {
@@ -18,7 +20,7 @@ class ChangelogService {
   }
 
   Future<void> dismissChangeLog() async {
-    await _secureStorage.write(key: _changelogKey, value: false.toString());
+    await secureStorage.write(key: _changelogKey, value: false.toString());
   }
 
   Future<String> _getCurrentAppVersion() async {
@@ -27,18 +29,18 @@ class ChangelogService {
   }
 
   Future<String> _loadOldAppVersion() async {
-    return await _secureStorage.read(key: _appVersionKey) ?? '';
+    return await secureStorage.read(key: _appVersionKey) ?? '';
   }
 
   Future<void> _saveCurrentAppVersion(String currentVersion) async {
-    await _secureStorage.write(key: _appVersionKey, value: currentVersion);
+    await secureStorage.write(key: _appVersionKey, value: currentVersion);
   }
 
   Future<void> checkIfAppUpdated(BuildContext context) async {
     final oldAppVersion = await _loadOldAppVersion();
     final currentAppVersion = await _getCurrentAppVersion();
     if (oldAppVersion != currentAppVersion) {
-      await _secureStorage.delete(key: _changelogKey);
+      await secureStorage.delete(key: _changelogKey);
       await _saveCurrentAppVersion(currentAppVersion);
     }
   }

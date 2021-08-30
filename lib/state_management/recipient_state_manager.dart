@@ -36,7 +36,7 @@ class RecipientStateManager extends ChangeNotifier {
     isLoading = true;
     if (recipientDataModel.shouldEncrypt) {
       await context
-          .read(recipientServiceProvider)
+          .read(recipientService)
           .disableEncryption(recipientID)
           .then((value) {
         recipientDataModel.shouldEncrypt = false;
@@ -46,7 +46,7 @@ class RecipientStateManager extends ChangeNotifier {
       });
     } else {
       await context
-          .read(recipientServiceProvider)
+          .read(recipientService)
           .enableEncryption(recipientID)
           .then((value) {
         recipientDataModel.shouldEncrypt = value.shouldEncrypt;
@@ -62,7 +62,7 @@ class RecipientStateManager extends ChangeNotifier {
       BuildContext context, String recipientID, String keyData) async {
     if (pgpKeyFormKey.currentState!.validate()) {
       await context
-          .read(recipientServiceProvider)
+          .read(recipientService)
           .addPublicGPGKey(recipientID, keyData)
           .then((value) {
         _showToast(kAddGPGKeySuccess);
@@ -78,7 +78,7 @@ class RecipientStateManager extends ChangeNotifier {
   Future<void> removePublicGPGKey(
       BuildContext context, String recipientID) async {
     await context
-        .read(recipientServiceProvider)
+        .read(recipientService)
         .removePublicGPGKey(recipientID)
         .then((value) {
       _showToast(kDeleteGPGKeySuccess);
@@ -93,7 +93,7 @@ class RecipientStateManager extends ChangeNotifier {
 
   Future<void> verifyEmail(BuildContext context, String recipientID) async {
     await context
-        .read(recipientServiceProvider)
+        .read(recipientService)
         .sendVerificationEmail(recipientID)
         .then((value) {
       _showToast('Verification email is sent');
@@ -105,10 +105,7 @@ class RecipientStateManager extends ChangeNotifier {
   Future<void> addRecipient(BuildContext context, String email) async {
     if (recipientFormKey.currentState!.validate()) {
       isLoading = true;
-      await context
-          .read(recipientServiceProvider)
-          .addRecipient(email)
-          .then((value) {
+      await context.read(recipientService).addRecipient(email).then((value) {
         _showToast('Recipient added successfully!');
       }).catchError((error) {
         _showToast(error.toString());
@@ -121,7 +118,7 @@ class RecipientStateManager extends ChangeNotifier {
 
   Future<void> removeRecipient(BuildContext context, String recipientID) async {
     await context
-        .read(recipientServiceProvider)
+        .read(recipientService)
         .removeRecipient(recipientID)
         .then((value) {
       _showToast('Recipient deleted successfully!');

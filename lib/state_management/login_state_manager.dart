@@ -31,11 +31,11 @@ class LoginStateManager extends ChangeNotifier {
       if (tokenFormKey.currentState!.validate()) {
         isLoading = true;
         await context
-            .read(accessTokenServiceProvider)
+            .read(accessTokenService)
             .validateAccessToken(accessToken, instanceURL)
             .then((value) async {
           if (value == 200) {
-            await context.read(accessTokenServiceProvider).saveLoginCredentials(
+            await context.read(accessTokenService).saveLoginCredentials(
                 accessToken, instanceURL ?? kAuthorityURL);
             isLoading = false;
             if (instanceURL != null) Navigator.pop(context);

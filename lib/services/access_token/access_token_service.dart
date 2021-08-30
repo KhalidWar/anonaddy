@@ -4,7 +4,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class AccessTokenService {
-  final _secureStorage = FlutterSecureStorage();
+  AccessTokenService(this.secureStorage);
+  final FlutterSecureStorage secureStorage;
+
   static const _accessTokenKey = 'accessToken';
   static const _instanceURLKey = 'instanceURLKey';
   String _accessTokenValue = '';
@@ -34,13 +36,13 @@ class AccessTokenService {
 
   Future<void> saveLoginCredentials(
       String accessToken, String instanceURL) async {
-    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
-    await _secureStorage.write(key: _instanceURLKey, value: instanceURL);
+    await secureStorage.write(key: _accessTokenKey, value: accessToken);
+    await secureStorage.write(key: _instanceURLKey, value: instanceURL);
   }
 
   Future<String> getAccessToken() async {
     if (_accessTokenValue.isEmpty) {
-      _accessTokenValue = await _secureStorage.read(key: _accessTokenKey) ?? '';
+      _accessTokenValue = await secureStorage.read(key: _accessTokenKey) ?? '';
       return _accessTokenValue;
     } else {
       return _accessTokenValue;
@@ -48,10 +50,10 @@ class AccessTokenService {
   }
 
   Future<String> getInstanceURL() async {
-    final savedURL = await _secureStorage.read(key: _instanceURLKey);
+    final savedURL = await secureStorage.read(key: _instanceURLKey);
     if (savedURL == null) _instanceURL = kAuthorityURL;
     if (_instanceURL.isEmpty) {
-      _instanceURL = await _secureStorage.read(key: _instanceURLKey) ?? '';
+      _instanceURL = await secureStorage.read(key: _instanceURLKey) ?? '';
       return _instanceURL;
     } else {
       return _instanceURL;

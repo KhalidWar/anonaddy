@@ -42,7 +42,7 @@ class UsernameStateManager extends ChangeNotifier {
   }
 
   Future<void> toggleActivity(BuildContext context, String usernameID) async {
-    final usernameProvider = context.read(usernameServiceProvider);
+    final usernameProvider = context.read(usernameService);
     activeSwitchLoading = true;
     if (usernameModel.active) {
       await usernameProvider.deactivateUsername(usernameID).then((username) {
@@ -64,7 +64,7 @@ class UsernameStateManager extends ChangeNotifier {
   }
 
   Future<void> toggleCatchAll(BuildContext context, String usernameID) async {
-    final usernameProvider = context.read(usernameServiceProvider);
+    final usernameProvider = context.read(usernameService);
     catchAllSwitchLoading = true;
     if (usernameModel.catchAll) {
       await usernameProvider.deactivateCatchAll(usernameID).then((username) {
@@ -88,7 +88,7 @@ class UsernameStateManager extends ChangeNotifier {
   Future<void> createNewUsername(BuildContext context, String username) async {
     if (createUsernameFormKey.currentState!.validate()) {
       await context
-          .read(usernameServiceProvider)
+          .read(usernameService)
           .createNewUsername(username)
           .then((username) {
         _showToast('Username added successfully!');
@@ -102,7 +102,7 @@ class UsernameStateManager extends ChangeNotifier {
   Future editDescription(BuildContext context, usernameID, description) async {
     if (editDescriptionFormKey.currentState!.validate()) {
       await context
-          .read(usernameServiceProvider)
+          .read(usernameService)
           .editUsernameDescription(usernameID, description)
           .then((username) {
         Navigator.pop(context);
@@ -118,7 +118,7 @@ class UsernameStateManager extends ChangeNotifier {
       BuildContext context, usernameID, recipientID) async {
     updateRecipientLoading = true;
     await context
-        .read(usernameServiceProvider)
+        .read(usernameService)
         .updateDefaultRecipient(usernameID, recipientID)
         .then((username) {
       updateRecipientLoading = false;
@@ -135,7 +135,7 @@ class UsernameStateManager extends ChangeNotifier {
   Future<void> deleteUsername(BuildContext context, String usernameID) async {
     Navigator.pop(context);
     await context
-        .read(usernameServiceProvider)
+        .read(usernameService)
         .deleteUsername(usernameID)
         .then((username) {
       Navigator.pop(context);

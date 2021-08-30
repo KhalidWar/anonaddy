@@ -27,8 +27,7 @@ final accountStreamProvider =
   }
 
   while (lifecycleStatus == LifecycleStatus.foreground) {
-    yield* Stream.fromFuture(
-        ref.read(userServiceProvider).getAccountData(offlineData));
+    yield* Stream.fromFuture(ref.read(userService).getAccountData(offlineData));
     await Future.delayed(Duration(seconds: 5));
   }
 });
@@ -44,7 +43,7 @@ final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
 
   while (lifecycleStatus == LifecycleStatus.foreground) {
     yield* Stream.fromFuture(
-        ref.read(aliasServiceProvider).getAllAliasesData(offlineData));
+        ref.read(aliasService).getAllAliasesData(offlineData));
     await Future.delayed(Duration(seconds: 1));
   }
 });
@@ -60,7 +59,7 @@ final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
 
   while (lifecycleStatus == LifecycleStatus.foreground) {
     yield* Stream.fromFuture(
-        ref.read(recipientServiceProvider).getAllRecipient(offlineData));
+        ref.read(recipientService).getAllRecipient(offlineData));
     await Future.delayed(Duration(seconds: 5));
   }
 });
@@ -68,27 +67,27 @@ final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
 /// Future Providers
 final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
   final offlineData = ref.read(offlineDataProvider);
-  return ref.read(usernameServiceProvider).getUsernameData(offlineData);
+  return ref.read(usernameService).getUsernameData(offlineData);
 });
 
 final domainsProvider = FutureProvider.autoDispose<DomainModel>((ref) async {
   final offlineData = ref.read(offlineDataProvider);
-  return await ref.read(domainServiceProvider).getAllDomains(offlineData);
+  return await ref.read(domainService).getAllDomains(offlineData);
 });
 
 final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
   final offlineData = ref.read(offlineDataProvider);
-  return ref.read(domainOptionsServiceProvider).getDomainOptions(offlineData);
+  return ref.read(domainOptionsService).getDomainOptions(offlineData);
 });
 
-final accessTokenProvider = FutureProvider<String>((ref) async =>
-    await ref.watch(accessTokenServiceProvider).getAccessToken());
+final accessTokenProvider = FutureProvider<String>(
+    (ref) async => await ref.watch(accessTokenService).getAccessToken());
 
 final packageInfoProvider =
     FutureProvider<PackageInfo>((ref) => PackageInfo.fromPlatform());
 
 final appVersionProvider = FutureProvider.autoDispose<AppVersion>((ref) async {
-  return await ref.read(appVersionServiceProvider).getAppVersionData();
+  return await ref.read(appVersionService).getAppVersionData();
 });
 
 final failedDeliveriesProvider =
