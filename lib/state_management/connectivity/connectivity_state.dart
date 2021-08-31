@@ -1,6 +1,7 @@
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../global_providers.dart';
 
 final connectivityStateProvider =
     StateNotifierProvider<ConnectivityState, ConnectionStatus>(

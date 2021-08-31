@@ -1,8 +1,9 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../global_providers.dart';
 
 class AliasFormatSelection extends StatelessWidget {
   const AliasFormatSelection({required this.aliasFormatList});

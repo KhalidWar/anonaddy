@@ -4,13 +4,13 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/login_state_manager.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../global_providers.dart';
 import 'change_instance_screen.dart';
 
 class TokenLoginScreen extends ConsumerWidget {

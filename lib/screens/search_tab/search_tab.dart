@@ -1,11 +1,10 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
-import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

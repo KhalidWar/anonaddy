@@ -1,7 +1,8 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../global_providers.dart';
 
 class LogoutScreen extends StatefulWidget {
   @override

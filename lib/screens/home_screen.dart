@@ -1,3 +1,5 @@
+import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/screens/failed_deliveries/failed_deliveries_screen.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
@@ -7,8 +9,6 @@ import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
-import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void checkIfAppUpdated() async {
-    final changeLog = context.read(changelogServiceProvider);
+    final changeLog = context.read(changelogService);
     await changeLog.checkIfAppUpdated(context).whenComplete(() async {
       await changeLog.isAppUpdated().then((value) {
         if (value) buildUpdateNews(context);
@@ -114,8 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   AppBar buildAppBar(BuildContext context, bool isOffline) {
-    final showToast = NicheMethod().showToast;
-
     return AppBar(
       elevation: 0,
       title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
@@ -140,27 +138,37 @@ class _HomeScreenState extends State<HomeScreen> {
     return Consumer(
       builder: (context, watch, child) {
         final showFab = watch(fabVisibilityStateNotifier);
-        return showFab ? child! : Container();
-      },
-      child: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          final userModel = context.read(accountStreamProvider).data;
-          if (userModel == null) {
-            NicheMethod().showToast(kLoadingText);
-          } else {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(kBottomSheetBorderRadius)),
-              ),
-              builder: (context) => CreateNewAlias(),
+        final singleTween = Tween(begin: 0.0, end: 1.0);
+
+        return AnimatedSwitcher(
+          duration: Duration(milliseconds: 300),
+          transitionBuilder: (child, animation) {
+            return ScaleTransition(
+              scale: singleTween.animate(animation),
+              child: showFab ? child : Container(),
             );
-          }
-        },
-      ),
+          },
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              final userModel = context.read(accountStreamProvider).data;
+              if (userModel == null) {
+                NicheMethod().showToast(kLoadingText);
+              } else {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(kBottomSheetBorderRadius)),
+                  ),
+                  builder: (context) => CreateNewAlias(),
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -212,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: ElevatedButton.styleFrom(),
                   child: const Text('Continue to AddyManager'),
                   onPressed: () {
-                    context.read(changelogServiceProvider).dismissChangeLog();
+                    context.read(changelogService).dismissChangeLog();
                     Navigator.pop(context);
                   },
                 ),

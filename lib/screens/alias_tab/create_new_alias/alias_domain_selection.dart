@@ -1,9 +1,10 @@
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../global_providers.dart';
 
 class AliasDomainSelection extends StatelessWidget {
   const AliasDomainSelection(

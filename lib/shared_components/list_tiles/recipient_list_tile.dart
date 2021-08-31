@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../global_providers.dart';
 import '../custom_page_route.dart';
 
 class RecipientListTile extends StatelessWidget {

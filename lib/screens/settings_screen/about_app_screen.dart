@@ -1,7 +1,7 @@
 import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
-import 'package:anonaddy/state_management/providers/global_providers.dart';
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

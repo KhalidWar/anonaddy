@@ -1,7 +1,8 @@
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../global_providers.dart';
 
 final fabVisibilityStateNotifier =
     StateNotifierProvider.autoDispose<FabVisibilityState, bool>((ref) {

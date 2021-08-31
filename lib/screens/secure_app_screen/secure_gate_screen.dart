@@ -4,7 +4,6 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
@@ -12,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
 import 'package:secure_application/secure_gate.dart';
+
+import '../../global_providers.dart';
 
 class SecureGateScreen extends StatefulWidget {
   const SecureGateScreen({Key? key, required this.child}) : super(key: key);

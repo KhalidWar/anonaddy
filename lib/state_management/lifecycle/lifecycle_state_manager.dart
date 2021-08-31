@@ -1,8 +1,9 @@
 import 'dart:developer';
 import 'dart:ui';
 
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../global_providers.dart';
 
 final lifecycleStateProvider =
     StateNotifierProvider<LifecycleState, LifecycleStatus>((ref) {

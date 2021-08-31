@@ -1,11 +1,10 @@
 import 'package:animations/animations.dart';
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/login_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
-import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
