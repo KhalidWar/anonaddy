@@ -18,6 +18,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:local_auth/local_auth.dart';
 
 import '../alias_state_manager.dart';
 import '../login_state_manager.dart';
@@ -27,8 +28,14 @@ import '../username_state_manager.dart';
 
 /// Class Providers
 final flutterSecureStorage = Provider((ref) => FlutterSecureStorage());
-final biometricAuthServiceProvider = Provider((ref) => BiometricAuthService());
-final offlineDataProvider = Provider((ref) => OfflineData());
+
+final biometricAuthServiceProvider =
+    Provider((ref) => BiometricAuthService(LocalAuthentication()));
+
+final offlineDataProvider = Provider<OfflineData>((ref) {
+  final secureStorage = ref.read(flutterSecureStorage);
+  return OfflineData(secureStorage);
+});
 
 final accessTokenService = Provider<AccessTokenService>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
