@@ -39,6 +39,34 @@ class FailedDeliveriesService {
     }
   }
 
+  Future<bool> deleteFailedDelivery(String failedDeliveryId) async {
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
+
+    try {
+      final response = await http.delete(
+        Uri.https(instanceURL,
+            '$kUnEncodedBaseURL/$kFailedDeliveriesURL/$failedDeliveryId'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+
+      if (response.statusCode == 204) {
+        log('deleteFailedDelivery: ' + response.statusCode.toString());
+        return true;
+      } else {
+        log('deleteFailedDelivery: ' + response.statusCode.toString());
+        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
 //todo add search recipient by email
 //todo search alias by id
 //todo search alias by email

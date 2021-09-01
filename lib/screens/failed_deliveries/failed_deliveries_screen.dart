@@ -13,6 +13,18 @@ class FailedDeliveriesScreen extends StatefulWidget {
 }
 
 class _FailedDeliveriesScreenState extends State<FailedDeliveriesScreen> {
+  List<FailedDeliveries> failedDeliveries = [];
+
+  Future<void> deleteFailedDelivery(String failedDeliveryId) async {
+    final result = await context
+        .read(failedDeliveriesService)
+        .deleteFailedDelivery(failedDeliveryId);
+    if (result) {
+      failedDeliveries.removeWhere((element) => element.id == failedDeliveryId);
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +42,7 @@ class _FailedDeliveriesScreenState extends State<FailedDeliveriesScreen> {
               return failedDeliveriesAsync.when(
                 loading: () => buildLoading(),
                 data: (data) {
-                  final failedDeliveries = data.failedDeliveries;
+                  failedDeliveries = data.failedDeliveries;
 
                   if (failedDeliveries.isEmpty)
                     return Center(child: Text('No failed deliveries found'));
@@ -91,7 +103,8 @@ class _FailedDeliveriesScreenState extends State<FailedDeliveriesScreen> {
                             Divider(height: 0),
                             TextButton(
                               child: Text('Delete failed delivery'),
-                              onPressed: () {},
+                              onPressed: () =>
+                                  deleteFailedDelivery(failedDeliveries.id),
                             ),
                           ],
                         );
