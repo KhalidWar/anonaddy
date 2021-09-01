@@ -39,9 +39,9 @@ class FailedDeliveries {
   @JsonKey(name: 'user_id')
   final String userId;
   @JsonKey(name: 'recipient_id')
-  final String recipientId;
+  final String? recipientId;
   @JsonKey(name: 'recipient_email')
-  final String recipientEmail;
+  final String? recipientEmail;
   @JsonKey(name: 'alias_id')
   final String aliasId;
   @JsonKey(name: 'alias_email')
@@ -50,7 +50,7 @@ class FailedDeliveries {
   final String bounceType;
   @JsonKey(name: 'remote_mta')
   final String remoteMta;
-  final String sender;
+  final String? sender;
   @JsonKey(name: 'email_type')
   final String emailType;
   final String status;
