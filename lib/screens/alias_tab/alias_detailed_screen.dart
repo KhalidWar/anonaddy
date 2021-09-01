@@ -78,12 +78,12 @@ class AliasDetailScreen extends ConsumerWidget {
               leadingIconData: Icons.mail_outline,
               title: 'Send email from this alias',
               subtitle: 'Send from',
-              trailingIconData: Icons.send,
+              trailingIconData: Icons.send_outlined,
               trailingIconOnPress: () => buildSendFromDialog(
                   context, sendFromAlias, aliasDataModel.email),
             ),
             AliasDetailListTile(
-              leadingIconData: Icons.toggle_on,
+              leadingIconData: Icons.toggle_on_outlined,
               title:
                   'Alias is ${aliasDataModel.active ? 'active' : 'inactive'}',
               subtitle: 'Activity',
@@ -103,10 +103,10 @@ class AliasDetailScreen extends ConsumerWidget {
               },
             ),
             AliasDetailListTile(
-              leadingIconData: Icons.comment,
+              leadingIconData: Icons.comment_outlined,
               title: aliasDataModel.description ?? 'No description',
               subtitle: 'Description',
-              trailingIconData: Icons.edit,
+              trailingIconData: Icons.edit_outlined,
               trailingIconOnPress: () {
                 buildEditDescriptionDialog(
                   context,
@@ -120,7 +120,7 @@ class AliasDetailScreen extends ConsumerWidget {
               leadingIconData: Icons.check_circle_outline,
               title: aliasDataModel.extension,
               subtitle: 'extension',
-              trailingIconData: Icons.edit,
+              trailingIconData: Icons.edit_outlined,
               trailingIconOnPress: () {},
             ),
             AliasDetailListTile(
@@ -164,7 +164,7 @@ class AliasDetailScreen extends ConsumerWidget {
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: Icon(Icons.edit_outlined),
                           onPressed: () => buildUpdateDefaultRecipient(
                               context, aliasDataModel),
                         ),

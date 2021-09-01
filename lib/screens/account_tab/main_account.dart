@@ -110,14 +110,14 @@ class MainAccount extends StatelessWidget {
         AccountListTile(
           title: account.defaultAliasDomain,
           subtitle: 'Default Alias Domain',
-          leadingIconData: Icons.dns,
+          leadingIconData: Icons.dns_outlined,
           trailingIconData: Icons.open_in_new_outlined,
           onTap: () => updateDefaultAliasFormatDomain(context),
         ),
         AccountListTile(
           title: correctAliasString(account.defaultAliasFormat),
           subtitle: 'Default Alias Format',
-          leadingIconData: Icons.alternate_email,
+          leadingIconData: Icons.alternate_email_outlined,
           trailingIconData: Icons.open_in_new_outlined,
           onTap: () => updateDefaultAliasFormatDomain(context),
         ),

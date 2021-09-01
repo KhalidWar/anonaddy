@@ -26,7 +26,7 @@ class RecipientListTile extends StatelessWidget {
           children: [
             Icon(
               Icons.email_outlined,
-              color: isDark ? Colors.white : Colors.grey,
+              color: isDark ? Colors.white : Colors.grey[700],
               size: 30,
             ),
             SizedBox(width: 15),

@@ -66,8 +66,8 @@ class DomainDetailedScreen extends ConsumerWidget {
               title: domain.description ?? kNoDescription,
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Domain description',
-              leadingIconData: Icons.comment,
-              trailing: IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+              leadingIconData: Icons.comment_outlined,
+              trailing: IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
               trailingIconOnPress: () => buildEditDescriptionDialog(
                   context, textEditingController, domain),
             ),
@@ -109,7 +109,7 @@ class DomainDetailedScreen extends ConsumerWidget {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: Icon(Icons.edit_outlined),
                         onPressed: () =>
                             buildUpdateDefaultRecipient(context, domain),
                       ),

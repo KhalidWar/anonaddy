@@ -57,8 +57,7 @@ class Domains extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Icon(
-                            Icons.language,
-                            // Icons.dns,
+                            Icons.dns_outlined,
                             size: 30,
                           ),
                           SizedBox(width: 15),

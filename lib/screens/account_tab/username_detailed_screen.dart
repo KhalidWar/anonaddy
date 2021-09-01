@@ -62,8 +62,9 @@ class UsernameDetailedScreen extends ConsumerWidget {
               title: username.description ?? kNoDescription,
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Username description',
-              leadingIconData: Icons.comment,
-              trailing: IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+              leadingIconData: Icons.comment_outlined,
+              trailing:
+                  IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
               trailingIconOnPress: () => buildEditDescriptionDialog(
                   context, textEditingController, username),
             ),
@@ -73,7 +74,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                   : 'Username is inactive',
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Activity',
-              leadingIconData: Icons.toggle_off_outlined,
+              leadingIconData: Icons.toggle_on_outlined,
               trailing: buildSwitch(activeSwitchLoading, username.active),
               trailingIconOnPress: () => toggleActivity(context, username.id),
             ),
@@ -99,7 +100,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: Icon(Icons.edit_outlined),
                         onPressed: () =>
                             buildUpdateDefaultRecipient(context, username),
                       ),

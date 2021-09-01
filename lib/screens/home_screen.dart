@@ -93,11 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
                 items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle),
+                    icon: Icon(Icons.account_circle_outlined),
                     label: kAccountBotNavLabel,
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.alternate_email_sharp),
+                    icon: Icon(Icons.alternate_email_outlined),
                     label: kAliasesBotNavLabel,
                   ),
                   BottomNavigationBarItem(
