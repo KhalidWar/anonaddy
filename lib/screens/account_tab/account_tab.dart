@@ -1,14 +1,14 @@
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/screens/account_tab/domains.dart';
-import 'package:anonaddy/screens/account_tab/recipients.dart';
+import 'package:anonaddy/screens/account_tab/domains/domains.dart';
+import 'package:anonaddy/screens/account_tab/recipients/recipients.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'additional_username.dart';
 import 'main_account.dart';
+import 'usernames/additional_username.dart';
 
 class AccountTab extends StatelessWidget {
   @override

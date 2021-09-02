@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
-import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
+import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

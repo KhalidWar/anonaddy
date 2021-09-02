@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../global_providers.dart';
+import '../../../global_providers.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
   const RecipientDetailedScreen({required this.recipientData});

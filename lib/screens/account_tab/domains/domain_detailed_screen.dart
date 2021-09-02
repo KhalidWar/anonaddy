@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
-import 'package:anonaddy/screens/account_tab/domain_default_recipient.dart';
+import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -17,7 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
+import '../../../global_providers.dart';
 
 class DomainDetailedScreen extends ConsumerWidget {
   DomainDetailedScreen({Key? key, required this.domain}) : super(key: key);
@@ -67,7 +67,8 @@ class DomainDetailedScreen extends ConsumerWidget {
               titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
               subtitle: 'Domain description',
               leadingIconData: Icons.comment_outlined,
-              trailing: IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
+              trailing:
+                  IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
               trailingIconOnPress: () => buildEditDescriptionDialog(
                   context, textEditingController, domain),
             ),

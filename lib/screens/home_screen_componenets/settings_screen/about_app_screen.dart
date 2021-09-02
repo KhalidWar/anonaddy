@@ -1,12 +1,13 @@
-import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'credits_screen.dart';
 
 class AboutAppScreen extends StatelessWidget {
   final _launchURL = NicheMethod().launchURL;

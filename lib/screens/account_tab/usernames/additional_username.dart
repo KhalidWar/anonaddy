@@ -1,5 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/screens/account_tab/username_detailed_screen.dart';
+import 'package:anonaddy/screens/account_tab/usernames/username_detailed_screen.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
