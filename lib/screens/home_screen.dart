@@ -15,8 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
+import 'home_screen_componenets/alert_center/alert_center_screen.dart';
 import 'home_screen_componenets/create_new_alias/create_new_alias.dart';
-import 'home_screen_componenets/failed_deliveries/failed_deliveries_screen.dart';
 import 'home_screen_componenets/settings_screen/settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leading: IconButton(
         icon: Icon(Icons.error_outline),
         onPressed: () {
-          Navigator.push(context, CustomPageRoute(FailedDeliveriesScreen()));
+          Navigator.push(context, CustomPageRoute(AlertCenterScreen()));
         },
       ),
       actions: [
