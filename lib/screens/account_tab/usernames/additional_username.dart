@@ -31,7 +31,6 @@ class AdditionalUsername extends ConsumerWidget {
       );
     } else {
       final usernameStream = watch(usernamesProvider);
-      final isDark = Theme.of(context).brightness == Brightness.dark;
 
       return usernameStream.when(
         loading: () => RecipientsShimmerLoading(),
@@ -57,11 +56,7 @@ class AdditionalUsername extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.account_circle_outlined,
-                          color: isDark ? Colors.white : Colors.grey,
-                          size: 30,
-                        ),
+                        Icon(Icons.account_circle_outlined),
                         SizedBox(width: 15),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
