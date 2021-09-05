@@ -6,27 +6,17 @@ import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
-import 'package:anonaddy/utilities/confirmation_dialog.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'about_app_screen.dart';
 
-class SettingsScreen extends StatefulWidget {
-  @override
-  _SettingsScreenState createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  final _nicheMethods = NicheMethod();
-
+class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-    final showToast = _nicheMethods.showToast;
+    final nicheMethod = context.read(nicheMethods);
+    final isIOS = context.read(targetedPlatform).isIOS();
 
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
@@ -40,10 +30,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               if (isAuthSuccess) {
                 settings.toggleBiometricRequired();
               } else {
-                showToast(kFailedToAuthenticate);
+                nicheMethod.showToast(kFailedToAuthenticate);
               }
-            }).catchError((error) => showToast(error.toString()));
-          }).catchError((error) => showToast(error.toString()));
+            }).catchError((error) => nicheMethod.showToast(error.toString()));
+          }).catchError((error) => nicheMethod.showToast(error.toString()));
         }
 
         return Column(
@@ -100,7 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               subtitle: Text('Learn more about AnonAddy'),
               trailing: Icon(Icons.open_in_new_outlined),
-              onTap: () => _nicheMethods.launchURL(kAnonAddyFAQURL),
+              onTap: () => nicheMethod.launchURL(kAnonAddyFAQURL),
             ),
             ListTile(
               dense: true,
@@ -116,7 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             Spacer(),
             buildAppVersion(context),
-            buildRateApp(),
+            buildRateApp(context, nicheMethod.launchURL, isIOS),
             Container(
               width: size.width,
               height: size.height * 0.05,
@@ -127,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   primary: Colors.red,
                 ),
                 child: Text('Logout'),
-                onPressed: () => buildLogoutDialog(context),
+                onPressed: () => buildLogoutDialog(context, isIOS),
               ),
             ),
             SizedBox(height: size.height * 0.01),
@@ -137,7 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget buildRateApp() {
+  Widget buildRateApp(BuildContext context, Function launchUrl, bool isIOS) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
@@ -159,10 +149,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Tap here to rate it on the App Store.',
           style: TextStyle(color: Colors.white),
         ),
-        onTap: () => _nicheMethods.launchURL(
-          TargetedPlatform().isIOS()
-              ? kAddyManagerAppStoreURL
-              : kAddyManagerPlayStoreURL,
+        onTap: () => launchUrl(
+          isIOS ? kAddyManagerAppStoreURL : kAddyManagerPlayStoreURL,
         ),
       ),
     );
@@ -190,8 +178,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future buildLogoutDialog(BuildContext context) {
-    final confirmationDialog = ConfirmationDialog();
+  Future buildLogoutDialog(BuildContext context, bool isIOS) {
+    final confirmDialog = context.read(confirmationDialog);
 
     logout() async {
       Navigator.pop(context);
@@ -205,10 +193,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return showModal(
       context: context,
       builder: (context) {
-        return TargetedPlatform().isIOS()
-            ? confirmationDialog.iOSAlertDialog(
+        return isIOS
+            ? confirmDialog.iOSAlertDialog(
                 context, kLogOutAlertDialog, logout, 'Logout')
-            : confirmationDialog.androidAlertDialog(
+            : confirmDialog.androidAlertDialog(
                 context, kLogOutAlertDialog, logout, 'Logout');
       },
     );
