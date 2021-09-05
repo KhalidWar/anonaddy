@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/login_screen/logout_screen.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
@@ -115,6 +116,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             Spacer(),
             buildAppVersion(context),
+            buildRateApp(),
             Container(
               width: size.width,
               height: size.height * 0.05,
@@ -132,6 +134,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         );
       }),
+    );
+  }
+
+  Widget buildRateApp() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: kPrimaryColor,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: ListTile(
+        dense: true,
+        contentPadding: EdgeInsets.symmetric(horizontal: 5),
+        leading: Image.asset('assets/images/play_store.png'),
+        title: Text(
+          'Enjoying AddyManager?',
+          style: TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+          'Tap here to rate it on the App Store.',
+          style: TextStyle(color: Colors.white),
+        ),
+        onTap: () => _nicheMethods.launchURL(
+          TargetedPlatform().isIOS()
+              ? kAddyManagerAppStoreURL
+              : kAddyManagerPlayStoreURL,
+        ),
+      ),
     );
   }
 

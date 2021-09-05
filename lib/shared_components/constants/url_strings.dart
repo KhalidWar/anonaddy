@@ -24,6 +24,10 @@ const kFailedDeliveriesURL = 'failed-deliveries';
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
 const kAnonAddyFAQURL = 'https://anonaddy.com/faq/';
 const kAnonAddySelfHostingURL = 'https://anonaddy.com/self-hosting/';
+const kAddyManagerPlayStoreURL =
+    'https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy';
+const kAddyManagerAppStoreURL =
+    'https://apps.apple.com/us/app/addymanager/id1547461270#?platform=iphone';
 
 /// AddyManager URLs
 const kAddyManagerRepoURL = 'https://github.com/KhalidWar/anonaddy';
