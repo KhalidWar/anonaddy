@@ -150,7 +150,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         leading: Image.asset('assets/images/play_store.png'),
         title: Text(
           'Enjoying AddyManager?',
-          style: TextStyle(color: Colors.white),
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Colors.white),
         ),
         subtitle: Text(
           'Tap here to rate it on the App Store.',
