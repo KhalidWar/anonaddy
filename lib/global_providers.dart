@@ -25,6 +25,11 @@ import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart'
 import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
 import 'package:anonaddy/state_management/domain_state_manager.dart';
 import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
+import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/confirmation_dialog.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -99,6 +104,19 @@ final failedDeliveriesService = Provider<FailedDeliveriesService>((ref) {
   final accessToken = ref.read(accessTokenService);
   return FailedDeliveriesService(accessToken);
 });
+
+final nicheMethods = Provider<NicheMethod>((ref) => NicheMethod());
+
+final formValidator = Provider<FormValidator>((ref) => FormValidator());
+
+final targetedPlatform =
+    Provider<TargetedPlatform>((ref) => TargetedPlatform());
+
+final confirmationDialog =
+    Provider<ConfirmationDialog>((ref) => ConfirmationDialog());
+
+final apiMessageHandler =
+    Provider<APIMessageHandler>((ref) => APIMessageHandler());
 
 /// Notifier Providers
 final aliasStateManagerProvider =
