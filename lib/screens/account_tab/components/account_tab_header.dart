@@ -1,6 +1,6 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/account/account_model.dart';
-import 'package:anonaddy/screens/account_tab/add_new_recipient.dart';
+import 'package:anonaddy/screens/account_tab/components/add_new_recipient.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
@@ -11,8 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'add_new_username.dart';
 
-class MainAccount extends StatelessWidget {
-  MainAccount({Key? key, required this.account}) : super(key: key) {
+class AccountTabHeader extends StatelessWidget {
+  AccountTabHeader({Key? key, required this.account}) : super(key: key) {
     isSelfHosted =
         account.recipientCount == null && account.recipientLimit == null;
   }

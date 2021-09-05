@@ -6,7 +6,7 @@ import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
+import '../../../global_providers.dart';
 
 class AddNewRecipient extends StatelessWidget {
   @override

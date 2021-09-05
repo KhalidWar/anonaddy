@@ -7,7 +7,7 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'main_account.dart';
+import 'components/account_tab_header.dart';
 import 'usernames/additional_username.dart';
 
 class AccountTab extends StatelessWidget {
@@ -35,7 +35,7 @@ class AccountTab extends StatelessWidget {
                       final accountStream = watch(accountStreamProvider);
                       return accountStream.when(
                         loading: () => LoadingIndicator(),
-                        data: (data) => MainAccount(account: data.account),
+                        data: (data) => AccountTabHeader(account: data.account),
                         error: (error, stackTrace) {
                           return LottieWidget(
                             showLoading: true,
