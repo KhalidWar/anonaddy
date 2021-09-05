@@ -64,14 +64,11 @@ class AliasTab extends ConsumerWidget {
                     pinned: true,
                     flexibleSpace: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
-                      background: Padding(
-                        padding: EdgeInsets.only(bottom: 30),
-                        child: AliasTabPieChart(
-                          emailsForwarded: reduceList(forwardedList),
-                          emailsBlocked: reduceList(blockedList),
-                          emailsReplied: reduceList(repliedList),
-                          emailsSent: reduceList(sentList),
-                        ),
+                      background: AliasTabPieChart(
+                        emailsForwarded: reduceList(forwardedList),
+                        emailsBlocked: reduceList(blockedList),
+                        emailsReplied: reduceList(repliedList),
+                        emailsSent: reduceList(sentList),
                       ),
                     ),
                     bottom: TabBar(
