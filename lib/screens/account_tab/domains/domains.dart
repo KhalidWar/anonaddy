@@ -13,8 +13,6 @@ import 'domain_detailed_screen.dart';
 class Domains extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final size = MediaQuery.of(context).size;
-
     final account = watch(accountStreamProvider).data;
     if (account == null) {
       return LottieWidget(
