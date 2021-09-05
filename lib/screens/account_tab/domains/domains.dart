@@ -13,6 +13,8 @@ import 'domain_detailed_screen.dart';
 class Domains extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final size = MediaQuery.of(context).size;
+
     final account = watch(accountStreamProvider).data;
     if (account == null) {
       return LottieWidget(
@@ -52,14 +54,11 @@ class Domains extends ConsumerWidget {
                   return InkWell(
                     child: Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.dns_outlined,
-                            size: 30,
-                          ),
+                          Icon(Icons.dns_outlined),
                           SizedBox(width: 15),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
