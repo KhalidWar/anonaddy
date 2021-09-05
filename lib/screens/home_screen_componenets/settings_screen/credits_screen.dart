@@ -1,11 +1,10 @@
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/global_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
 class CreditsScreen extends StatelessWidget {
-  final _launchURL = NicheMethod().launchURL;
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -36,6 +35,13 @@ class CreditsScreen extends StatelessWidget {
             creator: '张先生',
             lottieURL: 'https://lottiefiles.com/13525-empty',
           ),
+          buildTile(
+            context: context,
+            lottieFile: 'assets/lottie/coming_soon.json',
+            title: 'Coming Soon',
+            creator: 'Arno M. Scharinger',
+            lottieURL: 'https://lottiefiles.com/34957-coming-soon',
+          ),
         ],
       ),
     );
@@ -48,6 +54,7 @@ class CreditsScreen extends StatelessWidget {
       required String creator,
       required lottieURL}) {
     final size = MediaQuery.of(context).size;
+    final launchURL = context.read(nicheMethods).launchURL;
 
     return InkWell(
       child: Padding(
@@ -65,6 +72,7 @@ class CreditsScreen extends StatelessWidget {
                       height: size.height * 0.18,
                       width: size.width * 0.35,
                     ),
+                    SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -84,7 +92,7 @@ class CreditsScreen extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => _launchURL(lottieURL),
+      onTap: () => launchURL(lottieURL),
     );
   }
 }
