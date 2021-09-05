@@ -80,6 +80,8 @@ class MainAccount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     final subscription =
         context.read(accountStreamProvider).data!.value.account.subscription;
     final correctAliasString =
@@ -95,13 +97,13 @@ class MainAccount extends StatelessWidget {
             children: [
               Text(
                 _capitalize(account.username),
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headline6,
               ),
               Text(_capitalize(account.subscription ?? 'Self Hosted')),
             ],
           ),
         ),
-        Divider(height: 8),
+        Divider(height: size.height * 0.01),
         AccountListTile(
           title: _calculateBandWidth(),
           subtitle: 'Monthly Bandwidth',
@@ -111,28 +113,28 @@ class MainAccount extends StatelessWidget {
           title: account.defaultAliasDomain,
           subtitle: 'Default Alias Domain',
           leadingIconData: Icons.dns_outlined,
-          trailingIconData: Icons.open_in_new_outlined,
+          trailingIcon: Icon(Icons.open_in_new_outlined),
           onTap: () => updateDefaultAliasFormatDomain(context),
         ),
         AccountListTile(
           title: correctAliasString(account.defaultAliasFormat),
           subtitle: 'Default Alias Format',
           leadingIconData: Icons.alternate_email_outlined,
-          trailingIconData: Icons.open_in_new_outlined,
+          trailingIcon: Icon(Icons.open_in_new_outlined),
           onTap: () => updateDefaultAliasFormatDomain(context),
         ),
         AccountListTile(
           title: _calculateRecipientsCount(),
           subtitle: 'Recipients',
           leadingIconData: Icons.email_outlined,
-          trailingIconData: Icons.add_circle_outline_outlined,
+          trailingIcon: Icon(Icons.add_circle_outline_outlined),
           onTap: () => _addNewRecipient(context),
         ),
         AccountListTile(
           title: _calculateUsernamesCount(),
           subtitle: 'Usernames',
           leadingIconData: Icons.account_circle_outlined,
-          trailingIconData: Icons.add_circle_outline_outlined,
+          trailingIcon: Icon(Icons.add_circle_outline_outlined),
           onTap: () => _addNewUsername(context, subscription),
         ),
       ],
