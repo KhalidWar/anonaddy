@@ -16,19 +16,13 @@ class RecipientListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final recipientDataProvider = context.read(recipientStateManagerProvider);
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return InkWell(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(
-              Icons.email_outlined,
-              color: isDark ? Colors.white : Colors.grey[700],
-              size: 30,
-            ),
+            Icon(Icons.email_outlined),
             SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
