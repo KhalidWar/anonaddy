@@ -22,9 +22,10 @@ class AboutAppScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
         children: [
           buildHeader(context),
-          SizedBox(height: size.height * 0.03),
+          SizedBox(height: size.height * 0.02),
           Divider(height: 0),
           ListTile(
+            dense: true,
             title: Text('Khalid Warsame'),
             subtitle: Text('AddyManager developer'),
             trailing: Icon(Icons.account_circle_outlined),
@@ -32,6 +33,7 @@ class AboutAppScreen extends StatelessWidget {
           ),
           Divider(height: 0),
           ListTile(
+            dense: true,
             title: Text('Will Browning (AnonAddy team)'),
             subtitle: Text('Contributor'),
             trailing: Icon(Icons.account_circle_outlined),
@@ -39,6 +41,7 @@ class AboutAppScreen extends StatelessWidget {
           ),
           Divider(height: 0),
           ListTile(
+            dense: true,
             title: Text('Exodus Privacy Report'),
             subtitle: Text('Exodus\'s privacy report of AddyManager'),
             trailing: Icon(Icons.shield_outlined),
@@ -46,6 +49,7 @@ class AboutAppScreen extends StatelessWidget {
           ),
           Divider(height: 0),
           ListTile(
+            dense: true,
             title: Text('Found a bug?'),
             subtitle: Text('Report bugs and request features'),
             trailing: Icon(Icons.bug_report_outlined),
@@ -53,6 +57,7 @@ class AboutAppScreen extends StatelessWidget {
           ),
           Divider(height: 0),
           ListTile(
+            dense: true,
             title: Text('Source Code'),
             subtitle: Text('AddyManager\'s open source code'),
             trailing: Icon(Icons.code_outlined),
@@ -60,6 +65,7 @@ class AboutAppScreen extends StatelessWidget {
           ),
           Divider(height: 0),
           ListTile(
+            dense: true,
             title: Text('AddyManager License'),
             subtitle: Text('MIT License'),
             trailing: Icon(Icons.description_outlined),
@@ -67,6 +73,7 @@ class AboutAppScreen extends StatelessWidget {
           ),
           Divider(height: 0),
           ListTile(
+            dense: true,
             title: Text('Packages Licenses'),
             subtitle: Text('Third party packages\' licenses'),
             trailing: Icon(Icons.receipt_long),
@@ -74,6 +81,7 @@ class AboutAppScreen extends StatelessWidget {
           ),
           Divider(height: 0),
           ListTile(
+            dense: true,
             title: Text('Credits'),
             subtitle: Text('Credits for assets in AddyManager'),
             trailing: Icon(Icons.image_outlined),
@@ -92,7 +100,7 @@ class AboutAppScreen extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: size.width * 0.4,
+          width: size.width * 0.35,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(shape: BoxShape.circle),
           child: Image.asset('assets/images/app_logo.png'),

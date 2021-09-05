@@ -49,6 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ListTile(
+              dense: true,
               title: Text(
                 'Dark Theme',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -61,6 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () => settings.toggleTheme(),
             ),
             ListTile(
+              dense: true,
               title: Text(
                 'Auto Copy Email',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -75,6 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () => settings.toggleAutoCopy(),
             ),
             ListTile(
+              dense: true,
               title: Text(
                 'Biometric Authentication',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -89,6 +92,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () => enableBiometricAuth(),
             ),
             ListTile(
+              dense: true,
               title: Text(
                 'AnonAddy FAQ',
                 style: Theme.of(context).textTheme.bodyText1,
@@ -98,6 +102,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () => _nicheMethods.launchURL(kAnonAddyFAQURL),
             ),
             ListTile(
+              dense: true,
               title: Text(
                 'About App',
                 style: Theme.of(context).textTheme.bodyText1,
