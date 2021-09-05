@@ -23,14 +23,11 @@ class AliasShimmerLoading extends StatelessWidget {
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
-                  background: Padding(
-                    padding: EdgeInsets.only(bottom: 30),
-                    child: AliasTabPieChart(
-                      emailsForwarded: 0,
-                      emailsBlocked: 0,
-                      emailsReplied: 0,
-                      emailsSent: 0,
-                    ),
+                  background: AliasTabPieChart(
+                    emailsForwarded: 0,
+                    emailsBlocked: 0,
+                    emailsReplied: 0,
+                    emailsSent: 0,
                   ),
                 ),
                 bottom: TabBar(
