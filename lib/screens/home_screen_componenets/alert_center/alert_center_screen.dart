@@ -127,7 +127,6 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
                 itemBuilder: (context, index) {
                   final failedDeliveries = data.failedDeliveries[index];
                   return ExpansionTile(
-                    backgroundColor: Colors.grey.shade200,
                     expandedAlignment: Alignment.centerLeft,
                     tilePadding: EdgeInsets.all(0),
                     childrenPadding: EdgeInsets.symmetric(horizontal: 5),
