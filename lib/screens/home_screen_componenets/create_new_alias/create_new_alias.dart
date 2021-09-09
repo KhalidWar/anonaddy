@@ -10,6 +10,7 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'alias_domain_selection.dart';
@@ -122,35 +123,47 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                             controller: descFieldController,
                             textInputAction: TextInputAction.next,
                             decoration: kTextFormFieldDecoration.copyWith(
-                                hintText: kDescriptionFieldHint),
+                              hintText: kDescriptionFieldHint,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 10),
+                            ),
                           ),
-                          SizedBox(height: size.height * 0.01),
                           if (aliasFormat == kCustom)
-                            Form(
-                              key: customFormKey,
-                              child: TextFormField(
-                                controller: customFieldController,
-                                validator: (input) =>
-                                    FormValidator().validateLocalPart(input!),
-                                textInputAction: TextInputAction.next,
-                                decoration: kTextFormFieldDecoration.copyWith(
-                                    hintText: kLocalPartFieldHint),
-                              ),
+                            Column(
+                              children: [
+                                SizedBox(height: size.height * 0.01),
+                                Form(
+                                  key: customFormKey,
+                                  child: TextFormField(
+                                    controller: customFieldController,
+                                    validator: (input) => FormValidator()
+                                        .validateLocalPart(input!),
+                                    textInputAction: TextInputAction.next,
+                                    decoration:
+                                        kTextFormFieldDecoration.copyWith(
+                                      hintText: kLocalPartFieldHint,
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           SizedBox(height: size.height * 0.01),
                           aliasDomainFormatDropdown(
                             context: context,
-                            title: kAliasDomain,
+                            title: 'Alias Domain',
                             label: aliasDomain ?? kSelectAliasDomain,
                             isError: isAliasDomainError,
                             child: AliasDomainSelection(
-                                aliasFormatList: getAliasFormatList(),
-                                domainOptions: domainOptions),
+                              aliasFormatList: getAliasFormatList(),
+                              domainOptions: domainOptions,
+                            ),
                           ),
-                          SizedBox(height: 5),
+                          SizedBox(height: size.height * 0.01),
                           aliasDomainFormatDropdown(
                             context: context,
-                            title: kAliasFormat,
+                            title: 'Alias Format',
                             label: aliasFormat == null
                                 ? kSelectAliasFormat
                                 : aliasStateProvider
@@ -160,9 +173,12 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                                 aliasFormatList: getAliasFormatList()),
                           ),
                           if (aliasFormat == kCustom)
-                            Text(kCreateAliasCustomFieldNote),
+                            Text(
+                              kCreateAliasCustomFieldNote,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
                           SizedBox(height: size.height * 0.02),
-                          recipientsDropdown(context)
+                          recipientsDropdown(context),
                         ],
                       ),
                     ),
@@ -216,7 +232,10 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
               children: [
                 Text(
                   label,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle1!
+                      .copyWith(fontWeight: FontWeight.bold),
                 ),
                 Icon(Icons.keyboard_arrow_down_rounded),
               ],
@@ -229,6 +248,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
         isAliasFormatError = false;
         showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(kBottomSheetBorderRadius),
@@ -262,7 +282,10 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                       final recipient = createAliasRecipients[index];
                       return Text(
                         recipient.email,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1!
+                            .copyWith(fontWeight: FontWeight.bold),
                       );
                     },
                   ),
