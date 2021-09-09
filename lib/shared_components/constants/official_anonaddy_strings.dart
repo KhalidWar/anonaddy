@@ -55,3 +55,6 @@ const kMailerMe = 'mailer.me';
 const kFreeSubscription = 'free';
 const kLiteSubscription = 'lite';
 const kProSubscription = 'pro';
+
+/// Subscription Notices
+const kSubscriptionInfoText = 'You must be subscribed to unlock this feature';
