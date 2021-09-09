@@ -13,6 +13,7 @@ class AliasFormatSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final aliasStateProvider = context.read(aliasStateManagerProvider);
+    final correctAliasString = context.read(nicheMethods).correctAliasString;
 
     return DraggableScrollableSheet(
       expand: false,
@@ -48,7 +49,7 @@ class AliasFormatSelection extends StatelessWidget {
                           selectedTileColor: kAccentColor,
                           horizontalTitleGap: 0,
                           title: Text(
-                            aliasStateProvider.correctAliasString(format)!,
+                            correctAliasString(format),
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.subtitle1,
                           ),

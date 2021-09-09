@@ -43,6 +43,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
     return Consumer(
       builder: (_, watch, __) {
         final domainOptionsAsync = watch(domainOptionsProvider);
+        final correctAliasString =
+            context.read(nicheMethods).correctAliasString;
 
         final aliasStateProvider = watch(aliasStateManagerProvider);
         final isLoading = aliasStateProvider.isToggleLoading;
@@ -166,8 +168,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                             title: 'Alias Format',
                             label: aliasFormat == null
                                 ? kSelectAliasFormat
-                                : aliasStateProvider
-                                    .correctAliasString(aliasFormat)!,
+                                : correctAliasString(aliasFormat!),
                             isError: isAliasFormatError,
                             child: AliasFormatSelection(
                                 aliasFormatList: getAliasFormatList()),

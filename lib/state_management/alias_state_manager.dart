@@ -224,18 +224,4 @@ class AliasStateManager extends ChangeNotifier {
     });
     Navigator.pop(context);
   }
-
-  String? correctAliasString(String? input) {
-    if (input == null) return null;
-    switch (input) {
-      case 'random_characters':
-        return 'Random Characters';
-      case 'random_words':
-        return 'Random Words';
-      case 'custom':
-        return 'Custom';
-      default:
-        return 'UUID';
-    }
-  }
 }

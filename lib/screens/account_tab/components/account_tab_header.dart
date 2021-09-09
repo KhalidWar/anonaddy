@@ -84,8 +84,7 @@ class AccountTabHeader extends StatelessWidget {
 
     final subscription =
         context.read(accountStreamProvider).data!.value.account.subscription;
-    final correctAliasString =
-        context.read(aliasStateManagerProvider).correctAliasString;
+    final correctAliasString = context.read(nicheMethods).correctAliasString;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +116,9 @@ class AccountTabHeader extends StatelessWidget {
           onTap: () => updateDefaultAliasFormatDomain(context),
         ),
         AccountListTile(
-          title: correctAliasString(account.defaultAliasFormat),
+          title: account.defaultAliasFormat == null
+              ? null
+              : correctAliasString(account.defaultAliasFormat!),
           subtitle: 'Default Alias Format',
           leadingIconData: Icons.alternate_email_outlined,
           trailingIcon: Icon(Icons.open_in_new_outlined),
