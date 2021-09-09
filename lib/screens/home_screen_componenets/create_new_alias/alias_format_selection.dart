@@ -1,4 +1,5 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,49 +14,57 @@ class AliasFormatSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     final aliasStateProvider = context.read(aliasStateManagerProvider);
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    int aliasFormatIndex = 0;
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        BottomSheetHeader(headerLabel: 'Select Alias Format'),
-        Expanded(
-          child: CupertinoPicker(
-            itemExtent: 50,
-            diameterRatio: 10,
-            squeeze: 1,
-            selectionOverlay: Container(),
-            useMagnifier: false,
-            backgroundColor: Colors.transparent,
-            onSelectedItemChanged: (index) {
-              aliasFormatIndex = index;
-            },
-            children: aliasFormatList.map<Widget>((value) {
-              return Text(
-                aliasStateProvider.correctAliasString(value)!,
-                style: TextStyle(
-                  color: isDark ? Colors.white : null,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-        Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(),
-            child: Text('Done'),
-            onPressed: () {
-              aliasStateProvider.setAliasFormat =
-                  aliasFormatList[aliasFormatIndex];
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ],
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.5,
+      minChildSize: 0.3,
+      maxChildSize: 0.5,
+      builder: (context, controller) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            BottomSheetHeader(headerLabel: 'Select Alias Format'),
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                controller: controller,
+                children: [
+                  if (aliasFormatList.isEmpty)
+                    Center(
+                      child: Text(
+                        'No alias format found',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    )
+                  else
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: aliasFormatList.length,
+                      itemBuilder: (context, index) {
+                        final format = aliasFormatList[index];
+                        return ListTile(
+                          dense: true,
+                          selectedTileColor: kAccentColor,
+                          horizontalTitleGap: 0,
+                          title: Text(
+                            aliasStateProvider.correctAliasString(format)!,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          onTap: () {
+                            aliasStateProvider.setAliasFormat = format;
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
