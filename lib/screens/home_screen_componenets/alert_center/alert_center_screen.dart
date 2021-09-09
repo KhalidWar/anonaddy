@@ -1,5 +1,6 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
@@ -86,6 +87,26 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
   Widget buildFailedDeliveries() {
     return Consumer(
       builder: (context, watch, child) {
+        final account = context.read(accountStreamProvider).data;
+
+        if (account == null) {
+          return LottieWidget(
+            lottie: 'assets/lottie/errorCone.json',
+            lottieHeight: MediaQuery.of(context).size.height * 0.2,
+            label: kLoadAccountDataFailed,
+          );
+        }
+
+        if (account.value.account.subscription == kFreeSubscription) {
+          return Padding(
+            padding: EdgeInsets.all(20),
+            child: Text(
+              kSubscriptionInfoText,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          );
+        }
+
         final failedDeliveriesAsync = watch(failedDeliveriesProvider);
         return failedDeliveriesAsync.when(
           loading: () => Container(
