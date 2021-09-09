@@ -20,7 +20,7 @@ dependencies:
   animations: ^2.0.0
   shimmer: ^2.0.0
   fluttertoast: ^8.0.3
-  fl_chart: ^0.36.1
+  fl_chart: ^0.40.0
 
   # Internet Connectivity
   http: ^0.13.1
