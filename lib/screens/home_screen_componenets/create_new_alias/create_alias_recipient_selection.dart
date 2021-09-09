@@ -14,58 +14,38 @@ class CreateAliasRecipientSelection extends StatefulWidget {
 
 class _CreateAliasRecipientSelectionState
     extends State<CreateAliasRecipientSelection> {
-  final verifiedRecipients = <Recipient>[];
-  final selectedRecipients = <Recipient>[];
-
-  double initialChildSize = 0.55;
-  double minChildSize = 0.3;
-  double maxChildSize = 0.7;
-
-  void _setScrollSheetSizes() {
-    if (verifiedRecipients.length <= 3) {
-      initialChildSize = 0.5;
-      maxChildSize = 0.6;
-    } else if (verifiedRecipients.length > 3 &&
-        verifiedRecipients.length <= 6) {
-      initialChildSize = 0.55;
-      maxChildSize = 0.7;
-    } else {
-      initialChildSize = 0.7;
-      maxChildSize = 0.9;
-    }
-    setState(() {});
-  }
+  final _verifiedRecipients = <Recipient>[];
+  final _selectedRecipients = <Recipient>[];
 
   void _setDefaultRecipients() {
     final allRecipients =
         context.read(recipientsProvider).data!.value.recipients;
     for (Recipient recipient in allRecipients) {
       if (recipient.emailVerifiedAt != null) {
-        verifiedRecipients.add(recipient);
+        _verifiedRecipients.add(recipient);
       }
     }
   }
 
   bool _isRecipientSelected(Recipient verifiedRecipient) {
-    if (selectedRecipients.contains(verifiedRecipient)) {
+    if (_selectedRecipients.contains(verifiedRecipient)) {
       return true;
     }
     return false;
   }
 
   void _toggleRecipient(Recipient verifiedRecipient) {
-    if (selectedRecipients.contains(verifiedRecipient)) {
-      selectedRecipients
+    if (_selectedRecipients.contains(verifiedRecipient)) {
+      _selectedRecipients
           .removeWhere((element) => element.email == verifiedRecipient.email);
     } else {
-      selectedRecipients.add(verifiedRecipient);
+      _selectedRecipients.add(verifiedRecipient);
     }
     setState(() {});
   }
 
   @override
   void initState() {
-    _setScrollSheetSizes();
     _setDefaultRecipients();
     super.initState();
   }
@@ -76,61 +56,65 @@ class _CreateAliasRecipientSelectionState
 
     return DraggableScrollableSheet(
       expand: false,
-      initialChildSize: initialChildSize,
-      minChildSize: minChildSize,
-      maxChildSize: maxChildSize,
+      initialChildSize: 0.5,
+      minChildSize: 0.3,
+      maxChildSize: 0.7,
       builder: (context, controller) {
-        return Stack(
+        return Column(
           children: [
-            ListView(
-              controller: controller,
-              children: [
-                BottomSheetHeader(headerLabel: 'Select Default Recipients'),
-                if (verifiedRecipients.isEmpty)
-                  Center(
-                    child: Text(
-                      'No recipients found',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  )
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: verifiedRecipients.length,
-                    itemBuilder: (context, index) {
-                      final verifiedRecipient = verifiedRecipients[index];
-                      return ListTile(
-                        selected: _isRecipientSelected(verifiedRecipient),
-                        selectedTileColor: kAccentColor,
-                        horizontalTitleGap: 0,
-                        title: Text(
-                          verifiedRecipient.email,
-                          style: TextStyle(
-                            color: _isRecipientSelected(verifiedRecipient)
-                                ? Colors.black
-                                : Theme.of(context).textTheme.bodyText1!.color,
+            BottomSheetHeader(headerLabel: 'Select Default Recipients'),
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                controller: controller,
+                children: [
+                  if (_verifiedRecipients.isEmpty)
+                    Center(
+                      child: Text(
+                        'No recipients found',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    )
+                  else
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _verifiedRecipients.length,
+                      itemBuilder: (context, index) {
+                        final verifiedRecipient = _verifiedRecipients[index];
+                        return ListTile(
+                          selected: _isRecipientSelected(verifiedRecipient),
+                          selectedTileColor: kAccentColor,
+                          horizontalTitleGap: 0,
+                          title: Text(
+                            verifiedRecipient.email,
+                            style: TextStyle(
+                              color: _isRecipientSelected(verifiedRecipient)
+                                  ? Colors.black
+                                  : Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                            ),
                           ),
-                        ),
-                        onTap: () => _toggleRecipient(verifiedRecipient),
-                      );
-                    },
-                  ),
-                buildNote(size),
-                SizedBox(height: size.height * 0.1),
-              ],
+                          onTap: () => _toggleRecipient(verifiedRecipient),
+                        );
+                      },
+                    ),
+                  buildNote(size),
+                ],
+              ),
             ),
-            Positioned(
-              bottom: 15,
-              left: 15,
-              right: 15,
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.all(15),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
                 child: Text('Done'),
                 onPressed: () {
                   context
                       .read(aliasStateManagerProvider)
-                      .setCreateAliasRecipients = selectedRecipients;
+                      .setCreateAliasRecipients = _selectedRecipients;
                   Navigator.pop(context);
                 },
               ),
@@ -149,7 +133,10 @@ class _CreateAliasRecipientSelectionState
         children: [
           Divider(height: 0),
           SizedBox(height: size.height * 0.01),
-          Text(kUpdateAliasRecipientNote),
+          Text(
+            kUpdateAliasRecipientNote,
+            style: Theme.of(context).textTheme.caption,
+          ),
         ],
       ),
     );
