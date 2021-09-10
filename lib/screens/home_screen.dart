@@ -1,4 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -15,10 +16,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
-import 'home_screen_componenets/alert_center/alert_center_screen.dart';
-import 'home_screen_componenets/changelog_widget.dart';
-import 'home_screen_componenets/create_new_alias/create_new_alias.dart';
-import 'home_screen_componenets/settings_screen/settings_screen.dart';
+import 'home_screen_components/changelog_widget.dart';
+import 'home_screen_components/create_new_alias/create_new_alias.dart';
+import 'home_screen_components/settings_screen/settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

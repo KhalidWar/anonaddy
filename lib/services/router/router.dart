@@ -3,10 +3,10 @@ import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_scree
 import 'package:anonaddy/screens/account_tab/usernames/username_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
 import 'package:anonaddy/screens/home_screen.dart';
-import 'package:anonaddy/screens/home_screen_componenets/alert_center/alert_center_screen.dart';
-import 'package:anonaddy/screens/home_screen_componenets/settings_screen/about_app_screen.dart';
-import 'package:anonaddy/screens/home_screen_componenets/settings_screen/credits_screen.dart';
-import 'package:anonaddy/screens/home_screen_componenets/settings_screen/settings_screen.dart';
+import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
+import 'package:anonaddy/screens/home_screen_components/settings_screen/about_app_screen.dart';
+import 'package:anonaddy/screens/home_screen_components/settings_screen/credits_screen.dart';
+import 'package:anonaddy/screens/home_screen_components/settings_screen/settings_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
