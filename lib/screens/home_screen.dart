@@ -16,6 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'home_screen_componenets/alert_center/alert_center_screen.dart';
+import 'home_screen_componenets/changelog_widget.dart';
 import 'home_screen_componenets/create_new_alias/create_new_alias.dart';
 import 'home_screen_componenets/settings_screen/settings_screen.dart';
 
@@ -38,13 +39,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void checkIfAppUpdated() async {
+  Future checkIfAppUpdated() async {
     final changeLog = context.read(changelogService);
-    await changeLog.checkIfAppUpdated(context).whenComplete(() async {
-      await changeLog.isAppUpdated().then((value) {
-        if (value) buildUpdateNews(context);
-      });
-    });
+    await changeLog.checkIfAppUpdated(context);
+    final isUpdated = await changeLog.isAppUpdated();
+    if (isUpdated) {
+      return showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(kBottomSheetBorderRadius)),
+        ),
+        builder: (context) => ChangelogWidget(),
+      );
+    }
   }
 
   @override
@@ -166,67 +175,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
             },
-          ),
-        );
-      },
-    );
-  }
-
-  //todo extract into a widget that goes into home_screen_componeents
-  Future buildUpdateNews(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      builder: (context) {
-        return Container(
-          height: size.height * 0.5,
-          width: double.infinity,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'What\'s new?',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Consumer(
-                builder: (_, watch, __) {
-                  final appInfo = watch(packageInfoProvider);
-                  return appInfo.when(
-                    data: (data) => Text('Version: ${data.version}'),
-                    loading: () => CircularProgressIndicator(),
-                    error: (error, stackTrace) => Text(error.toString()),
-                  );
-                },
-              ),
-              Divider(height: size.height * 0.05),
-              //todo automate changelog fetching
-              Text('1. [BETA] Added self hosted instance'),
-              SizedBox(height: size.height * 0.01),
-              Text('2. [BETA] Added domains'),
-              SizedBox(height: size.height * 0.01),
-              Text('3. Added Send from to aliases'),
-              SizedBox(height: size.height * 0.01),
-              Text('4. Major overhaul to how data is handled'),
-              SizedBox(height: size.height * 0.01),
-              Text('5. Several under the hood improvements'),
-              SizedBox(height: size.height * 0.01),
-              Text('6. Minor UI tweaks'),
-              SizedBox(height: size.height * 0.01),
-              Spacer(),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(),
-                  child: const Text('Continue to AddyManager'),
-                  onPressed: () {
-                    context.read(changelogService).dismissChangeLog();
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ],
           ),
         );
       },
