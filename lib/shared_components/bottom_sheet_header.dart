@@ -19,7 +19,10 @@ class BottomSheetHeader extends StatelessWidget {
         SizedBox(height: size.height * 0.01),
         Text(
           headerLabel,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context)
+              .textTheme
+              .subtitle1!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         Divider(thickness: 1),
       ],

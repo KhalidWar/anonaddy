@@ -1,9 +1,10 @@
 import 'package:anonaddy/screens/login_screen/initial_screen.dart';
 import 'package:anonaddy/screens/secure_app_screen/secure_gate_screen.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
+
+import '../../global_providers.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class SecureAppScreen extends ConsumerWidget {

@@ -1,13 +1,13 @@
+import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
-import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
-import 'package:anonaddy/services/connectivity/connectivity_service.dart';
 import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
-import 'package:anonaddy/state_management/providers/global_providers.dart';
+import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
+import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
-import 'alias_tab/create_new_alias/create_new_alias.dart';
+import 'home_screen_components/changelog_widget.dart';
+import 'home_screen_components/create_new_alias/create_new_alias.dart';
+import 'home_screen_components/settings_screen/settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -27,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
 
   void _selectedTab(int index) {
+    context.read(fabVisibilityStateProvider).showFab();
     if (_selectedIndex == 2 && index == 2) {
       SearchTab().search(context);
     } else {
@@ -36,13 +39,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void checkIfAppUpdated() async {
-    final changeLog = context.read(changelogServiceProvider);
-    await changeLog.checkIfAppUpdated(context).whenComplete(() async {
-      await changeLog.isAppUpdated().then((value) {
-        if (value) buildUpdateNews(context);
-      });
-    });
+  Future checkIfAppUpdated() async {
+    final changeLog = context.read(changelogService);
+    await changeLog.checkIfAppUpdated(context);
+    final isUpdated = await changeLog.isAppUpdated();
+    if (isUpdated) {
+      return showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(kBottomSheetBorderRadius)),
+        ),
+        builder: (context) => ChangelogWidget(),
+      );
+    }
   }
 
   @override
@@ -52,30 +63,27 @@ class _HomeScreenState extends State<HomeScreen> {
     SearchHistoryStorage().openSearchHiveBox();
   }
 
-  // @override
-  // void dispose() {
-  //   Hive.close();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Consumer(
       builder: (_, watch, __) {
-        final connectivityAsyncValue = watch(connectivityStreamProvider);
-        bool isOffline = false;
+        final connectivityState = watch(connectivityStateProvider);
+        late bool isOffline;
 
-        connectivityAsyncValue.whenData((data) {
-          if (data == ConnectionStatus.offline) {
-            isOffline = true;
-          } else {
+        switch (connectivityState) {
+          case ConnectionStatus.online:
             isOffline = false;
-          }
-        });
+            break;
+          case ConnectionStatus.offline:
+            isOffline = true;
+            break;
+        }
+
         return Scaffold(
           appBar: buildAppBar(context, isOffline),
+          floatingActionButton: buildFab(context),
           body: IndexedStack(
             index: _selectedIndex,
             children: [
@@ -94,11 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
                 items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle),
+                    icon: Icon(Icons.account_circle_outlined),
                     label: kAccountBotNavLabel,
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.alternate_email_sharp),
+                    icon: Icon(Icons.alternate_email_outlined),
                     label: kAliasesBotNavLabel,
                   ),
                   BottomNavigationBarItem(
@@ -115,32 +123,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   AppBar buildAppBar(BuildContext context, bool isOffline) {
-    final showToast = NicheMethod().showToast;
-
     return AppBar(
       elevation: 0,
       title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.add_circle_outline_outlined),
-        onPressed: isOffline
-            ? () => showToast(kCreateAliasWhileOffline)
-            : () {
-                final userModel = context.read(accountStreamProvider).data;
-                if (userModel == null) {
-                  showToast(kLoadingText);
-                } else {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(kBottomSheetBorderRadius)),
-                    ),
-                    builder: (context) => CreateNewAlias(),
-                  );
-                }
-              },
+        icon: Icon(Icons.error_outline),
+        onPressed: () {
+          Navigator.push(context, CustomPageRoute(AlertCenterScreen()));
+        },
       ),
       actions: [
         IconButton(
@@ -152,60 +143,38 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future buildUpdateNews(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+  Widget buildFab(BuildContext context) {
+    return Consumer(
+      builder: (context, watch, child) {
+        final showFab = watch(fabVisibilityStateNotifier);
+        final singleTween = Tween(begin: 0.0, end: 1.0);
 
-    return showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      builder: (context) {
-        return Container(
-          height: size.height * 0.5,
-          width: double.infinity,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'What\'s new?',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Consumer(
-                builder: (_, watch, __) {
-                  final appInfo = watch(packageInfoProvider);
-                  return appInfo.when(
-                    data: (data) => Text('Version: ${data.version}'),
-                    loading: () => CircularProgressIndicator(),
-                    error: (error, stackTrace) => Text(error.toString()),
-                  );
-                },
-              ),
-              Divider(height: size.height * 0.05),
-              //todo automate changelog fetching
-              Text('1. [BETA] Added self hosted instance'),
-              SizedBox(height: size.height * 0.01),
-              Text('2. [BETA] Added domains'),
-              SizedBox(height: size.height * 0.01),
-              Text('3. Added Send from to aliases'),
-              SizedBox(height: size.height * 0.01),
-              Text('4. Major overhaul to how data is handled'),
-              SizedBox(height: size.height * 0.01),
-              Text('5. Several under the hood improvements'),
-              SizedBox(height: size.height * 0.01),
-              Text('6. Minor UI tweaks'),
-              SizedBox(height: size.height * 0.01),
-              Spacer(),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(),
-                  child: const Text('Continue to AddyManager'),
-                  onPressed: () {
-                    context.read(changelogServiceProvider).dismissChangeLog();
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ],
+        return AnimatedSwitcher(
+          duration: Duration(milliseconds: 300),
+          transitionBuilder: (child, animation) {
+            return ScaleTransition(
+              scale: singleTween.animate(animation),
+              child: showFab ? child : Container(),
+            );
+          },
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              final userModel = context.read(accountStreamProvider).data;
+              if (userModel == null) {
+                NicheMethod().showToast(kLoadingText);
+              } else {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(kBottomSheetBorderRadius)),
+                  ),
+                  builder: (context) => CreateNewAlias(),
+                );
+              }
+            },
           ),
         );
       },

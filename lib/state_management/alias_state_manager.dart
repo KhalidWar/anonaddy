@@ -3,12 +3,13 @@ import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../global_providers.dart';
 
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager() {
@@ -82,7 +83,7 @@ class AliasStateManager extends ChangeNotifier {
     Future<void> createAlias() async {
       setToggleLoading = true;
       await context
-          .read(aliasServiceProvider)
+          .read(aliasService)
           .createNewAlias(desc, domain, format, localPart, recipients)
           .then((value) {
         if (settings.isAutoCopy) {
@@ -112,11 +113,11 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> deleteOrRestoreAlias(
       BuildContext context, bool isAliasDeleted, String aliasID) async {
-    final aliasService = context.read(aliasServiceProvider);
+    final aliasServices = context.read(aliasService);
     setDeleteAliasLoading = true;
     if (!isAliasDeleted) {
       Navigator.pop(context);
-      await aliasService.deleteAlias(aliasID).then((value) {
+      await aliasServices.deleteAlias(aliasID).then((value) {
         _showToast(kDeleteAliasSuccess);
         setDeleteAliasLoading = false;
         Navigator.pop(context);
@@ -126,7 +127,7 @@ class AliasStateManager extends ChangeNotifier {
       });
     } else {
       Navigator.pop(context);
-      await aliasService.restoreAlias(aliasID).then((value) {
+      await aliasServices.restoreAlias(aliasID).then((value) {
         _showToast(kRestoreAliasSuccess);
         setDeleteAliasLoading = false;
         aliasDataModel = value;
@@ -139,10 +140,10 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> toggleAlias(BuildContext context, String aliasID) async {
-    final aliasService = context.read(aliasServiceProvider);
+    final aliasServices = context.read(aliasService);
     setToggleLoading = true;
     if (aliasDataModel.active) {
-      await aliasService.deactivateAlias(aliasID).then((value) {
+      await aliasServices.deactivateAlias(aliasID).then((value) {
         _showToast(kDeactivateAliasSuccess);
         aliasDataModel.active = false;
       }).catchError((error) {
@@ -150,7 +151,7 @@ class AliasStateManager extends ChangeNotifier {
       });
       setToggleLoading = false;
     } else {
-      await aliasService.activateAlias(aliasID).then((value) {
+      await aliasServices.activateAlias(aliasID).then((value) {
         _showToast(kActivateAliasSuccess);
         aliasDataModel.active = true;
       }).catchError((error) {
@@ -164,7 +165,7 @@ class AliasStateManager extends ChangeNotifier {
       BuildContext context, String aliasID, String input) async {
     if (descriptionFormKey.currentState!.validate()) {
       await context
-          .read(aliasServiceProvider)
+          .read(aliasService)
           .editAliasDescription(aliasID, input)
           .then((value) {
         _showToast(kEditDescriptionSuccess);
@@ -201,7 +202,7 @@ class AliasStateManager extends ChangeNotifier {
       BuildContext context, String aliasID, List<String> recipients) async {
     setUpdateRecipientLoading = true;
     await context
-        .read(aliasServiceProvider)
+        .read(aliasService)
         .updateAliasDefaultRecipient(aliasID, recipients)
         .then((value) {
       aliasDataModel.recipients = value.recipients;
@@ -216,25 +217,11 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> forgetAlias(BuildContext context, String aliasID) async {
-    await context.read(aliasServiceProvider).forgetAlias(aliasID).then((value) {
+    await context.read(aliasService).forgetAlias(aliasID).then((value) {
       _showToast(kForgetAliasSuccess);
     }).catchError((error) {
       _showToast(error.toString());
     });
     Navigator.pop(context);
-  }
-
-  String? correctAliasString(String? input) {
-    if (input == null) return null;
-    switch (input) {
-      case 'random_characters':
-        return 'Random Characters';
-      case 'random_words':
-        return 'Random Words';
-      case 'custom':
-        return 'Custom';
-      default:
-        return 'UUID';
-    }
   }
 }

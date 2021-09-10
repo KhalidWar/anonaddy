@@ -18,20 +18,21 @@ class PieChartIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          height: 12,
-          width: 12,
-          color: color,
-        ),
+        Container(height: 12, width: 12, color: color),
         SizedBox(width: 4),
         Text(
           count.toString(),
-          style: TextStyle(fontWeight: FontWeight.bold, color: textColor),
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(fontWeight: FontWeight.bold, color: textColor),
         ),
         SizedBox(width: 4),
         Text(
           label,
-          style: TextStyle(color: textColor),
+          style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                color: textColor,
+              ),
         ),
       ],
     );

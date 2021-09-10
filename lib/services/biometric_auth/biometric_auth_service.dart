@@ -4,11 +4,12 @@ import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
 
 class BiometricAuthService {
-  final _localAuth = LocalAuthentication();
+  const BiometricAuthService(this.localAuth);
+  final LocalAuthentication localAuth;
 
   Future<bool> canEnableBiometric() async {
     try {
-      return await _localAuth.canCheckBiometrics;
+      return await localAuth.canCheckBiometrics;
     } on PlatformException catch (e) {
       throw e.message!;
     }
@@ -17,7 +18,7 @@ class BiometricAuthService {
   Future<bool> authenticate(bool canCheckBio) async {
     if (canCheckBio) {
       try {
-        return await _localAuth.authenticate(
+        return await localAuth.authenticate(
           localizedReason: kAuthToProceed,
           useErrorDialogs: true,
           stickyAuth: true,

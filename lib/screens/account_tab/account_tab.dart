@@ -1,14 +1,14 @@
-import 'package:anonaddy/screens/account_tab/domains.dart';
-import 'package:anonaddy/screens/account_tab/recipients.dart';
+import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/screens/account_tab/domains/domains.dart';
+import 'package:anonaddy/screens/account_tab/recipients/recipients.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/state_management/providers/global_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'additional_username.dart';
-import 'main_account.dart';
+import 'components/account_tab_header.dart';
+import 'usernames/additional_username.dart';
 
 class AccountTab extends StatelessWidget {
   @override
@@ -23,7 +23,7 @@ class AccountTab extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                expandedHeight: size.height * 0.38,
+                expandedHeight: size.height * 0.34,
                 elevation: 0,
                 floating: true,
                 pinned: true,
@@ -35,7 +35,7 @@ class AccountTab extends StatelessWidget {
                       final accountStream = watch(accountStreamProvider);
                       return accountStream.when(
                         loading: () => LoadingIndicator(),
-                        data: (data) => MainAccount(account: data.account),
+                        data: (data) => AccountTabHeader(account: data.account),
                         error: (error, stackTrace) {
                           return LottieWidget(
                             showLoading: true,

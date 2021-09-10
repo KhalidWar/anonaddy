@@ -10,11 +10,12 @@ import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
 class DomainsService {
-  final _accessTokenService = AccessTokenService();
+  const DomainsService(this.accessTokenService);
+  final AccessTokenService accessTokenService;
 
   Future<DomainModel> getAllDomains(OfflineData offlineData) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
@@ -44,8 +45,8 @@ class DomainsService {
   }
 
   Future<Domain> createNewDomain(String domain) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -73,8 +74,8 @@ class DomainsService {
 
   Future<Domain> editDomainDescription(
       String domainID, String description) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
@@ -101,8 +102,8 @@ class DomainsService {
   }
 
   Future deleteDomain(String domainID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -129,8 +130,8 @@ class DomainsService {
 
   Future<Domain> updateDomainDefaultRecipient(
       String domainID, String recipientID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
@@ -158,8 +159,8 @@ class DomainsService {
   }
 
   Future<Domain> activateDomain(String domainID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -186,8 +187,8 @@ class DomainsService {
   }
 
   Future deactivateDomain(String domainID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -213,8 +214,8 @@ class DomainsService {
   }
 
   Future<Domain> activateCatchAll(String domainID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -241,8 +242,8 @@ class DomainsService {
   }
 
   Future deactivateCatchAll(String domainID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(

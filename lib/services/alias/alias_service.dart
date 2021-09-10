@@ -11,11 +11,12 @@ import 'package:http/http.dart' as http;
 import '../access_token/access_token_service.dart';
 
 class AliasService {
-  final _accessTokenService = AccessTokenService();
+  const AliasService(this.accessTokenService);
+  final AccessTokenService accessTokenService;
 
   Future<AliasModel> getAllAliasesData(OfflineData offlineData) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
@@ -47,8 +48,8 @@ class AliasService {
 
   Future<Alias> createNewAlias(String desc, String domain, String format,
       String localPart, List<String> recipients) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -81,8 +82,8 @@ class AliasService {
   }
 
   Future activateAlias(String aliasID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -109,8 +110,8 @@ class AliasService {
   }
 
   Future deactivateAlias(String aliasID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -136,8 +137,8 @@ class AliasService {
   }
 
   Future<Alias> editAliasDescription(String aliasID, String newDesc) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
@@ -164,8 +165,8 @@ class AliasService {
   }
 
   Future deleteAlias(String aliasID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(
@@ -191,8 +192,8 @@ class AliasService {
   }
 
   Future<Alias> restoreAlias(String aliasID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.patch(
@@ -220,8 +221,8 @@ class AliasService {
 
   Future<Alias> updateAliasDefaultRecipient(
       String aliasID, List<String> recipients) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.post(
@@ -251,8 +252,8 @@ class AliasService {
   }
 
   Future forgetAlias(String aliasID) async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.delete(

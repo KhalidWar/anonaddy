@@ -1,9 +1,10 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../global_providers.dart';
 
 class DomainStateManager extends ChangeNotifier {
   DomainStateManager() {
@@ -42,7 +43,7 @@ class DomainStateManager extends ChangeNotifier {
   }
 
   Future<void> toggleActivity(BuildContext context, String domainID) async {
-    final domainProvider = context.read(domainServiceProvider);
+    final domainProvider = context.read(domainService);
     activeSwitchLoading = true;
     if (domain.active) {
       await domainProvider.deactivateDomain(domainID).then((data) {
@@ -64,7 +65,7 @@ class DomainStateManager extends ChangeNotifier {
   }
 
   Future<void> toggleCatchAll(BuildContext context, String domainID) async {
-    final domainProvider = context.read(domainServiceProvider);
+    final domainProvider = context.read(domainService);
     catchAllSwitchLoading = true;
     if (domain.catchAll) {
       await domainProvider.deactivateCatchAll(domainID).then((data) {
@@ -87,10 +88,7 @@ class DomainStateManager extends ChangeNotifier {
 
   Future<void> createNewDomain(BuildContext context, String domain) async {
     if (createDomainFormKey.currentState!.validate()) {
-      await context
-          .read(domainServiceProvider)
-          .createNewDomain(domain)
-          .then((domain) {
+      await context.read(domainService).createNewDomain(domain).then((domain) {
         _showToast('domain added successfully!');
         Navigator.pop(context);
       }).catchError((error) {
@@ -102,7 +100,7 @@ class DomainStateManager extends ChangeNotifier {
   Future editDescription(BuildContext context, domainID, description) async {
     if (descriptionFormKey.currentState!.validate()) {
       await context
-          .read(domainServiceProvider)
+          .read(domainService)
           .editDomainDescription(domainID, description)
           .then((data) {
         Navigator.pop(context);
@@ -118,7 +116,7 @@ class DomainStateManager extends ChangeNotifier {
       BuildContext context, domainID, recipientID) async {
     updateRecipientLoading = true;
     await context
-        .read(domainServiceProvider)
+        .read(domainService)
         .updateDomainDefaultRecipient(domainID, recipientID)
         .then((updatedDomain) {
       updateRecipientLoading = false;
@@ -134,10 +132,7 @@ class DomainStateManager extends ChangeNotifier {
 
   Future<void> deleteDomain(BuildContext context, String domainID) async {
     Navigator.pop(context);
-    await context
-        .read(domainServiceProvider)
-        .deleteDomain(domainID)
-        .then((domain) {
+    await context.read(domainService).deleteDomain(domainID).then((domain) {
       Navigator.pop(context);
       _showToast('Domain deleted successfully!');
     }).catchError((error) {

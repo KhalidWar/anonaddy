@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
-import 'package:anonaddy/screens/recipient_screen/recipient_detailed_screen.dart';
-import 'package:anonaddy/state_management/providers/class_providers.dart';
+import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../global_providers.dart';
 import '../custom_page_route.dart';
 
 class RecipientListTile extends StatelessWidget {
@@ -16,19 +16,13 @@ class RecipientListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final recipientDataProvider = context.read(recipientStateManagerProvider);
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return InkWell(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(
-              Icons.email_outlined,
-              color: isDark ? Colors.white : Colors.grey,
-              size: 30,
-            ),
+            Icon(Icons.email_outlined),
             SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

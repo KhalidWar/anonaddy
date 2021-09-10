@@ -7,11 +7,12 @@ import 'package:anonaddy/utilities/api_message_handler.dart';
 import 'package:http/http.dart' as http;
 
 class AppVersionService {
-  final _accessTokenService = AccessTokenService();
+  const AppVersionService(this.accessTokenService);
+  final AccessTokenService accessTokenService;
 
   Future<AppVersion> getAppVersionData() async {
-    final accessToken = await _accessTokenService.getAccessToken();
-    final instanceURL = await _accessTokenService.getInstanceURL();
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(

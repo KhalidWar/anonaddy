@@ -1,7 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class OfflineData {
-  final _secureStorage = FlutterSecureStorage();
+  OfflineData(this.secureStorage);
+  final FlutterSecureStorage secureStorage;
 
   final _aliasDataKey = 'aliasDataKey';
   String _aliasData = '';
@@ -24,13 +25,13 @@ class OfflineData {
   Future<void> writeAliasOfflineData(String data) async {
     if (_aliasData.compareTo(data) != 0) {
       _aliasData = data;
-      await _secureStorage.write(key: _aliasDataKey, value: data);
+      await secureStorage.write(key: _aliasDataKey, value: data);
     }
   }
 
   Future<String> readAliasOfflineData() async {
     if (_aliasData.isEmpty) {
-      _aliasData = await _secureStorage.read(key: _aliasDataKey) ?? '';
+      _aliasData = await secureStorage.read(key: _aliasDataKey) ?? '';
       return _aliasData;
     } else {
       return _aliasData;
@@ -40,13 +41,13 @@ class OfflineData {
   Future<void> writeAccountOfflineData(String data) async {
     if (_accountData.compareTo(data) != 0) {
       _accountData = data;
-      await _secureStorage.write(key: _accountDataKey, value: data);
+      await secureStorage.write(key: _accountDataKey, value: data);
     }
   }
 
   Future<String> readAccountOfflineData() async {
     if (_accountData.isEmpty) {
-      _accountData = await _secureStorage.read(key: _accountDataKey) ?? '';
+      _accountData = await secureStorage.read(key: _accountDataKey) ?? '';
       return _accountData;
     } else {
       return _accountData;
@@ -56,13 +57,13 @@ class OfflineData {
   Future<void> writeUsernameOfflineData(String data) async {
     if (_usernameData.compareTo(data) != 0) {
       _usernameData = data;
-      await _secureStorage.write(key: _usernameDataKey, value: data);
+      await secureStorage.write(key: _usernameDataKey, value: data);
     }
   }
 
   Future<String> readUsernameOfflineData() async {
     if (_usernameData.isEmpty) {
-      final usernameData = await _secureStorage.read(key: _usernameDataKey);
+      final usernameData = await secureStorage.read(key: _usernameDataKey);
       _usernameData = usernameData!;
       return _usernameData;
     } else {
@@ -73,13 +74,13 @@ class OfflineData {
   Future<void> writeRecipientsOfflineData(String data) async {
     if (_recipientData.compareTo(data) != 0) {
       _recipientData = data;
-      await _secureStorage.write(key: _recipientsDataKey, value: data);
+      await secureStorage.write(key: _recipientsDataKey, value: data);
     }
   }
 
   Future<String> readRecipientsOfflineData() async {
     if (_recipientData.isEmpty) {
-      _recipientData = await _secureStorage.read(key: _recipientsDataKey) ?? '';
+      _recipientData = await secureStorage.read(key: _recipientsDataKey) ?? '';
       return _recipientData;
     } else {
       return _recipientData;
@@ -89,13 +90,13 @@ class OfflineData {
   Future<void> writeDomainOptionsOfflineData(String data) async {
     if (_domainOptionsData.compareTo(data) != 0) {
       _domainOptionsData = data;
-      await _secureStorage.write(key: _domainOptionsDataKey, value: data);
+      await secureStorage.write(key: _domainOptionsDataKey, value: data);
     }
   }
 
   Future<String> readDomainOptionsOfflineData() async {
     if (_domainOptionsData.isEmpty) {
-      final domainData = await _secureStorage.read(key: _domainOptionsDataKey);
+      final domainData = await secureStorage.read(key: _domainOptionsDataKey);
       _domainOptionsData = domainData!;
       return _domainOptionsData;
     } else {
@@ -106,13 +107,13 @@ class OfflineData {
   Future<void> writeDomainOfflineData(String data) async {
     if (_domainData.compareTo(data) != 0) {
       _domainData = data;
-      await _secureStorage.write(key: _domainDataKey, value: data);
+      await secureStorage.write(key: _domainDataKey, value: data);
     }
   }
 
   Future<String> readDomainOfflineData() async {
     if (_domainData.isEmpty) {
-      final domainData = await _secureStorage.read(key: _domainDataKey);
+      final domainData = await secureStorage.read(key: _domainDataKey);
       _domainData = domainData!;
       return _domainData;
     } else {

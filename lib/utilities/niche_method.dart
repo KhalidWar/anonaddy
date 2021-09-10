@@ -37,4 +37,17 @@ class NicheMethod {
       throw showToast(error.toString());
     });
   }
+
+  String correctAliasString(String input) {
+    switch (input) {
+      case 'random_characters':
+        return 'Random Characters';
+      case 'random_words':
+        return 'Random Words';
+      case 'custom':
+        return 'Custom';
+      default:
+        return 'UUID';
+    }
+  }
 }
