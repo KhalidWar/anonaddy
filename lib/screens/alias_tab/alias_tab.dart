@@ -102,28 +102,30 @@ class AliasTab extends ConsumerWidget {
                   if (availableAliasList.isEmpty)
                     buildEmptyAliasList(context)
                   else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: availableAliasList.length,
-                      itemBuilder: (context, index) {
-                        return AliasListTile(
-                          aliasData: availableAliasList[index],
-                        );
-                      },
+                    Scrollbar(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: availableAliasList.length,
+                        itemBuilder: (context, index) {
+                          return AliasListTile(
+                            aliasData: availableAliasList[index],
+                          );
+                        },
+                      ),
                     ),
                   if (deletedAliasList.isEmpty)
                     buildEmptyAliasList(context)
                   else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: deletedAliasList.length,
-                      itemBuilder: (context, index) {
-                        return AliasListTile(
-                          aliasData: deletedAliasList[index],
-                        );
-                      },
+                    Scrollbar(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: deletedAliasList.length,
+                        itemBuilder: (context, index) {
+                          return AliasListTile(
+                            aliasData: deletedAliasList[index],
+                          );
+                        },
+                      ),
                     ),
                 ],
               ),

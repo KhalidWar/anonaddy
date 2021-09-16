@@ -89,42 +89,45 @@ class ChangelogWidget extends StatelessWidget {
     }
 
     return Expanded(
-      child: ListView(
-        controller: controller,
-        physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        children: [
-          header('Fixed', Colors.blue),
-          label(
-            '1. Alias and Account headers text overlapping Tabs on small screen devices.',
-          ),
-          header('Added', Colors.green),
-          label(
-            '1. Alert Center, new central location for your account alerts.',
-          ),
-          SizedBox(height: size.height * 0.008),
-          label('2. Failed deliveries, for if an email is not delivered.'),
-          SizedBox(height: size.height * 0.008),
-          label(
-            '3. Exodus Privacy report about AddyManager to About App screen inside Settings.',
-          ),
-          SizedBox(height: size.height * 0.008),
-          label('4. FloatingActionButton is BACK!!'),
-          SizedBox(height: size.height * 0.008),
-          label('5. AddyManager source code link to About App.'),
-          SizedBox(height: size.height * 0.008),
-          label('6. Rate AddyManager to Settings'),
-          header('Removed', Colors.red),
-          label('1. Deleted aliases screen.'),
-          header('Improved', Colors.orange),
-          label('1. Improved Alias Domain and Format selection interface.'),
-          SizedBox(height: size.height * 0.008),
-          label('2. Unified icons styling and text sizing throughout the app.'),
-          SizedBox(height: size.height * 0.008),
-          label(
-            '3. Improved backend for a smoother and better performant app.',
-          ),
-        ],
+      child: Scrollbar(
+        child: ListView(
+          controller: controller,
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          children: [
+            header('Fixed', Colors.blue),
+            label(
+              '1. Alias and Account headers text overlapping Tabs on small screen devices.',
+            ),
+            header('Added', Colors.green),
+            label(
+              '1. Alert Center, new central location for your account alerts.',
+            ),
+            SizedBox(height: size.height * 0.008),
+            label('2. Failed deliveries, for if an email is not delivered.'),
+            SizedBox(height: size.height * 0.008),
+            label(
+              '3. Exodus Privacy report about AddyManager to About App screen inside Settings.',
+            ),
+            SizedBox(height: size.height * 0.008),
+            label('4. FloatingActionButton is BACK!!'),
+            SizedBox(height: size.height * 0.008),
+            label('5. AddyManager source code link to About App.'),
+            SizedBox(height: size.height * 0.008),
+            label('6. Rate AddyManager to Settings'),
+            header('Removed', Colors.red),
+            label('1. Deleted aliases screen.'),
+            header('Improved', Colors.orange),
+            label('1. Improved Alias Domain and Format selection interface.'),
+            SizedBox(height: size.height * 0.008),
+            label(
+                '2. Unified icons styling and text sizing throughout the app.'),
+            SizedBox(height: size.height * 0.008),
+            label(
+              '3. Improved backend for a smoother and better performant app.',
+            ),
+          ],
+        ),
       ),
     );
   }
