@@ -67,6 +67,7 @@ class _CreateAliasRecipientSelectionState
               child: ListView(
                 shrinkWrap: true,
                 controller: controller,
+                physics: BouncingScrollPhysics(),
                 children: [
                   if (_verifiedRecipients.isEmpty)
                     Center(

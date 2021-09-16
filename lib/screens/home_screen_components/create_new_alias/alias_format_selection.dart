@@ -29,6 +29,7 @@ class AliasFormatSelection extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 controller: controller,
+                physics: BouncingScrollPhysics(),
                 children: [
                   if (aliasFormatList.isEmpty)
                     Center(

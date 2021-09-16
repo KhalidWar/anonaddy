@@ -43,6 +43,7 @@ class AliasDomainSelection extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 controller: controller,
+                physics: BouncingScrollPhysics(),
                 children: [
                   if (domainOptions.domains.isEmpty)
                     Center(
