@@ -178,6 +178,20 @@ class AliasStateManager extends ChangeNotifier {
     }
   }
 
+  Future<void> clearDescription(BuildContext context, Alias alias) async {
+    await context
+        .read(aliasService)
+        .editAliasDescription(alias.id, '')
+        .then((value) {
+      _showToast(kClearDescriptionSuccess);
+      alias.description = value.description;
+      notifyListeners();
+    }).catchError((error) {
+      _showToast(error.toString());
+    });
+    Navigator.pop(context);
+  }
+
   Future<void> sendFromAlias(
       BuildContext context, String aliasEmail, String destinationEmail) async {
     if (sendFromFormKey.currentState!.validate()) {

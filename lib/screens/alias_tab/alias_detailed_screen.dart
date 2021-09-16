@@ -392,10 +392,31 @@ class AliasDetailScreen extends ConsumerWidget {
                       ),
                     ),
                     SizedBox(height: size.height * 0.015),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(),
-                      child: Text(kUpdateDescription),
-                      onPressed: () => editDesc(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.redAccent,
+                              minimumSize: Size(120, size.height * 0.055),
+                            ),
+                            child: Text(kRemoveDescription),
+                            onPressed: () =>
+                                aliasState.clearDescription(context, alias),
+                          ),
+                        ),
+                        SizedBox(width: size.width * 0.03),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(120, size.height * 0.055),
+                            ),
+                            child: Text(kUpdateDescription),
+                            onPressed: () => editDesc(),
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: size.height * 0.015),
                   ],
