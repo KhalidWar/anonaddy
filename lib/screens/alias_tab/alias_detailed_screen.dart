@@ -48,171 +48,162 @@ class AliasDetailScreen extends ConsumerWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context, aliasDataModel.id, isAliasDeleted),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AliasScreenPieChart(
-              emailsForwarded: aliasDataModel.emailsForwarded,
-              emailsBlocked: aliasDataModel.emailsBlocked,
-              emailsReplied: aliasDataModel.emailsReplied,
-              emailsSent: aliasDataModel.emailsSent,
+      body: ListView(
+        children: [
+          AliasScreenPieChart(
+            emailsForwarded: aliasDataModel.emailsForwarded,
+            emailsBlocked: aliasDataModel.emailsBlocked,
+            emailsReplied: aliasDataModel.emailsReplied,
+            emailsSent: aliasDataModel.emailsSent,
+          ),
+          Divider(height: size.height * 0.03),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+            child: Text(
+              'Actions',
+              style: Theme.of(context).textTheme.headline6,
             ),
-            Divider(height: size.height * 0.03),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-              child: Text(
-                'Actions',
-                style: Theme.of(context).textTheme.headline6,
-              ),
+          ),
+          SizedBox(height: size.height * 0.005),
+          AliasDetailListTile(
+            leadingIconData: Icons.alternate_email,
+            title: aliasDataModel.email,
+            subtitle: 'Email',
+            trailingIconData: Icons.copy,
+            trailingIconOnPress: () => copyOnTap(aliasDataModel.email),
+          ),
+          AliasDetailListTile(
+            leadingIconData: Icons.mail_outline,
+            title: 'Send email from this alias',
+            subtitle: 'Send from',
+            trailingIconData: Icons.send_outlined,
+            trailingIconOnPress: () => buildSendFromDialog(
+                context, sendFromAlias, aliasDataModel.email),
+          ),
+          AliasDetailListTile(
+            leadingIconData: Icons.toggle_on_outlined,
+            title: 'Alias is ${aliasDataModel.active ? 'active' : 'inactive'}',
+            subtitle: 'Activity',
+            trailing: Row(
+              children: [
+                if (isToggleLoading) customLoading,
+                Switch.adaptive(
+                  value: aliasDataModel.active,
+                  onChanged: isAliasDeleted ? null : (toggle) {},
+                ),
+              ],
             ),
-            SizedBox(height: size.height * 0.005),
-            AliasDetailListTile(
-              leadingIconData: Icons.alternate_email,
-              title: aliasDataModel.email,
-              subtitle: 'Email',
-              trailingIconData: Icons.copy,
-              trailingIconOnPress: () => copyOnTap(aliasDataModel.email),
+            trailingIconOnPress: () {
+              isAliasDeleted
+                  ? showToast(kRestoreBeforeActivate)
+                  : toggleAlias(context, aliasDataModel.id);
+            },
+          ),
+          AliasDetailListTile(
+            leadingIconData: Icons.comment_outlined,
+            title: aliasDataModel.description ?? 'No description',
+            subtitle: 'Description',
+            trailingIconData: Icons.edit_outlined,
+            trailingIconOnPress: () {
+              buildEditDescriptionDialog(
+                context,
+                textEditingController,
+                editDescription,
+                aliasDataModel,
+              );
+            },
+          ),
+          AliasDetailListTile(
+            leadingIconData: Icons.check_circle_outline,
+            title: aliasDataModel.extension,
+            subtitle: 'extension',
+            trailingIconData: Icons.edit_outlined,
+            trailingIconOnPress: () {},
+          ),
+          AliasDetailListTile(
+            leadingIconData:
+                isAliasDeleted ? Icons.restore_outlined : Icons.delete_outline,
+            title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
+            subtitle:
+                isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
+            trailing: Row(
+              children: [
+                if (deleteAliasLoading) customLoading,
+                IconButton(
+                  icon: isAliasDeleted
+                      ? Icon(Icons.restore_outlined, color: Colors.green)
+                      : Icon(Icons.delete_outline, color: Colors.red),
+                  onPressed: null,
+                ),
+              ],
             ),
-            AliasDetailListTile(
-              leadingIconData: Icons.mail_outline,
-              title: 'Send email from this alias',
-              subtitle: 'Send from',
-              trailingIconData: Icons.send_outlined,
-              trailingIconOnPress: () => buildSendFromDialog(
-                  context, sendFromAlias, aliasDataModel.email),
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.toggle_on_outlined,
-              title:
-                  'Alias is ${aliasDataModel.active ? 'active' : 'inactive'}',
-              subtitle: 'Activity',
-              trailing: Row(
-                children: [
-                  if (isToggleLoading) customLoading,
-                  Switch.adaptive(
-                    value: aliasDataModel.active,
-                    onChanged: isAliasDeleted ? null : (toggle) {},
+            trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(
+                context, isAliasDeleted, deleteOrRestoreAlias, aliasDataModel),
+          ),
+          if (aliasDataModel.recipients == null)
+            Container()
+          else
+            Column(
+              children: [
+                Divider(height: size.height * 0.01),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Default Recipient${aliasDataModel.recipients!.length >= 2 ? 's' : ''}',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.edit_outlined),
+                        onPressed: () => buildUpdateDefaultRecipient(
+                            context, aliasDataModel),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              trailingIconOnPress: () {
-                isAliasDeleted
-                    ? showToast(kRestoreBeforeActivate)
-                    : toggleAlias(context, aliasDataModel.id);
-              },
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.comment_outlined,
-              title: aliasDataModel.description ?? 'No description',
-              subtitle: 'Description',
-              trailingIconData: Icons.edit_outlined,
-              trailingIconOnPress: () {
-                buildEditDescriptionDialog(
-                  context,
-                  textEditingController,
-                  editDescription,
-                  aliasDataModel,
-                );
-              },
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.check_circle_outline,
-              title: aliasDataModel.extension,
-              subtitle: 'extension',
-              trailingIconData: Icons.edit_outlined,
-              trailingIconOnPress: () {},
-            ),
-            AliasDetailListTile(
-              leadingIconData: isAliasDeleted
-                  ? Icons.restore_outlined
-                  : Icons.delete_outline,
-              title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
-              subtitle:
-                  isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
-              trailing: Row(
-                children: [
-                  if (deleteAliasLoading) customLoading,
-                  IconButton(
-                    icon: isAliasDeleted
-                        ? Icon(Icons.restore_outlined, color: Colors.green)
-                        : Icon(Icons.delete_outline, color: Colors.red),
-                    onPressed: null,
-                  ),
-                ],
-              ),
-              trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(
-                  context,
-                  isAliasDeleted,
-                  deleteOrRestoreAlias,
-                  aliasDataModel),
-            ),
-            if (aliasDataModel.recipients == null)
-              Container()
-            else
-              Column(
-                children: [
-                  Divider(height: size.height * 0.01),
+                ),
+                if (aliasDataModel.recipients!.isEmpty)
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Default Recipient${aliasDataModel.recipients!.length >= 2 ? 's' : ''}',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.edit_outlined),
-                          onPressed: () => buildUpdateDefaultRecipient(
-                              context, aliasDataModel),
-                        ),
-                      ],
-                    ),
+                    child: Row(children: [Text(kNoDefaultRecipientSet)]),
+                  )
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: aliasDataModel.recipients!.length,
+                    itemBuilder: (context, index) {
+                      final recipients = aliasDataModel.recipients;
+                      return RecipientListTile(
+                        recipientDataModel: recipients![index],
+                      );
+                    },
                   ),
-                  if (aliasDataModel.recipients!.isEmpty)
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                      child: Row(children: [Text(kNoDefaultRecipientSet)]),
-                    )
-                  else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: aliasDataModel.recipients!.length,
-                      itemBuilder: (context, index) {
-                        final recipients = aliasDataModel.recipients;
-                        return RecipientListTile(
-                          recipientDataModel: recipients![index],
-                        );
-                      },
-                    ),
-                ],
-              ),
-            Divider(height: size.height * 0.03),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                AliasCreatedAtWidget(
-                  label: 'Created:',
-                  dateTime: aliasDataModel.createdAt,
-                ),
-                aliasDataModel.deletedAt == null
-                    ? AliasCreatedAtWidget(
-                        label: 'Updated:',
-                        dateTime: aliasDataModel.updatedAt,
-                      )
-                    : AliasCreatedAtWidget(
-                        label: 'Deleted:',
-                        dateTime: aliasDataModel.deletedAt!,
-                      ),
               ],
             ),
-            SizedBox(height: size.height * 0.05),
-          ],
-        ),
+          Divider(height: size.height * 0.03),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              AliasCreatedAtWidget(
+                label: 'Created:',
+                dateTime: aliasDataModel.createdAt,
+              ),
+              aliasDataModel.deletedAt == null
+                  ? AliasCreatedAtWidget(
+                      label: 'Updated:',
+                      dateTime: aliasDataModel.updatedAt,
+                    )
+                  : AliasCreatedAtWidget(
+                      label: 'Deleted:',
+                      dateTime: aliasDataModel.deletedAt!,
+                    ),
+            ],
+          ),
+          SizedBox(height: size.height * 0.05),
+        ],
       ),
     );
   }

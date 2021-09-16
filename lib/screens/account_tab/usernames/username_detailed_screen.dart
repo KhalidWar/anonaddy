@@ -34,141 +34,137 @@ class UsernameDetailedScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: buildAppBar(context, username.id),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(size.height * 0.01),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.account_circle_outlined,
-                    size: size.height * 0.035,
-                  ),
-                  SizedBox(width: size.width * 0.02),
-                  Text(
-                    username.username,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
+      body: ListView(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(size.height * 0.01),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.account_circle_outlined,
+                  size: size.height * 0.035,
+                ),
+                SizedBox(width: size.width * 0.02),
+                Text(
+                  username.username,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: size.height * 0.02),
+          AliasDetailListTile(
+            title: username.description ?? kNoDescription,
+            titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            subtitle: 'Username description',
+            leadingIconData: Icons.comment_outlined,
+            trailing:
+                IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
+            trailingIconOnPress: () => buildEditDescriptionDialog(
+                context, textEditingController, username),
+          ),
+          AliasDetailListTile(
+            title:
+                username.active ? 'Username is active' : 'Username is inactive',
+            titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            subtitle: 'Activity',
+            leadingIconData: Icons.toggle_on_outlined,
+            trailing: buildSwitch(activeSwitchLoading, username.active),
+            trailingIconOnPress: () => toggleActivity(context, username.id),
+          ),
+          AliasDetailListTile(
+            title: username.catchAll ? 'Enabled' : 'Disabled',
+            titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            subtitle: 'Catch All',
+            leadingIconData: Icons.repeat,
+            trailing: buildSwitch(catchAllSwitchLoading, username.catchAll),
+            trailingIconOnPress: () => toggleCatchAll(context, username.id),
+          ),
+          Divider(height: size.height * 0.02),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Default Recipient',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit_outlined),
+                      onPressed: () =>
+                          buildUpdateDefaultRecipient(context, username),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Divider(height: size.height * 0.02),
-            AliasDetailListTile(
-              title: username.description ?? kNoDescription,
-              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-              subtitle: 'Username description',
-              leadingIconData: Icons.comment_outlined,
-              trailing:
-                  IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
-              trailingIconOnPress: () => buildEditDescriptionDialog(
-                  context, textEditingController, username),
-            ),
-            AliasDetailListTile(
-              title: username.active
-                  ? 'Username is active'
-                  : 'Username is inactive',
-              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-              subtitle: 'Activity',
-              leadingIconData: Icons.toggle_on_outlined,
-              trailing: buildSwitch(activeSwitchLoading, username.active),
-              trailingIconOnPress: () => toggleActivity(context, username.id),
-            ),
-            AliasDetailListTile(
-              title: username.catchAll ? 'Enabled' : 'Disabled',
-              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-              subtitle: 'Catch All',
-              leadingIconData: Icons.repeat,
-              trailing: buildSwitch(catchAllSwitchLoading, username.catchAll),
-              trailingIconOnPress: () => toggleCatchAll(context, username.id),
-            ),
-            Divider(height: size.height * 0.02),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Default Recipient',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.edit_outlined),
-                        onPressed: () =>
-                            buildUpdateDefaultRecipient(context, username),
-                      ),
-                    ],
-                  ),
+              if (username.defaultRecipient == null)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('No default recipient found'),
+                )
+              else
+                RecipientListTile(
+                  recipientDataModel: username.defaultRecipient!,
                 ),
-                if (username.defaultRecipient == null)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('No default recipient found'),
-                  )
-                else
-                  RecipientListTile(
-                    recipientDataModel: username.defaultRecipient!,
-                  ),
-              ],
-            ),
-            Divider(height: size.height * 0.02),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Associated Aliases',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      Container(height: 36),
-                    ],
-                  ),
+            ],
+          ),
+          Divider(height: size.height * 0.02),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                child: Row(
+                  children: [
+                    Text(
+                      'Associated Aliases',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Container(height: 36),
+                  ],
                 ),
-                if (username.aliases!.isEmpty)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('No aliases found'),
-                  )
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: username.aliases!.length,
-                    itemBuilder: (context, index) {
-                      return AliasListTile(
-                        aliasData: username.aliases![index],
-                      );
-                    },
-                  ),
-              ],
-            ),
-            Divider(height: size.height * 0.03),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                AliasCreatedAtWidget(
-                  label: 'Created:',
-                  dateTime: username.createdAt,
+              ),
+              if (username.aliases!.isEmpty)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('No aliases found'),
+                )
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: username.aliases!.length,
+                  itemBuilder: (context, index) {
+                    return AliasListTile(
+                      aliasData: username.aliases![index],
+                    );
+                  },
                 ),
-                AliasCreatedAtWidget(
-                  label: 'Updated:',
-                  dateTime: username.updatedAt,
-                ),
-              ],
-            ),
-            SizedBox(height: size.height * 0.05),
-          ],
-        ),
+            ],
+          ),
+          Divider(height: size.height * 0.03),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              AliasCreatedAtWidget(
+                label: 'Created:',
+                dateTime: username.createdAt,
+              ),
+              AliasCreatedAtWidget(
+                label: 'Updated:',
+                dateTime: username.updatedAt,
+              ),
+            ],
+          ),
+          SizedBox(height: size.height * 0.05),
+        ],
       ),
     );
   }

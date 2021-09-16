@@ -62,136 +62,131 @@ class RecipientDetailedScreen extends ConsumerWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (recipientData.aliases == null ||
-                recipientData.emailVerifiedAt == null)
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 40),
-                child: SvgPicture.asset(
-                  'assets/images/envelope.svg',
-                  height: size.height * 0.22,
-                ),
-              )
-            else
-              AliasScreenPieChart(
-                emailsForwarded: calculateTotal(forwardedList),
-                emailsBlocked: calculateTotal(blockedList),
-                emailsReplied: calculateTotal(repliedList),
-                emailsSent: calculateTotal(sentList),
+      body: ListView(
+        children: [
+          if (recipientData.aliases == null ||
+              recipientData.emailVerifiedAt == null)
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: SvgPicture.asset(
+                'assets/images/envelope.svg',
+                height: size.height * 0.22,
               ),
-            Divider(height: size.height * 0.03),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-              child:
-                  Text('Actions', style: Theme.of(context).textTheme.headline6),
+            )
+          else
+            AliasScreenPieChart(
+              emailsForwarded: calculateTotal(forwardedList),
+              emailsBlocked: calculateTotal(blockedList),
+              emailsReplied: calculateTotal(repliedList),
+              emailsSent: calculateTotal(sentList),
             ),
-            AliasDetailListTile(
-              leadingIconData: Icons.email_outlined,
-              title: recipientData.email,
-              subtitle: 'Recipient Email',
-              trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
-              trailingIconOnPress: () =>
-                  NicheMethod().copyOnTap(recipientData.email),
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.fingerprint_outlined,
-              title: recipientData.fingerprint == null
-                  ? 'No fingerprint found'
-                  : '${recipientData.fingerprint}',
-              subtitle: 'GPG Key Fingerprint',
-              trailing: recipientData.fingerprint == null
-                  ? IconButton(
-                      icon: Icon(Icons.add_circle_outline_outlined),
-                      onPressed: () {})
-                  : IconButton(
-                      icon: Icon(Icons.delete_outline_outlined,
-                          color: Colors.red),
-                      onPressed: () {}),
-              trailingIconOnPress: recipientData.fingerprint == null
-                  ? () => buildAddPGPKeyDialog(context, recipientData)
-                  : () => buildRemovePGPKeyDialog(context),
-            ),
-            AliasDetailListTile(
-              leadingIconData:
-                  recipientData.shouldEncrypt ? Icons.lock : Icons.lock_open,
-              leadingIconColor:
-                  recipientData.shouldEncrypt ? Colors.green : null,
-              title:
-                  '${recipientData.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
-              subtitle: 'Encryption',
-              trailing: recipientData.fingerprint == null
-                  ? Container()
-                  : buildSwitch(isLoading),
-              trailingIconOnPress: recipientData.fingerprint == null
-                  ? null
-                  : () => toggleEncryption(context, recipientData.id),
-            ),
-            recipientData.emailVerifiedAt == null
-                ? AliasDetailListTile(
-                    leadingIconData: Icons.verified_outlined,
-                    title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
-                    subtitle: 'Is Email Verified?',
-                    trailing: TextButton(
-                        child: Text('Verify now!'), onPressed: () {}),
-                    trailingIconOnPress: () =>
-                        verifyEmail(context, recipientData.id),
-                  )
-                : Container(),
-            if (recipientData.aliases == null)
-              Container()
-            else if (recipientData.emailVerifiedAt == null)
-              buildUnverifiedEmailWarning(size)
-            else
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Divider(height: size.height * 0.03),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: Text('Aliases',
-                        style: Theme.of(context).textTheme.headline6),
-                  ),
-                  SizedBox(height: size.height * 0.01),
-                  if (recipientData.aliases!.isEmpty)
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.height * 0.01),
-                        child: Text('No aliases found'))
-                  else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: recipientData.aliases!.length,
-                      itemBuilder: (context, index) {
-                        return AliasListTile(
-                          aliasData: recipientData.aliases![index],
-                        );
-                      },
-                    ),
-                ],
-              ),
-            Divider(height: size.height * 0.03),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Divider(height: size.height * 0.03),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+            child:
+                Text('Actions', style: Theme.of(context).textTheme.headline6),
+          ),
+          AliasDetailListTile(
+            leadingIconData: Icons.email_outlined,
+            title: recipientData.email,
+            subtitle: 'Recipient Email',
+            trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
+            trailingIconOnPress: () =>
+                NicheMethod().copyOnTap(recipientData.email),
+          ),
+          AliasDetailListTile(
+            leadingIconData: Icons.fingerprint_outlined,
+            title: recipientData.fingerprint == null
+                ? 'No fingerprint found'
+                : '${recipientData.fingerprint}',
+            subtitle: 'GPG Key Fingerprint',
+            trailing: recipientData.fingerprint == null
+                ? IconButton(
+                    icon: Icon(Icons.add_circle_outline_outlined),
+                    onPressed: () {})
+                : IconButton(
+                    icon:
+                        Icon(Icons.delete_outline_outlined, color: Colors.red),
+                    onPressed: () {}),
+            trailingIconOnPress: recipientData.fingerprint == null
+                ? () => buildAddPGPKeyDialog(context, recipientData)
+                : () => buildRemovePGPKeyDialog(context),
+          ),
+          AliasDetailListTile(
+            leadingIconData:
+                recipientData.shouldEncrypt ? Icons.lock : Icons.lock_open,
+            leadingIconColor: recipientData.shouldEncrypt ? Colors.green : null,
+            title:
+                '${recipientData.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
+            subtitle: 'Encryption',
+            trailing: recipientData.fingerprint == null
+                ? Container()
+                : buildSwitch(isLoading),
+            trailingIconOnPress: recipientData.fingerprint == null
+                ? null
+                : () => toggleEncryption(context, recipientData.id),
+          ),
+          recipientData.emailVerifiedAt == null
+              ? AliasDetailListTile(
+                  leadingIconData: Icons.verified_outlined,
+                  title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
+                  subtitle: 'Is Email Verified?',
+                  trailing:
+                      TextButton(child: Text('Verify now!'), onPressed: () {}),
+                  trailingIconOnPress: () =>
+                      verifyEmail(context, recipientData.id),
+                )
+              : Container(),
+          if (recipientData.aliases == null)
+            Container()
+          else if (recipientData.emailVerifiedAt == null)
+            buildUnverifiedEmailWarning(size)
+          else
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AliasCreatedAtWidget(
-                  label: 'Created:',
-                  dateTime: recipientData.createdAt,
+                Divider(height: size.height * 0.03),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                  child: Text('Aliases',
+                      style: Theme.of(context).textTheme.headline6),
                 ),
-                AliasCreatedAtWidget(
-                  label: 'Updated:',
-                  dateTime: recipientData.updatedAt,
-                ),
+                SizedBox(height: size.height * 0.01),
+                if (recipientData.aliases!.isEmpty)
+                  Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                      child: Text('No aliases found'))
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: recipientData.aliases!.length,
+                    itemBuilder: (context, index) {
+                      return AliasListTile(
+                        aliasData: recipientData.aliases![index],
+                      );
+                    },
+                  ),
               ],
             ),
-            SizedBox(height: size.height * 0.03),
-          ],
-        ),
+          Divider(height: size.height * 0.03),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              AliasCreatedAtWidget(
+                label: 'Created:',
+                dateTime: recipientData.createdAt,
+              ),
+              AliasCreatedAtWidget(
+                label: 'Updated:',
+                dateTime: recipientData.updatedAt,
+              ),
+            ],
+          ),
+          SizedBox(height: size.height * 0.03),
+        ],
       ),
     );
   }

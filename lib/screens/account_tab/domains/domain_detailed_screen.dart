@@ -38,147 +38,144 @@ class DomainDetailedScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: buildAppBar(context, domain.id),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(size.height * 0.01),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.account_circle_outlined,
-                    size: size.height * 0.035,
-                  ),
-                  SizedBox(width: size.width * 0.02),
-                  Text(
-                    domain.domain,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                ],
+      body: ListView(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(size.height * 0.01),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.account_circle_outlined,
+                  size: size.height * 0.035,
+                ),
+                SizedBox(width: size.width * 0.02),
+                Text(
+                  domain.domain,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: size.height * 0.02),
+          AliasDetailListTile(
+            title: domain.description ?? kNoDescription,
+            titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            subtitle: 'Domain description',
+            leadingIconData: Icons.comment_outlined,
+            trailing:
+                IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
+            trailingIconOnPress: () => buildEditDescriptionDialog(
+                context, textEditingController, domain),
+          ),
+          AliasDetailListTile(
+            title: domain.active ? 'Domain is active' : 'Domain is inactive',
+            titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            subtitle: 'Activity',
+            leadingIconData: Icons.toggle_off_outlined,
+            trailing: buildSwitch(activeSwitchLoading, domain.active),
+            trailingIconOnPress: () => toggleActivity(context, domain.id),
+          ),
+          AliasDetailListTile(
+            title: domain.catchAll ? 'Enabled' : 'Disabled',
+            titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+            subtitle: 'Catch All',
+            leadingIconData: Icons.repeat,
+            trailing: buildSwitch(catchAllSwitchLoading, domain.catchAll),
+            trailingIconOnPress: () => toggleCatchAll(context, domain.id),
+          ),
+          if (domain.domainVerifiedAt == null)
+            buildUnverifiedEmailWarning(size, kUnverifiedDomainWarning),
+          // Divider(height: size.height * 0.02),
+          if (domain.domainMxValidatedAt == null)
+            buildUnverifiedEmailWarning(size, kInvalidDomainMXWarning),
+          Divider(height: size.height * 0.02),
+          // if (domain.domainSendingVerifiedAt == null)
+          //   buildUnverifiedEmailWarning(size, kUnverifiedDomainNote),
+          // Divider(height: size.height * 0.02),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Default Recipient',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit_outlined),
+                      onPressed: () =>
+                          buildUpdateDefaultRecipient(context, domain),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Divider(height: size.height * 0.02),
-            AliasDetailListTile(
-              title: domain.description ?? kNoDescription,
-              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-              subtitle: 'Domain description',
-              leadingIconData: Icons.comment_outlined,
-              trailing:
-                  IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
-              trailingIconOnPress: () => buildEditDescriptionDialog(
-                  context, textEditingController, domain),
-            ),
-            AliasDetailListTile(
-              title: domain.active ? 'Domain is active' : 'Domain is inactive',
-              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-              subtitle: 'Activity',
-              leadingIconData: Icons.toggle_off_outlined,
-              trailing: buildSwitch(activeSwitchLoading, domain.active),
-              trailingIconOnPress: () => toggleActivity(context, domain.id),
-            ),
-            AliasDetailListTile(
-              title: domain.catchAll ? 'Enabled' : 'Disabled',
-              titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
-              subtitle: 'Catch All',
-              leadingIconData: Icons.repeat,
-              trailing: buildSwitch(catchAllSwitchLoading, domain.catchAll),
-              trailingIconOnPress: () => toggleCatchAll(context, domain.id),
-            ),
-            if (domain.domainVerifiedAt == null)
-              buildUnverifiedEmailWarning(size, kUnverifiedDomainWarning),
-            // Divider(height: size.height * 0.02),
-            if (domain.domainMxValidatedAt == null)
-              buildUnverifiedEmailWarning(size, kInvalidDomainMXWarning),
-            Divider(height: size.height * 0.02),
-            // if (domain.domainSendingVerifiedAt == null)
-            //   buildUnverifiedEmailWarning(size, kUnverifiedDomainNote),
-            // Divider(height: size.height * 0.02),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Default Recipient',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.edit_outlined),
-                        onPressed: () =>
-                            buildUpdateDefaultRecipient(context, domain),
-                      ),
-                    ],
-                  ),
+              if (domain.defaultRecipient == null)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('No default recipient found'),
+                )
+              else
+                RecipientListTile(
+                  recipientDataModel: domain.defaultRecipient!,
                 ),
-                if (domain.defaultRecipient == null)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('No default recipient found'),
-                  )
-                else
-                  RecipientListTile(
-                    recipientDataModel: domain.defaultRecipient!,
-                  ),
-              ],
-            ),
-            Divider(height: size.height * 0.02),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Associated Aliases',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      Container(height: 36),
-                    ],
-                  ),
+            ],
+          ),
+          Divider(height: size.height * 0.02),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                child: Row(
+                  children: [
+                    Text(
+                      'Associated Aliases',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    Container(height: 36),
+                  ],
                 ),
-                if (domain.aliases!.isEmpty)
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text('No aliases found'),
-                  )
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: domain.aliases!.length,
-                    itemBuilder: (context, index) {
-                      return AliasListTile(
-                        aliasData: domain.aliases![index],
-                      );
-                    },
-                  ),
-              ],
-            ),
-            Divider(height: size.height * 0.03),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                AliasCreatedAtWidget(
-                  label: 'Created:',
-                  dateTime: domain.createdAt,
+              ),
+              if (domain.aliases!.isEmpty)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('No aliases found'),
+                )
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: domain.aliases!.length,
+                  itemBuilder: (context, index) {
+                    return AliasListTile(
+                      aliasData: domain.aliases![index],
+                    );
+                  },
                 ),
-                AliasCreatedAtWidget(
-                  label: 'Updated:',
-                  dateTime: domain.updatedAt,
-                ),
-              ],
-            ),
-            SizedBox(height: size.height * 0.05),
-          ],
-        ),
+            ],
+          ),
+          Divider(height: size.height * 0.03),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              AliasCreatedAtWidget(
+                label: 'Created:',
+                dateTime: domain.createdAt,
+              ),
+              AliasCreatedAtWidget(
+                label: 'Updated:',
+                dateTime: domain.updatedAt,
+              ),
+            ],
+          ),
+          SizedBox(height: size.height * 0.05),
+        ],
       ),
     );
   }
