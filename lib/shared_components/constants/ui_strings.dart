@@ -13,6 +13,7 @@ const kUpdateDescriptionString =
     'Enter new description or enter empty whitespace remove current description';
 const kForgetAlias = 'Forget Alias';
 const kUpdateDescription = 'Update Description';
+const kRemoveDescription = 'Remove Description';
 const kNoDefaultRecipientSet = 'No default recipient set yet';
 const kSendFromAlias = 'Send From Alias';
 const kSendFromAliasString =
