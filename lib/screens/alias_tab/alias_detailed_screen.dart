@@ -10,10 +10,7 @@ import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
-import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,40 +18,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../global_providers.dart';
 
 class AliasDetailScreen extends ConsumerWidget {
-  final isIOS = TargetedPlatform().isIOS();
-  final confirmationDialog = ConfirmationDialog();
+  const AliasDetailScreen(this.alias);
+  final Alias alias;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasDataProvider = watch(aliasStateManagerProvider);
-    final aliasDataModel = aliasDataProvider.aliasDataModel;
-    final toggleAlias = aliasDataProvider.toggleAlias;
     final isToggleLoading = aliasDataProvider.isToggleLoading;
     final deleteAliasLoading = aliasDataProvider.deleteAliasLoading;
-    final deleteOrRestoreAlias = aliasDataProvider.deleteOrRestoreAlias;
-    final editDescription = aliasDataProvider.editDescription;
-    final sendFromAlias = aliasDataProvider.sendFromAlias;
 
-    final nicheMethod = NicheMethod();
-    final showToast = nicheMethod.showToast;
-    final copyOnTap = nicheMethod.copyOnTap;
+    final nicheMethod = context.read(nicheMethods);
 
     final customLoading = CustomLoadingIndicator().customLoadingIndicator();
-    final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
-    final isAliasDeleted = aliasDataModel.deletedAt != null;
+    final isAliasDeleted = alias.deletedAt != null;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context, aliasDataModel.id, isAliasDeleted),
+      appBar: buildAppBar(context),
       body: ListView(
         children: [
           AliasScreenPieChart(
-            emailsForwarded: aliasDataModel.emailsForwarded,
-            emailsBlocked: aliasDataModel.emailsBlocked,
-            emailsReplied: aliasDataModel.emailsReplied,
-            emailsSent: aliasDataModel.emailsSent,
+            emailsForwarded: alias.emailsForwarded,
+            emailsBlocked: alias.emailsBlocked,
+            emailsReplied: alias.emailsReplied,
+            emailsSent: alias.emailsSent,
           ),
           Divider(height: size.height * 0.03),
           Padding(
@@ -67,55 +56,49 @@ class AliasDetailScreen extends ConsumerWidget {
           SizedBox(height: size.height * 0.005),
           AliasDetailListTile(
             leadingIconData: Icons.alternate_email,
-            title: aliasDataModel.email,
+            title: alias.email,
             subtitle: 'Email',
             trailingIconData: Icons.copy,
-            trailingIconOnPress: () => copyOnTap(aliasDataModel.email),
+            trailingIconOnPress: () => nicheMethod.copyOnTap(alias.email),
           ),
           AliasDetailListTile(
             leadingIconData: Icons.mail_outline,
             title: 'Send email from this alias',
             subtitle: 'Send from',
             trailingIconData: Icons.send_outlined,
-            trailingIconOnPress: () => buildSendFromDialog(
-                context, sendFromAlias, aliasDataModel.email),
+            trailingIconOnPress: () => buildSendFromDialog(context),
           ),
           AliasDetailListTile(
             leadingIconData: Icons.toggle_on_outlined,
-            title: 'Alias is ${aliasDataModel.active ? 'active' : 'inactive'}',
+            title: 'Alias is ${alias.active ? 'active' : 'inactive'}',
             subtitle: 'Activity',
             trailing: Row(
               children: [
                 if (isToggleLoading) customLoading,
                 Switch.adaptive(
-                  value: aliasDataModel.active,
+                  value: alias.active,
                   onChanged: isAliasDeleted ? null : (toggle) {},
                 ),
               ],
             ),
             trailingIconOnPress: () {
               isAliasDeleted
-                  ? showToast(kRestoreBeforeActivate)
-                  : toggleAlias(context, aliasDataModel.id);
+                  ? nicheMethod.showToast(kRestoreBeforeActivate)
+                  : context
+                      .read(aliasStateManagerProvider)
+                      .toggleAlias(context, alias);
             },
           ),
           AliasDetailListTile(
             leadingIconData: Icons.comment_outlined,
-            title: aliasDataModel.description ?? 'No description',
+            title: alias.description ?? 'No description',
             subtitle: 'Description',
             trailingIconData: Icons.edit_outlined,
-            trailingIconOnPress: () {
-              buildEditDescriptionDialog(
-                context,
-                textEditingController,
-                editDescription,
-                aliasDataModel,
-              );
-            },
+            trailingIconOnPress: () => buildEditDescriptionDialog(context),
           ),
           AliasDetailListTile(
             leadingIconData: Icons.check_circle_outline,
-            title: aliasDataModel.extension,
+            title: alias.extension,
             subtitle: 'extension',
             trailingIconData: Icons.edit_outlined,
             trailingIconOnPress: () {},
@@ -137,10 +120,9 @@ class AliasDetailScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(
-                context, isAliasDeleted, deleteOrRestoreAlias, aliasDataModel),
+            trailingIconOnPress: () => buildDeleteOrRestoreAliasDialog(context),
           ),
-          if (aliasDataModel.recipients == null)
+          if (alias.recipients == null)
             Container()
           else
             Column(
@@ -152,18 +134,17 @@ class AliasDetailScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Default Recipient${aliasDataModel.recipients!.length >= 2 ? 's' : ''}',
+                        'Default Recipient${alias.recipients!.length >= 2 ? 's' : ''}',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       IconButton(
                         icon: Icon(Icons.edit_outlined),
-                        onPressed: () => buildUpdateDefaultRecipient(
-                            context, aliasDataModel),
+                        onPressed: () => buildUpdateDefaultRecipient(context),
                       ),
                     ],
                   ),
                 ),
-                if (aliasDataModel.recipients!.isEmpty)
+                if (alias.recipients!.isEmpty)
                   Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -173,9 +154,9 @@ class AliasDetailScreen extends ConsumerWidget {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: aliasDataModel.recipients!.length,
+                    itemCount: alias.recipients!.length,
                     itemBuilder: (context, index) {
-                      final recipients = aliasDataModel.recipients;
+                      final recipients = alias.recipients;
                       return RecipientListTile(
                         recipientDataModel: recipients![index],
                       );
@@ -189,16 +170,16 @@ class AliasDetailScreen extends ConsumerWidget {
             children: [
               AliasCreatedAtWidget(
                 label: 'Created:',
-                dateTime: aliasDataModel.createdAt,
+                dateTime: alias.createdAt,
               ),
-              aliasDataModel.deletedAt == null
+              alias.deletedAt == null
                   ? AliasCreatedAtWidget(
                       label: 'Updated:',
-                      dateTime: aliasDataModel.updatedAt,
+                      dateTime: alias.updatedAt,
                     )
                   : AliasCreatedAtWidget(
                       label: 'Deleted:',
-                      dateTime: aliasDataModel.deletedAt!,
+                      dateTime: alias.deletedAt!,
                     ),
             ],
           ),
@@ -208,43 +189,44 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  Future buildUpdateDefaultRecipient(
-      BuildContext context, Alias aliasDataModel) {
+  Future buildUpdateDefaultRecipient(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+          top: Radius.circular(kBottomSheetBorderRadius),
+        ),
       ),
       builder: (context) {
-        return AliasDefaultRecipientScreen(aliasDataModel);
+        return AliasDefaultRecipientScreen(alias);
       },
     );
   }
 
-  Future buildDeleteOrRestoreAliasDialog(BuildContext context, bool isDeleted,
-      Function deleteOrRestoreAlias, Alias aliasDataModel) {
-    deleteOrRestore() {
-      deleteOrRestoreAlias(
-        context,
-        isDeleted,
-        aliasDataModel.id,
-      );
+  Future buildDeleteOrRestoreAliasDialog(BuildContext context) {
+    final isIOS = context.read(targetedPlatform).isIOS();
+    final dialog = context.read(confirmationDialog);
+    final isDeleted = alias.deletedAt != null;
+
+    Future<void> deleteOrRestore() async {
+      await context
+          .read(aliasStateManagerProvider)
+          .deleteOrRestoreAlias(context, alias);
     }
 
     return showModal(
       context: context,
       builder: (context) {
         return isIOS
-            ? confirmationDialog.iOSAlertDialog(
+            ? dialog.iOSAlertDialog(
                 context,
                 isDeleted
                     ? kRestoreAliasConfirmation
                     : kDeleteAliasConfirmation,
                 deleteOrRestore,
                 '${isDeleted ? 'Restore' : 'Delete'} Alias')
-            : confirmationDialog.androidAlertDialog(
+            : dialog.androidAlertDialog(
                 context,
                 isDeleted
                     ? kRestoreAliasConfirmation
@@ -255,19 +237,13 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  Future buildSendFromDialog(
-      BuildContext context, Function sendFromAlias, String aliasEmail) {
+  Future buildSendFromDialog(BuildContext context) {
     final textEditingController = TextEditingController();
+    final aliasState = context.read(aliasStateManagerProvider);
 
-    final sendFromFormKey =
-        context.read(aliasStateManagerProvider).sendFromFormKey;
-
-    void generateAddress() {
-      sendFromAlias(
-        context,
-        aliasEmail,
-        textEditingController.text.trim(),
-      );
+    Future<void> generateAddress() async {
+      await aliasState.sendFromAlias(
+          context, alias.email, textEditingController.text.trim());
     }
 
     return showModalBottomSheet(
@@ -298,7 +274,7 @@ class AliasDetailScreen extends ConsumerWidget {
                     TextFormField(
                       enabled: false,
                       decoration: kTextFormFieldDecoration.copyWith(
-                        hintText: aliasEmail,
+                        hintText: alias.email,
                       ),
                     ),
                     SizedBox(height: size.height * 0.02),
@@ -308,7 +284,7 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                     SizedBox(height: size.height * 0.01),
                     Form(
-                      key: sendFromFormKey,
+                      key: aliasState.sendFromFormKey,
                       child: TextFormField(
                         autofocus: true,
                         controller: textEditingController,
@@ -341,16 +317,13 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  Future buildEditDescriptionDialog(
-      BuildContext context,
-      TextEditingController _textEditingController,
-      Function editDescription,
-      Alias aliasDataModel) {
-    final formKey = context.read(aliasStateManagerProvider).descriptionFormKey;
+  Future buildEditDescriptionDialog(BuildContext context) {
+    final aliasState = context.read(aliasStateManagerProvider);
+    final textController = aliasState.descriptionTextController;
 
-    void editDesc() {
-      editDescription(
-          context, aliasDataModel.id, _textEditingController.text.trim());
+    Future<void> editDesc() async {
+      await aliasState.editDescription(
+          context, alias, textController.text.trim());
     }
 
     return showModalBottomSheet(
@@ -378,16 +351,15 @@ class AliasDetailScreen extends ConsumerWidget {
                     Text(kUpdateDescriptionString),
                     SizedBox(height: size.height * 0.015),
                     Form(
-                      key: formKey,
+                      key: aliasState.descriptionFormKey,
                       child: TextFormField(
                         autofocus: true,
-                        controller: _textEditingController,
+                        controller: textController,
                         validator: (input) =>
                             FormValidator().validateDescriptionField(input!),
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
-                          hintText:
-                              aliasDataModel.description ?? 'No description',
+                          hintText: alias.description ?? 'No description',
                         ),
                       ),
                     ),
@@ -429,12 +401,16 @@ class AliasDetailScreen extends ConsumerWidget {
     );
   }
 
-  AppBar buildAppBar(BuildContext context, String aliasID, bool isDeleted) {
-    final confirmationDialog = ConfirmationDialog();
-    final isIOS = TargetedPlatform().isIOS();
+  AppBar buildAppBar(BuildContext context) {
+    final dialog = context.read(confirmationDialog);
+    final isIOS = context.read(targetedPlatform).isIOS();
 
-    void forget() {
-      context.read(aliasStateManagerProvider).forgetAlias(context, aliasID);
+    final isDeleted = alias.deletedAt != null;
+
+    Future<void> forget() async {
+      await context
+          .read(aliasStateManagerProvider)
+          .forgetAlias(context, alias.id);
       Navigator.pop(context);
     }
 
@@ -463,9 +439,9 @@ class AliasDetailScreen extends ConsumerWidget {
               context: context,
               builder: (context) {
                 return isIOS
-                    ? confirmationDialog.iOSAlertDialog(
+                    ? dialog.iOSAlertDialog(
                         context, kForgetAliasConfirmation, forget, kForgetAlias)
-                    : confirmationDialog.androidAlertDialog(context,
+                    : dialog.androidAlertDialog(context,
                         kForgetAliasConfirmation, forget, kForgetAlias);
               },
             );

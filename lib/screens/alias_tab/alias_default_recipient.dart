@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDefaultRecipientScreen extends StatefulWidget {
-  const AliasDefaultRecipientScreen(this.aliasDataModel);
-  final Alias aliasDataModel;
+  const AliasDefaultRecipientScreen(this.alias);
+  final Alias alias;
 
   @override
   _AliasDefaultRecipientScreenState createState() =>
@@ -55,7 +55,7 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setDefaultRecipients() {
-    final aliasDefaultRecipients = widget.aliasDataModel.recipients;
+    final aliasDefaultRecipients = widget.alias.recipients;
     for (Recipient verifiedRecipient in _verifiedRecipients) {
       for (Recipient recipient in aliasDefaultRecipients!) {
         if (recipient.email == verifiedRecipient.email) {
@@ -169,7 +169,7 @@ class _AliasDefaultRecipientScreenState
                     .read(aliasStateManagerProvider)
                     .updateAliasDefaultRecipient(
                       context,
-                      widget.aliasDataModel.id,
+                      widget.alias,
                       _selectedRecipientsID,
                     ),
               ),

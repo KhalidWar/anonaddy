@@ -41,7 +41,8 @@ Route<dynamic> router(RouteSettings settings) {
     case failedDeliveriesScreen:
       return customPageRoute(AlertCenterScreen());
     case aliasDetailedScreen:
-      return customPageRoute(AliasDetailScreen());
+      final argument = settings.arguments as Map<String, dynamic>;
+      return customPageRoute(AliasDetailScreen(argument['alias']));
     case recipientDetailedScreen:
       final argument = settings.arguments as Map<String, dynamic>;
       return customPageRoute(

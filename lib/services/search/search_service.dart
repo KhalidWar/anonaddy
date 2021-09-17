@@ -56,9 +56,8 @@ class SearchService extends SearchDelegate {
             ),
             onTap: () {
               SearchHistoryStorage.getAliasBoxes().add(resultsList[index]);
-              context.read(aliasStateManagerProvider).aliasDataModel =
-                  resultsList[index];
-              Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
+              Navigator.push(context,
+                  CustomPageRoute(AliasDetailScreen(resultsList[index])));
             },
           );
         },

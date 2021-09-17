@@ -18,7 +18,6 @@ class AliasStateManager extends ChangeNotifier {
     updateRecipientLoading = false;
   }
 
-  late Alias aliasDataModel;
   late bool isToggleLoading;
   late bool deleteAliasLoading;
   late bool updateRecipientLoading;
@@ -27,6 +26,7 @@ class AliasStateManager extends ChangeNotifier {
   List<Recipient> createAliasRecipients = [];
 
   final descriptionFormKey = GlobalKey<FormState>();
+  final descriptionTextController = TextEditingController();
   final sendFromFormKey = GlobalKey<FormState>();
   final _showToast = NicheMethod().showToast;
 
@@ -111,13 +111,12 @@ class AliasStateManager extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteOrRestoreAlias(
-      BuildContext context, bool isAliasDeleted, String aliasID) async {
+  Future<void> deleteOrRestoreAlias(BuildContext context, Alias alias) async {
     final aliasServices = context.read(aliasService);
     setDeleteAliasLoading = true;
-    if (!isAliasDeleted) {
+    if (alias.deletedAt == null) {
       Navigator.pop(context);
-      await aliasServices.deleteAlias(aliasID).then((value) {
+      await aliasServices.deleteAlias(alias.id).then((value) {
         _showToast(kDeleteAliasSuccess);
         setDeleteAliasLoading = false;
         Navigator.pop(context);
@@ -127,10 +126,10 @@ class AliasStateManager extends ChangeNotifier {
       });
     } else {
       Navigator.pop(context);
-      await aliasServices.restoreAlias(aliasID).then((value) {
+      await aliasServices.restoreAlias(alias.id).then((value) {
         _showToast(kRestoreAliasSuccess);
         setDeleteAliasLoading = false;
-        aliasDataModel = value;
+        alias.deletedAt = value.deletedAt;
       }).catchError((error) {
         _showToast(error.toString());
         setDeleteAliasLoading = false;
@@ -139,21 +138,21 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleAlias(BuildContext context, String aliasID) async {
+  Future<void> toggleAlias(BuildContext context, Alias alias) async {
     final aliasServices = context.read(aliasService);
     setToggleLoading = true;
-    if (aliasDataModel.active) {
-      await aliasServices.deactivateAlias(aliasID).then((value) {
+    if (alias.active) {
+      await aliasServices.deactivateAlias(alias.id).then((value) {
         _showToast(kDeactivateAliasSuccess);
-        aliasDataModel.active = false;
+        alias.active = false;
       }).catchError((error) {
         _showToast(error.toString());
       });
       setToggleLoading = false;
     } else {
-      await aliasServices.activateAlias(aliasID).then((value) {
+      await aliasServices.activateAlias(alias.id).then((value) {
         _showToast(kActivateAliasSuccess);
-        aliasDataModel.active = true;
+        alias.active = true;
       }).catchError((error) {
         _showToast(error.toString());
       });
@@ -162,18 +161,19 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> editDescription(
-      BuildContext context, String aliasID, String input) async {
+      BuildContext context, Alias alias, String input) async {
     if (descriptionFormKey.currentState!.validate()) {
       await context
           .read(aliasService)
-          .editAliasDescription(aliasID, input)
+          .editAliasDescription(alias.id, input)
           .then((value) {
         _showToast(kEditDescriptionSuccess);
-        aliasDataModel.description = value.description;
+        alias.description = value.description;
         notifyListeners();
       }).catchError((error) {
         _showToast(error.toString());
       });
+      descriptionTextController.clear();
       Navigator.pop(context);
     }
   }
@@ -213,13 +213,13 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> updateAliasDefaultRecipient(
-      BuildContext context, String aliasID, List<String> recipients) async {
+      BuildContext context, Alias alias, List<String> recipients) async {
     setUpdateRecipientLoading = true;
     await context
         .read(aliasService)
-        .updateAliasDefaultRecipient(aliasID, recipients)
+        .updateAliasDefaultRecipient(alias.id, recipients)
         .then((value) {
-      aliasDataModel.recipients = value.recipients;
+      alias.recipients = value.recipients;
       notifyListeners();
       _showToast(kUpdateAliasRecipientSuccess);
       setUpdateRecipientLoading = false;

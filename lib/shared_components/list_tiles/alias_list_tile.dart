@@ -63,8 +63,10 @@ class AliasListTile extends StatelessWidget {
         ),
       ),
       onTap: () {
-        aliasDataProvider.aliasDataModel = aliasData;
-        Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
+        Navigator.push(
+          context,
+          CustomPageRoute(AliasDetailScreen(aliasData)),
+        );
       },
     );
   }
