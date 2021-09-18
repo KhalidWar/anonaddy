@@ -1,23 +1,25 @@
 import 'package:anonaddy/screens/home_screen.dart';
+import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../global_providers.dart';
-
 class LoginStateManager extends ChangeNotifier {
-  LoginStateManager() {
+  LoginStateManager(
+      {required this.accessTokenService,
+      required this.secureStorage,
+      required this.showToast}) {
     _isLoading = false;
   }
 
-  late bool _isLoading;
+  final AccessTokenService accessTokenService;
+  final FlutterSecureStorage secureStorage;
+  final Function showToast;
 
-  final _showToast = NicheMethod().showToast;
+  late bool _isLoading;
 
   bool get isLoading => _isLoading;
   set isLoading(bool toggle) {
@@ -31,12 +33,11 @@ class LoginStateManager extends ChangeNotifier {
     Future<void> login() async {
       if (tokenFormKey.currentState!.validate()) {
         isLoading = true;
-        await context
-            .read(accessTokenService)
+        await accessTokenService
             .validateAccessToken(accessToken, instanceURL)
             .then((value) async {
           if (value == 200) {
-            await context.read(accessTokenService).saveLoginCredentials(
+            await accessTokenService.saveLoginCredentials(
                 accessToken, instanceURL ?? kAuthorityURL);
             isLoading = false;
             if (instanceURL != null) Navigator.pop(context);
@@ -47,7 +48,7 @@ class LoginStateManager extends ChangeNotifier {
           }
         }).catchError((error, stackTrace) {
           isLoading = false;
-          _showToast(error.toString());
+          showToast(error.toString());
         });
       }
     }
@@ -62,8 +63,7 @@ class LoginStateManager extends ChangeNotifier {
   }
 
   Future<void> logout(BuildContext context) async {
-    await FlutterSecureStorage()
-        .deleteAll()
-        .whenComplete(() => Phoenix.rebirth(context));
+    await secureStorage.deleteAll();
+    await Phoenix.rebirth(context);
   }
 }
