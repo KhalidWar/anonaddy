@@ -16,6 +16,7 @@ import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/services/data_storage/settings_data_storage.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
@@ -128,6 +129,11 @@ final customLoadingIndicator = Provider<CustomLoadingIndicator>((ref) {
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
   return SettingsDataStorage(secureStorage);
+});
+
+final searchHistoryStorage = Provider<SearchHistoryStorage>((ref) {
+  final secureStorage = ref.read(flutterSecureStorage);
+  return SearchHistoryStorage(secureStorage);
 });
 
 /// Notifier Providers

@@ -1,7 +1,6 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
-import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
@@ -60,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     checkIfAppUpdated();
-    SearchHistoryStorage().openSearchHiveBox();
+    context.read(searchHistoryStorage).openSearchHiveBox();
   }
 
   @override
