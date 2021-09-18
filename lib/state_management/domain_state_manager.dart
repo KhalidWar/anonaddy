@@ -17,9 +17,6 @@ class DomainStateManager extends ChangeNotifier {
   late bool _catchAllSwitchLoading;
   late bool _updateRecipientLoading;
 
-  final createDomainFormKey = GlobalKey<FormState>();
-  final descriptionFormKey = GlobalKey<FormState>();
-
   bool get activeSwitchLoading => _activeSwitchLoading;
   bool get catchAllSwitchLoading => _catchAllSwitchLoading;
   bool get updateRecipientLoading => _updateRecipientLoading;
@@ -82,6 +79,7 @@ class DomainStateManager extends ChangeNotifier {
   }
 
   Future<void> createNewDomain(BuildContext context, String domain) async {
+    final createDomainFormKey = GlobalKey<FormState>();
     if (createDomainFormKey.currentState!.validate()) {
       await domainService.createNewDomain(domain).then((domain) {
         showToast('domain added successfully!');
@@ -94,17 +92,15 @@ class DomainStateManager extends ChangeNotifier {
 
   Future editDescription(
       BuildContext context, Domain domain, description) async {
-    if (descriptionFormKey.currentState!.validate()) {
-      await domainService
-          .editDomainDescription(domain.id, description)
-          .then((data) {
-        Navigator.pop(context);
-        domain.description = data.description;
-        showToast('Description updated successfully!');
-      }).catchError((error) {
-        showToast(error.toString());
-      });
-    }
+    await domainService
+        .editDomainDescription(domain.id, description)
+        .then((data) {
+      Navigator.pop(context);
+      domain.description = data.description;
+      showToast('Description updated successfully!');
+    }).catchError((error) {
+      showToast(error.toString());
+    });
   }
 
   Future updateDomainDefaultRecipient(

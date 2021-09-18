@@ -29,7 +29,6 @@ class DomainDetailedScreen extends ConsumerWidget {
     final domainState = context.read(domainStateManagerProvider);
 
     final size = MediaQuery.of(context).size;
-    final textEditingController = TextEditingController();
 
     return Scaffold(
       appBar: buildAppBar(context),
@@ -62,8 +61,7 @@ class DomainDetailedScreen extends ConsumerWidget {
             leadingIconData: Icons.comment_outlined,
             trailing:
                 IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
-            trailingIconOnPress: () =>
-                buildEditDescriptionDialog(context, textEditingController),
+            trailingIconOnPress: () => buildEditDescriptionDialog(context),
           ),
           AliasDetailListTile(
             title: domain.active ? 'Domain is active' : 'Domain is inactive',
@@ -191,13 +189,16 @@ class DomainDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildEditDescriptionDialog(
-      BuildContext context, TextEditingController textEditingController) {
+  Future buildEditDescriptionDialog(BuildContext context) {
     final domainState = context.read(domainStateManagerProvider);
+    final formKey = GlobalKey<FormState>();
+
+    String description = '';
 
     Future<void> editDesc() async {
-      await domainState.editDescription(
-          context, domain, textEditingController.text.trim());
+      if (formKey.currentState!.validate()) {
+        await domainState.editDescription(context, domain, description);
+      }
     }
 
     return showModalBottomSheet(
@@ -225,13 +226,13 @@ class DomainDetailedScreen extends ConsumerWidget {
                     Text(kUpdateDescriptionString),
                     SizedBox(height: size.height * 0.015),
                     Form(
-                      key: domainState.descriptionFormKey,
+                      key: formKey,
                       child: TextFormField(
                         autofocus: true,
-                        controller: textEditingController,
                         validator: (input) => context
                             .read(formValidator)
                             .validateDescriptionField(input!),
+                        onChanged: (input) => description = input,
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: domain.description ?? kNoDescription,
