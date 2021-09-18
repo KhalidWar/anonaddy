@@ -6,7 +6,6 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -72,7 +71,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
             titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
             subtitle: 'Activity',
             leadingIconData: Icons.toggle_on_outlined,
-            trailing: buildSwitch(activeSwitchLoading, username.active),
+            trailing:
+                buildSwitch(context, activeSwitchLoading, username.active),
             trailingIconOnPress: () => toggleActivity(context, username.id),
           ),
           AliasDetailListTile(
@@ -80,7 +80,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
             titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
             subtitle: 'Catch All',
             leadingIconData: Icons.repeat,
-            trailing: buildSwitch(catchAllSwitchLoading, username.catchAll),
+            trailing:
+                buildSwitch(context, catchAllSwitchLoading, username.catchAll),
             trailingIconOnPress: () => toggleCatchAll(context, username.id),
           ),
           Divider(height: size.height * 0.02),
@@ -169,8 +170,9 @@ class UsernameDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildSwitch(bool switchLoading, bool switchValue) {
-    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+  Widget buildSwitch(BuildContext context, bool switchLoading, switchValue) {
+    final customLoading =
+        context.read(customLoadingIndicator).customLoadingIndicator();
     return Row(
       children: [
         switchLoading ? customLoading : Container(),

@@ -21,6 +21,7 @@ import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
+import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
 import 'package:anonaddy/state_management/domain_state_manager.dart';
@@ -117,6 +118,11 @@ final confirmationDialog =
 
 final apiMessageHandler =
     Provider<APIMessageHandler>((ref) => APIMessageHandler());
+
+final customLoadingIndicator = Provider<CustomLoadingIndicator>((ref) {
+  final isIOS = ref.read(targetedPlatform).isIOS();
+  return CustomLoadingIndicator(isIOS);
+});
 
 /// Notifier Providers
 final aliasStateManagerProvider =

@@ -6,7 +6,6 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -75,7 +74,7 @@ class DomainDetailedScreen extends ConsumerWidget {
             titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
             subtitle: 'Activity',
             leadingIconData: Icons.toggle_off_outlined,
-            trailing: buildSwitch(activeSwitchLoading, domain.active),
+            trailing: buildSwitch(context, activeSwitchLoading, domain.active),
             trailingIconOnPress: () => toggleActivity(context, domain.id),
           ),
           AliasDetailListTile(
@@ -83,7 +82,8 @@ class DomainDetailedScreen extends ConsumerWidget {
             titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
             subtitle: 'Catch All',
             leadingIconData: Icons.repeat,
-            trailing: buildSwitch(catchAllSwitchLoading, domain.catchAll),
+            trailing:
+                buildSwitch(context, catchAllSwitchLoading, domain.catchAll),
             trailingIconOnPress: () => toggleCatchAll(context, domain.id),
           ),
           if (domain.domainVerifiedAt == null)
@@ -180,8 +180,9 @@ class DomainDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildSwitch(bool switchLoading, bool switchValue) {
-    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+  Widget buildSwitch(BuildContext context, bool switchLoading, switchValue) {
+    final customLoading =
+        context.read(customLoadingIndicator).customLoadingIndicator();
     return Row(
       children: [
         switchLoading ? customLoading : Container(),

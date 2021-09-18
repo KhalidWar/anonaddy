@@ -1,10 +1,10 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomLoadingIndicator {
-  final _isIOS = TargetedPlatform().isIOS();
+  const CustomLoadingIndicator(this._isIOS);
+  final bool _isIOS;
 
   Widget customLoadingIndicator() {
     return _isIOS

@@ -1,7 +1,6 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +45,9 @@ class AddNewRecipient extends StatelessWidget {
                 ),
                 SizedBox(height: size.height * 0.02),
                 isLoading
-                    ? CustomLoadingIndicator().customLoadingIndicator()
+                    ? context
+                        .read(customLoadingIndicator)
+                        .customLoadingIndicator()
                     : ElevatedButton(
                         style: ElevatedButton.styleFrom().copyWith(
                           minimumSize: MaterialStateProperty.all(Size(200, 50)),

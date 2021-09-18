@@ -6,7 +6,6 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
@@ -122,7 +121,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
             subtitle: 'Encryption',
             trailing: recipientData.fingerprint == null
                 ? Container()
-                : buildSwitch(isLoading),
+                : buildSwitch(context, isLoading),
             trailingIconOnPress: recipientData.fingerprint == null
                 ? null
                 : () => toggleEncryption(context, recipientData.id),
@@ -191,11 +190,11 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Row buildSwitch(bool isLoading) {
+  Row buildSwitch(BuildContext context, bool isLoading) {
     return Row(
       children: [
         isLoading
-            ? CustomLoadingIndicator().customLoadingIndicator()
+            ? context.read(customLoadingIndicator).customLoadingIndicator()
             : Container(),
         Switch.adaptive(
           value: recipientData.shouldEncrypt,

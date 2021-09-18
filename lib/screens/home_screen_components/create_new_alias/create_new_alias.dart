@@ -4,7 +4,6 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -23,7 +22,6 @@ class CreateNewAlias extends StatefulWidget {
 }
 
 class _CreateNewAliasState extends State<CreateNewAlias> {
-  final customLoading = CustomLoadingIndicator().customLoadingIndicator();
   final descFieldController = TextEditingController();
   final customFieldController = TextEditingController();
   final customFormKey = GlobalKey<FormState>();
@@ -34,6 +32,9 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    final customLoading =
+        context.read(customLoadingIndicator).customLoadingIndicator();
 
     final user = context.read(accountStreamProvider).data!.value.account;
     final subscription = user.subscription;

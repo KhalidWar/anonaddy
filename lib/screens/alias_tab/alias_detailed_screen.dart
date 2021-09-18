@@ -6,7 +6,6 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
@@ -29,7 +28,8 @@ class AliasDetailScreen extends ConsumerWidget {
 
     final nicheMethod = context.read(nicheMethods);
 
-    final customLoading = CustomLoadingIndicator().customLoadingIndicator();
+    final customLoading =
+        context.read(customLoadingIndicator).customLoadingIndicator();
     final size = MediaQuery.of(context).size;
 
     final isAliasDeleted = alias.deletedAt != null;
