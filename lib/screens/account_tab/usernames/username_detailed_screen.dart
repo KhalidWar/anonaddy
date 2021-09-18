@@ -9,8 +9,6 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
-import 'package:anonaddy/utilities/confirmation_dialog.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,20 +16,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../global_providers.dart';
 
 class UsernameDetailedScreen extends ConsumerWidget {
+  const UsernameDetailedScreen({required this.username});
+  final Username username;
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final usernameProvider = watch(usernameStateManagerProvider);
-    final username = usernameProvider.usernameModel;
     final activeSwitchLoading = usernameProvider.activeSwitchLoading;
     final catchAllSwitchLoading = usernameProvider.catchAllSwitchLoading;
-    final toggleActivity = usernameProvider.toggleActivity;
-    final toggleCatchAll = usernameProvider.toggleCatchAll;
+
+    final usernameState = context.read(usernameStateManagerProvider);
 
     final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: buildAppBar(context, username.id),
+      appBar: buildAppBar(context),
       body: ListView(
         children: [
           Padding(
@@ -61,8 +61,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
             leadingIconData: Icons.comment_outlined,
             trailing:
                 IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
-            trailingIconOnPress: () => buildEditDescriptionDialog(
-                context, textEditingController, username),
+            trailingIconOnPress: () =>
+                buildEditDescriptionDialog(context, textEditingController),
           ),
           AliasDetailListTile(
             title:
@@ -72,7 +72,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
             leadingIconData: Icons.toggle_on_outlined,
             trailing:
                 buildSwitch(context, activeSwitchLoading, username.active),
-            trailingIconOnPress: () => toggleActivity(context, username.id),
+            trailingIconOnPress: () =>
+                usernameState.toggleActivity(context, username),
           ),
           AliasDetailListTile(
             title: username.catchAll ? 'Enabled' : 'Disabled',
@@ -81,7 +82,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
             leadingIconData: Icons.repeat,
             trailing:
                 buildSwitch(context, catchAllSwitchLoading, username.catchAll),
-            trailingIconOnPress: () => toggleCatchAll(context, username.id),
+            trailingIconOnPress: () =>
+                usernameState.toggleCatchAll(context, username),
           ),
           Divider(height: size.height * 0.02),
           Column(
@@ -183,11 +185,13 @@ class UsernameDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildEditDescriptionDialog(BuildContext context,
-      TextEditingController textEditingController, Username username) {
-    void editDesc() {
-      context.read(usernameStateManagerProvider).editDescription(
-          context, username.id, textEditingController.text.trim());
+  Future buildEditDescriptionDialog(
+      BuildContext context, TextEditingController textEditingController) {
+    final usernameState = context.read(usernameStateManagerProvider);
+
+    Future<void> editDesc() async {
+      await usernameState.editDescription(
+          context, username, textEditingController.text.trim());
     }
 
     return showModalBottomSheet(
@@ -215,9 +219,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                     Text(kUpdateDescriptionString),
                     SizedBox(height: size.height * 0.015),
                     Form(
-                      key: context
-                          .read(usernameStateManagerProvider)
-                          .editDescriptionFormKey,
+                      key: usernameState.editDescriptionFormKey,
                       child: TextFormField(
                         autofocus: true,
                         controller: textEditingController,
@@ -261,14 +263,14 @@ class UsernameDetailedScreen extends ConsumerWidget {
     );
   }
 
-  AppBar buildAppBar(BuildContext context, String usernameID) {
-    final isIOS = TargetedPlatform().isIOS();
-    final confirmationDialog = ConfirmationDialog();
+  AppBar buildAppBar(BuildContext context) {
+    final isIOS = context.read(targetedPlatform).isIOS();
+    final dialog = context.read(confirmationDialog);
 
-    void deleteUsername() {
-      context
+    Future<void> deleteUsername() async {
+      await context
           .read(usernameStateManagerProvider)
-          .deleteUsername(context, usernameID);
+          .deleteUsername(context, username);
     }
 
     return AppBar(
@@ -293,12 +295,12 @@ class UsernameDetailedScreen extends ConsumerWidget {
               context: context,
               builder: (context) {
                 return isIOS
-                    ? confirmationDialog.iOSAlertDialog(
+                    ? dialog.iOSAlertDialog(
                         context,
                         kDeleteUsernameConfirmation,
                         deleteUsername,
                         'Delete Username')
-                    : confirmationDialog.androidAlertDialog(
+                    : dialog.androidAlertDialog(
                         context,
                         kDeleteUsernameConfirmation,
                         deleteUsername,

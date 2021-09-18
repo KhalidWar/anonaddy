@@ -195,7 +195,7 @@ class _AliasDefaultRecipientScreenState
                     .read(usernameStateManagerProvider)
                     .updateDefaultRecipient(
                       context,
-                      widget.username.id,
+                      widget.username,
                       selectedRecipient == null ? '' : selectedRecipient!.id,
                     ),
               ),

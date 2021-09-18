@@ -73,11 +73,10 @@ class AdditionalUsername extends ConsumerWidget {
                     ),
                   ),
                   onTap: () {
-                    context.read(usernameStateManagerProvider).usernameModel =
-                        username;
                     Navigator.push(
                       context,
-                      CustomPageRoute(UsernameDetailedScreen()),
+                      CustomPageRoute(
+                          UsernameDetailedScreen(username: username)),
                     );
                   },
                 );

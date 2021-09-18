@@ -13,8 +13,6 @@ class UsernameStateManager extends ChangeNotifier {
     updateRecipientLoading = false;
   }
 
-  late Username usernameModel;
-
   late bool _activeSwitchLoading;
   late bool _catchAllSwitchLoading;
   late bool _updateRecipientLoading;
@@ -42,20 +40,22 @@ class UsernameStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleActivity(BuildContext context, String usernameID) async {
+  Future<void> toggleActivity(BuildContext context, Username username) async {
     final usernameProvider = context.read(usernameService);
     activeSwitchLoading = true;
-    if (usernameModel.active) {
-      await usernameProvider.deactivateUsername(usernameID).then((username) {
+    if (username.active) {
+      await usernameProvider
+          .deactivateUsername(username.id)
+          .then((newUsername) {
         _showToast('Username Deactivated Successfully!');
-        usernameModel.active = false;
+        username.active = false;
       }).catchError((error) {
         _showToast(error.toString());
       });
       activeSwitchLoading = false;
     } else {
-      await usernameProvider.activateUsername(usernameID).then((username) {
-        usernameModel.active = username.active;
+      await usernameProvider.activateUsername(username.id).then((newUsername) {
+        username.active = newUsername.active;
         _showToast('Username Activated Successfully!');
       }).catchError((error) {
         _showToast(error.toString());
@@ -64,20 +64,22 @@ class UsernameStateManager extends ChangeNotifier {
     }
   }
 
-  Future<void> toggleCatchAll(BuildContext context, String usernameID) async {
+  Future<void> toggleCatchAll(BuildContext context, Username username) async {
     final usernameProvider = context.read(usernameService);
     catchAllSwitchLoading = true;
-    if (usernameModel.catchAll) {
-      await usernameProvider.deactivateCatchAll(usernameID).then((username) {
+    if (username.catchAll) {
+      await usernameProvider
+          .deactivateCatchAll(username.id)
+          .then((newUsername) {
         _showToast('Catch All Deactivated Successfully!');
-        usernameModel.catchAll = false;
+        username.catchAll = false;
       }).catchError((error) {
         _showToast(error.toString());
       });
       catchAllSwitchLoading = false;
     } else {
-      await usernameProvider.activateCatchAll(usernameID).then((username) {
-        usernameModel.catchAll = username.catchAll;
+      await usernameProvider.activateCatchAll(username.id).then((newUsername) {
+        username.catchAll = newUsername.catchAll;
         _showToast('Catch All Activated Successfully!');
       }).catchError((error) {
         _showToast(error.toString());
@@ -100,14 +102,15 @@ class UsernameStateManager extends ChangeNotifier {
     }
   }
 
-  Future editDescription(BuildContext context, usernameID, description) async {
+  Future editDescription(
+      BuildContext context, Username username, description) async {
     if (editDescriptionFormKey.currentState!.validate()) {
       await context
           .read(usernameService)
-          .editUsernameDescription(usernameID, description)
-          .then((username) {
+          .editUsernameDescription(username.id, description)
+          .then((newUsername) {
         Navigator.pop(context);
-        usernameModel.description = username.description;
+        username.description = newUsername.description;
         _showToast('Description updated successfully!');
       }).catchError((error) {
         _showToast(error.toString());
@@ -116,14 +119,14 @@ class UsernameStateManager extends ChangeNotifier {
   }
 
   Future updateDefaultRecipient(
-      BuildContext context, usernameID, recipientID) async {
+      BuildContext context, Username username, String recipientID) async {
     updateRecipientLoading = true;
     await context
         .read(usernameService)
-        .updateDefaultRecipient(usernameID, recipientID)
-        .then((username) {
+        .updateDefaultRecipient(username.id, recipientID)
+        .then((newUsername) {
       updateRecipientLoading = false;
-      usernameModel.defaultRecipient = username.defaultRecipient;
+      username.defaultRecipient = newUsername.defaultRecipient;
       notifyListeners();
       _showToast('Default recipient updated successfully!');
       Navigator.pop(context);
@@ -133,12 +136,12 @@ class UsernameStateManager extends ChangeNotifier {
     });
   }
 
-  Future<void> deleteUsername(BuildContext context, String usernameID) async {
+  Future<void> deleteUsername(BuildContext context, Username username) async {
     Navigator.pop(context);
     await context
         .read(usernameService)
-        .deleteUsername(usernameID)
-        .then((username) {
+        .deleteUsername(username.id)
+        .then((newUsername) {
       Navigator.pop(context);
       _showToast('Username deleted successfully!');
     }).catchError((error) {

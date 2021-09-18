@@ -46,9 +46,11 @@ Route<dynamic> router(RouteSettings settings) {
     case recipientDetailedScreen:
       final argument = settings.arguments as Map<String, dynamic>;
       return customPageRoute(
-          RecipientDetailedScreen(recipientData: argument['recipient']));
+          RecipientDetailedScreen(recipient: argument['recipient']));
     case usernameDetailedScreen:
-      return customPageRoute(UsernameDetailedScreen());
+      final argument = settings.arguments as Map<String, dynamic>;
+      return customPageRoute(
+          UsernameDetailedScreen(username: argument['username']));
     case domainDetailedScreen:
       final argument = settings.arguments as Map<String, dynamic>;
       return customPageRoute(DomainDetailedScreen(domain: argument['domain']));
