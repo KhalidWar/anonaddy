@@ -150,8 +150,15 @@ final usernameStateManagerProvider = ChangeNotifierProvider((ref) {
 final loginStateManagerProvider =
     ChangeNotifierProvider((ref) => LoginStateManager());
 
-final recipientStateManagerProvider =
-    ChangeNotifierProvider((ref) => RecipientStateManager());
+final recipientStateManagerProvider = ChangeNotifierProvider((ref) {
+  final services = ref.read(recipientService);
+  final methods = ref.read(nicheMethods);
+
+  return RecipientStateManager(
+    recipientService: services,
+    showToast: methods.showToast,
+  );
+});
 
 final settingsStateManagerProvider =
     ChangeNotifierProvider((ref) => SettingsStateManager());
