@@ -1,6 +1,5 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,7 @@ class ChangeInstanceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final validator = context.read(formValidator);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -50,7 +50,7 @@ class ChangeInstanceScreen extends StatelessWidget {
                           key: _urlFormKey,
                           child: TextFormField(
                             validator: (input) =>
-                                FormValidator().validateInstanceURL(input!),
+                                validator.validateInstanceURL(input!),
                             controller: _urlEditingController,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.multiline,
@@ -87,7 +87,7 @@ class ChangeInstanceScreen extends StatelessWidget {
                           key: _tokenFormKey,
                           child: TextFormField(
                             validator: (input) =>
-                                FormValidator().accessTokenValidator(input!),
+                                validator.accessTokenValidator(input!),
                             controller: _tokenEditingController,
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.multiline,

@@ -10,7 +10,6 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -232,8 +231,9 @@ class DomainDetailedScreen extends ConsumerWidget {
                       child: TextFormField(
                         autofocus: true,
                         controller: textEditingController,
-                        validator: (input) =>
-                            FormValidator().validateDescriptionField(input!),
+                        validator: (input) => context
+                            .read(formValidator)
+                            .validateDescriptionField(input!),
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: domain.description ?? kNoDescription,

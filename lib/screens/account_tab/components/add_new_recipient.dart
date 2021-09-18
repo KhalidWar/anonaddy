@@ -1,7 +1,6 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,7 +36,7 @@ class AddNewRecipient extends StatelessWidget {
                     autofocus: true,
                     controller: textEditController,
                     validator: (input) =>
-                        FormValidator().validateEmailField(input!),
+                        context.read(formValidator).validateEmailField(input!),
                     textInputAction: TextInputAction.next,
                     decoration: kTextFormFieldDecoration.copyWith(
                         hintText: 'joedoe@example.com'),

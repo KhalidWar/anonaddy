@@ -6,7 +6,6 @@ import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.d
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -139,7 +138,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                                   key: customFormKey,
                                   child: TextFormField(
                                     controller: customFieldController,
-                                    validator: (input) => FormValidator()
+                                    validator: (input) => context
+                                        .read(formValidator)
                                         .validateLocalPart(input!),
                                     textInputAction: TextInputAction.next,
                                     decoration:

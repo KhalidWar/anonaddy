@@ -9,7 +9,6 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -288,8 +287,9 @@ class AliasDetailScreen extends ConsumerWidget {
                       child: TextFormField(
                         autofocus: true,
                         controller: textEditingController,
-                        validator: (input) =>
-                            FormValidator().validateEmailField(input!),
+                        validator: (input) => context
+                            .read(formValidator)
+                            .validateEmailField(input!),
                         onFieldSubmitted: (toggle) => generateAddress(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: 'Enter email...',
@@ -355,8 +355,9 @@ class AliasDetailScreen extends ConsumerWidget {
                       child: TextFormField(
                         autofocus: true,
                         controller: textController,
-                        validator: (input) =>
-                            FormValidator().validateDescriptionField(input!),
+                        validator: (input) => context
+                            .read(formValidator)
+                            .validateDescriptionField(input!),
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: alias.description ?? 'No description',

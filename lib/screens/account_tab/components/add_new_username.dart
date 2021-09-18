@@ -1,7 +1,6 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,8 +39,9 @@ class AddNewUsername extends StatelessWidget {
                   child: TextFormField(
                     autofocus: true,
                     controller: _textEditController,
-                    validator: (input) =>
-                        FormValidator().validateUsernameInput(input!),
+                    validator: (input) => context
+                        .read(formValidator)
+                        .validateUsernameInput(input!),
                     onFieldSubmitted: (toggle) => createUsername(),
                     decoration: kTextFormFieldDecoration.copyWith(
                       hintText: 'johndoe',

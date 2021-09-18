@@ -4,7 +4,6 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/login_state_manager.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -111,7 +110,7 @@ class TokenLoginScreen extends ConsumerWidget {
             child: TextFormField(
               key: Key('loginTextField'),
               validator: (input) =>
-                  FormValidator().accessTokenValidator(input!),
+                  context.read(formValidator).accessTokenValidator(input!),
               controller: _textEditingController,
               onFieldSubmitted: (input) => loginManager.login(
                   context, _textEditingController.text.trim(), _formKey),

@@ -10,7 +10,6 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
@@ -292,8 +291,9 @@ class RecipientDetailedScreen extends ConsumerWidget {
                       child: TextFormField(
                         autofocus: true,
                         controller: _texEditingController,
-                        validator: (input) =>
-                            FormValidator().validatePGPKeyField(input!),
+                        validator: (input) => context
+                            .read(formValidator)
+                            .validatePGPKeyField(input!),
                         minLines: 4,
                         maxLines: 5,
                         textInputAction: TextInputAction.done,
