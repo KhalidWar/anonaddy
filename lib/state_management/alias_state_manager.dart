@@ -4,29 +4,27 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../global_providers.dart';
 
 class AliasStateManager extends ChangeNotifier {
-  AliasStateManager({required this.aliasService, required this.nicheMethod}) {
+  AliasStateManager(
+      {required this.aliasService,
+      required this.showToast,
+      required this.isAutoCopy}) {
     isToggleLoading = false;
     deleteAliasLoading = false;
     updateRecipientLoading = false;
-    _showToast = nicheMethod.showToast;
   }
 
   final AliasService aliasService;
-  final NicheMethod nicheMethod;
+  final Function showToast;
+  final bool isAutoCopy;
 
   late bool isToggleLoading;
   late bool deleteAliasLoading;
   late bool updateRecipientLoading;
-  late final _showToast;
 
   String? _aliasDomain;
   String? _aliasFormat;
@@ -78,7 +76,6 @@ class AliasStateManager extends ChangeNotifier {
       String format,
       String localPart,
       GlobalKey<FormState> customFormKey) async {
-    final settings = context.read(settingsStateManagerProvider);
     final recipients = <String>[];
     createAliasRecipients.forEach((element) => recipients.add(element.id));
 
@@ -87,15 +84,15 @@ class AliasStateManager extends ChangeNotifier {
       await aliasService
           .createNewAlias(desc, domain, format, localPart, recipients)
           .then((value) {
-        if (settings.isAutoCopy) {
+        if (isAutoCopy) {
           Clipboard.setData(ClipboardData(text: value.email));
-          _showToast(kCreateAliasAndCopyEmail);
+          showToast(kCreateAliasAndCopyEmail);
         } else {
-          _showToast(kCreateAliasSuccess);
+          showToast(kCreateAliasSuccess);
         }
         createAliasRecipients.clear();
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       setToggleLoading = false;
       Navigator.pop(context);
@@ -117,21 +114,21 @@ class AliasStateManager extends ChangeNotifier {
     if (alias.deletedAt == null) {
       Navigator.pop(context);
       await aliasService.deleteAlias(alias.id).then((value) {
-        _showToast(kDeleteAliasSuccess);
+        showToast(kDeleteAliasSuccess);
         setDeleteAliasLoading = false;
         Navigator.pop(context);
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
         setDeleteAliasLoading = false;
       });
     } else {
       Navigator.pop(context);
       await aliasService.restoreAlias(alias.id).then((value) {
-        _showToast(kRestoreAliasSuccess);
+        showToast(kRestoreAliasSuccess);
         setDeleteAliasLoading = false;
         alias.deletedAt = value.deletedAt;
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
         setDeleteAliasLoading = false;
       });
     }
@@ -142,18 +139,18 @@ class AliasStateManager extends ChangeNotifier {
     setToggleLoading = true;
     if (alias.active) {
       await aliasService.deactivateAlias(alias.id).then((value) {
-        _showToast(kDeactivateAliasSuccess);
+        showToast(kDeactivateAliasSuccess);
         alias.active = false;
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       setToggleLoading = false;
     } else {
       await aliasService.activateAlias(alias.id).then((value) {
-        _showToast(kActivateAliasSuccess);
+        showToast(kActivateAliasSuccess);
         alias.active = true;
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       setToggleLoading = false;
     }
@@ -162,22 +159,22 @@ class AliasStateManager extends ChangeNotifier {
   Future<void> editDescription(
       BuildContext context, Alias alias, String input) async {
     await aliasService.editAliasDescription(alias.id, input).then((value) {
-      _showToast(kEditDescriptionSuccess);
+      showToast(kEditDescriptionSuccess);
       alias.description = value.description;
       notifyListeners();
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
     });
     Navigator.pop(context);
   }
 
   Future<void> clearDescription(BuildContext context, Alias alias) async {
     await aliasService.editAliasDescription(alias.id, '').then((value) {
-      _showToast(kClearDescriptionSuccess);
+      showToast(kClearDescriptionSuccess);
       alias.description = value.description;
       notifyListeners();
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
     });
     Navigator.pop(context);
   }
@@ -193,10 +190,10 @@ class AliasStateManager extends ChangeNotifier {
 
     await Clipboard.setData(ClipboardData(text: generatedAddress))
         .then((value) {
-      _showToast(kSendFromAliasSuccess);
+      showToast(kSendFromAliasSuccess);
       Navigator.pop(context);
     }).catchError((error) {
-      _showToast(kSomethingWentWrong);
+      showToast(kSomethingWentWrong);
     });
   }
 
@@ -208,20 +205,20 @@ class AliasStateManager extends ChangeNotifier {
         .then((value) {
       alias.recipients = value.recipients;
       notifyListeners();
-      _showToast(kUpdateAliasRecipientSuccess);
+      showToast(kUpdateAliasRecipientSuccess);
       setUpdateRecipientLoading = false;
       Navigator.pop(context);
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
       setUpdateRecipientLoading = false;
     });
   }
 
   Future<void> forgetAlias(BuildContext context, String aliasID) async {
     await aliasService.forgetAlias(aliasID).then((value) {
-      _showToast(kForgetAliasSuccess);
+      showToast(kForgetAliasSuccess);
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
     });
     Navigator.pop(context);
   }
