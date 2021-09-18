@@ -163,8 +163,15 @@ final recipientStateManagerProvider = ChangeNotifierProvider((ref) {
 final settingsStateManagerProvider =
     ChangeNotifierProvider((ref) => SettingsStateManager());
 
-final domainStateManagerProvider =
-    ChangeNotifierProvider((ref) => DomainStateManager());
+final domainStateManagerProvider = ChangeNotifierProvider((ref) {
+  final services = ref.read(domainService);
+  final methods = ref.read(nicheMethods);
+
+  return DomainStateManager(
+    domainService: services,
+    showToast: methods.showToast,
+  );
+});
 
 /// State Providers
 final connectivityState = Provider((ref) => ConnectivityState(Connectivity()));
