@@ -17,9 +17,6 @@ class RecipientStateManager extends ChangeNotifier {
 
   late bool _isLoading;
 
-  final recipientFormKey = GlobalKey<FormState>();
-  final pgpKeyFormKey = GlobalKey<FormState>();
-
   bool get isLoading => _isLoading;
 
   set isLoading(bool value) {
@@ -55,18 +52,14 @@ class RecipientStateManager extends ChangeNotifier {
 
   Future<void> addPublicGPGKey(
       BuildContext context, Recipient recipient, String keyData) async {
-    if (pgpKeyFormKey.currentState!.validate()) {
-      await recipientService
-          .addPublicGPGKey(recipient.id, keyData)
-          .then((value) {
-        showToast(kAddGPGKeySuccess);
-        setFingerprint(recipient, value.fingerprint);
-        recipient.shouldEncrypt = value.shouldEncrypt;
-        Navigator.pop(context);
-      }).catchError((error) {
-        showToast(error.toString());
-      });
-    }
+    await recipientService.addPublicGPGKey(recipient.id, keyData).then((value) {
+      showToast(kAddGPGKeySuccess);
+      setFingerprint(recipient, value.fingerprint);
+      recipient.shouldEncrypt = value.shouldEncrypt;
+      Navigator.pop(context);
+    }).catchError((error) {
+      showToast(error.toString());
+    });
   }
 
   Future<void> removePublicGPGKey(
@@ -91,16 +84,14 @@ class RecipientStateManager extends ChangeNotifier {
   }
 
   Future<void> addRecipient(BuildContext context, String email) async {
-    if (recipientFormKey.currentState!.validate()) {
-      isLoading = true;
-      await recipientService.addRecipient(email).then((value) {
-        showToast('Recipient added successfully!');
-      }).catchError((error) {
-        showToast(error.toString());
-      });
-      isLoading = false;
-      Navigator.pop(context);
-    }
+    isLoading = true;
+    await recipientService.addRecipient(email).then((value) {
+      showToast('Recipient added successfully!');
+    }).catchError((error) {
+      showToast(error.toString());
+    });
+    isLoading = false;
+    Navigator.pop(context);
   }
 
   Future<void> removeRecipient(

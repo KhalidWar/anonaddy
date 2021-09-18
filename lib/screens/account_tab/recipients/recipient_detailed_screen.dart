@@ -246,12 +246,15 @@ class RecipientDetailedScreen extends ConsumerWidget {
   }
 
   Future buildAddPGPKeyDialog(BuildContext context) {
-    final _texEditingController = TextEditingController();
     final recipientState = context.read(recipientStateManagerProvider);
+    final formKey = GlobalKey<FormState>();
+
+    String keyData = '';
 
     Future<void> addPublicKey() async {
-      await recipientState.addPublicGPGKey(
-          context, recipient, _texEditingController.text);
+      if (formKey.currentState!.validate()) {
+        await recipientState.addPublicGPGKey(context, recipient, keyData);
+      }
     }
 
     return showModalBottomSheet(
@@ -278,16 +281,16 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     Text(kAddPublicKeyNote),
                     SizedBox(height: size.height * 0.015),
                     Form(
-                      key: recipientState.pgpKeyFormKey,
+                      key: formKey,
                       child: TextFormField(
                         autofocus: true,
-                        controller: _texEditingController,
                         validator: (input) => context
                             .read(formValidator)
                             .validatePGPKeyField(input!),
                         minLines: 4,
                         maxLines: 5,
                         textInputAction: TextInputAction.done,
+                        onChanged: (input) => keyData = input,
                         onFieldSubmitted: (submit) => addPublicKey(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           contentPadding: EdgeInsets.all(5),

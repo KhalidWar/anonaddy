@@ -13,6 +13,7 @@ class AddNewRecipient extends StatefulWidget {
 
 class _AddNewRecipientState extends State<AddNewRecipient> {
   final _textEditController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -24,6 +25,13 @@ class _AddNewRecipientState extends State<AddNewRecipient> {
   Widget build(BuildContext context) {
     final recipientManager = context.read(recipientStateManagerProvider);
     final size = MediaQuery.of(context).size;
+
+    Future<void> addRecipient() async {
+      if (_formKey.currentState!.validate()) {
+        await recipientManager.addRecipient(
+            context, _textEditController.text.trim());
+      }
+    }
 
     return Container(
       padding:
@@ -39,7 +47,7 @@ class _AddNewRecipientState extends State<AddNewRecipient> {
                 Text(kAddRecipientString),
                 SizedBox(height: size.height * 0.02),
                 Form(
-                  key: recipientManager.recipientFormKey,
+                  key: _formKey,
                   child: TextFormField(
                     autofocus: true,
                     controller: _textEditController,
@@ -60,8 +68,7 @@ class _AddNewRecipientState extends State<AddNewRecipient> {
                           minimumSize: MaterialStateProperty.all(Size(200, 50)),
                         ),
                         child: Text('Add Recipient'),
-                        onPressed: () => recipientManager.addRecipient(
-                            context, _textEditController.text.trim()),
+                        onPressed: () => addRecipient(),
                       ),
               ],
             ),
