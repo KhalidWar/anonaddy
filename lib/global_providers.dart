@@ -125,11 +125,11 @@ final customLoadingIndicator = Provider<CustomLoadingIndicator>((ref) {
 });
 
 /// Notifier Providers
-final aliasStateManagerProvider =
-    ChangeNotifierProvider((ref) {
-      final methods = ref.read(nicheMethods);
-      return AliasStateManager(nicheMethod: methods);
-    });
+final aliasStateManagerProvider = ChangeNotifierProvider((ref) {
+  final methods = ref.read(nicheMethods);
+  final service = ref.read(aliasService);
+  return AliasStateManager(nicheMethod: methods, aliasService: service);
+});
 
 final usernameStateManagerProvider =
     ChangeNotifierProvider((ref) => UsernameStateManager());

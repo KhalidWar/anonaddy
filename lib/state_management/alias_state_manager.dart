@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -12,13 +13,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../global_providers.dart';
 
 class AliasStateManager extends ChangeNotifier {
-  AliasStateManager({required this.nicheMethod}) {
+  AliasStateManager({required this.aliasService, required this.nicheMethod}) {
     isToggleLoading = false;
     deleteAliasLoading = false;
     updateRecipientLoading = false;
     _showToast = nicheMethod.showToast;
   }
 
+  final AliasService aliasService;
   final NicheMethod nicheMethod;
 
   late bool isToggleLoading;
@@ -82,8 +84,7 @@ class AliasStateManager extends ChangeNotifier {
 
     Future<void> createAlias() async {
       setToggleLoading = true;
-      await context
-          .read(aliasService)
+      await aliasService
           .createNewAlias(desc, domain, format, localPart, recipients)
           .then((value) {
         if (settings.isAutoCopy) {
@@ -112,11 +113,10 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> deleteOrRestoreAlias(BuildContext context, Alias alias) async {
-    final aliasServices = context.read(aliasService);
     setDeleteAliasLoading = true;
     if (alias.deletedAt == null) {
       Navigator.pop(context);
-      await aliasServices.deleteAlias(alias.id).then((value) {
+      await aliasService.deleteAlias(alias.id).then((value) {
         _showToast(kDeleteAliasSuccess);
         setDeleteAliasLoading = false;
         Navigator.pop(context);
@@ -126,7 +126,7 @@ class AliasStateManager extends ChangeNotifier {
       });
     } else {
       Navigator.pop(context);
-      await aliasServices.restoreAlias(alias.id).then((value) {
+      await aliasService.restoreAlias(alias.id).then((value) {
         _showToast(kRestoreAliasSuccess);
         setDeleteAliasLoading = false;
         alias.deletedAt = value.deletedAt;
@@ -139,10 +139,9 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> toggleAlias(BuildContext context, Alias alias) async {
-    final aliasServices = context.read(aliasService);
     setToggleLoading = true;
     if (alias.active) {
-      await aliasServices.deactivateAlias(alias.id).then((value) {
+      await aliasService.deactivateAlias(alias.id).then((value) {
         _showToast(kDeactivateAliasSuccess);
         alias.active = false;
       }).catchError((error) {
@@ -150,7 +149,7 @@ class AliasStateManager extends ChangeNotifier {
       });
       setToggleLoading = false;
     } else {
-      await aliasServices.activateAlias(alias.id).then((value) {
+      await aliasService.activateAlias(alias.id).then((value) {
         _showToast(kActivateAliasSuccess);
         alias.active = true;
       }).catchError((error) {
@@ -162,10 +161,7 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> editDescription(
       BuildContext context, Alias alias, String input) async {
-    await context
-        .read(aliasService)
-        .editAliasDescription(alias.id, input)
-        .then((value) {
+    await aliasService.editAliasDescription(alias.id, input).then((value) {
       _showToast(kEditDescriptionSuccess);
       alias.description = value.description;
       notifyListeners();
@@ -176,10 +172,7 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> clearDescription(BuildContext context, Alias alias) async {
-    await context
-        .read(aliasService)
-        .editAliasDescription(alias.id, '')
-        .then((value) {
+    await aliasService.editAliasDescription(alias.id, '').then((value) {
       _showToast(kClearDescriptionSuccess);
       alias.description = value.description;
       notifyListeners();
@@ -210,8 +203,7 @@ class AliasStateManager extends ChangeNotifier {
   Future<void> updateAliasDefaultRecipient(
       BuildContext context, Alias alias, List<String> recipients) async {
     setUpdateRecipientLoading = true;
-    await context
-        .read(aliasService)
+    await aliasService
         .updateAliasDefaultRecipient(alias.id, recipients)
         .then((value) {
       alias.recipients = value.recipients;
@@ -226,7 +218,7 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> forgetAlias(BuildContext context, String aliasID) async {
-    await context.read(aliasService).forgetAlias(aliasID).then((value) {
+    await aliasService.forgetAlias(aliasID).then((value) {
       _showToast(kForgetAliasSuccess);
     }).catchError((error) {
       _showToast(error.toString());
