@@ -13,8 +13,6 @@ class DomainStateManager extends ChangeNotifier {
     updateRecipientLoading = false;
   }
 
-  late Domain domain;
-
   late bool _activeSwitchLoading;
   late bool _catchAllSwitchLoading;
   late bool _updateRecipientLoading;
@@ -42,11 +40,11 @@ class DomainStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleActivity(BuildContext context, String domainID) async {
+  Future<void> toggleActivity(BuildContext context, Domain domain) async {
     final domainProvider = context.read(domainService);
     activeSwitchLoading = true;
     if (domain.active) {
-      await domainProvider.deactivateDomain(domainID).then((data) {
+      await domainProvider.deactivateDomain(domain.id).then((data) {
         _showToast('Domain Deactivated Successfully!');
         domain.active = false;
       }).catchError((error) {
@@ -54,7 +52,7 @@ class DomainStateManager extends ChangeNotifier {
       });
       activeSwitchLoading = false;
     } else {
-      await domainProvider.activateDomain(domainID).then((data) {
+      await domainProvider.activateDomain(domain.id).then((data) {
         domain.active = data.active;
         _showToast('Domain Activated Successfully!');
       }).catchError((error) {
@@ -64,11 +62,11 @@ class DomainStateManager extends ChangeNotifier {
     }
   }
 
-  Future<void> toggleCatchAll(BuildContext context, String domainID) async {
+  Future<void> toggleCatchAll(BuildContext context, Domain domain) async {
     final domainProvider = context.read(domainService);
     catchAllSwitchLoading = true;
     if (domain.catchAll) {
-      await domainProvider.deactivateCatchAll(domainID).then((data) {
+      await domainProvider.deactivateCatchAll(domain.id).then((data) {
         _showToast('Catch All Deactivated Successfully!');
         domain.catchAll = false;
       }).catchError((error) {
@@ -76,7 +74,7 @@ class DomainStateManager extends ChangeNotifier {
       });
       catchAllSwitchLoading = false;
     } else {
-      await domainProvider.activateCatchAll(domainID).then((data) {
+      await domainProvider.activateCatchAll(domain.id).then((data) {
         domain.catchAll = data.catchAll;
         _showToast('Catch All Activated Successfully!');
       }).catchError((error) {
@@ -97,11 +95,12 @@ class DomainStateManager extends ChangeNotifier {
     }
   }
 
-  Future editDescription(BuildContext context, domainID, description) async {
+  Future editDescription(
+      BuildContext context, Domain domain, description) async {
     if (descriptionFormKey.currentState!.validate()) {
       await context
           .read(domainService)
-          .editDomainDescription(domainID, description)
+          .editDomainDescription(domain.id, description)
           .then((data) {
         Navigator.pop(context);
         domain.description = data.description;
@@ -113,11 +112,11 @@ class DomainStateManager extends ChangeNotifier {
   }
 
   Future updateDomainDefaultRecipient(
-      BuildContext context, domainID, recipientID) async {
+      BuildContext context, Domain domain, recipientID) async {
     updateRecipientLoading = true;
     await context
         .read(domainService)
-        .updateDomainDefaultRecipient(domainID, recipientID)
+        .updateDomainDefaultRecipient(domain.id, recipientID)
         .then((updatedDomain) {
       updateRecipientLoading = false;
       domain.defaultRecipient = updatedDomain.defaultRecipient;
@@ -130,9 +129,9 @@ class DomainStateManager extends ChangeNotifier {
     });
   }
 
-  Future<void> deleteDomain(BuildContext context, String domainID) async {
+  Future<void> deleteDomain(BuildContext context, Domain domain) async {
     Navigator.pop(context);
-    await context.read(domainService).deleteDomain(domainID).then((domain) {
+    await context.read(domainService).deleteDomain(domain.id).then((domain) {
       Navigator.pop(context);
       _showToast('Domain deleted successfully!');
     }).catchError((error) {

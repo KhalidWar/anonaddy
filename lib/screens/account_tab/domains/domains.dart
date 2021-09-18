@@ -73,10 +73,6 @@ class Domains extends ConsumerWidget {
                       ),
                     ),
                     onTap: () {
-                      final domainStateManager =
-                          context.read(domainStateManagerProvider);
-
-                      domainStateManager.domain = domain;
                       Navigator.push(
                         context,
                         CustomPageRoute(

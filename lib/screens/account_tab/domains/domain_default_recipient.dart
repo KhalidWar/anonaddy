@@ -28,7 +28,6 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
   void _toggleRecipient(Recipient verifiedRecipient) {
     if (selectedRecipient == null) {
       selectedRecipient = verifiedRecipient;
-      print('${selectedRecipient!.id}');
     } else {
       if (verifiedRecipient.email == selectedRecipient!.email) {
         selectedRecipient = null;
@@ -194,7 +193,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
                     .read(domainStateManagerProvider)
                     .updateDomainDefaultRecipient(
                       context,
-                      widget.domain.id,
+                      widget.domain,
                       selectedRecipient == null ? '' : selectedRecipient!.id,
                     ),
               ),

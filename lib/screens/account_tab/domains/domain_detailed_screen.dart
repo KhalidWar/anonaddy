@@ -9,8 +9,6 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
-import 'package:anonaddy/utilities/confirmation_dialog.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,24 +16,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../global_providers.dart';
 
 class DomainDetailedScreen extends ConsumerWidget {
-  DomainDetailedScreen({Key? key, required this.domain}) : super(key: key);
+  const DomainDetailedScreen({Key? key, required this.domain})
+      : super(key: key);
   final Domain domain;
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final domainProvider = watch(domainStateManagerProvider);
-    final domain = domainProvider.domain;
-
     final activeSwitchLoading = domainProvider.activeSwitchLoading;
     final catchAllSwitchLoading = domainProvider.catchAllSwitchLoading;
-    final toggleActivity = domainProvider.toggleActivity;
-    final toggleCatchAll = domainProvider.toggleCatchAll;
+
+    final domainState = context.read(domainStateManagerProvider);
 
     final size = MediaQuery.of(context).size;
     final textEditingController = TextEditingController();
 
     return Scaffold(
-      appBar: buildAppBar(context, domain.id),
+      appBar: buildAppBar(context),
       body: ListView(
         children: [
           Padding(
@@ -65,8 +62,8 @@ class DomainDetailedScreen extends ConsumerWidget {
             leadingIconData: Icons.comment_outlined,
             trailing:
                 IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
-            trailingIconOnPress: () => buildEditDescriptionDialog(
-                context, textEditingController, domain),
+            trailingIconOnPress: () =>
+                buildEditDescriptionDialog(context, textEditingController),
           ),
           AliasDetailListTile(
             title: domain.active ? 'Domain is active' : 'Domain is inactive',
@@ -74,7 +71,8 @@ class DomainDetailedScreen extends ConsumerWidget {
             subtitle: 'Activity',
             leadingIconData: Icons.toggle_off_outlined,
             trailing: buildSwitch(context, activeSwitchLoading, domain.active),
-            trailingIconOnPress: () => toggleActivity(context, domain.id),
+            trailingIconOnPress: () =>
+                domainState.toggleActivity(context, domain),
           ),
           AliasDetailListTile(
             title: domain.catchAll ? 'Enabled' : 'Disabled',
@@ -83,7 +81,8 @@ class DomainDetailedScreen extends ConsumerWidget {
             leadingIconData: Icons.repeat,
             trailing:
                 buildSwitch(context, catchAllSwitchLoading, domain.catchAll),
-            trailingIconOnPress: () => toggleCatchAll(context, domain.id),
+            trailingIconOnPress: () =>
+                domainState.toggleCatchAll(context, domain),
           ),
           if (domain.domainVerifiedAt == null)
             buildUnverifiedEmailWarning(size, kUnverifiedDomainWarning),
@@ -108,8 +107,7 @@ class DomainDetailedScreen extends ConsumerWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.edit_outlined),
-                      onPressed: () =>
-                          buildUpdateDefaultRecipient(context, domain),
+                      onPressed: () => buildUpdateDefaultRecipient(context),
                     ),
                   ],
                 ),
@@ -193,11 +191,13 @@ class DomainDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildEditDescriptionDialog(BuildContext context,
-      TextEditingController textEditingController, Domain domain) {
-    void editDesc() {
-      context.read(domainStateManagerProvider).editDescription(
-          context, domain.id, textEditingController.text.trim());
+  Future buildEditDescriptionDialog(
+      BuildContext context, TextEditingController textEditingController) {
+    final domainState = context.read(domainStateManagerProvider);
+
+    Future<void> editDesc() async {
+      await domainState.editDescription(
+          context, domain, textEditingController.text.trim());
     }
 
     return showModalBottomSheet(
@@ -225,9 +225,7 @@ class DomainDetailedScreen extends ConsumerWidget {
                     Text(kUpdateDescriptionString),
                     SizedBox(height: size.height * 0.015),
                     Form(
-                      key: context
-                          .read(domainStateManagerProvider)
-                          .descriptionFormKey,
+                      key: domainState.descriptionFormKey,
                       child: TextFormField(
                         autofocus: true,
                         controller: textEditingController,
@@ -257,7 +255,7 @@ class DomainDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildUpdateDefaultRecipient(BuildContext context, Domain domain) {
+  Future buildUpdateDefaultRecipient(BuildContext context) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -272,14 +270,14 @@ class DomainDetailedScreen extends ConsumerWidget {
     );
   }
 
-  AppBar buildAppBar(BuildContext context, String domainID) {
-    final isIOS = TargetedPlatform().isIOS();
-    final confirmationDialog = ConfirmationDialog();
+  AppBar buildAppBar(BuildContext context) {
+    final isIOS = context.read(targetedPlatform).isIOS();
+    final dialog = context.read(confirmationDialog);
 
     Future<void> deleteDomain() async {
       await context
           .read(domainStateManagerProvider)
-          .deleteDomain(context, domainID);
+          .deleteDomain(context, domain);
     }
 
     return AppBar(
@@ -304,12 +302,9 @@ class DomainDetailedScreen extends ConsumerWidget {
               context: context,
               builder: (context) {
                 return isIOS
-                    ? confirmationDialog.iOSAlertDialog(
-                        context,
-                        kDeleteDomainConfirmation,
-                        deleteDomain,
-                        'Delete Domain')
-                    : confirmationDialog.androidAlertDialog(
+                    ? dialog.iOSAlertDialog(context, kDeleteDomainConfirmation,
+                        deleteDomain, 'Delete Domain')
+                    : dialog.androidAlertDialog(
                         context,
                         kDeleteDomainConfirmation,
                         deleteDomain,
