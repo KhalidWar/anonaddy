@@ -16,6 +16,7 @@ import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/services/data_storage/settings_data_storage.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
@@ -124,6 +125,11 @@ final customLoadingIndicator = Provider<CustomLoadingIndicator>((ref) {
   return CustomLoadingIndicator(isIOS);
 });
 
+final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
+  final secureStorage = ref.read(flutterSecureStorage);
+  return SettingsDataStorage(secureStorage);
+});
+
 /// Notifier Providers
 final aliasStateManagerProvider = ChangeNotifierProvider((ref) {
   final service = ref.read(aliasService);
@@ -160,8 +166,10 @@ final recipientStateManagerProvider = ChangeNotifierProvider((ref) {
   );
 });
 
-final settingsStateManagerProvider =
-    ChangeNotifierProvider((ref) => SettingsStateManager());
+final settingsStateManagerProvider = ChangeNotifierProvider((ref) {
+  final settingStorage = ref.read(settingsDataStorage);
+  return SettingsStateManager(settingsStorage: settingStorage);
+});
 
 final domainStateManagerProvider = ChangeNotifierProvider((ref) {
   final services = ref.read(domainService);
