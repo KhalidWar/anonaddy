@@ -6,15 +6,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../global_providers.dart';
 
-class AddNewRecipient extends StatelessWidget {
+class AddNewRecipient extends StatefulWidget {
+  @override
+  State<AddNewRecipient> createState() => _AddNewRecipientState();
+}
+
+class _AddNewRecipientState extends State<AddNewRecipient> {
+  final _textEditController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _textEditController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final recipientManager = context.read(recipientStateManagerProvider);
-    final recipientFormKey = recipientManager.recipientFormKey;
-    final textEditController = recipientManager.textEditController;
-    final addRecipient = recipientManager.addRecipient;
-    final isLoading = recipientManager.isLoading;
-
     final size = MediaQuery.of(context).size;
 
     return Container(
@@ -31,10 +39,10 @@ class AddNewRecipient extends StatelessWidget {
                 Text(kAddRecipientString),
                 SizedBox(height: size.height * 0.02),
                 Form(
-                  key: recipientFormKey,
+                  key: recipientManager.recipientFormKey,
                   child: TextFormField(
                     autofocus: true,
-                    controller: textEditController,
+                    controller: _textEditController,
                     validator: (input) =>
                         context.read(formValidator).validateEmailField(input!),
                     textInputAction: TextInputAction.next,
@@ -43,7 +51,7 @@ class AddNewRecipient extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
-                isLoading
+                recipientManager.isLoading
                     ? context
                         .read(customLoadingIndicator)
                         .customLoadingIndicator()
@@ -52,8 +60,8 @@ class AddNewRecipient extends StatelessWidget {
                           minimumSize: MaterialStateProperty.all(Size(200, 50)),
                         ),
                         child: Text('Add Recipient'),
-                        onPressed: () => addRecipient(
-                            context, textEditController.text.trim()),
+                        onPressed: () => recipientManager.addRecipient(
+                            context, _textEditController.text.trim()),
                       ),
               ],
             ),

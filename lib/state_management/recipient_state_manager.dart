@@ -15,7 +15,6 @@ class RecipientStateManager extends ChangeNotifier {
   late bool _isLoading;
 
   final _showToast = NicheMethod().showToast;
-  final textEditController = TextEditingController();
   final recipientFormKey = GlobalKey<FormState>();
   final pgpKeyFormKey = GlobalKey<FormState>();
 
@@ -111,7 +110,6 @@ class RecipientStateManager extends ChangeNotifier {
         _showToast(error.toString());
       });
       isLoading = false;
-      textEditController.clear();
       Navigator.pop(context);
     }
   }
