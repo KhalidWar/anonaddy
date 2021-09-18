@@ -13,6 +13,7 @@ class AddNewUsername extends StatefulWidget {
 
 class _AddNewUsernameState extends State<AddNewUsername> {
   final _textEditController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -25,8 +26,10 @@ class _AddNewUsernameState extends State<AddNewUsername> {
     final usernameManager = context.read(usernameStateManagerProvider);
 
     Future<void> createUsername() async {
-      await usernameManager.createNewUsername(
-          context, _textEditController.text.trim());
+      if (_formKey.currentState!.validate()) {
+        await usernameManager.createNewUsername(
+            context, _textEditController.text.trim());
+      }
     }
 
     final size = MediaQuery.of(context).size;
@@ -45,7 +48,7 @@ class _AddNewUsernameState extends State<AddNewUsername> {
                 Text(kAddNewUsernameString),
                 SizedBox(height: size.height * 0.02),
                 Form(
-                  key: usernameManager.createUsernameFormKey,
+                  key: _formKey,
                   child: TextFormField(
                     autofocus: true,
                     controller: _textEditController,

@@ -18,9 +18,6 @@ class UsernameStateManager extends ChangeNotifier {
   late bool _catchAllSwitchLoading;
   late bool _updateRecipientLoading;
 
-  final createUsernameFormKey = GlobalKey<FormState>();
-  final editDescriptionFormKey = GlobalKey<FormState>();
-
   bool get activeSwitchLoading => _activeSwitchLoading;
   bool get catchAllSwitchLoading => _catchAllSwitchLoading;
   bool get updateRecipientLoading => _updateRecipientLoading;
@@ -83,29 +80,25 @@ class UsernameStateManager extends ChangeNotifier {
   }
 
   Future<void> createNewUsername(BuildContext context, String username) async {
-    if (createUsernameFormKey.currentState!.validate()) {
-      await usernameService.createNewUsername(username).then((username) {
-        showToast('Username added successfully!');
-        Navigator.pop(context);
-      }).catchError((error) {
-        showToast(error.toString());
-      });
-    }
+    await usernameService.createNewUsername(username).then((username) {
+      showToast('Username added successfully!');
+      Navigator.pop(context);
+    }).catchError((error) {
+      showToast(error.toString());
+    });
   }
 
   Future editDescription(
       BuildContext context, Username username, description) async {
-    if (editDescriptionFormKey.currentState!.validate()) {
-      await usernameService
-          .editUsernameDescription(username.id, description)
-          .then((newUsername) {
-        Navigator.pop(context);
-        username.description = newUsername.description;
-        showToast('Description updated successfully!');
-      }).catchError((error) {
-        showToast(error.toString());
-      });
-    }
+    await usernameService
+        .editUsernameDescription(username.id, description)
+        .then((newUsername) {
+      Navigator.pop(context);
+      username.description = newUsername.description;
+      showToast('Description updated successfully!');
+    }).catchError((error) {
+      showToast(error.toString());
+    });
   }
 
   Future updateDefaultRecipient(

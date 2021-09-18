@@ -27,7 +27,6 @@ class UsernameDetailedScreen extends ConsumerWidget {
 
     final usernameState = context.read(usernameStateManagerProvider);
 
-    final textEditingController = TextEditingController();
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -61,8 +60,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
             leadingIconData: Icons.comment_outlined,
             trailing:
                 IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
-            trailingIconOnPress: () =>
-                buildEditDescriptionDialog(context, textEditingController),
+            trailingIconOnPress: () => buildEditDescriptionDialog(context),
           ),
           AliasDetailListTile(
             title:
@@ -185,13 +183,16 @@ class UsernameDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildEditDescriptionDialog(
-      BuildContext context, TextEditingController textEditingController) {
+  Future buildEditDescriptionDialog(BuildContext context) {
     final usernameState = context.read(usernameStateManagerProvider);
+    final formKey = GlobalKey<FormState>();
+
+    String description = '';
 
     Future<void> editDesc() async {
-      await usernameState.editDescription(
-          context, username, textEditingController.text.trim());
+      if (formKey.currentState!.validate()) {
+        await usernameState.editDescription(context, username, description);
+      }
     }
 
     return showModalBottomSheet(
@@ -219,13 +220,13 @@ class UsernameDetailedScreen extends ConsumerWidget {
                     Text(kUpdateDescriptionString),
                     SizedBox(height: size.height * 0.015),
                     Form(
-                      key: usernameState.editDescriptionFormKey,
+                      key: formKey,
                       child: TextFormField(
                         autofocus: true,
-                        controller: textEditingController,
                         validator: (input) => context
                             .read(formValidator)
                             .validateDescriptionField(input!),
+                        onChanged: (input) => description = input,
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: username.description ?? kNoDescription,
