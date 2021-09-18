@@ -237,12 +237,14 @@ class AliasDetailScreen extends ConsumerWidget {
   }
 
   Future buildSendFromDialog(BuildContext context) {
-    final textEditingController = TextEditingController();
     final aliasState = context.read(aliasStateManagerProvider);
+    final sendFromFormKey = GlobalKey<FormState>();
+    String destinationEmail = '';
 
     Future<void> generateAddress() async {
-      await aliasState.sendFromAlias(
-          context, alias.email, textEditingController.text.trim());
+      if (sendFromFormKey.currentState!.validate()) {
+        await aliasState.sendFromAlias(context, alias.email, destinationEmail);
+      }
     }
 
     return showModalBottomSheet(
@@ -283,13 +285,13 @@ class AliasDetailScreen extends ConsumerWidget {
                     ),
                     SizedBox(height: size.height * 0.01),
                     Form(
-                      key: aliasState.sendFromFormKey,
+                      key: sendFromFormKey,
                       child: TextFormField(
                         autofocus: true,
-                        controller: textEditingController,
                         validator: (input) => context
                             .read(formValidator)
                             .validateEmailField(input!),
+                        onChanged: (input) => destinationEmail = input,
                         onFieldSubmitted: (toggle) => generateAddress(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: 'Enter email...',
@@ -319,11 +321,13 @@ class AliasDetailScreen extends ConsumerWidget {
 
   Future buildEditDescriptionDialog(BuildContext context) {
     final aliasState = context.read(aliasStateManagerProvider);
-    final textController = aliasState.descriptionTextController;
+    final descriptionFormKey = GlobalKey<FormState>();
+    String newDescription = '';
 
     Future<void> editDesc() async {
-      await aliasState.editDescription(
-          context, alias, textController.text.trim());
+      if (descriptionFormKey.currentState!.validate()) {
+        await aliasState.editDescription(context, alias, newDescription);
+      }
     }
 
     return showModalBottomSheet(
@@ -351,13 +355,13 @@ class AliasDetailScreen extends ConsumerWidget {
                     Text(kUpdateDescriptionString),
                     SizedBox(height: size.height * 0.015),
                     Form(
-                      key: aliasState.descriptionFormKey,
+                      key: descriptionFormKey,
                       child: TextFormField(
                         autofocus: true,
-                        controller: textController,
                         validator: (input) => context
                             .read(formValidator)
                             .validateDescriptionField(input!),
+                        onChanged: (input) => newDescription = input,
                         onFieldSubmitted: (toggle) => editDesc(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           hintText: alias.description ?? 'No description',

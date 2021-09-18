@@ -12,23 +12,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../global_providers.dart';
 
 class AliasStateManager extends ChangeNotifier {
-  AliasStateManager() {
+  AliasStateManager({required this.nicheMethod}) {
     isToggleLoading = false;
     deleteAliasLoading = false;
     updateRecipientLoading = false;
+    _showToast = nicheMethod.showToast;
   }
+
+  final NicheMethod nicheMethod;
 
   late bool isToggleLoading;
   late bool deleteAliasLoading;
   late bool updateRecipientLoading;
+  late final _showToast;
+
   String? _aliasDomain;
   String? _aliasFormat;
   List<Recipient> createAliasRecipients = [];
-
-  final descriptionFormKey = GlobalKey<FormState>();
-  final descriptionTextController = TextEditingController();
-  final sendFromFormKey = GlobalKey<FormState>();
-  final _showToast = NicheMethod().showToast;
 
   final freeTierWithSharedDomain = [kUUID, kRandomChars];
   final freeTierNoSharedDomain = [kUUID, kRandomChars, kCustom];
@@ -162,20 +162,17 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> editDescription(
       BuildContext context, Alias alias, String input) async {
-    if (descriptionFormKey.currentState!.validate()) {
-      await context
-          .read(aliasService)
-          .editAliasDescription(alias.id, input)
-          .then((value) {
-        _showToast(kEditDescriptionSuccess);
-        alias.description = value.description;
-        notifyListeners();
-      }).catchError((error) {
-        _showToast(error.toString());
-      });
-      descriptionTextController.clear();
-      Navigator.pop(context);
-    }
+    await context
+        .read(aliasService)
+        .editAliasDescription(alias.id, input)
+        .then((value) {
+      _showToast(kEditDescriptionSuccess);
+      alias.description = value.description;
+      notifyListeners();
+    }).catchError((error) {
+      _showToast(error.toString());
+    });
+    Navigator.pop(context);
   }
 
   Future<void> clearDescription(BuildContext context, Alias alias) async {
@@ -194,22 +191,20 @@ class AliasStateManager extends ChangeNotifier {
 
   Future<void> sendFromAlias(
       BuildContext context, String aliasEmail, String destinationEmail) async {
-    if (sendFromFormKey.currentState!.validate()) {
-      /// https://anonaddy.com/help/sending-email-from-an-alias/
-      final leftPartOfAlias = aliasEmail.split('@')[0];
-      final rightPartOfAlias = aliasEmail.split('@')[1];
-      final recipientEmail = destinationEmail.replaceAll('@', '=');
-      final generatedAddress =
-          '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
+    /// https://anonaddy.com/help/sending-email-from-an-alias/
+    final leftPartOfAlias = aliasEmail.split('@')[0];
+    final rightPartOfAlias = aliasEmail.split('@')[1];
+    final recipientEmail = destinationEmail.replaceAll('@', '=');
+    final generatedAddress =
+        '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
 
-      await Clipboard.setData(ClipboardData(text: generatedAddress))
-          .then((value) {
-        _showToast(kSendFromAliasSuccess);
-        Navigator.pop(context);
-      }).catchError((error) {
-        _showToast(kSomethingWentWrong);
-      });
-    }
+    await Clipboard.setData(ClipboardData(text: generatedAddress))
+        .then((value) {
+      _showToast(kSendFromAliasSuccess);
+      Navigator.pop(context);
+    }).catchError((error) {
+      _showToast(kSomethingWentWrong);
+    });
   }
 
   Future<void> updateAliasDefaultRecipient(
