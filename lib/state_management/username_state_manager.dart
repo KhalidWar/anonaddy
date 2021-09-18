@@ -1,17 +1,18 @@
 import 'package:anonaddy/models/username/username_model.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/services/username/username_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../global_providers.dart';
 
 class UsernameStateManager extends ChangeNotifier {
-  UsernameStateManager() {
+  UsernameStateManager(
+      {required this.usernameService, required this.showToast}) {
     activeSwitchLoading = false;
     catchAllSwitchLoading = false;
     updateRecipientLoading = false;
   }
+
+  final UsernameService usernameService;
+  final Function showToast;
 
   late bool _activeSwitchLoading;
   late bool _catchAllSwitchLoading;
@@ -19,7 +20,6 @@ class UsernameStateManager extends ChangeNotifier {
 
   final createUsernameFormKey = GlobalKey<FormState>();
   final editDescriptionFormKey = GlobalKey<FormState>();
-  final _showToast = NicheMethod().showToast;
 
   bool get activeSwitchLoading => _activeSwitchLoading;
   bool get catchAllSwitchLoading => _catchAllSwitchLoading;
@@ -41,48 +41,42 @@ class UsernameStateManager extends ChangeNotifier {
   }
 
   Future<void> toggleActivity(BuildContext context, Username username) async {
-    final usernameProvider = context.read(usernameService);
     activeSwitchLoading = true;
     if (username.active) {
-      await usernameProvider
-          .deactivateUsername(username.id)
-          .then((newUsername) {
-        _showToast('Username Deactivated Successfully!');
+      await usernameService.deactivateUsername(username.id).then((newUsername) {
+        showToast('Username Deactivated Successfully!');
         username.active = false;
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       activeSwitchLoading = false;
     } else {
-      await usernameProvider.activateUsername(username.id).then((newUsername) {
+      await usernameService.activateUsername(username.id).then((newUsername) {
         username.active = newUsername.active;
-        _showToast('Username Activated Successfully!');
+        showToast('Username Activated Successfully!');
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       activeSwitchLoading = false;
     }
   }
 
   Future<void> toggleCatchAll(BuildContext context, Username username) async {
-    final usernameProvider = context.read(usernameService);
     catchAllSwitchLoading = true;
     if (username.catchAll) {
-      await usernameProvider
-          .deactivateCatchAll(username.id)
-          .then((newUsername) {
-        _showToast('Catch All Deactivated Successfully!');
+      await usernameService.deactivateCatchAll(username.id).then((newUsername) {
+        showToast('Catch All Deactivated Successfully!');
         username.catchAll = false;
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       catchAllSwitchLoading = false;
     } else {
-      await usernameProvider.activateCatchAll(username.id).then((newUsername) {
+      await usernameService.activateCatchAll(username.id).then((newUsername) {
         username.catchAll = newUsername.catchAll;
-        _showToast('Catch All Activated Successfully!');
+        showToast('Catch All Activated Successfully!');
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       catchAllSwitchLoading = false;
     }
@@ -90,14 +84,11 @@ class UsernameStateManager extends ChangeNotifier {
 
   Future<void> createNewUsername(BuildContext context, String username) async {
     if (createUsernameFormKey.currentState!.validate()) {
-      await context
-          .read(usernameService)
-          .createNewUsername(username)
-          .then((username) {
-        _showToast('Username added successfully!');
+      await usernameService.createNewUsername(username).then((username) {
+        showToast('Username added successfully!');
         Navigator.pop(context);
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
     }
   }
@@ -105,15 +96,14 @@ class UsernameStateManager extends ChangeNotifier {
   Future editDescription(
       BuildContext context, Username username, description) async {
     if (editDescriptionFormKey.currentState!.validate()) {
-      await context
-          .read(usernameService)
+      await usernameService
           .editUsernameDescription(username.id, description)
           .then((newUsername) {
         Navigator.pop(context);
         username.description = newUsername.description;
-        _showToast('Description updated successfully!');
+        showToast('Description updated successfully!');
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
     }
   }
@@ -121,31 +111,27 @@ class UsernameStateManager extends ChangeNotifier {
   Future updateDefaultRecipient(
       BuildContext context, Username username, String recipientID) async {
     updateRecipientLoading = true;
-    await context
-        .read(usernameService)
+    await usernameService
         .updateDefaultRecipient(username.id, recipientID)
         .then((newUsername) {
       updateRecipientLoading = false;
       username.defaultRecipient = newUsername.defaultRecipient;
       notifyListeners();
-      _showToast('Default recipient updated successfully!');
+      showToast('Default recipient updated successfully!');
       Navigator.pop(context);
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
       updateRecipientLoading = false;
     });
   }
 
   Future<void> deleteUsername(BuildContext context, Username username) async {
     Navigator.pop(context);
-    await context
-        .read(usernameService)
-        .deleteUsername(username.id)
-        .then((newUsername) {
+    await usernameService.deleteUsername(username.id).then((newUsername) {
       Navigator.pop(context);
-      _showToast('Username deleted successfully!');
+      showToast('Username deleted successfully!');
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
     });
   }
 }

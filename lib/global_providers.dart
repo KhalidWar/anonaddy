@@ -137,8 +137,15 @@ final aliasStateManagerProvider = ChangeNotifierProvider((ref) {
   );
 });
 
-final usernameStateManagerProvider =
-    ChangeNotifierProvider((ref) => UsernameStateManager());
+final usernameStateManagerProvider = ChangeNotifierProvider((ref) {
+  final services = ref.read(usernameService);
+  final methods = ref.read(nicheMethods);
+
+  return UsernameStateManager(
+    usernameService: services,
+    showToast: methods.showToast,
+  );
+});
 
 final loginStateManagerProvider =
     ChangeNotifierProvider((ref) => LoginStateManager());
