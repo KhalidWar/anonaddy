@@ -121,7 +121,7 @@ class DomainDetailedScreen extends ConsumerWidget {
                 )
               else
                 RecipientListTile(
-                  recipientDataModel: domain.defaultRecipient!,
+                  recipient: domain.defaultRecipient!,
                 ),
             ],
           ),

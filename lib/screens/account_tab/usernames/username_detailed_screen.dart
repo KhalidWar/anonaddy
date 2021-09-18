@@ -111,7 +111,7 @@ class UsernameDetailedScreen extends ConsumerWidget {
                 )
               else
                 RecipientListTile(
-                  recipientDataModel: username.defaultRecipient!,
+                  recipient: username.defaultRecipient!,
                 ),
             ],
           ),

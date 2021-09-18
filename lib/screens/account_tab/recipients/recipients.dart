@@ -28,7 +28,7 @@ class Recipients extends ConsumerWidget {
             itemCount: recipientList.length,
             itemBuilder: (context, index) {
               return RecipientListTile(
-                recipientDataModel: recipientList[index],
+                recipient: recipientList[index],
               );
             },
           );

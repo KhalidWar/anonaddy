@@ -7,10 +7,10 @@ import '../../global_providers.dart';
 import '../custom_page_route.dart';
 
 class RecipientListTile extends StatelessWidget {
-  const RecipientListTile({Key? key, required this.recipientDataModel})
+  const RecipientListTile({Key? key, required this.recipient})
       : super(key: key);
 
-  final Recipient recipientDataModel;
+  final Recipient recipient;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +27,9 @@ class RecipientListTile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(recipientDataModel.email),
+                Text(recipient.email),
                 SizedBox(height: 2),
-                recipientDataModel.emailVerifiedAt == null
+                recipient.emailVerifiedAt == null
                     ? Text(
                         'Unverified',
                         style: TextStyle(color: Colors.red),
@@ -44,11 +44,10 @@ class RecipientListTile extends StatelessWidget {
         ),
       ),
       onTap: () {
-        recipientDataProvider.recipientDataModel = recipientDataModel;
         Navigator.push(
-            context,
-            CustomPageRoute(
-                RecipientDetailedScreen(recipientData: recipientDataModel)));
+          context,
+          CustomPageRoute(RecipientDetailedScreen(recipient: recipient)),
+        );
       },
     );
   }

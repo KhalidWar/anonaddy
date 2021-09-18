@@ -12,7 +12,6 @@ class RecipientStateManager extends ChangeNotifier {
     _isLoading = false;
   }
 
-  late Recipient recipientDataModel;
   late bool _isLoading;
 
   final _showToast = NicheMethod().showToast;
@@ -27,20 +26,20 @@ class RecipientStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setFingerprint(String? input) {
-    recipientDataModel.fingerprint = input;
+  void setFingerprint(Recipient recipient, String? input) {
+    recipient.fingerprint = input;
     notifyListeners();
   }
 
   Future<void> toggleEncryption(
-      BuildContext context, String recipientID) async {
+      BuildContext context, Recipient recipient) async {
     isLoading = true;
-    if (recipientDataModel.shouldEncrypt) {
+    if (recipient.shouldEncrypt) {
       await context
           .read(recipientService)
-          .disableEncryption(recipientID)
+          .disableEncryption(recipient.id)
           .then((value) {
-        recipientDataModel.shouldEncrypt = false;
+        recipient.shouldEncrypt = false;
         _showToast(kEncryptionDisabled);
       }).catchError((error) {
         _showToast(error.toString());
@@ -48,9 +47,9 @@ class RecipientStateManager extends ChangeNotifier {
     } else {
       await context
           .read(recipientService)
-          .enableEncryption(recipientID)
+          .enableEncryption(recipient.id)
           .then((value) {
-        recipientDataModel.shouldEncrypt = value.shouldEncrypt;
+        recipient.shouldEncrypt = value.shouldEncrypt;
         _showToast(kEncryptionEnabled);
       }).catchError((error) {
         _showToast(error.toString());
@@ -60,15 +59,15 @@ class RecipientStateManager extends ChangeNotifier {
   }
 
   Future<void> addPublicGPGKey(
-      BuildContext context, String recipientID, String keyData) async {
+      BuildContext context, Recipient recipient, String keyData) async {
     if (pgpKeyFormKey.currentState!.validate()) {
       await context
           .read(recipientService)
-          .addPublicGPGKey(recipientID, keyData)
+          .addPublicGPGKey(recipient.id, keyData)
           .then((value) {
         _showToast(kAddGPGKeySuccess);
-        setFingerprint(value.fingerprint);
-        recipientDataModel.shouldEncrypt = value.shouldEncrypt;
+        setFingerprint(recipient, value.fingerprint);
+        recipient.shouldEncrypt = value.shouldEncrypt;
         Navigator.pop(context);
       }).catchError((error) {
         _showToast(error.toString());
@@ -77,14 +76,14 @@ class RecipientStateManager extends ChangeNotifier {
   }
 
   Future<void> removePublicGPGKey(
-      BuildContext context, String recipientID) async {
+      BuildContext context, Recipient recipient) async {
     await context
         .read(recipientService)
-        .removePublicGPGKey(recipientID)
+        .removePublicGPGKey(recipient.id)
         .then((value) {
       _showToast(kDeleteGPGKeySuccess);
-      setFingerprint(null);
-      recipientDataModel.shouldEncrypt = false;
+      setFingerprint(recipient, null);
+      recipient.shouldEncrypt = false;
     }).catchError((error) {
       _showToast(error.toString());
     });
@@ -92,10 +91,10 @@ class RecipientStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> verifyEmail(BuildContext context, String recipientID) async {
+  Future<void> verifyEmail(BuildContext context, Recipient recipient) async {
     await context
         .read(recipientService)
-        .sendVerificationEmail(recipientID)
+        .sendVerificationEmail(recipient.id)
         .then((value) {
       _showToast('Verification email is sent');
     }).catchError((error) {
@@ -117,10 +116,11 @@ class RecipientStateManager extends ChangeNotifier {
     }
   }
 
-  Future<void> removeRecipient(BuildContext context, String recipientID) async {
+  Future<void> removeRecipient(
+      BuildContext context, Recipient recipient) async {
     await context
         .read(recipientService)
-        .removeRecipient(recipientID)
+        .removeRecipient(recipient.id)
         .then((value) {
       _showToast('Recipient deleted successfully!');
     }).catchError((error) {

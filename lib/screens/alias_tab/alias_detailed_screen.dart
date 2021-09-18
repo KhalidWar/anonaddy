@@ -157,7 +157,7 @@ class AliasDetailScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final recipients = alias.recipients;
                       return RecipientListTile(
-                        recipientDataModel: recipients![index],
+                        recipient: recipients![index],
                       );
                     },
                   ),
