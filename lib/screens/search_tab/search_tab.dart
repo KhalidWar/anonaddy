@@ -5,7 +5,6 @@ import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -17,7 +16,7 @@ class SearchTab extends StatelessWidget {
   void search(BuildContext context) {
     final aliasProvider = context.read(aliasDataStream).data;
     if (aliasProvider == null) {
-      NicheMethod().showToast(kLoadingText);
+      context.read(nicheMethods).showToast(kLoadingText);
     } else {
       showSearch(
         context: context,

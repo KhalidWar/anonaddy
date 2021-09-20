@@ -7,7 +7,6 @@ import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -161,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               final userModel = context.read(accountStreamProvider).data;
               if (userModel == null) {
-                NicheMethod().showToast(kLoadingText);
+                context.read(nicheMethods).showToast(kLoadingText);
               } else {
                 showModalBottomSheet(
                   context: context,

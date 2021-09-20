@@ -9,7 +9,6 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -84,7 +83,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
             title: recipient.email,
             subtitle: 'Recipient Email',
             trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
-            trailingIconOnPress: () => NicheMethod().copyOnTap(recipient.email),
+            trailingIconOnPress: () =>
+                context.read(nicheMethods).copyOnTap(recipient.email),
           ),
           AliasDetailListTile(
             leadingIconData: Icons.fingerprint_outlined,

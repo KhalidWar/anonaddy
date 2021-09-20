@@ -1,5 +1,6 @@
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/global_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasCreatedAtWidget extends StatelessWidget {
   const AliasCreatedAtWidget(
@@ -18,7 +19,7 @@ class AliasCreatedAtWidget extends StatelessWidget {
           Text(label),
           SizedBox(width: 5),
           Text(
-            NicheMethod().fixDateTime(dateTime).toString(),
+            context.read(nicheMethods).fixDateTime(dateTime),
           ),
         ],
       ),

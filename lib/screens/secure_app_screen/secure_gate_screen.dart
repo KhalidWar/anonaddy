@@ -4,9 +4,6 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/utilities/confirmation_dialog.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
@@ -26,7 +23,7 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
   bool _didAuthenticate = false;
 
   Future<void> authenticate() async {
-    final showToast = NicheMethod().showToast;
+    final showToast = context.read(nicheMethods).showToast;
     final biometricAuth = context.read(biometricAuthServiceProvider);
 
     await biometricAuth.canEnableBiometric().then((canCheckBio) async {
@@ -121,8 +118,7 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
 
   Future buildLogoutDialog(
       BuildContext context, SecureApplicationController? secureNotifier) {
-    final confirmationDialog = ConfirmationDialog();
-    final targetedPlatform = TargetedPlatform();
+    final dialog = context.read(confirmationDialog);
 
     void logout() {
       secureNotifier!.unlock();
@@ -135,10 +131,10 @@ class _SecureGateScreenState extends State<SecureGateScreen> {
     return showModal(
       context: context,
       builder: (context) {
-        return targetedPlatform.isIOS()
-            ? confirmationDialog.iOSAlertDialog(
+        return context.read(targetedPlatform).isIOS()
+            ? dialog.iOSAlertDialog(
                 context, kLogOutAlertDialog, logout, 'Logout')
-            : confirmationDialog.androidAlertDialog(
+            : dialog.androidAlertDialog(
                 context, kLogOutAlertDialog, logout, 'Logout');
       },
     );

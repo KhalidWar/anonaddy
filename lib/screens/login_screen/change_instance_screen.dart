@@ -1,6 +1,5 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -111,8 +110,9 @@ class ChangeInstanceScreen extends StatelessWidget {
                   TextButton(
                     style: TextButton.styleFrom(),
                     child: Text('How to self-host AnonAddy?'),
-                    onPressed: () =>
-                        NicheMethod().launchURL(kAnonAddySelfHostingURL),
+                    onPressed: () => context
+                        .read(nicheMethods)
+                        .launchURL(kAnonAddySelfHostingURL),
                   ),
                   Consumer(
                     builder: (_, watch, __) {
