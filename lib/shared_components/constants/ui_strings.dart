@@ -82,3 +82,5 @@ const kNoDescription = 'No description';
 const kSomethingWentWrong = 'Something went wrong';
 const kFailedDeliveriesNote =
     'Sometimes when AnonAddy attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
+const navigationErrorMessage =
+    'Something has gone wrong with the navigation system. Please go back and try again.';
