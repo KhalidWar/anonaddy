@@ -5,7 +5,7 @@ import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 class AccountService {
@@ -33,7 +33,7 @@ class AccountService {
         return AccountModel.fromJson(jsonDecode(response.body));
       } else {
         print('getUserData ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } on SocketException {
       final securedData = await offlineData.readAccountOfflineData();

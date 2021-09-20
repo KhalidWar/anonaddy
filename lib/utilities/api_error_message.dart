@@ -1,12 +1,6 @@
-class APIMessageHandler {
-  String getStatusCodeMessage(int statusCode) {
+class ApiErrorMessage {
+  static String translateStatusCode(int statusCode) {
     switch (statusCode) {
-      case 200:
-        return '';
-      case 201:
-        return '';
-      case 204:
-        return '';
       case 400:
         return 'Bad Request -- Your request sucks';
       case 401:
@@ -25,7 +19,8 @@ class APIMessageHandler {
         return 'Internal Server Error -- We had a problem with our server. Try again later';
       case 503:
         return 'Service Unavailable -- We\'re temporarily offline for maintenance. Please try again later';
+      default:
+        return 'Server returned an error we can\'t understand ';
     }
-    throw UnimplementedError(statusCode.toString());
   }
 }

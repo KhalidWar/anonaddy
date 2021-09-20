@@ -6,7 +6,7 @@ import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 class DomainOptionsService {
@@ -34,7 +34,7 @@ class DomainOptionsService {
         return DomainOptions.fromJson(jsonDecode(response.body));
       } else {
         print('getDomainOptions ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } on SocketException {
       final securedData = await offlineData.readDomainOptionsOfflineData();

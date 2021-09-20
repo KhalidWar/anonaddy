@@ -6,7 +6,7 @@ import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 class UsernameService {
@@ -34,7 +34,7 @@ class UsernameService {
         return UsernameModel.fromJson(jsonDecode(response.body));
       } else {
         print('getUsernameData ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } on SocketException {
       final securedData = await offlineData.readUsernameOfflineData();
@@ -65,7 +65,7 @@ class UsernameService {
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("createNewUsername ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -94,7 +94,7 @@ class UsernameService {
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("editUsernameDescription ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -121,7 +121,7 @@ class UsernameService {
         return 204;
       } else {
         print("deleteUsername ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -151,7 +151,7 @@ class UsernameService {
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("updateDefaultRecipient ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -179,7 +179,7 @@ class UsernameService {
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("activateUsername ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -206,7 +206,7 @@ class UsernameService {
         return 204;
       } else {
         print("deactivateUsername ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -234,7 +234,7 @@ class UsernameService {
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("activateCatchAll ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -261,7 +261,7 @@ class UsernameService {
         return 204;
       } else {
         print("deactivateCatchAll ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;

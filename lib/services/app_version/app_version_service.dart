@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:anonaddy/models/app_version/app_version_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 class AppVersionService {
@@ -30,7 +30,7 @@ class AppVersionService {
         return AppVersion.fromJson(jsonDecode(response.body));
       } else {
         print('getAppVersionData ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;

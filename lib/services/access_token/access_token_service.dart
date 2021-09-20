@@ -1,5 +1,5 @@
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +27,7 @@ class AccessTokenService {
       if (response.statusCode == 200) {
         return 200;
       } else {
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
