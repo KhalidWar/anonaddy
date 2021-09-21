@@ -3,12 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
-
-final lifecycleStateProvider =
+final lifecycleStateNotifier =
     StateNotifierProvider<LifecycleState, LifecycleStatus>((ref) {
-  final state = ref.watch(lifecycleState);
-  return state;
+  return LifecycleState();
 });
 
 enum LifecycleStatus { foreground, background }
@@ -17,23 +14,12 @@ class LifecycleState extends StateNotifier<LifecycleStatus> {
   LifecycleState() : super(LifecycleStatus.foreground);
 
   void setLifecycleState(AppLifecycleState status) {
-    switch (status) {
-      case AppLifecycleState.resumed:
-        state = LifecycleStatus.foreground;
-        break;
+    log('AppLifecycleState: ' + state.toString());
 
-      case AppLifecycleState.inactive:
-        state = LifecycleStatus.background;
-        break;
-
-      case AppLifecycleState.paused:
-        state = LifecycleStatus.background;
-        break;
-
-      case AppLifecycleState.detached:
-        state = LifecycleStatus.background;
-        break;
+    if (status == AppLifecycleState.resumed) {
+      state = LifecycleStatus.foreground;
+    } else {
+      state = LifecycleStatus.background;
     }
-    log('LifecycleStatus: ' + state.toString());
   }
 }

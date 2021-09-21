@@ -15,7 +15,7 @@ final aliasStateNotifier =
   return AliasNotifier(
     aliasService: ref.read(aliasService),
     offlineData: ref.read(offlineDataProvider),
-    lifecycleStatus: ref.watch(lifecycleStateProvider),
+    lifecycleStatus: ref.watch(lifecycleStateNotifier),
   );
 });
 

@@ -190,8 +190,6 @@ final domainStateManagerProvider = ChangeNotifierProvider((ref) {
 });
 
 /// State Providers
-final lifecycleState = Provider((ref) => LifecycleState());
-
 final fabVisibilityStateProvider = Provider(
     (ref) => FabVisibilityState(ScrollController(), ScrollController()));
 
@@ -199,7 +197,7 @@ final fabVisibilityStateProvider = Provider(
 final accountStreamProvider =
     StreamProvider.autoDispose<AccountModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  final lifecycleStatus = ref.watch(lifecycleStateProvider);
+  final lifecycleStatus = ref.watch(lifecycleStateNotifier);
 
   final securedData = await offlineData.readAccountOfflineData();
   if (securedData.isNotEmpty) {
@@ -214,7 +212,7 @@ final accountStreamProvider =
 
 final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
   final offlineData = ref.read(offlineDataProvider);
-  final lifecycleStatus = ref.watch(lifecycleStateProvider);
+  final lifecycleStatus = ref.watch(lifecycleStateNotifier);
 
   final securedData = await offlineData.readRecipientsOfflineData();
   if (securedData.isNotEmpty) {

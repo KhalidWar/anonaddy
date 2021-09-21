@@ -1,7 +1,6 @@
+import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class LifecycleService extends StatefulWidget {
   const LifecycleService({Key? key, required this.child}) : super(key: key);
@@ -29,7 +28,7 @@ class _LifecycleServiceState extends State<LifecycleService>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    context.read(lifecycleState).setLifecycleState(state);
+    context.read(lifecycleStateNotifier.notifier).setLifecycleState(state);
   }
 
   @override
