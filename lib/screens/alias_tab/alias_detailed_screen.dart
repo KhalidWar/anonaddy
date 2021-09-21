@@ -324,7 +324,8 @@ class AliasDetailScreen extends ConsumerWidget {
 
     Future<void> editDesc() async {
       if (descriptionFormKey.currentState!.validate()) {
-        await aliasState.editDescription(context, alias, newDescription);
+        await aliasState.editDescription(alias, newDescription);
+        Navigator.pop(context);
       }
     }
 
