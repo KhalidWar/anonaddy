@@ -56,16 +56,16 @@ class RecipientStateManager extends ChangeNotifier {
     isLoading = false;
   }
 
-  Future<void> addPublicGPGKey(
-      BuildContext context, Recipient recipient, String keyData) async {
-    await recipientService.addPublicGPGKey(recipient.id, keyData).then((value) {
+  Future<void> addPublicGPGKey(Recipient recipient, String keyData) async {
+    try {
+      final updatedRecipient =
+          await recipientService.addPublicGPGKey(recipient.id, keyData);
       showToast(kAddGPGKeySuccess);
-      setFingerprint(recipient, value.fingerprint);
-      recipient.shouldEncrypt = value.shouldEncrypt;
-      Navigator.pop(context);
-    }).catchError((error) {
+      recipient.fingerprint = updatedRecipient.fingerprint;
+      recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
+    } catch (error) {
       showToast(error.toString());
-    });
+    }
   }
 
   Future<void> removePublicGPGKey(

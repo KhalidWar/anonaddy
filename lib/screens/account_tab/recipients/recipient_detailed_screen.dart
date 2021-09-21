@@ -253,7 +253,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
     Future<void> addPublicKey() async {
       if (formKey.currentState!.validate()) {
-        await recipientState.addPublicGPGKey(context, recipient, keyData);
+        await recipientState.addPublicGPGKey(recipient, keyData);
+        Navigator.pop(context);
       }
     }
 
