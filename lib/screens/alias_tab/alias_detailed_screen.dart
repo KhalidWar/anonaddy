@@ -378,8 +378,9 @@ class AliasDetailScreen extends ConsumerWidget {
                               minimumSize: Size(120, size.height * 0.055),
                             ),
                             child: Text(kRemoveDescription),
-                            onPressed: () =>
-                                aliasState.clearDescription(context, alias),
+                            onPressed: () => aliasState
+                                .clearDescription(alias)
+                                .whenComplete(() => Navigator.pop(context)),
                           ),
                         ),
                         SizedBox(width: size.width * 0.03),

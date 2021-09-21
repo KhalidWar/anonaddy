@@ -164,15 +164,16 @@ class AliasStateManager extends ChangeNotifier {
     }
   }
 
-  Future<void> clearDescription(BuildContext context, Alias alias) async {
-    await aliasService.editAliasDescription(alias.id, '').then((value) {
+  Future<void> clearDescription(Alias alias) async {
+    try {
+      final updatedAlias =
+          await aliasService.editAliasDescription(alias.id, '');
       showToast(kClearDescriptionSuccess);
-      alias.description = value.description;
+      alias.description = updatedAlias.description;
       notifyListeners();
-    }).catchError((error) {
+    } catch (error) {
       showToast(error.toString());
-    });
-    Navigator.pop(context);
+    }
   }
 
   Future<void> sendFromAlias(
