@@ -207,9 +207,9 @@ class AliasDetailScreen extends ConsumerWidget {
     final isDeleted = alias.deletedAt != null;
 
     Future<void> deleteOrRestore() async {
-      await context
-          .read(aliasStateManagerProvider)
-          .deleteOrRestoreAlias(context, alias);
+      Navigator.pop(context);
+      await context.read(aliasStateManagerProvider).deleteOrRestoreAlias(alias);
+      if (!isDeleted) Navigator.pop(context);
     }
 
     return showModal(

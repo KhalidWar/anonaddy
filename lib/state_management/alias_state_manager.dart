@@ -99,29 +99,33 @@ class AliasStateManager extends ChangeNotifier {
     _aliasFormat = null;
   }
 
-  Future<void> deleteOrRestoreAlias(BuildContext context, Alias alias) async {
+  Future<void> deleteOrRestoreAlias(Alias alias) async {
     setDeleteAliasLoading = true;
-    if (alias.deletedAt == null) {
-      Navigator.pop(context);
-      await aliasService.deleteAlias(alias.id).then((value) {
-        showToast(kDeleteAliasSuccess);
-        setDeleteAliasLoading = false;
-        Navigator.pop(context);
-      }).catchError((error) {
-        showToast(error.toString());
-        setDeleteAliasLoading = false;
-      });
-    } else {
-      Navigator.pop(context);
-      await aliasService.restoreAlias(alias.id).then((value) {
+
+    Future<void> restoreAlias() async {
+      try {
+        final restoredAlias = await aliasService.restoreAlias(alias.id);
         showToast(kRestoreAliasSuccess);
         setDeleteAliasLoading = false;
-        alias.deletedAt = value.deletedAt;
-      }).catchError((error) {
+        alias.deletedAt = restoredAlias.deletedAt;
+      } catch (error) {
         showToast(error.toString());
         setDeleteAliasLoading = false;
-      });
+      }
     }
+
+    Future<void> deleteAlias() async {
+      try {
+        await aliasService.deleteAlias(alias.id);
+        showToast(kDeleteAliasSuccess);
+        setDeleteAliasLoading = false;
+      } catch (error) {
+        showToast(error.toString());
+        setDeleteAliasLoading = false;
+      }
+    }
+
+    alias.deletedAt == null ? await deleteAlias() : await restoreAlias();
     notifyListeners();
   }
 
@@ -206,7 +210,7 @@ class AliasStateManager extends ChangeNotifier {
     setUpdateRecipientLoading = false;
   }
 
-  Future<void> forgetAlias( String aliasID) async {
+  Future<void> forgetAlias(String aliasID) async {
     try {
       await aliasService.forgetAlias(aliasID);
       showToast(kForgetAliasSuccess);
