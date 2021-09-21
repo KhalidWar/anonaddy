@@ -168,10 +168,8 @@ class _AliasDefaultRecipientScreenState
                 onPressed: () => context
                     .read(aliasStateManagerProvider)
                     .updateAliasDefaultRecipient(
-                      context,
-                      widget.alias,
-                      _selectedRecipientsID,
-                    ),
+                        widget.alias, _selectedRecipientsID)
+                    .whenComplete(() => Navigator.pop(context)),
               ),
             ),
           ],

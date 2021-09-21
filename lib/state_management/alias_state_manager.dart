@@ -147,7 +147,6 @@ class AliasStateManager extends ChangeNotifier {
     }
 
     alias.active ? await toggleOffAlias() : await toggleOnAlias();
-
     setToggleLoading = false;
   }
 
@@ -192,20 +191,19 @@ class AliasStateManager extends ChangeNotifier {
   }
 
   Future<void> updateAliasDefaultRecipient(
-      BuildContext context, Alias alias, List<String> recipients) async {
+      Alias alias, List<String> recipients) async {
     setUpdateRecipientLoading = true;
-    await aliasService
-        .updateAliasDefaultRecipient(alias.id, recipients)
-        .then((value) {
-      alias.recipients = value.recipients;
+
+    try {
+      final updatedAlias =
+          await aliasService.updateAliasDefaultRecipient(alias.id, recipients);
+      alias.recipients = updatedAlias.recipients;
       notifyListeners();
-      showToast(kUpdateAliasRecipientSuccess);
-      setUpdateRecipientLoading = false;
-      Navigator.pop(context);
-    }).catchError((error) {
+    } catch (error) {
       showToast(error.toString());
-      setUpdateRecipientLoading = false;
-    });
+    }
+
+    setUpdateRecipientLoading = false;
   }
 
   Future<void> forgetAlias(BuildContext context, String aliasID) async {
