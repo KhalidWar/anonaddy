@@ -115,7 +115,7 @@ class RecipientDetailedScreen extends ConsumerWidget {
                 : buildSwitch(context, isLoading),
             trailingIconOnPress: recipient.fingerprint == null
                 ? null
-                : () => recipientProvider.toggleEncryption(context, recipient),
+                : () => recipientProvider.toggleEncryption(recipient),
           ),
           recipient.emailVerifiedAt == null
               ? AliasDetailListTile(

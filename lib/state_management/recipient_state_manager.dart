@@ -29,24 +29,30 @@ class RecipientStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleEncryption(
-      BuildContext context, Recipient recipient) async {
+  Future<void> toggleEncryption(Recipient recipient) async {
     isLoading = true;
-    if (recipient.shouldEncrypt) {
-      await recipientService.disableEncryption(recipient.id).then((value) {
+    Future<void> toggleOffEncryption() async {
+      try {
+        await recipientService.disableEncryption(recipient.id);
         recipient.shouldEncrypt = false;
-        showToast(kEncryptionDisabled);
-      }).catchError((error) {
+      } catch (error) {
         showToast(error.toString());
-      });
-    } else {
-      await recipientService.enableEncryption(recipient.id).then((value) {
-        recipient.shouldEncrypt = value.shouldEncrypt;
-        showToast(kEncryptionEnabled);
-      }).catchError((error) {
-        showToast(error.toString());
-      });
+      }
     }
+
+    Future<void> toggleOnEncryption() async {
+      try {
+        final updatedRecipient =
+            await recipientService.enableEncryption(recipient.id);
+        recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
+      } catch (error) {
+        showToast(error.toString());
+      }
+    }
+
+    recipient.shouldEncrypt
+        ? await toggleOffEncryption()
+        : await toggleOnEncryption();
     isLoading = false;
   }
 
