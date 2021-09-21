@@ -1,17 +1,20 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_tab_pie_chart.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/state_management/alias_state/alias_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../global_providers.dart';
+import 'components/alias_shimmer_loading.dart';
+import 'components/alias_tab_pie_chart.dart';
 
 class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final aliasStream = watch(aliasDataStream);
+    final aliasState = watch(aliasStateNotifier);
 
     /// preloads domainOptions for create new alias screen
     watch(domainOptionsProvider);
@@ -33,9 +36,13 @@ class AliasTab extends ConsumerWidget {
       }
     }
 
-    return aliasStream.when(
-      loading: () => AliasShimmerLoading(),
-      data: (data) {
+    switch (aliasState.status) {
+      case AliasTabStatus.loading:
+        return AliasShimmerLoading();
+
+      case AliasTabStatus.loaded:
+        final data = aliasState.aliasModel!;
+
         for (Alias alias in data.aliases) {
           forwardedList.add(alias.emailsForwarded);
           blockedList.add(alias.emailsBlocked);
@@ -132,15 +139,15 @@ class AliasTab extends ConsumerWidget {
             ),
           ),
         );
-      },
-      error: (error, stackTrace) {
+
+      case AliasTabStatus.failed:
+        final error = aliasState.errorMessage!;
         return LottieWidget(
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           label: error.toString(),
         );
-      },
-    );
+    }
   }
 
   Center buildEmptyAliasList(BuildContext context) {

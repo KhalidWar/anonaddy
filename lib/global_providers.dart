@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:anonaddy/models/account/account_model.dart';
-import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/app_version/app_version_model.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
@@ -214,22 +213,6 @@ final accountStreamProvider =
   while (lifecycleStatus == LifecycleStatus.foreground) {
     yield* Stream.fromFuture(ref.read(userService).getAccountData(offlineData));
     await Future.delayed(Duration(seconds: 5));
-  }
-});
-
-final aliasDataStream = StreamProvider.autoDispose<AliasModel>((ref) async* {
-  final offlineData = ref.read(offlineDataProvider);
-  final lifecycleStatus = ref.watch(lifecycleStateProvider);
-
-  final securedData = await offlineData.readAliasOfflineData();
-  if (securedData.isNotEmpty) {
-    yield AliasModel.fromJson(jsonDecode(securedData));
-  }
-
-  while (lifecycleStatus == LifecycleStatus.foreground) {
-    yield* Stream.fromFuture(
-        ref.read(aliasService).getAllAliasesData(offlineData));
-    await Future.delayed(Duration(seconds: 1));
   }
 });
 

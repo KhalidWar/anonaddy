@@ -5,23 +5,23 @@ import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anonaddy/state_management/alias_state/alias_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class SearchTab extends StatelessWidget {
   void search(BuildContext context) {
-    final aliasProvider = context.read(aliasDataStream).data;
-    if (aliasProvider == null) {
-      context.read(nicheMethods).showToast(kLoadingText);
-    } else {
+    final aliasState = context.read(aliasStateNotifier);
+    if (aliasState.status == AliasTabStatus.loaded) {
+      final aliasData = aliasState.aliasModel!;
       showSearch(
         context: context,
-        delegate: SearchService(aliasProvider.value.aliases),
+        delegate: SearchService(aliasData.aliases),
       );
+    } else {
+      context.read(nicheMethods).showToast(kLoadingText);
     }
   }
 
