@@ -241,7 +241,8 @@ class AliasDetailScreen extends ConsumerWidget {
 
     Future<void> generateAddress() async {
       if (sendFromFormKey.currentState!.validate()) {
-        await aliasState.sendFromAlias(context, alias.email, destinationEmail);
+        await aliasState.sendFromAlias(alias.email, destinationEmail);
+        Navigator.pop(context);
       }
     }
 

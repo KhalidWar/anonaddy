@@ -7,7 +7,6 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class AliasStateManager extends ChangeNotifier {
   AliasStateManager({
@@ -176,8 +175,7 @@ class AliasStateManager extends ChangeNotifier {
     }
   }
 
-  Future<void> sendFromAlias(
-      BuildContext context, String aliasEmail, String destinationEmail) async {
+  Future<void> sendFromAlias(String aliasEmail, String destinationEmail) async {
     /// https://anonaddy.com/help/sending-email-from-an-alias/
     final leftPartOfAlias = aliasEmail.split('@')[0];
     final rightPartOfAlias = aliasEmail.split('@')[1];
@@ -185,13 +183,12 @@ class AliasStateManager extends ChangeNotifier {
     final generatedAddress =
         '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
 
-    await Clipboard.setData(ClipboardData(text: generatedAddress))
-        .then((value) {
+    try {
+      await nicheMethod.copyOnTap(generatedAddress);
       showToast(kSendFromAliasSuccess);
-      Navigator.pop(context);
-    }).catchError((error) {
+    } catch (error) {
       showToast(kSomethingWentWrong);
-    });
+    }
   }
 
   Future<void> updateAliasDefaultRecipient(
