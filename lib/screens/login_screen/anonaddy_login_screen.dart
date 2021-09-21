@@ -1,26 +1,36 @@
+import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
-import 'package:anonaddy/state_management/login_state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../global_providers.dart';
-import 'change_instance_screen.dart';
 
-class TokenLoginScreen extends ConsumerWidget {
-  final _textEditingController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+class AnonAddyLoginScreen extends StatefulWidget {
+  @override
+  State<AnonAddyLoginScreen> createState() => _AnonAddyLoginScreenState();
+}
+
+class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
+  final _tokenFormKey = GlobalKey<FormState>();
+
+  String _token = '';
+
+  Future<void> login(BuildContext context) async {
+    if (_tokenFormKey.currentState!.validate()) {
+      await context
+          .read(loginStateManagerProvider)
+          .login(context, kAuthorityURL, _token);
+    }
+  }
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final loginManager = watch(loginStateManagerProvider);
-
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -43,7 +53,7 @@ class TokenLoginScreen extends ConsumerWidget {
                 children: [
                   buildHeader(context, size),
                   Container(),
-                  buildTokenInputField(context, loginManager),
+                  buildTokenInputField(context),
                   Column(
                     children: [
                       TextButton(
@@ -56,11 +66,11 @@ class TokenLoginScreen extends ConsumerWidget {
                         style: TextButton.styleFrom(),
                         child: Text('Self Hosted? Change Instance!'),
                         onPressed: () => Navigator.push(
-                            context, CustomPageRoute(ChangeInstanceScreen())),
+                            context, CustomPageRoute(SelfHostLoginScreen())),
                       ),
                     ],
                   ),
-                  buildFooter(context, isDark, loginManager),
+                  buildFooter(context),
                 ],
               ),
             ),
@@ -91,8 +101,7 @@ class TokenLoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildTokenInputField(
-      BuildContext context, LoginStateManager loginManager) {
+  Widget buildTokenInputField(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15),
@@ -105,14 +114,13 @@ class TokenLoginScreen extends ConsumerWidget {
           ),
           SizedBox(height: size.height * 0.01),
           Form(
-            key: _formKey,
+            key: _tokenFormKey,
             child: TextFormField(
               key: Key('loginTextField'),
               validator: (input) =>
                   context.read(formValidator).accessTokenValidator(input!),
-              controller: _textEditingController,
-              onFieldSubmitted: (input) => loginManager.login(
-                  context, _textEditingController.text.trim(), _formKey),
+              onChanged: (input) => _token = input,
+              onFieldSubmitted: (input) => login(context),
               textInputAction: TextInputAction.go,
               keyboardType: TextInputType.multiline,
               minLines: 5,
@@ -201,38 +209,44 @@ class TokenLoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildFooter(
-      BuildContext context, bool isDark, LoginStateManager loginManager) {
+  Widget buildFooter(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height * 0.1,
-      width: size.width,
-      decoration: BoxDecoration(
-        color: isDark ? Colors.black : Color(0xFFF5F7FA),
-        borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(10),
-          bottomLeft: Radius.circular(10),
-        ),
-      ),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(),
-        key: Key('loginButton'),
-        child: loginManager.isLoading
-            ? CircularProgressIndicator(
-                key: Key('loginLoadingIndicator'),
-                backgroundColor: kPrimaryColor,
-              )
-            : Text(
-                'Login',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5!
-                    .copyWith(color: Colors.black),
-              ),
-        onPressed: () => loginManager.login(
-            context, _textEditingController.text.trim(), _formKey),
-      ),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Consumer(
+      builder: (context, watch, child) {
+        final loginManager = watch(loginStateManagerProvider);
+
+        return Container(
+          height: size.height * 0.1,
+          width: size.width,
+          decoration: BoxDecoration(
+            color: isDark ? Colors.black : Color(0xFFF5F7FA),
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+            ),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(),
+            key: Key('loginButton'),
+            child: loginManager.isLoading
+                ? CircularProgressIndicator(
+                    key: Key('loginLoadingIndicator'),
+                    backgroundColor: kPrimaryColor,
+                  )
+                : Text(
+                    'Login',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline5!
+                        .copyWith(color: Colors.black),
+                  ),
+            onPressed: () => login(context),
+          ),
+        );
+      },
     );
   }
 }

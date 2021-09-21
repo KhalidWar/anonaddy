@@ -27,38 +27,21 @@ class LoginStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(BuildContext context, String accessToken,
-      GlobalKey<FormState> tokenFormKey,
-      {String? instanceURL, GlobalKey<FormState>? urlFormKey}) async {
-    Future<void> login() async {
-      if (tokenFormKey.currentState!.validate()) {
-        isLoading = true;
-        await accessTokenService
-            .validateAccessToken(accessToken, instanceURL)
-            .then((value) async {
-          if (value == 200) {
-            await accessTokenService.saveLoginCredentials(
-                accessToken, instanceURL ?? kAuthorityURL);
-            isLoading = false;
-            if (instanceURL != null) Navigator.pop(context);
-            Navigator.pushReplacement(
-              context,
-              CustomPageRoute(HomeScreen()),
-            );
-          }
-        }).catchError((error, stackTrace) {
-          isLoading = false;
-          showToast(error.toString());
-        });
-      }
-    }
+  Future<void> login(BuildContext context, String url, String token) async {
+    isLoading = true;
+    try {
+      final isTokenValid =
+          await accessTokenService.validateAccessToken(url, token);
 
-    if (urlFormKey == null) {
-      login();
-    } else {
-      if (urlFormKey.currentState!.validate()) {
-        login();
+      if (isTokenValid) {
+        await accessTokenService.saveLoginCredentials(url, token);
+        isLoading = false;
+        if (url != kAuthorityURL) Navigator.pop(context);
+        Navigator.pushReplacement(context, CustomPageRoute(HomeScreen()));
       }
+    } catch (error) {
+      isLoading = false;
+      showToast(error.toString());
     }
   }
 

@@ -12,20 +12,19 @@ class AccessTokenService {
   String _accessTokenValue = '';
   String _instanceURL = '';
 
-  Future validateAccessToken(String accessToken, String? instanceURL) async {
+  Future<bool> validateAccessToken(String url, String token) async {
     try {
       final response = await http.get(
-        Uri.https(instanceURL ?? kAuthorityURL,
-            '$kUnEncodedBaseURL/$kAccountDetailsURL'),
+        Uri.https(url, '$kUnEncodedBaseURL/$kAccountDetailsURL'),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
           "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
+          "Authorization": "Bearer $token",
         },
       );
       if (response.statusCode == 200) {
-        return 200;
+        return true;
       } else {
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
@@ -34,10 +33,9 @@ class AccessTokenService {
     }
   }
 
-  Future<void> saveLoginCredentials(
-      String accessToken, String instanceURL) async {
-    await secureStorage.write(key: _accessTokenKey, value: accessToken);
-    await secureStorage.write(key: _instanceURLKey, value: instanceURL);
+  Future<void> saveLoginCredentials(String url, String token) async {
+    await secureStorage.write(key: _accessTokenKey, value: token);
+    await secureStorage.write(key: _instanceURLKey, value: url);
   }
 
   Future<String> getAccessToken() async {

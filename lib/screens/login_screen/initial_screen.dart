@@ -1,6 +1,6 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/home_screen.dart';
-import 'package:anonaddy/screens/login_screen/token_login_screen.dart';
+import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class InitialScreen extends ConsumerWidget {
         /// 2) data is obtained
         data: (accessToken) {
           if (accessToken.isEmpty) {
-            return TokenLoginScreen();
+            return AnonAddyLoginScreen();
           } else {
             return HomeScreen();
           }

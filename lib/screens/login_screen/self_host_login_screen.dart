@@ -6,11 +6,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../global_providers.dart';
 
-class ChangeInstanceScreen extends StatelessWidget {
-  final _urlEditingController = TextEditingController();
-  final _tokenEditingController = TextEditingController();
+class SelfHostLoginScreen extends StatefulWidget {
+  @override
+  State<SelfHostLoginScreen> createState() => _SelfHostLoginScreenState();
+}
+
+class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
   final _urlFormKey = GlobalKey<FormState>();
   final _tokenFormKey = GlobalKey<FormState>();
+
+  String _url = '';
+  String _token = '';
+
+  Future<void> login() async {
+    if (_urlFormKey.currentState!.validate() &&
+        _tokenFormKey.currentState!.validate()) {
+      await context
+          .read(loginStateManagerProvider)
+          .login(context, _url, _token);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +65,7 @@ class ChangeInstanceScreen extends StatelessWidget {
                           child: TextFormField(
                             validator: (input) =>
                                 validator.validateInstanceURL(input!),
-                            controller: _urlEditingController,
+                            onChanged: (input) => _url = input,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
@@ -87,7 +102,8 @@ class ChangeInstanceScreen extends StatelessWidget {
                           child: TextFormField(
                             validator: (input) =>
                                 validator.accessTokenValidator(input!),
-                            controller: _tokenEditingController,
+                            onChanged: (input) => _token = input,
+                            onFieldSubmitted: (input) => login(),
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.multiline,
                             minLines: 5,
@@ -114,55 +130,53 @@ class ChangeInstanceScreen extends StatelessWidget {
                         .read(nicheMethods)
                         .launchURL(kAnonAddySelfHostingURL),
                   ),
-                  Consumer(
-                    builder: (_, watch, __) {
-                      final loginManager = watch(loginStateManagerProvider);
-                      final isDark =
-                          Theme.of(context).brightness == Brightness.dark;
-                      return Container(
-                        height: size.height * 0.1,
-                        width: size.width,
-                        decoration: BoxDecoration(
-                          color: isDark ? Colors.black : Color(0xFFF5F7FA),
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                          ),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(),
-                          key: Key('loginButton'),
-                          child: loginManager.isLoading
-                              ? CircularProgressIndicator(
-                                  key: Key('loginLoadingIndicator'),
-                                  backgroundColor: kPrimaryColor,
-                                )
-                              : Text(
-                                  'Login',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline5!
-                                      .copyWith(color: Colors.black),
-                                ),
-                          onPressed: () => loginManager.login(
-                            context,
-                            _tokenEditingController.text.trim(),
-                            _tokenFormKey,
-                            instanceURL: _urlEditingController.text.trim(),
-                            urlFormKey: _urlFormKey,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                  loginButton(context),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Consumer loginButton(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return Consumer(
+      builder: (_, watch, __) {
+        final loginManager = watch(loginStateManagerProvider);
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        return Container(
+          height: size.height * 0.1,
+          width: size.width,
+          decoration: BoxDecoration(
+            color: isDark ? Colors.black : Color(0xFFF5F7FA),
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+            ),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(),
+            key: Key('loginButton'),
+            child: loginManager.isLoading
+                ? CircularProgressIndicator(
+                    key: Key('loginLoadingIndicator'),
+                    backgroundColor: kPrimaryColor,
+                  )
+                : Text(
+                    'Login',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline5!
+                        .copyWith(color: Colors.black),
+                  ),
+            onPressed: () => login(),
+          ),
+        );
+      },
     );
   }
 }
