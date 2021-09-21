@@ -4,24 +4,28 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AliasStateManager extends ChangeNotifier {
-  AliasStateManager(
-      {required this.aliasService,
-      required this.showToast,
-      required this.isAutoCopy}) {
+  AliasStateManager({
+    required this.aliasService,
+    required this.nicheMethod,
+    required this.isAutoCopy,
+  }) {
+    showToast = nicheMethod.showToast;
     isToggleLoading = false;
     deleteAliasLoading = false;
     updateRecipientLoading = false;
   }
 
   final AliasService aliasService;
-  final Function showToast;
+  final NicheMethod nicheMethod;
   final bool isAutoCopy;
 
+  late Function showToast;
   late bool isToggleLoading;
   late bool deleteAliasLoading;
   late bool updateRecipientLoading;
@@ -69,44 +73,31 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createNewAlias(
-      BuildContext context,
-      String desc,
-      String domain,
-      String format,
-      String localPart,
-      GlobalKey<FormState> customFormKey) async {
+  Future<void> createNewAlias( String desc, String domain,
+      String format, String localPart) async {
     final recipients = <String>[];
     createAliasRecipients.forEach((element) => recipients.add(element.id));
 
-    Future<void> createAlias() async {
-      setToggleLoading = true;
-      await aliasService
-          .createNewAlias(desc, domain, format, localPart, recipients)
-          .then((value) {
-        if (isAutoCopy) {
-          Clipboard.setData(ClipboardData(text: value.email));
-          showToast(kCreateAliasAndCopyEmail);
-        } else {
-          showToast(kCreateAliasSuccess);
-        }
-        createAliasRecipients.clear();
-      }).catchError((error) {
-        showToast(error.toString());
-      });
-      setToggleLoading = false;
-      Navigator.pop(context);
-      _aliasDomain = null;
-      _aliasFormat = null;
+    setToggleLoading = true;
+
+    try {
+      final createdAlias = await aliasService.createNewAlias(
+          desc, domain, format, localPart, recipients);
+
+      if (isAutoCopy) {
+        await nicheMethod.copyOnTap(createdAlias.email);
+        showToast(kCreateAliasAndCopyEmail);
+      } else {
+        showToast(kCreateAliasSuccess);
+      }
+      createAliasRecipients.clear();
+    } catch (error) {
+      showToast(error.toString());
     }
 
-    if (format == kCustom) {
-      if (customFormKey.currentState!.validate()) {
-        await createAlias();
-      }
-    } else {
-      await createAlias();
-    }
+    setToggleLoading = false;
+    _aliasDomain = null;
+    _aliasFormat = null;
   }
 
   Future<void> deleteOrRestoreAlias(BuildContext context, Alias alias) async {

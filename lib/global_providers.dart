@@ -140,7 +140,7 @@ final aliasStateManagerProvider = ChangeNotifierProvider((ref) {
 
   return AliasStateManager(
     aliasService: service,
-    showToast: methods.showToast,
+    nicheMethod: methods,
     isAutoCopy: settings.isAutoCopy,
   );
 });

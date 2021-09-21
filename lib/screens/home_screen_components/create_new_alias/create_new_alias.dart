@@ -6,9 +6,7 @@ import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.d
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'alias_domain_selection.dart';
@@ -21,12 +19,20 @@ class CreateNewAlias extends StatefulWidget {
 }
 
 class _CreateNewAliasState extends State<CreateNewAlias> {
-  final descFieldController = TextEditingController();
-  final customFieldController = TextEditingController();
-  final customFormKey = GlobalKey<FormState>();
+  final _localPartFormKey = GlobalKey<FormState>();
+
+  String _description = '';
+  String _localPart = '';
 
   bool isAliasDomainError = false;
   bool isAliasFormatError = false;
+
+  Future<void> createNewAlias(String aliasDomain, aliasFormat) async {
+    await context
+        .read(aliasStateManagerProvider)
+        .createNewAlias(_description, aliasDomain, aliasFormat, _localPart);
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +73,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
           }
         }
 
+        //todo Clean up this mess!!
         Future<void> createAlias(DomainOptions domainOptions) async {
           final isDomainNull =
               aliasDomain == null && domainOptions.defaultAliasDomain == null;
@@ -75,13 +82,19 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
 
           if (!isDomainNull) {
             if (!isFormatNull) {
-              await aliasStateProvider.createNewAlias(
-                  context,
-                  descFieldController.text.trim(),
+              if (aliasFormat == kCustom) {
+                if (_localPartFormKey.currentState!.validate()) {
+                  await createNewAlias(
+                    aliasDomain ?? domainOptions.defaultAliasDomain!,
+                    aliasFormat ?? domainOptions.defaultAliasFormat!,
+                  );
+                }
+              } else {
+                await createNewAlias(
                   aliasDomain ?? domainOptions.defaultAliasDomain!,
                   aliasFormat ?? domainOptions.defaultAliasFormat!,
-                  customFieldController.text.trim(),
-                  customFormKey);
+                );
+              }
             } else {
               setState(() {
                 isAliasFormatError = true;
@@ -122,8 +135,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                           Text(createAliasText),
                           SizedBox(height: size.height * 0.01),
                           TextFormField(
-                            controller: descFieldController,
                             textInputAction: TextInputAction.next,
+                            onChanged: (input) => _description = input,
                             decoration: kTextFormFieldDecoration.copyWith(
                               hintText: kDescriptionFieldHint,
                               contentPadding:
@@ -135,9 +148,9 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                               children: [
                                 SizedBox(height: size.height * 0.01),
                                 Form(
-                                  key: customFormKey,
+                                  key: _localPartFormKey,
                                   child: TextFormField(
-                                    controller: customFieldController,
+                                    onChanged: (input) => _localPart = input,
                                     validator: (input) => context
                                         .read(formValidator)
                                         .validateLocalPart(input!),
