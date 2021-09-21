@@ -83,9 +83,7 @@ class AliasDetailScreen extends ConsumerWidget {
             trailingIconOnPress: () {
               isAliasDeleted
                   ? nicheMethod.showToast(kRestoreBeforeActivate)
-                  : context
-                      .read(aliasStateManagerProvider)
-                      .toggleAlias(context, alias);
+                  : context.read(aliasStateManagerProvider).toggleAlias(alias);
             },
           ),
           AliasDetailListTile(

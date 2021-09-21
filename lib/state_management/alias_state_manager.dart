@@ -73,8 +73,8 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createNewAlias( String desc, String domain,
-      String format, String localPart) async {
+  Future<void> createNewAlias(
+      String desc, String domain, String format, String localPart) async {
     final recipients = <String>[];
     createAliasRecipients.forEach((element) => recipients.add(element.id));
 
@@ -126,25 +126,30 @@ class AliasStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleAlias(BuildContext context, Alias alias) async {
+  Future<void> toggleAlias(Alias alias) async {
     setToggleLoading = true;
-    if (alias.active) {
-      await aliasService.deactivateAlias(alias.id).then((value) {
-        showToast(kDeactivateAliasSuccess);
+
+    Future<void> toggleOffAlias() async {
+      try {
+        await aliasService.deactivateAlias(alias.id);
         alias.active = false;
-      }).catchError((error) {
+      } catch (error) {
         showToast(error.toString());
-      });
-      setToggleLoading = false;
-    } else {
-      await aliasService.activateAlias(alias.id).then((value) {
-        showToast(kActivateAliasSuccess);
-        alias.active = true;
-      }).catchError((error) {
-        showToast(error.toString());
-      });
-      setToggleLoading = false;
+      }
     }
+
+    Future<void> toggleOnAlias() async {
+      try {
+        await aliasService.activateAlias(alias.id);
+        alias.active = true;
+      } catch (error) {
+        showToast(error.toString());
+      }
+    }
+
+    alias.active ? await toggleOffAlias() : await toggleOnAlias();
+
+    setToggleLoading = false;
   }
 
   Future<void> editDescription(
