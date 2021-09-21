@@ -206,12 +206,12 @@ class AliasStateManager extends ChangeNotifier {
     setUpdateRecipientLoading = false;
   }
 
-  Future<void> forgetAlias(BuildContext context, String aliasID) async {
-    await aliasService.forgetAlias(aliasID).then((value) {
+  Future<void> forgetAlias( String aliasID) async {
+    try {
+      await aliasService.forgetAlias(aliasID);
       showToast(kForgetAliasSuccess);
-    }).catchError((error) {
+    } catch (error) {
       showToast(error.toString());
-    });
-    Navigator.pop(context);
+    }
   }
 }

@@ -414,9 +414,8 @@ class AliasDetailScreen extends ConsumerWidget {
     final isDeleted = alias.deletedAt != null;
 
     Future<void> forget() async {
-      await context
-          .read(aliasStateManagerProvider)
-          .forgetAlias(context, alias.id);
+      await context.read(aliasStateManagerProvider).forgetAlias(alias.id);
+      Navigator.pop(context);
       Navigator.pop(context);
     }
 
