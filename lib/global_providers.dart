@@ -24,14 +24,12 @@ import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
-import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
 import 'package:anonaddy/state_management/domain_state_manager.dart';
 import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:anonaddy/utilities/target_platform.dart';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -192,8 +190,6 @@ final domainStateManagerProvider = ChangeNotifierProvider((ref) {
 });
 
 /// State Providers
-final connectivityState = Provider((ref) => ConnectivityState(Connectivity()));
-
 final lifecycleState = Provider((ref) => LifecycleState());
 
 final fabVisibilityStateProvider = Provider(

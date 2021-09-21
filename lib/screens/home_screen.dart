@@ -64,63 +64,53 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Consumer(
-      builder: (_, watch, __) {
-        final connectivityState = watch(connectivityStateProvider);
-        late bool isOffline;
-
-        switch (connectivityState) {
-          case ConnectionStatus.online:
-            isOffline = false;
-            break;
-          case ConnectionStatus.offline:
-            isOffline = true;
-            break;
-        }
-
-        return Scaffold(
-          appBar: buildAppBar(context, isOffline),
-          floatingActionButton: buildFab(context),
-          body: IndexedStack(
-            index: _selectedIndex,
-            children: [
-              AccountTab(),
-              AliasTab(),
-              SearchTab(),
-            ],
+    return Scaffold(
+      appBar: buildAppBar(context),
+      floatingActionButton: buildFab(context),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          AccountTab(),
+          AliasTab(),
+          SearchTab(),
+        ],
+      ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Consumer(
+            builder: (_, watch, __) {
+              final connectivityStatus = watch(connectivityStateNotifier);
+              return connectivityStatus == ConnectionStatus.offline
+                  ? NoInternetAlert()
+                  : Container();
+            },
           ),
-          bottomNavigationBar: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              isOffline ? NoInternetAlert() : Container(),
-              BottomNavigationBar(
-                onTap: _selectedTab,
-                currentIndex: _selectedIndex,
-                selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.account_circle_outlined),
-                    label: kAccountBotNavLabel,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.alternate_email_outlined),
-                    label: kAliasesBotNavLabel,
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.search_outlined),
-                    label: kSearchBotNavLabel,
-                  ),
-                ],
+          BottomNavigationBar(
+            onTap: _selectedTab,
+            currentIndex: _selectedIndex,
+            selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle_outlined),
+                label: kAccountBotNavLabel,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.alternate_email_outlined),
+                label: kAliasesBotNavLabel,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search_outlined),
+                label: kSearchBotNavLabel,
               ),
             ],
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 
-  AppBar buildAppBar(BuildContext context, bool isOffline) {
+  AppBar buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 0,
       title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
