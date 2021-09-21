@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/screens/home_screen_components/settings_screen/components/rate_addymanager.dart';
 import 'package:anonaddy/screens/login_screen/logout_screen.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
@@ -106,7 +106,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             Spacer(),
             buildAppVersion(context),
-            buildRateApp(context, nicheMethod.launchURL, isIOS),
+            const RateAddyManager(),
             Container(
               width: size.width,
               height: size.height * 0.05,
@@ -124,35 +124,6 @@ class SettingsScreen extends StatelessWidget {
           ],
         );
       }),
-    );
-  }
-
-  Widget buildRateApp(BuildContext context, Function launchUrl, bool isIOS) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: kPrimaryColor,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: ListTile(
-        dense: true,
-        contentPadding: EdgeInsets.symmetric(horizontal: 5),
-        leading: Image.asset('assets/images/play_store.png'),
-        title: Text(
-          'Enjoying AddyManager?',
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: Colors.white),
-        ),
-        subtitle: Text(
-          'Tap here to rate it on the App Store.',
-          style: TextStyle(color: Colors.white),
-        ),
-        onTap: () => launchUrl(
-          isIOS ? kAddyManagerAppStoreURL : kAddyManagerPlayStoreURL,
-        ),
-      ),
     );
   }
 
@@ -181,9 +152,7 @@ class SettingsScreen extends StatelessWidget {
   Future buildLogoutDialog(BuildContext context, bool isIOS) {
     final confirmDialog = context.read(confirmationDialog);
 
-    logout() async {
-      Navigator.pop(context);
-      Navigator.pop(context);
+    logout() {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => LogoutScreen()),
