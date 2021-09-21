@@ -6,7 +6,6 @@ import 'package:anonaddy/models/app_version/app_version_model.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
-import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/account/account_service.dart';
@@ -206,22 +205,6 @@ final accountStreamProvider =
 
   while (lifecycleStatus == LifecycleStatus.foreground) {
     yield* Stream.fromFuture(ref.read(userService).getAccountData(offlineData));
-    await Future.delayed(Duration(seconds: 5));
-  }
-});
-
-final recipientsProvider = StreamProvider<RecipientModel>((ref) async* {
-  final offlineData = ref.read(offlineDataProvider);
-  final lifecycleStatus = ref.watch(lifecycleStateNotifier);
-
-  final securedData = await offlineData.readRecipientsOfflineData();
-  if (securedData.isNotEmpty) {
-    yield RecipientModel.fromJson(jsonDecode(securedData));
-  }
-
-  while (lifecycleStatus == LifecycleStatus.foreground) {
-    yield* Stream.fromFuture(
-        ref.read(recipientService).getAllRecipient(offlineData));
     await Future.delayed(Duration(seconds: 5));
   }
 });
