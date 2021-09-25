@@ -33,7 +33,9 @@ class RecipientNotifier extends StateNotifier<RecipientState> {
 
   Future<void> fetchRecipients() async {
     try {
-      await _loadOfflineData();
+      if (state.status != RecipientStatus.failed) {
+        await _loadOfflineData();
+      }
 
       while (lifecycleStatus == LifecycleStatus.foreground) {
         final recipients = await recipientService.getAllRecipient();
@@ -51,6 +53,14 @@ class RecipientNotifier extends StateNotifier<RecipientState> {
           errorMessage: error.toString(),
         );
       }
+      await _retryOnError();
+    }
+  }
+
+  Future _retryOnError() async {
+    if (state.status == RecipientStatus.failed) {
+      await Future.delayed(Duration(seconds: 5));
+      await fetchRecipients();
     }
   }
 

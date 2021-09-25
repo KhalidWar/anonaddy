@@ -35,7 +35,9 @@ class AliasNotifier extends StateNotifier<AliasState> {
 
   Future<void> fetchAliases() async {
     try {
-      await _loadOfflineData();
+      if (state.status != AliasTabStatus.failed) {
+        await _loadOfflineData();
+      }
 
       while (lifecycleStatus == LifecycleStatus.foreground) {
         final alias = await aliasService.getAllAliasesData();
@@ -52,6 +54,14 @@ class AliasNotifier extends StateNotifier<AliasState> {
           errorMessage: error.toString(),
         );
       }
+      await _retryOnError();
+    }
+  }
+
+  Future _retryOnError() async {
+    if (state.status == AliasTabStatus.failed) {
+      await Future.delayed(Duration(seconds: 5));
+      await fetchAliases();
     }
   }
 
