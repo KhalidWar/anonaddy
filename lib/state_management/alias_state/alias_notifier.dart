@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -11,7 +12,7 @@ import '../../global_providers.dart';
 import 'alias_state.dart';
 
 final aliasStateNotifier =
-    StateNotifierProvider.autoDispose<AliasNotifier, AliasState>((ref) {
+    StateNotifierProvider<AliasNotifier, AliasState>((ref) {
   return AliasNotifier(
     aliasService: ref.read(aliasService),
     offlineData: ref.read(offlineDataProvider),
@@ -24,7 +25,7 @@ class AliasNotifier extends StateNotifier<AliasState> {
     required this.aliasService,
     required this.offlineData,
     required this.lifecycleStatus,
-  }) : super(AliasState(status: AliasTabStatus.loading)) {
+  }) : super(AliasState(status: AliasStatus.loading)) {
     fetchAliases();
   }
 
@@ -35,14 +36,14 @@ class AliasNotifier extends StateNotifier<AliasState> {
 
   Future<void> fetchAliases() async {
     try {
-      if (state.status != AliasTabStatus.failed) {
+      if (state.status != AliasStatus.failed) {
         await _loadOfflineData();
       }
 
       while (lifecycleStatus == LifecycleStatus.foreground) {
         final alias = await aliasService.getAllAliasesData();
         await _saveOfflineData(alias);
-        state = AliasState(status: AliasTabStatus.loaded, aliasModel: alias);
+        state = AliasState(status: AliasStatus.loaded, aliasModel: alias);
         await Future.delayed(Duration(seconds: 1));
       }
     } on SocketException {
@@ -50,16 +51,16 @@ class AliasNotifier extends StateNotifier<AliasState> {
     } catch (error) {
       if (mounted) {
         state = AliasState(
-          status: AliasTabStatus.failed,
+          status: AliasStatus.failed,
           errorMessage: error.toString(),
         );
+        await _retryOnError();
       }
-      await _retryOnError();
     }
   }
 
   Future _retryOnError() async {
-    if (state.status == AliasTabStatus.failed) {
+    if (state.status == AliasStatus.failed) {
       await Future.delayed(Duration(seconds: 5));
       await fetchAliases();
     }
@@ -69,7 +70,7 @@ class AliasNotifier extends StateNotifier<AliasState> {
     final securedData = await offlineData.readAliasOfflineData();
     if (securedData.isNotEmpty) {
       final data = AliasModel.fromJson(jsonDecode(securedData));
-      state = AliasState(status: AliasTabStatus.loaded, aliasModel: data);
+      state = AliasState(status: AliasStatus.loaded, aliasModel: data);
     }
   }
 

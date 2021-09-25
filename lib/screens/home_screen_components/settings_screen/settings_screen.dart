@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'about_app_screen.dart';
+import 'components/app_version.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -104,8 +105,8 @@ class SettingsScreen extends StatelessWidget {
                 Navigator.push(context, CustomPageRoute(AboutAppScreen()));
               },
             ),
-            Spacer(),
-            buildAppVersion(context),
+            const Spacer(),
+            const AppVersion(),
             const RateAddyManager(),
             Container(
               width: size.width,
@@ -125,28 +126,6 @@ class SettingsScreen extends StatelessWidget {
         );
       }),
     );
-  }
-
-  Widget buildAppVersion(BuildContext context) {
-    final accountData = context.read(accountStreamProvider).data;
-    if (accountData == null) {
-      return Container();
-    } else {
-      if (accountData.value.account.subscription == null) {
-        return Consumer(
-          builder: (_, watch, __) {
-            final appVersionData = watch(appVersionProvider);
-            return appVersionData.when(
-              loading: () => Text('...'),
-              data: (data) => Text('v' + data.version),
-              error: (error, stackTrace) => Container(),
-            );
-          },
-        );
-      } else {
-        return Container();
-      }
-    }
   }
 
   Future buildLogoutDialog(BuildContext context, bool isIOS) {

@@ -6,6 +6,7 @@ import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.d
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,7 +42,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
     final customLoading =
         context.read(customLoadingIndicator).customLoadingIndicator();
 
-    final user = context.read(accountStreamProvider).data!.value.account;
+    final user = context.read(accountStateNotifier).accountModel!.account;
     final subscription = user.subscription;
     final createAliasText =
         'Other aliases e.g. alias@${user.username}.anonaddy.com or .me can also be created automatically when they receive their first email.';

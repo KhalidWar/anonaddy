@@ -14,14 +14,20 @@ import 'package:hive_flutter/hive_flutter.dart';
 class SearchTab extends StatelessWidget {
   void search(BuildContext context) {
     final aliasState = context.read(aliasStateNotifier);
-    if (aliasState.status == AliasTabStatus.loaded) {
-      final aliasData = aliasState.aliasModel!;
-      showSearch(
-        context: context,
-        delegate: SearchService(aliasData.aliases),
-      );
-    } else {
-      context.read(nicheMethods).showToast(kLoadingText);
+    switch (aliasState.status) {
+      case AliasStatus.loading:
+        context.read(nicheMethods).showToast(kLoadingText);
+        break;
+      case AliasStatus.loaded:
+        final aliases = aliasState.aliasModel!.aliases;
+        showSearch(
+          context: context,
+          delegate: SearchService(aliases),
+        );
+        break;
+      case AliasStatus.failed:
+        context.read(nicheMethods).showToast(kLoadingText);
+        break;
     }
   }
 

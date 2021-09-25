@@ -1,9 +1,10 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/state_management/account/account_notifier.dart';
+import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,19 +33,22 @@ class AccountTab extends StatelessWidget {
                   collapseMode: CollapseMode.pin,
                   background: Consumer(
                     builder: (_, watch, __) {
-                      final accountStream = watch(accountStreamProvider);
-                      return accountStream.when(
-                        loading: () => LoadingIndicator(),
-                        data: (data) => AccountTabHeader(account: data.account),
-                        error: (error, stackTrace) {
+                      final accountState = watch(accountStateNotifier);
+                      switch (accountState.status) {
+                        case AccountStatus.loading:
+                          return LoadingIndicator();
+                        case AccountStatus.loaded:
+                          final account = accountState.accountModel;
+                          return AccountTabHeader(account: account!.account);
+                        case AccountStatus.failed:
+                          final error = accountState.errorMessage;
                           return LottieWidget(
                             showLoading: true,
                             lottie: 'assets/lottie/errorCone.json',
                             lottieHeight: size.height * 0.2,
                             label: error.toString(),
                           );
-                        },
-                      );
+                      }
                     },
                   ),
                 ),

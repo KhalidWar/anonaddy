@@ -5,11 +5,11 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
+import 'package:anonaddy/state_management/account/account_notifier.dart';
+import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_tab/account_tab.dart';
@@ -148,19 +148,29 @@ class _HomeScreenState extends State<HomeScreen> {
           child: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {
-              final userModel = context.read(accountStreamProvider).data;
-              if (userModel == null) {
-                context.read(nicheMethods).showToast(kLoadingText);
-              } else {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(kBottomSheetBorderRadius)),
-                  ),
-                  builder: (context) => CreateNewAlias(),
-                );
+              final accountState = context.read(accountStateNotifier);
+
+              switch (accountState.status) {
+                case AccountStatus.loading:
+                  context.read(nicheMethods).showToast(kLoadingText);
+                  break;
+
+                case AccountStatus.loaded:
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(kBottomSheetBorderRadius),
+                      ),
+                    ),
+                    builder: (context) => CreateNewAlias(),
+                  );
+                  break;
+
+                case AccountStatus.failed:
+                  context.read(nicheMethods).showToast(kLoadAccountDataFailed);
+                  break;
               }
             },
           ),

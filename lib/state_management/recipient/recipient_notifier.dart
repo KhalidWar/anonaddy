@@ -52,8 +52,8 @@ class RecipientNotifier extends StateNotifier<RecipientState> {
           status: RecipientStatus.failed,
           errorMessage: error.toString(),
         );
+        await _retryOnError();
       }
-      await _retryOnError();
     }
   }
 

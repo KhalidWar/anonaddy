@@ -37,10 +37,10 @@ class AliasTab extends ConsumerWidget {
     }
 
     switch (aliasState.status) {
-      case AliasTabStatus.loading:
+      case AliasStatus.loading:
         return AliasShimmerLoading();
 
-      case AliasTabStatus.loaded:
+      case AliasStatus.loaded:
         final data = aliasState.aliasModel!;
 
         for (Alias alias in data.aliases) {
@@ -140,7 +140,7 @@ class AliasTab extends ConsumerWidget {
           ),
         );
 
-      case AliasTabStatus.failed:
+      case AliasStatus.failed:
         final error = aliasState.errorMessage!;
         return LottieWidget(
           showLoading: true,

@@ -61,12 +61,12 @@ class AccountTabHeader extends StatelessWidget {
     }
   }
 
-  void _addNewUsername(BuildContext context, String? subscription) {
+  void _addNewUsername(BuildContext context) {
     final showToast = context.read(nicheMethods).showToast;
     if (isSelfHosted) {
       buildAddNewUsername(context);
     } else {
-      if (subscription == kFreeSubscription) {
+      if (account.subscription == kFreeSubscription) {
         showToast(kOnlyAvailableToPaid);
       } else {
         account.usernameCount == account.usernameLimit
@@ -80,8 +80,6 @@ class AccountTabHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final subscription =
-        context.read(accountStreamProvider).data!.value.account.subscription;
     final correctAliasString = context.read(nicheMethods).correctAliasString;
 
     return Column(
@@ -134,7 +132,7 @@ class AccountTabHeader extends StatelessWidget {
           subtitle: 'Usernames',
           leadingIconData: Icons.account_circle_outlined,
           trailingIcon: Icon(Icons.add_circle_outline_outlined),
-          onTap: () => _addNewUsername(context, subscription),
+          onTap: () => _addNewUsername(context),
         ),
       ],
     );

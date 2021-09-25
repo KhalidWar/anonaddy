@@ -1,7 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/models/app_version/app_version_model.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
@@ -24,7 +20,6 @@ import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/domain_state_manager.dart';
-import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -36,7 +31,6 @@ import 'package:local_auth/local_auth.dart';
 import 'package:package_info/package_info.dart';
 
 import 'state_management/alias_state_manager.dart';
-import 'state_management/lifecycle/lifecycle_state_manager.dart';
 import 'state_management/login_state_manager.dart';
 import 'state_management/recipient_state_manager.dart';
 import 'state_management/settings_state_manager.dart';
@@ -68,7 +62,7 @@ final usernameService = Provider<UsernameService>((ref) {
   return UsernameService(accessToken);
 });
 
-final userService = Provider<AccountService>((ref) {
+final accountService = Provider<AccountService>((ref) {
   final accessToken = ref.read(accessTokenService);
   return AccountService(accessToken);
 });
@@ -191,23 +185,6 @@ final domainStateManagerProvider = ChangeNotifierProvider((ref) {
 /// State Providers
 final fabVisibilityStateProvider = Provider(
     (ref) => FabVisibilityState(ScrollController(), ScrollController()));
-
-/// Stream Providers
-final accountStreamProvider =
-    StreamProvider.autoDispose<AccountModel>((ref) async* {
-  final offlineData = ref.read(offlineDataProvider);
-  final lifecycleStatus = ref.watch(lifecycleStateNotifier);
-
-  final securedData = await offlineData.readAccountOfflineData();
-  if (securedData.isNotEmpty) {
-    yield AccountModel.fromJson(jsonDecode(securedData));
-  }
-
-  while (lifecycleStatus == LifecycleStatus.foreground) {
-    yield* Stream.fromFuture(ref.read(userService).getAccountData(offlineData));
-    await Future.delayed(Duration(seconds: 5));
-  }
-});
 
 /// Future Providers
 final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
