@@ -1,5 +1,4 @@
 import 'package:anonaddy/models/app_version/app_version_model.dart';
-import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/account/account_service.dart';
@@ -179,11 +178,6 @@ final domainStateManagerProvider = ChangeNotifierProvider((ref) {
 });
 
 /// Future Providers
-final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
-  final offlineData = ref.read(offlineDataProvider);
-  return ref.read(domainOptionsService).getDomainOptions(offlineData);
-});
-
 final accessTokenProvider = FutureProvider<String>(
     (ref) async => await ref.watch(accessTokenService).getAccessToken());
 

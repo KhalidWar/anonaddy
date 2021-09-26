@@ -7,6 +7,8 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
+import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
+import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,72 +50,76 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
         'Other aliases e.g. alias@${user.username}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
     return Consumer(
-      builder: (_, watch, __) {
-        final domainOptionsAsync = watch(domainOptionsProvider);
-        final correctAliasString =
-            context.read(nicheMethods).correctAliasString;
+      builder: (context, watch, _) {
+        final domainOptionsState = watch(domainOptionsStateNotifier);
 
-        final aliasStateProvider = watch(aliasStateManagerProvider);
-        final isLoading = aliasStateProvider.isToggleLoading;
-        String? aliasDomain = aliasStateProvider.aliasDomain;
-        String? aliasFormat = aliasStateProvider.aliasFormat;
+        switch (domainOptionsState.status) {
+          case DomainOptionsStatus.loading:
+            return Container(
+              height: size.height * 0.5,
+              child: LoadingIndicator(),
+            );
 
-        List<String> getAliasFormatList() {
-          if (aliasStateProvider.sharedDomains.contains(aliasDomain)) {
-            if (subscription == kFreeSubscription) {
-              return aliasStateProvider.freeTierWithSharedDomain;
-            } else {
-              return aliasStateProvider.paidTierWithSharedDomain;
-            }
-          } else {
-            if (subscription == kFreeSubscription) {
-              return aliasStateProvider.freeTierNoSharedDomain;
-            } else {
-              return aliasStateProvider.paidTierNoSharedDomain;
-            }
-          }
-        }
+          case DomainOptionsStatus.loaded:
+            final domainOptions = domainOptionsState.domainOptions!;
+            final correctAliasString =
+                context.read(nicheMethods).correctAliasString;
 
-        //todo Clean up this mess!!
-        Future<void> createAlias(DomainOptions domainOptions) async {
-          final isDomainNull =
-              aliasDomain == null && domainOptions.defaultAliasDomain == null;
-          final isFormatNull =
-              aliasFormat == null && domainOptions.defaultAliasFormat == null;
+            final aliasStateProvider = watch(aliasStateManagerProvider);
+            final isLoading = aliasStateProvider.isToggleLoading;
+            String? aliasDomain = aliasStateProvider.aliasDomain;
+            String? aliasFormat = aliasStateProvider.aliasFormat;
 
-          if (!isDomainNull) {
-            if (!isFormatNull) {
-              if (aliasFormat == kCustom) {
-                if (_localPartFormKey.currentState!.validate()) {
-                  await createNewAlias(
-                    aliasDomain ?? domainOptions.defaultAliasDomain!,
-                    aliasFormat ?? domainOptions.defaultAliasFormat!,
-                  );
+            List<String> getAliasFormatList() {
+              if (aliasStateProvider.sharedDomains.contains(aliasDomain)) {
+                if (subscription == kFreeSubscription) {
+                  return aliasStateProvider.freeTierWithSharedDomain;
+                } else {
+                  return aliasStateProvider.paidTierWithSharedDomain;
                 }
               } else {
-                await createNewAlias(
-                  aliasDomain ?? domainOptions.defaultAliasDomain!,
-                  aliasFormat ?? domainOptions.defaultAliasFormat!,
-                );
+                if (subscription == kFreeSubscription) {
+                  return aliasStateProvider.freeTierNoSharedDomain;
+                } else {
+                  return aliasStateProvider.paidTierNoSharedDomain;
+                }
               }
-            } else {
-              setState(() {
-                isAliasFormatError = true;
-              });
             }
-          } else {
-            setState(() {
-              isAliasDomainError = true;
-            });
-          }
-        }
 
-        return domainOptionsAsync.when(
-          loading: () => Container(
-            height: size.height * 0.5,
-            child: LoadingIndicator(),
-          ),
-          data: (domainOptions) {
+            //todo Clean up this mess!!
+            Future<void> createAlias(DomainOptions domainOptions) async {
+              final isDomainNull = aliasDomain == null &&
+                  domainOptions.defaultAliasDomain == null;
+              final isFormatNull = aliasFormat == null &&
+                  domainOptions.defaultAliasFormat == null;
+
+              if (!isDomainNull) {
+                if (!isFormatNull) {
+                  if (aliasFormat == kCustom) {
+                    if (_localPartFormKey.currentState!.validate()) {
+                      await createNewAlias(
+                        aliasDomain ?? domainOptions.defaultAliasDomain!,
+                        aliasFormat ?? domainOptions.defaultAliasFormat!,
+                      );
+                    }
+                  } else {
+                    await createNewAlias(
+                      aliasDomain ?? domainOptions.defaultAliasDomain!,
+                      aliasFormat ?? domainOptions.defaultAliasFormat!,
+                    );
+                  }
+                } else {
+                  setState(() {
+                    isAliasFormatError = true;
+                  });
+                }
+              } else {
+                setState(() {
+                  isAliasDomainError = true;
+                });
+              }
+            }
+
             if (aliasDomain == null)
               aliasDomain = domainOptions.defaultAliasDomain;
             if (aliasFormat == null)
@@ -183,7 +189,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                             title: 'Alias Format',
                             label: aliasFormat == null
                                 ? kSelectAliasFormat
-                                : correctAliasString(aliasFormat!),
+                                : correctAliasString(aliasFormat),
                             isError: isAliasFormatError,
                             child: AliasFormatSelection(
                                 aliasFormatList: getAliasFormatList()),
@@ -214,15 +220,15 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                 ),
               ),
             );
-          },
-          error: (error, stackTrade) {
+
+          case DomainOptionsStatus.failed:
+            final error = domainOptionsState.errorMessage;
             return LottieWidget(
               lottie: 'assets/lottie/errorCone.json',
               label: error.toString(),
               lottieHeight: MediaQuery.of(context).size.height * 0.2,
             );
-          },
-        );
+        }
       },
     );
   }

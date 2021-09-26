@@ -8,7 +8,6 @@ import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
 import 'components/alias_shimmer_loading.dart';
 import 'components/alias_tab_pie_chart.dart';
 
@@ -16,9 +15,6 @@ class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasState = watch(aliasStateNotifier);
-
-    /// preloads domainOptions for create new alias screen
-    watch(domainOptionsProvider);
 
     final size = MediaQuery.of(context).size;
 
