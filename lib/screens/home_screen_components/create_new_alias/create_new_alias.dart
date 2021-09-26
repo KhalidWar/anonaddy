@@ -1,4 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -6,7 +7,6 @@ import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.d
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,9 @@ import 'alias_format_selection.dart';
 import 'create_alias_recipient_selection.dart';
 
 class CreateNewAlias extends StatefulWidget {
+  const CreateNewAlias({Key? key, required this.account}) : super(key: key);
+  final Account account;
+
   @override
   _CreateNewAliasState createState() => _CreateNewAliasState();
 }
@@ -41,13 +44,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final customLoading =
-        context.read(customLoadingIndicator).customLoadingIndicator();
-
-    final user = context.read(accountStateNotifier).accountModel!.account;
-    final subscription = user.subscription;
     final createAliasText =
-        'Other aliases e.g. alias@${user.username}.anonaddy.com or .me can also be created automatically when they receive their first email.';
+        'Other aliases e.g. alias@${widget.account.username}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
     return Consumer(
       builder: (context, watch, _) {
@@ -72,13 +70,13 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
 
             List<String> getAliasFormatList() {
               if (aliasStateProvider.sharedDomains.contains(aliasDomain)) {
-                if (subscription == kFreeSubscription) {
+                if (widget.account.subscription == kFreeSubscription) {
                   return aliasStateProvider.freeTierWithSharedDomain;
                 } else {
                   return aliasStateProvider.paidTierWithSharedDomain;
                 }
               } else {
-                if (subscription == kFreeSubscription) {
+                if (widget.account.subscription == kFreeSubscription) {
                   return aliasStateProvider.freeTierNoSharedDomain;
                 } else {
                   return aliasStateProvider.paidTierNoSharedDomain;
@@ -210,7 +208,11 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                           EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(),
-                        child: isLoading ? customLoading : Text(kCreateAlias),
+                        child: isLoading
+                            ? context
+                                .read(customLoadingIndicator)
+                                .customLoadingIndicator()
+                            : Text(kCreateAlias),
                         onPressed: isLoading
                             ? () {}
                             : () => createAlias(domainOptions),

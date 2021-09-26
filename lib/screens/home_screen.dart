@@ -156,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   break;
 
                 case AccountStatus.loaded:
+                  final account = accountState.accountModel!.account;
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -164,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         top: Radius.circular(kBottomSheetBorderRadius),
                       ),
                     ),
-                    builder: (context) => CreateNewAlias(),
+                    builder: (context) => CreateNewAlias(account: account),
                   );
                   break;
 
