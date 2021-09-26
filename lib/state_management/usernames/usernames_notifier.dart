@@ -33,10 +33,6 @@ class UsernamesNotifier extends StateNotifier<UsernamesState> {
 
   Future fetchUsernames() async {
     try {
-      if (state.status != UsernamesStatus.failed) {
-        await _loadOfflineData();
-      }
-
       final domains = await usernameService.getUsernameData();
       await _saveOfflineData(domains);
       state = UsernamesState(

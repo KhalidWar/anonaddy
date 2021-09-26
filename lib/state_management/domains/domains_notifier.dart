@@ -34,10 +34,6 @@ class DomainsNotifier extends StateNotifier<DomainsState> {
 
   Future<void> fetchDomains() async {
     try {
-      if (state.status != DomainsStatus.failed) {
-        await _loadOfflineData();
-      }
-
       final domains = await domainsService.getAllDomains();
       await _saveOfflineData(domains);
       state = DomainsState(
