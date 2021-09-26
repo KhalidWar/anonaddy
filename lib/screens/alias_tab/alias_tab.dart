@@ -4,6 +4,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/state_management/alias_state/alias_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_state.dart';
+import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -60,8 +61,9 @@ class AliasTab extends ConsumerWidget {
           body: DefaultTabController(
             length: 2,
             child: NestedScrollView(
-              controller:
-                  context.read(fabVisibilityStateProvider).aliasController,
+              controller: context
+                  .read(fabVisibilityStateNotifier.notifier)
+                  .aliasController,
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(

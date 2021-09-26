@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
 
   void _selectedTab(int index) {
-    context.read(fabVisibilityStateProvider).showFab();
+    context.read(fabVisibilityStateNotifier.notifier).showFab();
     if (_selectedIndex == 2 && index == 2) {
       SearchTab().search(context);
     } else {

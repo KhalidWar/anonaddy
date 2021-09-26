@@ -2,22 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
-
 final fabVisibilityStateNotifier =
     StateNotifierProvider.autoDispose<FabVisibilityState, bool>((ref) {
-  final fabStateProvider = ref.read(fabVisibilityStateProvider);
-
-  ref.onDispose(() {
-    fabStateProvider.aliasController.dispose();
-    fabStateProvider.searchController.dispose();
-  });
-
-  return fabStateProvider;
+  return FabVisibilityState(
+    aliasTabController: ScrollController(),
+    searchTabController: ScrollController(),
+  );
 });
 
 class FabVisibilityState extends StateNotifier<bool> {
-  FabVisibilityState(ScrollController aliasTabController, searchTabController)
+  FabVisibilityState(
+      {required ScrollController aliasTabController, searchTabController})
       : aliasController = aliasTabController,
         searchController = searchTabController,
         super(true) {
