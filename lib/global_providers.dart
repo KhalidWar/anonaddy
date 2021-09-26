@@ -1,5 +1,4 @@
 import 'package:anonaddy/models/app_version/app_version_model.dart';
-import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/models/username/username_model.dart';
@@ -190,11 +189,6 @@ final fabVisibilityStateProvider = Provider(
 final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
   final offlineData = ref.read(offlineDataProvider);
   return ref.read(usernameService).getUsernameData(offlineData);
-});
-
-final domainsProvider = FutureProvider.autoDispose<DomainModel>((ref) async {
-  final offlineData = ref.read(offlineDataProvider);
-  return await ref.read(domainService).getAllDomains(offlineData);
 });
 
 final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
