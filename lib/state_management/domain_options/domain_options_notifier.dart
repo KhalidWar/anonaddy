@@ -37,13 +37,10 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
         await _loadOfflineData();
       }
 
-      while (lifecycleStatus == LifecycleStatus.foreground) {
-        final domainOptions = await domainOptionsService.getDomainOptions();
-        await _saveOfflineData(domainOptions);
-        state = DomainOptionsState(
-            status: DomainOptionsStatus.loaded, domainOptions: domainOptions);
-        await Future.delayed(Duration(seconds: 1));
-      }
+      final domainOptions = await domainOptionsService.getDomainOptions();
+      await _saveOfflineData(domainOptions);
+      state = DomainOptionsState(
+          status: DomainOptionsStatus.loaded, domainOptions: domainOptions);
     } on SocketException {
       await _loadOfflineData();
     } catch (error) {
