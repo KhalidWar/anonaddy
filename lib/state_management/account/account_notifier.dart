@@ -44,7 +44,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
         await _saveOfflineData(account);
         state =
             AccountState(status: AccountStatus.loaded, accountModel: account);
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(Duration(seconds: 3));
       }
     } on SocketException {
       await _loadOfflineData();

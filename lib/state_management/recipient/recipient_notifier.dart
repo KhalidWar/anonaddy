@@ -42,7 +42,7 @@ class RecipientNotifier extends StateNotifier<RecipientState> {
         await _saveOfflineData(recipients);
         state = RecipientState(
             status: RecipientStatus.loaded, recipientModel: recipients);
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(Duration(seconds: 3));
       }
     } on SocketException {
       await _loadOfflineData();
