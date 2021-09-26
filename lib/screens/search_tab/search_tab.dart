@@ -81,15 +81,17 @@ class SearchTab extends StatelessWidget {
               );
             else
               return Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: aliases.length,
-                  controller: context
-                      .read(fabVisibilityStateNotifier.notifier)
-                      .searchController,
-                  itemBuilder: (context, index) {
-                    return AliasListTile(aliasData: aliases[index]);
-                  },
+                child: Scrollbar(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: aliases.length,
+                    controller: context
+                        .read(fabVisibilityStateNotifier.notifier)
+                        .searchController,
+                    itemBuilder: (context, index) {
+                      return AliasListTile(aliasData: aliases[index]);
+                    },
+                  ),
                 ),
               );
           },

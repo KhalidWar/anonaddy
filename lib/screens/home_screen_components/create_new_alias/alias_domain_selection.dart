@@ -40,39 +40,41 @@ class AliasDomainSelection extends StatelessWidget {
           children: [
             BottomSheetHeader(headerLabel: 'Select Alias Domain'),
             Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                controller: controller,
-                physics: BouncingScrollPhysics(),
-                children: [
-                  if (domainOptions.domains.isEmpty)
-                    Center(
-                      child: Text(
-                        'No alias domain found',
-                        style: Theme.of(context).textTheme.headline6,
+              child: Scrollbar(
+                child: ListView(
+                  shrinkWrap: true,
+                  controller: controller,
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    if (domainOptions.domains.isEmpty)
+                      Center(
+                        child: Text(
+                          'No alias domain found',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      )
+                    else
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: domainOptions.domains.length,
+                        itemBuilder: (context, index) {
+                          final domain = domainOptions.domains[index];
+                          return ListTile(
+                            dense: true,
+                            selectedTileColor: kAccentColor,
+                            horizontalTitleGap: 0,
+                            title: Text(
+                              domain,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            onTap: () => setAliasDomain(context, domain),
+                          );
+                        },
                       ),
-                    )
-                  else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: domainOptions.domains.length,
-                      itemBuilder: (context, index) {
-                        final domain = domainOptions.domains[index];
-                        return ListTile(
-                          dense: true,
-                          selectedTileColor: kAccentColor,
-                          horizontalTitleGap: 0,
-                          title: Text(
-                            domain,
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.subtitle1,
-                          ),
-                          onTap: () => setAliasDomain(context, domain),
-                        );
-                      },
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
             SizedBox(height: size.height * 0.03),
