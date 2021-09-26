@@ -121,12 +121,10 @@ final searchHistoryStorage = Provider<SearchHistoryStorage>((ref) {
 final aliasStateManagerProvider = ChangeNotifierProvider((ref) {
   final service = ref.read(aliasService);
   final methods = ref.read(nicheMethods);
-  final settings = ref.watch(settingsStateManagerProvider);
 
   return AliasStateManager(
     aliasService: service,
     nicheMethod: methods,
-    isAutoCopy: settings.isAutoCopy,
   );
 });
 

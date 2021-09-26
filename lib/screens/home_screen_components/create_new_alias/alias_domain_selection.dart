@@ -1,29 +1,15 @@
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../global_providers.dart';
 
 class AliasDomainSelection extends StatelessWidget {
-  const AliasDomainSelection(
-      {required this.aliasFormatList, required this.domainOptions});
-  final List<String> aliasFormatList;
+  const AliasDomainSelection({
+    required this.domainOptions,
+    required this.setAliasDomain,
+  });
   final DomainOptions domainOptions;
-
-  void setAliasDomain(BuildContext context, String selectedDomain) {
-    final aliasStateProvider = context.read(aliasStateManagerProvider);
-    aliasStateProvider.setAliasDomain = selectedDomain;
-
-    if (aliasStateProvider.sharedDomains.contains(selectedDomain)) {
-      aliasStateProvider.setAliasFormat = aliasFormatList[0];
-    } else {
-      aliasStateProvider.setAliasFormat = domainOptions.defaultAliasFormat;
-    }
-    Navigator.pop(context);
-  }
+  final Function(String) setAliasDomain;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +55,7 @@ class AliasDomainSelection extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.subtitle1,
                             ),
-                            onTap: () => setAliasDomain(context, domain),
+                            onTap: () => setAliasDomain(domain),
                           );
                         },
                       ),

@@ -1,7 +1,5 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -12,7 +10,6 @@ class AliasStateManager extends ChangeNotifier {
   AliasStateManager({
     required this.aliasService,
     required this.nicheMethod,
-    required this.isAutoCopy,
   }) {
     showToast = nicheMethod.showToast;
     isToggleLoading = false;
@@ -22,35 +19,11 @@ class AliasStateManager extends ChangeNotifier {
 
   final AliasService aliasService;
   final NicheMethod nicheMethod;
-  final bool isAutoCopy;
 
   late Function showToast;
   late bool isToggleLoading;
   late bool deleteAliasLoading;
   late bool updateRecipientLoading;
-
-  String? _aliasDomain;
-  String? _aliasFormat;
-  List<Recipient> createAliasRecipients = [];
-
-  final freeTierWithSharedDomain = [kUUID, kRandomChars];
-  final freeTierNoSharedDomain = [kUUID, kRandomChars, kCustom];
-  final paidTierWithSharedDomain = [kUUID, kRandomChars, kRandomWords];
-  final paidTierNoSharedDomain = [kUUID, kRandomChars, kRandomWords, kCustom];
-  final sharedDomains = [kAnonAddyMe, kAddyMail, k4wrd, kMailerMe];
-
-  String? get aliasDomain => _aliasDomain;
-  String? get aliasFormat => _aliasFormat;
-
-  set setAliasDomain(String input) {
-    _aliasDomain = input;
-    notifyListeners();
-  }
-
-  set setAliasFormat(String? input) {
-    _aliasFormat = input;
-    notifyListeners();
-  }
 
   set setToggleLoading(bool input) {
     isToggleLoading = input;
@@ -65,38 +38,6 @@ class AliasStateManager extends ChangeNotifier {
   set setUpdateRecipientLoading(bool input) {
     updateRecipientLoading = input;
     notifyListeners();
-  }
-
-  set setCreateAliasRecipients(List<Recipient> input) {
-    createAliasRecipients = input;
-    notifyListeners();
-  }
-
-  Future<void> createNewAlias(
-      String desc, String domain, String format, String localPart) async {
-    final recipients = <String>[];
-    createAliasRecipients.forEach((element) => recipients.add(element.id));
-
-    setToggleLoading = true;
-
-    try {
-      final createdAlias = await aliasService.createNewAlias(
-          desc, domain, format, localPart, recipients);
-
-      if (isAutoCopy) {
-        await nicheMethod.copyOnTap(createdAlias.email);
-        showToast(kCreateAliasAndCopyEmail);
-      } else {
-        showToast(kCreateAliasSuccess);
-      }
-      createAliasRecipients.clear();
-    } catch (error) {
-      showToast(error.toString());
-    }
-
-    setToggleLoading = false;
-    _aliasDomain = null;
-    _aliasFormat = null;
   }
 
   Future<void> deleteOrRestoreAlias(Alias alias) async {

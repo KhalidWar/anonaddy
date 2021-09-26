@@ -1,8 +1,8 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_state.dart';
 import 'package:flutter/material.dart';
@@ -118,8 +118,8 @@ class _CreateAliasRecipientSelectionState
                 child: Text('Done'),
                 onPressed: () {
                   context
-                      .read(aliasStateManagerProvider)
-                      .setCreateAliasRecipients = _selectedRecipients;
+                      .read(createAliasNotifier.notifier)
+                      .setRecipients(_selectedRecipients);
                   Navigator.pop(context);
                 },
               ),
