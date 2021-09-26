@@ -8,10 +8,10 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
+import 'package:anonaddy/state_management/usernames/usernames_notifier.dart';
+import 'package:anonaddy/state_management/usernames/usernames_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../global_providers.dart';
 
 class AdditionalUsername extends ConsumerWidget {
   @override
@@ -28,11 +28,13 @@ class AdditionalUsername extends ConsumerWidget {
           return PaidFeatureWall();
         }
 
-        final usernameStream = watch(usernamesProvider);
-        return usernameStream.when(
-          loading: () => RecipientsShimmerLoading(),
-          data: (usernameData) {
-            final usernames = usernameData.usernames;
+        final usernameState = watch(usernameStateNotifier);
+        switch (usernameState.status) {
+          case UsernamesStatus.loading:
+            return RecipientsShimmerLoading();
+
+          case UsernamesStatus.loaded:
+            final usernames = usernameState.usernameModel!.usernames;
             if (usernames.isEmpty) {
               return Center(
                 child: Text(
@@ -40,18 +42,18 @@ class AdditionalUsername extends ConsumerWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               );
-            } else {
-              return usernamesList(usernames);
             }
-          },
-          error: (error, stackTrace) {
+
+            return usernamesList(usernames);
+
+          case UsernamesStatus.failed:
+            final error = usernameState.errorMessage;
             return LottieWidget(
               lottie: 'assets/lottie/errorCone.json',
               lottieHeight: MediaQuery.of(context).size.height * 0.1,
               label: error.toString(),
             );
-          },
-        );
+        }
 
       case AccountStatus.failed:
         return LottieWidget(

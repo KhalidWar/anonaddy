@@ -1,7 +1,6 @@
 import 'package:anonaddy/models/app_version/app_version_model.dart';
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
-import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
@@ -186,11 +185,6 @@ final fabVisibilityStateProvider = Provider(
     (ref) => FabVisibilityState(ScrollController(), ScrollController()));
 
 /// Future Providers
-final usernamesProvider = FutureProvider.autoDispose<UsernameModel>((ref) {
-  final offlineData = ref.read(offlineDataProvider);
-  return ref.read(usernameService).getUsernameData(offlineData);
-});
-
 final domainOptionsProvider = FutureProvider<DomainOptions>((ref) {
   final offlineData = ref.read(offlineDataProvider);
   return ref.read(domainOptionsService).getDomainOptions(offlineData);
