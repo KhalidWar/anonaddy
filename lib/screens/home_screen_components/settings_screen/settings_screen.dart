@@ -90,7 +90,7 @@ class SettingsScreen extends StatelessWidget {
                 'AnonAddy Help Center',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
-              subtitle: Text('Learn more about AnonAddy'),
+              subtitle: Text('AnonAddy\'s terminologies...etc.'),
               trailing: Icon(Icons.open_in_new_outlined),
               onTap: () => nicheMethod.launchURL(kAnonAddyHelpCenterURL),
             ),
