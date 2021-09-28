@@ -41,7 +41,6 @@ class UsernameStateManager extends ChangeNotifier {
     activeSwitchLoading = true;
     if (username.active) {
       await usernameService.deactivateUsername(username.id).then((newUsername) {
-        showToast('Username Deactivated Successfully!');
         username.active = false;
       }).catchError((error) {
         showToast(error.toString());
@@ -50,7 +49,6 @@ class UsernameStateManager extends ChangeNotifier {
     } else {
       await usernameService.activateUsername(username.id).then((newUsername) {
         username.active = newUsername.active;
-        showToast('Username Activated Successfully!');
       }).catchError((error) {
         showToast(error.toString());
       });
@@ -62,7 +60,6 @@ class UsernameStateManager extends ChangeNotifier {
     catchAllSwitchLoading = true;
     if (username.catchAll) {
       await usernameService.deactivateCatchAll(username.id).then((newUsername) {
-        showToast('Catch All Deactivated Successfully!');
         username.catchAll = false;
       }).catchError((error) {
         showToast(error.toString());
@@ -71,7 +68,6 @@ class UsernameStateManager extends ChangeNotifier {
     } else {
       await usernameService.activateCatchAll(username.id).then((newUsername) {
         username.catchAll = newUsername.catchAll;
-        showToast('Catch All Activated Successfully!');
       }).catchError((error) {
         showToast(error.toString());
       });

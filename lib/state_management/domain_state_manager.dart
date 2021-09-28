@@ -40,7 +40,6 @@ class DomainStateManager extends ChangeNotifier {
     activeSwitchLoading = true;
     if (domain.active) {
       await domainService.deactivateDomain(domain.id).then((data) {
-        showToast('Domain Deactivated Successfully!');
         domain.active = false;
       }).catchError((error) {
         showToast(error.toString());
@@ -49,7 +48,6 @@ class DomainStateManager extends ChangeNotifier {
     } else {
       await domainService.activateDomain(domain.id).then((data) {
         domain.active = data.active;
-        showToast('Domain Activated Successfully!');
       }).catchError((error) {
         showToast(error.toString());
       });
@@ -61,7 +59,6 @@ class DomainStateManager extends ChangeNotifier {
     catchAllSwitchLoading = true;
     if (domain.catchAll) {
       await domainService.deactivateCatchAll(domain.id).then((data) {
-        showToast('Catch All Deactivated Successfully!');
         domain.catchAll = false;
       }).catchError((error) {
         showToast(error.toString());
@@ -70,7 +67,6 @@ class DomainStateManager extends ChangeNotifier {
     } else {
       await domainService.activateCatchAll(domain.id).then((data) {
         domain.catchAll = data.catchAll;
-        showToast('Catch All Activated Successfully!');
       }).catchError((error) {
         showToast(error.toString());
       });
