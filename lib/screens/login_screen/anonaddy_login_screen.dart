@@ -5,7 +5,6 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../global_providers.dart';
@@ -45,7 +44,7 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
               width: size.width * 0.88,
               padding: EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
+                color: Theme.of(context).cardTheme.color,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
