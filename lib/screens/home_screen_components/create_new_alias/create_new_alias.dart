@@ -16,213 +16,206 @@ import 'alias_domain_selection.dart';
 import 'alias_format_selection.dart';
 import 'create_alias_recipient_selection.dart';
 
-class CreateNewAlias extends ConsumerWidget {
+class CreateNewAlias extends StatefulWidget {
   CreateNewAlias({Key? key, required this.account}) : super(key: key);
   final Account account;
 
+  @override
+  State<CreateNewAlias> createState() => _CreateNewAliasState();
+}
+
+class _CreateNewAliasState extends State<CreateNewAlias> {
   final _localPartFormKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final domainOptionsState = watch(domainOptionsStateNotifier);
-
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    switch (domainOptionsState.status) {
-      case DomainOptionsStatus.loading:
-        return Container(
-          height: size.height * 0.5,
-          child: LoadingIndicator(),
-        );
+    return Consumer(
+      builder: (context, watch, _) {
+        final domainOptionsState = watch(domainOptionsStateNotifier);
 
-      case DomainOptionsStatus.loaded:
-        return createAliasWidget(context, domainOptionsState);
+        switch (domainOptionsState.status) {
+          case DomainOptionsStatus.loading:
+            return Container(
+              height: size.height * 0.5,
+              child: LoadingIndicator(),
+            );
 
-      case DomainOptionsStatus.failed:
-        final error = domainOptionsState.errorMessage;
-        return LottieWidget(
-          lottie: 'assets/lottie/errorCone.json',
-          label: error.toString(),
-          lottieHeight: MediaQuery.of(context).size.height * 0.2,
-        );
-    }
+          case DomainOptionsStatus.loaded:
+            final createAliasState = watch(createAliasNotifier);
+            return buildListView(createAliasState, domainOptionsState);
+
+          case DomainOptionsStatus.failed:
+            final error = domainOptionsState.errorMessage;
+            return Container(
+              height: size.height * 0.5,
+              child: LottieWidget(
+                lottie: 'assets/lottie/errorCone.json',
+                label: error,
+                lottieHeight: MediaQuery.of(context).size.height * 0.2,
+              ),
+            );
+        }
+      },
+    );
   }
 
-  Widget createAliasWidget(
-      BuildContext context, DomainOptionsState domainOptionsState) {
+  Widget buildListView(CreateAliasNotifier createAliasState,
+      DomainOptionsState domainOptionsState) {
     final size = MediaQuery.of(context).size;
     final createAliasText =
-        'Other aliases e.g. alias@${account.username}.anonaddy.com or .me can also be created automatically when they receive their first email.';
+        'Other aliases e.g. alias@${widget.account.username}.anonaddy.com or .me can also be created automatically when they receive their first email.';
 
-    return Consumer(builder: (context, watch, _) {
-      final createAliasState = watch(createAliasNotifier);
-      final onPressNotifier = context.read(createAliasNotifier.notifier);
+    final onPressNotifier = context.read(createAliasNotifier.notifier);
 
-      Future createAlias() async {
-        if (!createAliasState.isAliasDomainNull()) {
-          if (!createAliasState.isAliasFormatNull()) {
-            if (createAliasState.aliasFormat == kCustom) {
-              if (_localPartFormKey.currentState!.validate()) {
-                await onPressNotifier.createNewAlias();
-                Navigator.pop(context);
-              }
-            } else {
+    Future createAlias() async {
+      if (!createAliasState.isAliasDomainNull()) {
+        if (!createAliasState.isAliasFormatNull()) {
+          if (createAliasState.aliasFormat == kCustom) {
+            if (_localPartFormKey.currentState!.validate()) {
               await onPressNotifier.createNewAlias();
               Navigator.pop(context);
             }
           } else {
-            onPressNotifier.setAliasFormatError(true);
+            await onPressNotifier.createNewAlias();
+            Navigator.pop(context);
           }
         } else {
-          onPressNotifier.setAliasDomainError(true);
+          onPressNotifier.setAliasFormatError(true);
         }
+      } else {
+        onPressNotifier.setAliasDomainError(true);
       }
+    }
 
-      return Container(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: SingleChildScrollView(
+    return ListView(
+      shrinkWrap: true,
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      physics: NeverScrollableScrollPhysics(),
+      children: [
+        BottomSheetHeader(headerLabel: kCreateNewAlias),
+        Padding(
+          padding: EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BottomSheetHeader(headerLabel: kCreateNewAlias),
-              Padding(
-                padding:
-                    EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(createAliasText),
-                    SizedBox(height: size.height * 0.01),
-                    TextFormField(
-                      textInputAction: TextInputAction.next,
-                      onChanged: (input) =>
-                          onPressNotifier.setDescription(input),
-                      decoration: kTextFormFieldDecoration.copyWith(
-                        hintText: kDescriptionFieldHint,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              Text(createAliasText),
+              SizedBox(height: size.height * 0.01),
+              TextFormField(
+                textInputAction: TextInputAction.next,
+                onChanged: (input) => onPressNotifier.setDescription(input),
+                decoration: kTextFormFieldDecoration.copyWith(
+                  hintText: kDescriptionFieldHint,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                ),
+              ),
+              if (createAliasState.aliasFormat == kCustom)
+                buildLocalPartInput(context, onPressNotifier),
+              SizedBox(height: size.height * 0.01),
+              aliasDomainFormatDropdown(
+                context: context,
+                title: 'Alias Domain',
+                label: createAliasState.aliasDomain ?? kSelectAliasDomain,
+                isError: createAliasState.isAliasDomainError!,
+                onPress: () {
+                  onPressNotifier.setAliasDomainError(false);
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(kBottomSheetBorderRadius),
                       ),
                     ),
-                    localPartInputField(
-                        context, createAliasState, onPressNotifier),
-                    SizedBox(height: size.height * 0.01),
-                    aliasDomainFormatDropdown(
-                      context: context,
-                      title: 'Alias Domain',
-                      label: createAliasState.aliasDomain ?? kSelectAliasDomain,
-                      isError: createAliasState.isAliasDomainError!,
-                      onPress: () {
-                        onPressNotifier.setAliasDomainError(false);
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(kBottomSheetBorderRadius),
-                            ),
-                          ),
-                          builder: (context) => AliasDomainSelection(
-                            domainOptions: domainOptionsState.domainOptions!,
-                            setAliasDomain: (domain) {
-                              onPressNotifier.setAliasDomain(domain);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        );
+                    builder: (context) => AliasDomainSelection(
+                      domainOptions: domainOptionsState.domainOptions!,
+                      setAliasDomain: (domain) {
+                        onPressNotifier.setAliasDomain(domain);
+                        Navigator.pop(context);
                       },
                     ),
-                    SizedBox(height: size.height * 0.01),
-                    aliasDomainFormatDropdown(
-                      context: context,
-                      title: 'Alias Format',
-                      label: createAliasState.aliasFormat == null
-                          ? kSelectAliasFormat
-                          : context.read(nicheMethods).correctAliasString(
-                              createAliasState.aliasFormat!),
-                      isError: createAliasState.isAliasFormatError!,
-                      onPress: () {
-                        onPressNotifier.setAliasFormatError(false);
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(kBottomSheetBorderRadius),
-                            ),
-                          ),
-                          builder: (context) => AliasFormatSelection(
-                            setAliasFormat: (format) {
-                              onPressNotifier.setAliasFormat(format);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        );
+                  );
+                },
+              ),
+              SizedBox(height: size.height * 0.01),
+              aliasDomainFormatDropdown(
+                context: context,
+                title: 'Alias Format',
+                label: createAliasState.aliasFormat == null
+                    ? kSelectAliasFormat
+                    : context
+                        .read(nicheMethods)
+                        .correctAliasString(createAliasState.aliasFormat!),
+                isError: createAliasState.isAliasFormatError!,
+                onPress: () {
+                  onPressNotifier.setAliasFormatError(false);
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(kBottomSheetBorderRadius),
+                      ),
+                    ),
+                    builder: (context) => AliasFormatSelection(
+                      setAliasFormat: (format) {
+                        onPressNotifier.setAliasFormat(format);
+                        Navigator.pop(context);
                       },
                     ),
-                    buildNote(context, createAliasState),
-                    SizedBox(height: size.height * 0.02),
-                    recipientsDropdown(context),
-                  ],
-                ),
+                  );
+                },
               ),
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(),
-                  child: createAliasState.isLoading!
-                      ? context
-                          .read(customLoadingIndicator)
-                          .customLoadingIndicator()
-                      : Text(kCreateAlias),
-                  onPressed:
-                      createAliasState.isLoading! ? () {} : () => createAlias(),
+              if (createAliasState.aliasFormat == kCustom)
+                Text(
+                  kCreateAliasCustomFieldNote,
+                  style: Theme.of(context).textTheme.caption,
                 ),
-              ),
+              SizedBox(height: size.height * 0.02),
+              recipientsDropdown(context),
             ],
           ),
         ),
-      );
-    });
+        Container(
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(),
+            child: createAliasState.isLoading!
+                ? context.read(customLoadingIndicator).customLoadingIndicator()
+                : Text(kCreateAlias),
+            onPressed:
+                createAliasState.isLoading! ? () {} : () => createAlias(),
+          ),
+        ),
+      ],
+    );
   }
 
-  Widget localPartInputField(BuildContext context,
-      CreateAliasNotifier createAliasState, onPressNotifier) {
-    final size = MediaQuery.of(context).size;
-    final aliasFormat = createAliasState.aliasFormat ?? '';
-
-    if (aliasFormat == kCustom) {
-      return Column(
-        children: [
-          SizedBox(height: size.height * 0.01),
-          Form(
-            key: _localPartFormKey,
-            child: TextFormField(
-              onChanged: (input) => onPressNotifier.setLocalPart(input),
-              validator: (input) =>
-                  context.read(formValidator).validateLocalPart(input!),
-              textInputAction: TextInputAction.next,
-              decoration: kTextFormFieldDecoration.copyWith(
-                hintText: kLocalPartFieldHint,
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              ),
+  Widget buildLocalPartInput(
+      BuildContext context, CreateAliasNotifier onPressNotifier) {
+    return ListView(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: [
+        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+        Form(
+          key: _localPartFormKey,
+          child: TextFormField(
+            onChanged: (input) => onPressNotifier.setLocalPart(input),
+            validator: (input) =>
+                context.read(formValidator).validateLocalPart(input!),
+            textInputAction: TextInputAction.next,
+            decoration: kTextFormFieldDecoration.copyWith(
+              hintText: kLocalPartFieldHint,
+              contentPadding: EdgeInsets.symmetric(horizontal: 10),
             ),
           ),
-        ],
-      );
-    }
-    return Container();
-  }
-
-  Widget buildNote(BuildContext context, CreateAliasNotifier createAliasState) {
-    final aliasFormat = createAliasState.aliasFormat ?? '';
-    if (aliasFormat == kCustom) {
-      return Text(
-        kCreateAliasCustomFieldNote,
-        style: Theme.of(context).textTheme.caption,
-      );
-    }
-    return Container();
+        ),
+      ],
+    );
   }
 
   Widget aliasDomainFormatDropdown(
