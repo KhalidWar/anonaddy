@@ -9,8 +9,7 @@ const kUpdateAliasRecipientNote =
     'Note: only verified recipients can be used as default recipients.';
 const kDeleteAliasSubtitle = 'Alias will reject all emails sent to it';
 const kRestoreAliasSubtitle = 'Alias will be able to receive emails';
-const kUpdateDescriptionString =
-    'Enter new description or enter empty whitespace remove current description';
+const kUpdateDescriptionString = 'Provide a description for this alias';
 const kForgetAlias = 'Forget Alias';
 const kUpdateDescription = 'Update Description';
 const kRemoveDescription = 'Remove Description';
