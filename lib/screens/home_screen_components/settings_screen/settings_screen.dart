@@ -83,6 +83,17 @@ class SettingsScreen extends StatelessWidget {
               ),
               onTap: () => enableBiometricAuth(),
             ),
+            Divider(height: 0),
+            ListTile(
+              dense: true,
+              title: Text(
+                'AnonAddy Help Center',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              subtitle: Text('Learn more about AnonAddy'),
+              trailing: Icon(Icons.open_in_new_outlined),
+              onTap: () => nicheMethod.launchURL(kAnonAddyHelpCenterURL),
+            ),
             ListTile(
               dense: true,
               title: Text(
@@ -93,6 +104,7 @@ class SettingsScreen extends StatelessWidget {
               trailing: Icon(Icons.open_in_new_outlined),
               onTap: () => nicheMethod.launchURL(kAnonAddyFAQURL),
             ),
+            Divider(height: 0),
             ListTile(
               dense: true,
               title: Text(
@@ -105,6 +117,16 @@ class SettingsScreen extends StatelessWidget {
                 Navigator.push(context, CustomPageRoute(AboutAppScreen()));
               },
             ),
+            // ListTile(
+            //   title: Text(
+            //     'Logout',
+            //     textAlign: TextAlign.center,
+            //   ),
+            //   tileColor: Colors.red,
+            //   onTap: () {
+            //     Navigator.push(context, CustomPageRoute(AboutAppScreen()));
+            //   },
+            // ),
             const Spacer(),
             const AppVersion(),
             const RateAddyManager(),
