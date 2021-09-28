@@ -63,8 +63,7 @@ class OfflineData {
 
   Future<String> readUsernameOfflineData() async {
     if (_usernameData.isEmpty) {
-      final usernameData = await secureStorage.read(key: _usernameDataKey);
-      _usernameData = usernameData!;
+      _usernameData = await secureStorage.read(key: _usernameDataKey) ?? '';
       return _usernameData;
     } else {
       return _usernameData;
@@ -96,8 +95,8 @@ class OfflineData {
 
   Future<String> readDomainOptionsOfflineData() async {
     if (_domainOptionsData.isEmpty) {
-      final domainData = await secureStorage.read(key: _domainOptionsDataKey);
-      _domainOptionsData = domainData!;
+      _domainOptionsData =
+          await secureStorage.read(key: _domainOptionsDataKey) ?? '';
       return _domainOptionsData;
     } else {
       return _domainOptionsData;
@@ -113,8 +112,7 @@ class OfflineData {
 
   Future<String> readDomainOfflineData() async {
     if (_domainData.isEmpty) {
-      final domainData = await secureStorage.read(key: _domainDataKey);
-      _domainData = domainData!;
+      _domainData = await secureStorage.read(key: _domainDataKey) ?? '';
       return _domainData;
     } else {
       return _domainData;
