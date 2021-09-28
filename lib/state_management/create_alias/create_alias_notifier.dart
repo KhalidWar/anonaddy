@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
@@ -93,12 +91,10 @@ class CreateAliasNotifier extends ChangeNotifier {
   }
 
   void setAliasDomain(String aliasDomain) {
-    log('aliasDomain: ' + aliasDomain.toString());
     this.aliasDomain = aliasDomain;
     setAliasFormatList(aliasDomain);
 
     if (sharedDomains.contains(aliasDomain)) {
-      // final defaultFormat = domainOptions.domainOptions!.defaultAliasFormat;
       aliasFormat = aliasFormatList![0];
     } else {
       aliasFormat = domainOptions.domainOptions!.defaultAliasFormat;
@@ -108,25 +104,21 @@ class CreateAliasNotifier extends ChangeNotifier {
   }
 
   void setAliasFormat(String aliasFormat) {
-    log('aliasFormat: ' + aliasFormat.toString());
     this.aliasFormat = aliasFormat;
     notifyListeners();
   }
 
   void setDescription(String? description) {
-    log('description: ' + description.toString());
-    description = description;
+    this.description = description;
     notifyListeners();
   }
 
   void setLocalPart(String? localPart) {
-    log('localPart: ' + localPart.toString());
-    localPart = localPart;
+    this.localPart = localPart;
     notifyListeners();
   }
 
   void setRecipients(List<Recipient> recipients) {
-    log('recipients: ' + recipients.toString());
     createAliasRecipients = recipients;
     notifyListeners();
   }
