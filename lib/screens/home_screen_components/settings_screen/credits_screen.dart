@@ -1,6 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
@@ -34,6 +33,14 @@ class CreditsScreen extends StatelessWidget {
             title: 'Empty',
             creator: '张先生',
             lottieURL: 'https://lottiefiles.com/13525-empty',
+          ),
+          buildTile(
+            context: context,
+            lottieFile: 'assets/lottie/biometric.json',
+            title: 'Biometric Animation',
+            creator: 'Clément Boissy',
+            lottieURL:
+                'https://lottiefiles.com/8185-biometrics-android-animation',
           ),
           buildTile(
             context: context,
