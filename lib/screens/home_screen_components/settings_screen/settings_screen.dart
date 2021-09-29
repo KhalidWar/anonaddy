@@ -2,10 +2,10 @@ import 'package:animations/animations.dart';
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/home_screen_components/settings_screen/components/rate_addymanager.dart';
 import 'package:anonaddy/screens/login_screen/logout_screen.dart';
-import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
+import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,132 +21,117 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
-      body: Consumer(builder: (_, watch, __) {
-        final settings = watch(settingsStateManagerProvider);
-        final biometricAuth = context.read(biometricAuthServiceProvider);
+      body: Consumer(
+        builder: (_, watch, __) {
+          final settings = watch(settingsStateManagerProvider);
+          final biometric = watch(biometricNotifier);
 
-        Future<void> enableBiometricAuth() async {
-          await biometricAuth.canEnableBiometric().then((canCheckBio) async {
-            await biometricAuth.authenticate(canCheckBio).then((isAuthSuccess) {
-              if (isAuthSuccess) {
-                settings.toggleBiometricRequired();
-              } else {
-                nicheMethod.showToast(kFailedToAuthenticate);
-              }
-            }).catchError((error) => nicheMethod.showToast(error.toString()));
-          }).catchError((error) => nicheMethod.showToast(error.toString()));
-        }
-
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ListTile(
-              dense: true,
-              title: Text(
-                'Dark Theme',
-                style: Theme.of(context).textTheme.bodyText1,
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ListTile(
+                dense: true,
+                title: Text(
+                  'Dark Theme',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: Text('App follows system by default'),
+                trailing: Switch.adaptive(
+                  value: settings.isDarkTheme,
+                  onChanged: (toggle) => settings.toggleTheme(),
+                ),
               ),
-              subtitle: Text('App follows system by default'),
-              trailing: IgnorePointer(
-                child: Switch.adaptive(
-                    value: settings.isDarkTheme, onChanged: (toggle) {}),
-              ),
-              onTap: () => settings.toggleTheme(),
-            ),
-            ListTile(
-              dense: true,
-              title: Text(
-                'Auto Copy Email',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: Text('Automatically copy email after alias creation'),
-              trailing: IgnorePointer(
-                child: Switch.adaptive(
+              ListTile(
+                dense: true,
+                title: Text(
+                  'Auto Copy Email',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: Text('Automatically copy email after alias creation'),
+                trailing: Switch.adaptive(
                   value: settings.isAutoCopy,
-                  onChanged: (toggle) {},
+                  onChanged: (toggle) => settings.toggleAutoCopy(),
                 ),
               ),
-              onTap: () => settings.toggleAutoCopy(),
-            ),
-            ListTile(
-              dense: true,
-              title: Text(
-                'Biometric Authentication',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: Text('Require biometric authentication'),
-              trailing: IgnorePointer(
-                child: Switch.adaptive(
-                  value: settings.isBiometricAuth,
-                  onChanged: (toggle) {},
+              ListTile(
+                dense: true,
+                title: Text(
+                  'Biometric Authentication',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: Text('Require biometric authentication'),
+                trailing: Switch.adaptive(
+                  value: biometric.isEnabled,
+                  onChanged: (toggle) => context
+                      .read(biometricNotifier.notifier)
+                      .toggleBiometric(toggle),
                 ),
               ),
-              onTap: () => enableBiometricAuth(),
-            ),
-            Divider(height: 0),
-            ListTile(
-              dense: true,
-              title: Text(
-                'AnonAddy Help Center',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: Text('AnonAddy\'s terminologies...etc.'),
-              trailing: Icon(Icons.open_in_new_outlined),
-              onTap: () => nicheMethod.launchURL(kAnonAddyHelpCenterURL),
-            ),
-            ListTile(
-              dense: true,
-              title: Text(
-                'AnonAddy FAQ',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: Text('Learn more about AnonAddy'),
-              trailing: Icon(Icons.open_in_new_outlined),
-              onTap: () => nicheMethod.launchURL(kAnonAddyFAQURL),
-            ),
-            Divider(height: 0),
-            ListTile(
-              dense: true,
-              title: Text(
-                'About App',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: Text('View AddyManager details'),
-              trailing: Icon(Icons.help_outline),
-              onTap: () {
-                Navigator.push(context, CustomPageRoute(AboutAppScreen()));
-              },
-            ),
-            // ListTile(
-            //   title: Text(
-            //     'Logout',
-            //     textAlign: TextAlign.center,
-            //   ),
-            //   tileColor: Colors.red,
-            //   onTap: () {
-            //     Navigator.push(context, CustomPageRoute(AboutAppScreen()));
-            //   },
-            // ),
-            const Spacer(),
-            const AppVersion(),
-            const RateAddyManager(),
-            Container(
-              width: size.width,
-              height: size.height * 0.05,
-              margin: EdgeInsets.all(10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  primary: Colors.red,
+              Divider(height: 0),
+              ListTile(
+                dense: true,
+                title: Text(
+                  'AnonAddy Help Center',
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
-                child: Text('Logout'),
-                onPressed: () => buildLogoutDialog(context, isIOS),
+                subtitle: Text('AnonAddy\'s terminologies...etc.'),
+                trailing: Icon(Icons.open_in_new_outlined),
+                onTap: () => nicheMethod.launchURL(kAnonAddyHelpCenterURL),
               ),
-            ),
-            SizedBox(height: size.height * 0.01),
-          ],
-        );
-      }),
+              ListTile(
+                dense: true,
+                title: Text(
+                  'AnonAddy FAQ',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: Text('Learn more about AnonAddy'),
+                trailing: Icon(Icons.open_in_new_outlined),
+                onTap: () => nicheMethod.launchURL(kAnonAddyFAQURL),
+              ),
+              Divider(height: 0),
+              ListTile(
+                dense: true,
+                title: Text(
+                  'About App',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: Text('View AddyManager details'),
+                trailing: Icon(Icons.help_outline),
+                onTap: () {
+                  Navigator.push(context, CustomPageRoute(AboutAppScreen()));
+                },
+              ),
+              // ListTile(
+              //   title: Text(
+              //     'Logout',
+              //     textAlign: TextAlign.center,
+              //   ),
+              //   tileColor: Colors.red,
+              //   onTap: () {
+              //     Navigator.push(context, CustomPageRoute(AboutAppScreen()));
+              //   },
+              // ),
+              const Spacer(),
+              const AppVersion(),
+              const RateAddyManager(),
+              Container(
+                width: size.width,
+                height: size.height * 0.05,
+                margin: EdgeInsets.all(10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    primary: Colors.red,
+                  ),
+                  child: Text('Logout'),
+                  onPressed: () => buildLogoutDialog(context, isIOS),
+                ),
+              ),
+              SizedBox(height: size.height * 0.01),
+            ],
+          );
+        },
+      ),
     );
   }
 

@@ -34,7 +34,7 @@ import 'state_management/username_state_manager.dart';
 /// Class Providers
 final flutterSecureStorage = Provider((ref) => FlutterSecureStorage());
 
-final biometricAuthServiceProvider =
+final biometricAuthService =
     Provider((ref) => BiometricAuthService(LocalAuthentication()));
 
 final offlineDataProvider = Provider<OfflineData>((ref) {
