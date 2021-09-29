@@ -23,6 +23,7 @@ class BiometricNotifier extends ChangeNotifier {
     required this.showToast,
   }) : super() {
     isEnabled = false;
+    biometricService.init();
     _loadBiometricState();
   }
 
