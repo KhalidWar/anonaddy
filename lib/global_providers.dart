@@ -176,9 +176,6 @@ final domainStateManagerProvider = ChangeNotifierProvider((ref) {
 });
 
 /// Future Providers
-final accessTokenProvider = FutureProvider<String>(
-    (ref) async => await ref.watch(accessTokenService).getAccessToken());
-
 final packageInfoProvider =
     FutureProvider<PackageInfo>((ref) => PackageInfo.fromPlatform());
 

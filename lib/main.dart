@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/screens/secure_app_screen/secure_app_screen.dart';
+import 'package:anonaddy/screens/security_screen/authorization_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +68,7 @@ class MyApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: themeProvider.isDarkTheme ? darkTheme : lightTheme,
         darkTheme: darkTheme,
-        home: SecureAppScreen(),
+        home: AuthorizationScreen(),
       ),
     );
   }
