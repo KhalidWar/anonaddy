@@ -141,7 +141,7 @@ class SettingsScreen extends StatelessWidget {
     logout() {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LogoutScreen()),
+        CustomPageRoute(LogoutScreen()),
       );
     }
 

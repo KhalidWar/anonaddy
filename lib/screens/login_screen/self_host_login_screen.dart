@@ -1,6 +1,6 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,9 +21,8 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
   Future<void> login() async {
     if (_urlFormKey.currentState!.validate() &&
         _tokenFormKey.currentState!.validate()) {
-      await context
-          .read(loginStateManagerProvider)
-          .login(context, _url, _token);
+      //todo fix navigation issue. Screen stays on top.
+      await context.read(authStateNotifier.notifier).login(_url, _token);
     }
   }
 
@@ -145,8 +144,9 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
 
     return Consumer(
       builder: (_, watch, __) {
-        final loginManager = watch(loginStateManagerProvider);
+        final authState = watch(authStateNotifier);
         final isDark = Theme.of(context).brightness == Brightness.dark;
+
         return Container(
           height: size.height * 0.1,
           width: size.width,
@@ -161,7 +161,7 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(),
             key: Key('loginButton'),
-            child: loginManager.isLoading
+            child: authState.loginLoading!
                 ? CircularProgressIndicator(
                     key: Key('loginLoadingIndicator'),
                     backgroundColor: kPrimaryColor,

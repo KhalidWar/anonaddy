@@ -1,8 +1,7 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class LogoutScreen extends StatefulWidget {
   @override
@@ -10,10 +9,14 @@ class LogoutScreen extends StatefulWidget {
 }
 
 class _LogoutScreenState extends State<LogoutScreen> {
+  Future<void> logout() async {
+    await context.read(authStateNotifier.notifier).logout(context);
+  }
+
   @override
   void initState() {
     super.initState();
-    context.read(loginStateManagerProvider).logout(context);
+    logout();
   }
 
   @override

@@ -138,18 +138,6 @@ final usernameStateManagerProvider = ChangeNotifierProvider((ref) {
   );
 });
 
-final loginStateManagerProvider = ChangeNotifierProvider((ref) {
-  final services = ref.read(accessTokenService);
-  final secureStorage = ref.read(flutterSecureStorage);
-  final methods = ref.read(nicheMethods);
-
-  return LoginStateManager(
-    accessTokenService: services,
-    secureStorage: secureStorage,
-    showToast: methods.showToast,
-  );
-});
-
 final recipientStateManagerProvider = ChangeNotifierProvider((ref) {
   final services = ref.read(recipientService);
   final methods = ref.read(nicheMethods);

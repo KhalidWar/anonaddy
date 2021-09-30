@@ -4,6 +4,7 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
+import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,8 +23,8 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
   Future<void> login(BuildContext context) async {
     if (_tokenFormKey.currentState!.validate()) {
       await context
-          .read(loginStateManagerProvider)
-          .login(context, kAuthorityURL, _token);
+          .read(authStateNotifier.notifier)
+          .login(kAuthorityURL, _token);
     }
   }
 
@@ -214,7 +215,7 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
 
     return Consumer(
       builder: (context, watch, child) {
-        final loginManager = watch(loginStateManagerProvider);
+        final authState = watch(authStateNotifier);
 
         return Container(
           height: size.height * 0.1,
@@ -230,7 +231,7 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(),
             key: Key('loginButton'),
-            child: loginManager.isLoading
+            child: authState.loginLoading!
                 ? CircularProgressIndicator(
                     key: Key('loginLoadingIndicator'),
                     backgroundColor: kPrimaryColor,

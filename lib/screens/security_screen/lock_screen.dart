@@ -81,11 +81,8 @@ class _LockScreenState extends State<LockScreen> {
       onPressed: () {
         final dialog = context.read(confirmationDialog);
 
-        void logout() {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LogoutScreen()),
-          );
+        Future<void> logout() async {
+          await context.read(authStateNotifier.notifier).logout(context);
         }
 
         showModal(
