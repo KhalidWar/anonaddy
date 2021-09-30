@@ -31,6 +31,7 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -45,7 +46,9 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
               width: size.width * 0.88,
               padding: EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardTheme.color,
+                color: isDark
+                    ? Theme.of(context).cardTheme.color
+                    : Theme.of(context).cardColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
@@ -70,7 +73,7 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
                       ),
                     ],
                   ),
-                  buildFooter(context),
+                  buildFooter(context, isDark),
                 ],
               ),
             ),
@@ -209,9 +212,8 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
     );
   }
 
-  Widget buildFooter(BuildContext context) {
+  Widget buildFooter(BuildContext context, bool isDark) {
     final size = MediaQuery.of(context).size;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Consumer(
       builder: (context, watch, child) {

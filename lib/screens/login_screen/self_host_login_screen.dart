@@ -29,6 +29,8 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final validator = context.read(formValidator);
 
     return GestureDetector(
@@ -43,7 +45,9 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
               width: size.width * 0.88,
               padding: EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
+                color: isDark
+                    ? Theme.of(context).cardTheme.color
+                    : Theme.of(context).cardColor,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
@@ -129,7 +133,7 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                         .read(nicheMethods)
                         .launchURL(kAnonAddySelfHostingURL),
                   ),
-                  loginButton(context),
+                  loginButton(context, isDark),
                 ],
               ),
             ),
@@ -139,13 +143,12 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
     );
   }
 
-  Consumer loginButton(BuildContext context) {
+  Consumer loginButton(BuildContext context, bool isDark) {
     final size = MediaQuery.of(context).size;
 
     return Consumer(
       builder: (_, watch, __) {
         final authState = watch(authStateNotifier);
-        final isDark = Theme.of(context).brightness == Brightness.dark;
 
         return Container(
           height: size.height * 0.1,
