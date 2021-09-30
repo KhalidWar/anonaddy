@@ -1,6 +1,4 @@
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -8,9 +6,10 @@ import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/state_management/alias_state/alias_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
+import 'package:anonaddy/state_management/search/search_history_notifier.dart';
+import 'package:anonaddy/state_management/search/search_history_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class SearchTab extends StatelessWidget {
   void search(BuildContext context) {
@@ -63,16 +62,35 @@ class SearchTab extends StatelessWidget {
               ),
               TextButton(
                 child: Text('Clear'),
-                onPressed: () => SearchHistoryStorage.getAliasBoxes().clear(),
+                onPressed: () => context
+                    .read(searchHistoryStateNotifier.notifier)
+                    .clearSearchHistory(),
               ),
             ],
           ),
         ),
         Divider(height: 0),
-        ValueListenableBuilder<Box<Alias>>(
-          valueListenable: SearchHistoryStorage.getAliasBoxes().listenable(),
-          builder: (context, box, __) {
-            final aliases = box.values.toList().cast<Alias>();
+        searchHistory(context),
+      ],
+    );
+  }
+
+  Widget searchHistory(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    return Consumer(
+      builder: (context, watch, _) {
+        final searchState = watch(searchHistoryStateNotifier);
+
+        switch (searchState.status) {
+          case SearchHistoryStatus.loading:
+            return Padding(
+              padding: EdgeInsets.all(size.height * 0.01),
+              child: Center(child: CircularProgressIndicator()),
+            );
+
+          case SearchHistoryStatus.loaded:
+            final aliases = searchState.aliases;
 
             if (aliases.isEmpty)
               return Padding(
@@ -94,9 +112,19 @@ class SearchTab extends StatelessWidget {
                   ),
                 ),
               );
-          },
-        ),
-      ],
+
+          case SearchHistoryStatus.failed:
+            final error = searchState.errorMessage;
+            return Padding(
+              padding: EdgeInsets.all(size.height * 0.01),
+              child: Row(
+                children: [
+                  Text(error ?? 'Something went wrong: ${error.toString()}'),
+                ],
+              ),
+            );
+        }
+      },
     );
   }
 }

@@ -58,7 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     checkIfAppUpdated();
-    context.read(searchHistoryStorage).openSearchHiveBox();
   }
 
   @override

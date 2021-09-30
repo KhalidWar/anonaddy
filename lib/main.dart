@@ -23,22 +23,6 @@ void main() async {
   Hive.registerAdapter(AliasAdapter());
   Hive.registerAdapter(RecipientAdapter());
 
-  final secureStorage = const FlutterSecureStorage();
-
-  final containsEncryptionKey =
-      await secureStorage.containsKey(key: kHiveSecureKey);
-  if (!containsEncryptionKey) {
-    final key = Hive.generateSecureKey();
-    await secureStorage.write(key: kHiveSecureKey, value: base64UrlEncode(key));
-  }
-
-  final data = await secureStorage.read(key: kHiveSecureKey);
-  final encryptionKey = base64Url.decode(data!);
-  await Hive.openBox<Alias>(
-    kSearchHistoryBox,
-    encryptionCipher: HiveAesCipher(encryptionKey),
-  );
-
   runApp(
     /// Phoenix restarts app upon logout
     Phoenix(
