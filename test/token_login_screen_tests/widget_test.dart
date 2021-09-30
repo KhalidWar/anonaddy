@@ -1,25 +1,21 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
-import 'package:anonaddy/state_management/login_state_manager.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 
-class MockLoginStateManager extends Mock implements LoginStateManager {
-  MockLoginStateManager(this._isLoading);
-  late bool _isLoading;
-
-  @override
-  bool get isLoading => _isLoading;
-
-  @override
-  set isLoading(bool toggle) {
-    _isLoading = toggle;
-    notifyListeners();
-  }
-}
+// class MockLoginStateManager extends Mock implements LoginStateManager {
+//   MockLoginStateManager(this._isLoading);
+//   late bool _isLoading;
+//
+//   @override
+//   bool get isLoading => _isLoading;
+//
+//   @override
+//   set isLoading(bool toggle) {
+//     _isLoading = toggle;
+//     notifyListeners();
+//   }
+// }
 
 void main() {
   Widget rootWidget({Widget? child}) {
@@ -99,33 +95,33 @@ void main() {
     expect(find.text('Cancel'), findsOneWidget);
   });
 
-  testWidgets('override providers', (WidgetTester tester) async {
-    // Arrange
-    await tester.pumpWidget(ProviderScope(
-      overrides: [
-        loginStateManagerProvider.overrideWithProvider(
-          Provider((ref) => MockLoginStateManager(true)),
-        )
-      ],
-      child: MaterialApp(home: AnonAddyLoginScreen()),
-    ));
-
-    // Act
-    final textField = find.byKey(Key('loginTextField'));
-    await tester.enterText(textField, 'text');
-    await tester.pump();
-
-    final loginButton = find.byKey(Key('loginButton'));
-    //todo fix tap is not working.
-    await tester.tap(loginButton);
-    await tester.pump();
-
-    // Assert
-    expect(textField, findsOneWidget);
-    expect(find.text('text'), findsOneWidget);
-    expect(loginButton, findsOneWidget);
-
-    // it is loading because class constructor sets isLoading to true
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-  });
+  // testWidgets('override providers', (WidgetTester tester) async {
+  //   // Arrange
+  //   await tester.pumpWidget(ProviderScope(
+  //     overrides: [
+  //       loginStateManagerProvider.overrideWithProvider(
+  //         Provider((ref) => MockLoginStateManager(true)),
+  //       )
+  //     ],
+  //     child: MaterialApp(home: AnonAddyLoginScreen()),
+  //   ));
+  //
+  //   // Act
+  //   final textField = find.byKey(Key('loginTextField'));
+  //   await tester.enterText(textField, 'text');
+  //   await tester.pump();
+  //
+  //   final loginButton = find.byKey(Key('loginButton'));
+  //   //todo fix tap is not working.
+  //   await tester.tap(loginButton);
+  //   await tester.pump();
+  //
+  //   // Assert
+  //   expect(textField, findsOneWidget);
+  //   expect(find.text('text'), findsOneWidget);
+  //   expect(loginButton, findsOneWidget);
+  //
+  //   // it is loading because class constructor sets isLoading to true
+  //   expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  // });
 }

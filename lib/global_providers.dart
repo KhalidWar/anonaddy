@@ -26,7 +26,6 @@ import 'package:local_auth/local_auth.dart';
 import 'package:package_info/package_info.dart';
 
 import 'state_management/alias_state_manager.dart';
-import 'state_management/login_state_manager.dart';
 import 'state_management/recipient_state_manager.dart';
 import 'state_management/settings_state_manager.dart';
 import 'state_management/username_state_manager.dart';

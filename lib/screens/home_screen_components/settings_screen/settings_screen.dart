@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/screens/home_screen_components/settings_screen/components/rate_addymanager.dart';
-import 'package:anonaddy/screens/login_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';

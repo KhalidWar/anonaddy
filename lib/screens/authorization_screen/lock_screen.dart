@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/screens/login_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
