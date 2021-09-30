@@ -6,10 +6,25 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: kPrimaryColor,
-      body: Center(
-        child: CircularProgressIndicator(),
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Image.asset(
+              'assets/images/play_store.png',
+              height: size.height * 0.3,
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.all(20),
+            child: CircularProgressIndicator(),
+          ),
+        ],
       ),
     );
   }
