@@ -1,7 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
-import 'package:anonaddy/screens/home_screen_components/settings_screen/components/rate_addymanager.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'about_app_screen.dart';
 import 'components/app_version.dart';
+import 'components/rate_addymanager.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override

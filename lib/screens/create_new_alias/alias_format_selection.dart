@@ -4,7 +4,7 @@ import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../global_providers.dart';
+import '../../global_providers.dart';
 
 class AliasFormatSelection extends StatelessWidget {
   const AliasFormatSelection({required this.setAliasFormat});
