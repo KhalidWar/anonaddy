@@ -1,14 +1,12 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
-import 'package:anonaddy/services/data_storage/search_history_storage.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/state_management/search/search_history_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class SearchService extends SearchDelegate {
   SearchService(this.searchAliasList);
@@ -47,21 +45,27 @@ class SearchService extends SearchDelegate {
         lottieHeight: 150,
       );
     else
-      return ListView.builder(
-        itemCount: resultsList.length,
-        itemBuilder: (context, index) {
-          return InkWell(
-            child: IgnorePointer(
-              child: AliasListTile(aliasData: resultsList[index]),
-            ),
-            onTap: () {
-              SearchHistoryStorage.getAliasBoxes().add(resultsList[index]);
-              context.read(aliasStateManagerProvider).aliasDataModel =
-                  resultsList[index];
-              Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
-            },
-          );
-        },
+      return Scrollbar(
+        child: ListView.builder(
+          itemCount: resultsList.length,
+          itemBuilder: (context, index) {
+            final alias = resultsList[index];
+            return InkWell(
+              child: IgnorePointer(
+                child: AliasListTile(aliasData: alias),
+              ),
+              onTap: () {
+                context
+                    .read(searchHistoryStateNotifier.notifier)
+                    .addAliasToSearchHistory(alias);
+                Navigator.push(
+                  context,
+                  CustomPageRoute(AliasDetailScreen(alias)),
+                );
+              },
+            );
+          },
+        ),
       );
   }
 

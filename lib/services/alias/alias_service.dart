@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 import '../access_token/access_token_service.dart';
@@ -14,7 +12,7 @@ class AliasService {
   const AliasService(this.accessTokenService);
   final AccessTokenService accessTokenService;
 
-  Future<AliasModel> getAllAliasesData(OfflineData offlineData) async {
+  Future<AliasModel> getAllAliasesData() async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
@@ -32,15 +30,11 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('getAllAliasesData ${response.statusCode}');
-        await offlineData.writeAliasOfflineData(response.body);
         return AliasModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllAliasesData ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
-    } on SocketException {
-      final securedData = await offlineData.readAliasOfflineData();
-      return AliasModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
@@ -74,7 +68,7 @@ class AliasService {
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("createNewAlias ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -102,7 +96,7 @@ class AliasService {
         return 200;
       } else {
         print('Network activateAlias ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -129,7 +123,7 @@ class AliasService {
         return 204;
       } else {
         print('Network deactivateAlias ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -157,7 +151,7 @@ class AliasService {
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('Network editDescription ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -184,7 +178,7 @@ class AliasService {
         return 204;
       } else {
         print('Network deleteAlias ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -212,7 +206,7 @@ class AliasService {
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('Network restoreAlias ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -244,7 +238,7 @@ class AliasService {
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('editAliasRecipient ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -272,7 +266,7 @@ class AliasService {
         return 204;
       } else {
         print('forgetAlias ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;

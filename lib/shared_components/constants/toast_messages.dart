@@ -20,6 +20,7 @@ const kRestoreAliasFailed = 'Failed to Restore Alias';
 
 /// Alias Description
 const kEditDescriptionSuccess = 'Description Updated Successfully';
+const kClearDescriptionSuccess = 'Description Cleared Successfully';
 const kEditDescriptionFailed = 'Failed to update description';
 
 /// Alias Create Alias

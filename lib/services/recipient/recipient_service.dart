@@ -1,18 +1,16 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 class RecipientService {
   const RecipientService(this.accessTokenService);
   final AccessTokenService accessTokenService;
 
-  Future<RecipientModel> getAllRecipient(OfflineData offlineData) async {
+  Future<RecipientModel> getAllRecipient() async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
@@ -29,15 +27,11 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print('getAllRecipient ${response.statusCode}');
-        await offlineData.writeRecipientsOfflineData(response.body);
         return RecipientModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllRecipient ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
-    } on SocketException {
-      final securedData = await offlineData.readRecipientsOfflineData();
-      return RecipientModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
@@ -64,7 +58,7 @@ class RecipientService {
         return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('enableEncryption ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -91,7 +85,7 @@ class RecipientService {
         return 204;
       } else {
         print('disableEncryption ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -120,7 +114,7 @@ class RecipientService {
         return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("addPublicGPGKey ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -148,7 +142,7 @@ class RecipientService {
         return 204;
       } else {
         print('removePublicKey ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -176,7 +170,7 @@ class RecipientService {
         return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("addRecipient ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -204,7 +198,7 @@ class RecipientService {
         return 204;
       } else {
         print('removeRecipient ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -233,7 +227,7 @@ class RecipientService {
         return 200;
       } else {
         print('sendVerificationEmail ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;

@@ -1,24 +1,21 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../global_providers.dart';
 
 class RecipientStateManager extends ChangeNotifier {
-  RecipientStateManager() {
+  RecipientStateManager({
+    required this.recipientService,
+    required this.showToast,
+  }) {
     _isLoading = false;
   }
 
-  late Recipient recipientDataModel;
-  late bool _isLoading;
+  final RecipientService recipientService;
+  final Function showToast;
 
-  final _showToast = NicheMethod().showToast;
-  final textEditController = TextEditingController();
-  final recipientFormKey = GlobalKey<FormState>();
-  final pgpKeyFormKey = GlobalKey<FormState>();
+  late bool _isLoading;
 
   bool get isLoading => _isLoading;
 
@@ -27,104 +24,88 @@ class RecipientStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setFingerprint(String? input) {
-    recipientDataModel.fingerprint = input;
+  void setFingerprint(Recipient recipient, String? input) {
+    recipient.fingerprint = input;
     notifyListeners();
   }
 
-  Future<void> toggleEncryption(
-      BuildContext context, String recipientID) async {
+  Future<void> toggleEncryption(Recipient recipient) async {
     isLoading = true;
-    if (recipientDataModel.shouldEncrypt) {
-      await context
-          .read(recipientService)
-          .disableEncryption(recipientID)
-          .then((value) {
-        recipientDataModel.shouldEncrypt = false;
-        _showToast(kEncryptionDisabled);
-      }).catchError((error) {
-        _showToast(error.toString());
-      });
-    } else {
-      await context
-          .read(recipientService)
-          .enableEncryption(recipientID)
-          .then((value) {
-        recipientDataModel.shouldEncrypt = value.shouldEncrypt;
-        _showToast(kEncryptionEnabled);
-      }).catchError((error) {
-        _showToast(error.toString());
-      });
+    Future<void> toggleOffEncryption() async {
+      try {
+        await recipientService.disableEncryption(recipient.id);
+        recipient.shouldEncrypt = false;
+      } catch (error) {
+        showToast(error.toString());
+      }
     }
+
+    Future<void> toggleOnEncryption() async {
+      try {
+        final updatedRecipient =
+            await recipientService.enableEncryption(recipient.id);
+        recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
+      } catch (error) {
+        showToast(error.toString());
+      }
+    }
+
+    recipient.shouldEncrypt
+        ? await toggleOffEncryption()
+        : await toggleOnEncryption();
     isLoading = false;
   }
 
-  Future<void> addPublicGPGKey(
-      BuildContext context, String recipientID, String keyData) async {
-    if (pgpKeyFormKey.currentState!.validate()) {
-      await context
-          .read(recipientService)
-          .addPublicGPGKey(recipientID, keyData)
-          .then((value) {
-        _showToast(kAddGPGKeySuccess);
-        setFingerprint(value.fingerprint);
-        recipientDataModel.shouldEncrypt = value.shouldEncrypt;
-        Navigator.pop(context);
-      }).catchError((error) {
-        _showToast(error.toString());
-      });
+  Future<void> addPublicGPGKey(Recipient recipient, String keyData) async {
+    try {
+      final updatedRecipient =
+          await recipientService.addPublicGPGKey(recipient.id, keyData);
+      showToast(kAddGPGKeySuccess);
+      recipient.fingerprint = updatedRecipient.fingerprint;
+      recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
+    } catch (error) {
+      showToast(error.toString());
     }
   }
 
   Future<void> removePublicGPGKey(
-      BuildContext context, String recipientID) async {
-    await context
-        .read(recipientService)
-        .removePublicGPGKey(recipientID)
-        .then((value) {
-      _showToast(kDeleteGPGKeySuccess);
-      setFingerprint(null);
-      recipientDataModel.shouldEncrypt = false;
+      BuildContext context, Recipient recipient) async {
+    await recipientService.removePublicGPGKey(recipient.id).then((value) {
+      showToast(kDeleteGPGKeySuccess);
+      setFingerprint(recipient, null);
+      recipient.shouldEncrypt = false;
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
     });
     Navigator.pop(context);
     notifyListeners();
   }
 
-  Future<void> verifyEmail(BuildContext context, String recipientID) async {
-    await context
-        .read(recipientService)
-        .sendVerificationEmail(recipientID)
-        .then((value) {
-      _showToast('Verification email is sent');
+  Future<void> verifyEmail(BuildContext context, Recipient recipient) async {
+    await recipientService.sendVerificationEmail(recipient.id).then((value) {
+      showToast('Verification email is sent');
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
     });
   }
 
   Future<void> addRecipient(BuildContext context, String email) async {
-    if (recipientFormKey.currentState!.validate()) {
-      isLoading = true;
-      await context.read(recipientService).addRecipient(email).then((value) {
-        _showToast('Recipient added successfully!');
-      }).catchError((error) {
-        _showToast(error.toString());
-      });
-      isLoading = false;
-      textEditController.clear();
-      Navigator.pop(context);
-    }
+    isLoading = true;
+    await recipientService.addRecipient(email).then((value) {
+      showToast('Recipient added successfully!');
+    }).catchError((error) {
+      showToast(error.toString());
+    });
+    isLoading = false;
+    Navigator.pop(context);
   }
 
-  Future<void> removeRecipient(BuildContext context, String recipientID) async {
-    await context
-        .read(recipientService)
-        .removeRecipient(recipientID)
-        .then((value) {
-      _showToast('Recipient deleted successfully!');
+  Future<void> removeRecipient(
+      BuildContext context, Recipient recipient) async {
+    await recipientService.removeRecipient(recipient.id).then((value) {
+      showToast('Recipient deleted successfully!');
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
     });
     Navigator.pop(context);
   }

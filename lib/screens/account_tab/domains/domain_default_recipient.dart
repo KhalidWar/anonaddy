@@ -5,7 +5,8 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anonaddy/state_management/recipient/recipient_notifier.dart';
+import 'package:anonaddy/state_management/recipient/recipient_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,7 +29,6 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
   void _toggleRecipient(Recipient verifiedRecipient) {
     if (selectedRecipient == null) {
       selectedRecipient = verifiedRecipient;
-      print('${selectedRecipient!.id}');
     } else {
       if (verifiedRecipient.email == selectedRecipient!.email) {
         selectedRecipient = null;
@@ -50,10 +50,13 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
   }
 
   void _setVerifiedRecipients() {
-    final allRecipients = context.read(recipientsProvider).data!.value;
-    for (Recipient recipient in allRecipients.recipients) {
-      if (recipient.emailVerifiedAt != null) {
-        _verifiedRecipients.add(recipient);
+    final recipientState = context.read(recipientStateNotifier);
+    if (recipientState.status == RecipientStatus.loaded) {
+      final allRecipients = recipientState.recipientModel!.recipients;
+      for (Recipient recipient in allRecipients) {
+        if (recipient.emailVerifiedAt != null) {
+          _verifiedRecipients.add(recipient);
+        }
       }
     }
   }
@@ -194,7 +197,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
                     .read(domainStateManagerProvider)
                     .updateDomainDefaultRecipient(
                       context,
-                      widget.domain.id,
+                      widget.domain,
                       selectedRecipient == null ? '' : selectedRecipient!.id,
                     ),
               ),

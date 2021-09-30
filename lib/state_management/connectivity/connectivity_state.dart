@@ -1,14 +1,9 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
-
-final connectivityStateProvider =
-    StateNotifierProvider<ConnectivityState, ConnectionStatus>(
-  (ref) {
-    final connectivityProvider = ref.read(connectivityState);
-    return connectivityProvider;
-  },
+final connectivityStateNotifier =
+    StateNotifierProvider.autoDispose<ConnectivityState, ConnectionStatus>(
+  (ref) => ConnectivityState(Connectivity()),
 );
 
 enum ConnectionStatus { online, offline }

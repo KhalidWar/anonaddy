@@ -9,10 +9,10 @@ const kUpdateAliasRecipientNote =
     'Note: only verified recipients can be used as default recipients.';
 const kDeleteAliasSubtitle = 'Alias will reject all emails sent to it';
 const kRestoreAliasSubtitle = 'Alias will be able to receive emails';
-const kUpdateDescriptionString =
-    'Enter new description or enter empty whitespace remove current description';
+const kUpdateDescriptionString = 'Provide a description for this alias';
 const kForgetAlias = 'Forget Alias';
 const kUpdateDescription = 'Update Description';
+const kRemoveDescription = 'Remove Description';
 const kNoDefaultRecipientSet = 'No default recipient set yet';
 const kSendFromAlias = 'Send From Alias';
 const kSendFromAliasString =
@@ -81,3 +81,5 @@ const kNoDescription = 'No description';
 const kSomethingWentWrong = 'Something went wrong';
 const kFailedDeliveriesNote =
     'Sometimes when AnonAddy attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
+const navigationErrorMessage =
+    'Something has gone wrong with the navigation system. Please go back and try again.';

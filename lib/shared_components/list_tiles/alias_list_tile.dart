@@ -1,6 +1,5 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,9 +14,7 @@ class AliasListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final copyOnTap = NicheMethod().copyOnTap;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final aliasDataProvider = context.read(aliasStateManagerProvider);
 
     bool isAliasDeleted() {
       return aliasData.deletedAt == null ? false : true;
@@ -56,15 +53,18 @@ class AliasListTile extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.copy),
-              onPressed:
-                  isAliasDeleted() ? null : () => copyOnTap(aliasData.email),
+              onPressed: isAliasDeleted()
+                  ? null
+                  : () => context.read(nicheMethods).copyOnTap(aliasData.email),
             ),
           ],
         ),
       ),
       onTap: () {
-        aliasDataProvider.aliasDataModel = aliasData;
-        Navigator.push(context, CustomPageRoute(AliasDetailScreen()));
+        Navigator.push(
+          context,
+          CustomPageRoute(AliasDetailScreen(aliasData)),
+        );
       },
     );
   }

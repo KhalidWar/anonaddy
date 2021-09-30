@@ -5,13 +5,14 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anonaddy/state_management/recipient/recipient_notifier.dart';
+import 'package:anonaddy/state_management/recipient/recipient_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDefaultRecipientScreen extends StatefulWidget {
-  const AliasDefaultRecipientScreen(this.aliasDataModel);
-  final Alias aliasDataModel;
+  const AliasDefaultRecipientScreen(this.alias);
+  final Alias alias;
 
   @override
   _AliasDefaultRecipientScreenState createState() =>
@@ -46,16 +47,19 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final allRecipients = context.read(recipientsProvider).data!.value;
-    for (Recipient recipient in allRecipients.recipients) {
-      if (recipient.emailVerifiedAt != null) {
-        _verifiedRecipients.add(recipient);
+    final recipientState = context.read(recipientStateNotifier);
+    if (recipientState.status == RecipientStatus.loaded) {
+      final allRecipients = recipientState.recipientModel!.recipients;
+      for (Recipient recipient in allRecipients) {
+        if (recipient.emailVerifiedAt != null) {
+          _verifiedRecipients.add(recipient);
+        }
       }
     }
   }
 
   void _setDefaultRecipients() {
-    final aliasDefaultRecipients = widget.aliasDataModel.recipients;
+    final aliasDefaultRecipients = widget.alias.recipients;
     for (Recipient verifiedRecipient in _verifiedRecipients) {
       for (Recipient recipient in aliasDefaultRecipients!) {
         if (recipient.email == verifiedRecipient.email) {
@@ -168,10 +172,8 @@ class _AliasDefaultRecipientScreenState
                 onPressed: () => context
                     .read(aliasStateManagerProvider)
                     .updateAliasDefaultRecipient(
-                      context,
-                      widget.aliasDataModel.id,
-                      _selectedRecipientsID,
-                    ),
+                        widget.alias, _selectedRecipientsID)
+                    .whenComplete(() => Navigator.pop(context)),
               ),
             ),
           ],

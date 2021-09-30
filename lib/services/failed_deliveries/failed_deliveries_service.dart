@@ -5,7 +5,7 @@ import 'dart:developer';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 class FailedDeliveriesService {
@@ -32,7 +32,7 @@ class FailedDeliveriesService {
         return FailedDeliveriesModel.fromJson(jsonDecode(response.body));
       } else {
         log('getFailedDeliveries: ' + response.statusCode.toString());
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -60,7 +60,7 @@ class FailedDeliveriesService {
         return true;
       } else {
         log('deleteFailedDelivery: ' + response.statusCode.toString());
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;

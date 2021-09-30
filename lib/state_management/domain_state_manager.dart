@@ -1,27 +1,21 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../global_providers.dart';
 
 class DomainStateManager extends ChangeNotifier {
-  DomainStateManager() {
+  DomainStateManager({required this.domainService, required this.showToast}) {
     activeSwitchLoading = false;
     catchAllSwitchLoading = false;
     updateRecipientLoading = false;
   }
 
-  late Domain domain;
+  final DomainsService domainService;
+  final Function showToast;
 
   late bool _activeSwitchLoading;
   late bool _catchAllSwitchLoading;
   late bool _updateRecipientLoading;
-
-  final createDomainFormKey = GlobalKey<FormState>();
-  final descriptionFormKey = GlobalKey<FormState>();
-  final _showToast = NicheMethod().showToast;
 
   bool get activeSwitchLoading => _activeSwitchLoading;
   bool get catchAllSwitchLoading => _catchAllSwitchLoading;
@@ -42,101 +36,93 @@ class DomainStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleActivity(BuildContext context, String domainID) async {
-    final domainProvider = context.read(domainService);
+  Future<void> toggleActivity(BuildContext context, Domain domain) async {
     activeSwitchLoading = true;
     if (domain.active) {
-      await domainProvider.deactivateDomain(domainID).then((data) {
-        _showToast('Domain Deactivated Successfully!');
+      await domainService.deactivateDomain(domain.id).then((data) {
         domain.active = false;
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       activeSwitchLoading = false;
     } else {
-      await domainProvider.activateDomain(domainID).then((data) {
+      await domainService.activateDomain(domain.id).then((data) {
         domain.active = data.active;
-        _showToast('Domain Activated Successfully!');
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       activeSwitchLoading = false;
     }
   }
 
-  Future<void> toggleCatchAll(BuildContext context, String domainID) async {
-    final domainProvider = context.read(domainService);
+  Future<void> toggleCatchAll(BuildContext context, Domain domain) async {
     catchAllSwitchLoading = true;
     if (domain.catchAll) {
-      await domainProvider.deactivateCatchAll(domainID).then((data) {
-        _showToast('Catch All Deactivated Successfully!');
+      await domainService.deactivateCatchAll(domain.id).then((data) {
         domain.catchAll = false;
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       catchAllSwitchLoading = false;
     } else {
-      await domainProvider.activateCatchAll(domainID).then((data) {
+      await domainService.activateCatchAll(domain.id).then((data) {
         domain.catchAll = data.catchAll;
-        _showToast('Catch All Activated Successfully!');
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
       catchAllSwitchLoading = false;
     }
   }
 
   Future<void> createNewDomain(BuildContext context, String domain) async {
+    final createDomainFormKey = GlobalKey<FormState>();
     if (createDomainFormKey.currentState!.validate()) {
-      await context.read(domainService).createNewDomain(domain).then((domain) {
-        _showToast('domain added successfully!');
+      await domainService.createNewDomain(domain).then((domain) {
+        showToast('domain added successfully!');
         Navigator.pop(context);
       }).catchError((error) {
-        _showToast(error.toString());
+        showToast(error.toString());
       });
     }
   }
 
-  Future editDescription(BuildContext context, domainID, description) async {
-    if (descriptionFormKey.currentState!.validate()) {
-      await context
-          .read(domainService)
-          .editDomainDescription(domainID, description)
-          .then((data) {
-        Navigator.pop(context);
-        domain.description = data.description;
-        _showToast('Description updated successfully!');
-      }).catchError((error) {
-        _showToast(error.toString());
-      });
-    }
+  Future editDescription(
+      BuildContext context, Domain domain, description) async {
+    await domainService
+        .editDomainDescription(domain.id, description)
+        .then((data) {
+      Navigator.pop(context);
+      domain.description = data.description;
+      showToast('Description updated successfully!');
+    }).catchError((error) {
+      showToast(error.toString());
+    });
   }
 
   Future updateDomainDefaultRecipient(
-      BuildContext context, domainID, recipientID) async {
+      BuildContext context, Domain domain, recipientID) async {
     updateRecipientLoading = true;
-    await context
-        .read(domainService)
-        .updateDomainDefaultRecipient(domainID, recipientID)
+    await domainService
+        .updateDomainDefaultRecipient(domain.id, recipientID)
         .then((updatedDomain) {
       updateRecipientLoading = false;
       domain.defaultRecipient = updatedDomain.defaultRecipient;
       notifyListeners();
-      _showToast('Default recipient updated successfully!');
+      showToast('Default recipient updated successfully!');
       Navigator.pop(context);
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
       updateRecipientLoading = false;
     });
   }
 
-  Future<void> deleteDomain(BuildContext context, String domainID) async {
+  Future<void> deleteDomain(BuildContext context, Domain domain) async {
     Navigator.pop(context);
-    await context.read(domainService).deleteDomain(domainID).then((domain) {
+    await domainService.deleteDomain(domain.id).then((domain) {
       Navigator.pop(context);
-      _showToast('Domain deleted successfully!');
+      showToast('Domain deleted successfully!');
     }).catchError((error) {
-      _showToast(error.toString());
+      showToast(error.toString());
     });
   }
 }

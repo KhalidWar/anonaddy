@@ -1,19 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 class DomainsService {
   const DomainsService(this.accessTokenService);
   final AccessTokenService accessTokenService;
 
-  Future<DomainModel> getAllDomains(OfflineData offlineData) async {
+  Future<DomainModel> getAllDomains() async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
@@ -30,15 +28,11 @@ class DomainsService {
 
       if (response.statusCode == 200) {
         print('getAllDomains ${response.statusCode}');
-        await offlineData.writeDomainOfflineData(response.body);
         return DomainModel.fromJson(jsonDecode(response.body));
       } else {
         print('getAllDomains ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
-    } on SocketException {
-      final securedData = await offlineData.readDomainOfflineData();
-      throw DomainModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
@@ -65,7 +59,7 @@ class DomainsService {
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("createNewDomain ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -94,7 +88,7 @@ class DomainsService {
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("editDomainDescription ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -121,7 +115,7 @@ class DomainsService {
         return 204;
       } else {
         print("deleteDomain ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -151,7 +145,7 @@ class DomainsService {
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("updateDomainDefaultRecipient ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -179,7 +173,7 @@ class DomainsService {
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("activateDomain ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -206,7 +200,7 @@ class DomainsService {
         return 204;
       } else {
         print("deactivateDomain ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -234,7 +228,7 @@ class DomainsService {
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
         print("activateCatchAll ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;
@@ -261,7 +255,7 @@ class DomainsService {
         return 204;
       } else {
         print("deactivateCatchAll ${response.statusCode}");
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
       throw e;

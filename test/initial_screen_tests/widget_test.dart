@@ -1,5 +1,4 @@
-import 'package:anonaddy/screens/login_screen/initial_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +14,7 @@ void main() {
       'Then scaffold is loaded, shows loading indicator, and no error.',
       (WidgetTester tester) async {
     // Arrange
-    await tester.pumpWidget(rootWidget(child: InitialScreen()));
+    await tester.pumpWidget(rootWidget(child: AuthorizationScreen()));
 
     // Act
     final scaffold = find.byKey(Key('initialScreenScaffold'));

@@ -5,7 +5,6 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,8 +18,6 @@ class AccountTabHeader extends StatelessWidget {
 
   final Account account;
   late final isSelfHosted;
-
-  final _nicheMethod = NicheMethod();
 
   String _capitalize(String input) {
     final firstLetter = input[0];
@@ -59,20 +56,21 @@ class AccountTabHeader extends StatelessWidget {
       buildAddNewRecipient(context);
     } else {
       account.recipientCount == account.recipientLimit
-          ? _nicheMethod.showToast(kReachedRecipientLimit)
+          ? context.read(nicheMethods).showToast(kReachedRecipientLimit)
           : buildAddNewRecipient(context);
     }
   }
 
-  void _addNewUsername(BuildContext context, String? subscription) {
+  void _addNewUsername(BuildContext context) {
+    final showToast = context.read(nicheMethods).showToast;
     if (isSelfHosted) {
       buildAddNewUsername(context);
     } else {
-      if (subscription == kFreeSubscription) {
-        _nicheMethod.showToast(kOnlyAvailableToPaid);
+      if (account.subscription == kFreeSubscription) {
+        showToast(kOnlyAvailableToPaid);
       } else {
         account.usernameCount == account.usernameLimit
-            ? _nicheMethod.showToast(kReachedUsernameLimit)
+            ? showToast(kReachedUsernameLimit)
             : buildAddNewUsername(context);
       }
     }
@@ -82,8 +80,6 @@ class AccountTabHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final subscription =
-        context.read(accountStreamProvider).data!.value.account.subscription;
     final correctAliasString = context.read(nicheMethods).correctAliasString;
 
     return Column(
@@ -136,7 +132,7 @@ class AccountTabHeader extends StatelessWidget {
           subtitle: 'Usernames',
           leadingIconData: Icons.account_circle_outlined,
           trailingIcon: Icon(Icons.add_circle_outline_outlined),
-          onTap: () => _addNewUsername(context, subscription),
+          onTap: () => _addNewUsername(context),
         ),
       ],
     );
@@ -144,7 +140,7 @@ class AccountTabHeader extends StatelessWidget {
 
   Future<void> updateDefaultAliasFormatDomain(BuildContext context) async {
     final instanceURL = await context.read(accessTokenService).getInstanceURL();
-    await _nicheMethod.launchURL('https://$instanceURL/settings');
+    await context.read(nicheMethods).launchURL('https://$instanceURL/settings');
   }
 
   Future buildAddNewRecipient(BuildContext context) {

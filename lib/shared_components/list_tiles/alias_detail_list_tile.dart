@@ -1,5 +1,6 @@
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/global_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDetailListTile extends StatelessWidget {
   const AliasDetailListTile({
@@ -38,7 +39,7 @@ class AliasDetailListTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${NicheMethod().fixDateTime(title)}',
+                          context.read(nicheMethods).fixDateTime(title),
                           style: titleTextStyle ?? null,
                         ),
                         Padding(

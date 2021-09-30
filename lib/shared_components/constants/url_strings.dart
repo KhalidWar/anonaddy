@@ -23,6 +23,7 @@ const kFailedDeliveriesURL = 'failed-deliveries';
 /// AnonAddy URLs
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
 const kAnonAddyFAQURL = 'https://anonaddy.com/faq/';
+const kAnonAddyHelpCenterURL = 'https://anonaddy.com/help/';
 const kAnonAddySelfHostingURL = 'https://anonaddy.com/self-hosting/';
 const kAddyManagerPlayStoreURL =
     'https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy';

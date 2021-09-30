@@ -1,20 +1,20 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_tab_pie_chart.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/state_management/alias_state/alias_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_state.dart';
+import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'components/alias_shimmer_loading.dart';
+import 'components/alias_tab_pie_chart.dart';
 
 class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final aliasStream = watch(aliasDataStream);
-
-    /// preloads domainOptions for create new alias screen
-    watch(domainOptionsProvider);
+    final aliasState = watch(aliasStateNotifier);
 
     final size = MediaQuery.of(context).size;
 
@@ -33,9 +33,13 @@ class AliasTab extends ConsumerWidget {
       }
     }
 
-    return aliasStream.when(
-      loading: () => AliasShimmerLoading(),
-      data: (data) {
+    switch (aliasState.status) {
+      case AliasStatus.loading:
+        return AliasShimmerLoading();
+
+      case AliasStatus.loaded:
+        final data = aliasState.aliasModel!;
+
         for (Alias alias in data.aliases) {
           forwardedList.add(alias.emailsForwarded);
           blockedList.add(alias.emailsBlocked);
@@ -53,8 +57,9 @@ class AliasTab extends ConsumerWidget {
           body: DefaultTabController(
             length: 2,
             child: NestedScrollView(
-              controller:
-                  context.read(fabVisibilityStateProvider).aliasController,
+              controller: context
+                  .read(fabVisibilityStateNotifier.notifier)
+                  .aliasController,
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
@@ -102,43 +107,45 @@ class AliasTab extends ConsumerWidget {
                   if (availableAliasList.isEmpty)
                     buildEmptyAliasList(context)
                   else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: availableAliasList.length,
-                      itemBuilder: (context, index) {
-                        return AliasListTile(
-                          aliasData: availableAliasList[index],
-                        );
-                      },
+                    Scrollbar(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: availableAliasList.length,
+                        itemBuilder: (context, index) {
+                          return AliasListTile(
+                            aliasData: availableAliasList[index],
+                          );
+                        },
+                      ),
                     ),
                   if (deletedAliasList.isEmpty)
                     buildEmptyAliasList(context)
                   else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: deletedAliasList.length,
-                      itemBuilder: (context, index) {
-                        return AliasListTile(
-                          aliasData: deletedAliasList[index],
-                        );
-                      },
+                    Scrollbar(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: deletedAliasList.length,
+                        itemBuilder: (context, index) {
+                          return AliasListTile(
+                            aliasData: deletedAliasList[index],
+                          );
+                        },
+                      ),
                     ),
                 ],
               ),
             ),
           ),
         );
-      },
-      error: (error, stackTrace) {
+
+      case AliasStatus.failed:
+        final error = aliasState.errorMessage!;
         return LottieWidget(
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',
           label: error.toString(),
         );
-      },
-    );
+    }
   }
 
   Center buildEmptyAliasList(BuildContext context) {

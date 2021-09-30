@@ -6,14 +6,9 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
-import 'package:anonaddy/utilities/confirmation_dialog.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,8 +17,8 @@ import 'package:flutter_svg/svg.dart';
 import '../../../global_providers.dart';
 
 class RecipientDetailedScreen extends ConsumerWidget {
-  const RecipientDetailedScreen({required this.recipientData});
-  final Recipient recipientData;
+  const RecipientDetailedScreen({required this.recipient});
+  final Recipient recipient;
 
   int calculateTotal(List<int> list) {
     if (list.isEmpty) {
@@ -40,9 +35,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final isLoading = recipientStateProvider.isLoading;
 
     final recipientProvider = context.read(recipientStateManagerProvider);
-    final toggleEncryption = recipientProvider.toggleEncryption;
-    final verifyEmail = recipientProvider.verifyEmail;
-
     final size = MediaQuery.of(context).size;
 
     final List<int> forwardedList = [];
@@ -50,8 +42,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
     final List<int> repliedList = [];
     final List<int> sentList = [];
 
-    if (recipientData.aliases != null) {
-      for (Alias alias in recipientData.aliases!) {
+    if (recipient.aliases != null) {
+      for (Alias alias in recipient.aliases!) {
         forwardedList.add(alias.emailsForwarded);
         blockedList.add(alias.emailsBlocked);
         repliedList.add(alias.emailsReplied);
@@ -62,148 +54,141 @@ class RecipientDetailedScreen extends ConsumerWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (recipientData.aliases == null ||
-                recipientData.emailVerifiedAt == null)
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 40),
-                child: SvgPicture.asset(
-                  'assets/images/envelope.svg',
-                  height: size.height * 0.22,
-                ),
-              )
-            else
-              AliasScreenPieChart(
-                emailsForwarded: calculateTotal(forwardedList),
-                emailsBlocked: calculateTotal(blockedList),
-                emailsReplied: calculateTotal(repliedList),
-                emailsSent: calculateTotal(sentList),
+      body: ListView(
+        children: [
+          if (recipient.aliases == null || recipient.emailVerifiedAt == null)
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: SvgPicture.asset(
+                'assets/images/envelope.svg',
+                height: size.height * 0.22,
               ),
-            Divider(height: size.height * 0.03),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-              child:
-                  Text('Actions', style: Theme.of(context).textTheme.headline6),
+            )
+          else
+            AliasScreenPieChart(
+              emailsForwarded: calculateTotal(forwardedList),
+              emailsBlocked: calculateTotal(blockedList),
+              emailsReplied: calculateTotal(repliedList),
+              emailsSent: calculateTotal(sentList),
             ),
-            AliasDetailListTile(
-              leadingIconData: Icons.email_outlined,
-              title: recipientData.email,
-              subtitle: 'Recipient Email',
-              trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
-              trailingIconOnPress: () =>
-                  NicheMethod().copyOnTap(recipientData.email),
-            ),
-            AliasDetailListTile(
-              leadingIconData: Icons.fingerprint_outlined,
-              title: recipientData.fingerprint == null
-                  ? 'No fingerprint found'
-                  : '${recipientData.fingerprint}',
-              subtitle: 'GPG Key Fingerprint',
-              trailing: recipientData.fingerprint == null
-                  ? IconButton(
-                      icon: Icon(Icons.add_circle_outline_outlined),
-                      onPressed: () {})
-                  : IconButton(
-                      icon: Icon(Icons.delete_outline_outlined,
-                          color: Colors.red),
-                      onPressed: () {}),
-              trailingIconOnPress: recipientData.fingerprint == null
-                  ? () => buildAddPGPKeyDialog(context, recipientData)
-                  : () => buildRemovePGPKeyDialog(context),
-            ),
-            AliasDetailListTile(
-              leadingIconData:
-                  recipientData.shouldEncrypt ? Icons.lock : Icons.lock_open,
-              leadingIconColor:
-                  recipientData.shouldEncrypt ? Colors.green : null,
-              title:
-                  '${recipientData.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
-              subtitle: 'Encryption',
-              trailing: recipientData.fingerprint == null
-                  ? Container()
-                  : buildSwitch(isLoading),
-              trailingIconOnPress: recipientData.fingerprint == null
-                  ? null
-                  : () => toggleEncryption(context, recipientData.id),
-            ),
-            recipientData.emailVerifiedAt == null
-                ? AliasDetailListTile(
-                    leadingIconData: Icons.verified_outlined,
-                    title: recipientData.emailVerifiedAt == null ? 'No' : 'Yes',
-                    subtitle: 'Is Email Verified?',
-                    trailing: TextButton(
-                        child: Text('Verify now!'), onPressed: () {}),
-                    trailingIconOnPress: () =>
-                        verifyEmail(context, recipientData.id),
-                  )
-                : Container(),
-            if (recipientData.aliases == null)
-              Container()
-            else if (recipientData.emailVerifiedAt == null)
-              buildUnverifiedEmailWarning(size)
-            else
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Divider(height: size.height * 0.03),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: Text('Aliases',
-                        style: Theme.of(context).textTheme.headline6),
-                  ),
-                  SizedBox(height: size.height * 0.01),
-                  if (recipientData.aliases!.isEmpty)
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.height * 0.01),
-                        child: Text('No aliases found'))
-                  else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: recipientData.aliases!.length,
-                      itemBuilder: (context, index) {
-                        return AliasListTile(
-                          aliasData: recipientData.aliases![index],
-                        );
-                      },
-                    ),
-                ],
-              ),
-            Divider(height: size.height * 0.03),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Divider(height: size.height * 0.03),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+            child:
+                Text('Actions', style: Theme.of(context).textTheme.headline6),
+          ),
+          AliasDetailListTile(
+            leadingIconData: Icons.email_outlined,
+            title: recipient.email,
+            subtitle: 'Recipient Email',
+            trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
+            trailingIconOnPress: () =>
+                context.read(nicheMethods).copyOnTap(recipient.email),
+          ),
+          AliasDetailListTile(
+            leadingIconData: Icons.fingerprint_outlined,
+            title: recipient.fingerprint == null
+                ? 'No fingerprint found'
+                : '${recipient.fingerprint}',
+            subtitle: 'GPG Key Fingerprint',
+            trailing: recipient.fingerprint == null
+                ? IconButton(
+                    icon: Icon(Icons.add_circle_outline_outlined),
+                    onPressed: () {})
+                : IconButton(
+                    icon:
+                        Icon(Icons.delete_outline_outlined, color: Colors.red),
+                    onPressed: () {}),
+            trailingIconOnPress: recipient.fingerprint == null
+                ? () => buildAddPGPKeyDialog(context)
+                : () => buildRemovePGPKeyDialog(context),
+          ),
+          AliasDetailListTile(
+            leadingIconData:
+                recipient.shouldEncrypt ? Icons.lock : Icons.lock_open,
+            leadingIconColor: recipient.shouldEncrypt ? Colors.green : null,
+            title: '${recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
+            subtitle: 'Encryption',
+            trailing: recipient.fingerprint == null
+                ? Container()
+                : buildSwitch(context, isLoading),
+            trailingIconOnPress: recipient.fingerprint == null
+                ? null
+                : () => recipientProvider.toggleEncryption(recipient),
+          ),
+          recipient.emailVerifiedAt == null
+              ? AliasDetailListTile(
+                  leadingIconData: Icons.verified_outlined,
+                  title: recipient.emailVerifiedAt == null ? 'No' : 'Yes',
+                  subtitle: 'Is Email Verified?',
+                  trailing:
+                      TextButton(child: Text('Verify now!'), onPressed: () {}),
+                  trailingIconOnPress: () =>
+                      recipientProvider.verifyEmail(context, recipient),
+                )
+              : Container(),
+          if (recipient.aliases == null)
+            Container()
+          else if (recipient.emailVerifiedAt == null)
+            buildUnverifiedEmailWarning(size)
+          else
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AliasCreatedAtWidget(
-                  label: 'Created:',
-                  dateTime: recipientData.createdAt,
+                Divider(height: size.height * 0.03),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                  child: Text('Aliases',
+                      style: Theme.of(context).textTheme.headline6),
                 ),
-                AliasCreatedAtWidget(
-                  label: 'Updated:',
-                  dateTime: recipientData.updatedAt,
-                ),
+                SizedBox(height: size.height * 0.01),
+                if (recipient.aliases!.isEmpty)
+                  Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                      child: Text('No aliases found'))
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: recipient.aliases!.length,
+                    itemBuilder: (context, index) {
+                      return AliasListTile(
+                        aliasData: recipient.aliases![index],
+                      );
+                    },
+                  ),
               ],
             ),
-            SizedBox(height: size.height * 0.03),
-          ],
-        ),
+          Divider(height: size.height * 0.03),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              AliasCreatedAtWidget(
+                label: 'Created:',
+                dateTime: recipient.createdAt,
+              ),
+              AliasCreatedAtWidget(
+                label: 'Updated:',
+                dateTime: recipient.updatedAt,
+              ),
+            ],
+          ),
+          SizedBox(height: size.height * 0.03),
+        ],
       ),
     );
   }
 
-  Row buildSwitch(bool isLoading) {
+  Row buildSwitch(BuildContext context, bool isLoading) {
     return Row(
       children: [
         isLoading
-            ? CustomLoadingIndicator().customLoadingIndicator()
+            ? context.read(customLoadingIndicator).customLoadingIndicator()
             : Container(),
         Switch.adaptive(
-          value: recipientData.shouldEncrypt,
+          value: recipient.shouldEncrypt,
           onChanged: (toggle) {},
         ),
       ],
@@ -233,25 +218,25 @@ class RecipientDetailedScreen extends ConsumerWidget {
   }
 
   Future buildRemovePGPKeyDialog(BuildContext context) {
-    final confirmationDialog = ConfirmationDialog();
-    final isIOS = TargetedPlatform().isIOS();
+    final dialog = context.read(confirmationDialog);
+    final isIOS = context.read(targetedPlatform).isIOS();
 
-    void removePublicKey() {
-      context
+    Future<void> removePublicKey() async {
+      await context
           .read(recipientStateManagerProvider)
-          .removePublicGPGKey(context, recipientData.id);
+          .removePublicGPGKey(context, recipient);
     }
 
     return showModal(
       context: context,
       builder: (context) {
         return isIOS
-            ? confirmationDialog.iOSAlertDialog(
+            ? dialog.iOSAlertDialog(
                 context,
                 kRemoveRecipientPublicKeyConfirmation,
                 removePublicKey,
                 'Remove Public Key')
-            : confirmationDialog.androidAlertDialog(
+            : dialog.androidAlertDialog(
                 context,
                 kRemoveRecipientPublicKeyConfirmation,
                 removePublicKey,
@@ -260,12 +245,17 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildAddPGPKeyDialog(BuildContext context, Recipient recipientData) {
-    final _texEditingController = TextEditingController();
+  Future buildAddPGPKeyDialog(BuildContext context) {
+    final recipientState = context.read(recipientStateManagerProvider);
+    final formKey = GlobalKey<FormState>();
 
-    void addPublicKey() {
-      context.read(recipientStateManagerProvider).addPublicGPGKey(
-          context, recipientData.id, _texEditingController.text);
+    String keyData = '';
+
+    Future<void> addPublicKey() async {
+      if (formKey.currentState!.validate()) {
+        await recipientState.addPublicGPGKey(recipient, keyData);
+        Navigator.pop(context);
+      }
     }
 
     return showModalBottomSheet(
@@ -277,8 +267,6 @@ class RecipientDetailedScreen extends ConsumerWidget {
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
-        final pgpKeyFormKey =
-            context.read(recipientStateManagerProvider).pgpKeyFormKey;
 
         return Container(
           padding:
@@ -294,15 +282,16 @@ class RecipientDetailedScreen extends ConsumerWidget {
                     Text(kAddPublicKeyNote),
                     SizedBox(height: size.height * 0.015),
                     Form(
-                      key: pgpKeyFormKey,
+                      key: formKey,
                       child: TextFormField(
                         autofocus: true,
-                        controller: _texEditingController,
-                        validator: (input) =>
-                            FormValidator().validatePGPKeyField(input!),
+                        validator: (input) => context
+                            .read(formValidator)
+                            .validatePGPKeyField(input!),
                         minLines: 4,
                         maxLines: 5,
                         textInputAction: TextInputAction.done,
+                        onChanged: (input) => keyData = input,
                         onFieldSubmitted: (submit) => addPublicKey(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           contentPadding: EdgeInsets.all(5),
@@ -328,13 +317,13 @@ class RecipientDetailedScreen extends ConsumerWidget {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    final confirmationDialog = ConfirmationDialog();
-    final isIOS = TargetedPlatform().isIOS();
+    final dialog = context.read(confirmationDialog);
+    final isIOS = context.read(targetedPlatform).isIOS();
 
-    void remove() {
-      context
+    Future<void> remove() async {
+      await context
           .read(recipientStateManagerProvider)
-          .removeRecipient(context, recipientData.id);
+          .removeRecipient(context, recipient);
       Navigator.pop(context);
     }
 
@@ -360,12 +349,12 @@ class RecipientDetailedScreen extends ConsumerWidget {
               context: context,
               builder: (context) {
                 return isIOS
-                    ? confirmationDialog.iOSAlertDialog(
+                    ? dialog.iOSAlertDialog(
                         context,
                         kDeleteRecipientConfirmation,
                         remove,
                         'Delete Recipient')
-                    : confirmationDialog.androidAlertDialog(
+                    : dialog.androidAlertDialog(
                         context,
                         kDeleteRecipientConfirmation,
                         remove,

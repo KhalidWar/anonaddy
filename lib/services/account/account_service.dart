@@ -1,18 +1,16 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/models/account/account_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_message_handler.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
 
 class AccountService {
   const AccountService(this.accessTokenService);
   final AccessTokenService accessTokenService;
 
-  Future<AccountModel> getAccountData(OfflineData offlineData) async {
+  Future<AccountModel> getAccountData() async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
@@ -29,15 +27,11 @@ class AccountService {
 
       if (response.statusCode == 200) {
         print('getUserData ${response.statusCode}');
-        await offlineData.writeAccountOfflineData(response.body);
         return AccountModel.fromJson(jsonDecode(response.body));
       } else {
         print('getUserData ${response.statusCode}');
-        throw APIMessageHandler().getStatusCodeMessage(response.statusCode);
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
-    } on SocketException {
-      final securedData = await offlineData.readAccountOfflineData();
-      return AccountModel.fromJson(jsonDecode(securedData));
     } catch (e) {
       throw e;
     }
