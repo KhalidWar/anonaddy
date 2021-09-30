@@ -2,6 +2,7 @@ import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
+import 'package:anonaddy/state_management/search/search_history_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,11 +14,13 @@ final authStateNotifier = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
   final bioService = ref.read(biometricAuthService);
   final tokenService = ref.read(accessTokenService);
+  final searchHistory = ref.read(searchHistoryStateNotifier.notifier);
   final showToast = ref.read(nicheMethods).showToast;
   return AuthNotifier(
     secureStorage: secureStorage,
     biometricService: bioService,
     tokenService: tokenService,
+    searchHistory: searchHistory,
     showToast: showToast,
   );
 });
@@ -27,6 +30,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required this.secureStorage,
     required this.biometricService,
     required this.tokenService,
+    required this.searchHistory,
     required this.showToast,
   }) : super(AuthState(
           authStatus: AuthStatus.initial,
@@ -39,6 +43,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final FlutterSecureStorage secureStorage;
   final BiometricAuthService biometricService;
   final AccessTokenService tokenService;
+  final SearchHistoryNotifier searchHistory;
   final Function showToast;
 
   Future<void> login(String url, String token) async {
@@ -59,8 +64,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> logout(BuildContext context) async {
     try {
-      //todo delete HiveBox data
       await secureStorage.deleteAll();
+      await searchHistory.clearSearchHistory();
       Phoenix.rebirth(context);
       state = AuthState.freshStart();
     } catch (error) {

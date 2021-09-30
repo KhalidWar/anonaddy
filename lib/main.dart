@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/services/theme/theme.dart';
@@ -7,14 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'global_providers.dart';
 import 'models/alias/alias_model.dart';
 import 'models/recipient/recipient_model.dart';
-import 'shared_components/constants/hive_constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
