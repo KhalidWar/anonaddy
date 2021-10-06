@@ -3,7 +3,6 @@ import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +12,8 @@ import 'components/app_version.dart';
 import 'components/rate_addymanager.dart';
 
 class SettingsScreen extends StatelessWidget {
+  static const routeName = 'settingsScreen';
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -98,7 +99,7 @@ class SettingsScreen extends StatelessWidget {
                 subtitle: Text('View AddyManager details'),
                 trailing: Icon(Icons.help_outline),
                 onTap: () {
-                  Navigator.push(context, CustomPageRoute(AboutAppScreen()));
+                  Navigator.pushNamed(context, AboutAppScreen.routeName);
                 },
               ),
               // ListTile(
@@ -139,10 +140,7 @@ class SettingsScreen extends StatelessWidget {
     final confirmDialog = context.read(confirmationDialog);
 
     logout() {
-      Navigator.pushReplacement(
-        context,
-        CustomPageRoute(LogoutScreen()),
-      );
+      Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
     }
 
     return showModal(

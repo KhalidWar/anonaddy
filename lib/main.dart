@@ -1,3 +1,4 @@
+import 'package:anonaddy/route_generator.dart';
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/services/theme/theme.dart';
@@ -48,7 +49,8 @@ class MyApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: themeProvider.isDarkTheme ? darkTheme : lightTheme,
         darkTheme: darkTheme,
-        home: AuthorizationScreen(),
+        onGenerateRoute: RouteGenerator.generateRoute,
+        initialRoute: AuthorizationScreen.routeName,
       ),
     );
   }

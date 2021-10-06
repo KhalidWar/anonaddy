@@ -20,6 +20,8 @@ class DomainDetailedScreen extends ConsumerWidget {
       : super(key: key);
   final Domain domain;
 
+  static const routeName = 'domainDetailedScreen';
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final domainProvider = watch(domainStateManagerProvider);

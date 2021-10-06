@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../global_providers.dart';
-import '../custom_page_route.dart';
 
 class RecipientListTile extends StatelessWidget {
   const RecipientListTile({Key? key, required this.recipient})
@@ -44,9 +43,10 @@ class RecipientListTile extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          CustomPageRoute(RecipientDetailedScreen(recipient: recipient)),
+          RecipientDetailedScreen.routeName,
+          arguments: recipient,
         );
       },
     );

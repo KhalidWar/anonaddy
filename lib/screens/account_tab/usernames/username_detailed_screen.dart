@@ -19,6 +19,8 @@ class UsernameDetailedScreen extends ConsumerWidget {
   const UsernameDetailedScreen({required this.username});
   final Username username;
 
+  static const routeName = 'usernameDetailedScreen';
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final usernameProvider = watch(usernameStateManagerProvider);

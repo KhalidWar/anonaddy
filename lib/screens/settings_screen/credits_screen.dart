@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
 class CreditsScreen extends StatelessWidget {
+  static const routeName = 'creditsScreen';
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

@@ -3,7 +3,6 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../global_providers.dart';
 
 class AnonAddyLoginScreen extends StatefulWidget {
+  static const routeName = 'loginScreen';
+
   @override
   State<AnonAddyLoginScreen> createState() => _AnonAddyLoginScreenState();
 }
@@ -68,8 +69,8 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
                       TextButton(
                         style: TextButton.styleFrom(),
                         child: Text('Self Hosted? Change Instance!'),
-                        onPressed: () => Navigator.push(
-                            context, CustomPageRoute(SelfHostLoginScreen())),
+                        onPressed: () => Navigator.pushNamed(
+                            context, SelfHostLoginScreen.routeName),
                       ),
                     ],
                   ),

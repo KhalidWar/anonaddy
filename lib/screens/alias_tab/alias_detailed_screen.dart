@@ -19,6 +19,8 @@ class AliasDetailScreen extends ConsumerWidget {
   const AliasDetailScreen(this.alias);
   final Alias alias;
 
+  static const routeName = 'aliasDetailedScreen';
+
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final aliasDataProvider = watch(aliasStateManagerProvider);

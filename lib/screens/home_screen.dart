@@ -4,7 +4,6 @@ import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
@@ -19,6 +18,8 @@ import 'create_new_alias/create_new_alias.dart';
 import 'home_screen_components/changelog_widget.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const routeName = 'homeScreen';
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -117,14 +118,15 @@ class _HomeScreenState extends State<HomeScreen> {
       leading: IconButton(
         icon: Icon(Icons.error_outline),
         onPressed: () {
-          Navigator.push(context, CustomPageRoute(AlertCenterScreen()));
+          Navigator.pushNamed(context, AlertCenterScreen.routeName);
         },
       ),
       actions: [
         IconButton(
           icon: Icon(Icons.settings),
-          onPressed: () =>
-              Navigator.push(context, CustomPageRoute(SettingsScreen())),
+          onPressed: () {
+            Navigator.pushNamed(context, SettingsScreen.routeName);
+          },
         ),
       ],
     );

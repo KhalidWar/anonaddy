@@ -20,6 +20,8 @@ class RecipientDetailedScreen extends ConsumerWidget {
   const RecipientDetailedScreen({required this.recipient});
   final Recipient recipient;
 
+  static const routeName = 'recipientDetailedScreen';
+
   int calculateTotal(List<int> list) {
     if (list.isEmpty) {
       return 0;

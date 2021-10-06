@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LogoutScreen extends StatefulWidget {
+  static const routeName = 'logoutScreen';
+
   @override
   _LogoutScreenState createState() => _LogoutScreenState();
 }

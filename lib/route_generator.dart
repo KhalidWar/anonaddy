@@ -5,6 +5,7 @@ import 'package:anonaddy/screens/account_tab/domains/domain_detailed_screen.dart
 import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
@@ -19,28 +20,6 @@ import 'package:flutter/material.dart';
 import 'models/domain/domain_model.dart';
 
 class RouteGenerator {
-  /// Route Names
-  static const splashScreen = 'splashScreen';
-  static const loginScreen = 'loginScreen';
-  static const selfHostedScreen = 'selfHostedScreen';
-  static const initialScreen = 'initialScreen';
-
-  static const secureAppScreen = 'secureAppScreen';
-  static const secureGateScreen = 'secureGateScreen';
-
-  static const homeScreen = 'homeScreen';
-
-  static const aliasDetailedScreen = 'aliasDetailedScreen';
-  static const recipientDetailedScreen = 'recipientDetailedScreen';
-  static const usernameDetailedScreen = 'usernameDetailedScreen';
-  static const domainDetailedScreen = 'domainDetailedScreen';
-
-  static const failedDeliveriesScreen = 'failedDeliveriesScreen';
-
-  static const settingsScreen = 'settingsScreen';
-  static const aboutAppScreen = 'aboutAppScreen';
-  static const creditsScreen = 'creditsScreen';
-
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final argument = settings.arguments;
 
@@ -62,39 +41,43 @@ class RouteGenerator {
 
     switch (settings.name) {
 
+      /// Authentication Screen
+      case AuthorizationScreen.routeName:
+        return customPageRoute(AuthorizationScreen());
+
       /// Home Screen
-      case homeScreen:
+      case HomeScreen.routeName:
         return customPageRoute(HomeScreen());
-      case failedDeliveriesScreen:
+      case AlertCenterScreen.routeName:
         return customPageRoute(AlertCenterScreen());
 
       /// Settings Screen
-      case settingsScreen:
+      case SettingsScreen.routeName:
         return customPageRoute(SettingsScreen());
-      case aboutAppScreen:
+      case AboutAppScreen.routeName:
         return customPageRoute(AboutAppScreen());
-      case creditsScreen:
+      case CreditsScreen.routeName:
         return customPageRoute(CreditsScreen());
 
       /// Alias Tab
-      case aliasDetailedScreen:
+      case AliasDetailScreen.routeName:
         return customPageRoute(AliasDetailScreen(argument as Alias));
 
       /// Account Tab
-      case recipientDetailedScreen:
+      case RecipientDetailedScreen.routeName:
         return customPageRoute(
             RecipientDetailedScreen(recipient: argument as Recipient));
-      case usernameDetailedScreen:
+      case UsernameDetailedScreen.routeName:
         return customPageRoute(
             UsernameDetailedScreen(username: argument as Username));
-      case domainDetailedScreen:
+      case DomainDetailedScreen.routeName:
         return customPageRoute(
             DomainDetailedScreen(domain: argument as Domain));
 
       /// Login Screen
-      case loginScreen:
+      case AnonAddyLoginScreen.routeName:
         return customPageRoute(AnonAddyLoginScreen());
-      case selfHostedScreen:
+      case SelfHostLoginScreen.routeName:
         return customPageRoute(SelfHostLoginScreen());
 
       /// Show ErrorScreen if screen doesn't exist or something goes wrong

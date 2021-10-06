@@ -12,6 +12,8 @@ import 'lock_screen.dart';
 class AuthorizationScreen extends StatelessWidget {
   const AuthorizationScreen({Key? key}) : super(key: key);
 
+  static const routeName = 'authorizationScreen';
+
   @override
   Widget build(BuildContext context) {
     return Consumer(

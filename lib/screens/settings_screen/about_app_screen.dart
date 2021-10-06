@@ -1,6 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -9,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'credits_screen.dart';
 
 class AboutAppScreen extends StatelessWidget {
+  static const routeName = 'aboutAppScreen';
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -85,7 +86,7 @@ class AboutAppScreen extends StatelessWidget {
             subtitle: Text('Credits for assets in AddyManager'),
             trailing: Icon(Icons.image_outlined),
             onTap: () {
-              Navigator.push(context, CustomPageRoute(CreditsScreen()));
+              Navigator.pushNamed(context, CreditsScreen.routeName);
             },
           ),
           Divider(height: 0),

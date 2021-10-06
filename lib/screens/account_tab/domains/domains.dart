@@ -2,7 +2,6 @@ import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
@@ -96,11 +95,10 @@ class Domains extends ConsumerWidget {
             ),
           ),
           onTap: () {
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              CustomPageRoute(
-                DomainDetailedScreen(domain: domain),
-              ),
+              DomainDetailedScreen.routeName,
+              arguments: domain,
             );
           },
         );
