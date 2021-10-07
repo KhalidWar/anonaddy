@@ -50,6 +50,7 @@ class LottieWidget extends StatelessWidget {
                   ? Container()
                   : Text(
                       '$label',
+                      textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
                           .bodyText2!
