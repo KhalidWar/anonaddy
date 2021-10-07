@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -59,7 +59,7 @@ class SearchService extends SearchDelegate {
                     .addAliasToSearchHistory(alias);
                 Navigator.pushNamed(
                   context,
-                  AliasDetailScreen.routeName,
+                  AliasScreen.routeName,
                   arguments: alias,
                 );
               },

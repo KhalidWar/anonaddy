@@ -1,10 +1,10 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_state.dart';
 import 'package:flutter/material.dart';
@@ -163,14 +163,14 @@ class _AliasDefaultRecipientScreenState
                 child: Consumer(
                   builder: (_, watch, __) {
                     final isLoading =
-                        watch(aliasStateManagerProvider).updateRecipientLoading;
+                        watch(aliasScreenStateNotifier).updateRecipientLoading!;
                     return isLoading
                         ? CircularProgressIndicator(color: kPrimaryColor)
                         : Text('Update Recipients');
                   },
                 ),
                 onPressed: () => context
-                    .read(aliasStateManagerProvider)
+                    .read(aliasScreenStateNotifier.notifier)
                     .updateAliasDefaultRecipient(
                         widget.alias, _selectedRecipientsID)
                     .whenComplete(() => Navigator.pop(context)),

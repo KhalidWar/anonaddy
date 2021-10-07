@@ -40,6 +40,35 @@ class AliasService {
     }
   }
 
+  Future<Alias> getSpecificAlias(String aliasID) async {
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
+
+    try {
+      final response = await http.get(
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID',
+            {'deleted': 'with'}),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('getSpecificAlias ${response.statusCode}');
+        final alias = jsonDecode(response.body)['data'];
+        return Alias.fromJson(alias);
+      } else {
+        print('getSpecificAlias ${response.statusCode}');
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<Alias> createNewAlias(String desc, String domain, String format,
       String localPart, List<String> recipients) async {
     final accessToken = await accessTokenService.getAccessToken();
@@ -75,7 +104,7 @@ class AliasService {
     }
   }
 
-  Future activateAlias(String aliasID) async {
+  Future<Alias> activateAlias(String aliasID) async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
@@ -93,7 +122,7 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('Network activateAlias ${response.statusCode}');
-        return 200;
+        return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
         print('Network activateAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);

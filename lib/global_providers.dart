@@ -24,7 +24,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:package_info/package_info.dart';
 
-import 'state_management/alias_state_manager.dart';
 import 'state_management/recipient_state_manager.dart';
 import 'state_management/settings_state_manager.dart';
 import 'state_management/username_state_manager.dart';
@@ -111,16 +110,6 @@ final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
 });
 
 /// Notifier Providers
-final aliasStateManagerProvider = ChangeNotifierProvider((ref) {
-  final service = ref.read(aliasService);
-  final methods = ref.read(nicheMethods);
-
-  return AliasStateManager(
-    aliasService: service,
-    nicheMethod: methods,
-  );
-});
-
 final usernameStateManagerProvider = ChangeNotifierProvider((ref) {
   final services = ref.read(usernameService);
   final methods = ref.read(nicheMethods);

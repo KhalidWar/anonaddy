@@ -4,7 +4,7 @@ import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/domains/domain_detailed_screen.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_detailed_screen.dart';
-import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
@@ -60,8 +60,8 @@ class RouteGenerator {
         return customPageRoute(CreditsScreen());
 
       /// Alias Tab
-      case AliasDetailScreen.routeName:
-        return customPageRoute(AliasDetailScreen(argument as Alias));
+      case AliasScreen.routeName:
+        return customPageRoute(AliasScreen(argument as Alias));
 
       /// Account Tab
       case RecipientDetailedScreen.routeName:

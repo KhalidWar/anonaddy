@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -62,7 +62,7 @@ class AliasListTile extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(
           context,
-          AliasDetailScreen.routeName,
+          AliasScreen.routeName,
           arguments: aliasData,
         );
       },
