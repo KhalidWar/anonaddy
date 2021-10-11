@@ -1,15 +1,15 @@
 import 'package:anonaddy/models/alias/alias.dart';
 
-enum AliasStatus { loading, loaded, failed }
+enum AliasTabStatus { loading, loaded, failed }
 
-class AliasState {
-  const AliasState({
+class AliasTabState {
+  const AliasTabState({
     required this.status,
     this.aliases,
     this.errorMessage,
   });
 
-  final AliasStatus status;
+  final AliasTabStatus status;
   final List<Alias>? aliases;
   final String? errorMessage;
 }

@@ -9,23 +9,23 @@ import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../global_providers.dart';
-import 'alias_state.dart';
+import 'alias_tab_state.dart';
 
-final aliasStateNotifier =
-    StateNotifierProvider<AliasNotifier, AliasState>((ref) {
-  return AliasNotifier(
+final aliasTabStateNotifier =
+    StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {
+  return AliasTabNotifier(
     aliasService: ref.read(aliasService),
     offlineData: ref.read(offlineDataProvider),
     lifecycleStatus: ref.watch(lifecycleStateNotifier),
   );
 });
 
-class AliasNotifier extends StateNotifier<AliasState> {
-  AliasNotifier({
+class AliasTabNotifier extends StateNotifier<AliasTabState> {
+  AliasTabNotifier({
     required this.aliasService,
     required this.offlineData,
     required this.lifecycleStatus,
-  }) : super(AliasState(status: AliasStatus.loading)) {
+  }) : super(AliasTabState(status: AliasTabStatus.loading)) {
     fetchAliases();
   }
 
@@ -36,22 +36,22 @@ class AliasNotifier extends StateNotifier<AliasState> {
 
   Future<void> fetchAliases() async {
     try {
-      if (state.status != AliasStatus.failed) {
+      if (state.status != AliasTabStatus.failed) {
         await _loadOfflineData();
       }
 
       while (lifecycleStatus == LifecycleStatus.foreground) {
         final aliases = await aliasService.getAllAliasesData();
         await _saveOfflineData(aliases);
-        state = AliasState(status: AliasStatus.loaded, aliases: aliases);
+        state = AliasTabState(status: AliasTabStatus.loaded, aliases: aliases);
         await Future.delayed(Duration(seconds: 1));
       }
     } on SocketException {
       await _loadOfflineData();
     } catch (error) {
       if (mounted) {
-        state = AliasState(
-          status: AliasStatus.failed,
+        state = AliasTabState(
+          status: AliasTabStatus.failed,
           errorMessage: error.toString(),
         );
         await _retryOnError();
@@ -60,7 +60,7 @@ class AliasNotifier extends StateNotifier<AliasState> {
   }
 
   Future _retryOnError() async {
-    if (state.status == AliasStatus.failed) {
+    if (state.status == AliasTabStatus.failed) {
       await Future.delayed(Duration(seconds: 5));
       await fetchAliases();
     }
@@ -75,7 +75,7 @@ class AliasNotifier extends StateNotifier<AliasState> {
         return Alias.fromJson(alias);
       }).toList();
 
-      state = AliasState(status: AliasStatus.loaded, aliases: aliases);
+      state = AliasTabState(status: AliasTabStatus.loaded, aliases: aliases);
     }
   }
 

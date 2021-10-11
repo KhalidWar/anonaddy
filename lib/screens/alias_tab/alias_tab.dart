@@ -2,8 +2,8 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/state_management/alias_state/alias_notifier.dart';
-import 'package:anonaddy/state_management/alias_state/alias_state.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +14,7 @@ import 'components/alias_tab_pie_chart.dart';
 class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final aliasState = watch(aliasStateNotifier);
+    final aliasTabState = watch(aliasTabStateNotifier);
 
     final size = MediaQuery.of(context).size;
 
@@ -33,12 +33,12 @@ class AliasTab extends ConsumerWidget {
       }
     }
 
-    switch (aliasState.status) {
-      case AliasStatus.loading:
+    switch (aliasTabState.status) {
+      case AliasTabStatus.loading:
         return AliasShimmerLoading();
 
-      case AliasStatus.loaded:
-        final data = aliasState.aliases!;
+      case AliasTabStatus.loaded:
+        final data = aliasTabState.aliases!;
 
         for (Alias alias in data) {
           forwardedList.add(alias.emailsForwarded);
@@ -138,8 +138,8 @@ class AliasTab extends ConsumerWidget {
           ),
         );
 
-      case AliasStatus.failed:
-        final error = aliasState.errorMessage!;
+      case AliasTabStatus.failed:
+        final error = aliasTabState.errorMessage!;
         return LottieWidget(
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',

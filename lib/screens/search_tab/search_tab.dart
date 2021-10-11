@@ -3,8 +3,8 @@ import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/state_management/alias_state/alias_notifier.dart';
-import 'package:anonaddy/state_management/alias_state/alias_state.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/search/search_history_notifier.dart';
 import 'package:anonaddy/state_management/search/search_history_state.dart';
@@ -13,19 +13,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SearchTab extends StatelessWidget {
   void search(BuildContext context) {
-    final aliasState = context.read(aliasStateNotifier);
-    switch (aliasState.status) {
-      case AliasStatus.loading:
+    final aliasTabState = context.read(aliasTabStateNotifier);
+    switch (aliasTabState.status) {
+      case AliasTabStatus.loading:
         context.read(nicheMethods).showToast(kLoadingText);
         break;
-      case AliasStatus.loaded:
-        final aliases = aliasState.aliases!;
+      case AliasTabStatus.loaded:
+        final aliases = aliasTabState.aliases!;
         showSearch(
           context: context,
           delegate: SearchService(aliases),
         );
         break;
-      case AliasStatus.failed:
+      case AliasTabStatus.failed:
         context.read(nicheMethods).showToast(kLoadingText);
         break;
     }
