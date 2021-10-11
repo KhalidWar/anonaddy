@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -38,9 +38,9 @@ class AliasTab extends ConsumerWidget {
         return AliasShimmerLoading();
 
       case AliasStatus.loaded:
-        final data = aliasState.aliasModel!;
+        final data = aliasState.aliases!;
 
-        for (Alias alias in data.aliases) {
+        for (Alias alias in data) {
           forwardedList.add(alias.emailsForwarded);
           blockedList.add(alias.emailsBlocked);
           repliedList.add(alias.emailsReplied);

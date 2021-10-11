@@ -10,7 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'global_providers.dart';
-import 'models/alias/alias_model.dart';
+import 'models/alias/alias.dart';
 import 'models/recipient/recipient_model.dart';
 
 void main() async {

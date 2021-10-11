@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +12,7 @@ class AliasService {
   const AliasService(this.accessTokenService);
   final AccessTokenService accessTokenService;
 
-  Future<AliasModel> getAllAliasesData() async {
+  Future<List<Alias>> getAllAliasesData() async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
@@ -30,7 +30,10 @@ class AliasService {
 
       if (response.statusCode == 200) {
         print('getAllAliasesData ${response.statusCode}');
-        return AliasModel.fromJson(jsonDecode(response.body));
+        final decodedData = jsonDecode(response.body)['data'];
+        return (decodedData as List).map((alias) {
+          return Alias.fromJson(alias);
+        }).toList();
       } else {
         print('getAllAliasesData ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);

@@ -1,15 +1,15 @@
-import 'package:anonaddy/models/alias/alias_model.dart';
+import 'package:anonaddy/models/alias/alias.dart';
 
 enum AliasStatus { loading, loaded, failed }
 
 class AliasState {
   const AliasState({
     required this.status,
-    this.aliasModel,
+    this.aliases,
     this.errorMessage,
   });
 
   final AliasStatus status;
-  final AliasModel? aliasModel;
+  final List<Alias>? aliases;
   final String? errorMessage;
 }

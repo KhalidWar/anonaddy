@@ -2,20 +2,7 @@ import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'alias_model.g.dart';
-
-@JsonSerializable(explicitToJson: true)
-class AliasModel {
-  AliasModel({required this.aliases});
-
-  @JsonKey(name: 'data')
-  List<Alias> aliases;
-
-  factory AliasModel.fromJson(Map<String, dynamic> json) =>
-      _$AliasModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AliasModelToJson(this);
-}
+part 'alias.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 0)
@@ -109,4 +96,9 @@ class Alias extends HiveObject {
   factory Alias.fromJson(Map<String, dynamic> json) => _$AliasFromJson(json);
 
   Map<String, dynamic> toJson() => _$AliasToJson(this);
+
+  @override
+  String toString() {
+    return 'Alias{id: $id, userId: $userId, aliasableId: $aliasableId, aliasableType: $aliasableType, localPart: $localPart, extension: $extension, domain: $domain, email: $email, active: $active, description: $description, emailsForwarded: $emailsForwarded, emailsBlocked: $emailsBlocked, emailsReplied: $emailsReplied, emailsSent: $emailsSent, recipients: $recipients, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt}';
+  }
 }

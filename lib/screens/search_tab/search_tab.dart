@@ -19,7 +19,7 @@ class SearchTab extends StatelessWidget {
         context.read(nicheMethods).showToast(kLoadingText);
         break;
       case AliasStatus.loaded:
-        final aliases = aliasState.aliasModel!.aliases;
+        final aliases = aliasState.aliases!;
         showSearch(
           context: context,
           delegate: SearchService(aliases),

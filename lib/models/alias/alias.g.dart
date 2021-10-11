@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'alias_model.dart';
+part of 'alias.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -94,19 +94,6 @@ class AliasAdapter extends TypeAdapter<Alias> {
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
-
-AliasModel _$AliasModelFromJson(Map<String, dynamic> json) {
-  return AliasModel(
-    aliases: (json['data'] as List<dynamic>)
-        .map((e) => Alias.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
-
-Map<String, dynamic> _$AliasModelToJson(AliasModel instance) =>
-    <String, dynamic>{
-      'data': instance.aliases.map((e) => e.toJson()).toList(),
-    };
 
 Alias _$AliasFromJson(Map<String, dynamic> json) {
   return Alias(
