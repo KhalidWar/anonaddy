@@ -1,24 +1,24 @@
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/state_management/recipient/recipient_notifier.dart';
-import 'package:anonaddy/state_management/recipient/recipient_state.dart';
+import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
+import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Recipients extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final recipientState = watch(recipientStateNotifier);
+    final recipientTabState = watch(recipientTabStateNotifier);
 
     final size = MediaQuery.of(context).size;
 
-    switch (recipientState.status) {
-      case RecipientStatus.loading:
+    switch (recipientTabState.status) {
+      case RecipientTabStatus.loading:
         return RecipientsShimmerLoading();
 
-      case RecipientStatus.loaded:
-        final recipientList = recipientState.recipientModel!.recipients;
+      case RecipientTabStatus.loaded:
+        final recipientList = recipientTabState.recipientModel!.recipients;
         if (recipientList.isEmpty)
           return Center(
             child: Text('No recipients found',
@@ -34,8 +34,8 @@ class Recipients extends ConsumerWidget {
             },
           );
 
-      case RecipientStatus.failed:
-        final error = recipientState.errorMessage;
+      case RecipientTabStatus.failed:
+        final error = recipientTabState.errorMessage;
         return LottieWidget(
           showLoading: true,
           lottie: 'assets/lottie/errorCone.json',

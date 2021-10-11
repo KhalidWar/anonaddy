@@ -6,24 +6,24 @@ import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
-import 'package:anonaddy/state_management/recipient/recipient_state.dart';
+import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final recipientStateNotifier =
-    StateNotifierProvider<RecipientNotifier, RecipientState>((ref) {
-  return RecipientNotifier(
+final recipientTabStateNotifier =
+    StateNotifierProvider<RecipientTabNotifier, RecipientTabState>((ref) {
+  return RecipientTabNotifier(
     recipientService: ref.read(recipientService),
     offlineData: ref.read(offlineDataProvider),
     lifecycleStatus: ref.watch(lifecycleStateNotifier),
   );
 });
 
-class RecipientNotifier extends StateNotifier<RecipientState> {
-  RecipientNotifier({
+class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
+  RecipientTabNotifier({
     required this.recipientService,
     required this.offlineData,
     required this.lifecycleStatus,
-  }) : super(RecipientState(status: RecipientStatus.loading)) {
+  }) : super(RecipientTabState(status: RecipientTabStatus.loading)) {
     fetchRecipients();
   }
 
@@ -33,23 +33,23 @@ class RecipientNotifier extends StateNotifier<RecipientState> {
 
   Future<void> fetchRecipients() async {
     try {
-      if (state.status != RecipientStatus.failed) {
+      if (state.status != RecipientTabStatus.failed) {
         await _loadOfflineData();
       }
 
       while (lifecycleStatus == LifecycleStatus.foreground) {
         final recipients = await recipientService.getAllRecipient();
         await _saveOfflineData(recipients);
-        state = RecipientState(
-            status: RecipientStatus.loaded, recipientModel: recipients);
+        state = RecipientTabState(
+            status: RecipientTabStatus.loaded, recipientModel: recipients);
         await Future.delayed(Duration(seconds: 5));
       }
     } on SocketException {
       await _loadOfflineData();
     } catch (error) {
       if (mounted) {
-        state = RecipientState(
-          status: RecipientStatus.failed,
+        state = RecipientTabState(
+          status: RecipientTabStatus.failed,
           errorMessage: error.toString(),
         );
         await _retryOnError();
@@ -58,7 +58,7 @@ class RecipientNotifier extends StateNotifier<RecipientState> {
   }
 
   Future _retryOnError() async {
-    if (state.status == RecipientStatus.failed) {
+    if (state.status == RecipientTabStatus.failed) {
       await Future.delayed(Duration(seconds: 5));
       await fetchRecipients();
     }
@@ -68,8 +68,8 @@ class RecipientNotifier extends StateNotifier<RecipientState> {
     final securedData = await offlineData.readRecipientsOfflineData();
     if (securedData.isNotEmpty) {
       final data = RecipientModel.fromJson(jsonDecode(securedData));
-      state = RecipientState(
-        status: RecipientStatus.loaded,
+      state = RecipientTabState(
+        status: RecipientTabStatus.loaded,
         recipientModel: data,
       );
     }

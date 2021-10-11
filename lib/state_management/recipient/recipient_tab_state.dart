@@ -1,15 +1,15 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 
-enum RecipientStatus { loading, loaded, failed }
+enum RecipientTabStatus { loading, loaded, failed }
 
-class RecipientState {
-  const RecipientState({
+class RecipientTabState {
+  const RecipientTabState({
     required this.status,
     this.recipientModel,
     this.errorMessage,
   });
 
-  final RecipientStatus status;
+  final RecipientTabStatus status;
   final RecipientModel? recipientModel;
   final String? errorMessage;
 }

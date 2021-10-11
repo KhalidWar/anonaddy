@@ -5,8 +5,8 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/state_management/recipient/recipient_notifier.dart';
-import 'package:anonaddy/state_management/recipient/recipient_state.dart';
+import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
+import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,9 +52,9 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final recipientState = context.read(recipientStateNotifier);
-    if (recipientState.status == RecipientStatus.loaded) {
-      final allRecipients = recipientState.recipientModel!.recipients;
+    final recipientTabState = context.read(recipientTabStateNotifier);
+    if (recipientTabState.status == RecipientTabStatus.loaded) {
+      final allRecipients = recipientTabState.recipientModel!.recipients;
       for (Recipient recipient in allRecipients) {
         if (recipient.emailVerifiedAt != null) {
           _verifiedRecipients.add(recipient);
