@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';
+import 'package:anonaddy/screens/account_tab/recipients/recipients_screen.dart';
 import 'package:flutter/material.dart';
 
 class RecipientListTile extends StatelessWidget {
@@ -40,7 +40,7 @@ class RecipientListTile extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(
           context,
-          RecipientDetailedScreen.routeName,
+          RecipientsScreen.routeName,
           arguments: recipient,
         );
       },

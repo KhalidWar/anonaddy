@@ -2,7 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/domains/domain_detailed_screen.dart';
-import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';
+import 'package:anonaddy/screens/account_tab/recipients/recipients_screen.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_detailed_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
@@ -64,9 +64,9 @@ class RouteGenerator {
         return customPageRoute(AliasScreen(argument as Alias));
 
       /// Account Tab
-      case RecipientDetailedScreen.routeName:
+      case RecipientsScreen.routeName:
         return customPageRoute(
-            RecipientDetailedScreen(recipient: argument as Recipient));
+            RecipientsScreen(recipient: argument as Recipient));
       case UsernameDetailedScreen.routeName:
         return customPageRoute(
             UsernameDetailedScreen(username: argument as Username));

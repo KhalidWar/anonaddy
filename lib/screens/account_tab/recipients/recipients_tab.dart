@@ -6,7 +6,7 @@ import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Recipients extends ConsumerWidget {
+class RecipientsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final recipientTabState = watch(recipientTabStateNotifier);

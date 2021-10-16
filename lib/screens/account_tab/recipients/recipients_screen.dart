@@ -19,18 +19,17 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../global_providers.dart';
 
-class RecipientDetailedScreen extends StatefulWidget {
-  const RecipientDetailedScreen({required this.recipient});
+class RecipientsScreen extends StatefulWidget {
+  const RecipientsScreen({required this.recipient});
   final Recipient recipient;
 
   static const routeName = 'recipientDetailedScreen';
 
   @override
-  State<RecipientDetailedScreen> createState() =>
-      _RecipientDetailedScreenState();
+  State<RecipientsScreen> createState() => _RecipientsScreenState();
 }
 
-class _RecipientDetailedScreenState extends State<RecipientDetailedScreen> {
+class _RecipientsScreenState extends State<RecipientsScreen> {
   int calculateTotal(List<int> list) {
     if (list.isEmpty) {
       return 0;
