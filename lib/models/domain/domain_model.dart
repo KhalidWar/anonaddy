@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'domain_model.g.dart';

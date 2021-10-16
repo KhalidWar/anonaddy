@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 
 enum RecipientScreenStatus { loading, loaded, failed }
 

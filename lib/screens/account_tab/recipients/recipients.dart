@@ -18,7 +18,7 @@ class Recipients extends ConsumerWidget {
         return RecipientsShimmerLoading();
 
       case RecipientTabStatus.loaded:
-        final recipientList = recipientTabState.recipientModel!.recipients;
+        final recipientList = recipientTabState.recipients!;
         if (recipientList.isEmpty)
           return Center(
             child: Text('No recipients found',

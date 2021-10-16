@@ -1,5 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -54,7 +54,7 @@ class _AliasDefaultRecipientScreenState
   void _setVerifiedRecipients() {
     final recipientTabState = context.read(recipientTabStateNotifier);
     if (recipientTabState.status == RecipientTabStatus.loaded) {
-      final allRecipients = recipientTabState.recipientModel!.recipients;
+      final allRecipients = recipientTabState.recipients!;
       for (Recipient recipient in allRecipients) {
         if (recipient.emailVerifiedAt != null) {
           _verifiedRecipients.add(recipient);

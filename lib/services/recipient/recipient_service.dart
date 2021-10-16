@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
@@ -10,7 +10,7 @@ class RecipientService {
   const RecipientService(this.accessTokenService);
   final AccessTokenService accessTokenService;
 
-  Future<RecipientModel> getAllRecipient() async {
+  Future<List<Recipient>> getAllRecipient() async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
@@ -27,7 +27,10 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print('getAllRecipient ${response.statusCode}');
-        return RecipientModel.fromJson(jsonDecode(response.body));
+        final decodedData = jsonDecode(response.body)['data'];
+        return (decodedData as List).map((recipient) {
+          return Recipient.fromJson(recipient);
+        }).toList();
       } else {
         print('getAllRecipient ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'recipient_model.dart';
+part of 'recipient.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -67,19 +67,6 @@ class RecipientAdapter extends TypeAdapter<Recipient> {
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
-
-RecipientModel _$RecipientModelFromJson(Map<String, dynamic> json) {
-  return RecipientModel(
-    recipients: (json['data'] as List<dynamic>)
-        .map((e) => Recipient.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
-
-Map<String, dynamic> _$RecipientModelToJson(RecipientModel instance) =>
-    <String, dynamic>{
-      'data': instance.recipients.map((e) => e.toJson()).toList(),
-    };
 
 Recipient _$RecipientFromJson(Map<String, dynamic> json) {
   return Recipient(

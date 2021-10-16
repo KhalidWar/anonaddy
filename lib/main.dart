@@ -11,7 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'global_providers.dart';
 import 'models/alias/alias.dart';
-import 'models/recipient/recipient_model.dart';
+import 'models/recipient/recipient.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

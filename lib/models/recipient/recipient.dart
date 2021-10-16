@@ -2,20 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'recipient_model.g.dart';
-
-@JsonSerializable(explicitToJson: true)
-class RecipientModel {
-  RecipientModel({required this.recipients});
-
-  @JsonKey(name: 'data')
-  List<Recipient> recipients;
-
-  factory RecipientModel.fromJson(Map<String, dynamic> json) =>
-      _$RecipientModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RecipientModelToJson(this);
-}
+part 'recipient.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 1)

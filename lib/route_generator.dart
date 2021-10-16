@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/domains/domain_detailed_screen.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';

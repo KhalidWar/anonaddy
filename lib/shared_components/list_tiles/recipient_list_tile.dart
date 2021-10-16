@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';
 import 'package:flutter/material.dart';
 

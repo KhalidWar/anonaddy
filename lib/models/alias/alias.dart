@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
