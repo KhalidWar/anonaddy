@@ -5,6 +5,7 @@ import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.d
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -18,6 +19,7 @@ final createAliasNotifier = ChangeNotifierProvider.autoDispose((ref) {
     accountState: ref.read(accountStateNotifier),
     nicheMethod: ref.read(nicheMethods),
     isAutoCopy: ref.read(settingsStateManagerProvider).isAutoCopy,
+    aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
   );
 });
 
@@ -28,6 +30,7 @@ class CreateAliasNotifier extends ChangeNotifier {
     required this.accountState,
     required this.nicheMethod,
     required this.isAutoCopy,
+    required this.aliasTabNotifier,
   }) : super() {
     aliasDomain = domainOptions.domainOptions!.defaultAliasDomain;
     aliasFormat = domainOptions.domainOptions!.defaultAliasFormat;
@@ -41,6 +44,7 @@ class CreateAliasNotifier extends ChangeNotifier {
   final AccountState accountState;
   final NicheMethod nicheMethod;
   final bool isAutoCopy;
+  final AliasTabNotifier aliasTabNotifier;
 
   static const sharedDomains = [kAnonAddyMe, kAddyMail, k4wrd, kMailerMe];
   static const freeTierWithSharedDomain = [kUUID, kRandomChars];
@@ -79,6 +83,7 @@ class CreateAliasNotifier extends ChangeNotifier {
       } else {
         nicheMethod.showToast(kCreateAliasSuccess);
       }
+      aliasTabNotifier.addAlias(createdAlias);
     } catch (error) {
       nicheMethod.showToast(error.toString());
     }

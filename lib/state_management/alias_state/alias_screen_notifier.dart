@@ -7,18 +7,27 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'alias_screen_state.dart';
+import 'alias_tab_notifier.dart';
 
 final aliasScreenStateNotifier =
     StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
         (ref) {
   final service = ref.read(aliasService);
   final methods = ref.read(nicheMethods);
-  return AliasScreenNotifier(aliasService: service, nicheMethod: methods);
+  final aliasTabNotifier = ref.read(aliasTabStateNotifier.notifier);
+  return AliasScreenNotifier(
+    aliasService: service,
+    nicheMethod: methods,
+    aliasTabNotifier: aliasTabNotifier,
+  );
 });
 
 class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
-  AliasScreenNotifier({required this.aliasService, required this.nicheMethod})
-      : super(AliasScreenState(
+  AliasScreenNotifier({
+    required this.aliasService,
+    required this.nicheMethod,
+    required this.aliasTabNotifier,
+  }) : super(AliasScreenState(
           status: AliasScreenStatus.loading,
           errorMessage: '',
           isToggleLoading: false,
@@ -30,6 +39,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   final AliasService aliasService;
   final NicheMethod nicheMethod;
+  final AliasTabNotifier aliasTabNotifier;
 
   late Function showToast;
 
@@ -90,6 +100,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       showToast(kDeleteAliasSuccess);
       final oldAlias = state.alias!;
       oldAlias.deletedAt = null;
+      aliasTabNotifier.deleteAlias(aliasId);
       state = state.copyWith(deleteAliasLoading: false, alias: oldAlias);
     } catch (error) {
       showToast(error.toString());
@@ -102,6 +113,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       final newAlias = await aliasService.restoreAlias(aliasId);
       showToast(kRestoreAliasSuccess);
+      aliasTabNotifier.addAlias(newAlias);
       state = state.copyWith(deleteAliasLoading: false, alias: newAlias);
     } catch (error) {
       showToast(error.toString());

@@ -83,4 +83,16 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     final encodedData = jsonEncode(aliases);
     await offlineData.writeAliasOfflineData(encodedData);
   }
+
+  void addAlias(Alias alias) {
+    /// Put new alias in the first spot
+    state.aliases!.insert(0, alias);
+    state = state.copyWith(aliases: state.aliases);
+  }
+
+  void deleteAlias(String aliasId) {
+    /// Remove alias from aliases list
+    state.aliases!.removeWhere((alias) => alias.id == aliasId);
+    state = state.copyWith(aliases: state.aliases);
+  }
 }
