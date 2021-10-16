@@ -37,6 +37,37 @@ class RecipientService {
     }
   }
 
+  Future<Recipient> getSpecificRecipient(String recipientId) async {
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
+
+    try {
+      final response = await http.get(
+        Uri.https(
+            instanceURL,
+            '$kUnEncodedBaseURL/$kRecipientsURL/$recipientId',
+            {'deleted': 'with'}),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('getSpecificAlias ${response.statusCode}');
+        final recipient = jsonDecode(response.body)['data'];
+        return Recipient.fromJson(recipient);
+      } else {
+        print('getSpecificAlias ${response.statusCode}');
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<Recipient> enableEncryption(String recipientID) async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();

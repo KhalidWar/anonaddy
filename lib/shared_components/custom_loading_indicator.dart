@@ -6,13 +6,13 @@ class CustomLoadingIndicator {
   const CustomLoadingIndicator(this._isIOS);
   final bool _isIOS;
 
-  Widget customLoadingIndicator() {
+  Widget customLoadingIndicator({Color? color}) {
     return _isIOS
         ? CupertinoActivityIndicator(radius: 15)
         : Container(
             height: 20,
             width: 20,
-            child: CircularProgressIndicator(color: kAccentColor),
+            child: CircularProgressIndicator(color: color ?? kAccentColor),
           );
   }
 }

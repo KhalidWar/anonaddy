@@ -1,9 +1,6 @@
 import 'package:anonaddy/models/recipient/recipient_model.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipient_detailed_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class RecipientListTile extends StatelessWidget {
   const RecipientListTile({Key? key, required this.recipient})
@@ -13,8 +10,6 @@ class RecipientListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recipientDataProvider = context.read(recipientStateManagerProvider);
-
     return InkWell(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),

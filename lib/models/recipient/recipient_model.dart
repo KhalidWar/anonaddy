@@ -68,4 +68,9 @@ class Recipient extends HiveObject {
       _$RecipientFromJson(json);
 
   Map<String, dynamic> toJson() => _$RecipientToJson(this);
+
+  @override
+  String toString() {
+    return 'Recipient{id: $id, userId: $userId, email: $email, shouldEncrypt: $shouldEncrypt, fingerprint: $fingerprint, emailVerifiedAt: $emailVerifiedAt, aliases: $aliases, createdAt: $createdAt, updatedAt: $updatedAt}';
+  }
 }

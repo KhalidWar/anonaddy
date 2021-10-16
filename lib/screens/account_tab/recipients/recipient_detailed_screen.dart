@@ -8,7 +8,10 @@ import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.d
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
+import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
+import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,12 +19,18 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../global_providers.dart';
 
-class RecipientDetailedScreen extends ConsumerWidget {
+class RecipientDetailedScreen extends StatefulWidget {
   const RecipientDetailedScreen({required this.recipient});
   final Recipient recipient;
 
   static const routeName = 'recipientDetailedScreen';
 
+  @override
+  State<RecipientDetailedScreen> createState() =>
+      _RecipientDetailedScreenState();
+}
+
+class _RecipientDetailedScreenState extends State<RecipientDetailedScreen> {
   int calculateTotal(List<int> list) {
     if (list.isEmpty) {
       return 0;
@@ -32,11 +41,51 @@ class RecipientDetailedScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final recipientStateProvider = watch(recipientStateManagerProvider);
-    final isLoading = recipientStateProvider.isLoading;
+  void initState() {
+    super.initState();
+    context
+        .read(recipientScreenStateNotifier.notifier)
+        .fetchRecipient(widget.recipient.id);
+  }
 
-    final recipientProvider = context.read(recipientStateManagerProvider);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: buildAppBar(context),
+      body: Consumer(
+        builder: (context, watch, _) {
+          final recipientScreenState = watch(recipientScreenStateNotifier);
+
+          switch (recipientScreenState.status) {
+            case RecipientScreenStatus.loading:
+              return Center(
+                child: context
+                    .read(customLoadingIndicator)
+                    .customLoadingIndicator(),
+              );
+
+            case RecipientScreenStatus.loaded:
+              return buildListView(context, recipientScreenState);
+
+            case RecipientScreenStatus.failed:
+              final error = recipientScreenState.errorMessage!;
+              return LottieWidget(
+                lottie: 'assets/lottie/errorCone.json',
+                label: error,
+              );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildListView(
+      BuildContext context, RecipientScreenState recipientScreenState) {
+    final recipient = recipientScreenState.recipient!;
+
+    final recipientProvider =
+        context.read(recipientScreenStateNotifier.notifier);
     final size = MediaQuery.of(context).size;
 
     final List<int> forwardedList = [];
@@ -53,144 +102,144 @@ class RecipientDetailedScreen extends ConsumerWidget {
       }
     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context),
-      body: ListView(
-        children: [
-          if (recipient.aliases == null || recipient.emailVerifiedAt == null)
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(vertical: 40),
-              child: SvgPicture.asset(
-                'assets/images/envelope.svg',
-                height: size.height * 0.22,
-              ),
-            )
-          else
-            AliasScreenPieChart(
-              emailsForwarded: calculateTotal(forwardedList),
-              emailsBlocked: calculateTotal(blockedList),
-              emailsReplied: calculateTotal(repliedList),
-              emailsSent: calculateTotal(sentList),
+    Future<void> toggleEncryption() async {
+      return recipient.shouldEncrypt
+          ? await recipientProvider.disableEncryption(recipient)
+          : await recipientProvider.enableEncryption(recipient);
+    }
+
+    return ListView(
+      children: [
+        if (recipient.aliases == null || recipient.emailVerifiedAt == null)
+          Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(vertical: 40),
+            child: SvgPicture.asset(
+              'assets/images/envelope.svg',
+              height: size.height * 0.22,
             ),
-          Divider(height: size.height * 0.03),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-            child:
-                Text('Actions', style: Theme.of(context).textTheme.headline6),
+          )
+        else
+          AliasScreenPieChart(
+            emailsForwarded: calculateTotal(forwardedList),
+            emailsBlocked: calculateTotal(blockedList),
+            emailsReplied: calculateTotal(repliedList),
+            emailsSent: calculateTotal(sentList),
           ),
-          AliasDetailListTile(
-            leadingIconData: Icons.email_outlined,
-            title: recipient.email,
-            subtitle: 'Recipient Email',
-            trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
-            trailingIconOnPress: () =>
-                context.read(nicheMethods).copyOnTap(recipient.email),
-          ),
-          AliasDetailListTile(
-            leadingIconData: Icons.fingerprint_outlined,
-            title: recipient.fingerprint == null
-                ? 'No fingerprint found'
-                : '${recipient.fingerprint}',
-            subtitle: 'GPG Key Fingerprint',
-            trailing: recipient.fingerprint == null
-                ? IconButton(
-                    icon: Icon(Icons.add_circle_outline_outlined),
-                    onPressed: () {})
-                : IconButton(
-                    icon:
-                        Icon(Icons.delete_outline_outlined, color: Colors.red),
-                    onPressed: () {}),
-            trailingIconOnPress: recipient.fingerprint == null
-                ? () => buildAddPGPKeyDialog(context)
-                : () => buildRemovePGPKeyDialog(context),
-          ),
-          AliasDetailListTile(
-            leadingIconData:
-                recipient.shouldEncrypt ? Icons.lock : Icons.lock_open,
-            leadingIconColor: recipient.shouldEncrypt ? Colors.green : null,
-            title: '${recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
-            subtitle: 'Encryption',
-            trailing: recipient.fingerprint == null
-                ? Container()
-                : buildSwitch(context, isLoading),
-            trailingIconOnPress: recipient.fingerprint == null
-                ? null
-                : () => recipientProvider.toggleEncryption(recipient),
-          ),
-          recipient.emailVerifiedAt == null
-              ? AliasDetailListTile(
-                  leadingIconData: Icons.verified_outlined,
-                  title: recipient.emailVerifiedAt == null ? 'No' : 'Yes',
-                  subtitle: 'Is Email Verified?',
-                  trailing:
-                      TextButton(child: Text('Verify now!'), onPressed: () {}),
-                  trailingIconOnPress: () =>
-                      recipientProvider.verifyEmail(context, recipient),
-                )
-              : Container(),
-          if (recipient.aliases == null)
-            Container()
-          else if (recipient.emailVerifiedAt == null)
-            buildUnverifiedEmailWarning(size)
-          else
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Divider(height: size.height * 0.03),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Text('Aliases',
-                      style: Theme.of(context).textTheme.headline6),
-                ),
-                SizedBox(height: size.height * 0.01),
-                if (recipient.aliases!.isEmpty)
-                  Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                      child: Text('No aliases found'))
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: recipient.aliases!.length,
-                    itemBuilder: (context, index) {
-                      return AliasListTile(
-                        aliasData: recipient.aliases![index],
-                      );
-                    },
-                  ),
-              ],
-            ),
-          Divider(height: size.height * 0.03),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+        Divider(height: size.height * 0.03),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+          child: Text('Actions', style: Theme.of(context).textTheme.headline6),
+        ),
+        AliasDetailListTile(
+          leadingIconData: Icons.email_outlined,
+          title: recipient.email,
+          subtitle: 'Recipient Email',
+          trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
+          trailingIconOnPress: () =>
+              context.read(nicheMethods).copyOnTap(recipient.email),
+        ),
+        AliasDetailListTile(
+          leadingIconData: Icons.fingerprint_outlined,
+          title: recipient.fingerprint == null
+              ? 'No fingerprint found'
+              : '${recipient.fingerprint}',
+          subtitle: 'GPG Key Fingerprint',
+          trailing: recipient.fingerprint == null
+              ? IconButton(
+                  icon: Icon(Icons.add_circle_outline_outlined),
+                  onPressed: () {})
+              : IconButton(
+                  icon: Icon(Icons.delete_outline_outlined, color: Colors.red),
+                  onPressed: () {}),
+          trailingIconOnPress: recipient.fingerprint == null
+              ? () => buildAddPGPKeyDialog(context, recipient)
+              : () => buildRemovePGPKeyDialog(context, recipient),
+        ),
+        AliasDetailListTile(
+          leadingIconData:
+              recipient.shouldEncrypt ? Icons.lock : Icons.lock_open,
+          leadingIconColor: recipient.shouldEncrypt ? Colors.green : null,
+          title: '${recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
+          subtitle: 'Encryption',
+          trailing: recipient.fingerprint == null
+              ? Container()
+              : buildSwitch(context, recipientScreenState),
+          trailingIconOnPress:
+              recipient.fingerprint == null ? null : () => toggleEncryption(),
+        ),
+        recipient.emailVerifiedAt == null
+            ? AliasDetailListTile(
+                leadingIconData: Icons.verified_outlined,
+                title: recipient.emailVerifiedAt == null ? 'No' : 'Yes',
+                subtitle: 'Is Email Verified?',
+                trailing:
+                    TextButton(child: Text('Verify now!'), onPressed: () {}),
+                trailingIconOnPress: () =>
+                    recipientProvider.verifyEmail(recipient),
+              )
+            : Container(),
+        if (recipient.aliases == null)
+          Container()
+        else if (recipient.emailVerifiedAt == null)
+          buildUnverifiedEmailWarning(size)
+        else
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AliasCreatedAtWidget(
-                label: 'Created:',
-                dateTime: recipient.createdAt,
+              Divider(height: size.height * 0.03),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                child: Text('Aliases',
+                    style: Theme.of(context).textTheme.headline6),
               ),
-              AliasCreatedAtWidget(
-                label: 'Updated:',
-                dateTime: recipient.updatedAt,
-              ),
+              SizedBox(height: size.height * 0.01),
+              if (recipient.aliases!.isEmpty)
+                Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                    child: Text('No aliases found'))
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: recipient.aliases!.length,
+                  itemBuilder: (context, index) {
+                    return AliasListTile(
+                      aliasData: recipient.aliases![index],
+                    );
+                  },
+                ),
             ],
           ),
-          SizedBox(height: size.height * 0.03),
-        ],
-      ),
+        Divider(height: size.height * 0.03),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            AliasCreatedAtWidget(
+              label: 'Created:',
+              dateTime: recipient.createdAt,
+            ),
+            AliasCreatedAtWidget(
+              label: 'Updated:',
+              dateTime: recipient.updatedAt,
+            ),
+          ],
+        ),
+        SizedBox(height: size.height * 0.03),
+      ],
     );
   }
 
-  Row buildSwitch(BuildContext context, bool isLoading) {
+  Row buildSwitch(
+      BuildContext context, RecipientScreenState recipientScreenState) {
     return Row(
       children: [
-        isLoading
+        recipientScreenState.isEncryptionToggleLoading!
             ? context.read(customLoadingIndicator).customLoadingIndicator()
             : Container(),
         Switch.adaptive(
-          value: recipient.shouldEncrypt,
+          value: recipientScreenState.recipient!.shouldEncrypt,
           onChanged: (toggle) {},
         ),
       ],
@@ -219,14 +268,15 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildRemovePGPKeyDialog(BuildContext context) {
+  Future buildRemovePGPKeyDialog(BuildContext context, Recipient recipient) {
     final dialog = context.read(confirmationDialog);
     final isIOS = context.read(targetedPlatform).isIOS();
 
     Future<void> removePublicKey() async {
       await context
-          .read(recipientStateManagerProvider)
-          .removePublicGPGKey(context, recipient);
+          .read(recipientScreenStateNotifier.notifier)
+          .removePublicGPGKey(recipient);
+      Navigator.pop(context);
     }
 
     return showModal(
@@ -247,15 +297,16 @@ class RecipientDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Future buildAddPGPKeyDialog(BuildContext context) {
-    final recipientState = context.read(recipientStateManagerProvider);
+  Future buildAddPGPKeyDialog(BuildContext context, Recipient recipient) {
     final formKey = GlobalKey<FormState>();
 
     String keyData = '';
 
     Future<void> addPublicKey() async {
       if (formKey.currentState!.validate()) {
-        await recipientState.addPublicGPGKey(recipient, keyData);
+        await context
+            .read(recipientScreenStateNotifier.notifier)
+            .addPublicGPGKey(recipient, keyData);
         Navigator.pop(context);
       }
     }
@@ -324,8 +375,9 @@ class RecipientDetailedScreen extends ConsumerWidget {
 
     Future<void> remove() async {
       await context
-          .read(recipientStateManagerProvider)
-          .removeRecipient(context, recipient);
+          .read(recipientScreenStateNotifier.notifier)
+          .removeRecipient(widget.recipient);
+      Navigator.pop(context);
       Navigator.pop(context);
     }
 
