@@ -7,8 +7,8 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
-import 'package:anonaddy/state_management/usernames/usernames_notifier.dart';
-import 'package:anonaddy/state_management/usernames/usernames_state.dart';
+import 'package:anonaddy/state_management/usernames/usernames_tab_notifier.dart';
+import 'package:anonaddy/state_management/usernames/usernames_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
