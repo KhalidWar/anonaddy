@@ -10,6 +10,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
@@ -264,9 +265,6 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
   }
 
   Future buildRemovePGPKeyDialog(BuildContext context, Recipient recipient) {
-    final dialog = context.read(confirmationDialog);
-    final isIOS = context.read(targetedPlatform).isIOS();
-
     Future<void> removePublicKey() async {
       await context
           .read(recipientScreenStateNotifier.notifier)
@@ -277,17 +275,11 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     return showModal(
       context: context,
       builder: (context) {
-        return isIOS
-            ? dialog.iOSAlertDialog(
-                context,
-                kRemoveRecipientPublicKeyConfirmation,
-                removePublicKey,
-                'Remove Public Key')
-            : dialog.androidAlertDialog(
-                context,
-                kRemoveRecipientPublicKeyConfirmation,
-                removePublicKey,
-                'Remove Public Key');
+        return PlatformAlertDialog(
+          content: kRemoveRecipientPublicKeyConfirmation,
+          method: removePublicKey,
+          title: 'Remove Public Key',
+        );
       },
     );
   }
@@ -365,7 +357,6 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    final dialog = context.read(confirmationDialog);
     final isIOS = context.read(targetedPlatform).isIOS();
 
     Future<void> remove() async {
@@ -397,17 +388,11 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
             showModal(
               context: context,
               builder: (context) {
-                return isIOS
-                    ? dialog.iOSAlertDialog(
-                        context,
-                        kDeleteRecipientConfirmation,
-                        remove,
-                        'Delete Recipient')
-                    : dialog.androidAlertDialog(
-                        context,
-                        kDeleteRecipientConfirmation,
-                        remove,
-                        'Delete Recipient');
+                return PlatformAlertDialog(
+                  content: kDeleteRecipientConfirmation,
+                  method: remove,
+                  title: 'Delete Recipient',
+                );
               },
             );
           },

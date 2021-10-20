@@ -3,6 +3,7 @@ import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +19,6 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final nicheMethod = context.read(nicheMethods);
-    final isIOS = context.read(targetedPlatform).isIOS();
 
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
@@ -125,7 +125,7 @@ class SettingsScreen extends StatelessWidget {
                     primary: Colors.red,
                   ),
                   child: Text('Logout'),
-                  onPressed: () => buildLogoutDialog(context, isIOS),
+                  onPressed: () => buildLogoutDialog(context),
                 ),
               ),
               SizedBox(height: size.height * 0.01),
@@ -136,9 +136,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future buildLogoutDialog(BuildContext context, bool isIOS) {
-    final confirmDialog = context.read(confirmationDialog);
-
+  Future buildLogoutDialog(BuildContext context) {
     logout() {
       Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
     }
@@ -146,11 +144,8 @@ class SettingsScreen extends StatelessWidget {
     return showModal(
       context: context,
       builder: (context) {
-        return isIOS
-            ? confirmDialog.iOSAlertDialog(
-                context, kLogOutAlertDialog, logout, 'Logout')
-            : confirmDialog.androidAlertDialog(
-                context, kLogOutAlertDialog, logout, 'Logout');
+        return PlatformAlertDialog(
+            content: kLogOutAlertDialog, method: logout, title: 'Logout');
       },
     );
   }

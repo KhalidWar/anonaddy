@@ -10,6 +10,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
@@ -264,8 +265,6 @@ class _AliasScreenState extends State<AliasScreen> {
   }
 
   Future buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
-    final isIOS = context.read(targetedPlatform).isIOS();
-    final dialog = context.read(confirmationDialog);
     final isDeleted = alias.deletedAt != null;
 
     Future<void> deleteOrRestore() async {
@@ -284,21 +283,12 @@ class _AliasScreenState extends State<AliasScreen> {
     return showModal(
       context: context,
       builder: (context) {
-        return isIOS
-            ? dialog.iOSAlertDialog(
-                context,
-                isDeleted
-                    ? kRestoreAliasConfirmation
-                    : kDeleteAliasConfirmation,
-                deleteOrRestore,
-                '${isDeleted ? 'Restore' : 'Delete'} Alias')
-            : dialog.androidAlertDialog(
-                context,
-                isDeleted
-                    ? kRestoreAliasConfirmation
-                    : kDeleteAliasConfirmation,
-                deleteOrRestore,
-                '${isDeleted ? 'Restore' : 'Delete'} Alias');
+        return PlatformAlertDialog(
+          content:
+              isDeleted ? kRestoreAliasConfirmation : kDeleteAliasConfirmation,
+          method: deleteOrRestore,
+          title: '${isDeleted ? 'Restore' : 'Delete'} Alias',
+        );
       },
     );
   }
@@ -479,7 +469,6 @@ class _AliasScreenState extends State<AliasScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    final dialog = context.read(confirmationDialog);
     final isIOS = context.read(targetedPlatform).isIOS();
 
     Future<void> forget() async {
@@ -495,11 +484,11 @@ class _AliasScreenState extends State<AliasScreen> {
       showModal(
         context: context,
         builder: (context) {
-          return isIOS
-              ? dialog.iOSAlertDialog(
-                  context, kForgetAliasConfirmation, forget, kForgetAlias)
-              : dialog.androidAlertDialog(
-                  context, kForgetAliasConfirmation, forget, kForgetAlias);
+          return PlatformAlertDialog(
+            content: kForgetAliasConfirmation,
+            method: forget,
+            title: kForgetAlias,
+          );
         },
       );
     }

@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,9 +48,6 @@ class NavigationErrorScreen extends StatelessWidget {
   }
 
   Future logout(BuildContext context) async {
-    final isIOS = context.read(targetedPlatform).isIOS();
-    final dialog = context.read(confirmationDialog);
-
     Future<void> logout() async {
       await context.read(authStateNotifier.notifier).logout(context);
     }
@@ -58,9 +55,7 @@ class NavigationErrorScreen extends StatelessWidget {
     showModal(
       context: context,
       builder: (context) {
-        return isIOS
-            ? dialog.iOSAlertDialog(context, kLogOutAlertDialog, logout)
-            : dialog.androidAlertDialog(context, kLogOutAlertDialog, logout);
+        return PlatformAlertDialog(content: kLogOutAlertDialog, method: logout);
       },
     );
   }

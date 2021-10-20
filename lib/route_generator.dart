@@ -39,6 +39,12 @@ class RouteGenerator {
       );
     }
 
+    cupertinoPageRoute(Widget child) {
+      return CupertinoPageRoute(builder: (BuildContext context) {
+        return child;
+      });
+    }
+
     switch (settings.name) {
 
       /// Authentication Screen
