@@ -189,6 +189,20 @@ class _AliasScreenState extends State<AliasScreen> {
                   ],
                 ),
               ),
+              if (alias.recipients!.isNotEmpty)
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                  child: Column(
+                    children: [
+                      Text(
+                        'To manage recipients, go to Recipients under Account tab.',
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                      SizedBox(height: size.height * 0.01),
+                    ],
+                  ),
+                ),
               if (alias.recipients!.isEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -201,8 +215,10 @@ class _AliasScreenState extends State<AliasScreen> {
                   itemCount: alias.recipients!.length,
                   itemBuilder: (context, index) {
                     final recipients = alias.recipients;
-                    return RecipientListTile(
-                      recipient: recipients![index],
+                    return IgnorePointer(
+                      child: RecipientListTile(
+                        recipient: recipients![index],
+                      ),
                     );
                   },
                 ),
