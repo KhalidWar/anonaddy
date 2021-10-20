@@ -125,7 +125,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
                           Consumer(
                             builder: (_, watch, __) {
                               final isLoading =
-                                  watch(usernameStateManagerProvider)
+                                  watch(domainStateManagerProvider)
                                       .updateRecipientLoading;
                               return isLoading
                                   ? LinearProgressIndicator(color: kAccentColor)
