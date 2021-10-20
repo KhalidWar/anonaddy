@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformAlertDialog extends PlatformAware {
-  PlatformAlertDialog({
+  const PlatformAlertDialog({
     required this.content,
     required this.method,
     this.title,

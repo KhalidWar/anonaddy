@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformLoadingIndicator extends PlatformAware {
-  PlatformLoadingIndicator({this.color});
+  const PlatformLoadingIndicator({this.color});
   final Color? color;
 
   @override
