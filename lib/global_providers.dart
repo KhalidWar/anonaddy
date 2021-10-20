@@ -25,7 +25,6 @@ import 'package:local_auth/local_auth.dart';
 import 'package:package_info/package_info.dart';
 
 import 'state_management/settings_state_manager.dart';
-import 'state_management/username_state_manager.dart';
 
 /// Class Providers
 final flutterSecureStorage = Provider((ref) => FlutterSecureStorage());
@@ -109,16 +108,6 @@ final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
 });
 
 /// Notifier Providers
-final usernameStateManagerProvider = ChangeNotifierProvider((ref) {
-  final services = ref.read(usernameService);
-  final methods = ref.read(nicheMethods);
-
-  return UsernameStateManager(
-    usernameService: services,
-    showToast: methods.showToast,
-  );
-});
-
 final settingsStateManagerProvider = ChangeNotifierProvider((ref) {
   final settingStorage = ref.read(settingsDataStorage);
   return SettingsStateManager(settingsStorage: settingStorage);

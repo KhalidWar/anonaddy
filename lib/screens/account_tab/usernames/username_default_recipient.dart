@@ -7,6 +7,7 @@ import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.d
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
+import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -124,16 +125,7 @@ class _AliasDefaultRecipientScreenState
                         children: [
                           Text(kUpdateUsernameDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
-                          Consumer(
-                            builder: (_, watch, __) {
-                              final isLoading =
-                                  watch(usernameStateManagerProvider)
-                                      .updateRecipientLoading;
-                              return isLoading
-                                  ? LinearProgressIndicator(color: kAccentColor)
-                                  : Divider(height: 0);
-                            },
-                          ),
+                          Divider(height: 0),
                         ],
                       ),
                     ),
@@ -194,14 +186,26 @@ class _AliasDefaultRecipientScreenState
               right: 15,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
-                child: Text('Update Default Recipients'),
-                onPressed: () => context
-                    .read(usernameStateManagerProvider)
-                    .updateDefaultRecipient(
-                      context,
-                      widget.username,
-                      selectedRecipient == null ? '' : selectedRecipient!.id,
-                    ),
+                child: Consumer(
+                  builder: (_, watch, __) {
+                    final isLoading = watch(usernamesScreenStateNotifier)
+                        .updateRecipientLoading!;
+                    return isLoading
+                        ? context
+                            .read(customLoadingIndicator)
+                            .customLoadingIndicator(color: kPrimaryColor)
+                        : Text('Update Default Recipients');
+                  },
+                ),
+                onPressed: () async {
+                  await context
+                      .read(usernamesScreenStateNotifier.notifier)
+                      .updateDefaultRecipient(
+                        widget.username,
+                        selectedRecipient == null ? '' : selectedRecipient!.id,
+                      );
+                  Navigator.pop(context);
+                },
               ),
             ),
           ],
