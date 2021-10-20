@@ -10,6 +10,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,11 +49,7 @@ class _AliasScreenState extends State<AliasScreen> {
 
           switch (aliasState.status!) {
             case AliasScreenStatus.loading:
-              return Center(
-                child: context
-                    .read(customLoadingIndicator)
-                    .customLoadingIndicator(),
-              );
+              return Center(child: PlatformLoadingIndicator());
 
             case AliasScreenStatus.loaded:
               return buildListView(context, aliasState);
@@ -76,9 +73,6 @@ class _AliasScreenState extends State<AliasScreen> {
     final size = MediaQuery.of(context).size;
 
     final nicheMethod = context.read(nicheMethods);
-
-    final customLoading =
-        context.read(customLoadingIndicator).customLoadingIndicator();
 
     final isAliasDeleted = alias.deletedAt != null;
 
@@ -119,7 +113,7 @@ class _AliasScreenState extends State<AliasScreen> {
           subtitle: 'Activity',
           trailing: Row(
             children: [
-              if (isToggleLoading) customLoading,
+              if (isToggleLoading) PlatformLoadingIndicator(),
               Switch.adaptive(
                 value: alias.active,
                 onChanged: isAliasDeleted ? null : (toggle) {},
@@ -160,7 +154,7 @@ class _AliasScreenState extends State<AliasScreen> {
               isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
           trailing: Row(
             children: [
-              if (deleteAliasLoading) customLoading,
+              if (deleteAliasLoading) PlatformLoadingIndicator(),
               IconButton(
                 icon: isAliasDeleted
                     ? Icon(Icons.restore_outlined, color: Colors.green)

@@ -1,6 +1,7 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,9 +61,7 @@ class _AddNewRecipientState extends State<AddNewRecipient> {
                         minimumSize: MaterialStateProperty.all(Size(200, 50)),
                       ),
                       child: recipientState.isAddRecipientLoading!
-                          ? context
-                              .read(customLoadingIndicator)
-                              .customLoadingIndicator(color: kPrimaryColor)
+                          ? PlatformLoadingIndicator()
                           : Text('Add Recipient'),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {

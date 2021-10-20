@@ -4,8 +4,8 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
@@ -37,10 +37,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
 
         switch (domainOptionsState.status) {
           case DomainOptionsStatus.loading:
-            return Container(
-              height: size.height * 0.5,
-              child: LoadingIndicator(),
-            );
+            return Center(child: PlatformLoadingIndicator());
 
           case DomainOptionsStatus.loaded:
             final createAliasState = watch(createAliasNotifier);
@@ -184,7 +181,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(),
             child: createAliasState.isLoading!
-                ? context.read(customLoadingIndicator).customLoadingIndicator()
+                ? PlatformLoadingIndicator()
                 : Text(kCreateAlias),
             onPressed:
                 createAliasState.isLoading! ? () {} : () => createAlias(),

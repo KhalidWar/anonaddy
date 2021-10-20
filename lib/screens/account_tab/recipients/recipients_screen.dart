@@ -10,6 +10,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,11 +59,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
 
           switch (recipientScreenState.status) {
             case RecipientScreenStatus.loading:
-              return Center(
-                child: context
-                    .read(customLoadingIndicator)
-                    .customLoadingIndicator(),
-              );
+              return Center(child: PlatformLoadingIndicator());
 
             case RecipientScreenStatus.loaded:
               return buildListView(context, recipientScreenState);
@@ -163,7 +160,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
           subtitle: 'Encryption',
           trailing: recipient.fingerprint == null
               ? Container()
-              : buildSwitch(context, recipientScreenState),
+              : buildSwitch(recipientScreenState),
           trailingIconOnPress:
               recipient.fingerprint == null ? null : () => toggleEncryption(),
         ),
@@ -230,12 +227,11 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     );
   }
 
-  Row buildSwitch(
-      BuildContext context, RecipientScreenState recipientScreenState) {
+  Row buildSwitch(RecipientScreenState recipientScreenState) {
     return Row(
       children: [
         recipientScreenState.isEncryptionToggleLoading!
-            ? context.read(customLoadingIndicator).customLoadingIndicator()
+            ? PlatformLoadingIndicator()
             : Container(),
         Switch.adaptive(
           value: recipientScreenState.recipient!.shouldEncrypt,

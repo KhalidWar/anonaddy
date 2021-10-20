@@ -10,6 +10,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,11 +48,7 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
 
           switch (usernameState.status) {
             case UsernamesScreenStatus.loading:
-              return Center(
-                child: context
-                    .read(customLoadingIndicator)
-                    .customLoadingIndicator(),
-              );
+              return Center(child: PlatformLoadingIndicator());
 
             case UsernamesScreenStatus.loaded:
               return buildListView(context, usernameState);
@@ -126,8 +123,8 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
           titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Activity',
           leadingIconData: Icons.toggle_on_outlined,
-          trailing: buildSwitch(
-              context, usernameState.activeSwitchLoading!, username.active),
+          trailing:
+              buildSwitch(usernameState.activeSwitchLoading!, username.active),
           trailingIconOnPress: () => toggleActivity(),
         ),
         AliasDetailListTile(
@@ -136,7 +133,7 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
           subtitle: 'Catch All',
           leadingIconData: Icons.repeat,
           trailing: buildSwitch(
-              context, usernameState.catchAllSwitchLoading!, username.catchAll),
+              usernameState.catchAllSwitchLoading!, username.catchAll),
           trailingIconOnPress: () => toggleCatchAll(),
         ),
         Divider(height: size.height * 0.02),
@@ -224,12 +221,10 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
     );
   }
 
-  Widget buildSwitch(BuildContext context, bool switchLoading, switchValue) {
-    final customLoading =
-        context.read(customLoadingIndicator).customLoadingIndicator();
+  Widget buildSwitch(bool switchLoading, switchValue) {
     return Row(
       children: [
-        switchLoading ? customLoading : Container(),
+        switchLoading ? PlatformLoadingIndicator() : Container(),
         Switch.adaptive(
           value: switchValue,
           onChanged: (toggle) {},

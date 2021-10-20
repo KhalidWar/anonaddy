@@ -1,8 +1,8 @@
 import 'package:anonaddy/screens/account_tab/domains/domains.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_tab.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/loading_indicator.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
@@ -36,10 +36,12 @@ class AccountTab extends StatelessWidget {
                       final accountState = watch(accountStateNotifier);
                       switch (accountState.status) {
                         case AccountStatus.loading:
-                          return LoadingIndicator();
+                          return Center(child: PlatformLoadingIndicator());
+
                         case AccountStatus.loaded:
                           final account = accountState.accountModel;
                           return AccountTabHeader(account: account!.account);
+
                         case AccountStatus.failed:
                           final error = accountState.errorMessage;
                           return LottieWidget(

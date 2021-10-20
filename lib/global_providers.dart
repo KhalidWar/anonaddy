@@ -13,7 +13,6 @@ import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
-import 'package:anonaddy/shared_components/custom_loading_indicator.dart';
 import 'package:anonaddy/state_management/domain_state_manager.dart';
 import 'package:anonaddy/utilities/confirmation_dialog.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -96,11 +95,6 @@ final targetedPlatform =
 
 final confirmationDialog =
     Provider<ConfirmationDialog>((ref) => ConfirmationDialog());
-
-final customLoadingIndicator = Provider<CustomLoadingIndicator>((ref) {
-  final isIOS = ref.read(targetedPlatform).isIOS();
-  return CustomLoadingIndicator(isIOS);
-});
 
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);

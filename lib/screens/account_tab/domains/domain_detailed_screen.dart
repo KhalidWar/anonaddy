@@ -9,6 +9,7 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,7 +71,7 @@ class DomainDetailedScreen extends ConsumerWidget {
             titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
             subtitle: 'Activity',
             leadingIconData: Icons.toggle_off_outlined,
-            trailing: buildSwitch(context, activeSwitchLoading, domain.active),
+            trailing: buildSwitch(activeSwitchLoading, domain.active),
             trailingIconOnPress: () =>
                 domainState.toggleActivity(context, domain),
           ),
@@ -79,8 +80,7 @@ class DomainDetailedScreen extends ConsumerWidget {
             titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
             subtitle: 'Catch All',
             leadingIconData: Icons.repeat,
-            trailing:
-                buildSwitch(context, catchAllSwitchLoading, domain.catchAll),
+            trailing: buildSwitch(catchAllSwitchLoading, domain.catchAll),
             trailingIconOnPress: () =>
                 domainState.toggleCatchAll(context, domain),
           ),
@@ -177,12 +177,10 @@ class DomainDetailedScreen extends ConsumerWidget {
     );
   }
 
-  Widget buildSwitch(BuildContext context, bool switchLoading, switchValue) {
-    final customLoading =
-        context.read(customLoadingIndicator).customLoadingIndicator();
+  Widget buildSwitch(bool switchLoading, switchValue) {
     return Row(
       children: [
-        switchLoading ? customLoading : Container(),
+        switchLoading ? PlatformLoadingIndicator() : Container(),
         Switch.adaptive(
           value: switchValue,
           onChanged: (toggle) {},
