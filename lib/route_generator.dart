@@ -14,6 +14,7 @@ import 'package:anonaddy/screens/navigation_errror/navigation_error_screen.dart'
 import 'package:anonaddy/screens/settings_screen/about_app_screen.dart';
 import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,72 +24,50 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final argument = settings.arguments;
 
-    /// Custom page route animation
-    PageRouteBuilder customPageRoute(Widget child) {
-      return PageRouteBuilder(
-        transitionsBuilder: (context, animation, secondAnimation, child) {
-          final tween = Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0));
-          animation =
-              CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut);
-          return SlideTransition(
-            position: tween.animate(animation),
-            child: child,
-          );
-        },
-        pageBuilder: (context, animation, secondAnimation) => child,
-      );
-    }
-
-    cupertinoPageRoute(Widget child) {
-      return CupertinoPageRoute(builder: (BuildContext context) {
-        return child;
-      });
-    }
-
     switch (settings.name) {
 
       /// Authentication Screen
       case AuthorizationScreen.routeName:
-        return customPageRoute(AuthorizationScreen());
+        return PlatformAware.customPageRoute(AuthorizationScreen());
 
       /// Home Screen
       case HomeScreen.routeName:
-        return customPageRoute(HomeScreen());
+        return PlatformAware.customPageRoute(HomeScreen());
       case AlertCenterScreen.routeName:
-        return customPageRoute(AlertCenterScreen());
+        return PlatformAware.customPageRoute(AlertCenterScreen());
 
       /// Settings Screen
       case SettingsScreen.routeName:
-        return customPageRoute(SettingsScreen());
+        return PlatformAware.customPageRoute(SettingsScreen());
       case AboutAppScreen.routeName:
-        return customPageRoute(AboutAppScreen());
+        return PlatformAware.customPageRoute(AboutAppScreen());
       case CreditsScreen.routeName:
-        return customPageRoute(CreditsScreen());
+        return PlatformAware.customPageRoute(CreditsScreen());
 
       /// Alias Tab
       case AliasScreen.routeName:
-        return customPageRoute(AliasScreen(argument as Alias));
+        return PlatformAware.customPageRoute(AliasScreen(argument as Alias));
 
       /// Account Tab
       case RecipientsScreen.routeName:
-        return customPageRoute(
+        return PlatformAware.customPageRoute(
             RecipientsScreen(recipient: argument as Recipient));
       case UsernameDetailedScreen.routeName:
-        return customPageRoute(
+        return PlatformAware.customPageRoute(
             UsernameDetailedScreen(username: argument as Username));
       case DomainDetailedScreen.routeName:
-        return customPageRoute(
+        return PlatformAware.customPageRoute(
             DomainDetailedScreen(domain: argument as Domain));
 
       /// Login Screen
       case AnonAddyLoginScreen.routeName:
-        return customPageRoute(AnonAddyLoginScreen());
+        return PlatformAware.customPageRoute(AnonAddyLoginScreen());
       case SelfHostLoginScreen.routeName:
-        return customPageRoute(SelfHostLoginScreen());
+        return PlatformAware.customPageRoute(SelfHostLoginScreen());
 
       /// Show ErrorScreen if screen doesn't exist or something goes wrong
       default:
-        return customPageRoute(NavigationErrorScreen());
+        return PlatformAware.customPageRoute(NavigationErrorScreen());
     }
   }
 }

@@ -1,14 +1,12 @@
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/no_internet_alert.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_home_screen.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
-import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,9 +23,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _tabScreens = [AccountTab(), AliasTab(), SearchTab()];
+
   int _selectedIndex = 1;
 
-  void _selectedTab(int index) {
+  void switchAndroidTabs(int index) {
     context.read(fabVisibilityStateNotifier.notifier).showFab();
     if (_selectedIndex == 2 && index == 2) {
       SearchTab().search(context);
@@ -36,6 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
         _selectedIndex = index;
       });
     }
+  }
+
+  Widget switchIosTabs(int index) {
+    //todo add quick search access
+    return _tabScreens[index];
   }
 
   Future checkIfAppUpdated() async {
@@ -64,62 +69,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      appBar: buildAppBar(context),
-      floatingActionButton: buildFab(context),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          AccountTab(),
-          AliasTab(),
-          SearchTab(),
-        ],
-      ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Consumer(
-            builder: (_, watch, __) {
-              final connectivityStatus = watch(connectivityStateNotifier);
-              return connectivityStatus == ConnectionStatus.offline
-                  ? NoInternetAlert()
-                  : Container();
-            },
-          ),
-          BottomNavigationBar(
-            onTap: _selectedTab,
-            currentIndex: _selectedIndex,
-            selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle_outlined),
-                label: kAccountBotNavLabel,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.alternate_email_outlined),
-                label: kAliasesBotNavLabel,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search_outlined),
-                label: kSearchBotNavLabel,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
-      centerTitle: true,
-      leading: IconButton(
-        icon: Icon(Icons.error_outline),
-        onPressed: () {
-          Navigator.pushNamed(context, AlertCenterScreen.routeName);
-        },
+    return PlatformHomeScreen(
+      fab: buildFab(context),
+      child: IndexedStack(
+        index: _selectedIndex,
+        children: _tabScreens,
       ),
       actions: [
         IconButton(
@@ -129,6 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ],
+      androidOnTap: (index) => switchAndroidTabs(index),
+      iosOnTap: (context, index) => switchIosTabs(index),
+      currentIndex: _selectedIndex,
+      isDark: isDark,
     );
   }
 

@@ -1,7 +1,5 @@
-import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -36,7 +34,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     /// Use [watch] method to access different providers
-    final themeProvider = watch(settingsStateManagerProvider);
+    final settingsState = watch(settingsStateManagerProvider);
 
     /// Sets StatusBarColor for the whole app
     SystemChrome.setSystemUIOverlayStyle(
@@ -44,14 +42,7 @@ class MyApp extends ConsumerWidget {
     );
 
     return LifecycleService(
-      child: MaterialApp(
-        title: 'AddyManager',
-        debugShowCheckedModeBanner: false,
-        theme: themeProvider.isDarkTheme ? darkTheme : lightTheme,
-        darkTheme: darkTheme,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: AuthorizationScreen.routeName,
-      ),
+      child: PlatformApp(settingsState: settingsState),
     );
   }
 }
