@@ -10,6 +10,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:flutter/cupertino.dart';
@@ -274,8 +275,6 @@ class DomainDetailedScreen extends ConsumerWidget {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    final isIOS = context.read(targetedPlatform).isIOS();
-
     Future<void> deleteDomain() async {
       await context
           .read(domainStateManagerProvider)
@@ -285,7 +284,9 @@ class DomainDetailedScreen extends ConsumerWidget {
     return AppBar(
       title: Text('Domain', style: TextStyle(color: Colors.white)),
       leading: IconButton(
-        icon: Icon(isIOS ? CupertinoIcons.back : Icons.arrow_back),
+        icon: Icon(
+          PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
+        ),
         color: Colors.white,
         onPressed: () => Navigator.pop(context),
       ),

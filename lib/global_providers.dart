@@ -16,7 +16,6 @@ import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/domain_state_manager.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:anonaddy/utilities/target_platform.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
@@ -88,9 +87,6 @@ final failedDeliveriesService = Provider<FailedDeliveriesService>((ref) {
 final nicheMethods = Provider<NicheMethod>((ref) => NicheMethod());
 
 final formValidator = Provider<FormValidator>((ref) => FormValidator());
-
-final targetedPlatform =
-    Provider<TargetedPlatform>((ref) => TargetedPlatform());
 
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);

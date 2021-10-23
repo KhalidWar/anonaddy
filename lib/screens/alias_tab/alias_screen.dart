@@ -11,6 +11,7 @@ import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
@@ -470,8 +471,6 @@ class _AliasScreenState extends State<AliasScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    final isIOS = context.read(targetedPlatform).isIOS();
-
     Future<void> forget() async {
       await context
           .read(aliasScreenStateNotifier.notifier)
@@ -500,7 +499,9 @@ class _AliasScreenState extends State<AliasScreen> {
         style: TextStyle(color: Colors.white),
       ),
       leading: IconButton(
-        icon: Icon(isIOS ? CupertinoIcons.back : Icons.arrow_back),
+        icon: Icon(
+          PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
+        ),
         color: Colors.white,
         onPressed: () => Navigator.pop(context),
       ),
