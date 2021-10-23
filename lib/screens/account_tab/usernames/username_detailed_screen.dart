@@ -12,6 +12,7 @@ import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -226,7 +227,7 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
     return Row(
       children: [
         switchLoading ? PlatformLoadingIndicator() : Container(),
-        Switch.adaptive(
+        PlatformSwitch(
           value: switchValue,
           onChanged: (toggle) {},
         ),

@@ -4,6 +4,7 @@ import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +38,7 @@ class SettingsScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 subtitle: Text('App follows system by default'),
-                trailing: Switch.adaptive(
+                trailing: PlatformSwitch(
                   value: settings.isDarkTheme,
                   onChanged: (toggle) => settings.toggleTheme(),
                 ),
@@ -49,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 subtitle: Text('Automatically copy email after alias creation'),
-                trailing: Switch.adaptive(
+                trailing: PlatformSwitch(
                   value: settings.isAutoCopy,
                   onChanged: (toggle) => settings.toggleAutoCopy(),
                 ),
@@ -61,7 +62,7 @@ class SettingsScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 subtitle: Text('Require biometric authentication'),
-                trailing: Switch.adaptive(
+                trailing: PlatformSwitch(
                   value: biometric.isEnabled,
                   onChanged: (toggle) => context
                       .read(biometricNotifier.notifier)

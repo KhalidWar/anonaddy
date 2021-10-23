@@ -11,6 +11,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -182,7 +183,7 @@ class DomainDetailedScreen extends ConsumerWidget {
     return Row(
       children: [
         switchLoading ? PlatformLoadingIndicator() : Container(),
-        Switch.adaptive(
+        PlatformSwitch(
           value: switchValue,
           onChanged: (toggle) {},
         ),

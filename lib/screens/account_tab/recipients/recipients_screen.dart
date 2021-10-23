@@ -12,6 +12,7 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -234,7 +235,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
         recipientScreenState.isEncryptionToggleLoading!
             ? PlatformLoadingIndicator()
             : Container(),
-        Switch.adaptive(
+        PlatformSwitch(
           value: recipientScreenState.recipient!.shouldEncrypt,
           onChanged: (toggle) {},
         ),
