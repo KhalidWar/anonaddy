@@ -4,8 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformLoadingIndicator extends PlatformAware {
-  const PlatformLoadingIndicator({this.color});
+  const PlatformLoadingIndicator({
+    this.color,
+    this.size,
+  });
   final Color? color;
+  final double? size;
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
@@ -14,6 +18,10 @@ class PlatformLoadingIndicator extends PlatformAware {
 
   @override
   Widget buildMaterialWidget(BuildContext context) {
-    return CircularProgressIndicator(color: color ?? kAccentColor);
+    return Container(
+      height: size,
+      width: size,
+      child: CircularProgressIndicator(color: color ?? kAccentColor),
+    );
   }
 }

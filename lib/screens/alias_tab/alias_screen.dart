@@ -114,7 +114,7 @@ class _AliasScreenState extends State<AliasScreen> {
           subtitle: 'Activity',
           trailing: Row(
             children: [
-              if (isToggleLoading) PlatformLoadingIndicator(),
+              if (isToggleLoading) PlatformLoadingIndicator(size: 20),
               Switch.adaptive(
                 value: alias.active,
                 onChanged: isAliasDeleted ? null : (toggle) {},
