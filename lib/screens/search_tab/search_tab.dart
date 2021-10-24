@@ -3,6 +3,7 @@ import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
@@ -99,7 +100,7 @@ class SearchTab extends StatelessWidget {
               );
             else
               return Expanded(
-                child: Scrollbar(
+                child: PlatformScrollbar(
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: aliases.length,

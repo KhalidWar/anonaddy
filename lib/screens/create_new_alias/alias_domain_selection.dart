@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:flutter/material.dart';
 
 class AliasDomainSelection extends StatelessWidget {
@@ -26,7 +27,7 @@ class AliasDomainSelection extends StatelessWidget {
           children: [
             BottomSheetHeader(headerLabel: 'Select Alias Domain'),
             Expanded(
-              child: Scrollbar(
+              child: PlatformScrollbar(
                 child: ListView(
                   shrinkWrap: true,
                   controller: controller,

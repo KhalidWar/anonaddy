@@ -2,6 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
@@ -107,7 +108,7 @@ class AliasTab extends ConsumerWidget {
                   if (availableAliasList.isEmpty)
                     buildEmptyAliasList(context)
                   else
-                    Scrollbar(
+                    PlatformScrollbar(
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: availableAliasList.length,
@@ -121,7 +122,7 @@ class AliasTab extends ConsumerWidget {
                   if (deletedAliasList.isEmpty)
                     buildEmptyAliasList(context)
                   else
-                    Scrollbar(
+                    PlatformScrollbar(
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: deletedAliasList.length,
