@@ -19,40 +19,13 @@ class AliasTab extends ConsumerWidget {
 
     final size = MediaQuery.of(context).size;
 
-    final List<Alias> availableAliasList = [];
-    final List<Alias> deletedAliasList = [];
-    final List<int> forwardedList = [];
-    final List<int> blockedList = [];
-    final List<int> repliedList = [];
-    final List<int> sentList = [];
-
-    int reduceList(List<int> list) {
-      if (list.isEmpty) {
-        return 0;
-      } else {
-        return list.reduce((value, element) => value + element);
-      }
-    }
-
     switch (aliasTabState.status) {
       case AliasTabStatus.loading:
         return AliasShimmerLoading();
 
       case AliasTabStatus.loaded:
-        final data = aliasTabState.aliases!;
-
-        for (Alias alias in data) {
-          forwardedList.add(alias.emailsForwarded);
-          blockedList.add(alias.emailsBlocked);
-          repliedList.add(alias.emailsReplied);
-          sentList.add(alias.emailsSent);
-
-          if (alias.deletedAt == null) {
-            availableAliasList.add(alias);
-          } else {
-            deletedAliasList.add(alias);
-          }
-        }
+        final List<Alias> availableAliasList = aliasTabState.availableAliasList;
+        final List<Alias> deletedAliasList = aliasTabState.deletedAliasList;
 
         return Scaffold(
           body: DefaultTabController(
@@ -71,10 +44,10 @@ class AliasTab extends ConsumerWidget {
                     flexibleSpace: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
                       background: AliasTabPieChart(
-                        emailsForwarded: reduceList(forwardedList),
-                        emailsBlocked: reduceList(blockedList),
-                        emailsReplied: reduceList(repliedList),
-                        emailsSent: reduceList(sentList),
+                        emailsForwarded: aliasTabState.forwardedList,
+                        emailsBlocked: aliasTabState.blockedList,
+                        emailsReplied: aliasTabState.repliedList,
+                        emailsSent: aliasTabState.sentList,
                       ),
                     ),
                     bottom: TabBar(
