@@ -140,11 +140,12 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   }
 
   Future<List<Alias>> _loadOfflineData() async {
+    List<dynamic> decodedData = [];
     final securedData = await offlineData.readAliasOfflineData();
-    final decodedData = jsonDecode(securedData);
+    if (securedData.isNotEmpty) decodedData = jsonDecode(securedData);
 
     if (decodedData.isNotEmpty) {
-      final aliases = (decodedData as List).map((alias) {
+      final aliases = decodedData.map((alias) {
         return Alias.fromJson(alias);
       }).toList();
       return aliases;
