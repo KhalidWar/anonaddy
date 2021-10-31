@@ -3,7 +3,6 @@ import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_home_screen.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'create_new_alias/create_new_alias.dart';
+import 'home_screen_components/alert_center/alert_center_screen.dart';
 import 'home_screen_components/changelog_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _selectedIndex = 1;
 
-  void switchAndroidTabs(int index) {
+  void switchIndex(int index) {
     context.read(fabVisibilityStateNotifier.notifier).showFab();
     if (_selectedIndex == 2 && index == 2) {
       SearchTab().search(context);
@@ -38,11 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget switchIosTabs(int index) {
-    //todo add quick search access
-    return _tabScreens[index];
-  }
-
   Future checkIfAppUpdated() async {
     final changeLog = context.read(changelogService);
     await changeLog.checkIfAppUpdated(context);
@@ -51,11 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
       return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
               top: Radius.circular(kBottomSheetBorderRadius)),
         ),
-        builder: (context) => ChangelogWidget(),
+        builder: (context) => const ChangelogWidget(),
       );
     }
   }
@@ -69,25 +64,54 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return PlatformHomeScreen(
-      fab: buildFab(context),
-      child: IndexedStack(
+    return Scaffold(
+      appBar: buildAppBar(context),
+      floatingActionButton: buildFab(context),
+      body: IndexedStack(
         index: _selectedIndex,
         children: _tabScreens,
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) => switchIndex(index),
+        currentIndex: _selectedIndex,
+        selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
+        items: [
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined),
+            label: kAccountBotNavLabel,
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.alternate_email_outlined),
+            label: kAliasesBotNavLabel,
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.search_outlined),
+            label: kSearchBotNavLabel,
+          ),
+        ],
+      ),
+    );
+  }
+
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(Icons.error_outline),
+        onPressed: () {
+          Navigator.pushNamed(context, AlertCenterScreen.routeName);
+        },
+      ),
       actions: [
         IconButton(
-          icon: Icon(Icons.settings),
+          icon: const Icon(Icons.settings),
           onPressed: () {
             Navigator.pushNamed(context, SettingsScreen.routeName);
           },
         ),
       ],
-      androidOnTap: (index) => switchAndroidTabs(index),
-      iosOnTap: (context, index) => switchIosTabs(index),
-      currentIndex: _selectedIndex,
-      isDark: isDark,
     );
   }
 
@@ -106,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
           child: FloatingActionButton(
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
             onPressed: () {
               final accountState = context.read(accountStateNotifier);
 
@@ -120,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(kBottomSheetBorderRadius),
                       ),
