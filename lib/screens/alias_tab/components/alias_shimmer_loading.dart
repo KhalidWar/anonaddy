@@ -5,6 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import 'alias_tab_pie_chart.dart';
 
 class AliasShimmerLoading extends StatelessWidget {
+  const AliasShimmerLoading();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
