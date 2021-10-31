@@ -1,5 +1,9 @@
+import 'package:anonaddy/route_generator.dart';
+import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_app.dart';
+import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -41,8 +45,23 @@ class MyApp extends ConsumerWidget {
       SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
 
+    const _defaultLocalizations = [
+      DefaultMaterialLocalizations.delegate,
+      DefaultCupertinoLocalizations.delegate,
+      DefaultWidgetsLocalizations.delegate,
+    ];
+
     return LifecycleService(
-      child: PlatformApp(settingsState: settingsState),
+      child: MaterialApp(
+        title: kAppBarTitle,
+        debugShowCheckedModeBanner: false,
+        theme: settingsState.isDarkTheme ? darkTheme : lightTheme,
+        darkTheme: darkTheme,
+        onGenerateRoute: RouteGenerator.generateRoute,
+        initialRoute: AuthorizationScreen.routeName,
+        locale: const Locale('en', 'US'),
+        localizationsDelegates: _defaultLocalizations,
+      ),
     );
   }
 }
