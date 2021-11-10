@@ -2,7 +2,7 @@ import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
-import 'package:anonaddy/state_management/search/search_history_notifier.dart';
+import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -3,7 +3,7 @@ import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/state_management/search/search_history_notifier.dart';
+import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

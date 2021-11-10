@@ -5,7 +5,7 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
-import 'package:anonaddy/state_management/search/search_history_notifier.dart';
+import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
