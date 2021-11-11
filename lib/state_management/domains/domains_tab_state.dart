@@ -1,15 +1,15 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 
-enum DomainsStatus { loading, loaded, failed }
+enum DomainsTabStatus { loading, loaded, failed }
 
-class DomainsState {
-  const DomainsState({
+class DomainsTabState {
+  const DomainsTabState({
     required this.status,
     this.domainModel,
     this.errorMessage,
   });
 
-  final DomainsStatus status;
+  final DomainsTabStatus status;
   final DomainModel? domainModel;
   final String? errorMessage;
 }

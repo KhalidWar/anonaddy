@@ -1,10 +1,10 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/state_management/domains/domains_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +90,16 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
     });
   }
 
+  Future<void> updateDefaultRecipient() async {
+    await context
+        .read(domainsScreenStateNotifier.notifier)
+        .updateDomainDefaultRecipients(
+          widget.domain.id,
+          selectedRecipient == null ? '' : selectedRecipient!.id,
+        );
+    Navigator.pop(context);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -125,8 +135,8 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
                           Consumer(
                             builder: (_, watch, __) {
                               final isLoading =
-                                  watch(domainStateManagerProvider)
-                                      .updateRecipientLoading;
+                                  watch(domainsScreenStateNotifier)
+                                      .updateRecipientLoading!;
                               return isLoading
                                   ? LinearProgressIndicator(color: kAccentColor)
                                   : Divider(height: 0);
@@ -193,13 +203,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
                 child: Text('Update Default Recipients'),
-                onPressed: () => context
-                    .read(domainStateManagerProvider)
-                    .updateDomainDefaultRecipient(
-                      context,
-                      widget.domain,
-                      selectedRecipient == null ? '' : selectedRecipient!.id,
-                    ),
+                onPressed: () => updateDefaultRecipient(),
               ),
             ),
           ],

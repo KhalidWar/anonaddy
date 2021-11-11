@@ -1,4 +1,3 @@
-import 'package:anonaddy/screens/account_tab/domains/domains.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_tab.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'components/account_tab_header.dart';
+import 'domains/domains_tab.dart';
 import 'usernames/additional_username.dart';
 
 class AccountTab extends StatelessWidget {
@@ -70,7 +70,7 @@ class AccountTab extends StatelessWidget {
             children: [
               RecipientsTab(),
               AdditionalUsername(),
-              Domains(),
+              DomainsTab(),
             ],
           ),
         ),

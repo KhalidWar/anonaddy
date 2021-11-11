@@ -13,7 +13,6 @@ import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
-import 'package:anonaddy/state_management/domain_state_manager.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -97,16 +96,6 @@ final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
 final settingsStateManagerProvider = ChangeNotifierProvider((ref) {
   final settingStorage = ref.read(settingsDataStorage);
   return SettingsStateManager(settingsStorage: settingStorage);
-});
-
-final domainStateManagerProvider = ChangeNotifierProvider((ref) {
-  final services = ref.read(domainService);
-  final methods = ref.read(nicheMethods);
-
-  return DomainStateManager(
-    domainService: services,
-    showToast: methods.showToast,
-  );
 });
 
 /// Future Providers

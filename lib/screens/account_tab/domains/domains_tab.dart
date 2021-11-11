@@ -6,14 +6,14 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
-import 'package:anonaddy/state_management/domains/domains_notifier.dart';
-import 'package:anonaddy/state_management/domains/domains_state.dart';
+import 'package:anonaddy/state_management/domains/domains_tab_notifier.dart';
+import 'package:anonaddy/state_management/domains/domains_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'domain_detailed_screen.dart';
+import 'domains_screen.dart';
 
-class Domains extends ConsumerWidget {
+class DomainsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final accountState = watch(accountStateNotifier);
@@ -31,10 +31,10 @@ class Domains extends ConsumerWidget {
         final domainsState = watch(domainsStateNotifier);
 
         switch (domainsState.status) {
-          case DomainsStatus.loading:
+          case DomainsTabStatus.loading:
             return RecipientsShimmerLoading();
 
-          case DomainsStatus.loaded:
+          case DomainsTabStatus.loaded:
             final domains = domainsState.domainModel!.domains;
             if (domains.isEmpty) {
               return Center(
@@ -47,7 +47,7 @@ class Domains extends ConsumerWidget {
 
             return domainsList(domains);
 
-          case DomainsStatus.failed:
+          case DomainsTabStatus.failed:
             final error = domainsState.errorMessage;
             return LottieWidget(
               lottie: 'assets/lottie/errorCone.json',
@@ -97,7 +97,7 @@ class Domains extends ConsumerWidget {
           onTap: () {
             Navigator.pushNamed(
               context,
-              DomainDetailedScreen.routeName,
+              DomainsScreen.routeName,
               arguments: domain,
             );
           },
