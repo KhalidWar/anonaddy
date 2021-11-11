@@ -227,7 +227,7 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
   Widget buildSwitch(bool switchLoading, switchValue) {
     return Row(
       children: [
-        switchLoading ? PlatformLoadingIndicator() : Container(),
+        switchLoading ? PlatformLoadingIndicator(size: 20) : Container(),
         PlatformSwitch(
           value: switchValue,
           onChanged: (toggle) {},

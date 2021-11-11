@@ -234,7 +234,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     return Row(
       children: [
         recipientScreenState.isEncryptionToggleLoading!
-            ? PlatformLoadingIndicator()
+            ? PlatformLoadingIndicator(size: 20)
             : Container(),
         PlatformSwitch(
           value: recipientScreenState.recipient!.shouldEncrypt,
