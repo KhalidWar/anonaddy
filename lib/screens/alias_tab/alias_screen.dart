@@ -480,7 +480,6 @@ class _AliasScreenState extends State<AliasScreen> {
     }
 
     Future forgetOnPress() async {
-      Navigator.pop(context);
       showModal(
         context: context,
         builder: (context) {
@@ -506,30 +505,16 @@ class _AliasScreenState extends State<AliasScreen> {
         onPressed: () => Navigator.pop(context),
       ),
       actions: [
-        IconButton(
-          icon: Icon(Icons.more_vert_outlined),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    BottomSheetHeader(headerLabel: 'Alias'),
-                    ListTile(
-                      title: Text(
-                        'Forget Alias',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      onTap: () => forgetOnPress(),
-                    ),
-                    SizedBox(height: 20),
-                  ],
-                );
-              },
-            );
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) {
+            return ['Forget Alias'].map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
           },
+          onSelected: (String choice) => forgetOnPress(),
         ),
       ],
     );
