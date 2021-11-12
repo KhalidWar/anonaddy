@@ -1,4 +1,4 @@
-import 'package:anonaddy/services/data_storage/settings_data_storage.dart';
+import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
 import 'package:anonaddy/state_management/settings/settings_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
