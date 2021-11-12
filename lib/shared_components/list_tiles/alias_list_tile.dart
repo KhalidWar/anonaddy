@@ -1,11 +1,10 @@
-import 'package:anonaddy/models/alias/alias_model.dart';
-import 'package:anonaddy/screens/alias_tab/alias_detailed_screen.dart';
+import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../global_providers.dart';
-import '../custom_page_route.dart';
 import 'alias_list_tile_leading.dart';
 
 class AliasListTile extends StatelessWidget {
@@ -61,9 +60,10 @@ class AliasListTile extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          CustomPageRoute(AliasDetailScreen(aliasData)),
+          AliasScreen.routeName,
+          arguments: aliasData,
         );
       },
     );

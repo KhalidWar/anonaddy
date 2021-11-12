@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -94,31 +95,31 @@ class ChangelogWidget extends StatelessWidget {
     }
 
     return Expanded(
-      child: Scrollbar(
+      child: PlatformScrollbar(
         child: ListView(
           controller: controller,
           physics: BouncingScrollPhysics(),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
             header('Fixed', Colors.blue),
-            label('1. Fixed several bugs that arise from logout'),
-            label(
-              '2. Fixed a biometric authentication issue where enabling it required to initially authenticate multiple times in a row.',
-            ),
+            label('1. Squashed several bugs.'),
+            SizedBox(height: size.height * 0.008),
             header('Added', Colors.green),
-            label('1. Added Scrollbar to scrolling lists.'),
+            label('1. Added AnonAddy FAQ and Help Center to Settings screen.'),
             SizedBox(height: size.height * 0.008),
             header('Improved', Colors.orange),
-            label('1. Improved Authorization/authentication flow.'),
+            label(
+                '1. Improved how alias, recipient, domain, and username data are loaded.'),
             SizedBox(height: size.height * 0.008),
-            label('2. Updated several UI components.'),
+            label('2. Several under the hood improvements.'),
+            SizedBox(height: size.height * 0.008),
+            label('3. Improved navigation system and flow throughout the app.'),
+            SizedBox(height: size.height * 0.008),
+            label('4. Updated several UI components'),
             SizedBox(height: size.height * 0.008),
             label(
-              '3. Under the hood improvement for a smoother running app app.',
-            ),
-            label(
-              '4. Improved how several components interact with each other to eliminate rare bugs.',
-            ),
+                '5. Too many  other improvements to list. Check out our github repo for fully detailed changelog.'),
+            SizedBox(height: size.height * 0.008),
           ],
         ),
       ),

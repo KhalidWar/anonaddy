@@ -1,6 +1,8 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,15 +25,7 @@ class _AddNewRecipientState extends State<AddNewRecipient> {
 
   @override
   Widget build(BuildContext context) {
-    final recipientManager = context.read(recipientStateManagerProvider);
     final size = MediaQuery.of(context).size;
-
-    Future<void> addRecipient() async {
-      if (_formKey.currentState!.validate()) {
-        await recipientManager.addRecipient(
-            context, _textEditController.text.trim());
-      }
-    }
 
     return Container(
       padding:
@@ -59,17 +53,27 @@ class _AddNewRecipientState extends State<AddNewRecipient> {
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
-                recipientManager.isLoading
-                    ? context
-                        .read(customLoadingIndicator)
-                        .customLoadingIndicator()
-                    : ElevatedButton(
-                        style: ElevatedButton.styleFrom().copyWith(
-                          minimumSize: MaterialStateProperty.all(Size(200, 50)),
-                        ),
-                        child: Text('Add Recipient'),
-                        onPressed: () => addRecipient(),
+                Consumer(
+                  builder: (context, watch, _) {
+                    final recipientState = watch(recipientScreenStateNotifier);
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom().copyWith(
+                        minimumSize: MaterialStateProperty.all(Size(200, 50)),
                       ),
+                      child: recipientState.isAddRecipientLoading!
+                          ? PlatformLoadingIndicator()
+                          : Text('Add Recipient'),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await context
+                              .read(recipientScreenStateNotifier.notifier)
+                              .addRecipient(_textEditController.text.trim());
+                          Navigator.pop(context);
+                        }
+                      },
+                    );
+                  },
+                ),
               ],
             ),
           ),

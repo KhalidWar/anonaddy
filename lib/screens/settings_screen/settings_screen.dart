@@ -3,8 +3,10 @@ import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
+import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,17 +15,19 @@ import 'components/app_version.dart';
 import 'components/rate_addymanager.dart';
 
 class SettingsScreen extends StatelessWidget {
+  static const routeName = 'settingsScreen';
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final nicheMethod = context.read(nicheMethods);
-    final isIOS = context.read(targetedPlatform).isIOS();
 
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
       body: Consumer(
         builder: (_, watch, __) {
-          final settings = watch(settingsStateManagerProvider);
+          final settingsState = watch(settingsStateNotifier);
+          final settingsNotifier = context.read(settingsStateNotifier.notifier);
           final biometric = watch(biometricNotifier);
 
           return Column(
@@ -36,9 +40,9 @@ class SettingsScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 subtitle: Text('App follows system by default'),
-                trailing: Switch.adaptive(
-                  value: settings.isDarkTheme,
-                  onChanged: (toggle) => settings.toggleTheme(),
+                trailing: PlatformSwitch(
+                  value: settingsState.isDarkTheme!,
+                  onChanged: (toggle) => settingsNotifier.toggleTheme(),
                 ),
               ),
               ListTile(
@@ -48,9 +52,9 @@ class SettingsScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 subtitle: Text('Automatically copy email after alias creation'),
-                trailing: Switch.adaptive(
-                  value: settings.isAutoCopy,
-                  onChanged: (toggle) => settings.toggleAutoCopy(),
+                trailing: PlatformSwitch(
+                  value: settingsState.isAutoCopy!,
+                  onChanged: (toggle) => settingsNotifier.toggleAutoCopy(),
                 ),
               ),
               ListTile(
@@ -60,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 subtitle: Text('Require biometric authentication'),
-                trailing: Switch.adaptive(
+                trailing: PlatformSwitch(
                   value: biometric.isEnabled,
                   onChanged: (toggle) => context
                       .read(biometricNotifier.notifier)
@@ -98,7 +102,7 @@ class SettingsScreen extends StatelessWidget {
                 subtitle: Text('View AddyManager details'),
                 trailing: Icon(Icons.help_outline),
                 onTap: () {
-                  Navigator.push(context, CustomPageRoute(AboutAppScreen()));
+                  Navigator.pushNamed(context, AboutAppScreen.routeName);
                 },
               ),
               // ListTile(
@@ -124,7 +128,7 @@ class SettingsScreen extends StatelessWidget {
                     primary: Colors.red,
                   ),
                   child: Text('Logout'),
-                  onPressed: () => buildLogoutDialog(context, isIOS),
+                  onPressed: () => buildLogoutDialog(context),
                 ),
               ),
               SizedBox(height: size.height * 0.01),
@@ -135,24 +139,16 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future buildLogoutDialog(BuildContext context, bool isIOS) {
-    final confirmDialog = context.read(confirmationDialog);
-
+  Future buildLogoutDialog(BuildContext context) {
     logout() {
-      Navigator.pushReplacement(
-        context,
-        CustomPageRoute(LogoutScreen()),
-      );
+      Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
     }
 
     return showModal(
       context: context,
       builder: (context) {
-        return isIOS
-            ? confirmDialog.iOSAlertDialog(
-                context, kLogOutAlertDialog, logout, 'Logout')
-            : confirmDialog.androidAlertDialog(
-                context, kLogOutAlertDialog, logout, 'Logout');
+        return PlatformAlertDialog(
+            content: kLogOutAlertDialog, method: logout, title: 'Logout');
       },
     );
   }

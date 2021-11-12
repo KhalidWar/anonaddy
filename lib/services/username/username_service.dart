@@ -38,6 +38,33 @@ class UsernameService {
     }
   }
 
+  Future<Username> getSpecificUsername(String usernameId) async {
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
+
+    try {
+      final response = await http.get(
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kUsernamesURL/$usernameId'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('getUsernameData ${response.statusCode}');
+        return Username.fromJson(jsonDecode(response.body)['data']);
+      } else {
+        print('getUsernameData ${response.statusCode}');
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<Username> createNewUsername(String username) async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();

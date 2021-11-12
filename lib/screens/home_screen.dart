@@ -1,32 +1,33 @@
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/custom_page_route.dart';
-import 'package:anonaddy/shared_components/no_internet_alert.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
-import 'package:anonaddy/state_management/connectivity/connectivity_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'create_new_alias/create_new_alias.dart';
+import 'home_screen_components/alert_center/alert_center_screen.dart';
 import 'home_screen_components/changelog_widget.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const routeName = 'homeScreen';
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _tabScreens = [AccountTab(), AliasTab(), SearchTab()];
+
   int _selectedIndex = 1;
 
-  void _selectedTab(int index) {
+  void switchIndex(int index) {
     context.read(fabVisibilityStateNotifier.notifier).showFab();
     if (_selectedIndex == 2 && index == 2) {
       SearchTab().search(context);
@@ -45,11 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
       return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
               top: Radius.circular(kBottomSheetBorderRadius)),
         ),
-        builder: (context) => ChangelogWidget(),
+        builder: (context) => const ChangelogWidget(),
       );
     }
   }
@@ -68,41 +69,24 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: buildFab(context),
       body: IndexedStack(
         index: _selectedIndex,
-        children: [
-          AccountTab(),
-          AliasTab(),
-          SearchTab(),
-        ],
+        children: _tabScreens,
       ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Consumer(
-            builder: (_, watch, __) {
-              final connectivityStatus = watch(connectivityStateNotifier);
-              return connectivityStatus == ConnectionStatus.offline
-                  ? NoInternetAlert()
-                  : Container();
-            },
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (index) => switchIndex(index),
+        currentIndex: _selectedIndex,
+        selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
+        items: [
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined),
+            label: kAccountBotNavLabel,
           ),
-          BottomNavigationBar(
-            onTap: _selectedTab,
-            currentIndex: _selectedIndex,
-            selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle_outlined),
-                label: kAccountBotNavLabel,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.alternate_email_outlined),
-                label: kAliasesBotNavLabel,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search_outlined),
-                label: kSearchBotNavLabel,
-              ),
-            ],
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.alternate_email_outlined),
+            label: kAliasesBotNavLabel,
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.search_outlined),
+            label: kSearchBotNavLabel,
           ),
         ],
       ),
@@ -115,16 +99,17 @@ class _HomeScreenState extends State<HomeScreen> {
       title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
       centerTitle: true,
       leading: IconButton(
-        icon: Icon(Icons.error_outline),
+        icon: const Icon(Icons.error_outline),
         onPressed: () {
-          Navigator.push(context, CustomPageRoute(AlertCenterScreen()));
+          Navigator.pushNamed(context, AlertCenterScreen.routeName);
         },
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () =>
-              Navigator.push(context, CustomPageRoute(SettingsScreen())),
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            Navigator.pushNamed(context, SettingsScreen.routeName);
+          },
         ),
       ],
     );
@@ -145,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
           child: FloatingActionButton(
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
             onPressed: () {
               final accountState = context.read(accountStateNotifier);
 
@@ -159,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(kBottomSheetBorderRadius),
                       ),

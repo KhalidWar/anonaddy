@@ -12,6 +12,8 @@ import 'lock_screen.dart';
 class AuthorizationScreen extends StatelessWidget {
   const AuthorizationScreen({Key? key}) : super(key: key);
 
+  static const routeName = 'authorizationScreen';
+
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -26,7 +28,7 @@ class AuthorizationScreen extends StatelessWidget {
 
             /// Disables screenshot and blocks app view on Recent Apps
             return SecureApplication(
-              nativeRemoveDelay: 1000,
+              nativeRemoveDelay: 500,
               child: Builder(
                 builder: (context) {
                   /// Access secureApp provider to control its state

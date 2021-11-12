@@ -1,57 +1,57 @@
-import 'package:anonaddy/models/alias/alias_model.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/state_management/alias_state/alias_notifier.dart';
-import 'package:anonaddy/state_management/alias_state/alias_state.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'components/alias_shimmer_loading.dart';
 import 'components/alias_tab_pie_chart.dart';
+import 'components/empty_list_alias_tab.dart';
 
 class AliasTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final aliasState = watch(aliasStateNotifier);
+    final aliasTabState = watch(aliasTabStateNotifier);
 
+    switch (aliasTabState.status) {
+      case AliasTabStatus.loading:
+        return const AliasShimmerLoading();
+
+      case AliasTabStatus.loaded:
+        return const LoadedAliasTab();
+
+      case AliasTabStatus.failed:
+        final error = aliasTabState.errorMessage!;
+        return LottieWidget(
+          showLoading: true,
+          lottie: 'assets/lottie/errorCone.json',
+          label: error.toString(),
+        );
+    }
+  }
+}
+
+class LoadedAliasTab extends StatefulWidget {
+  const LoadedAliasTab({Key? key}) : super(key: key);
+
+  @override
+  _LoadedAliasTabState createState() => _LoadedAliasTabState();
+}
+
+class _LoadedAliasTabState extends State<LoadedAliasTab> {
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final List<Alias> availableAliasList = [];
-    final List<Alias> deletedAliasList = [];
-    final List<int> forwardedList = [];
-    final List<int> blockedList = [];
-    final List<int> repliedList = [];
-    final List<int> sentList = [];
-
-    int reduceList(List<int> list) {
-      if (list.isEmpty) {
-        return 0;
-      } else {
-        return list.reduce((value, element) => value + element);
-      }
-    }
-
-    switch (aliasState.status) {
-      case AliasStatus.loading:
-        return AliasShimmerLoading();
-
-      case AliasStatus.loaded:
-        final data = aliasState.aliasModel!;
-
-        for (Alias alias in data.aliases) {
-          forwardedList.add(alias.emailsForwarded);
-          blockedList.add(alias.emailsBlocked);
-          repliedList.add(alias.emailsReplied);
-          sentList.add(alias.emailsSent);
-
-          if (alias.deletedAt == null) {
-            availableAliasList.add(alias);
-          } else {
-            deletedAliasList.add(alias);
-          }
-        }
+    return Consumer(
+      builder: (context, watch, _) {
+        final aliasTabState = watch(aliasTabStateNotifier);
+        final availableAliasList = aliasTabState.availableAliasList;
+        final deletedAliasList = aliasTabState.deletedAliasList;
 
         return Scaffold(
           body: DefaultTabController(
@@ -70,10 +70,10 @@ class AliasTab extends ConsumerWidget {
                     flexibleSpace: FlexibleSpaceBar(
                       collapseMode: CollapseMode.pin,
                       background: AliasTabPieChart(
-                        emailsForwarded: reduceList(forwardedList),
-                        emailsBlocked: reduceList(blockedList),
-                        emailsReplied: reduceList(repliedList),
-                        emailsSent: reduceList(sentList),
+                        emailsForwarded: aliasTabState.forwardedList,
+                        emailsBlocked: aliasTabState.blockedList,
+                        emailsReplied: aliasTabState.repliedList,
+                        emailsSent: aliasTabState.sentList,
                       ),
                     ),
                     bottom: TabBar(
@@ -83,7 +83,7 @@ class AliasTab extends ConsumerWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text('Available Aliases'),
+                              const Text('Available Aliases'),
                               Text('${availableAliasList.length}'),
                             ],
                           ),
@@ -92,7 +92,7 @@ class AliasTab extends ConsumerWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text('Deleted Aliases'),
+                              const Text('Deleted Aliases'),
                               Text('${deletedAliasList.length}'),
                             ],
                           ),
@@ -105,9 +105,9 @@ class AliasTab extends ConsumerWidget {
               body: TabBarView(
                 children: [
                   if (availableAliasList.isEmpty)
-                    buildEmptyAliasList(context)
+                    const EmptyListAliasTabWidget()
                   else
-                    Scrollbar(
+                    PlatformScrollbar(
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: availableAliasList.length,
@@ -119,9 +119,9 @@ class AliasTab extends ConsumerWidget {
                       ),
                     ),
                   if (deletedAliasList.isEmpty)
-                    buildEmptyAliasList(context)
+                    const EmptyListAliasTabWidget()
                   else
-                    Scrollbar(
+                    PlatformScrollbar(
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: deletedAliasList.length,
@@ -137,27 +137,7 @@ class AliasTab extends ConsumerWidget {
             ),
           ),
         );
-
-      case AliasStatus.failed:
-        final error = aliasState.errorMessage!;
-        return LottieWidget(
-          showLoading: true,
-          lottie: 'assets/lottie/errorCone.json',
-          label: error.toString(),
-        );
-    }
-  }
-
-  Center buildEmptyAliasList(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Center(
-      child: Text(
-        'It doesn\'t look like you have any aliases yet!',
-        style: Theme.of(context)
-            .textTheme
-            .bodyText1!
-            .copyWith(color: isDark ? Colors.white : kPrimaryColor),
-      ),
+      },
     );
   }
 }

@@ -38,6 +38,33 @@ class DomainsService {
     }
   }
 
+  Future<Domain> getSpecificDomain(String domainId) async {
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
+
+    try {
+      final response = await http.get(
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kDomainsURL/$domainId'),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('getSpecificDomain ${response.statusCode}');
+        return Domain.fromJson(jsonDecode(response.body)['data']);
+      } else {
+        print('getSpecificDomain ${response.statusCode}');
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<Domain> createNewDomain(String domain) async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();

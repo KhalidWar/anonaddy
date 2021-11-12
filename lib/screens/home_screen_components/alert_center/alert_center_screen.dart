@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 class AlertCenterScreen extends StatefulWidget {
   const AlertCenterScreen({Key? key}) : super(key: key);
 
+  static const routeName = 'alertCenterScreen';
+
   @override
   _AlertCenterScreenState createState() => _AlertCenterScreenState();
 }

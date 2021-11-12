@@ -1,6 +1,7 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,7 +32,7 @@ class RateAddyManager extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         onTap: () => context.read(nicheMethods).launchURL(
-              context.read(targetedPlatform).isIOS()
+              PlatformAware.isIOS()
                   ? kAddyManagerAppStoreURL
                   : kAddyManagerPlayStoreURL,
             ),

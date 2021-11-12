@@ -1,6 +1,7 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,16 +24,16 @@ class _AddNewUsernameState extends State<AddNewUsername> {
 
   @override
   Widget build(BuildContext context) {
-    final usernameManager = context.read(usernameStateManagerProvider);
+    final size = MediaQuery.of(context).size;
 
     Future<void> createUsername() async {
       if (_formKey.currentState!.validate()) {
-        await usernameManager.createNewUsername(
-            context, _textEditController.text.trim());
+        await context
+            .read(usernamesScreenStateNotifier.notifier)
+            .createNewUsername(_textEditController.text.trim());
+        Navigator.pop(context);
       }
     }
-
-    final size = MediaQuery.of(context).size;
 
     return Container(
       padding:

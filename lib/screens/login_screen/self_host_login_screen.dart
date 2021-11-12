@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../global_providers.dart';
 
 class SelfHostLoginScreen extends StatefulWidget {
+  static const routeName = 'selfHostedScreen';
+
   @override
   State<SelfHostLoginScreen> createState() => _SelfHostLoginScreenState();
 }

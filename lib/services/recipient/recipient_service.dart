@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
@@ -10,7 +10,7 @@ class RecipientService {
   const RecipientService(this.accessTokenService);
   final AccessTokenService accessTokenService;
 
-  Future<RecipientModel> getAllRecipient() async {
+  Future<List<Recipient>> getAllRecipient() async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
@@ -27,9 +27,43 @@ class RecipientService {
 
       if (response.statusCode == 200) {
         print('getAllRecipient ${response.statusCode}');
-        return RecipientModel.fromJson(jsonDecode(response.body));
+        final decodedData = jsonDecode(response.body)['data'];
+        return (decodedData as List).map((recipient) {
+          return Recipient.fromJson(recipient);
+        }).toList();
       } else {
         print('getAllRecipient ${response.statusCode}');
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<Recipient> getSpecificRecipient(String recipientId) async {
+    final accessToken = await accessTokenService.getAccessToken();
+    final instanceURL = await accessTokenService.getInstanceURL();
+
+    try {
+      final response = await http.get(
+        Uri.https(
+            instanceURL,
+            '$kUnEncodedBaseURL/$kRecipientsURL/$recipientId',
+            {'deleted': 'with'}),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('getSpecificAlias ${response.statusCode}');
+        final recipient = jsonDecode(response.body)['data'];
+        return Recipient.fromJson(recipient);
+      } else {
+        print('getSpecificAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {

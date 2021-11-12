@@ -1,12 +1,13 @@
-import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/models/recipient/recipient_model.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/state_management/recipient/recipient_notifier.dart';
-import 'package:anonaddy/state_management/recipient/recipient_state.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
+import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
+import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,9 +53,9 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final recipientState = context.read(recipientStateNotifier);
-    if (recipientState.status == RecipientStatus.loaded) {
-      final allRecipients = recipientState.recipientModel!.recipients;
+    final recipientTabState = context.read(recipientTabStateNotifier);
+    if (recipientTabState.status == RecipientTabStatus.loaded) {
+      final allRecipients = recipientTabState.recipients!;
       for (Recipient recipient in allRecipients) {
         if (recipient.emailVerifiedAt != null) {
           _verifiedRecipients.add(recipient);
@@ -124,16 +125,7 @@ class _AliasDefaultRecipientScreenState
                         children: [
                           Text(kUpdateUsernameDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
-                          Consumer(
-                            builder: (_, watch, __) {
-                              final isLoading =
-                                  watch(usernameStateManagerProvider)
-                                      .updateRecipientLoading;
-                              return isLoading
-                                  ? LinearProgressIndicator(color: kAccentColor)
-                                  : Divider(height: 0);
-                            },
-                          ),
+                          Divider(height: 0),
                         ],
                       ),
                     ),
@@ -194,14 +186,24 @@ class _AliasDefaultRecipientScreenState
               right: 15,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
-                child: Text('Update Default Recipients'),
-                onPressed: () => context
-                    .read(usernameStateManagerProvider)
-                    .updateDefaultRecipient(
-                      context,
-                      widget.username,
-                      selectedRecipient == null ? '' : selectedRecipient!.id,
-                    ),
+                child: Consumer(
+                  builder: (_, watch, __) {
+                    final isLoading = watch(usernamesScreenStateNotifier)
+                        .updateRecipientLoading!;
+                    return isLoading
+                        ? PlatformLoadingIndicator()
+                        : Text('Update Default Recipients');
+                  },
+                ),
+                onPressed: () async {
+                  await context
+                      .read(usernamesScreenStateNotifier.notifier)
+                      .updateDefaultRecipient(
+                        widget.username,
+                        selectedRecipient == null ? '' : selectedRecipient!.id,
+                      );
+                  Navigator.pop(context);
+                },
               ),
             ),
           ],
