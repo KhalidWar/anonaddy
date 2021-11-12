@@ -20,8 +20,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:package_info/package_info.dart';
 
-import 'state_management/settings_state_manager.dart';
-
 /// Class Providers
 final flutterSecureStorage = Provider((ref) => FlutterSecureStorage());
 
@@ -90,12 +88,6 @@ final formValidator = Provider<FormValidator>((ref) => FormValidator());
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
   return SettingsDataStorage(secureStorage);
-});
-
-/// Notifier Providers
-final settingsStateManagerProvider = ChangeNotifierProvider((ref) {
-  final settingStorage = ref.read(settingsDataStorage);
-  return SettingsStateManager(settingsStorage: settingStorage);
 });
 
 /// Future Providers

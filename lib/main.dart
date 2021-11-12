@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart'
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'global_providers.dart';
 import 'models/alias/alias.dart';
 import 'models/recipient/recipient.dart';
 
@@ -38,7 +38,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     /// Use [watch] method to access different providers
-    final settingsState = watch(settingsStateManagerProvider);
+    final settingsState = watch(settingsStateNotifier);
 
     /// Sets StatusBarColor for the whole app
     SystemChrome.setSystemUIOverlayStyle(
@@ -55,7 +55,7 @@ class MyApp extends ConsumerWidget {
       child: MaterialApp(
         title: kAppBarTitle,
         debugShowCheckedModeBanner: false,
-        theme: settingsState.isDarkTheme ? darkTheme : lightTheme,
+        theme: settingsState.isDarkTheme! ? darkTheme : lightTheme,
         darkTheme: darkTheme,
         onGenerateRoute: RouteGenerator.generateRoute,
         initialRoute: AuthorizationScreen.routeName,

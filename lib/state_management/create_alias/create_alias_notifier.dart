@@ -8,6 +8,7 @@ import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
+import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +19,7 @@ final createAliasNotifier = ChangeNotifierProvider.autoDispose((ref) {
     domainOptions: ref.read(domainOptionsStateNotifier),
     accountState: ref.read(accountStateNotifier),
     nicheMethod: ref.read(nicheMethods),
-    isAutoCopy: ref.read(settingsStateManagerProvider).isAutoCopy,
+    isAutoCopy: ref.read(settingsStateNotifier).isAutoCopy!,
     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
   );
 });

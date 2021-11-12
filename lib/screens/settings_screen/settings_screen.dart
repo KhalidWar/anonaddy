@@ -6,6 +6,7 @@ import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
+import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,7 +26,8 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Settings')),
       body: Consumer(
         builder: (_, watch, __) {
-          final settings = watch(settingsStateManagerProvider);
+          final settingsState = watch(settingsStateNotifier);
+          final settingsNotifier = context.read(settingsStateNotifier.notifier);
           final biometric = watch(biometricNotifier);
 
           return Column(
@@ -39,8 +41,8 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 subtitle: Text('App follows system by default'),
                 trailing: PlatformSwitch(
-                  value: settings.isDarkTheme,
-                  onChanged: (toggle) => settings.toggleTheme(),
+                  value: settingsState.isDarkTheme!,
+                  onChanged: (toggle) => settingsNotifier.toggleTheme(),
                 ),
               ),
               ListTile(
@@ -51,8 +53,8 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 subtitle: Text('Automatically copy email after alias creation'),
                 trailing: PlatformSwitch(
-                  value: settings.isAutoCopy,
-                  onChanged: (toggle) => settings.toggleAutoCopy(),
+                  value: settingsState.isAutoCopy!,
+                  onChanged: (toggle) => settingsNotifier.toggleAutoCopy(),
                 ),
               ),
               ListTile(
