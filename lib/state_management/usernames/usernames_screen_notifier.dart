@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/username/username_service.dart';
@@ -30,10 +32,15 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
   final Function showToast;
   final UsernamesNotifier usernamesNotifier;
 
-  Future<void> fetchUsername(String usernameId) async {
+  Future<void> fetchUsername(Username username) async {
     state = state.copyWith(status: UsernamesScreenStatus.loading);
     try {
-      final username = await usernameService.getSpecificUsername(usernameId);
+      final updatedUsername =
+          await usernameService.getSpecificUsername(username.id);
+      state = state.copyWith(
+          status: UsernamesScreenStatus.loaded, username: updatedUsername);
+    } on SocketException {
+      /// Return old alias data if there's no internet connection
       state = state.copyWith(
           status: UsernamesScreenStatus.loaded, username: username);
     } catch (error) {

@@ -38,7 +38,7 @@ class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
     super.initState();
     context
         .read(usernamesScreenStateNotifier.notifier)
-        .fetchUsername(widget.username.id);
+        .fetchUsername(widget.username);
   }
 
   @override
