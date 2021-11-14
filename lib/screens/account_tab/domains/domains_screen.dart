@@ -38,7 +38,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
     super.initState();
     context
         .read(domainsScreenStateNotifier.notifier)
-        .fetchDomain(widget.domain.id);
+        .fetchDomain(widget.domain);
   }
 
   @override
