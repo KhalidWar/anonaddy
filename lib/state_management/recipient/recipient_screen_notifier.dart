@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
@@ -39,11 +41,18 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
 
   late final Function showToast;
 
-  Future<void> fetchRecipient(String recipientId) async {
+  Future<void> fetchRecipient(Recipient recipient) async {
+    /// Initially set RecipientScreen to loading
     state = state.copyWith(status: RecipientScreenStatus.loading);
     try {
-      final recipient =
-          await recipientService.getSpecificRecipient(recipientId);
+      final newRecipient =
+          await recipientService.getSpecificRecipient(recipient.id);
+
+      /// Assign newly fetched recipient data to RecipientScreen state
+      state = state.copyWith(
+          status: RecipientScreenStatus.loaded, recipient: newRecipient);
+    } on SocketException {
+      /// Return old recipient data if there's no internet connection
       state = state.copyWith(
           status: RecipientScreenStatus.loaded, recipient: recipient);
     } catch (error) {

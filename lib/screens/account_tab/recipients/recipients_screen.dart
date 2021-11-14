@@ -48,7 +48,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     super.initState();
     context
         .read(recipientScreenStateNotifier.notifier)
-        .fetchRecipient(widget.recipient.id);
+        .fetchRecipient(widget.recipient);
   }
 
   @override
