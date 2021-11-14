@@ -20,6 +20,18 @@ class AliasScreenState {
   final bool? deleteAliasLoading;
   final bool? updateRecipientLoading;
 
+  static AliasScreenState initialState() {
+    /// Initializing [AliasScreen] state to avoid null exception
+    /// Then call [.copyWith()] method to update specific state variable
+    return AliasScreenState(
+      status: AliasScreenStatus.loading,
+      errorMessage: '',
+      isToggleLoading: false,
+      deleteAliasLoading: false,
+      updateRecipientLoading: false,
+    );
+  }
+
   AliasScreenState copyWith({
     AliasScreenStatus? status,
     Alias? alias,

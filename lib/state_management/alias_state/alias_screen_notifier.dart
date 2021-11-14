@@ -29,13 +29,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     required this.aliasService,
     required this.nicheMethod,
     required this.aliasTabNotifier,
-  }) : super(AliasScreenState(
-          status: AliasScreenStatus.loading,
-          errorMessage: '',
-          isToggleLoading: false,
-          deleteAliasLoading: false,
-          updateRecipientLoading: false,
-        )) {
+  }) : super(AliasScreenState.initialState()) {
     showToast = nicheMethod.showToast;
   }
 
