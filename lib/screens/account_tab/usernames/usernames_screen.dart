@@ -22,17 +22,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../global_providers.dart';
 
-class UsernameDetailedScreen extends StatefulWidget {
-  const UsernameDetailedScreen({required this.username});
+class UsernamesScreen extends StatefulWidget {
+  const UsernamesScreen({required this.username});
   final Username username;
 
   static const routeName = 'usernameDetailedScreen';
 
   @override
-  State<UsernameDetailedScreen> createState() => _UsernameDetailedScreenState();
+  State<UsernamesScreen> createState() => _UsernamesScreenState();
 }
 
-class _UsernameDetailedScreenState extends State<UsernameDetailedScreen> {
+class _UsernamesScreenState extends State<UsernamesScreen> {
   @override
   void initState() {
     super.initState();
