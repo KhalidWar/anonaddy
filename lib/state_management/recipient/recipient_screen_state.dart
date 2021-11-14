@@ -18,6 +18,15 @@ class RecipientScreenState {
   final bool? isEncryptionToggleLoading;
   final bool? isAddRecipientLoading;
 
+  static RecipientScreenState initialState() {
+    return RecipientScreenState(
+      status: RecipientScreenStatus.loading,
+      errorMessage: '',
+      isEncryptionToggleLoading: false,
+      isAddRecipientLoading: false,
+    );
+  }
+
   RecipientScreenState copyWith({
     RecipientScreenStatus? status,
     Recipient? recipient,

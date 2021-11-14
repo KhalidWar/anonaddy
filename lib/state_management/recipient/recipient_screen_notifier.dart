@@ -26,12 +26,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     required this.recipientService,
     required this.nicheMethod,
     required this.recipientTabNotifier,
-  }) : super(RecipientScreenState(
-          status: RecipientScreenStatus.loading,
-          errorMessage: '',
-          isEncryptionToggleLoading: false,
-          isAddRecipientLoading: false,
-        )) {
+  }) : super(RecipientScreenState.initialState()) {
     showToast = nicheMethod.showToast;
   }
 
