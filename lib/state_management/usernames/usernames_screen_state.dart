@@ -20,6 +20,15 @@ class UsernamesScreenState {
   final bool? catchAllSwitchLoading;
   final bool? updateRecipientLoading;
 
+  static UsernamesScreenState initialState() {
+    return UsernamesScreenState(
+      status: UsernamesScreenStatus.loading,
+      activeSwitchLoading: false,
+      catchAllSwitchLoading: false,
+      updateRecipientLoading: false,
+    );
+  }
+
   UsernamesScreenState copyWith({
     UsernamesScreenStatus? status,
     Username? username,

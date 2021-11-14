@@ -21,12 +21,7 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
     required this.usernameService,
     required this.showToast,
     required this.usernamesNotifier,
-  }) : super(UsernamesScreenState(
-          status: UsernamesScreenStatus.loading,
-          activeSwitchLoading: false,
-          catchAllSwitchLoading: false,
-          updateRecipientLoading: false,
-        ));
+  }) : super(UsernamesScreenState.initialState());
 
   final UsernameService usernameService;
   final Function showToast;
