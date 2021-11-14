@@ -36,9 +36,7 @@ class _AliasScreenState extends State<AliasScreen> {
   @override
   void initState() {
     super.initState();
-    context
-        .read(aliasScreenStateNotifier.notifier)
-        .fetchAliases(widget.alias.id);
+    context.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
   }
 
   @override

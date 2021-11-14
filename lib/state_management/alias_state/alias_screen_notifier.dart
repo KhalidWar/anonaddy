@@ -43,10 +43,17 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   late Function showToast;
 
-  Future<void> fetchAliases(String aliasId) async {
+  Future<void> fetchAliases(Alias alias) async {
+    /// Initially set AliasScreen to loading
     state = state.copyWith(status: AliasScreenStatus.loading);
     try {
-      final alias = await aliasService.getSpecificAlias(aliasId);
+      final updatedAlias = await aliasService.getSpecificAlias(alias.id);
+
+      /// Assign newly fetched alias data to AliasScreen state
+      state =
+          state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
+    } on SocketException {
+      /// Return old alias data if there's no internet connection
       state = state.copyWith(status: AliasScreenStatus.loaded, alias: alias);
     } catch (error) {
       state = state.copyWith(
