@@ -155,7 +155,7 @@ class _AliasScreenState extends State<AliasScreen> {
               isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
           trailing: Row(
             children: [
-              if (deleteAliasLoading) PlatformLoadingIndicator(),
+              if (deleteAliasLoading) PlatformLoadingIndicator(size: 20),
               IconButton(
                 icon: isAliasDeleted
                     ? Icon(Icons.restore_outlined, color: Colors.green)
