@@ -7,14 +7,6 @@ class FormValidator {
     }
   }
 
-  String? validateDescriptionField(String input) {
-    if (input.isEmpty) {
-      return 'Provide a description';
-    } else {
-      return null;
-    }
-  }
-
   String? validatePGPKeyField(String input) {
     if (input.isEmpty) {
       return 'Provide a PGP Key';
