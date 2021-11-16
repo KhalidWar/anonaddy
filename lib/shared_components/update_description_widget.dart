@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_description_input_field.dart';
 import 'package:flutter/material.dart';
 
@@ -54,16 +55,21 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     Expanded(
                       child: PlatformButton(
                         color: Colors.redAccent,
-                        labelColor: Colors.black,
-                        label: kRemoveDescription,
+                        child: Text(
+                          kRemoveDescription,
+                          style: TextStyle(color: Colors.black),
+                        ),
                         onPress: removeDescription,
                       ),
                     ),
                     SizedBox(width: size.width * 0.03),
                     Expanded(
                       child: PlatformButton(
-                        labelColor: Colors.black,
-                        label: kUpdateDescription,
+                        color: kAccentColor,
+                        child: Text(
+                          kUpdateDescription,
+                          style: TextStyle(color: Colors.black),
+                        ),
                         onPress: updateDescription,
                       ),
                     ),

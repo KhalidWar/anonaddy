@@ -5,24 +5,20 @@ import 'package:flutter/material.dart';
 
 class PlatformButton extends PlatformAware {
   const PlatformButton({
-    required this.label,
+    required this.child,
     required this.onPress,
     this.color,
-    this.labelColor,
   });
-  final String label;
+  final Widget child;
   final Function() onPress;
-  final Color? color, labelColor;
+  final Color? color;
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
     return CupertinoButton(
       color: color ?? kAccentColor,
       padding: EdgeInsets.all(0),
-      child: Text(
-        label,
-        style: TextStyle(color: labelColor),
-      ),
+      child: child,
       onPressed: onPress,
     );
   }
@@ -34,10 +30,7 @@ class PlatformButton extends PlatformAware {
         padding: EdgeInsets.all(0),
         primary: color ?? kAccentColor,
       ),
-      child: Text(
-        label,
-        style: TextStyle(color: labelColor),
-      ),
+      child: child,
       onPressed: onPress,
     );
   }
