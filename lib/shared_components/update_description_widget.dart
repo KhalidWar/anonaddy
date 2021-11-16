@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'bottom_sheet_header.dart';
 import 'constants/ui_strings.dart';
+import 'platform_aware_widgets/platform_button.dart';
 
 class UpdateDescriptionWidget extends StatelessWidget {
   const UpdateDescriptionWidget({
@@ -51,28 +52,24 @@ class UpdateDescriptionWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.redAccent,
-                          minimumSize: Size(120, size.height * 0.055),
-                        ),
-                        child: Text(kRemoveDescription),
-                        onPressed: removeDescription,
+                      child: PlatformButton(
+                        color: Colors.redAccent,
+                        labelColor: Colors.black,
+                        label: kRemoveDescription,
+                        onPress: removeDescription,
                       ),
                     ),
                     SizedBox(width: size.width * 0.03),
                     Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(120, size.height * 0.055),
-                        ),
-                        child: Text(kUpdateDescription),
-                        onPressed: updateDescription,
+                      child: PlatformButton(
+                        labelColor: Colors.black,
+                        label: kUpdateDescription,
+                        onPress: updateDescription,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: size.height * 0.02),
+                SizedBox(height: size.height * 0.03),
               ],
             ),
           ),
