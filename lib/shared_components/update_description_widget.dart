@@ -1,9 +1,7 @@
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_description_input_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../global_providers.dart';
 import 'bottom_sheet_header.dart';
-import 'constants/material_constants.dart';
 import 'constants/ui_strings.dart';
 
 class UpdateDescriptionWidget extends StatelessWidget {
@@ -39,22 +37,16 @@ class UpdateDescriptionWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(kUpdateDescriptionString),
-                SizedBox(height: size.height * 0.015),
+                SizedBox(height: size.height * 0.02),
                 Form(
                   key: descriptionFormKey,
-                  child: TextFormField(
-                    autofocus: true,
-                    validator: (input) => context
-                        .read(formValidator)
-                        .validateDescriptionField(input!),
+                  child: PlatformDescriptionInputField(
+                    placeholder: description ?? 'No description',
                     onChanged: inputOnChanged,
                     onFieldSubmitted: (toggle) => updateDescription(),
-                    decoration: kTextFormFieldDecoration.copyWith(
-                      hintText: description ?? 'No description',
-                    ),
                   ),
                 ),
-                SizedBox(height: size.height * 0.015),
+                SizedBox(height: size.height * 0.02),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -80,7 +72,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: size.height * 0.015),
+                SizedBox(height: size.height * 0.02),
               ],
             ),
           ),
