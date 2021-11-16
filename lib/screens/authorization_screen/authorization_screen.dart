@@ -28,7 +28,7 @@ class AuthorizationScreen extends StatelessWidget {
 
             /// Disables screenshot and blocks app view on Recent Apps
             return SecureApplication(
-              nativeRemoveDelay: 500,
+              nativeRemoveDelay: 100,
               child: Builder(
                 builder: (context) {
                   /// Access secureApp provider to control its state
