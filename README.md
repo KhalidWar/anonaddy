@@ -33,11 +33,15 @@ Your support will help the continuous development of this project. Click on QR c
 
 
 ## Security
-AddyManager requires [Access Token](https://app.anonaddy.com/settings) to access and manage your AnonAddy account. It utilizes secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token. Your Access Token is NEVER sent to us or any third party. 
+AddyManager requires [Access Token](https://app.anonaddy.com/settings) to access and manage your AnonAddy account. It utilizes secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token. 
+
+Your access token is NOT sent to us or any third party server. However, access token is required to interact with your AnonAddy account and is used to fetch aliases, recipients, domains...etc.
 
 
 ## Privacy
-AddyManager is free and open source software licensed under [MIT](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). Free as in free of charge, ads, analytics, and trackers. What's yours is yours. Please feel free to inspect the code and verify for yourself.
+AddyManager is free and open source software licensed under [MIT](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). Free as in free of charge, ads, analytics, and trackers. What's yours is yours.
+
+Your account data, aliases, recipients, domains, search history...etc. do NOT leave your device and are DELETED upon log out. Again, what's yours is yours.
 
 
 ## Packages used
