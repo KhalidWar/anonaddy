@@ -16,7 +16,7 @@ Your support will help the continuous development of this project. Click on QR c
 
 ## Screenshots
 <img src="assets/screenshots/account.jpg" width="200"> <img src="assets/screenshots/aliases.jpg" width="200"> <img src="assets/screenshots/search.jpg" width="200"> 
-<img src="assets/screenshots/create_alias.jpg" width="200"> <img src="assets/screenshots/settings.jpg" width="200"> <img src="assets/screenshots/login.jpg" width="200">
+<img src="assets/screenshots/create_alias.jpg" width="200">
 
 
 ## Features
