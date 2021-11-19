@@ -14,6 +14,7 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
+import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,9 +37,7 @@ class _AliasScreenState extends State<AliasScreen> {
   @override
   void initState() {
     super.initState();
-    context
-        .read(aliasScreenStateNotifier.notifier)
-        .fetchAliases(widget.alias.id);
+    context.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
   }
 
   @override
@@ -140,7 +139,7 @@ class _AliasScreenState extends State<AliasScreen> {
           title: alias.description ?? 'No description',
           subtitle: 'Description',
           trailingIconData: Icons.edit_outlined,
-          trailingIconOnPress: () => buildEditDescriptionDialog(context, alias),
+          trailingIconOnPress: () => updateDescriptionDialog(context, alias),
         ),
         AliasDetailListTile(
           leadingIconData: Icons.check_circle_outline,
@@ -157,7 +156,7 @@ class _AliasScreenState extends State<AliasScreen> {
               isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
           trailing: Row(
             children: [
-              if (deleteAliasLoading) PlatformLoadingIndicator(),
+              if (deleteAliasLoading) PlatformLoadingIndicator(size: 20),
               IconButton(
                 icon: isAliasDeleted
                     ? Icon(Icons.restore_outlined, color: Colors.green)
@@ -380,16 +379,21 @@ class _AliasScreenState extends State<AliasScreen> {
     );
   }
 
-  Future buildEditDescriptionDialog(BuildContext context, Alias alias) {
-    final aliasScreenState = context.read(aliasScreenStateNotifier.notifier);
+  Future updateDescriptionDialog(BuildContext context, Alias alias) {
+    final aliasScreenNotifier = context.read(aliasScreenStateNotifier.notifier);
     final descriptionFormKey = GlobalKey<FormState>();
     String newDescription = '';
 
-    Future<void> editDesc() async {
+    Future<void> updateDescription() async {
       if (descriptionFormKey.currentState!.validate()) {
-        await aliasScreenState.editDescription(alias, newDescription);
+        await aliasScreenNotifier.editDescription(alias, newDescription);
         Navigator.pop(context);
       }
+    }
+
+    Future<void> removeDescription() async {
+      await aliasScreenNotifier.editDescription(alias, '');
+      Navigator.pop(context);
     }
 
     return showModalBottomSheet(
@@ -400,71 +404,12 @@ class _AliasScreenState extends State<AliasScreen> {
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
-        final size = MediaQuery.of(context).size;
-
-        return Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              BottomSheetHeader(headerLabel: kUpdateDescription),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(kUpdateDescriptionString),
-                    SizedBox(height: size.height * 0.015),
-                    Form(
-                      key: descriptionFormKey,
-                      child: TextFormField(
-                        autofocus: true,
-                        validator: (input) => context
-                            .read(formValidator)
-                            .validateDescriptionField(input!),
-                        onChanged: (input) => newDescription = input,
-                        onFieldSubmitted: (toggle) => editDesc(),
-                        decoration: kTextFormFieldDecoration.copyWith(
-                          hintText: alias.description ?? 'No description',
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.redAccent,
-                              minimumSize: Size(120, size.height * 0.055),
-                            ),
-                            child: Text(kRemoveDescription),
-                            onPressed: () async {
-                              await aliasScreenState.editDescription(alias, '');
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        SizedBox(width: size.width * 0.03),
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(120, size.height * 0.055),
-                            ),
-                            child: Text(kUpdateDescription),
-                            onPressed: () => editDesc(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        return UpdateDescriptionWidget(
+          description: alias.description,
+          descriptionFormKey: descriptionFormKey,
+          updateDescription: updateDescription,
+          inputOnChanged: (input) => newDescription = input,
+          removeDescription: removeDescription,
         );
       },
     );

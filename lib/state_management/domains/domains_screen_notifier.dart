@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_state.dart';
@@ -21,10 +24,14 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
   final DomainsService domainService;
   final Function showToast;
 
-  Future<void> fetchDomain(String domainId) async {
+  Future<void> fetchDomain(Domain domain) async {
     state = state.copyWith(status: DomainsScreenStatus.loading);
     try {
-      final domain = await domainService.getSpecificDomain(domainId);
+      final updatedDomain = await domainService.getSpecificDomain(domain.id);
+      state = state.copyWith(
+          status: DomainsScreenStatus.loaded, domain: updatedDomain);
+    } on SocketException {
+      /// Return old domain data if there's no internet connection
       state =
           state.copyWith(status: DomainsScreenStatus.loaded, domain: domain);
     } catch (error) {

@@ -5,6 +5,8 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
@@ -176,17 +178,15 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
           ),
         ),
         Container(
-          width: double.infinity,
           margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(),
+          child: PlatformButton(
             child: createAliasState.isLoading!
                 ? PlatformLoadingIndicator()
-                : Text(kCreateAlias),
-            onPressed:
-                createAliasState.isLoading! ? () {} : () => createAlias(),
+                : Text(kCreateAlias, style: TextStyle(color: Colors.black)),
+            onPress: createAliasState.isLoading! ? () {} : () => createAlias(),
           ),
         ),
+        if (PlatformAware.isIOS()) SizedBox(height: size.height * 0.03),
       ],
     );
   }

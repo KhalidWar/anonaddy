@@ -1,7 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -13,13 +12,13 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
+import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_notifier.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../global_providers.dart';
 import 'domain_default_recipient.dart';
 
 class DomainsScreen extends StatefulWidget {
@@ -38,7 +37,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
     super.initState();
     context
         .read(domainsScreenStateNotifier.notifier)
-        .fetchDomain(widget.domain.id);
+        .fetchDomain(widget.domain);
   }
 
   @override
@@ -239,17 +238,20 @@ class _DomainsScreenState extends State<DomainsScreen> {
   }
 
   Future buildEditDescriptionDialog(BuildContext context, Domain domain) {
+    final domainNotifier = context.read(domainsScreenStateNotifier.notifier);
     final formKey = GlobalKey<FormState>();
+    String newDescription = '';
 
-    String description = '';
-
-    Future<void> editDesc() async {
+    Future<void> updateDescription() async {
       if (formKey.currentState!.validate()) {
-        await context
-            .read(domainsScreenStateNotifier.notifier)
-            .editDescription(domain.id, description);
+        await domainNotifier.editDescription(domain.id, newDescription);
         Navigator.pop(context);
       }
+    }
+
+    Future<void> removeDescription() async {
+      await domainNotifier.editDescription(domain.id, '');
+      Navigator.pop(context);
     }
 
     return showModalBottomSheet(
@@ -260,48 +262,12 @@ class _DomainsScreenState extends State<DomainsScreen> {
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
-        final size = MediaQuery.of(context).size;
-
-        return Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              BottomSheetHeader(headerLabel: 'Update Description'),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(kUpdateDescriptionString),
-                    SizedBox(height: size.height * 0.015),
-                    Form(
-                      key: formKey,
-                      child: TextFormField(
-                        autofocus: true,
-                        validator: (input) => context
-                            .read(formValidator)
-                            .validateDescriptionField(input!),
-                        onChanged: (input) => description = input,
-                        onFieldSubmitted: (toggle) => editDesc(),
-                        decoration: kTextFormFieldDecoration.copyWith(
-                          hintText: domain.description ?? kNoDescription,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(),
-                      child: Text('Update Description'),
-                      onPressed: () => editDesc(),
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                  ],
-                ),
-              ),
-            ],
-          ),
+        return UpdateDescriptionWidget(
+          description: domain.description,
+          descriptionFormKey: formKey,
+          inputOnChanged: (input) => newDescription = input,
+          updateDescription: updateDescription,
+          removeDescription: removeDescription,
         );
       },
     );

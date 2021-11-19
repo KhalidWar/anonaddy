@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
@@ -27,13 +29,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     required this.aliasService,
     required this.nicheMethod,
     required this.aliasTabNotifier,
-  }) : super(AliasScreenState(
-          status: AliasScreenStatus.loading,
-          errorMessage: '',
-          isToggleLoading: false,
-          deleteAliasLoading: false,
-          updateRecipientLoading: false,
-        )) {
+  }) : super(AliasScreenState.initialState()) {
     showToast = nicheMethod.showToast;
   }
 
@@ -43,10 +39,17 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   late Function showToast;
 
-  Future<void> fetchAliases(String aliasId) async {
+  Future<void> fetchAliases(Alias alias) async {
+    /// Initially set AliasScreen to loading
     state = state.copyWith(status: AliasScreenStatus.loading);
     try {
-      final alias = await aliasService.getSpecificAlias(aliasId);
+      final updatedAlias = await aliasService.getSpecificAlias(alias.id);
+
+      /// Assign newly fetched alias data to AliasScreen state
+      state =
+          state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
+    } on SocketException {
+      /// Return old alias data if there's no internet connection
       state = state.copyWith(status: AliasScreenStatus.loaded, alias: alias);
     } catch (error) {
       state = state.copyWith(

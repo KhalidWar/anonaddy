@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
-import 'package:anonaddy/screens/account_tab/usernames/username_detailed_screen.dart';
+import 'package:anonaddy/screens/account_tab/usernames/usernames_screen.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -12,7 +12,7 @@ import 'package:anonaddy/state_management/usernames/usernames_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AdditionalUsername extends ConsumerWidget {
+class UsernamesTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final accountState = watch(accountStateNotifier);
@@ -95,7 +95,7 @@ class AdditionalUsername extends ConsumerWidget {
           onTap: () {
             Navigator.pushNamed(
               context,
-              UsernameDetailedScreen.routeName,
+              UsernamesScreen.routeName,
               arguments: username,
             );
           },

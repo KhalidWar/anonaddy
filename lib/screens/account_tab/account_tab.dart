@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'components/account_tab_header.dart';
 import 'domains/domains_tab.dart';
-import 'usernames/additional_username.dart';
+import 'usernames/usernames_tab.dart';
 
 class AccountTab extends StatelessWidget {
   @override
@@ -69,7 +69,7 @@ class AccountTab extends StatelessWidget {
           body: TabBarView(
             children: [
               RecipientsTab(),
-              AdditionalUsername(),
+              UsernamesTab(),
               DomainsTab(),
             ],
           ),
