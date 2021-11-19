@@ -32,11 +32,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required this.tokenService,
     required this.searchHistory,
     required this.showToast,
-  }) : super(AuthState(
-          authStatus: AuthStatus.initial,
-          authLock: AuthLock.off,
-          loginLoading: false,
-        )) {
+  }) : super(AuthState.initialState()) {
     _initAuth();
   }
 
