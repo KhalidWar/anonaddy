@@ -14,13 +14,10 @@ import 'alias_tab_notifier.dart';
 final aliasScreenStateNotifier =
     StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
         (ref) {
-  final service = ref.read(aliasService);
-  final methods = ref.read(nicheMethods);
-  final aliasTabNotifier = ref.read(aliasTabStateNotifier.notifier);
   return AliasScreenNotifier(
-    aliasService: service,
-    nicheMethod: methods,
-    aliasTabNotifier: aliasTabNotifier,
+    aliasService: ref.read(aliasService),
+    nicheMethod: ref.read(nicheMethods),
+    aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
   );
 });
 
@@ -50,7 +47,11 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
           state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
     } on SocketException {
       /// Return old alias data if there's no internet connection
-      state = state.copyWith(status: AliasScreenStatus.loaded, alias: alias);
+      state = state.copyWith(
+        status: AliasScreenStatus.loaded,
+        isOffline: true,
+        alias: alias,
+      );
     } catch (error) {
       state = state.copyWith(
         status: AliasScreenStatus.failed,

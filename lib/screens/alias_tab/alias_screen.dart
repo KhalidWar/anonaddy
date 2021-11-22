@@ -9,6 +9,7 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/offline_banner.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -80,6 +81,7 @@ class _AliasScreenState extends State<AliasScreen> {
 
     return ListView(
       children: [
+        if (aliasState.isOffline!) const OfflineBanner(),
         AliasScreenPieChart(
           emailsForwarded: alias.emailsForwarded,
           emailsBlocked: alias.emailsBlocked,
