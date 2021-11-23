@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
@@ -266,23 +265,21 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     );
   }
 
-  Future buildRemovePGPKeyDialog(BuildContext context, Recipient recipient) {
-    Future<void> removePublicKey() async {
-      await context
-          .read(recipientScreenStateNotifier.notifier)
-          .removePublicGPGKey(recipient);
-      Navigator.pop(context);
-    }
-
-    return showModal(
+  void buildRemovePGPKeyDialog(BuildContext context, Recipient recipient) {
+    PlatformAware.platformDialog(
       context: context,
-      builder: (context) {
-        return PlatformAlertDialog(
-          content: kRemoveRecipientPublicKeyConfirmation,
-          method: removePublicKey,
-          title: 'Remove Public Key',
-        );
-      },
+      child: PlatformAlertDialog(
+        title: 'Remove Public Key',
+        content: kRemoveRecipientPublicKeyConfirmation,
+        method: () async {
+          await context
+              .read(recipientScreenStateNotifier.notifier)
+              .removePublicGPGKey(recipient);
+
+          /// Dismisses this dialog
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 
@@ -359,12 +356,25 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    Future<void> remove() async {
-      await context
-          .read(recipientScreenStateNotifier.notifier)
-          .removeRecipient(widget.recipient);
-      Navigator.pop(context);
-      Navigator.pop(context);
+    void showDialog() {
+      PlatformAware.platformDialog(
+        context: context,
+        child: PlatformAlertDialog(
+          title: 'Delete Recipient',
+          content: kDeleteRecipientConfirmation,
+          method: () async {
+            await context
+                .read(recipientScreenStateNotifier.notifier)
+                .removeRecipient(widget.recipient);
+
+            /// Dismisses this dialog
+            Navigator.pop(context);
+
+            /// Dismisses [RecipientScreen] after recipient deletion
+            Navigator.pop(context);
+          },
+        ),
+      );
     }
 
     return AppBar(
@@ -386,18 +396,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
               );
             }).toList();
           },
-          onSelected: (String choice) {
-            showModal(
-              context: context,
-              builder: (context) {
-                return PlatformAlertDialog(
-                  content: kDeleteRecipientConfirmation,
-                  method: remove,
-                  title: 'Delete Recipient',
-                );
-              },
-            );
-          },
+          onSelected: (String choice) => showDialog(),
         ),
       ],
     );
