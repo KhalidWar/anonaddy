@@ -1,9 +1,9 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/state_management/settings/settings_notifier.dart';
@@ -139,17 +139,16 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future buildLogoutDialog(BuildContext context) {
-    logout() {
-      Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
-    }
-
-    return showModal(
+  void buildLogoutDialog(BuildContext context) {
+    PlatformAware.platformDialog(
       context: context,
-      builder: (context) {
-        return PlatformAlertDialog(
-            content: kLogOutAlertDialog, method: logout, title: 'Logout');
-      },
+      child: PlatformAlertDialog(
+        title: 'Logout',
+        content: kLogOutAlertDialog,
+        method: () {
+          Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
+        },
+      ),
     );
   }
 }
