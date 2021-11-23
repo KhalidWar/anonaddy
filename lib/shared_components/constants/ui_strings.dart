@@ -70,11 +70,16 @@ const kGetAccessToken = 'Get Access Token';
 /// Error
 const kLoadAccountDataFailed = 'Failed to Load Account Data';
 
+/// No Internet (Offline Mode) Dialog
+const kNoInternetOfflineData = 'No internet connection';
+const kNoInternetDialogTitle = 'Offline Mode';
+const kNoInternetContent =
+    'No internet connection. Displaying cached offline data.';
+const kNoInternetDialogButton = 'Close';
+
 /// Miscellaneous
 const kLoadingText = 'Loading';
 const kComingSoon = 'Coming Soon';
-const kNoInternetConnection =
-    'No Internet Connection.\nMake sure you\'re online.';
 const kLogOutAlertDialog =
     'Are you sure you want to log out?\n\nAll app data will be deleted.';
 const kNoDescription = 'No description';
