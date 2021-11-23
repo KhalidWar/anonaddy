@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -317,15 +316,13 @@ class _DomainsScreenState extends State<DomainsScreen> {
             }).toList();
           },
           onSelected: (String choice) {
-            showModal(
+            PlatformAware.platformDialog(
               context: context,
-              builder: (context) {
-                return PlatformAlertDialog(
-                  content: kDeleteDomainConfirmation,
-                  method: deleteDomain,
-                  title: 'Delete Domain',
-                );
-              },
+              child: PlatformAlertDialog(
+                content: kDeleteDomainConfirmation,
+                method: deleteDomain,
+                title: 'Delete Domain',
+              ),
             );
           },
         ),
