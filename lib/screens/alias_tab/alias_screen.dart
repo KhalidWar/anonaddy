@@ -423,20 +423,22 @@ class _AliasScreenState extends State<AliasScreen> {
       await context
           .read(aliasScreenStateNotifier.notifier)
           .forgetAlias(widget.alias.id);
+
+      /// Dismisses [platformDialog]
       Navigator.pop(context);
+
+      /// Dismisses [AliasScreen] after forgetting [alias]
       Navigator.pop(context);
     }
 
     Future forgetOnPress() async {
-      showModal(
+      PlatformAware.platformDialog(
         context: context,
-        builder: (context) {
-          return PlatformAlertDialog(
-            content: kForgetAliasConfirmation,
-            method: forget,
-            title: kForgetAlias,
-          );
-        },
+        child: PlatformAlertDialog(
+          content: kForgetAliasConfirmation,
+          method: forget,
+          title: kForgetAlias,
+        ),
       );
     }
 
