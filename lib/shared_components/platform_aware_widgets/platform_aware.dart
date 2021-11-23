@@ -44,6 +44,22 @@ abstract class PlatformAware<C extends Widget, M extends Widget>
     }
   }
 
+  /// Shows platform dialog
+  static platformDialog(
+      {required BuildContext context, required Widget child}) {
+    if (isIOS()) {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) => child,
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => child,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isIOS()) {
