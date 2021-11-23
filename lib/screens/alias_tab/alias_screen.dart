@@ -267,32 +267,33 @@ class _AliasScreenState extends State<AliasScreen> {
     );
   }
 
-  Future buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
+  void buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
     final isDeleted = alias.deletedAt != null;
 
-    Future<void> deleteOrRestore() async {
-      Navigator.pop(context);
-      isDeleted
-          ? await context
-              .read(aliasScreenStateNotifier.notifier)
-              .restoreAlias(alias.id)
-          : await context
-              .read(aliasScreenStateNotifier.notifier)
-              .deleteAlias(alias.id);
-
-      if (!isDeleted) Navigator.pop(context);
-    }
-
-    return showModal(
+    /// Display platform appropriate dialog
+    PlatformAware.platformDialog(
       context: context,
-      builder: (context) {
-        return PlatformAlertDialog(
-          content:
-              isDeleted ? kRestoreAliasConfirmation : kDeleteAliasConfirmation,
-          method: deleteOrRestore,
-          title: '${isDeleted ? 'Restore' : 'Delete'} Alias',
-        );
-      },
+      child: PlatformAlertDialog(
+        title: '${isDeleted ? 'Restore' : 'Delete'} Alias',
+        content:
+            isDeleted ? kRestoreAliasConfirmation : kDeleteAliasConfirmation,
+        method: () async {
+          /// Dismisses [platformDialog]
+          Navigator.pop(context);
+
+          /// Delete [alias] if it's available or restore it if it's deleted
+          isDeleted
+              ? await context
+                  .read(aliasScreenStateNotifier.notifier)
+                  .restoreAlias(alias.id)
+              : await context
+                  .read(aliasScreenStateNotifier.notifier)
+                  .deleteAlias(alias.id);
+
+          /// Dismisses [AliasScreen] if [alias] is deleted
+          if (!isDeleted) Navigator.pop(context);
+        },
+      ),
     );
   }
 
