@@ -25,16 +25,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     required this.aliasService,
     required this.offlineData,
     required this.lifecycleStatus,
-  }) : super(AliasTabState(
-          status: AliasTabStatus.loading,
-          aliases: [],
-          availableAliasList: [],
-          deletedAliasList: [],
-          forwardedList: 0,
-          blockedList: 0,
-          repliedList: 0,
-          sentList: 0,
-        )) {
+  }) : super(AliasTabState.initialState()) {
     _setOfflineState();
     fetchAliases();
   }

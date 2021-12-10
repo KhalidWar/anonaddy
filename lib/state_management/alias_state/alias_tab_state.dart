@@ -26,6 +26,19 @@ class AliasTabState {
   final int repliedList;
   final int sentList;
 
+  static AliasTabState initialState() {
+    return AliasTabState(
+      status: AliasTabStatus.loading,
+      aliases: [],
+      availableAliasList: [],
+      deletedAliasList: [],
+      forwardedList: 0,
+      blockedList: 0,
+      repliedList: 0,
+      sentList: 0,
+    );
+  }
+
   AliasTabState copyWith({
     AliasTabStatus? status,
     List<Alias>? aliases,
