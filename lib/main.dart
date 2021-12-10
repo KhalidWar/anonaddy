@@ -1,3 +1,4 @@
+import 'package:anonaddy/models/profile/profile.dart';
 import 'package:anonaddy/route_generator.dart';
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
@@ -19,8 +20,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
+
+  /// @HiveType(typeId: 0)
   Hive.registerAdapter(AliasAdapter());
+
+  /// @HiveType(typeId: 1)
   Hive.registerAdapter(RecipientAdapter());
+
+  /// @HiveType(typeId: 2)
+  Hive.registerAdapter(ProfileAdapter());
 
   runApp(
     /// Phoenix restarts app upon logout
