@@ -11,6 +11,7 @@ import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
+import 'package:anonaddy/services/rules/rules_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -69,6 +70,11 @@ final recipientService = Provider<RecipientService>((ref) {
 final domainService = Provider<DomainsService>((ref) {
   final accessToken = ref.read(accessTokenService);
   return DomainsService(accessToken);
+});
+
+final rulesService = Provider<RulesService>((ref) {
+  final accessToken = ref.read(accessTokenService);
+  return RulesService(accessToken);
 });
 
 final appVersionService = Provider<AppVersionService>((ref) {

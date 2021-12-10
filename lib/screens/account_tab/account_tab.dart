@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'components/account_tab_header.dart';
 import 'domains/domains_tab.dart';
+import 'rules/rules_tab.dart';
 import 'usernames/usernames_tab.dart';
 
 class AccountTab extends StatelessWidget {
@@ -19,7 +20,7 @@ class AccountTab extends StatelessWidget {
 
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 4,
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
@@ -55,12 +56,14 @@ class AccountTab extends StatelessWidget {
                   ),
                 ),
                 bottom: TabBar(
+                  isScrollable: true,
                   indicatorColor: kAccentColor,
                   labelColor: isDark ? Colors.white : Colors.black,
                   tabs: [
                     Tab(child: Text('Recipients')),
                     Tab(child: Text('Usernames')),
                     Tab(child: Text('Domains')),
+                    Tab(child: Text('Rules')),
                   ],
                 ),
               ),
@@ -71,6 +74,7 @@ class AccountTab extends StatelessWidget {
               RecipientsTab(),
               UsernamesTab(),
               DomainsTab(),
+              RulesTab()
             ],
           ),
         ),
