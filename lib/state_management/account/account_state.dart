@@ -12,4 +12,9 @@ class AccountState {
   final AccountStatus status;
   final Account? account;
   final String? errorMessage;
+
+  @override
+  String toString() {
+    return 'AccountState{status: $status, account: $account, errorMessage: $errorMessage}';
+  }
 }
