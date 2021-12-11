@@ -25,39 +25,54 @@ class AccountNotifier extends StateNotifier<AccountState> {
       required this.offlineData,
       required this.lifecycleStatus})
       : super(AccountState(status: AccountStatus.loading)) {
+    /// Initially load data from disk (secured device storage)
+    _loadOfflineData();
+
+    /// Fetch latest data from server
     fetchAccount();
   }
 
   final AccountService accountService;
   final OfflineData offlineData;
   final LifecycleStatus lifecycleStatus;
-  // final bool refresh;
+
+  /// Updates UI to the newState
+  void _updateState(AccountState newState) {
+    if (mounted) state = newState;
+  }
 
   Future<void> fetchAccount() async {
     try {
-      if (state.status != AccountStatus.failed) {
-        await _loadOfflineData();
-      }
-
+      /// Only trigger fetch API when app is Foreground to avoid API spamming
       while (lifecycleStatus == LifecycleStatus.foreground) {
         final account = await accountService.getAccountData();
         await _saveOfflineData(account);
-        state = AccountState(status: AccountStatus.loaded, account: account);
+
+        /// Construct new state
+        final newState =
+            AccountState(status: AccountStatus.loaded, account: account);
+
+        /// Update UI with the latest state
+        _updateState(newState);
+
+        /// To avoid spamming API, wait set amount of time before calling API again
         await Future.delayed(Duration(seconds: 5));
       }
     } on SocketException {
+      /// Loads offline data when there's no internet connection
       await _loadOfflineData();
     } catch (error) {
-      if (mounted) {
-        state = AccountState(
-          status: AccountStatus.failed,
-          errorMessage: error.toString(),
-        );
-        await _retryOnError();
-      }
+      /// On error, update UI state with the error message
+      final newState = AccountState(
+          status: AccountStatus.failed, errorMessage: error.toString());
+      _updateState(newState);
+
+      /// Retry after facing an error
+      await _retryOnError();
     }
   }
 
+  /// Triggers [fetchAccount] when it fails after a certain amount of time
   Future _retryOnError() async {
     if (state.status == AccountStatus.failed) {
       await Future.delayed(Duration(seconds: 5));
@@ -65,16 +80,24 @@ class AccountNotifier extends StateNotifier<AccountState> {
     }
   }
 
+  /// Loads [Account] data from disk
   Future<void> _loadOfflineData() async {
-    final securedData = await offlineData.readAccountOfflineData();
-    if (securedData.isNotEmpty) {
-      final data = Account.fromJson(jsonDecode(securedData));
-      state = AccountState(status: AccountStatus.loaded, account: data);
+    /// Load data from disk if state is NOT showing an error
+    if (state.status != AccountStatus.failed) {
+      final securedData = await offlineData.readAccountOfflineData();
+      if (securedData.isNotEmpty) {
+        final account = Account.fromJson(jsonDecode(securedData));
+        final newState =
+            AccountState(status: AccountStatus.loaded, account: account);
+        _updateState(newState);
+      }
     }
   }
 
-  Future<void> _saveOfflineData(Account accounts) async {
-    final encodedData = jsonEncode(accounts);
+  /// Saves [Account] data to disk
+  Future<void> _saveOfflineData(Account account) async {
+    /// Convert [Account] data to a String to save
+    final encodedData = jsonEncode(account);
     await offlineData.writeAccountOfflineData(encodedData);
   }
 }
