@@ -17,7 +17,7 @@ class AppVersion extends ConsumerWidget {
         return Container();
 
       case AccountStatus.loaded:
-        final subscription = accountState.accountModel!.account.subscription;
+        final subscription = accountState.account!.subscription;
 
         if (subscription == null) {
           return Consumer(

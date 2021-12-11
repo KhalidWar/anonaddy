@@ -40,8 +40,8 @@ class AccountTab extends StatelessWidget {
                           return Center(child: PlatformLoadingIndicator());
 
                         case AccountStatus.loaded:
-                          final account = accountState.accountModel;
-                          return AccountTabHeader(account: account!.account);
+                          final account = accountState.account;
+                          return AccountTabHeader(account: account!);
 
                         case AccountStatus.failed:
                           final error = accountState.errorMessage;

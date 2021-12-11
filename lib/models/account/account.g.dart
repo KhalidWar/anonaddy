@@ -1,21 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'account_model.dart';
+part of 'account.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
-
-AccountModel _$AccountModelFromJson(Map<String, dynamic> json) {
-  return AccountModel(
-    Account.fromJson(json['data'] as Map<String, dynamic>),
-  );
-}
-
-Map<String, dynamic> _$AccountModelToJson(AccountModel instance) =>
-    <String, dynamic>{
-      'data': instance.account.toJson(),
-    };
 
 Account _$AccountFromJson(Map<String, dynamic> json) {
   return Account(
@@ -41,6 +30,10 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
     activeDomainLimit: json['active_domain_limit'] as int?,
     aliasCount: json['active_shared_domain_alias_count'] as int?,
     aliasLimit: json['active_shared_domain_alias_limit'] as int?,
+    totalEmailsForwarded: json['total_emails_forwarded'] as int,
+    totalEmailsBlocked: json['total_emails_blocked'] as int,
+    totalEmailsReplied: json['total_emails_replied'] as int,
+    totalEmailsSent: json['total_emails_sent'] as int,
     createdAt: DateTime.parse(json['created_at'] as String),
     lastUpdated: DateTime.parse(json['updated_at'] as String),
   );
@@ -67,6 +60,10 @@ Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
       'active_domain_limit': instance.activeDomainLimit,
       'active_shared_domain_alias_count': instance.aliasCount,
       'active_shared_domain_alias_limit': instance.aliasLimit,
+      'total_emails_forwarded': instance.totalEmailsForwarded,
+      'total_emails_blocked': instance.totalEmailsBlocked,
+      'total_emails_replied': instance.totalEmailsReplied,
+      'total_emails_sent': instance.totalEmailsSent,
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.lastUpdated.toIso8601String(),
     };

@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/account/account_model.dart';
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';

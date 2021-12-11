@@ -31,7 +31,7 @@ class RulesTab extends ConsumerWidget {
 
         /// [Rules] is a paid feature.
         /// Show paywall if user's account is free tier.
-        final subscription = accountState.accountModel!.account.subscription;
+        final subscription = accountState.account!.subscription;
         if (subscription == kFreeSubscription) return PaidFeatureWall();
 
         final rulesState = watch(rulesTabStateNotifier);

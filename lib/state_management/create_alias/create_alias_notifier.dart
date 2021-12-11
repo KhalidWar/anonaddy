@@ -147,7 +147,7 @@ class CreateAliasNotifier extends ChangeNotifier {
   }
 
   void setAliasFormatList(String aliasDomain) {
-    final subscription = accountState.accountModel!.account.subscription;
+    final subscription = accountState.account!.subscription;
     if (sharedDomains.contains(aliasDomain)) {
       if (subscription == kFreeSubscription) {
         aliasFormatList = freeTierWithSharedDomain;

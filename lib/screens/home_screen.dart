@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   break;
 
                 case AccountStatus.loaded:
-                  final account = accountState.accountModel!.account;
+                  final account = accountState.account!;
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,

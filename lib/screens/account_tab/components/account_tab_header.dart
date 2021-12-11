@@ -1,5 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/models/account/account_model.dart';
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/screens/account_tab/components/add_new_recipient.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
