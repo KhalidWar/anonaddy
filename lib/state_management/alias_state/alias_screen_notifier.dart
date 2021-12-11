@@ -16,7 +16,6 @@ final aliasScreenStateNotifier =
         (ref) {
   return AliasScreenNotifier(
     aliasService: ref.read(aliasService),
-    nicheMethod: ref.read(nicheMethods),
     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
   );
 });
@@ -24,17 +23,13 @@ final aliasScreenStateNotifier =
 class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   AliasScreenNotifier({
     required this.aliasService,
-    required this.nicheMethod,
     required this.aliasTabNotifier,
-  }) : super(AliasScreenState.initialState()) {
-    showToast = nicheMethod.showToast;
-  }
+  }) : super(AliasScreenState.initialState());
 
   final AliasService aliasService;
-  final NicheMethod nicheMethod;
   final AliasTabNotifier aliasTabNotifier;
 
-  late Function showToast;
+  final showToast = NicheMethod.showToast;
 
   Future<void> fetchAliases(Alias alias) async {
     /// Initially set AliasScreen to loading
@@ -157,7 +152,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
         '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
 
     try {
-      await nicheMethod.copyOnTap(generatedAddress);
+      await NicheMethod.copyOnTap(generatedAddress);
       showToast(kSendFromAliasSuccess);
     } catch (error) {
       showToast(kSomethingWentWrong);

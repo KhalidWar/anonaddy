@@ -1,10 +1,8 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
 import 'alias_list_tile_leading.dart';
 
 class AliasListTile extends StatelessWidget {
@@ -54,7 +52,7 @@ class AliasListTile extends StatelessWidget {
               icon: Icon(Icons.copy),
               onPressed: isAliasDeleted()
                   ? null
-                  : () => context.read(nicheMethods).copyOnTap(aliasData.email),
+                  : () => NicheMethod.copyOnTap(aliasData.email),
             ),
           ],
         ),

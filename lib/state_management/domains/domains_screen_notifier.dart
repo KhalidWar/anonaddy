@@ -5,24 +5,23 @@ import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_state.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsScreenStateNotifier = StateNotifierProvider.autoDispose<
     DomainsScreenNotifier, DomainsScreenState>((ref) {
-  final services = ref.read(domainService);
-  final toastMethod = ref.read(nicheMethods).showToast;
   return DomainsScreenNotifier(
-    domainService: services,
-    showToast: toastMethod,
+    domainService: ref.read(domainService),
   );
 });
 
 class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
-  DomainsScreenNotifier({required this.domainService, required this.showToast})
+  DomainsScreenNotifier({required this.domainService})
       : super(DomainsScreenState.initial());
 
   final DomainsService domainService;
-  final Function showToast;
+
+  final showToast = NicheMethod.showToast;
 
   Future<void> fetchDomain(Domain domain) async {
     state = state.copyWith(status: DomainsScreenStatus.loading);

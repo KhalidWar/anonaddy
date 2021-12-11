@@ -1,18 +1,14 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final biometricNotifier = ChangeNotifierProvider<BiometricNotifier>((ref) {
-  final biometricService = ref.read(biometricAuthService);
-  final secureStorage = ref.read(flutterSecureStorage);
-  final showToast = ref.read(nicheMethods).showToast;
-
   return BiometricNotifier(
-    biometricService: biometricService,
-    secureStorage: secureStorage,
-    showToast: showToast,
+    biometricService: ref.read(biometricAuthService),
+    secureStorage: ref.read(flutterSecureStorage),
   );
 });
 
@@ -20,7 +16,6 @@ class BiometricNotifier extends ChangeNotifier {
   BiometricNotifier({
     required this.biometricService,
     required this.secureStorage,
-    required this.showToast,
   }) : super() {
     isEnabled = false;
     biometricService.init();
@@ -29,7 +24,8 @@ class BiometricNotifier extends ChangeNotifier {
 
   final BiometricAuthService biometricService;
   final FlutterSecureStorage secureStorage;
-  final Function showToast;
+
+  final showToast = NicheMethod.showToast;
 
   static const biometricAuthKey = 'biometricAuthKey';
 

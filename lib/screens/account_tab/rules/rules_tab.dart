@@ -9,10 +9,9 @@ import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/rules/rules_tab_notifier.dart';
 import 'package:anonaddy/state_management/rules/rules_tab_state.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../global_providers.dart';
 
 class RulesTab extends ConsumerWidget {
   const RulesTab({Key? key}) : super(key: key);
@@ -78,7 +77,7 @@ class RulesTab extends ConsumerWidget {
         const message = 'Coming soon';
         return RulesListTile(
           rule: rule,
-          onTap: () => context.read(nicheMethods).showToast(message),
+          onTap: () => NicheMethod.showToast(message),
         );
       },
     );

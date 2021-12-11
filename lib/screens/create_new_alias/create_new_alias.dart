@@ -11,6 +11,7 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loadi
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -144,9 +145,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                 title: 'Alias Format',
                 label: createAliasState.aliasFormat == null
                     ? kSelectAliasFormat
-                    : context
-                        .read(nicheMethods)
-                        .correctAliasString(createAliasState.aliasFormat!),
+                    : NicheMethod.correctAliasString(
+                        createAliasState.aliasFormat!),
                 isError: createAliasState.isAliasFormatError!,
                 onPress: () {
                   onPressNotifier.setAliasFormatError(false);

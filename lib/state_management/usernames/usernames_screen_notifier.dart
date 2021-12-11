@@ -5,13 +5,13 @@ import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_state.dart';
 import 'package:anonaddy/state_management/usernames/usernames_tab_notifier.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernamesScreenStateNotifier = StateNotifierProvider.autoDispose<
     UsernamesScreenNotifier, UsernamesScreenState>((ref) {
   return UsernamesScreenNotifier(
     usernameService: ref.read(usernameService),
-    showToast: ref.read(nicheMethods).showToast,
     usernamesNotifier: ref.read(usernameStateNotifier.notifier),
   );
 });
@@ -19,13 +19,13 @@ final usernamesScreenStateNotifier = StateNotifierProvider.autoDispose<
 class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
   UsernamesScreenNotifier({
     required this.usernameService,
-    required this.showToast,
     required this.usernamesNotifier,
   }) : super(UsernamesScreenState.initialState());
 
   final UsernameService usernameService;
-  final Function showToast;
   final UsernamesNotifier usernamesNotifier;
+
+  final Function showToast = NicheMethod.showToast;
 
   Future<void> fetchUsername(Username username) async {
     state = state.copyWith(status: UsernamesScreenStatus.loading);

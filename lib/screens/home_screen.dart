@@ -6,6 +6,7 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -136,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               switch (accountState.status) {
                 case AccountStatus.loading:
-                  context.read(nicheMethods).showToast(kLoadingText);
+                  NicheMethod.showToast(kLoadingText);
                   break;
 
                 case AccountStatus.loaded:
@@ -154,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   break;
 
                 case AccountStatus.failed:
-                  context.read(nicheMethods).showToast(kLoadAccountDataFailed);
+                  NicheMethod.showToast(kLoadAccountDataFailed);
                   break;
               }
             },

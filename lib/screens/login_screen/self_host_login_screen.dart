@@ -1,6 +1,7 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -131,9 +132,8 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                   TextButton(
                     style: TextButton.styleFrom(),
                     child: Text('How to self-host AnonAddy?'),
-                    onPressed: () => context
-                        .read(nicheMethods)
-                        .launchURL(kAnonAddySelfHostingURL),
+                    onPressed: () =>
+                        NicheMethod.launchURL(kAnonAddySelfHostingURL),
                   ),
                   loginButton(context, isDark),
                 ],

@@ -17,6 +17,7 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switc
 import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,8 +75,6 @@ class _AliasScreenState extends State<AliasScreen> {
     final deleteAliasLoading = aliasState.deleteAliasLoading!;
     final size = MediaQuery.of(context).size;
 
-    final nicheMethod = context.read(nicheMethods);
-
     final isAliasDeleted = alias.deletedAt != null;
 
     return ListView(
@@ -101,7 +100,7 @@ class _AliasScreenState extends State<AliasScreen> {
           title: alias.email,
           subtitle: 'Email',
           trailingIconData: Icons.copy,
-          trailingIconOnPress: () => nicheMethod.copyOnTap(alias.email),
+          trailingIconOnPress: () => NicheMethod.copyOnTap(alias.email),
         ),
         AliasDetailListTile(
           leadingIconData: Icons.mail_outline,
@@ -125,7 +124,7 @@ class _AliasScreenState extends State<AliasScreen> {
           ),
           trailingIconOnPress: () async {
             isAliasDeleted
-                ? nicheMethod.showToast(kRestoreBeforeActivate)
+                ? NicheMethod.showToast(kRestoreBeforeActivate)
                 : alias.active
                     ? await context
                         .read(aliasScreenStateNotifier.notifier)

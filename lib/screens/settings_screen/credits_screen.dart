@@ -1,6 +1,5 @@
-import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
 class CreditsScreen extends StatelessWidget {
@@ -63,7 +62,6 @@ class CreditsScreen extends StatelessWidget {
       required String creator,
       required lottieURL}) {
     final size = MediaQuery.of(context).size;
-    final launchURL = context.read(nicheMethods).launchURL;
 
     return InkWell(
       child: Padding(
@@ -101,7 +99,7 @@ class CreditsScreen extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => launchURL(lottieURL),
+      onTap: () => NicheMethod.launchURL(lottieURL),
     );
   }
 }

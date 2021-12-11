@@ -5,6 +5,7 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -56,13 +57,13 @@ class AccountTabHeader extends StatelessWidget {
       buildAddNewRecipient(context);
     } else {
       account.recipientCount == account.recipientLimit
-          ? context.read(nicheMethods).showToast(kReachedRecipientLimit)
+          ? NicheMethod.showToast(kReachedRecipientLimit)
           : buildAddNewRecipient(context);
     }
   }
 
   void _addNewUsername(BuildContext context) {
-    final showToast = context.read(nicheMethods).showToast;
+    final showToast = NicheMethod.showToast;
     if (isSelfHosted) {
       buildAddNewUsername(context);
     } else {
@@ -79,8 +80,6 @@ class AccountTabHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
-    final correctAliasString = context.read(nicheMethods).correctAliasString;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +113,7 @@ class AccountTabHeader extends StatelessWidget {
         AccountListTile(
           title: account.defaultAliasFormat == null
               ? null
-              : correctAliasString(account.defaultAliasFormat!),
+              : NicheMethod.correctAliasString(account.defaultAliasFormat!),
           subtitle: 'Default Alias Format',
           leadingIconData: Icons.alternate_email_outlined,
           trailingIcon: Icon(Icons.open_in_new_outlined),
@@ -140,7 +139,7 @@ class AccountTabHeader extends StatelessWidget {
 
   Future<void> updateDefaultAliasFormatDomain(BuildContext context) async {
     final instanceURL = await context.read(accessTokenService).getInstanceURL();
-    await context.read(nicheMethods).launchURL('https://$instanceURL/settings');
+    await NicheMethod.launchURL('https://$instanceURL/settings');
   }
 
   Future buildAddNewRecipient(BuildContext context) {

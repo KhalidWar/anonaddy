@@ -1,4 +1,3 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/search_tab/components/search_history.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -6,6 +5,7 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,7 +14,7 @@ class SearchTab extends StatelessWidget {
     final aliasTabState = context.read(aliasTabStateNotifier);
     switch (aliasTabState.status) {
       case AliasTabStatus.loading:
-        context.read(nicheMethods).showToast(kLoadingText);
+        NicheMethod.showToast(kLoadingText);
         break;
       case AliasTabStatus.loaded:
         final aliases = aliasTabState.aliases!;
@@ -24,7 +24,7 @@ class SearchTab extends StatelessWidget {
         );
         break;
       case AliasTabStatus.failed:
-        context.read(nicheMethods).showToast(kLoadingText);
+        NicheMethod.showToast(kLoadingText);
         break;
     }
   }
