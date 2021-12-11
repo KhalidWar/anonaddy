@@ -17,12 +17,11 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switc
 import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class AliasScreen extends StatefulWidget {
   const AliasScreen(this.alias);
@@ -349,9 +348,8 @@ class _AliasScreenState extends State<AliasScreen> {
                       key: sendFromFormKey,
                       child: TextFormField(
                         autofocus: true,
-                        validator: (input) => context
-                            .read(formValidator)
-                            .validateEmailField(input!),
+                        validator: (input) =>
+                            FormValidator.validateEmailField(input!),
                         onChanged: (input) => destinationEmail = input,
                         onFieldSubmitted: (toggle) => generateAddress(),
                         decoration: kTextFormFieldDecoration.copyWith(

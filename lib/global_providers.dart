@@ -14,7 +14,6 @@ import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/rules/rules_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
@@ -85,8 +84,6 @@ final failedDeliveriesService = Provider<FailedDeliveriesService>((ref) {
   final accessToken = ref.read(accessTokenService);
   return FailedDeliveriesService(accessToken);
 });
-
-final formValidator = Provider<FormValidator>((ref) => FormValidator());
 
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);

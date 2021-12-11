@@ -2,10 +2,9 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../global_providers.dart';
 
 class AddNewUsername extends StatefulWidget {
   @override
@@ -53,9 +52,8 @@ class _AddNewUsernameState extends State<AddNewUsername> {
                   child: TextFormField(
                     autofocus: true,
                     controller: _textEditController,
-                    validator: (input) => context
-                        .read(formValidator)
-                        .validateUsernameInput(input!),
+                    validator: (input) =>
+                        FormValidator.validateUsernameInput(input!),
                     onFieldSubmitted: (toggle) => createUsername(),
                     decoration: kTextFormFieldDecoration.copyWith(
                       hintText: 'johndoe',

@@ -15,13 +15,12 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loadi
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../global_providers.dart';
 
 class RecipientsScreen extends StatefulWidget {
   const RecipientsScreen({required this.recipient});
@@ -324,9 +323,8 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
                       key: formKey,
                       child: TextFormField(
                         autofocus: true,
-                        validator: (input) => context
-                            .read(formValidator)
-                            .validatePGPKeyField(input!),
+                        validator: (input) =>
+                            FormValidator.validatePGPKeyField(input!),
                         minLines: 4,
                         maxLines: 5,
                         textInputAction: TextInputAction.done,
