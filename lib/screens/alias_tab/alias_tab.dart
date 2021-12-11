@@ -13,6 +13,8 @@ import 'components/alias_tab_pie_chart.dart';
 import 'components/empty_list_alias_tab.dart';
 
 class AliasTab extends StatelessWidget {
+  const AliasTab();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

@@ -24,8 +24,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _tabScreens = [AccountTab(), AliasTab(), SearchTab()];
-
   int _selectedIndex = 1;
 
   void switchIndex(int index) {
@@ -70,7 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: buildFab(context),
       body: IndexedStack(
         index: _selectedIndex,
-        children: _tabScreens,
+        children: const [
+          AccountTab(),
+          AliasTab(),
+          SearchTab(),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) => switchIndex(index),

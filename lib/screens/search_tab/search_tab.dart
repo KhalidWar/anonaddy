@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SearchTab extends StatelessWidget {
+  const SearchTab();
+
   void search(BuildContext context) {
     final aliasTabState = context.read(aliasTabStateNotifier);
     switch (aliasTabState.status) {

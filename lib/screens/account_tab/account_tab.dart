@@ -13,6 +13,8 @@ import 'rules/rules_tab.dart';
 import 'usernames/usernames_tab.dart';
 
 class AccountTab extends StatelessWidget {
+  const AccountTab();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
