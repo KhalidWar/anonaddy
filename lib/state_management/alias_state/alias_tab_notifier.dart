@@ -26,7 +26,10 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     required this.offlineData,
     required this.lifecycleStatus,
   }) : super(AliasTabState.initialState()) {
+    /// Initially, get data from disk (secure device storage) and assign it
     _setOfflineState();
+
+    /// Fetch the latest Aliases data from server
     fetchAliases();
   }
 
@@ -36,23 +39,16 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
   Future<void> fetchAliases() async {
     try {
+      /// Only fetch data when app is in foreground
       while (lifecycleStatus == LifecycleStatus.foreground) {
         final aliases = await aliasService.getAllAliasesData();
         await _saveOfflineData(aliases);
 
         final availableAliasList = <Alias>[];
         final deletedAliasList = <Alias>[];
-        final forwardedList = <int>[];
-        final blockedList = <int>[];
-        final repliedList = <int>[];
-        final sentList = <int>[];
 
+        /// Divide Aliases into available and deleted aliases.
         for (Alias alias in aliases) {
-          forwardedList.add(alias.emailsForwarded);
-          blockedList.add(alias.emailsBlocked);
-          repliedList.add(alias.emailsReplied);
-          sentList.add(alias.emailsSent);
-
           if (alias.deletedAt == null) {
             availableAliasList.add(alias);
           } else {
@@ -65,10 +61,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
           aliases: aliases,
           availableAliasList: availableAliasList,
           deletedAliasList: deletedAliasList,
-          forwardedList: _reduceList(forwardedList),
-          blockedList: _reduceList(blockedList),
-          repliedList: _reduceList(repliedList),
-          sentList: _reduceList(sentList),
         );
         await Future.delayed(Duration(seconds: 1));
       }
@@ -98,17 +90,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       if (savedAliases.isNotEmpty) {
         final availableAliasList = <Alias>[];
         final deletedAliasList = <Alias>[];
-        final forwardedList = <int>[];
-        final blockedList = <int>[];
-        final repliedList = <int>[];
-        final sentList = <int>[];
 
         for (Alias alias in savedAliases) {
-          forwardedList.add(alias.emailsForwarded);
-          blockedList.add(alias.emailsBlocked);
-          repliedList.add(alias.emailsReplied);
-          sentList.add(alias.emailsSent);
-
           if (alias.deletedAt == null) {
             availableAliasList.add(alias);
           } else {
@@ -121,10 +104,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
           aliases: savedAliases,
           availableAliasList: availableAliasList,
           deletedAliasList: deletedAliasList,
-          forwardedList: _reduceList(forwardedList),
-          blockedList: _reduceList(blockedList),
-          repliedList: _reduceList(repliedList),
-          sentList: _reduceList(sentList),
         );
       }
     }
@@ -160,13 +139,5 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     /// Remove alias from aliases list
     state.aliases!.removeWhere((alias) => alias.id == aliasId);
     state = state.copyWith(aliases: state.aliases);
-  }
-
-  int _reduceList(List<int> list) {
-    if (list.isEmpty) {
-      return 0;
-    } else {
-      return list.reduce((value, element) => value + element);
-    }
   }
 }
