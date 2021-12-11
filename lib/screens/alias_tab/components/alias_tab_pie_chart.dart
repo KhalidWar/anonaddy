@@ -31,7 +31,12 @@ class AliasTabPieChart extends StatelessWidget {
               return buildAliasStat(context: context, account: account);
 
             case AccountStatus.failed:
-              return Center(child: Text('Failed to load data'));
+              return Center(
+                child: Text(
+                  'Failed to load data',
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
           }
         },
       ),
