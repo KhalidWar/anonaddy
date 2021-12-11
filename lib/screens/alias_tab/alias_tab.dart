@@ -18,12 +18,14 @@ class AliasTab extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      /// [DefaultTabController] is required when using [TabBar]s without
+      /// a custom [TabController]
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
           controller:
               context.read(fabVisibilityStateNotifier.notifier).aliasController,
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
+          headerSliverBuilder: (context, _) {
             return [
               SliverAppBar(
                 expandedHeight: size.height * 0.25,
@@ -36,9 +38,9 @@ class AliasTab extends StatelessWidget {
                 ),
                 bottom: TabBar(
                   indicatorColor: kAccentColor,
-                  tabs: [
-                    Tab(child: const Text('Available Aliases')),
-                    Tab(child: const Text('Deleted Aliases')),
+                  tabs: const [
+                    Tab(child: Text('Available Aliases')),
+                    Tab(child: Text('Deleted Aliases')),
                   ],
                 ),
               ),
@@ -49,14 +51,24 @@ class AliasTab extends StatelessWidget {
               final aliasTabState = watch(aliasTabStateNotifier);
 
               switch (aliasTabState.status) {
-                case AliasTabStatus.loading:
-                  return const AliasShimmerLoading();
 
+                /// When AliasTab is fetching data (loading)
+                case AliasTabStatus.loading:
+                  return TabBarView(
+                    children: const [
+                      AliasShimmerLoading(),
+                      AliasShimmerLoading(),
+                    ],
+                  );
+
+                /// When AliasTab has loaded and has data to display
                 case AliasTabStatus.loaded:
                   final availableAliasList = aliasTabState.availableAliasList;
                   final deletedAliasList = aliasTabState.deletedAliasList;
+
                   return TabBarView(
                     children: [
+                      /// Available aliases list
                       if (availableAliasList.isEmpty)
                         const EmptyListAliasTabWidget()
                       else
@@ -71,6 +83,8 @@ class AliasTab extends StatelessWidget {
                             },
                           ),
                         ),
+
+                      /// Deleted aliases list
                       if (deletedAliasList.isEmpty)
                         const EmptyListAliasTabWidget()
                       else
@@ -88,11 +102,22 @@ class AliasTab extends StatelessWidget {
                     ],
                   );
 
+                /// When AliasTab has failed and has an error message
                 case AliasTabStatus.failed:
                   final error = aliasTabState.errorMessage!;
-                  return LottieWidget(
-                    lottie: 'assets/lottie/errorCone.json',
-                    label: error.toString(),
+                  return TabBarView(
+                    children: [
+                      LottieWidget(
+                        lottie: 'assets/lottie/errorCone.json',
+                        label: error.toString(),
+                        lottieHeight: size.height * 0.2,
+                      ),
+                      LottieWidget(
+                        lottie: 'assets/lottie/errorCone.json',
+                        label: error.toString(),
+                        lottieHeight: size.height * 0.2,
+                      ),
+                    ],
                   );
               }
             },
