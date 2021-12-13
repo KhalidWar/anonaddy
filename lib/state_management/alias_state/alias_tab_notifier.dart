@@ -129,6 +129,10 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     await offlineData.writeAliasOfflineData(encodedData);
   }
 
+  List<Alias> getAliases() {
+    return state.aliases ?? [];
+  }
+
   void addAlias(Alias alias) {
     /// Put new alias in the first spot
     state.aliases!.insert(0, alias);

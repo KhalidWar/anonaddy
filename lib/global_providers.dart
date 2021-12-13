@@ -12,6 +12,7 @@ import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/rules/rules_service.dart';
+import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,6 +54,11 @@ final accountService = Provider<AccountService>((ref) {
 final aliasService = Provider<AliasService>((ref) {
   final accessToken = ref.read(accessTokenService);
   return AliasService(accessToken);
+});
+
+final searchService = Provider<SearchService>((ref) {
+  final accessToken = ref.read(accessTokenService);
+  return SearchService(accessToken);
 });
 
 final domainOptionsService = Provider<DomainOptionsService>((ref) {

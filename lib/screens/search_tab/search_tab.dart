@@ -1,76 +1,169 @@
+import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/screens/search_tab/components/search_history.dart';
-import 'package:anonaddy/services/search/search_service.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/screens/search_tab/components/search_text_field.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
-import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
+import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/state_management/search/search_result/search_result_notifier.dart';
+import 'package:anonaddy/state_management/search/search_result/search_result_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'components/search_list_header.dart';
+
 class SearchTab extends StatelessWidget {
   const SearchTab();
-
-  void search(BuildContext context) {
-    final aliasTabState = context.read(aliasTabStateNotifier);
-    switch (aliasTabState.status) {
-      case AliasTabStatus.loading:
-        NicheMethod.showToast(kLoadingText);
-        break;
-      case AliasTabStatus.loaded:
-        final aliases = aliasTabState.aliases!;
-        showSearch(
-          context: context,
-          delegate: SearchService(aliases),
-        );
-        break;
-      case AliasTabStatus.failed:
-        NicheMethod.showToast(kLoadingText);
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(size.height * 0.01),
-          child: InkWell(
-            child: IgnorePointer(
-              child: TextFormField(
-                decoration: kTextFormFieldDecoration.copyWith(
-                  hintText: kSearchFieldHint,
-                  suffixIcon: Icon(Icons.search),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+      child: Scaffold(
+        body: NestedScrollView(
+          headerSliverBuilder: (context, _) {
+            return [
+              SliverAppBar(
+                expandedHeight: size.height * 0.19,
+                elevation: 0,
+                flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.pin,
+                  background: Padding(
+                    padding: EdgeInsets.all(size.height * 0.01),
+                    child: const SearchTabHeader(),
+                  ),
                 ),
               ),
-            ),
-            onTap: () => search(context),
+            ];
+          },
+          body: Consumer(
+            builder: (context, watch, _) {
+              final searchState = watch(searchResultStateNotifier);
+
+              switch (searchState.status) {
+
+                /// When search is NOT triggered, basically the default state for [SearchTab]
+                /// In this case, show [SearchHistory].
+                case SearchResultStatus.Initial:
+                  return Column(
+                    children: [
+                      SearchListHeader(
+                        title: kSearchHistory,
+                        buttonLabel: kClearSearchHistoryButtonText,
+                        buttonTextColor: Colors.red,
+                        onPress: () {
+                          context
+                              .read(searchHistoryStateNotifier.notifier)
+                              .clearSearchHistory();
+                        },
+                      ),
+                      const SearchHistory(),
+                    ],
+                  );
+
+                /// Displays limited search results based on searching through
+                /// locally available aliases, typically page 1 of user's aliases.
+                case SearchResultStatus.Limited:
+                  final aliases = searchState.aliases!;
+                  return buildResult(context, aliases, true);
+
+                /// When search is loading e.g. fetching matching aliases
+                case SearchResultStatus.Loading:
+                  return Column(
+                    children: [
+                      SearchListHeader(
+                        title: kSearching,
+                        buttonLabel: kCancelSearchingButtonText,
+                        buttonTextColor: Colors.red,
+                        onPress: () {
+                          /// Close current on-going search
+                          context
+                              .read(searchResultStateNotifier.notifier)
+                              .closeSearch();
+                        },
+                      ),
+                      const Expanded(child: AliasShimmerLoading()),
+                    ],
+                  );
+
+                /// When search has finished loading and returns matching aliases
+                case SearchResultStatus.Loaded:
+                  final aliases = searchState.aliases ?? [];
+                  return buildResult(context, aliases, false);
+
+                /// When searching fails and returns an error
+                case SearchResultStatus.Failed:
+                  return const LottieWidget(
+                    lottie: 'assets/lottie/empty.json',
+                    lottieHeight: 150,
+                  );
+              }
+            },
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                kSearchHistory,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              TextButton(
-                child: Text('Clear'),
-                onPressed: () => context
-                    .read(searchHistoryStateNotifier.notifier)
-                    .clearSearchHistory(),
-              ),
-            ],
-          ),
+      ),
+    );
+  }
+
+  Widget buildResult(
+      BuildContext context, List<Alias> resultsList, bool isLimited) {
+    final size = MediaQuery.of(context).size;
+    return Column(
+      children: [
+        SearchListHeader(
+          title: kSearchResult,
+          buttonLabel: kCloseSearchButtonText,
+          onPress: () {
+            context.read(searchResultStateNotifier.notifier).closeSearch();
+          },
         ),
-        Divider(height: 0),
-        const SearchHistory(),
+        if (isLimited)
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Text('Limited results. Tap Search for full search.'),
+          ),
+        resultsList.isEmpty
+            ? LottieWidget(
+                lottie: 'assets/lottie/empty.json',
+                lottieHeight: size.height * 0.12)
+            : Expanded(
+                child: PlatformScrollbar(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: resultsList.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final alias = resultsList[index];
+                      return InkWell(
+                        child: IgnorePointer(
+                          child: AliasListTile(aliasData: alias),
+                        ),
+                        onTap: () {
+                          /// Dismisses keyboard
+                          FocusScope.of(context).requestFocus(FocusNode());
+
+                          /// Add selected Alias to Search History
+                          context
+                              .read(searchHistoryStateNotifier.notifier)
+                              .addAliasToSearchHistory(alias);
+
+                          /// Navigate to Alias Screen
+                          Navigator.pushNamed(
+                            context,
+                            AliasScreen.routeName,
+                            arguments: alias,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
       ],
     );
   }

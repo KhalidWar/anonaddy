@@ -49,6 +49,11 @@ const kInvalidDomainMXWarning =
 const kSearchAliasByEmailOrDesc = 'Search for aliases by email or description';
 const kSearchFieldHint = 'Search';
 const kSearchHistory = 'Search History';
+const kClearSearchHistoryButtonText = 'Clear';
+const kSearching = 'Searching...';
+const kCancelSearchingButtonText = 'Cancel';
+const kSearchResult = 'Search Result';
+const kCloseSearchButtonText = 'Close Search';
 
 /// Login Screen
 const kEnterAccessToken = 'Enter Access Token';

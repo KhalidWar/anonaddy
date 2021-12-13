@@ -28,13 +28,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void switchIndex(int index) {
     context.read(fabVisibilityStateNotifier.notifier).showFab();
-    if (_selectedIndex == 2 && index == 2) {
-      SearchTab().search(context);
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   Future checkIfAppUpdated() async {
