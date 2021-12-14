@@ -71,7 +71,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
 
     if (state.searchController != null) {
       final text = state.searchController!.text.trim();
-      final aliases = aliasTabState.getAliases();
+      final aliases = aliasTabState.getAliases() ?? [];
 
       aliases.forEach((element) {
         final filterByEmail =

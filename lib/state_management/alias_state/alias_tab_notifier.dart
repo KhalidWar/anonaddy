@@ -129,8 +129,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     await offlineData.writeAliasOfflineData(encodedData);
   }
 
-  List<Alias> getAliases() {
-    return state.aliases ?? [];
+  List<Alias>? getAliases() {
+    if (mounted) return state.aliases;
   }
 
   void addAlias(Alias alias) {
