@@ -116,54 +116,66 @@ class SearchTab extends StatelessWidget {
     return Column(
       children: [
         SearchListHeader(
-          title: kSearchResult,
+          title: isLimited ? kLimitedSearchResult : kSearchResult,
           buttonLabel: kCloseSearchButtonText,
           onPress: () {
+            FocusScope.of(context).requestFocus(FocusNode());
             context.read(searchResultStateNotifier.notifier).closeSearch();
           },
         ),
+
+        /// Display a banner indicating that current results are from a limited list
         if (isLimited)
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Text('Limited results. Tap Search for full search.'),
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: const Text('Tap Search Icon for a full search'),
           ),
-        resultsList.isEmpty
-            ? LottieWidget(
-                lottie: 'assets/lottie/empty.json',
-                lottieHeight: size.height * 0.12)
-            : Expanded(
-                child: PlatformScrollbar(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: resultsList.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final alias = resultsList[index];
-                      return InkWell(
-                        child: IgnorePointer(
-                          child: AliasListTile(aliasData: alias),
-                        ),
-                        onTap: () {
-                          /// Dismisses keyboard
-                          FocusScope.of(context).requestFocus(FocusNode());
 
-                          /// Add selected Alias to Search History
-                          context
-                              .read(searchHistoryStateNotifier.notifier)
-                              .addAliasToSearchHistory(alias);
+        /// Display nothing if result from a limited list is empty
+        if (resultsList.isEmpty && isLimited)
+          Container()
+        else
 
-                          /// Navigate to Alias Screen
-                          Navigator.pushNamed(
-                            context,
-                            AliasScreen.routeName,
-                            arguments: alias,
-                          );
-                        },
+        /// Show empty lottie if result from full search is empty
+        if (resultsList.isEmpty)
+          LottieWidget(
+            lottie: 'assets/lottie/empty.json',
+            lottieHeight: size.height * 0.12,
+          )
+        else
+          Expanded(
+            child: PlatformScrollbar(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: resultsList.length,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final alias = resultsList[index];
+                  return InkWell(
+                    child: IgnorePointer(
+                      child: AliasListTile(aliasData: alias),
+                    ),
+                    onTap: () {
+                      /// Dismisses keyboard
+                      FocusScope.of(context).requestFocus(FocusNode());
+
+                      /// Add selected Alias to Search History
+                      context
+                          .read(searchHistoryStateNotifier.notifier)
+                          .addAliasToSearchHistory(alias);
+
+                      /// Navigate to Alias Screen
+                      Navigator.pushNamed(
+                        context,
+                        AliasScreen.routeName,
+                        arguments: alias,
                       );
                     },
-                  ),
-                ),
+                  );
+                },
               ),
+            ),
+          ),
       ],
     );
   }
