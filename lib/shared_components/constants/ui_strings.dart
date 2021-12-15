@@ -53,6 +53,7 @@ const kClearSearchHistoryButtonText = 'Clear';
 const kSearching = 'Searching...';
 const kCancelSearchingButtonText = 'Cancel';
 const kSearchResult = 'Search Result';
+const kLimitedSearchResult = 'Limited Result';
 const kCloseSearchButtonText = 'Close Search';
 
 /// Login Screen
