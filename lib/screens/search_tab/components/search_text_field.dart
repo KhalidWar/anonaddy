@@ -38,6 +38,10 @@ class SearchTabHeader extends StatelessWidget {
                     style: TextStyle(color: Colors.white),
                     decoration: kTextFormFieldDecoration.copyWith(
                       hintText: kSearchFieldHint,
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
                       suffixIcon:
                           closeIcon(context, searchState.showCloseIcon!),
                     ),
