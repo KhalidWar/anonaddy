@@ -58,4 +58,12 @@ class FormValidator {
       return null;
     }
   }
+
+  static String? validateSearchField(String input) {
+    if (input.length < 3) {
+      return 'Keyword must be 3 characters long';
+    } else {
+      return null;
+    }
+  }
 }
