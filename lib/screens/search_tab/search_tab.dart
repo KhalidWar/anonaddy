@@ -29,13 +29,14 @@ class SearchTab extends StatelessWidget {
           headerSliverBuilder: (context, _) {
             return [
               SliverAppBar(
-                expandedHeight: size.height * 0.19,
+                expandedHeight: size.height * 0.2,
                 elevation: 0,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   background: Padding(
-                    padding: EdgeInsets.all(size.height * 0.01),
-                    child: const SearchTabHeader(),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                    child: SearchTabHeader(),
                   ),
                 ),
               ),
@@ -128,7 +129,7 @@ class SearchTab extends StatelessWidget {
         if (isLimited)
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: const Text('Tap Search Icon for a full search'),
+            child: const Text('Tap Search for a full search'),
           ),
 
         /// Display nothing if result from a limited list is empty

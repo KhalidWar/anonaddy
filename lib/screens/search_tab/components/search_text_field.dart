@@ -1,12 +1,15 @@
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/search/search_result/search_result_notifier.dart';
-import 'package:anonaddy/state_management/search/search_result/search_result_state.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SearchTabHeader extends StatelessWidget {
-  const SearchTabHeader({Key? key}) : super(key: key);
+  SearchTabHeader({Key? key}) : super(key: key);
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,38 +28,38 @@ class SearchTabHeader extends StatelessWidget {
 
             return Column(
               children: [
-                TextField(
-                  controller: searchState.searchController,
-                  textInputAction: TextInputAction.search,
-                  // inputFormatters: [TextInputFormatter()],
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: kSearchFieldHint,
-                    hintStyle: TextStyle(color: Colors.white),
-                    suffixIcon: closeIcon(context, searchState),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: searchState.searchController,
+                    validator: (input) =>
+                        FormValidator.validateSearchField(input!),
+                    textInputAction: TextInputAction.search,
+                    style: TextStyle(color: Colors.white),
+                    decoration: kTextFormFieldDecoration.copyWith(
+                      hintText: kSearchFieldHint,
+                      suffixIcon:
+                          closeIcon(context, searchState.showCloseIcon!),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
+                    onChanged: (input) {
+                      context
+                          .read(searchResultStateNotifier.notifier)
+                          .toggleCloseIcon();
+                      context
+                          .read(searchResultStateNotifier.notifier)
+                          .searchAliasesLocally();
+                    },
+                    onFieldSubmitted: (keyword) {
+                      /// Validate input text characters are NOT less than 3 characters
+                      if (_formKey.currentState!.validate()) {
+                        /// Triggers Full Search
+                        context
+                            .read(searchResultStateNotifier.notifier)
+                            .searchAliases();
+                      }
+                    },
                   ),
-                  onTap: () {},
-                  onChanged: (input) {
-                    context
-                        .read(searchResultStateNotifier.notifier)
-                        .toggleCloseIcon();
-                    context
-                        .read(searchResultStateNotifier.notifier)
-                        .searchAliasesLocally();
-                  },
-                  onSubmitted: (keyword) {
-                    context
-                        .read(searchResultStateNotifier.notifier)
-                        .searchAliases();
-                  },
                 ),
-                SizedBox(height: size.height * 0.01),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -73,7 +76,7 @@ class SearchTabHeader extends StatelessWidget {
                       },
                     ),
                   ],
-                )
+                ),
               ],
             );
           },
@@ -82,29 +85,14 @@ class SearchTabHeader extends StatelessWidget {
     );
   }
 
-  Widget? closeIcon(BuildContext context, SearchResultState state) {
-    if (state.showCloseIcon ?? false) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: Icon(Icons.close, color: Colors.white),
-            onPressed: () {
-              context.read(searchResultStateNotifier.notifier).closeSearch();
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              /// Dismisses keyboard
-              FocusScope.of(context).requestFocus(FocusNode());
-
-              /// Triggers search
-              context.read(searchResultStateNotifier.notifier).searchAliases();
-            },
-          ),
-        ],
+  Widget? closeIcon(BuildContext context, bool showCloseIcon) {
+    if (showCloseIcon) {
+      return IconButton(
+        icon: Icon(Icons.close, color: Colors.white),
+        onPressed: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          context.read(searchResultStateNotifier.notifier).closeSearch();
+        },
       );
     }
   }
