@@ -6,6 +6,7 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
+import 'package:anonaddy/services/changelog_service/changelog_storage.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
@@ -18,7 +19,7 @@ import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Class Providers
 final flutterSecureStorage = Provider((ref) => FlutterSecureStorage());
@@ -36,9 +37,14 @@ final accessTokenService = Provider<AccessTokenService>((ref) {
   return AccessTokenService(secureStorage);
 });
 
-final changelogService = Provider<ChangelogService>((ref) {
+final changelogStorage = Provider<ChangelogStorage>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
-  return ChangelogService(secureStorage);
+  return ChangelogStorage(secureStorage);
+});
+
+final changelogService = Provider<ChangelogService>((ref) {
+  final changelogStore = ref.read(changelogStorage);
+  return ChangelogService(changelogStore);
 });
 
 final usernameService = Provider<UsernameService>((ref) {

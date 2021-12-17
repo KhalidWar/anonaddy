@@ -1,4 +1,3 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -6,6 +5,7 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
+import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +14,6 @@ import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
 import 'create_new_alias/create_new_alias.dart';
 import 'home_screen_components/alert_center/alert_center_screen.dart';
-import 'home_screen_components/changelog_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = 'homeScreen';
@@ -33,27 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future checkIfAppUpdated() async {
-    final changeLog = context.read(changelogService);
-    await changeLog.checkIfAppUpdated(context);
-    final isUpdated = await changeLog.isAppUpdated();
-    if (isUpdated) {
-      return showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-              top: Radius.circular(kBottomSheetBorderRadius)),
-        ),
-        builder: (context) => const ChangelogWidget(),
-      );
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    checkIfAppUpdated();
+
+    /// Show [ChangelogWidget] in [HomeScreen] if app has updated
+    context.read(changelogStateNotifier.notifier).showChangelogWidget(context);
   }
 
   @override
