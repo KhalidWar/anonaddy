@@ -105,8 +105,26 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
     }
   }
 
-  /// Controls [includeDeleted] visibility
+  /// Controls [SearchResultState.includeDeleted] visibility
   void toggleIncludeDeleted(bool toggle) {
+    //todo [toggle] should show/hide deleted aliases from result list
+    // final availableAliases = <Alias>[];
+    // if (state.status == SearchResultStatus.Loaded) {
+    //   state.aliases!.forEach((alias) {
+    //     if (alias.deletedAt == null) {
+    //       availableAliases.add(alias);
+    //     }
+    //   });
+    //
+    //   final aliases = toggle ? state.aliases! : availableAliases;
+    //   final newState = state.copyWith(aliases: aliases, includeDeleted: toggle);
+    //   _updateState(newState);
+    //   return;
+    // } else {
+    //   final newState = state.copyWith(includeDeleted: toggle);
+    //   _updateState(newState);
+    // }
+
     final newState = state.copyWith(includeDeleted: toggle);
     _updateState(newState);
   }
