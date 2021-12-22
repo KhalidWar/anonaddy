@@ -24,6 +24,10 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
     required this.offlineData,
     required this.lifecycleStatus,
   }) : super(DomainOptionsState(status: DomainOptionsStatus.loading)) {
+    /// Initially load data from disk (secured device storage)
+    _loadOfflineData();
+
+    /// Fetch latest data from server
     fetchDomainOption();
   }
 
@@ -31,26 +35,29 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
   final OfflineData offlineData;
   final LifecycleStatus lifecycleStatus;
 
+  /// Updates UI to the latest state
+  void _updateState(DomainOptionsState newState) {
+    if (mounted) state = newState;
+  }
+
   Future fetchDomainOption() async {
     try {
-      if (state.status != DomainOptionsStatus.failed) {
-        await _loadOfflineData();
-      }
-
       final domainOptions = await domainOptionsService.getDomainOptions();
       await _saveOfflineData(domainOptions);
-      state = DomainOptionsState(
+
+      final newState = DomainOptionsState(
           status: DomainOptionsStatus.loaded, domainOptions: domainOptions);
+      _updateState(newState);
     } on SocketException {
+      /// Loads offline data when there's no internet connection
       await _loadOfflineData();
     } catch (error) {
-      if (mounted) {
-        state = DomainOptionsState(
-          status: DomainOptionsStatus.failed,
-          errorMessage: error.toString(),
-        );
-        await _retryOnError();
-      }
+      final newState = DomainOptionsState(
+          status: DomainOptionsStatus.failed, errorMessage: error.toString());
+      _updateState(newState);
+
+      /// Retry after facing an error
+      await _retryOnError();
     }
   }
 
@@ -65,8 +72,9 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
     final securedData = await offlineData.readDomainOptionsOfflineData();
     if (securedData.isNotEmpty) {
       final data = DomainOptions.fromJson(jsonDecode(securedData));
-      state = DomainOptionsState(
+      final newState = DomainOptionsState(
           status: DomainOptionsStatus.loaded, domainOptions: data);
+      _updateState(newState);
     }
   }
 
