@@ -69,27 +69,25 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
   void searchAliasesLocally() {
     final matchingAliases = <Alias>[];
 
-    if (state.searchController != null) {
-      final text = state.searchController!.text.trim();
-      final aliases = aliasTabState.getAliases() ?? [];
+    final text = state.searchController!.text.trim();
+    final aliases = aliasTabState.getAliases() ?? [];
 
-      aliases.forEach((element) {
-        final filterByEmail =
-            element.email.toLowerCase().contains(text.toLowerCase());
-        if (element.description == null) {
-          if (filterByEmail) {
-            matchingAliases.add(element);
-          }
-        } else {
-          final filterByDescription =
-              element.description!.toLowerCase().contains(text.toLowerCase());
-
-          if (filterByEmail || filterByDescription) {
-            matchingAliases.add(element);
-          }
+    aliases.forEach((element) {
+      final filterByEmail =
+          element.email.toLowerCase().contains(text.toLowerCase());
+      if (element.description == null) {
+        if (filterByEmail) {
+          matchingAliases.add(element);
         }
-      });
-    }
+      } else {
+        final filterByDescription =
+            element.description!.toLowerCase().contains(text.toLowerCase());
+
+        if (filterByEmail || filterByDescription) {
+          matchingAliases.add(element);
+        }
+      }
+    });
 
     final newState = state.copyWith(
         status: SearchResultStatus.Limited, aliases: matchingAliases);
