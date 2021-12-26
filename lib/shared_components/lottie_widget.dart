@@ -28,34 +28,31 @@ class LottieWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        showLoading ?? false
-            ? LinearProgressIndicator(
-                backgroundColor: Colors.transparent,
-                color: kAccentColor,
-              )
-            : Container(),
+        if (showLoading ?? false)
+          LinearProgressIndicator(
+            backgroundColor: Colors.transparent,
+            color: kAccentColor,
+          ),
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              lottie == null
-                  ? Container()
-                  : Lottie.asset(
-                      lottie!,
-                      height: lottieHeight,
-                      fit: BoxFit.fitHeight,
-                      repeat: repeat ?? false,
-                    ),
-              label == null
-                  ? Container()
-                  : Text(
-                      '$label',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2!
-                          .copyWith(fontWeight: FontWeight.normal),
-                    ),
+              if (lottie != null)
+                Lottie.asset(
+                  lottie!,
+                  height: lottieHeight,
+                  fit: BoxFit.fitHeight,
+                  repeat: repeat ?? false,
+                ),
+              if (label != null)
+                Text(
+                  '$label',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2!
+                      .copyWith(fontWeight: FontWeight.normal),
+                ),
             ],
           ),
         ),

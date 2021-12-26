@@ -1,19 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'account_model.g.dart';
-
-@JsonSerializable(explicitToJson: true)
-class AccountModel {
-  AccountModel(this.account);
-
-  @JsonKey(name: 'data')
-  final Account account;
-
-  factory AccountModel.fromJson(Map<String, dynamic> json) =>
-      _$AccountModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AccountModelToJson(this);
-}
+part 'account.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Account {
@@ -38,6 +25,10 @@ class Account {
     required this.activeDomainLimit,
     required this.aliasCount,
     required this.aliasLimit,
+    required this.totalEmailsForwarded,
+    required this.totalEmailsBlocked,
+    required this.totalEmailsReplied,
+    required this.totalEmailsSent,
     required this.createdAt,
     required this.lastUpdated,
   });
@@ -96,6 +87,18 @@ class Account {
 
   @JsonKey(name: 'active_shared_domain_alias_limit')
   int? aliasLimit;
+
+  @JsonKey(name: 'total_emails_forwarded')
+  int totalEmailsForwarded;
+
+  @JsonKey(name: 'total_emails_blocked')
+  int totalEmailsBlocked;
+
+  @JsonKey(name: 'total_emails_replied')
+  int totalEmailsReplied;
+
+  @JsonKey(name: 'total_emails_sent')
+  int totalEmailsSent;
 
   @JsonKey(name: 'created_at')
   DateTime createdAt;

@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NicheMethod {
-  String fixDateTime(dynamic input) {
+  static String fixDateTime(dynamic input) {
     if (input.runtimeType == DateTime) {
       return '${input.month}/${input.day}/${input.year.toString().substring(2)} ${input.hour}:${input.minute}';
     } else {
@@ -13,7 +13,7 @@ class NicheMethod {
     }
   }
 
-  Future<void> copyOnTap(String input) async {
+  static copyOnTap(String input) async {
     await Clipboard.setData(
       ClipboardData(text: input),
     ).catchError((error) {
@@ -23,7 +23,7 @@ class NicheMethod {
     });
   }
 
-  Future<void> showToast(String message) async {
+  static showToast(String message) async {
     await Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
@@ -32,13 +32,13 @@ class NicheMethod {
     );
   }
 
-  Future<void> launchURL(String url) async {
+  static launchURL(String url) async {
     await launch(url).catchError((error, stackTrace) {
       throw showToast(error.toString());
     });
   }
 
-  String correctAliasString(String input) {
+  static correctAliasString(String input) {
     switch (input) {
       case 'random_characters':
         return 'Random Characters';

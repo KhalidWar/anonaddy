@@ -19,6 +19,7 @@ const kDomainsOptionsURL = 'domain-options';
 const kForgetURL = 'forget';
 const kAppVersionURL = 'app-version';
 const kFailedDeliveriesURL = 'failed-deliveries';
+const kRulesURL = 'rules';
 
 /// AnonAddy URLs
 const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';

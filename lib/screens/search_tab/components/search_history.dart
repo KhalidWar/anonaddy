@@ -1,6 +1,5 @@
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
-import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
 import 'package:anonaddy/state_management/search/search_history/search_history_state.dart';
 import 'package:flutter/material.dart';
@@ -27,20 +26,18 @@ class SearchHistory extends StatelessWidget {
           case SearchHistoryStatus.loaded:
             final aliases = searchState.aliases;
 
-            if (aliases.isEmpty)
+            if (aliases.isEmpty) {
               return Padding(
                 padding: EdgeInsets.all(size.height * 0.01),
                 child: Row(children: [Text('Nothing to see here.')]),
               );
-            else {
+            } else {
               return Expanded(
                 child: PlatformScrollbar(
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: aliases.length,
-                    controller: context
-                        .read(fabVisibilityStateNotifier.notifier)
-                        .searchController,
+                    physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return AliasListTile(aliasData: aliases[index]);
                     },

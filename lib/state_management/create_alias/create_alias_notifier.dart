@@ -18,7 +18,6 @@ final createAliasNotifier = ChangeNotifierProvider.autoDispose((ref) {
     aliasService: ref.read(aliasService),
     domainOptions: ref.read(domainOptionsStateNotifier),
     accountState: ref.read(accountStateNotifier),
-    nicheMethod: ref.read(nicheMethods),
     isAutoCopy: ref.read(settingsStateNotifier).isAutoCopy!,
     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
   );
@@ -29,7 +28,6 @@ class CreateAliasNotifier extends ChangeNotifier {
     required this.aliasService,
     required this.domainOptions,
     required this.accountState,
-    required this.nicheMethod,
     required this.isAutoCopy,
     required this.aliasTabNotifier,
   }) : super() {
@@ -43,7 +41,6 @@ class CreateAliasNotifier extends ChangeNotifier {
   final AliasService aliasService;
   final DomainOptionsState domainOptions;
   final AccountState accountState;
-  final NicheMethod nicheMethod;
   final bool isAutoCopy;
   final AliasTabNotifier aliasTabNotifier;
 
@@ -79,14 +76,14 @@ class CreateAliasNotifier extends ChangeNotifier {
           aliasDomain!, aliasFormat!, localPart ?? '', recipients);
 
       if (isAutoCopy) {
-        await nicheMethod.copyOnTap(createdAlias.email);
-        nicheMethod.showToast(kCreateAliasAndCopyEmail);
+        await NicheMethod.copyOnTap(createdAlias.email);
+        NicheMethod.showToast(kCreateAliasAndCopyEmail);
       } else {
-        nicheMethod.showToast(kCreateAliasSuccess);
+        NicheMethod.showToast(kCreateAliasSuccess);
       }
       aliasTabNotifier.addAlias(createdAlias);
     } catch (error) {
-      nicheMethod.showToast(error.toString());
+      NicheMethod.showToast(error.toString());
     }
     setLoading(false);
   }
@@ -150,7 +147,7 @@ class CreateAliasNotifier extends ChangeNotifier {
   }
 
   void setAliasFormatList(String aliasDomain) {
-    final subscription = accountState.accountModel!.account.subscription;
+    final subscription = accountState.account!.subscription;
     if (sharedDomains.contains(aliasDomain)) {
       if (subscription == kFreeSubscription) {
         aliasFormatList = freeTierWithSharedDomain;

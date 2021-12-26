@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
@@ -9,19 +8,20 @@ import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/offline_banner.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class AliasScreen extends StatefulWidget {
   const AliasScreen(this.alias);
@@ -74,12 +74,11 @@ class _AliasScreenState extends State<AliasScreen> {
     final deleteAliasLoading = aliasState.deleteAliasLoading!;
     final size = MediaQuery.of(context).size;
 
-    final nicheMethod = context.read(nicheMethods);
-
     final isAliasDeleted = alias.deletedAt != null;
 
     return ListView(
       children: [
+        if (aliasState.isOffline!) const OfflineBanner(),
         AliasScreenPieChart(
           emailsForwarded: alias.emailsForwarded,
           emailsBlocked: alias.emailsBlocked,
@@ -100,7 +99,7 @@ class _AliasScreenState extends State<AliasScreen> {
           title: alias.email,
           subtitle: 'Email',
           trailingIconData: Icons.copy,
-          trailingIconOnPress: () => nicheMethod.copyOnTap(alias.email),
+          trailingIconOnPress: () => NicheMethod.copyOnTap(alias.email),
         ),
         AliasDetailListTile(
           leadingIconData: Icons.mail_outline,
@@ -124,7 +123,7 @@ class _AliasScreenState extends State<AliasScreen> {
           ),
           trailingIconOnPress: () async {
             isAliasDeleted
-                ? nicheMethod.showToast(kRestoreBeforeActivate)
+                ? NicheMethod.showToast(kRestoreBeforeActivate)
                 : alias.active
                     ? await context
                         .read(aliasScreenStateNotifier.notifier)
@@ -265,32 +264,33 @@ class _AliasScreenState extends State<AliasScreen> {
     );
   }
 
-  Future buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
+  void buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
     final isDeleted = alias.deletedAt != null;
 
-    Future<void> deleteOrRestore() async {
-      Navigator.pop(context);
-      isDeleted
-          ? await context
-              .read(aliasScreenStateNotifier.notifier)
-              .restoreAlias(alias.id)
-          : await context
-              .read(aliasScreenStateNotifier.notifier)
-              .deleteAlias(alias.id);
-
-      if (!isDeleted) Navigator.pop(context);
-    }
-
-    return showModal(
+    /// Display platform appropriate dialog
+    PlatformAware.platformDialog(
       context: context,
-      builder: (context) {
-        return PlatformAlertDialog(
-          content:
-              isDeleted ? kRestoreAliasConfirmation : kDeleteAliasConfirmation,
-          method: deleteOrRestore,
-          title: '${isDeleted ? 'Restore' : 'Delete'} Alias',
-        );
-      },
+      child: PlatformAlertDialog(
+        title: '${isDeleted ? 'Restore' : 'Delete'} Alias',
+        content:
+            isDeleted ? kRestoreAliasConfirmation : kDeleteAliasConfirmation,
+        method: () async {
+          /// Dismisses [platformDialog]
+          Navigator.pop(context);
+
+          /// Delete [alias] if it's available or restore it if it's deleted
+          isDeleted
+              ? await context
+                  .read(aliasScreenStateNotifier.notifier)
+                  .restoreAlias(alias.id)
+              : await context
+                  .read(aliasScreenStateNotifier.notifier)
+                  .deleteAlias(alias.id);
+
+          /// Dismisses [AliasScreen] if [alias] is deleted
+          if (!isDeleted) Navigator.pop(context);
+        },
+      ),
     );
   }
 
@@ -348,9 +348,8 @@ class _AliasScreenState extends State<AliasScreen> {
                       key: sendFromFormKey,
                       child: TextFormField(
                         autofocus: true,
-                        validator: (input) => context
-                            .read(formValidator)
-                            .validateEmailField(input!),
+                        validator: (input) =>
+                            FormValidator.validateEmailField(input!),
                         onChanged: (input) => destinationEmail = input,
                         onFieldSubmitted: (toggle) => generateAddress(),
                         decoration: kTextFormFieldDecoration.copyWith(
@@ -420,20 +419,22 @@ class _AliasScreenState extends State<AliasScreen> {
       await context
           .read(aliasScreenStateNotifier.notifier)
           .forgetAlias(widget.alias.id);
+
+      /// Dismisses [platformDialog]
       Navigator.pop(context);
+
+      /// Dismisses [AliasScreen] after forgetting [alias]
       Navigator.pop(context);
     }
 
     Future forgetOnPress() async {
-      showModal(
+      PlatformAware.platformDialog(
         context: context,
-        builder: (context) {
-          return PlatformAlertDialog(
-            content: kForgetAliasConfirmation,
-            method: forget,
-            title: kForgetAlias,
-          );
-        },
+        child: PlatformAlertDialog(
+          content: kForgetAliasConfirmation,
+          method: forget,
+          title: kForgetAlias,
+        ),
       );
     }
 

@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
@@ -9,7 +8,7 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
@@ -285,12 +284,25 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    Future<void> deleteUsername() async {
-      await context
-          .read(usernamesScreenStateNotifier.notifier)
-          .deleteUsername(widget.username);
-      Navigator.pop(context);
-      Navigator.pop(context);
+    void showDialog() {
+      PlatformAware.platformDialog(
+        context: context,
+        child: PlatformAlertDialog(
+          title: 'Delete Username',
+          content: kDeleteUsernameConfirmation,
+          method: () async {
+            await context
+                .read(usernamesScreenStateNotifier.notifier)
+                .deleteUsername(widget.username);
+
+            /// Dismisses this dialog
+            Navigator.pop(context);
+
+            /// Dismisses [UsernamesScreen] after deletion
+            Navigator.pop(context);
+          },
+        ),
+      );
     }
 
     return AppBar(
@@ -312,18 +324,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
               );
             }).toList();
           },
-          onSelected: (String choice) {
-            showModal(
-              context: context,
-              builder: (context) {
-                return PlatformAlertDialog(
-                  content: kDeleteUsernameConfirmation,
-                  method: deleteUsername,
-                  title: 'Delete Username',
-                );
-              },
-            );
-          },
+          onSelected: (String choice) => showDialog(),
         ),
       ],
     );

@@ -14,30 +14,22 @@ import 'alias_tab_notifier.dart';
 final aliasScreenStateNotifier =
     StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
         (ref) {
-  final service = ref.read(aliasService);
-  final methods = ref.read(nicheMethods);
-  final aliasTabNotifier = ref.read(aliasTabStateNotifier.notifier);
   return AliasScreenNotifier(
-    aliasService: service,
-    nicheMethod: methods,
-    aliasTabNotifier: aliasTabNotifier,
+    aliasService: ref.read(aliasService),
+    aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
   );
 });
 
 class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   AliasScreenNotifier({
     required this.aliasService,
-    required this.nicheMethod,
     required this.aliasTabNotifier,
-  }) : super(AliasScreenState.initialState()) {
-    showToast = nicheMethod.showToast;
-  }
+  }) : super(AliasScreenState.initialState());
 
   final AliasService aliasService;
-  final NicheMethod nicheMethod;
   final AliasTabNotifier aliasTabNotifier;
 
-  late Function showToast;
+  final showToast = NicheMethod.showToast;
 
   Future<void> fetchAliases(Alias alias) async {
     /// Initially set AliasScreen to loading
@@ -50,7 +42,11 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
           state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
     } on SocketException {
       /// Return old alias data if there's no internet connection
-      state = state.copyWith(status: AliasScreenStatus.loaded, alias: alias);
+      state = state.copyWith(
+        status: AliasScreenStatus.loaded,
+        isOffline: true,
+        alias: alias,
+      );
     } catch (error) {
       state = state.copyWith(
         status: AliasScreenStatus.failed,
@@ -156,7 +152,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
         '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
 
     try {
-      await nicheMethod.copyOnTap(generatedAddress);
+      await NicheMethod.copyOnTap(generatedAddress);
       showToast(kSendFromAliasSuccess);
     } catch (error) {
       showToast(kSomethingWentWrong);

@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
@@ -10,18 +9,18 @@ import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dar
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../global_providers.dart';
 
 class RecipientsScreen extends StatefulWidget {
   const RecipientsScreen({required this.recipient});
@@ -135,8 +134,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
           title: recipient.email,
           subtitle: 'Recipient Email',
           trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
-          trailingIconOnPress: () =>
-              context.read(nicheMethods).copyOnTap(recipient.email),
+          trailingIconOnPress: () => NicheMethod.copyOnTap(recipient.email),
         ),
         AliasDetailListTile(
           leadingIconData: Icons.fingerprint_outlined,
@@ -266,23 +264,21 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     );
   }
 
-  Future buildRemovePGPKeyDialog(BuildContext context, Recipient recipient) {
-    Future<void> removePublicKey() async {
-      await context
-          .read(recipientScreenStateNotifier.notifier)
-          .removePublicGPGKey(recipient);
-      Navigator.pop(context);
-    }
-
-    return showModal(
+  void buildRemovePGPKeyDialog(BuildContext context, Recipient recipient) {
+    PlatformAware.platformDialog(
       context: context,
-      builder: (context) {
-        return PlatformAlertDialog(
-          content: kRemoveRecipientPublicKeyConfirmation,
-          method: removePublicKey,
-          title: 'Remove Public Key',
-        );
-      },
+      child: PlatformAlertDialog(
+        title: 'Remove Public Key',
+        content: kRemoveRecipientPublicKeyConfirmation,
+        method: () async {
+          await context
+              .read(recipientScreenStateNotifier.notifier)
+              .removePublicGPGKey(recipient);
+
+          /// Dismisses this dialog
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 
@@ -327,9 +323,8 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
                       key: formKey,
                       child: TextFormField(
                         autofocus: true,
-                        validator: (input) => context
-                            .read(formValidator)
-                            .validatePGPKeyField(input!),
+                        validator: (input) =>
+                            FormValidator.validatePGPKeyField(input!),
                         minLines: 4,
                         maxLines: 5,
                         textInputAction: TextInputAction.done,
@@ -359,12 +354,25 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    Future<void> remove() async {
-      await context
-          .read(recipientScreenStateNotifier.notifier)
-          .removeRecipient(widget.recipient);
-      Navigator.pop(context);
-      Navigator.pop(context);
+    void showDialog() {
+      PlatformAware.platformDialog(
+        context: context,
+        child: PlatformAlertDialog(
+          title: 'Delete Recipient',
+          content: kDeleteRecipientConfirmation,
+          method: () async {
+            await context
+                .read(recipientScreenStateNotifier.notifier)
+                .removeRecipient(widget.recipient);
+
+            /// Dismisses this dialog
+            Navigator.pop(context);
+
+            /// Dismisses [RecipientScreen] after recipient deletion
+            Navigator.pop(context);
+          },
+        ),
+      );
     }
 
     return AppBar(
@@ -386,18 +394,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
               );
             }).toList();
           },
-          onSelected: (String choice) {
-            showModal(
-              context: context,
-              builder: (context) {
-                return PlatformAlertDialog(
-                  content: kDeleteRecipientConfirmation,
-                  method: remove,
-                  title: 'Delete Recipient',
-                );
-              },
-            );
-          },
+          onSelected: (String choice) => showDialog(),
         ),
       ],
     );

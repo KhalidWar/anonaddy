@@ -14,6 +14,14 @@ class AuthState {
   final String? errorMessage;
   final bool? loginLoading;
 
+  static initialState() {
+    return AuthState(
+      authStatus: AuthStatus.initial,
+      authLock: AuthLock.off,
+      loginLoading: false,
+    );
+  }
+
   static freshStart() {
     return AuthState(
       authStatus: AuthStatus.unauthorized,

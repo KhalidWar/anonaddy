@@ -23,7 +23,7 @@ class DomainsTab extends ConsumerWidget {
         return RecipientsShimmerLoading();
 
       case AccountStatus.loaded:
-        final subscription = accountState.accountModel!.account.subscription;
+        final subscription = accountState.account!.subscription;
         if (subscription == kFreeSubscription) {
           return PaidFeatureWall();
         }

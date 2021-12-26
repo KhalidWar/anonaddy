@@ -1,7 +1,10 @@
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 
+/// Status for when fetching [alias] data
 enum AliasScreenStatus { loading, loaded, failed }
 
+/// States which [AliasScreen] and its components can be in
 class AliasScreenState {
   const AliasScreenState({
     this.status,
@@ -10,15 +13,20 @@ class AliasScreenState {
     this.isToggleLoading,
     this.deleteAliasLoading,
     this.updateRecipientLoading,
+    this.isOffline,
   });
 
+  /// [AliasScreen] status when fetching for [alias]
   final AliasScreenStatus? status;
+
+  /// Alias shown in [AliasScreen]
   final Alias? alias;
   final String? errorMessage;
 
   final bool? isToggleLoading;
   final bool? deleteAliasLoading;
   final bool? updateRecipientLoading;
+  final bool? isOffline;
 
   static AliasScreenState initialState() {
     /// Initializing [AliasScreen] state to avoid null exception
@@ -29,6 +37,7 @@ class AliasScreenState {
       isToggleLoading: false,
       deleteAliasLoading: false,
       updateRecipientLoading: false,
+      isOffline: false,
     );
   }
 
@@ -39,6 +48,7 @@ class AliasScreenState {
     bool? isToggleLoading,
     bool? deleteAliasLoading,
     bool? updateRecipientLoading,
+    bool? isOffline,
   }) {
     return AliasScreenState(
       status: status ?? this.status,
@@ -48,6 +58,7 @@ class AliasScreenState {
       deleteAliasLoading: deleteAliasLoading ?? this.deleteAliasLoading,
       updateRecipientLoading:
           updateRecipientLoading ?? this.updateRecipientLoading,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 

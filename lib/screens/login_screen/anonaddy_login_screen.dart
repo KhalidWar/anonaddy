@@ -4,10 +4,10 @@ import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class AnonAddyLoginScreen extends StatefulWidget {
   static const routeName = 'loginScreen';
@@ -121,8 +121,7 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
             key: _tokenFormKey,
             child: TextFormField(
               key: Key('loginTextField'),
-              validator: (input) =>
-                  context.read(formValidator).accessTokenValidator(input!),
+              validator: (input) => FormValidator.accessTokenValidator(input!),
               onChanged: (input) => _token = input,
               onFieldSubmitted: (input) => login(context),
               textInputAction: TextInputAction.go,
@@ -203,8 +202,7 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
                     Icon(Icons.open_in_new_outlined),
                   ],
                 ),
-                onPressed: () =>
-                    context.read(nicheMethods).launchURL(kAnonAddySettingsURL),
+                onPressed: () => NicheMethod.launchURL(kAnonAddySettingsURL),
               ),
             ),
           ],

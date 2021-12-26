@@ -1,8 +1,8 @@
-import 'package:animations/animations.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -77,16 +77,16 @@ class _LockScreenState extends State<LockScreen> {
         ),
       ),
       onPressed: () {
-        Future<void> logout() async {
-          await context.read(authStateNotifier.notifier).logout(context);
-        }
-
-        showModal(
+        /// Show platform dialog
+        PlatformAware.platformDialog(
           context: context,
-          builder: (context) {
-            return PlatformAlertDialog(
-                content: kLogOutAlertDialog, method: logout, title: 'Logout');
-          },
+          child: PlatformAlertDialog(
+            title: 'Logout',
+            content: kLogOutAlertDialog,
+            method: () async {
+              await context.read(authStateNotifier.notifier).logout(context);
+            },
+          ),
         );
       },
     );

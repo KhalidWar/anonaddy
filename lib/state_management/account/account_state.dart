@@ -1,15 +1,20 @@
-import 'package:anonaddy/models/account/account_model.dart';
+import 'package:anonaddy/models/account/account.dart';
 
 enum AccountStatus { loading, loaded, failed }
 
 class AccountState {
   const AccountState({
     required this.status,
-    this.accountModel,
+    this.account,
     this.errorMessage,
   });
 
   final AccountStatus status;
-  final AccountModel? accountModel;
+  final Account? account;
   final String? errorMessage;
+
+  @override
+  String toString() {
+    return 'AccountState{status: $status, account: $account, errorMessage: $errorMessage}';
+  }
 }

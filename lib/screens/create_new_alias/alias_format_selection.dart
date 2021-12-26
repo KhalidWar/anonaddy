@@ -1,10 +1,9 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class AliasFormatSelection extends StatelessWidget {
   const AliasFormatSelection({required this.setAliasFormat});
@@ -50,9 +49,7 @@ class AliasFormatSelection extends StatelessWidget {
                           selectedTileColor: kAccentColor,
                           horizontalTitleGap: 0,
                           title: Text(
-                            context
-                                .read(nicheMethods)
-                                .correctAliasString(format),
+                            NicheMethod.correctAliasString(format),
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.subtitle1,
                           ),

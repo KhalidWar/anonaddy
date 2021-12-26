@@ -9,9 +9,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'components/account_tab_header.dart';
 import 'domains/domains_tab.dart';
+import 'rules/rules_tab.dart';
 import 'usernames/usernames_tab.dart';
 
 class AccountTab extends StatelessWidget {
+  const AccountTab();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -19,7 +22,7 @@ class AccountTab extends StatelessWidget {
 
     return Scaffold(
       body: DefaultTabController(
-        length: 3,
+        length: 4,
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
@@ -39,8 +42,8 @@ class AccountTab extends StatelessWidget {
                           return Center(child: PlatformLoadingIndicator());
 
                         case AccountStatus.loaded:
-                          final account = accountState.accountModel;
-                          return AccountTabHeader(account: account!.account);
+                          final account = accountState.account;
+                          return AccountTabHeader(account: account!);
 
                         case AccountStatus.failed:
                           final error = accountState.errorMessage;
@@ -55,12 +58,14 @@ class AccountTab extends StatelessWidget {
                   ),
                 ),
                 bottom: TabBar(
+                  isScrollable: true,
                   indicatorColor: kAccentColor,
                   labelColor: isDark ? Colors.white : Colors.black,
                   tabs: [
                     Tab(child: Text('Recipients')),
                     Tab(child: Text('Usernames')),
                     Tab(child: Text('Domains')),
+                    Tab(child: Text('Rules')),
                   ],
                 ),
               ),
@@ -71,6 +76,7 @@ class AccountTab extends StatelessWidget {
               RecipientsTab(),
               UsernamesTab(),
               DomainsTab(),
+              RulesTab()
             ],
           ),
         ),

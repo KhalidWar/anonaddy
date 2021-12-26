@@ -11,30 +11,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientScreenStateNotifier = StateNotifierProvider.autoDispose<
     RecipientScreenNotifier, RecipientScreenState>((ref) {
-  final service = ref.read(recipientService);
-  final methods = ref.read(nicheMethods);
-  final recipientTabNotifier = ref.read(recipientTabStateNotifier.notifier);
   return RecipientScreenNotifier(
-    recipientService: service,
-    nicheMethod: methods,
-    recipientTabNotifier: recipientTabNotifier,
+    recipientService: ref.read(recipientService),
+    recipientTabNotifier: ref.read(recipientTabStateNotifier.notifier),
   );
 });
 
 class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   RecipientScreenNotifier({
     required this.recipientService,
-    required this.nicheMethod,
     required this.recipientTabNotifier,
-  }) : super(RecipientScreenState.initialState()) {
-    showToast = nicheMethod.showToast;
-  }
+  }) : super(RecipientScreenState.initialState());
 
   final RecipientService recipientService;
-  final NicheMethod nicheMethod;
   final RecipientTabNotifier recipientTabNotifier;
 
-  late final Function showToast;
+  final showToast = NicheMethod.showToast;
 
   Future<void> fetchRecipient(Recipient recipient) async {
     /// Initially set RecipientScreen to loading

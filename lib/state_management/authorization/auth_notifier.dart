@@ -3,6 +3,7 @@ import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,13 +16,11 @@ final authStateNotifier = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final bioService = ref.read(biometricAuthService);
   final tokenService = ref.read(accessTokenService);
   final searchHistory = ref.read(searchHistoryStateNotifier.notifier);
-  final showToast = ref.read(nicheMethods).showToast;
   return AuthNotifier(
     secureStorage: secureStorage,
     biometricService: bioService,
     tokenService: tokenService,
     searchHistory: searchHistory,
-    showToast: showToast,
   );
 });
 
@@ -31,12 +30,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required this.biometricService,
     required this.tokenService,
     required this.searchHistory,
-    required this.showToast,
-  }) : super(AuthState(
-          authStatus: AuthStatus.initial,
-          authLock: AuthLock.off,
-          loginLoading: false,
-        )) {
+  }) : super(AuthState.initialState()) {
     _initAuth();
   }
 
@@ -44,7 +38,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final BiometricAuthService biometricService;
   final AccessTokenService tokenService;
   final SearchHistoryNotifier searchHistory;
-  final Function showToast;
+
+  final showToast = NicheMethod.showToast;
 
   Future<void> login(String url, String token) async {
     state = state.copyWith(loginLoading: true);

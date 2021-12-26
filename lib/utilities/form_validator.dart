@@ -1,5 +1,5 @@
 class FormValidator {
-  String? accessTokenValidator(String input) {
+  static String? accessTokenValidator(String input) {
     if (input.isEmpty) {
       return 'Provide a valid Access Token';
     } else {
@@ -7,7 +7,7 @@ class FormValidator {
     }
   }
 
-  String? validatePGPKeyField(String input) {
+  static String? validatePGPKeyField(String input) {
     if (input.isEmpty) {
       return 'Provide a PGP Key';
     } else {
@@ -15,7 +15,7 @@ class FormValidator {
     }
   }
 
-  String? validateUsernameInput(String input) {
+  static String? validateUsernameInput(String input) {
     if (input.isEmpty) {
       return ' Username is required';
     } else {
@@ -23,7 +23,7 @@ class FormValidator {
     }
   }
 
-  String? validateEmailField(String input) {
+  static String? validateEmailField(String input) {
     final emailPattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)';
     final regExp = RegExp(emailPattern);
 
@@ -36,7 +36,7 @@ class FormValidator {
     }
   }
 
-  String? validateLocalPart(String input) {
+  static String? validateLocalPart(String input) {
     // todo fix pattern validation
     // final anonAddyPattern =
     //     r'(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))\$/)';
@@ -51,9 +51,17 @@ class FormValidator {
     }
   }
 
-  String? validateInstanceURL(String input) {
+  static String? validateInstanceURL(String input) {
     if (input.isEmpty) {
       return 'Provide a valid URL';
+    } else {
+      return null;
+    }
+  }
+
+  static String? validateSearchField(String input) {
+    if (input.length < 3) {
+      return 'Keyword must be 3 characters long';
     } else {
       return null;
     }

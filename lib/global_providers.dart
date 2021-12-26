@@ -6,19 +6,20 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
+import 'package:anonaddy/services/changelog_service/changelog_storage.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
+import 'package:anonaddy/services/rules/rules_service.dart';
+import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Class Providers
 final flutterSecureStorage = Provider((ref) => FlutterSecureStorage());
@@ -36,9 +37,14 @@ final accessTokenService = Provider<AccessTokenService>((ref) {
   return AccessTokenService(secureStorage);
 });
 
-final changelogService = Provider<ChangelogService>((ref) {
+final changelogStorage = Provider<ChangelogStorage>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
-  return ChangelogService(secureStorage);
+  return ChangelogStorage(secureStorage);
+});
+
+final changelogService = Provider<ChangelogService>((ref) {
+  final changelogStore = ref.read(changelogStorage);
+  return ChangelogService(changelogStore);
 });
 
 final usernameService = Provider<UsernameService>((ref) {
@@ -56,6 +62,11 @@ final aliasService = Provider<AliasService>((ref) {
   return AliasService(accessToken);
 });
 
+final searchService = Provider<SearchService>((ref) {
+  final accessToken = ref.read(accessTokenService);
+  return SearchService(accessToken);
+});
+
 final domainOptionsService = Provider<DomainOptionsService>((ref) {
   final accessToken = ref.read(accessTokenService);
   return DomainOptionsService(accessToken);
@@ -71,6 +82,11 @@ final domainService = Provider<DomainsService>((ref) {
   return DomainsService(accessToken);
 });
 
+final rulesService = Provider<RulesService>((ref) {
+  final accessToken = ref.read(accessTokenService);
+  return RulesService(accessToken);
+});
+
 final appVersionService = Provider<AppVersionService>((ref) {
   final accessToken = ref.read(accessTokenService);
   return AppVersionService(accessToken);
@@ -80,10 +96,6 @@ final failedDeliveriesService = Provider<FailedDeliveriesService>((ref) {
   final accessToken = ref.read(accessTokenService);
   return FailedDeliveriesService(accessToken);
 });
-
-final nicheMethods = Provider<NicheMethod>((ref) => NicheMethod());
-
-final formValidator = Provider<FormValidator>((ref) => FormValidator());
 
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);

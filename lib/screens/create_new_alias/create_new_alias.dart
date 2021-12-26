@@ -1,5 +1,4 @@
-import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/models/account/account_model.dart';
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -11,6 +10,8 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loadi
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -144,9 +145,8 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
                 title: 'Alias Format',
                 label: createAliasState.aliasFormat == null
                     ? kSelectAliasFormat
-                    : context
-                        .read(nicheMethods)
-                        .correctAliasString(createAliasState.aliasFormat!),
+                    : NicheMethod.correctAliasString(
+                        createAliasState.aliasFormat!),
                 isError: createAliasState.isAliasFormatError!,
                 onPress: () {
                   onPressNotifier.setAliasFormatError(false);
@@ -202,8 +202,7 @@ class _CreateNewAliasState extends State<CreateNewAlias> {
           key: _localPartFormKey,
           child: TextFormField(
             onChanged: (input) => onPressNotifier.setLocalPart(input),
-            validator: (input) =>
-                context.read(formValidator).validateLocalPart(input!),
+            validator: (input) => FormValidator.validateLocalPart(input!),
             textInputAction: TextInputAction.next,
             decoration: kTextFormFieldDecoration.copyWith(
               hintText: kLocalPartFieldHint,

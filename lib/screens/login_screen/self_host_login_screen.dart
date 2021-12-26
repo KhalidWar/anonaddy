@@ -1,10 +1,10 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 class SelfHostLoginScreen extends StatefulWidget {
   static const routeName = 'selfHostedScreen';
@@ -32,8 +32,6 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final validator = context.read(formValidator);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -69,7 +67,7 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                           key: _urlFormKey,
                           child: TextFormField(
                             validator: (input) =>
-                                validator.validateInstanceURL(input!),
+                                FormValidator.validateInstanceURL(input!),
                             onChanged: (input) => _url = input,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.multiline,
@@ -106,7 +104,7 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                           key: _tokenFormKey,
                           child: TextFormField(
                             validator: (input) =>
-                                validator.accessTokenValidator(input!),
+                                FormValidator.accessTokenValidator(input!),
                             onChanged: (input) => _token = input,
                             onFieldSubmitted: (input) => login(),
                             textInputAction: TextInputAction.done,
@@ -131,9 +129,8 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                   TextButton(
                     style: TextButton.styleFrom(),
                     child: Text('How to self-host AnonAddy?'),
-                    onPressed: () => context
-                        .read(nicheMethods)
-                        .launchURL(kAnonAddySelfHostingURL),
+                    onPressed: () =>
+                        NicheMethod.launchURL(kAnonAddySelfHostingURL),
                   ),
                   loginButton(context, isDark),
                 ],

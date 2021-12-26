@@ -1,104 +1,49 @@
+import 'dart:convert';
+
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/utilities/api_error_message.dart';
+import 'package:http/http.dart' as http;
 
-class SearchService extends SearchDelegate {
-  SearchService(this.searchAliasList);
-  List<Alias> searchAliasList;
+class SearchService {
+  SearchService(this.tokenService);
+  final AccessTokenService tokenService;
 
-  void _searchAliases(List<Alias> resultsList) {
-    searchAliasList.forEach((element) {
-      final filterByEmail =
-          element.email.toLowerCase().contains(query.toLowerCase());
+  /// Fetches matching aliases from API
+  Future<List<Alias>> fetchMatchingAliases(
+      String searchKeyword, bool includeDeleted) async {
+    final accessToken = await tokenService.getAccessToken();
+    final instanceURL = await tokenService.getInstanceURL();
 
-      if (element.description == null) {
-        if (filterByEmail) {
-          resultsList.add(element);
-        }
+    try {
+      /// https:/app.anonaddy.com/api/v1/aliases
+
+      final response = await http.get(
+        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL', {
+          'deleted': includeDeleted ? 'with' : null,
+          "filter[search]": searchKeyword,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "Accept": "application/json",
+          "Authorization": "Bearer $accessToken",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('_fetchMatchingAliases ${response.statusCode}');
+        final decodedData = jsonDecode(response.body)['data'];
+        return (decodedData as List).map((alias) {
+          return Alias.fromJson(alias);
+        }).toList();
       } else {
-        final filterByDescription =
-            element.description!.toLowerCase().contains(query.toLowerCase());
-
-        if (filterByEmail || filterByDescription) {
-          resultsList.add(element);
-        }
+        print('fetchMatchingAliases ${response.statusCode}');
+        throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
-    });
-  }
-
-  Widget _buildResult(List<Alias> resultsList) {
-    if (query.isEmpty)
-      return Container(
-        alignment: Alignment.topCenter,
-        margin: EdgeInsets.only(top: 20),
-        child: Text(kSearchAliasByEmailOrDesc),
-      );
-    else if (resultsList.isEmpty)
-      return LottieWidget(
-        lottie: 'assets/lottie/empty.json',
-        lottieHeight: 150,
-      );
-    else
-      return Scrollbar(
-        child: ListView.builder(
-          itemCount: resultsList.length,
-          itemBuilder: (context, index) {
-            final alias = resultsList[index];
-            return InkWell(
-              child: IgnorePointer(
-                child: AliasListTile(aliasData: alias),
-              ),
-              onTap: () {
-                context
-                    .read(searchHistoryStateNotifier.notifier)
-                    .addAliasToSearchHistory(alias);
-                Navigator.pushNamed(
-                  context,
-                  AliasScreen.routeName,
-                  arguments: alias,
-                );
-              },
-            );
-          },
-        ),
-      );
-  }
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      query.isEmpty
-          ? Container()
-          : IconButton(icon: Icon(Icons.clear), onPressed: () => query = ''),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () => close(context, null),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    final resultsList = <Alias>[];
-
-    _searchAliases(resultsList);
-    return _buildResult(resultsList);
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final resultsList = <Alias>[];
-
-    _searchAliases(resultsList);
-    return _buildResult(resultsList);
+    } catch (e) {
+      throw e;
+    }
   }
 }

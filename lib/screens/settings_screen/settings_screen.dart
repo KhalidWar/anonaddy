@@ -1,12 +1,12 @@
-import 'package:animations/animations.dart';
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/state_management/settings/settings_notifier.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,7 +20,6 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final nicheMethod = context.read(nicheMethods);
 
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
@@ -80,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 subtitle: Text('AnonAddy\'s terminologies...etc.'),
                 trailing: Icon(Icons.open_in_new_outlined),
-                onTap: () => nicheMethod.launchURL(kAnonAddyHelpCenterURL),
+                onTap: () => NicheMethod.launchURL(kAnonAddyHelpCenterURL),
               ),
               ListTile(
                 dense: true,
@@ -90,7 +89,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 subtitle: Text('Learn more about AnonAddy'),
                 trailing: Icon(Icons.open_in_new_outlined),
-                onTap: () => nicheMethod.launchURL(kAnonAddyFAQURL),
+                onTap: () => NicheMethod.launchURL(kAnonAddyFAQURL),
               ),
               Divider(height: 0),
               ListTile(
@@ -139,17 +138,16 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future buildLogoutDialog(BuildContext context) {
-    logout() {
-      Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
-    }
-
-    return showModal(
+  void buildLogoutDialog(BuildContext context) {
+    PlatformAware.platformDialog(
       context: context,
-      builder: (context) {
-        return PlatformAlertDialog(
-            content: kLogOutAlertDialog, method: logout, title: 'Logout');
-      },
+      child: PlatformAlertDialog(
+        title: 'Logout',
+        content: kLogOutAlertDialog,
+        method: () {
+          Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
+        },
+      ),
     );
   }
 }

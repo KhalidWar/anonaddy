@@ -1,47 +1,39 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:package_info/package_info.dart';
+import 'package:anonaddy/services/changelog_service/changelog_storage.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ChangelogService {
-  const ChangelogService(this.secureStorage);
-  final FlutterSecureStorage secureStorage;
+  const ChangelogService(this.changelogStorage);
 
-  final _changelogKey = 'changelogKey';
-  final _appVersionKey = 'appVersionKey';
+  final ChangelogStorage changelogStorage;
 
   Future<bool> isAppUpdated() async {
-    return await secureStorage.read(key: _changelogKey).then((value) {
-      if (value == 'true' || value == null) {
-        return true;
-      } else {
-        return false;
-      }
-    });
+    final data = await changelogStorage.getChangelogStatus();
+    final isUpdated = data == null || data == 'true';
+    return isUpdated;
   }
 
-  Future<void> dismissChangeLog() async {
-    await secureStorage.write(key: _changelogKey, value: false.toString());
+  Future<void> markChangelogRead() async {
+    await changelogStorage.markChangelogRead();
+  }
+
+  /// Compare current app version number to the old version number.
+  Future<void> checkIfAppUpdated() async {
+    final oldAppVersion = await changelogStorage.loadOldAppVersion();
+    final currentAppVersion = await _getCurrentAppVersion();
+
+    if (oldAppVersion != currentAppVersion) {
+      /// If numbers do NOT match, meaning app has been updated, delete
+      /// changelog value from the storage so that [ChangelogWidget] is displayed
+      await changelogStorage.deleteChangelogStatus();
+
+      /// Then save current AppVersion's number to acknowledge that the user
+      /// has opened app with this version before.
+      await changelogStorage.saveCurrentAppVersion(currentAppVersion);
+    }
   }
 
   Future<String> _getCurrentAppVersion() async {
     final appVersion = await PackageInfo.fromPlatform();
     return appVersion.version;
-  }
-
-  Future<String> _loadOldAppVersion() async {
-    return await secureStorage.read(key: _appVersionKey) ?? '';
-  }
-
-  Future<void> _saveCurrentAppVersion(String currentVersion) async {
-    await secureStorage.write(key: _appVersionKey, value: currentVersion);
-  }
-
-  Future<void> checkIfAppUpdated(BuildContext context) async {
-    final oldAppVersion = await _loadOldAppVersion();
-    final currentAppVersion = await _getCurrentAppVersion();
-    if (oldAppVersion != currentAppVersion) {
-      await secureStorage.delete(key: _changelogKey);
-      await _saveCurrentAppVersion(currentAppVersion);
-    }
   }
 }

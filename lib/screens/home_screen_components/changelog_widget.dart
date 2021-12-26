@@ -1,4 +1,5 @@
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
+import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,7 +58,9 @@ class ChangelogWidget extends StatelessWidget {
                 style: ElevatedButton.styleFrom(),
                 child: const Text('Continue to AddyManager'),
                 onPressed: () {
-                  context.read(changelogService).dismissChangeLog();
+                  context
+                      .read(changelogStateNotifier.notifier)
+                      .markChangelogRead();
                   Navigator.pop(context);
                 },
               ),
