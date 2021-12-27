@@ -37,6 +37,11 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   final OfflineData offlineData;
   final LifecycleStatus lifecycleStatus;
 
+  /// Updated UI to
+  void _updateState(AliasTabState newState) {
+    if (mounted) state = newState;
+  }
+
   Future<void> fetchAliases() async {
     try {
       /// Only fetch data when app is in foreground
@@ -56,24 +61,26 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
           }
         }
 
-        state = state.copyWith(
+        final newState = state.copyWith(
           status: AliasTabStatus.loaded,
           aliases: aliases,
           availableAliasList: availableAliasList,
           deletedAliasList: deletedAliasList,
         );
+        _updateState(newState);
+
         await Future.delayed(Duration(seconds: 1));
       }
     } on SocketException {
       _setOfflineState();
     } catch (error) {
-      if (mounted) {
-        state = state.copyWith(
-          status: AliasTabStatus.failed,
-          errorMessage: error.toString(),
-        );
-        await _retryOnError();
-      }
+      final newState = state.copyWith(
+        status: AliasTabStatus.failed,
+        errorMessage: error.toString(),
+      );
+      _updateState(newState);
+
+      await _retryOnError();
     }
   }
 
@@ -99,12 +106,13 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
           }
         }
 
-        state = state.copyWith(
+        final newState = state.copyWith(
           status: AliasTabStatus.loaded,
           aliases: savedAliases,
           availableAliasList: availableAliasList,
           deletedAliasList: deletedAliasList,
         );
+        _updateState(newState);
       }
     }
   }
@@ -136,12 +144,14 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   void addAlias(Alias alias) {
     /// Put new alias in the first spot
     state.aliases!.insert(0, alias);
-    state = state.copyWith(aliases: state.aliases);
+    final newState = state.copyWith(aliases: state.aliases);
+    _updateState(newState);
   }
 
   void deleteAlias(String aliasId) {
     /// Remove alias from aliases list
     state.aliases!.removeWhere((alias) => alias.id == aliasId);
-    state = state.copyWith(aliases: state.aliases);
+    final newState = state.copyWith(aliases: state.aliases);
+    _updateState(newState);
   }
 }
