@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/home_screen_components/alert_center/alert_center_screen.dart';
+import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';

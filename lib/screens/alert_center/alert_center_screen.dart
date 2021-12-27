@@ -1,7 +1,8 @@
-import 'package:anonaddy/screens/home_screen_components/alert_center/failed_deliveries_widget.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
+
+import 'failed_deliveries_widget.dart';
 
 class AlertCenterScreen extends StatefulWidget {
   const AlertCenterScreen({Key? key}) : super(key: key);

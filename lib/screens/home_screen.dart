@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_tab/account_tab.dart';
+import 'alert_center/alert_center_screen.dart';
 import 'alias_tab/alias_tab.dart';
-import 'home_screen_components/alert_center/alert_center_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = 'homeScreen';
