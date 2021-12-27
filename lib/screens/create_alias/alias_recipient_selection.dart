@@ -1,10 +1,10 @@
-import 'package:anonaddy/screens/create_new_alias/components/recipients_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'components/recipients_note.dart';
+import 'components/recipients_tile.dart';
 
 class AliasRecipientSelection extends StatelessWidget {
   const AliasRecipientSelection();

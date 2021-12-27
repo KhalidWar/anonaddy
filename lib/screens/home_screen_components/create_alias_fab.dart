@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/create_new_alias/create_alias.dart';
+import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';

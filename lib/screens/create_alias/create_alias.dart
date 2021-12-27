@@ -1,4 +1,3 @@
-import 'package:anonaddy/screens/create_new_alias/components/recipients_dropdown.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -16,6 +15,7 @@ import 'alias_format_selection.dart';
 import 'alias_recipient_selection.dart';
 import 'components/domain_format_dropdown.dart';
 import 'components/local_part_input.dart';
+import 'components/recipients_dropdown.dart';
 
 class CreateAlias extends StatelessWidget {
   const CreateAlias({Key? key}) : super(key: key);
