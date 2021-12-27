@@ -11,7 +11,7 @@ import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/screens/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
-import 'package:anonaddy/screens/navigation_errror/navigation_error_screen.dart';
+import 'package:anonaddy/screens/navigation_error/navigation_error_screen.dart';
 import 'package:anonaddy/screens/settings_screen/about_app_screen.dart';
 import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
