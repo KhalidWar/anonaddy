@@ -1,18 +1,16 @@
+import 'package:anonaddy/screens/home_screen_components/create_alias_fab.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_tab/account_tab.dart';
 import 'alias_tab/alias_tab.dart';
-import 'create_new_alias/create_new_alias.dart';
 import 'home_screen_components/alert_center/alert_center_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,6 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     /// Show [ChangelogWidget] in [HomeScreen] if app has updated
     context.read(changelogStateNotifier.notifier).showChangelogWidget(context);
+
+    /// Pre-loads [DomainOptions] data for [CreateAlias]
+    context.read(domainOptionsStateNotifier.notifier).fetchDomainOption();
   }
 
   @override
@@ -45,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: buildAppBar(context),
-      floatingActionButton: buildFab(context),
+      floatingActionButton: const CreateAliasFAB(),
       body: IndexedStack(
         index: _selectedIndex,
         children: const [
@@ -95,55 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ],
-    );
-  }
-
-  Widget buildFab(BuildContext context) {
-    return Consumer(
-      builder: (context, watch, child) {
-        final showFab = watch(fabVisibilityStateNotifier);
-        final singleTween = Tween(begin: 0.0, end: 1.0);
-
-        return AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
-          transitionBuilder: (child, animation) {
-            return ScaleTransition(
-              scale: singleTween.animate(animation),
-              child: showFab ? child : Container(),
-            );
-          },
-          child: FloatingActionButton(
-            child: const Icon(Icons.add),
-            onPressed: () {
-              final accountState = context.read(accountStateNotifier);
-
-              switch (accountState.status) {
-                case AccountStatus.loading:
-                  NicheMethod.showToast(kLoadingText);
-                  break;
-
-                case AccountStatus.loaded:
-                  final account = accountState.account!;
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(kBottomSheetBorderRadius),
-                      ),
-                    ),
-                    builder: (context) => CreateNewAlias(account: account),
-                  );
-                  break;
-
-                case AccountStatus.failed:
-                  NicheMethod.showToast(kLoadAccountDataFailed);
-                  break;
-              }
-            },
-          ),
-        );
-      },
     );
   }
 }

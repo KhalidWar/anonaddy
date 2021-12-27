@@ -72,8 +72,12 @@ class AliasService {
     }
   }
 
-  Future<Alias> createNewAlias(String desc, String domain, String format,
-      String localPart, List<String> recipients) async {
+  Future<Alias> createNewAlias(
+      {required String desc,
+      localPart,
+      domain,
+      format,
+      required List<String> recipients}) async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
