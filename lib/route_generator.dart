@@ -8,7 +8,7 @@ import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
-import 'package:anonaddy/screens/home_screen.dart';
+import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/screens/navigation_error/navigation_error_screen.dart';

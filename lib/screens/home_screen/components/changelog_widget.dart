@@ -3,7 +3,7 @@ import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
+import '../../../global_providers.dart';
 
 class ChangelogWidget extends StatelessWidget {
   const ChangelogWidget({Key? key}) : super(key: key);

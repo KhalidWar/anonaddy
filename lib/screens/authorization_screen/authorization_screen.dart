@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/home_screen.dart';
+import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/state_management/authorization/auth_state.dart';

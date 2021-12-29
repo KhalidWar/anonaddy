@@ -1,4 +1,3 @@
-import 'package:anonaddy/screens/home_screen_components/create_alias_fab.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
@@ -9,9 +8,10 @@ import 'package:anonaddy/state_management/domain_options/domain_options_notifier
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'account_tab/account_tab.dart';
-import 'alert_center/alert_center_screen.dart';
-import 'alias_tab/alias_tab.dart';
+import '../account_tab/account_tab.dart';
+import '../alert_center/alert_center_screen.dart';
+import '../alias_tab/alias_tab.dart';
+import 'components/create_alias_fab.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = 'homeScreen';
