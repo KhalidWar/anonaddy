@@ -37,7 +37,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   final OfflineData offlineData;
   final LifecycleStatus lifecycleStatus;
 
-  /// Updated UI to
+  /// Updates UI to the newest state
   void _updateState(AliasTabState newState) {
     if (mounted) state = newState;
   }
@@ -49,23 +49,11 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         final aliases = await aliasService.getAllAliasesData();
         await _saveOfflineData(aliases);
 
-        final availableAliasList = <Alias>[];
-        final deletedAliasList = <Alias>[];
-
-        /// Divide Aliases into available and deleted aliases.
-        for (Alias alias in aliases) {
-          if (alias.deletedAt == null) {
-            availableAliasList.add(alias);
-          } else {
-            deletedAliasList.add(alias);
-          }
-        }
-
         final newState = state.copyWith(
           status: AliasTabStatus.loaded,
           aliases: aliases,
-          availableAliasList: availableAliasList,
-          deletedAliasList: deletedAliasList,
+          availableAliasList: _getAvailableAliases(aliases),
+          deletedAliasList: _getDeletedAliases(aliases),
         );
         _updateState(newState);
 
@@ -91,26 +79,18 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     }
   }
 
+  /// Fetches aliases from disk and displays them, used at initial app
+  /// startup since fetching from disk is a lot faster than fetching from API.
+  /// It's also used to when there's no internet connection.
   Future<void> _setOfflineState() async {
     if (state.status != AliasTabStatus.failed) {
       final savedAliases = await _loadOfflineData();
       if (savedAliases.isNotEmpty) {
-        final availableAliasList = <Alias>[];
-        final deletedAliasList = <Alias>[];
-
-        for (Alias alias in savedAliases) {
-          if (alias.deletedAt == null) {
-            availableAliasList.add(alias);
-          } else {
-            deletedAliasList.add(alias);
-          }
-        }
-
         final newState = state.copyWith(
           status: AliasTabStatus.loaded,
           aliases: savedAliases,
-          availableAliasList: availableAliasList,
-          deletedAliasList: deletedAliasList,
+          availableAliasList: _getAvailableAliases(savedAliases),
+          deletedAliasList: _getDeletedAliases(savedAliases),
         );
         _updateState(newState);
       }
@@ -141,17 +121,62 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     if (mounted) return state.aliases;
   }
 
-  void addAlias(Alias alias) {
-    /// Put new alias in the first spot
+  /// Adds specific alias to aliases, mainly used to add newly
+  /// created alias to list of available aliases without making an API
+  /// request and forcing the user to wait before interacting with the new alias.
+  void addAlias(Alias alias) async {
+    /// Injects [alias] into the first slot in the list
     state.aliases!.insert(0, alias);
-    final newState = state.copyWith(aliases: state.aliases);
+
+    /// Saves current list of aliases into disk
+    _saveOfflineData(state.aliases!);
+
+    final newState = state.copyWith(
+      aliases: state.aliases!,
+      availableAliasList: _getAvailableAliases(state.aliases!),
+      deletedAliasList: _getDeletedAliases(state.aliases!),
+    );
     _updateState(newState);
   }
 
+  /// Moves deleted alias from available to deleted aliases
   void deleteAlias(String aliasId) {
-    /// Remove alias from aliases list
-    state.aliases!.removeWhere((alias) => alias.id == aliasId);
-    final newState = state.copyWith(aliases: state.aliases);
+    /// Emulates deleting alias by setting its [deletedAt] to now.
+    /// Then add it to aliases so it can show up in deletedAliases.
+    final alias = state.aliases!.firstWhere((alias) => alias.id == aliasId);
+    alias.deletedAt = DateTime.now();
+    state.aliases!.insert(0, alias);
+
+    /// Saves current list of aliases into disk
+    _saveOfflineData(state.aliases!);
+
+    final newState = state.copyWith(
+      aliases: state.aliases,
+      availableAliasList: _getAvailableAliases(state.aliases!),
+      deletedAliasList: _getDeletedAliases(state.aliases!),
+    );
     _updateState(newState);
+  }
+
+  /// Sorts through aliases and returns available aliases
+  List<Alias> _getAvailableAliases(List<Alias> aliases) {
+    final availableAliasList = <Alias>[];
+    for (Alias alias in aliases) {
+      if (alias.deletedAt == null) {
+        availableAliasList.add(alias);
+      }
+    }
+    return availableAliasList;
+  }
+
+  /// Sorts through aliases and returns deleted aliases
+  List<Alias> _getDeletedAliases(List<Alias> aliases) {
+    final deletedAliasList = <Alias>[];
+    for (Alias alias in aliases) {
+      if (alias.deletedAt != null) {
+        deletedAliasList.add(alias);
+      }
+    }
+    return deletedAliasList;
   }
 }

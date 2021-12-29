@@ -110,7 +110,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
         NicheMethod.showToast(kCreateAliasSuccess);
       }
 
-      // aliasTabNotifier.addAlias(createdAlias);
+      aliasTabNotifier.addAlias(createdAlias);
     } catch (error) {
       NicheMethod.showToast(error.toString());
     }
