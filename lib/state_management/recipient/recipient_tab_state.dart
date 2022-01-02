@@ -12,4 +12,21 @@ class RecipientTabState {
   final RecipientTabStatus status;
   final List<Recipient>? recipients;
   final String? errorMessage;
+
+  RecipientTabState copyWith({
+    RecipientTabStatus? status,
+    List<Recipient>? recipients,
+    String? errorMessage,
+  }) {
+    return RecipientTabState(
+      status: status ?? this.status,
+      recipients: recipients ?? this.recipients,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'RecipientTabState{status: $status, recipients: $recipients, errorMessage: $errorMessage}';
+  }
 }
