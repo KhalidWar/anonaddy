@@ -10,8 +10,7 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientTabStateNotifier =
-    StateNotifierProvider.autoDispose<RecipientTabNotifier, RecipientTabState>(
-        (ref) {
+    StateNotifierProvider<RecipientTabNotifier, RecipientTabState>((ref) {
   return RecipientTabNotifier(
     recipientService: ref.read(recipientService),
     offlineData: ref.read(offlineDataProvider),
