@@ -456,7 +456,10 @@ class _AliasScreenState extends State<AliasScreen> {
           PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
         ),
         color: Colors.white,
-        onPressed: () => Navigator.pop(context),
+        onPressed: () {
+          context.read(aliasTabStateNotifier.notifier).refreshAliases();
+          Navigator.pop(context);
+        },
       ),
       actions: [
         PopupMenuButton(
