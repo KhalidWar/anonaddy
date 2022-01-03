@@ -12,7 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'about_app_screen.dart';
 import 'components/app_version.dart';
-import 'components/rate_addymanager.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = 'settingsScreen';
@@ -29,8 +28,7 @@ class SettingsScreen extends StatelessWidget {
           final settingsNotifier = context.read(settingsStateNotifier.notifier);
           final biometric = watch(biometricNotifier);
 
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          return ListView(
             children: [
               ListTile(
                 dense: true,
@@ -92,6 +90,7 @@ class SettingsScreen extends StatelessWidget {
                 onTap: () => NicheMethod.launchURL(kAnonAddyFAQURL),
               ),
               Divider(height: 0),
+              AppVersion(),
               ListTile(
                 dense: true,
                 title: Text(
@@ -104,33 +103,41 @@ class SettingsScreen extends StatelessWidget {
                   Navigator.pushNamed(context, AboutAppScreen.routeName);
                 },
               ),
-              // ListTile(
-              //   title: Text(
-              //     'Logout',
-              //     textAlign: TextAlign.center,
-              //   ),
-              //   tileColor: Colors.red,
-              //   onTap: () {
-              //     Navigator.push(context, CustomPageRoute(AboutAppScreen()));
-              //   },
-              // ),
-              const Spacer(),
-              const AppVersion(),
-              const RateAddyManager(),
+              ListTile(
+                dense: true,
+                title: Text(
+                  'Enjoying AddyManager?',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: Text('Tap to rate it on the App Store'),
+                trailing: Icon(Icons.help_outline),
+                onTap: () {
+                  NicheMethod.launchURL(
+                    PlatformAware.isIOS()
+                        ? kAddyManagerAppStoreURL
+                        : kAddyManagerPlayStoreURL,
+                  );
+                },
+              ),
+              Divider(height: 0),
+              SizedBox(height: size.height * 0.01),
               Container(
-                width: size.width,
-                height: size.height * 0.05,
-                margin: EdgeInsets.all(10),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    primary: Colors.red,
+                margin: EdgeInsets.symmetric(horizontal: 6),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  dense: true,
+                  title: Text(
+                    'Logout',
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  child: Text('Logout'),
-                  onPressed: () => buildLogoutDialog(context),
+                  subtitle: Text('All app data will be deleted'),
+                  trailing: Icon(Icons.logout),
+                  onTap: () => buildLogoutDialog(context),
                 ),
               ),
-              SizedBox(height: size.height * 0.01),
             ],
           );
         },
