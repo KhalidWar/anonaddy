@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../global_providers.dart';
@@ -16,7 +16,6 @@ final aliasTabStateNotifier =
   return AliasTabNotifier(
     aliasService: ref.read(aliasService),
     offlineData: ref.read(offlineDataProvider),
-    lifecycleStatus: ref.watch(lifecycleStateNotifier),
   );
 });
 
@@ -24,7 +23,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   AliasTabNotifier({
     required this.aliasService,
     required this.offlineData,
-    required this.lifecycleStatus,
   }) : super(AliasTabState.initialState()) {
     /// Initially, get data from disk (secure device storage) and assign it
     _setOfflineState();
@@ -35,7 +33,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
   final AliasService aliasService;
   final OfflineData offlineData;
-  final LifecycleStatus lifecycleStatus;
 
   /// Updates UI to the newest state
   void _updateState(AliasTabState newState) {
@@ -43,22 +40,20 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   }
 
   Future<void> fetchAliases() async {
+    final newState = state.copyWith(status: AliasTabStatus.loading);
+    _updateState(newState);
+
     try {
-      /// Only fetch data when app is in foreground
-      while (lifecycleStatus == LifecycleStatus.foreground) {
-        final aliases = await aliasService.getAllAliasesData();
-        await _saveOfflineData(aliases);
+      final aliases = await aliasService.getAllAliasesData();
+      await _saveOfflineData(aliases);
 
-        final newState = state.copyWith(
-          status: AliasTabStatus.loaded,
-          aliases: aliases,
-          availableAliasList: _getAvailableAliases(aliases),
-          deletedAliasList: _getDeletedAliases(aliases),
-        );
-        _updateState(newState);
-
-        await Future.delayed(Duration(seconds: 1));
-      }
+      final newState = state.copyWith(
+        status: AliasTabStatus.loaded,
+        aliases: aliases,
+        availableAliasList: _getAvailableAliases(aliases),
+        deletedAliasList: _getDeletedAliases(aliases),
+      );
+      _updateState(newState);
     } on SocketException {
       _setOfflineState();
     } catch (error) {
@@ -69,6 +64,24 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       _updateState(newState);
 
       await _retryOnError();
+    }
+  }
+
+  /// Silently fetches the latest aliases data and displays them
+  Future<void> refreshAliases() async {
+    try {
+      final aliases = await aliasService.getAllAliasesData();
+      await _saveOfflineData(aliases);
+
+      final newState = state.copyWith(
+        status: AliasTabStatus.loaded,
+        aliases: aliases,
+        availableAliasList: _getAvailableAliases(aliases),
+        deletedAliasList: _getDeletedAliases(aliases),
+      );
+      _updateState(newState);
+    } catch (error) {
+      NicheMethod.showToast(error.toString());
     }
   }
 

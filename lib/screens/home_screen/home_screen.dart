@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
@@ -33,6 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index == 0) {
       context.read(accountStateNotifier.notifier).refreshAccount();
       context.read(recipientTabStateNotifier.notifier).refreshRecipients();
+    }
+
+    if (index == 1) {
+      context.read(aliasTabStateNotifier.notifier).refreshAliases();
     }
   }
 

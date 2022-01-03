@@ -71,36 +71,48 @@ class AliasTab extends StatelessWidget {
                   return TabBarView(
                     children: [
                       /// Available aliases list
-                      if (availableAliasList.isEmpty)
-                        const EmptyListAliasTabWidget()
-                      else
-                        PlatformScrollbar(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: availableAliasList.length,
-                            itemBuilder: (context, index) {
-                              return AliasListTile(
-                                aliasData: availableAliasList[index],
-                              );
-                            },
-                          ),
-                        ),
+                      RefreshIndicator(
+                        color: kAccentColor,
+                        displacement: 20,
+                        onRefresh: () async {
+                          await context
+                              .read(aliasTabStateNotifier.notifier)
+                              .refreshAliases();
+                        },
+                        child: availableAliasList.isEmpty
+                            ? const EmptyListAliasTabWidget()
+                            : PlatformScrollbar(
+                                child: ListView.builder(
+                                  itemCount: availableAliasList.length,
+                                  itemBuilder: (context, index) {
+                                    return AliasListTile(
+                                      aliasData: availableAliasList[index],
+                                    );
+                                  },
+                                ),
+                              ),
+                      ),
 
                       /// Deleted aliases list
-                      if (deletedAliasList.isEmpty)
-                        const EmptyListAliasTabWidget()
-                      else
-                        PlatformScrollbar(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: deletedAliasList.length,
-                            itemBuilder: (context, index) {
-                              return AliasListTile(
-                                aliasData: deletedAliasList[index],
-                              );
-                            },
-                          ),
-                        ),
+                      RefreshIndicator(
+                        onRefresh: () async {
+                          await context
+                              .read(aliasTabStateNotifier.notifier)
+                              .refreshAliases();
+                        },
+                        child: deletedAliasList.isEmpty
+                            ? const EmptyListAliasTabWidget()
+                            : PlatformScrollbar(
+                                child: ListView.builder(
+                                  itemCount: deletedAliasList.length,
+                                  itemBuilder: (context, index) {
+                                    return AliasListTile(
+                                      aliasData: deletedAliasList[index],
+                                    );
+                                  },
+                                ),
+                              ),
+                      ),
                     ],
                   );
 
