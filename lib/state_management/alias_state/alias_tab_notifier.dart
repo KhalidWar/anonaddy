@@ -44,8 +44,11 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     _updateState(newState);
 
     try {
-      final aliases = await aliasService.getAllAliasesData();
+      final aliases = await aliasService.getAllAliasesData('with');
       await _saveOfflineData(aliases);
+
+      /// Fetches more aliases if there's not enough
+      await fetchMoreAliases(aliases);
 
       final newState = state.copyWith(
         status: AliasTabStatus.loaded,
@@ -70,8 +73,11 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Silently fetches the latest aliases data and displays them
   Future<void> refreshAliases() async {
     try {
-      final aliases = await aliasService.getAllAliasesData();
+      final aliases = await aliasService.getAllAliasesData('with');
       await _saveOfflineData(aliases);
+
+      /// Fetches more aliases if there's not enough
+      await fetchMoreAliases(aliases);
 
       final newState = state.copyWith(
         status: AliasTabStatus.loaded,
@@ -89,6 +95,21 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     if (state.status == AliasTabStatus.failed) {
       await Future.delayed(Duration(seconds: 5));
       await fetchAliases();
+    }
+  }
+
+  /// Fetches more available aliases if there's less than 20
+  Future<void> fetchMoreAliases(List<Alias> aliases) async {
+    /// Fetches 100 additional available aliases if there are less than 20
+    if (_getAvailableAliases(aliases).length < 20) {
+      final moreAliases = await aliasService.getAllAliasesData(null);
+      aliases.addAll(moreAliases);
+    }
+
+    /// Fetches 100 additional deleted aliases if there are less than 10
+    if (_getDeletedAliases(aliases).length < 10) {
+      final moreAliases = await aliasService.getAllAliasesData('only');
+      aliases.addAll(moreAliases);
     }
   }
 

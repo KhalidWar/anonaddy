@@ -12,14 +12,14 @@ class AliasService {
   const AliasService(this.accessTokenService);
   final AccessTokenService accessTokenService;
 
-  Future<List<Alias>> getAllAliasesData() async {
+  Future<List<Alias>> getAllAliasesData(String? deleted) async {
     final accessToken = await accessTokenService.getAccessToken();
     final instanceURL = await accessTokenService.getInstanceURL();
 
     try {
       final response = await http.get(
         Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL',
-            {'deleted': 'with'}),
+            {'deleted': deleted}),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
