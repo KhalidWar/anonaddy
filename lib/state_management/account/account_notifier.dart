@@ -6,6 +6,7 @@ import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'account_state.dart';
@@ -69,6 +70,24 @@ class AccountNotifier extends StateNotifier<AccountState> {
 
       /// Retry after facing an error
       await _retryOnError();
+    }
+  }
+
+  /// Silently fetches the latest account data and displays them
+  Future<void> refreshAccount() async {
+    try {
+      /// Only trigger fetch API when app is Foreground to avoid API spamming
+      final account = await accountService.getAccountData();
+      await _saveOfflineData(account);
+
+      /// Construct new state
+      final newState =
+          AccountState(status: AccountStatus.loaded, account: account);
+
+      /// Update UI with the latest state
+      _updateState(newState);
+    } catch (error) {
+      NicheMethod.showToast(error.toString());
     }
   }
 

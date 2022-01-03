@@ -2,9 +2,11 @@ import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
+import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,11 +25,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 1;
 
-  void switchIndex(int index) {
+  void _switchIndex(int index) {
     context.read(fabVisibilityStateNotifier.notifier).showFab();
     setState(() {
       _selectedIndex = index;
     });
+    if (index == 0) {
+      context.read(accountStateNotifier.notifier).refreshAccount();
+      context.read(recipientTabStateNotifier.notifier).refreshRecipients();
+    }
   }
 
   @override
@@ -56,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        onTap: (index) => switchIndex(index),
+        onTap: _switchIndex,
         currentIndex: _selectedIndex,
         selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
         items: [
