@@ -99,7 +99,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       showToast(kDeleteAliasSuccess);
       final oldAlias = state.alias!;
       oldAlias.deletedAt = null;
-      aliasTabNotifier.deleteAlias(aliasId);
+      aliasTabNotifier.refreshAliases();
       state = state.copyWith(deleteAliasLoading: false, alias: oldAlias);
     } catch (error) {
       showToast(error.toString());
@@ -112,7 +112,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       final newAlias = await aliasService.restoreAlias(aliasId);
       showToast(kRestoreAliasSuccess);
-      aliasTabNotifier.addAlias(newAlias);
+      aliasTabNotifier.refreshAliases();
       state = state.copyWith(deleteAliasLoading: false, alias: newAlias);
     } catch (error) {
       showToast(error.toString());

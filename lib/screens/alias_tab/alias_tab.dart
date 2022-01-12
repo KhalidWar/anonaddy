@@ -8,6 +8,7 @@ import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'components/alias_animated_list.dart';
 import 'components/alias_shimmer_loading.dart';
 import 'components/alias_tab_pie_chart.dart';
 import 'components/empty_list_alias_tab.dart';
@@ -71,36 +72,49 @@ class AliasTab extends StatelessWidget {
                   return TabBarView(
                     children: [
                       /// Available aliases list
-                      if (availableAliasList.isEmpty)
-                        const EmptyListAliasTabWidget()
-                      else
-                        PlatformScrollbar(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: availableAliasList.length,
-                            itemBuilder: (context, index) {
-                              return AliasListTile(
-                                aliasData: availableAliasList[index],
-                              );
-                            },
-                          ),
-                        ),
+                      RefreshIndicator(
+                        color: kAccentColor,
+                        displacement: 20,
+                        onRefresh: () async {
+                          await context
+                              .read(aliasTabStateNotifier.notifier)
+                              .refreshAliases();
+                        },
+                        child: availableAliasList.isEmpty
+                            ? const EmptyListAliasTabWidget()
+                            : PlatformScrollbar(
+                                child: AliasAnimatedList(
+                                  listKey: aliasTabState.availableListKey,
+                                  itemCount: availableAliasList.length,
+                                  itemBuilder: (context, index) {
+                                    return AliasListTile(
+                                      aliasData: availableAliasList[index],
+                                    );
+                                  },
+                                ),
+                              ),
+                      ),
 
                       /// Deleted aliases list
-                      if (deletedAliasList.isEmpty)
-                        const EmptyListAliasTabWidget()
-                      else
-                        PlatformScrollbar(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: deletedAliasList.length,
-                            itemBuilder: (context, index) {
-                              return AliasListTile(
-                                aliasData: deletedAliasList[index],
-                              );
-                            },
-                          ),
-                        ),
+                      RefreshIndicator(
+                        onRefresh: () async {
+                          await context
+                              .read(aliasTabStateNotifier.notifier)
+                              .refreshAliases();
+                        },
+                        child: deletedAliasList.isEmpty
+                            ? const EmptyListAliasTabWidget()
+                            : PlatformScrollbar(
+                                child: ListView.builder(
+                                  itemCount: deletedAliasList.length,
+                                  itemBuilder: (context, index) {
+                                    return AliasListTile(
+                                      aliasData: deletedAliasList[index],
+                                    );
+                                  },
+                                ),
+                              ),
+                      ),
                     ],
                   );
 

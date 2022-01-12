@@ -17,6 +17,7 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switc
 import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,28 +43,35 @@ class _AliasScreenState extends State<AliasScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context),
-      body: Consumer(
-        builder: (context, watch, _) {
-          final aliasState = watch(aliasScreenStateNotifier);
+    return WillPopScope(
+      /// Refreshes AliasesTab data when navigating back from this screen
+      onWillPop: () async {
+        context.read(aliasTabStateNotifier.notifier).refreshAliases();
+        return true;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: buildAppBar(context),
+        body: Consumer(
+          builder: (context, watch, _) {
+            final aliasState = watch(aliasScreenStateNotifier);
 
-          switch (aliasState.status!) {
-            case AliasScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+            switch (aliasState.status!) {
+              case AliasScreenStatus.loading:
+                return Center(child: PlatformLoadingIndicator());
 
-            case AliasScreenStatus.loaded:
-              return buildListView(context, aliasState);
+              case AliasScreenStatus.loaded:
+                return buildListView(context, aliasState);
 
-            case AliasScreenStatus.failed:
-              final error = aliasState.errorMessage;
-              return LottieWidget(
-                lottie: 'assets/lottie/errorCone.json',
-                label: error,
-              );
-          }
-        },
+              case AliasScreenStatus.failed:
+                final error = aliasState.errorMessage;
+                return LottieWidget(
+                  lottie: 'assets/lottie/errorCone.json',
+                  label: error,
+                );
+            }
+          },
+        ),
       ),
     );
   }
@@ -448,7 +456,10 @@ class _AliasScreenState extends State<AliasScreen> {
           PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
         ),
         color: Colors.white,
-        onPressed: () => Navigator.pop(context),
+        onPressed: () {
+          context.read(aliasTabStateNotifier.notifier).refreshAliases();
+          Navigator.pop(context);
+        },
       ),
       actions: [
         PopupMenuButton(

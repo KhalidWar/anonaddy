@@ -3,7 +3,7 @@ import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../global_providers.dart';
+import '../../../global_providers.dart';
 
 class ChangelogWidget extends StatelessWidget {
   const ChangelogWidget({Key? key}) : super(key: key);
@@ -105,14 +105,19 @@ class ChangelogWidget extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
             header('Fixed', Colors.blue),
-            label('1. Fixed loading offline data error.'),
+            label('1. Fixed some bugs related to create alias.'),
+            label(
+                '2. Fixed some more bugs regarding updating alias recipient.'),
             SizedBox(height: size.height * 0.008),
             header('Added', Colors.green),
-            label('1. Added more native UI components.'),
+            label('1. Added pull to refresh to aliases.'),
             SizedBox(height: size.height * 0.008),
-            header('Improved', Colors.orange),
-            label(
-                '1. Unified UpdateDescription widget across alias, usernames, and domains.'),
+            header('Improvements', Colors.orange),
+            label('1. Newly created aliases show up instantly.'),
+            label('2. Deleted and restored aliases reflect immediately.'),
+            label('3. Improved Create alias process.'),
+            label('4. Improved updating alias default recipient.'),
+            label('5. Several minor UI improvements.'),
             SizedBox(height: size.height * 0.008),
           ],
         ),
