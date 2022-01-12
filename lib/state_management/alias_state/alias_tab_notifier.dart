@@ -107,7 +107,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     }
 
     /// Fetches 100 additional deleted aliases if there are less than 10
-    if (_getDeletedAliases(aliases).length < 10) {
+    if (_getDeletedAliases(aliases).length < 20) {
       final moreAliases = await aliasService.getAllAliasesData('only');
       aliases.addAll(moreAliases);
     }
