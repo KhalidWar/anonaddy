@@ -171,6 +171,9 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       deletedAliasList: _getDeletedAliases(state.aliases!),
     );
     _updateState(newState);
+
+    state.availableListKey.currentState!
+        .insertItem(0, duration: const Duration(milliseconds: 300));
   }
 
   /// Moves deleted alias from available to deleted aliases

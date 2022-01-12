@@ -8,6 +8,7 @@ import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'components/alias_animated_list.dart';
 import 'components/alias_shimmer_loading.dart';
 import 'components/alias_tab_pie_chart.dart';
 import 'components/empty_list_alias_tab.dart';
@@ -82,7 +83,8 @@ class AliasTab extends StatelessWidget {
                         child: availableAliasList.isEmpty
                             ? const EmptyListAliasTabWidget()
                             : PlatformScrollbar(
-                                child: ListView.builder(
+                                child: AliasAnimatedList(
+                                  listKey: aliasTabState.availableListKey,
                                   itemCount: availableAliasList.length,
                                   itemBuilder: (context, index) {
                                     return AliasListTile(

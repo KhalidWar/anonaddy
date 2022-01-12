@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:flutter/material.dart';
 
 enum AliasTabStatus { loading, loaded, failed }
 
@@ -9,6 +10,7 @@ class AliasTabState {
     this.errorMessage,
     required this.availableAliasList,
     required this.deletedAliasList,
+    required this.availableListKey,
   });
 
   final AliasTabStatus status;
@@ -16,6 +18,7 @@ class AliasTabState {
   final String? errorMessage;
 
   final List<Alias> availableAliasList;
+  final GlobalKey<AnimatedListState> availableListKey;
   final List<Alias> deletedAliasList;
 
   static AliasTabState initialState() {
@@ -23,6 +26,7 @@ class AliasTabState {
       status: AliasTabStatus.loading,
       aliases: [],
       availableAliasList: [],
+      availableListKey: GlobalKey<AnimatedListState>(),
       deletedAliasList: [],
     );
   }
@@ -32,6 +36,7 @@ class AliasTabState {
     List<Alias>? aliases,
     String? errorMessage,
     List<Alias>? availableAliasList,
+    GlobalKey<AnimatedListState>? availableListKey,
     List<Alias>? deletedAliasList,
   }) {
     return AliasTabState(
@@ -39,12 +44,13 @@ class AliasTabState {
       aliases: aliases ?? this.aliases,
       errorMessage: errorMessage ?? this.errorMessage,
       availableAliasList: availableAliasList ?? this.availableAliasList,
+      availableListKey: availableListKey ?? this.availableListKey,
       deletedAliasList: deletedAliasList ?? this.deletedAliasList,
     );
   }
 
   @override
   String toString() {
-    return 'AliasTabState{status: $status, aliases: $aliases, errorMessage: $errorMessage, availableAliasList: $availableAliasList, deletedAliasList: $deletedAliasList}';
+    return 'AliasTabState{status: $status, aliases: $aliases, errorMessage: $errorMessage, availableAliasList: $availableAliasList, availableListKey: $availableListKey, deletedAliasList: $deletedAliasList}';
   }
 }
