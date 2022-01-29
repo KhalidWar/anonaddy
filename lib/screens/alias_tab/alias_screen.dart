@@ -38,40 +38,35 @@ class _AliasScreenState extends State<AliasScreen> {
   @override
   void initState() {
     super.initState();
+
+    /// Fetches latest data for this specific alias
     context.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      /// Refreshes AliasesTab data when navigating back from this screen
-      onWillPop: () async {
-        context.read(aliasTabStateNotifier.notifier).refreshAliases();
-        return true;
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: buildAppBar(context),
-        body: Consumer(
-          builder: (context, watch, _) {
-            final aliasState = watch(aliasScreenStateNotifier);
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: buildAppBar(context),
+      body: Consumer(
+        builder: (context, watch, _) {
+          final aliasState = watch(aliasScreenStateNotifier);
 
-            switch (aliasState.status!) {
-              case AliasScreenStatus.loading:
-                return Center(child: PlatformLoadingIndicator());
+          switch (aliasState.status!) {
+            case AliasScreenStatus.loading:
+              return Center(child: PlatformLoadingIndicator());
 
-              case AliasScreenStatus.loaded:
-                return buildListView(context, aliasState);
+            case AliasScreenStatus.loaded:
+              return buildListView(context, aliasState);
 
-              case AliasScreenStatus.failed:
-                final error = aliasState.errorMessage;
-                return LottieWidget(
-                  lottie: 'assets/lottie/errorCone.json',
-                  label: error,
-                );
-            }
-          },
-        ),
+            case AliasScreenStatus.failed:
+              final error = aliasState.errorMessage;
+              return LottieWidget(
+                lottie: 'assets/lottie/errorCone.json',
+                label: error,
+              );
+          }
+        },
       ),
     );
   }
