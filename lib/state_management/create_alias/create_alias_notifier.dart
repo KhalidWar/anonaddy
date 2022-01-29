@@ -68,7 +68,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
       _setDomains([]);
     }
 
-    if (domainOptions.domainOptions != null) _setVerifiedRecipients();
+    _setVerifiedRecipients();
     _setHeaderText();
   }
 
