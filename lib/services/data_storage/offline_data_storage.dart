@@ -4,118 +4,66 @@ class OfflineData {
   OfflineData(this.secureStorage);
   final FlutterSecureStorage secureStorage;
 
-  final _aliasDataKey = 'aliasDataKey';
-  String _aliasData = '';
-
-  final _accountDataKey = 'accountDataKey';
-  String _accountData = '';
-
-  final _usernameDataKey = 'usernameDataKey';
-  String _usernameData = '';
-
-  final _recipientsDataKey = 'recipientsDataKey';
-  String _recipientData = '';
-
-  final _domainOptionsDataKey = 'domainOptionsDataKey';
-  String _domainOptionsData = '';
-
-  final _domainDataKey = 'domainDataKey';
-  String _domainData = '';
+  static const _aliasDataKey = 'aliasDataKey';
+  static const _accountDataKey = 'accountDataKey';
+  static const _usernameDataKey = 'usernameDataKey';
+  static const _recipientsDataKey = 'recipientsDataKey';
+  static const _domainOptionsDataKey = 'domainOptionsDataKey';
+  static const _domainDataKey = 'domainDataKey';
 
   Future<void> writeAliasOfflineData(String data) async {
-    if (_aliasData.compareTo(data) != 0) {
-      _aliasData = data;
-      await secureStorage.write(key: _aliasDataKey, value: data);
-    }
+    await secureStorage.write(key: _aliasDataKey, value: data);
   }
 
   Future<String> readAliasOfflineData() async {
-    if (_aliasData.isEmpty) {
-      _aliasData = await secureStorage.read(key: _aliasDataKey) ?? '';
-      return _aliasData;
-    } else {
-      return _aliasData;
-    }
+    final aliasData = await secureStorage.read(key: _aliasDataKey) ?? '';
+    return aliasData;
   }
 
   Future<void> writeAccountOfflineData(String data) async {
-    if (_accountData.compareTo(data) != 0) {
-      _accountData = data;
-      await secureStorage.write(key: _accountDataKey, value: data);
-    }
+    await secureStorage.write(key: _accountDataKey, value: data);
   }
 
   Future<String> readAccountOfflineData() async {
-    if (_accountData.isEmpty) {
-      _accountData = await secureStorage.read(key: _accountDataKey) ?? '';
-      return _accountData;
-    } else {
-      return _accountData;
-    }
+    final accountData = await secureStorage.read(key: _accountDataKey) ?? '';
+    return accountData;
   }
 
   Future<void> writeUsernameOfflineData(String data) async {
-    if (_usernameData.compareTo(data) != 0) {
-      _usernameData = data;
-      await secureStorage.write(key: _usernameDataKey, value: data);
-    }
+    await secureStorage.write(key: _usernameDataKey, value: data);
   }
 
   Future<String> readUsernameOfflineData() async {
-    if (_usernameData.isEmpty) {
-      _usernameData = await secureStorage.read(key: _usernameDataKey) ?? '';
-      return _usernameData;
-    } else {
-      return _usernameData;
-    }
+    final usernameData = await secureStorage.read(key: _usernameDataKey) ?? '';
+    return usernameData;
   }
 
   Future<void> writeRecipientsOfflineData(String data) async {
-    if (_recipientData.compareTo(data) != 0) {
-      _recipientData = data;
-      await secureStorage.write(key: _recipientsDataKey, value: data);
-    }
+    await secureStorage.write(key: _recipientsDataKey, value: data);
   }
 
   Future<String> readRecipientsOfflineData() async {
-    if (_recipientData.isEmpty) {
-      _recipientData = await secureStorage.read(key: _recipientsDataKey) ?? '';
-      return _recipientData;
-    } else {
-      return _recipientData;
-    }
+    final recipientData =
+        await secureStorage.read(key: _recipientsDataKey) ?? '';
+    return recipientData;
   }
 
   Future<void> writeDomainOptionsOfflineData(String data) async {
-    if (_domainOptionsData.compareTo(data) != 0) {
-      _domainOptionsData = data;
-      await secureStorage.write(key: _domainOptionsDataKey, value: data);
-    }
+    await secureStorage.write(key: _domainOptionsDataKey, value: data);
   }
 
   Future<String> readDomainOptionsOfflineData() async {
-    if (_domainOptionsData.isEmpty) {
-      _domainOptionsData =
-          await secureStorage.read(key: _domainOptionsDataKey) ?? '';
-      return _domainOptionsData;
-    } else {
-      return _domainOptionsData;
-    }
+    final domainOptionsData =
+        await secureStorage.read(key: _domainOptionsDataKey) ?? '';
+    return domainOptionsData;
   }
 
   Future<void> writeDomainOfflineData(String data) async {
-    if (_domainData.compareTo(data) != 0) {
-      _domainData = data;
-      await secureStorage.write(key: _domainDataKey, value: data);
-    }
+    await secureStorage.write(key: _domainDataKey, value: data);
   }
 
   Future<String> readDomainOfflineData() async {
-    if (_domainData.isEmpty) {
-      _domainData = await secureStorage.read(key: _domainDataKey) ?? '';
-      return _domainData;
-    } else {
-      return _domainData;
-    }
+    final domainData = await secureStorage.read(key: _domainDataKey) ?? '';
+    return domainData;
   }
 }
