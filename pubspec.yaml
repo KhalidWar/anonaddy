@@ -58,6 +58,13 @@ dev_dependencies:
   build_runner: ^2.0.6
   hive_generator: ^1.1.0
   json_serializable: ^4.1.4
+  flutter_native_splash: ^2.0.1+1
+
+flutter_native_splash:
+  color: "#19216C"
+  color_dark: "#19216C"
+  image: assets/images/splash_image.png
+  image_dark: assets/images/splash_image.png
 
 # The following section is specific to Flutter.
 flutter:
