@@ -1,38 +1,38 @@
-import 'package:anonaddy/services/changelog_service/changelog_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class ChangelogService {
-  const ChangelogService(this.changelogStorage);
+  ChangelogService(this.secureStorage);
+  final FlutterSecureStorage secureStorage;
 
-  final ChangelogStorage changelogStorage;
+  static const _changelogKey = 'changelogKey';
+  static const _appVersionKey = 'appVersionKey';
 
-  Future<bool> isAppUpdated() async {
-    final data = await changelogStorage.getChangelogStatus();
-    final isUpdated = data == null || data == 'true';
-    return isUpdated;
+  Future<String?> getChangelogStatus() async {
+    final status = await secureStorage.read(key: _changelogKey);
+    return status;
   }
 
+  /// Marks [Changelog] as read so it doesn't show it again on app restart
   Future<void> markChangelogRead() async {
-    await changelogStorage.markChangelogRead();
+    await secureStorage.write(key: _changelogKey, value: false.toString());
   }
 
-  /// Compare current app version number to the old version number.
-  Future<void> checkIfAppUpdated() async {
-    final oldAppVersion = await changelogStorage.loadOldAppVersion();
-    final currentAppVersion = await _getCurrentAppVersion();
-
-    if (oldAppVersion != currentAppVersion) {
-      /// If numbers do NOT match, meaning app has been updated, delete
-      /// changelog value from the storage so that [ChangelogWidget] is displayed
-      await changelogStorage.deleteChangelogStatus();
-
-      /// Then save current AppVersion's number to acknowledge that the user
-      /// has opened app with this version before.
-      await changelogStorage.saveCurrentAppVersion(currentAppVersion);
-    }
+  /// Deletes/resets changelogKey (status) from storage
+  Future<void> deleteChangelogStatus() async {
+    await secureStorage.delete(key: _changelogKey);
   }
 
-  Future<String> _getCurrentAppVersion() async {
+  /// Save current [AppVersion] version number
+  Future<void> saveCurrentAppVersion(String currentVersion) async {
+    await secureStorage.write(key: _appVersionKey, value: currentVersion);
+  }
+
+  Future<String> loadOldAppVersion() async {
+    return await secureStorage.read(key: _appVersionKey) ?? '';
+  }
+
+  Future<String> getCurrentAppVersion() async {
     final appVersion = await PackageInfo.fromPlatform();
     return appVersion.version;
   }

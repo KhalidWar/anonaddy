@@ -12,14 +12,14 @@ final changelogStateNotifier = StateNotifierProvider((ref) {
 class ChangelogNotifier extends StateNotifier {
   ChangelogNotifier({required this.changelogService}) : super(null) {
     /// Check if app has updated
-    changelogService.checkIfAppUpdated();
+    checkIfAppUpdated();
   }
 
   final ChangelogService changelogService;
 
   /// Show [ChangelogWidget] if app has been updated
   Future<void> showChangelogWidget(BuildContext context) async {
-    final isUpdated = await changelogService.isAppUpdated();
+    final isUpdated = await isAppUpdated();
     if (isUpdated) {
       showModalBottomSheet(
         context: context,
@@ -33,7 +33,29 @@ class ChangelogNotifier extends StateNotifier {
     }
   }
 
+  Future<bool> isAppUpdated() async {
+    final data = await changelogService.getChangelogStatus();
+    final isUpdated = data == null || data == 'true';
+    return isUpdated;
+  }
+
   Future<void> markChangelogRead() async {
     await changelogService.markChangelogRead();
+  }
+
+  /// Compare current app version number to the old version number.
+  Future<void> checkIfAppUpdated() async {
+    final oldAppVersion = await changelogService.loadOldAppVersion();
+    final currentAppVersion = await changelogService.getCurrentAppVersion();
+
+    if (oldAppVersion != currentAppVersion) {
+      /// If numbers do NOT match, meaning app has been updated, delete
+      /// changelog value from the storage so that [ChangelogWidget] is displayed
+      await changelogService.deleteChangelogStatus();
+
+      /// Then save current AppVersion's number to acknowledge that the user
+      /// has opened app with this version before.
+      await changelogService.saveCurrentAppVersion(currentAppVersion);
+    }
   }
 }
