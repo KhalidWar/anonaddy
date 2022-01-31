@@ -8,9 +8,9 @@ import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'models/alias/alias.dart';
@@ -19,16 +19,18 @@ import 'models/recipient/recipient.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Hive.initFlutter();
+  FlutterNativeSplash.removeAfter((BuildContext context) async {
+    await Hive.initFlutter();
 
-  /// @HiveType(typeId: 0)
-  Hive.registerAdapter(AliasAdapter());
+    /// @HiveType(typeId: 0)
+    Hive.registerAdapter(AliasAdapter());
 
-  /// @HiveType(typeId: 1)
-  Hive.registerAdapter(RecipientAdapter());
+    /// @HiveType(typeId: 1)
+    Hive.registerAdapter(RecipientAdapter());
 
-  /// @HiveType(typeId: 2)
-  Hive.registerAdapter(ProfileAdapter());
+    /// @HiveType(typeId: 2)
+    Hive.registerAdapter(ProfileAdapter());
+  });
 
   runApp(
     /// Phoenix restarts app upon logout
