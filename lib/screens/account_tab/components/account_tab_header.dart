@@ -13,8 +13,7 @@ import 'add_new_username.dart';
 
 class AccountTabHeader extends StatelessWidget {
   AccountTabHeader({Key? key, required this.account}) : super(key: key) {
-    isSelfHosted =
-        account.recipientCount == null && account.recipientLimit == null;
+    isSelfHosted = account.subscription == null;
   }
 
   final Account account;
