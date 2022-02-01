@@ -1,5 +1,6 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
@@ -29,14 +30,14 @@ class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.5,
       minChildSize: 0.3,
       maxChildSize: 0.7,
       builder: (context, controller) {
-        final size = MediaQuery.of(context).size;
-
         return Consumer(
           builder: (context, watch, _) {
             final recipientState = watch(recipientTabStateNotifier);
@@ -125,7 +126,8 @@ class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
                             ),
                           ],
                         ),
-                        SizedBox(height: size.height * 0.01),
+                        if (PlatformAware.isIOS())
+                          SizedBox(height: size.height * 0.03),
                       ],
                     );
                   },
