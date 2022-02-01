@@ -32,6 +32,17 @@ class _FailedDeliveriesWidgetState extends State<FailedDeliveriesWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    /// Insures Flutter has finished rendering frame
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      /// Fetches latest account data
+      context.read(accountStateNotifier.notifier).fetchAccount();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, watch, child) {
