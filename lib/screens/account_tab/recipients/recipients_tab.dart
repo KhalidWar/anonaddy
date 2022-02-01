@@ -15,7 +15,9 @@ class _RecipientsTabState extends State<RecipientsTab> {
   @override
   void initState() {
     super.initState();
-    context.read(recipientTabStateNotifier.notifier).fetchRecipients();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      context.read(recipientTabStateNotifier.notifier).fetchRecipients();
+    });
   }
 
   @override
