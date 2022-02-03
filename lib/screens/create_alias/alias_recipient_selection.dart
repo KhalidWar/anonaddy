@@ -126,6 +126,7 @@ class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
                             ),
                           ],
                         ),
+                        SizedBox(height: size.height * 0.03),
                         if (PlatformAware.isIOS())
                           SizedBox(height: size.height * 0.03),
                       ],
