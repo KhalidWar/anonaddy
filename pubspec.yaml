@@ -21,6 +21,7 @@ dependencies:
   shimmer: ^2.0.0
   fluttertoast: ^8.0.8
   fl_chart: ^0.40.0
+  modal_bottom_sheet: ^2.0.0
 
   # Internet Connectivity
   http: ^0.13.1

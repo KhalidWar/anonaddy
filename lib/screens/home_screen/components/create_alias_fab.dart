@@ -7,6 +7,7 @@ import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart'
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CreateAliasFAB extends StatelessWidget {
   const CreateAliasFAB({Key? key}) : super(key: key);
@@ -37,9 +38,8 @@ class CreateAliasFAB extends StatelessWidget {
                   break;
 
                 case AccountStatus.loaded:
-                  showModalBottomSheet(
+                  showCupertinoModalBottomSheet(
                     context: context,
-                    isScrollControlled: true,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(kBottomSheetBorderRadius),
