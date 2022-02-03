@@ -56,6 +56,8 @@ class CreateAlias extends StatelessWidget {
 
   @override
   Widget build(BuildContext rootContext) {
+    final isDark = Theme.of(rootContext).brightness == Brightness.dark;
+
     /// Base [Material] widget is required to display and nest other material widgets
     /// such as [TextFormField] inside [Cupertino] widgets.
     return Material(
@@ -73,6 +75,10 @@ class CreateAlias extends StatelessWidget {
                   return CupertinoPageScaffold(
                     /// iOS style header (top bar).
                     navigationBar: CupertinoNavigationBar(
+                      /// [backgroundColor] not setting dark theme is a known bug.
+                      /// https://github.com/flutter/flutter/issues/51899
+                      backgroundColor: isDark ? Colors.black12 : Colors.white,
+                      brightness: Brightness.dark,
                       leading: CupertinoButton(
                         padding: EdgeInsets.all(0),
                         child: Text('Cancel'),
@@ -83,7 +89,13 @@ class CreateAlias extends StatelessWidget {
                         child: Text('Done'),
                         onPressed: () => createAlias(rootContext),
                       ),
-                      middle: Text('Create New Alias'),
+
+                      middle: Text(
+                        'Create New Alias',
+                        style: TextStyle(
+                          color: isDark ? Colors.white : Colors.black,
+                        ),
+                      ),
                     ),
 
                     /// This is the body of the sheet.
