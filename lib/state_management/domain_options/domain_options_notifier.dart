@@ -6,7 +6,6 @@ import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
-import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainOptionsStateNotifier =
@@ -14,7 +13,6 @@ final domainOptionsStateNotifier =
   return DomainOptionsNotifier(
     domainOptionsService: ref.read(domainOptionsService),
     offlineData: ref.read(offlineDataProvider),
-    lifecycleStatus: ref.watch(lifecycleStateNotifier),
   );
 });
 
@@ -22,7 +20,6 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
   DomainOptionsNotifier({
     required this.domainOptionsService,
     required this.offlineData,
-    required this.lifecycleStatus,
   }) : super(DomainOptionsState(status: DomainOptionsStatus.loading)) {
     /// Initially load data from disk (secured device storage)
     _loadOfflineData();
@@ -33,7 +30,6 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
 
   final DomainOptionsService domainOptionsService;
   final OfflineData offlineData;
-  final LifecycleStatus lifecycleStatus;
 
   /// Updates UI to the latest state
   void _updateState(DomainOptionsState newState) {

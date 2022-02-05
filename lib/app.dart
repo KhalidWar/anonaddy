@@ -1,4 +1,3 @@
-import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
 import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,17 +27,15 @@ class App extends ConsumerWidget {
       DefaultWidgetsLocalizations.delegate,
     ];
 
-    return LifecycleService(
-      child: MaterialApp(
-        title: kAppBarTitle,
-        debugShowCheckedModeBanner: false,
-        theme: settingsState.isDarkTheme! ? darkTheme : lightTheme,
-        darkTheme: darkTheme,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: AuthorizationScreen.routeName,
-        locale: const Locale('en', 'US'),
-        localizationsDelegates: _defaultLocalizations,
-      ),
+    return MaterialApp(
+      title: kAppBarTitle,
+      debugShowCheckedModeBanner: false,
+      theme: settingsState.isDarkTheme! ? darkTheme : lightTheme,
+      darkTheme: darkTheme,
+      onGenerateRoute: RouteGenerator.generateRoute,
+      initialRoute: AuthorizationScreen.routeName,
+      locale: const Locale('en', 'US'),
+      localizationsDelegates: _defaultLocalizations,
     );
   }
 }
