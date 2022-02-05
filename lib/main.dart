@@ -17,20 +17,11 @@ import 'shared_components/constants/offline_data_key.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// Keeps SplashScreen on until following methods are completed.
   FlutterNativeSplash.removeAfter((BuildContext context) async {
-    await Hive.initFlutter();
-
-    /// @HiveType(typeId: 0)
-    Hive.registerAdapter(AliasAdapter());
-
-    /// @HiveType(typeId: 1)
-    Hive.registerAdapter(RecipientAdapter());
-
-    /// @HiveType(typeId: 2)
-    Hive.registerAdapter(ProfileAdapter());
+    await _initHive();
+    await _handleAppUpdate();
   });
-
-  await _handleAppUpdate();
 
   /// Launches app
   runApp(
@@ -42,6 +33,20 @@ void main() async {
       ),
     ),
   );
+}
+
+/// Initializes [Hive] and its adapters.
+Future<void> _initHive() async {
+  await Hive.initFlutter();
+
+  /// @HiveType(typeId: 0)
+  Hive.registerAdapter(AliasAdapter());
+
+  /// @HiveType(typeId: 1)
+  Hive.registerAdapter(RecipientAdapter());
+
+  /// @HiveType(typeId: 2)
+  Hive.registerAdapter(ProfileAdapter());
 }
 
 /// Does housekeeping after app is updated. Does nothing otherwise.
