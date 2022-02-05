@@ -15,7 +15,7 @@ class RecipientsDropdown extends StatelessWidget {
 
         return CreateAliasCard(
           header: 'Recipients',
-          subHeader: '',
+          subHeader: 'Default recipient(s) for alias.',
           child: recipients.isEmpty
               ? Text(
                   'Select recipient(s) (optional)...',

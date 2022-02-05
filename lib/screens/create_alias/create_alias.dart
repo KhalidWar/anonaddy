@@ -156,8 +156,7 @@ class CreateAlias extends StatelessWidget {
                 ),
               CreateAliasCard(
                 header: 'Alias Domain',
-                subHeader:
-                    'A domain URL that appends alias email similar to ***@gmail.com.',
+                subHeader: 'Domain URL of the alias e.g. ***@gmail.com.',
                 child: Text(
                   createAliasState.aliasDomain!,
                   style: Theme.of(consumerContext)
@@ -172,7 +171,7 @@ class CreateAlias extends StatelessWidget {
               cardSpacer(size),
               CreateAliasCard(
                 header: 'Alias Format',
-                subHeader: '',
+                subHeader: 'Alias format',
                 child: Text(
                   NicheMethod.correctAliasString(createAliasState.aliasFormat!),
                   style: Theme.of(consumerContext)
