@@ -1,39 +1,19 @@
-import 'package:anonaddy/services/changelog_service/changelog_storage.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:anonaddy/shared_components/constants/changelog_storage_key.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ChangelogService {
-  const ChangelogService(this.changelogStorage);
+  ChangelogService(this.secureStorage);
+  final FlutterSecureStorage secureStorage;
 
-  final ChangelogStorage changelogStorage;
-
-  Future<bool> isAppUpdated() async {
-    final data = await changelogStorage.getChangelogStatus();
-    final isUpdated = data == null || data == 'true';
-    return isUpdated;
+  Future<String?> getChangelogStatus() async {
+    final status =
+        await secureStorage.read(key: ChangelogStorageKey.changelogKey);
+    return status;
   }
 
+  /// Marks [Changelog] as read so it doesn't show it again on app restart
   Future<void> markChangelogRead() async {
-    await changelogStorage.markChangelogRead();
-  }
-
-  /// Compare current app version number to the old version number.
-  Future<void> checkIfAppUpdated() async {
-    final oldAppVersion = await changelogStorage.loadOldAppVersion();
-    final currentAppVersion = await _getCurrentAppVersion();
-
-    if (oldAppVersion != currentAppVersion) {
-      /// If numbers do NOT match, meaning app has been updated, delete
-      /// changelog value from the storage so that [ChangelogWidget] is displayed
-      await changelogStorage.deleteChangelogStatus();
-
-      /// Then save current AppVersion's number to acknowledge that the user
-      /// has opened app with this version before.
-      await changelogStorage.saveCurrentAppVersion(currentAppVersion);
-    }
-  }
-
-  Future<String> _getCurrentAppVersion() async {
-    final appVersion = await PackageInfo.fromPlatform();
-    return appVersion.version;
+    await secureStorage.write(
+        key: ChangelogStorageKey.changelogKey, value: false.toString());
   }
 }

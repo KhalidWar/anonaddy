@@ -6,20 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final changelogStateNotifier = StateNotifierProvider((ref) {
-  return ChangelogNotifier(changelogService: ref.read(changelogService));
+  return ChangelogNotifier(
+    changelogService: ref.read(changelogService),
+  );
 });
 
 class ChangelogNotifier extends StateNotifier {
-  ChangelogNotifier({required this.changelogService}) : super(null) {
-    /// Check if app has updated
-    changelogService.checkIfAppUpdated();
-  }
-
+  ChangelogNotifier({required this.changelogService}) : super(null);
   final ChangelogService changelogService;
 
   /// Show [ChangelogWidget] if app has been updated
   Future<void> showChangelogWidget(BuildContext context) async {
-    final isUpdated = await changelogService.isAppUpdated();
+    final isUpdated = await _hasChangelogStatusChanged();
     if (isUpdated) {
       showModalBottomSheet(
         context: context,
@@ -31,6 +29,12 @@ class ChangelogNotifier extends StateNotifier {
         builder: (context) => const ChangelogWidget(),
       );
     }
+  }
+
+  Future<bool> _hasChangelogStatusChanged() async {
+    final data = await changelogService.getChangelogStatus();
+    final isUpdated = data == null || data == 'true';
+    return isUpdated;
   }
 
   Future<void> markChangelogRead() async {

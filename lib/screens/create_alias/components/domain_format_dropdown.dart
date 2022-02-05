@@ -1,3 +1,4 @@
+import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
 import 'package:flutter/material.dart';
 
 class DomainFormatDropdown extends StatelessWidget {
@@ -10,42 +11,28 @@ class DomainFormatDropdown extends StatelessWidget {
 
   final String title;
   final String label;
-  final Function onPress;
+  final Function() onPress;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return InkWell(
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: size.height * 0.01,
-          horizontal: 1,
+    return CreateAliasCard(
+      onPress: onPress,
+      header: label,
+      subHeader: label,
+      child: ListTile(
+        dense: true,
+        contentPadding: EdgeInsets.all(0),
+        minVerticalPadding: 0,
+        horizontalTitleGap: 0,
+        title: Text(
+          label,
+          style: Theme.of(context)
+              .textTheme
+              .subtitle1!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  label,
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                Icon(Icons.keyboard_arrow_down_rounded),
-              ],
-            ),
-          ],
-        ),
+        trailing: Icon(Icons.keyboard_arrow_down_rounded),
       ),
-      onTap: () => onPress(),
     );
   }
 }

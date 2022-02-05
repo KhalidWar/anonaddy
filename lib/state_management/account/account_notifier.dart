@@ -5,7 +5,6 @@ import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/state_management/lifecycle/lifecycle_state_manager.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,15 +15,11 @@ final accountStateNotifier =
   return AccountNotifier(
     accountService: ref.read(accountService),
     offlineData: ref.read(offlineDataProvider),
-    lifecycleStatus: ref.watch(lifecycleStateNotifier),
   );
 });
 
 class AccountNotifier extends StateNotifier<AccountState> {
-  AccountNotifier(
-      {required this.accountService,
-      required this.offlineData,
-      required this.lifecycleStatus})
+  AccountNotifier({required this.accountService, required this.offlineData})
       : super(AccountState(status: AccountStatus.loading)) {
     /// Initially load data from disk (secured device storage)
     _loadOfflineData();
@@ -35,7 +30,6 @@ class AccountNotifier extends StateNotifier<AccountState> {
 
   final AccountService accountService;
   final OfflineData offlineData;
-  final LifecycleStatus lifecycleStatus;
 
   /// Updates UI to the newState
   void _updateState(AccountState newState) {
@@ -43,28 +37,28 @@ class AccountNotifier extends StateNotifier<AccountState> {
   }
 
   Future<void> fetchAccount() async {
+    final newState = state.copyWith(status: AccountStatus.loading);
+    _updateState(newState);
+
     try {
-      /// Only trigger fetch API when app is Foreground to avoid API spamming
-      while (lifecycleStatus == LifecycleStatus.foreground) {
-        final account = await accountService.getAccountData();
-        await _saveOfflineData(account);
+      final account = await accountService.getAccountData();
+      await _saveOfflineData(account);
 
-        /// Construct new state
-        final newState =
-            AccountState(status: AccountStatus.loaded, account: account);
+      /// Construct new state
+      final newState =
+          state.copyWith(status: AccountStatus.loaded, account: account);
 
-        /// Update UI with the latest state
-        _updateState(newState);
+      /// Update UI with the latest state
+      _updateState(newState);
 
-        /// To avoid spamming API, wait set amount of time before calling API again
-        await Future.delayed(Duration(seconds: 5));
-      }
+      /// To avoid spamming API, wait set amount of time before calling API again
+      await Future.delayed(Duration(seconds: 5));
     } on SocketException {
       /// Loads offline data when there's no internet connection
       await _loadOfflineData();
     } catch (error) {
       /// On error, update UI state with the error message
-      final newState = AccountState(
+      final newState = state.copyWith(
           status: AccountStatus.failed, errorMessage: error.toString());
       _updateState(newState);
 
@@ -82,7 +76,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
 
       /// Construct new state
       final newState =
-          AccountState(status: AccountStatus.loaded, account: account);
+          state.copyWith(status: AccountStatus.loaded, account: account);
 
       /// Update UI with the latest state
       _updateState(newState);
@@ -107,7 +101,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
       if (securedData.isNotEmpty) {
         final account = Account.fromJson(jsonDecode(securedData));
         final newState =
-            AccountState(status: AccountStatus.loaded, account: account);
+            state.copyWith(status: AccountStatus.loaded, account: account);
         _updateState(newState);
       }
     }

@@ -1,3 +1,4 @@
+import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,42 +13,33 @@ class RecipientsDropdown extends StatelessWidget {
       builder: (context, watch, _) {
         final recipients = watch(createAliasStateNotifier).selectedRecipients!;
 
-        return InkWell(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Recipients'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (recipients.isEmpty)
-                    Text(
-                      'Select recipient(s) (optional)...',
-                      style: Theme.of(context).textTheme.caption,
-                    )
-                  else
-                    Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: recipients.length,
-                        itemBuilder: (context, index) {
-                          final recipient = recipients[index];
-                          return Text(
-                            recipient.email,
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          );
-                        },
-                      ),
-                    ),
-                  Icon(Icons.keyboard_arrow_down_rounded),
-                ],
-              ),
-            ],
-          ),
-          onTap: onPress,
+        return CreateAliasCard(
+          header: 'Recipients',
+          subHeader: 'Default recipient(s) for alias.',
+          child: recipients.isEmpty
+              ? Text(
+                  'Select recipient(s) (optional)...',
+                  style: Theme.of(context).textTheme.caption,
+                )
+              : Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: recipients.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    itemBuilder: (context, index) {
+                      final recipient = recipients[index];
+                      return Text(
+                        recipient.email,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      );
+                    },
+                  ),
+                ),
+          onPress: onPress,
         );
       },
     );

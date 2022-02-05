@@ -1,24 +1,43 @@
 import 'package:anonaddy/models/profile/profile.dart';
-import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
-import 'package:anonaddy/services/lifecycle_service/lifecycle_service.dart';
-import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
-import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
+import 'app.dart';
 import 'models/alias/alias.dart';
 import 'models/recipient/recipient.dart';
+import 'shared_components/constants/changelog_storage_key.dart';
+import 'shared_components/constants/offline_data_key.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// Keeps SplashScreen on until following methods are completed.
+  FlutterNativeSplash.removeAfter((BuildContext context) async {
+    await _initHive();
+  });
+
+  await _handleAppUpdate();
+
+  /// Launches app
+  runApp(
+    /// Phoenix restarts app upon logout
+    Phoenix(
+      /// Riverpod base widget to store provider state
+      child: ProviderScope(
+        child: App(),
+      ),
+    ),
+  );
+}
+
+/// Initializes [Hive] and its adapters.
+Future<void> _initHive() async {
   await Hive.initFlutter();
 
   /// @HiveType(typeId: 0)
@@ -29,47 +48,38 @@ void main() async {
 
   /// @HiveType(typeId: 2)
   Hive.registerAdapter(ProfileAdapter());
-
-  runApp(
-    /// Phoenix restarts app upon logout
-    Phoenix(
-      /// Riverpod base widget to store provider state
-      child: ProviderScope(
-        child: MyApp(),
-      ),
-    ),
-  );
 }
 
-/// ConsumerWidget is used to update state using ChangeNotifierProvider
-class MyApp extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    /// Use [watch] method to access different providers
-    final settingsState = watch(settingsStateNotifier);
+/// Does housekeeping after app is updated. Does nothing otherwise.
+Future<void> _handleAppUpdate() async {
+  final secureStorage = FlutterSecureStorage();
 
-    /// Sets StatusBarColor for the whole app
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  final oldAppVersion =
+      await secureStorage.read(key: ChangelogStorageKey.appVersionKey) ?? '';
+
+  /// Gets current app version number using [PackageInfo]
+  final appVersion = await PackageInfo.fromPlatform();
+  final currentAppVersion = appVersion.version;
+
+  /// Number NOT matching means app has been updated.
+  if (oldAppVersion != currentAppVersion) {
+    /// delete changelog value from the storage so that [ChangelogWidget] is displayed
+    await secureStorage.delete(key: ChangelogStorageKey.changelogKey);
+
+    /// Saves current AppVersion's number to acknowledge that the user
+    /// has opened app with this version before.
+    await secureStorage.write(
+      key: ChangelogStorageKey.appVersionKey,
+      value: currentAppVersion,
     );
 
-    const _defaultLocalizations = [
-      DefaultMaterialLocalizations.delegate,
-      DefaultCupertinoLocalizations.delegate,
-      DefaultWidgetsLocalizations.delegate,
-    ];
-
-    return LifecycleService(
-      child: MaterialApp(
-        title: kAppBarTitle,
-        debugShowCheckedModeBanner: false,
-        theme: settingsState.isDarkTheme! ? darkTheme : lightTheme,
-        darkTheme: darkTheme,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: AuthorizationScreen.routeName,
-        locale: const Locale('en', 'US'),
-        localizationsDelegates: _defaultLocalizations,
-      ),
-    );
+    /// Deletes stored offline data after an app has been updated.
+    /// This is to prevent bugs that may arise from conflicting stored data scheme.
+    await secureStorage.delete(key: OfflineDataKey.aliases);
+    await secureStorage.delete(key: OfflineDataKey.account);
+    await secureStorage.delete(key: OfflineDataKey.username);
+    await secureStorage.delete(key: OfflineDataKey.recipients);
+    await secureStorage.delete(key: OfflineDataKey.domainOptions);
+    await secureStorage.delete(key: OfflineDataKey.domain);
   }
 }

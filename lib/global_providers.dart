@@ -6,7 +6,6 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
-import 'package:anonaddy/services/changelog_service/changelog_storage.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
@@ -37,14 +36,9 @@ final accessTokenService = Provider<AccessTokenService>((ref) {
   return AccessTokenService(secureStorage);
 });
 
-final changelogStorage = Provider<ChangelogStorage>((ref) {
-  final secureStorage = ref.read(flutterSecureStorage);
-  return ChangelogStorage(secureStorage);
-});
-
 final changelogService = Provider<ChangelogService>((ref) {
-  final changelogStore = ref.read(changelogStorage);
-  return ChangelogService(changelogStore);
+  final secureStorage = ref.read(flutterSecureStorage);
+  return ChangelogService(secureStorage);
 });
 
 final usernameService = Provider<UsernameService>((ref) {
