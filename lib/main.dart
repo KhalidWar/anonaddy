@@ -20,8 +20,9 @@ void main() async {
   /// Keeps SplashScreen on until following methods are completed.
   FlutterNativeSplash.removeAfter((BuildContext context) async {
     await _initHive();
-    await _handleAppUpdate();
   });
+
+  await _handleAppUpdate();
 
   /// Launches app
   runApp(
