@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -36,7 +35,6 @@ class _AnimatedFabState extends State<AnimatedFab>
   /// Manages which direction the animation should go
   /// depending on whether FAB is becoming visible or not.
   void animate() {
-    log('animate is called');
     if (_animationController.isAnimating) return;
     if (widget.showFab) {
       _animationController.forward();
@@ -64,8 +62,6 @@ class _AnimatedFabState extends State<AnimatedFab>
       animation: _animationController,
       child: widget.child,
       builder: (context, child) {
-        log('AnimatedBuilder is called');
-
         return Transform.scale(
           scale: _animationController.value,
           child: Transform.rotate(
