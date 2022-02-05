@@ -1,4 +1,5 @@
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
+import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
@@ -15,18 +16,11 @@ class CreateAliasFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (context, watch, child) {
+      builder: (context, watch, _) {
         final showFab = watch(fabVisibilityStateNotifier);
-        final singleTween = Tween(begin: 0.0, end: 1.0);
 
-        return AnimatedSwitcher(
-          duration: Duration(milliseconds: 300),
-          transitionBuilder: (child, animation) {
-            return ScaleTransition(
-              scale: singleTween.animate(animation),
-              child: showFab ? child : Container(),
-            );
-          },
+        return AnimatedFab(
+          showFab: showFab,
           child: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
