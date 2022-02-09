@@ -21,23 +21,21 @@ class RecipientsDropdown extends StatelessWidget {
                   'Select recipient(s) (optional)...',
                   style: Theme.of(context).textTheme.caption,
                 )
-              : Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: recipients.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    itemBuilder: (context, index) {
-                      final recipient = recipients[index];
-                      return Text(
-                        recipient.email,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      );
-                    },
-                  ),
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: recipients.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(vertical: 5),
+                  itemBuilder: (context, index) {
+                    final recipient = recipients[index];
+                    return Text(
+                      recipient.email,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle1!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    );
+                  },
                 ),
           onPress: onPress,
         );
