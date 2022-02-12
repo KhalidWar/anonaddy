@@ -19,8 +19,8 @@ class AliasDomainSelection extends StatelessWidget {
       maxChildSize: 0.7,
       builder: (context, controller) {
         return Consumer(
-          builder: (context, watch, child) {
-            final createAliasState = watch(createAliasStateNotifier);
+          builder: (context, ref, child) {
+            final createAliasState = ref.watch(createAliasStateNotifier);
             final domains = createAliasState.domains!;
 
             return Column(
@@ -58,7 +58,7 @@ class AliasDomainSelection extends StatelessWidget {
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                                 onTap: () {
-                                  context
+                                  ref
                                       .read(createAliasStateNotifier.notifier)
                                       .setAliasDomain(domain);
                                   Navigator.pop(context);

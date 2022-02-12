@@ -6,14 +6,16 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SelfHostLoginScreen extends StatefulWidget {
+class SelfHostLoginScreen extends ConsumerStatefulWidget {
+  const SelfHostLoginScreen({Key? key}) : super(key: key);
+
   static const routeName = 'selfHostedScreen';
 
   @override
-  State<SelfHostLoginScreen> createState() => _SelfHostLoginScreenState();
+  ConsumerState createState() => _SelfHostLoginScreenState();
 }
 
-class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
+class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
   final _urlFormKey = GlobalKey<FormState>();
   final _tokenFormKey = GlobalKey<FormState>();
 
@@ -24,7 +26,7 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
     if (_urlFormKey.currentState!.validate() &&
         _tokenFormKey.currentState!.validate()) {
       //todo fix navigation issue. Screen stays on top.
-      await context.read(authStateNotifier.notifier).login(_url, _token);
+      await ref.read(authStateNotifier.notifier).login(_url, _token);
     }
   }
 
@@ -146,8 +148,8 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
     final size = MediaQuery.of(context).size;
 
     return Consumer(
-      builder: (_, watch, __) {
-        final authState = watch(authStateNotifier);
+      builder: (_, ref, __) {
+        final authState = ref.watch(authStateNotifier);
 
         return Container(
           height: size.height * 0.1,

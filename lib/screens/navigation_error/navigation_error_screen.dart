@@ -6,11 +6,11 @@ import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NavigationErrorScreen extends StatelessWidget {
+class NavigationErrorScreen extends ConsumerWidget {
   const NavigationErrorScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -38,7 +38,7 @@ class NavigationErrorScreen extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.red),
                 child: Text('logout'),
-                onPressed: () => logout(context),
+                onPressed: () => logout(context, ref),
               ),
             ),
           ],
@@ -47,7 +47,7 @@ class NavigationErrorScreen extends StatelessWidget {
     );
   }
 
-  Future logout(BuildContext context) async {
+  Future logout(BuildContext context, WidgetRef ref) async {
     /// Show platform dialog
     PlatformAware.platformDialog(
       context: context,
@@ -55,7 +55,7 @@ class NavigationErrorScreen extends StatelessWidget {
         title: 'Logout',
         content: kLogOutAlertDialog,
         method: () async {
-          await context.read(authStateNotifier.notifier).logout(context);
+          await ref.read(authStateNotifier.notifier).logout(context);
         },
       ),
     );

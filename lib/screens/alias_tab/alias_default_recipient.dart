@@ -12,24 +12,23 @@ import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasDefaultRecipientScreen extends StatefulWidget {
+class AliasDefaultRecipientScreen extends ConsumerStatefulWidget {
   const AliasDefaultRecipientScreen(this.alias);
   final Alias alias;
 
   @override
-  _AliasDefaultRecipientScreenState createState() =>
-      _AliasDefaultRecipientScreenState();
+  ConsumerState createState() => _AliasDefaultRecipientScreenState();
 }
 
 class _AliasDefaultRecipientScreenState
-    extends State<AliasDefaultRecipientScreen> {
+    extends ConsumerState<AliasDefaultRecipientScreen> {
   @override
   void initState() {
     super.initState();
 
     /// After widgets are built, fetch recipients and display verified ones.
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read(recipientTabStateNotifier.notifier).fetchRecipients();
+      ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
     });
   }
 
@@ -44,7 +43,7 @@ class _AliasDefaultRecipientScreenState
       maxChildSize: 0.7,
       builder: (context, controller) {
         return Consumer(builder: (context, watch, _) {
-          final recipientState = watch(recipientTabStateNotifier);
+          final recipientState = ref.watch(recipientTabStateNotifier);
 
           switch (recipientState.status) {
             case RecipientTabStatus.loading:
@@ -52,7 +51,8 @@ class _AliasDefaultRecipientScreenState
 
             case RecipientTabStatus.loaded:
               return Consumer(builder: (context, watch, _) {
-                final aliasScreenState = watch(defaultRecipientStateNotifier);
+                final aliasScreenState =
+                    ref.watch(defaultRecipientStateNotifier);
                 final verifiedRecipients = aliasScreenState.verifiedRecipients!;
 
                 return Column(
@@ -84,7 +84,7 @@ class _AliasDefaultRecipientScreenState
                               itemBuilder: (context, index) {
                                 final verifiedRecipient =
                                     verifiedRecipients[index];
-                                final isDefault = context
+                                final isDefault = ref
                                     .read(
                                         defaultRecipientStateNotifier.notifier)
                                     .isRecipientDefault(verifiedRecipient);
@@ -105,7 +105,7 @@ class _AliasDefaultRecipientScreenState
                                     ),
                                   ),
                                   onTap: () {
-                                    context
+                                    ref
                                         .read(defaultRecipientStateNotifier
                                             .notifier)
                                         .toggleRecipient(verifiedRecipient);
@@ -137,7 +137,8 @@ class _AliasDefaultRecipientScreenState
                         style: ElevatedButton.styleFrom(),
                         child: Consumer(
                           builder: (_, watch, __) {
-                            final isLoading = watch(aliasScreenStateNotifier)
+                            final isLoading = ref
+                                .watch(aliasScreenStateNotifier)
                                 .updateRecipientLoading!;
                             return isLoading
                                 ? CircularProgressIndicator(
@@ -147,12 +148,12 @@ class _AliasDefaultRecipientScreenState
                         ),
                         onPressed: () {
                           /// Get default recipients Ids.
-                          final recipientIds = context
+                          final recipientIds = ref
                               .read(defaultRecipientStateNotifier.notifier)
                               .getRecipientIds();
 
                           /// Update default recipients for [widget.alias]
-                          context
+                          ref
                               .read(aliasScreenStateNotifier.notifier)
                               .updateAliasDefaultRecipient(
                                   widget.alias, recipientIds)

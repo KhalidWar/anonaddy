@@ -15,8 +15,8 @@ import 'domains_screen.dart';
 
 class DomainsTab extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final accountState = watch(accountStateNotifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountState = ref.watch(accountStateNotifier);
 
     switch (accountState.status) {
       case AccountStatus.loading:
@@ -28,7 +28,7 @@ class DomainsTab extends ConsumerWidget {
           return PaidFeatureWall();
         }
 
-        final domainsState = watch(domainsStateNotifier);
+        final domainsState = ref.watch(domainsStateNotifier);
 
         switch (domainsState.status) {
           case DomainsTabStatus.loading:

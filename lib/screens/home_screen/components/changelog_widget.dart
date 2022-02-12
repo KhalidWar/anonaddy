@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../global_providers.dart';
 
-class ChangelogWidget extends StatelessWidget {
+class ChangelogWidget extends ConsumerWidget {
   const ChangelogWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     return DraggableScrollableSheet(
@@ -36,8 +36,8 @@ class ChangelogWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   Consumer(
-                    builder: (_, watch, __) {
-                      final appInfo = watch(packageInfoProvider);
+                    builder: (_, ref, __) {
+                      final appInfo = ref.watch(packageInfoProvider);
                       return appInfo.when(
                         data: (data) => Text('Version: ${data.version}'),
                         loading: () => CircularProgressIndicator(),
@@ -58,9 +58,7 @@ class ChangelogWidget extends StatelessWidget {
                 style: ElevatedButton.styleFrom(),
                 child: const Text('Continue to AddyManager'),
                 onPressed: () {
-                  context
-                      .read(changelogStateNotifier.notifier)
-                      .markChangelogRead();
+                  ref.read(changelogStateNotifier.notifier).markChangelogRead();
                   Navigator.pop(context);
                 },
               ),

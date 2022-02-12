@@ -10,8 +10,9 @@ class RecipientsDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (context, watch, _) {
-        final recipients = watch(createAliasStateNotifier).selectedRecipients!;
+      builder: (context, ref, _) {
+        final recipients =
+            ref.watch(createAliasStateNotifier).selectedRecipients!;
 
         return CreateAliasCard(
           header: 'Recipients',

@@ -23,8 +23,8 @@ class SearchTabHeader extends StatelessWidget {
         ),
         SizedBox(height: size.height * 0.01),
         Consumer(
-          builder: (context, watch, _) {
-            final searchState = watch(searchResultStateNotifier);
+          builder: (context, ref, _) {
+            final searchState = ref.watch(searchResultStateNotifier);
 
             return Column(
               children: [
@@ -43,13 +43,13 @@ class SearchTabHeader extends StatelessWidget {
                         borderSide: BorderSide(color: Colors.white),
                       ),
                       suffixIcon:
-                          closeIcon(context, searchState.showCloseIcon!),
+                          closeIcon(context, ref, searchState.showCloseIcon!),
                     ),
                     onChanged: (input) {
-                      context
+                      ref
                           .read(searchResultStateNotifier.notifier)
                           .toggleCloseIcon();
-                      context
+                      ref
                           .read(searchResultStateNotifier.notifier)
                           .searchAliasesLocally();
                     },
@@ -57,7 +57,7 @@ class SearchTabHeader extends StatelessWidget {
                       /// Validate input text characters are NOT less than 3 characters
                       if (_formKey.currentState!.validate()) {
                         /// Triggers Full Search
-                        context
+                        ref
                             .read(searchResultStateNotifier.notifier)
                             .searchAliases();
                       }
@@ -74,7 +74,7 @@ class SearchTabHeader extends StatelessWidget {
                     PlatformSwitch(
                       value: searchState.includeDeleted!,
                       onChanged: (toggle) {
-                        context
+                        ref
                             .read(searchResultStateNotifier.notifier)
                             .toggleIncludeDeleted(toggle);
                       },
@@ -89,13 +89,13 @@ class SearchTabHeader extends StatelessWidget {
     );
   }
 
-  Widget? closeIcon(BuildContext context, bool showCloseIcon) {
+  Widget? closeIcon(BuildContext context, WidgetRef ref, bool showCloseIcon) {
     if (showCloseIcon) {
       return IconButton(
         icon: Icon(Icons.close, color: Colors.white),
         onPressed: () {
           FocusScope.of(context).requestFocus(FocusNode());
-          context.read(searchResultStateNotifier.notifier).closeSearch();
+          ref.read(searchResultStateNotifier.notifier).closeSearch();
         },
       );
     }

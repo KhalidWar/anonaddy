@@ -19,21 +19,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UsernamesScreen extends StatefulWidget {
+class UsernamesScreen extends ConsumerStatefulWidget {
   const UsernamesScreen({required this.username});
   final Username username;
-
   static const routeName = 'usernameDetailedScreen';
 
   @override
-  State<UsernamesScreen> createState() => _UsernamesScreenState();
+  ConsumerState createState() => _UsernameScreenState();
 }
 
-class _UsernamesScreenState extends State<UsernamesScreen> {
+class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
   @override
   void initState() {
     super.initState();
-    context
+    ref
         .read(usernamesScreenStateNotifier.notifier)
         .fetchUsername(widget.username);
   }
@@ -43,8 +42,8 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
     return Scaffold(
       appBar: buildAppBar(context),
       body: Consumer(
-        builder: (context, watch, _) {
-          final usernameState = watch(usernamesScreenStateNotifier);
+        builder: (context, ref, _) {
+          final usernameState = ref.watch(usernamesScreenStateNotifier);
 
           switch (usernameState.status) {
             case UsernamesScreenStatus.loading:
@@ -71,7 +70,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
 
     final username = usernameState.username!;
     final usernameStateProvider =
-        context.read(usernamesScreenStateNotifier.notifier);
+        ref.read(usernamesScreenStateNotifier.notifier);
 
     Future<void> toggleActivity() async {
       username.active
@@ -233,8 +232,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
   }
 
   Future updateDescriptionDialog(BuildContext context, Username username) {
-    final usernameNotifier =
-        context.read(usernamesScreenStateNotifier.notifier);
+    final usernameNotifier = ref.read(usernamesScreenStateNotifier.notifier);
     final formKey = GlobalKey<FormState>();
     String newDescription = '';
 
@@ -291,7 +289,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
           title: 'Delete Username',
           content: kDeleteUsernameConfirmation,
           method: () async {
-            await context
+            await ref
                 .read(usernamesScreenStateNotifier.notifier)
                 .deleteUsername(widget.username);
 

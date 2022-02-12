@@ -21,13 +21,18 @@ import 'components/local_part_input.dart';
 /// controls a full screen iOS style bottom sheet.
 /// Check out [modal_bottom_sheet] package's official example:
 /// https://github.com/jamesblasco/modal_bottom_sheet/blob/master/example/lib/modals/modal_with_navigator.dart
-class CreateAlias extends StatelessWidget {
+class CreateAlias extends ConsumerStatefulWidget {
   const CreateAlias({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState createState() => _CreateAliasState();
+}
+
+class _CreateAliasState extends ConsumerState<CreateAlias> {
   /// Creates alias with selected parameters.
   void createAlias(BuildContext rootContext) {
     /// initiate create alias method
-    rootContext
+    ref
         .read(createAliasStateNotifier.notifier)
         .createNewAlias()
 
@@ -115,8 +120,8 @@ class CreateAlias extends StatelessWidget {
     final size = MediaQuery.of(rootContext).size;
 
     return Consumer(
-      builder: (consumerContext, watch, _) {
-        final createAliasState = watch(createAliasStateNotifier);
+      builder: (consumerContext, ref, _) {
+        final createAliasState = ref.watch(createAliasStateNotifier);
 
         return SafeArea(
           bottom: false,
@@ -137,7 +142,7 @@ class CreateAlias extends StatelessWidget {
                 showIcon: false,
                 child: TextFormField(
                   textInputAction: TextInputAction.next,
-                  onChanged: (input) => consumerContext
+                  onChanged: (input) => ref
                       .read(createAliasStateNotifier.notifier)
                       .setDescription(input),
                   decoration: kTextFormFieldDecoration.copyWith(

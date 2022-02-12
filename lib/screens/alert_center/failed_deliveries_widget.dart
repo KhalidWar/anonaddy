@@ -11,18 +11,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../global_providers.dart';
 
-class FailedDeliveriesWidget extends StatefulWidget {
-  const FailedDeliveriesWidget({Key? key}) : super(key: key);
+class FailedDeliveriesWidget extends ConsumerStatefulWidget {
+  const FailedDeliveriesWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<FailedDeliveriesWidget> createState() => _FailedDeliveriesWidgetState();
+  ConsumerState createState() => _FailedDeliveriesWidgetState();
 }
 
-class _FailedDeliveriesWidgetState extends State<FailedDeliveriesWidget> {
+class _FailedDeliveriesWidgetState
+    extends ConsumerState<FailedDeliveriesWidget> {
   List<FailedDeliveries> failedDeliveries = [];
 
   Future<void> deleteFailedDelivery(String failedDeliveryId) async {
-    final result = await context
+    final result = await ref
         .read(failedDeliveriesService)
         .deleteFailedDelivery(failedDeliveryId);
     if (result) {
@@ -38,55 +41,51 @@ class _FailedDeliveriesWidgetState extends State<FailedDeliveriesWidget> {
     /// Insures Flutter has finished rendering frame
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       /// Fetches latest account data
-      context.read(accountStateNotifier.notifier).fetchAccount();
+      ref.read(accountStateNotifier.notifier).fetchAccount();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, watch, child) {
-        final accountState = watch(accountStateNotifier);
-        switch (accountState.status) {
-          case AccountStatus.loading:
-            return loadingWidget(context);
+    final accountState = ref.watch(accountStateNotifier);
+    switch (accountState.status) {
+      case AccountStatus.loading:
+        return loadingWidget(context);
 
-          case AccountStatus.loaded:
-            final subscription = accountState.account!.subscription;
+      case AccountStatus.loaded:
+        final subscription = accountState.account!.subscription;
 
-            if (subscription == kFreeSubscription) {
-              return PaidFeatureWall();
+        if (subscription == kFreeSubscription) {
+          return PaidFeatureWall();
+        }
+
+        final failedDeliveriesAsync = ref.watch(failedDeliveriesProvider);
+        return failedDeliveriesAsync.when(
+          loading: () => loadingWidget(context),
+          data: (data) {
+            failedDeliveries = data.failedDeliveries;
+
+            if (failedDeliveries.isEmpty) {
+              return Text('No failed deliveries found');
+            } else {
+              return failedDeliveriesList(data);
             }
-
-            final failedDeliveriesAsync = watch(failedDeliveriesProvider);
-            return failedDeliveriesAsync.when(
-              loading: () => loadingWidget(context),
-              data: (data) {
-                failedDeliveries = data.failedDeliveries;
-
-                if (failedDeliveries.isEmpty) {
-                  return Text('No failed deliveries found');
-                } else {
-                  return failedDeliveriesList(data);
-                }
-              },
-              error: (error, stackTrace) {
-                return LottieWidget(
-                  lottie: 'assets/lottie/errorCone.json',
-                  label: error.toString(),
-                );
-              },
-            );
-
-          case AccountStatus.failed:
+          },
+          error: (error, stackTrace) {
             return LottieWidget(
               lottie: 'assets/lottie/errorCone.json',
-              lottieHeight: MediaQuery.of(context).size.height * 0.2,
-              label: kLoadAccountDataFailed,
+              label: error.toString(),
             );
-        }
-      },
-    );
+          },
+        );
+
+      case AccountStatus.failed:
+        return LottieWidget(
+          lottie: 'assets/lottie/errorCone.json',
+          lottieHeight: MediaQuery.of(context).size.height * 0.2,
+          label: kLoadAccountDataFailed,
+        );
+    }
   }
 
   Widget failedDeliveriesList(FailedDeliveriesModel data) {

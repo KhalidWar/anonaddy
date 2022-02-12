@@ -17,8 +17,8 @@ class RulesTab extends ConsumerWidget {
   const RulesTab({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final accountState = watch(accountStateNotifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountState = ref.watch(accountStateNotifier);
 
     switch (accountState.status) {
 
@@ -34,7 +34,7 @@ class RulesTab extends ConsumerWidget {
         final subscription = accountState.account!.subscription;
         if (subscription == kFreeSubscription) return PaidFeatureWall();
 
-        final rulesState = watch(rulesTabStateNotifier);
+        final rulesState = ref.watch(rulesTabStateNotifier);
         switch (rulesState.status) {
           case RulesTabStatus.loading:
             return RecipientsShimmerLoading();

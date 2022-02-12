@@ -12,11 +12,11 @@ import 'domains/domains_tab.dart';
 import 'rules/rules_tab.dart';
 import 'usernames/usernames_tab.dart';
 
-class AccountTab extends StatelessWidget {
+class AccountTab extends ConsumerWidget {
   const AccountTab();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -36,7 +36,7 @@ class AccountTab extends StatelessWidget {
                   collapseMode: CollapseMode.pin,
                   background: Consumer(
                     builder: (_, watch, __) {
-                      final accountState = watch(accountStateNotifier);
+                      final accountState = ref.watch(accountStateNotifier);
                       switch (accountState.status) {
                         case AccountStatus.loading:
                           return Center(child: PlatformLoadingIndicator());

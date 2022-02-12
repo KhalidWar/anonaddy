@@ -10,16 +10,16 @@ import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DomainDefaultRecipient extends StatefulWidget {
+class DomainDefaultRecipient extends ConsumerStatefulWidget {
   const DomainDefaultRecipient(this.domain);
-
   final Domain domain;
 
   @override
-  _DomainDefaultRecipientState createState() => _DomainDefaultRecipientState();
+  ConsumerState createState() => _DomainDefaultRecipientState();
 }
 
-class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
+class _DomainDefaultRecipientState
+    extends ConsumerState<DomainDefaultRecipient> {
   final _verifiedRecipients = <Recipient>[];
   Recipient? selectedRecipient;
 
@@ -50,7 +50,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
   }
 
   void _setVerifiedRecipients() {
-    final recipientTabState = context.read(recipientTabStateNotifier);
+    final recipientTabState = ref.read(recipientTabStateNotifier);
     if (recipientTabState.status == RecipientTabStatus.loaded) {
       final allRecipients = recipientTabState.recipients!;
       for (Recipient recipient in allRecipients) {
@@ -91,7 +91,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
   }
 
   Future<void> updateDefaultRecipient() async {
-    await context
+    await ref
         .read(domainsScreenStateNotifier.notifier)
         .updateDomainDefaultRecipients(
           widget.domain.id,
@@ -134,9 +134,9 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
                           SizedBox(height: size.height * 0.01),
                           Consumer(
                             builder: (_, watch, __) {
-                              final isLoading =
-                                  watch(domainsScreenStateNotifier)
-                                      .updateRecipientLoading!;
+                              final isLoading = ref
+                                  .watch(domainsScreenStateNotifier)
+                                  .updateRecipientLoading!;
                               return isLoading
                                   ? LinearProgressIndicator(color: kAccentColor)
                                   : Divider(height: 0);

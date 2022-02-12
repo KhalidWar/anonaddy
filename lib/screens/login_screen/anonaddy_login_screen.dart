@@ -9,23 +9,23 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AnonAddyLoginScreen extends StatefulWidget {
+class AnonAddyLoginScreen extends ConsumerStatefulWidget {
+  const AnonAddyLoginScreen({Key? key}) : super(key: key);
+
   static const routeName = 'loginScreen';
 
   @override
-  State<AnonAddyLoginScreen> createState() => _AnonAddyLoginScreenState();
+  ConsumerState createState() => _AnonAddyLoginScreenState();
 }
 
-class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
+class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
   final _tokenFormKey = GlobalKey<FormState>();
 
   String _token = '';
 
   Future<void> login(BuildContext context) async {
     if (_tokenFormKey.currentState!.validate()) {
-      await context
-          .read(authStateNotifier.notifier)
-          .login(kAuthorityURL, _token);
+      await ref.read(authStateNotifier.notifier).login(kAuthorityURL, _token);
     }
   }
 
@@ -215,8 +215,8 @@ class _AnonAddyLoginScreenState extends State<AnonAddyLoginScreen> {
     final size = MediaQuery.of(context).size;
 
     return Consumer(
-      builder: (context, watch, child) {
-        final authState = watch(authStateNotifier);
+      builder: (context, ref, child) {
+        final authState = ref.watch(authStateNotifier);
 
         return Container(
           height: size.height * 0.1,

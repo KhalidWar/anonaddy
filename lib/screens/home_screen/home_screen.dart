@@ -16,28 +16,30 @@ import '../alert_center/alert_center_screen.dart';
 import '../alias_tab/alias_tab.dart';
 import 'components/create_alias_fab.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   static const routeName = 'homeScreen';
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  ConsumerState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int _selectedIndex = 1;
 
   void _switchIndex(int index) {
-    context.read(fabVisibilityStateNotifier.notifier).showFab();
+    ref.read(fabVisibilityStateNotifier.notifier).showFab();
     setState(() {
       _selectedIndex = index;
     });
     if (index == 0) {
-      context.read(accountStateNotifier.notifier).refreshAccount();
-      context.read(recipientTabStateNotifier.notifier).refreshRecipients();
+      ref.read(accountStateNotifier.notifier).refreshAccount();
+      ref.read(recipientTabStateNotifier.notifier).refreshRecipients();
     }
 
     if (index == 1) {
-      context.read(aliasTabStateNotifier.notifier).refreshAliases();
+      ref.read(aliasTabStateNotifier.notifier).refreshAliases();
     }
   }
 
@@ -46,10 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     /// Show [ChangelogWidget] in [HomeScreen] if app has updated
-    context.read(changelogStateNotifier.notifier).showChangelogWidget(context);
+    ref.read(changelogStateNotifier.notifier).showChangelogWidget(context);
 
     /// Pre-loads [DomainOptions] data for [CreateAlias]
-    context.read(domainOptionsStateNotifier.notifier).fetchDomainOption();
+    ref.read(domainOptionsStateNotifier.notifier).fetchDomainOption();
   }
 
   @override

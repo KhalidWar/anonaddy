@@ -10,8 +10,8 @@ class AppVersion extends ConsumerWidget {
   const AppVersion({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final accountState = watch(accountStateNotifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountState = ref.watch(accountStateNotifier);
 
     switch (accountState.status) {
       case AccountStatus.loading:
@@ -22,8 +22,8 @@ class AppVersion extends ConsumerWidget {
 
         if (subscription == null) {
           return Consumer(
-            builder: (_, watch, __) {
-              final appVersionData = watch(appVersionProvider);
+            builder: (_, ref, __) {
+              final appVersionData = ref.watch(appVersionProvider);
               return appVersionData.when(
                 loading: () => Container(),
                 data: (appData) {

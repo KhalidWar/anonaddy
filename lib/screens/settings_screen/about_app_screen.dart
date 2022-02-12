@@ -104,8 +104,8 @@ class AboutAppScreen extends StatelessWidget {
         ),
         SizedBox(height: size.height * 0.01),
         Consumer(
-          builder: (_, watch, __) {
-            final packageInfo = watch(packageInfoProvider);
+          builder: (_, ref, __) {
+            final packageInfo = ref.watch(packageInfoProvider);
             return packageInfo.when(
               data: (data) {
                 return Column(

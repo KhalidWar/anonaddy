@@ -24,23 +24,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasScreen extends StatefulWidget {
+class AliasScreen extends ConsumerStatefulWidget {
   const AliasScreen(this.alias);
   final Alias alias;
 
   static const routeName = 'aliasDetailedScreen';
 
   @override
-  State<AliasScreen> createState() => _AliasScreenState();
+  ConsumerState createState() => _AliasScreenState();
 }
 
-class _AliasScreenState extends State<AliasScreen> {
+class _AliasScreenState extends ConsumerState<AliasScreen> {
   @override
   void initState() {
     super.initState();
 
     /// Fetches latest data for this specific alias
-    context.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
+    ref.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
   }
 
   @override
@@ -50,7 +50,7 @@ class _AliasScreenState extends State<AliasScreen> {
       appBar: buildAppBar(context),
       body: Consumer(
         builder: (context, watch, _) {
-          final aliasState = watch(aliasScreenStateNotifier);
+          final aliasState = ref.watch(aliasScreenStateNotifier);
 
           switch (aliasState.status!) {
             case AliasScreenStatus.loading:
@@ -128,10 +128,10 @@ class _AliasScreenState extends State<AliasScreen> {
             isAliasDeleted
                 ? NicheMethod.showToast(kRestoreBeforeActivate)
                 : alias.active
-                    ? await context
+                    ? await ref
                         .read(aliasScreenStateNotifier.notifier)
                         .toggleOffAlias(alias.id)
-                    : await context
+                    : await ref
                         .read(aliasScreenStateNotifier.notifier)
                         .toggleOnAlias(alias.id);
           },
@@ -283,10 +283,10 @@ class _AliasScreenState extends State<AliasScreen> {
 
           /// Delete [alias] if it's available or restore it if it's deleted
           isDeleted
-              ? await context
+              ? await ref
                   .read(aliasScreenStateNotifier.notifier)
                   .restoreAlias(alias.id)
-              : await context
+              : await ref
                   .read(aliasScreenStateNotifier.notifier)
                   .deleteAlias(alias.id);
 
@@ -303,7 +303,7 @@ class _AliasScreenState extends State<AliasScreen> {
 
     Future<void> generateAddress() async {
       if (sendFromFormKey.currentState!.validate()) {
-        await context
+        await ref
             .read(aliasScreenStateNotifier.notifier)
             .sendFromAlias(alias.email, destinationEmail);
         Navigator.pop(context);
@@ -382,7 +382,7 @@ class _AliasScreenState extends State<AliasScreen> {
   }
 
   Future updateDescriptionDialog(BuildContext context, Alias alias) {
-    final aliasScreenNotifier = context.read(aliasScreenStateNotifier.notifier);
+    final aliasScreenNotifier = ref.read(aliasScreenStateNotifier.notifier);
     final descriptionFormKey = GlobalKey<FormState>();
     String newDescription = '';
 
@@ -419,7 +419,7 @@ class _AliasScreenState extends State<AliasScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     Future<void> forget() async {
-      await context
+      await ref
           .read(aliasScreenStateNotifier.notifier)
           .forgetAlias(widget.alias.id);
 
@@ -452,7 +452,7 @@ class _AliasScreenState extends State<AliasScreen> {
         ),
         color: Colors.white,
         onPressed: () {
-          context.read(aliasTabStateNotifier.notifier).refreshAliases();
+          ref.read(aliasTabStateNotifier.notifier).refreshAliases();
           Navigator.pop(context);
         },
       ),

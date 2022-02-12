@@ -43,8 +43,8 @@ class SearchTab extends StatelessWidget {
             ];
           },
           body: Consumer(
-            builder: (context, watch, _) {
-              final searchState = watch(searchResultStateNotifier);
+            builder: (context, ref, _) {
+              final searchState = ref.watch(searchResultStateNotifier);
 
               switch (searchState.status) {
 
@@ -58,7 +58,7 @@ class SearchTab extends StatelessWidget {
                         buttonLabel: kClearSearchHistoryButtonText,
                         buttonTextColor: Colors.red,
                         onPress: () {
-                          context
+                          ref
                               .read(searchHistoryStateNotifier.notifier)
                               .clearSearchHistory();
                         },
@@ -71,7 +71,7 @@ class SearchTab extends StatelessWidget {
                 /// locally available aliases, typically page 1 of user's aliases.
                 case SearchResultStatus.Limited:
                   final aliases = searchState.aliases!;
-                  return buildResult(context, aliases, true);
+                  return buildResult(context, ref, aliases, true);
 
                 /// When search is loading e.g. fetching matching aliases
                 case SearchResultStatus.Loading:
@@ -83,7 +83,7 @@ class SearchTab extends StatelessWidget {
                         buttonTextColor: Colors.red,
                         onPress: () {
                           /// Close current on-going search
-                          context
+                          ref
                               .read(searchResultStateNotifier.notifier)
                               .closeSearch();
                         },
@@ -95,7 +95,7 @@ class SearchTab extends StatelessWidget {
                 /// When search has finished loading and returns matching aliases
                 case SearchResultStatus.Loaded:
                   final aliases = searchState.aliases ?? [];
-                  return buildResult(context, aliases, false);
+                  return buildResult(context, ref, aliases, false);
 
                 /// When searching fails and returns an error
                 case SearchResultStatus.Failed:
@@ -111,8 +111,8 @@ class SearchTab extends StatelessWidget {
     );
   }
 
-  Widget buildResult(
-      BuildContext context, List<Alias> resultsList, bool isLimited) {
+  Widget buildResult(BuildContext context, WidgetRef ref,
+      List<Alias> resultsList, bool isLimited) {
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -121,7 +121,7 @@ class SearchTab extends StatelessWidget {
           buttonLabel: kCloseSearchButtonText,
           onPress: () {
             FocusScope.of(context).requestFocus(FocusNode());
-            context.read(searchResultStateNotifier.notifier).closeSearch();
+            ref.read(searchResultStateNotifier.notifier).closeSearch();
           },
         ),
 
@@ -161,7 +161,7 @@ class SearchTab extends StatelessWidget {
                       FocusScope.of(context).requestFocus(FocusNode());
 
                       /// Add selected Alias to Search History
-                      context
+                      ref
                           .read(searchHistoryStateNotifier.notifier)
                           .addAliasToSearchHistory(alias);
 

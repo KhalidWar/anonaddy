@@ -17,8 +17,8 @@ class AuthorizationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (context, watch, _) {
-        final authState = watch(authStateNotifier);
+      builder: (context, ref, _) {
+        final authState = ref.watch(authStateNotifier);
 
         switch (authState.authStatus) {
           case AuthStatus.initial:

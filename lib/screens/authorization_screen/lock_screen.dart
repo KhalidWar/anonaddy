@@ -7,18 +7,20 @@ import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LockScreen extends StatefulWidget {
-  const LockScreen({Key? key}) : super(key: key);
+class LockScreen extends ConsumerStatefulWidget {
+  const LockScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<LockScreen> createState() => _LockScreenState();
+  ConsumerState createState() => _LockScreenState();
 }
 
-class _LockScreenState extends State<LockScreen> {
+class _LockScreenState extends ConsumerState<LockScreen> {
   @override
   void initState() {
     super.initState();
-    context.read(authStateNotifier.notifier).authenticate();
+    ref.read(authStateNotifier.notifier).authenticate();
   }
 
   @override
@@ -60,7 +62,7 @@ class _LockScreenState extends State<LockScreen> {
           ),
         ),
       ),
-      onPressed: () => context.read(authStateNotifier.notifier).authenticate(),
+      onPressed: () => ref.read(authStateNotifier.notifier).authenticate(),
     );
   }
 
@@ -84,7 +86,7 @@ class _LockScreenState extends State<LockScreen> {
             title: 'Logout',
             content: kLogOutAlertDialog,
             method: () async {
-              await context.read(authStateNotifier.notifier).logout(context);
+              await ref.read(authStateNotifier.notifier).logout(context);
             },
           ),
         );

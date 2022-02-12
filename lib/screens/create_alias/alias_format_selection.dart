@@ -6,13 +6,13 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasFormatSelection extends StatelessWidget {
+class AliasFormatSelection extends ConsumerWidget {
   const AliasFormatSelection();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final aliasFormatList =
-        context.read(createAliasStateNotifier).aliasFormatList ??
+        ref.read(createAliasStateNotifier).aliasFormatList ??
             CreateAliasState.paidTierNoSharedDomain;
 
     return DraggableScrollableSheet(
@@ -55,7 +55,7 @@ class AliasFormatSelection extends StatelessWidget {
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                           onTap: () {
-                            context
+                            ref
                                 .read(createAliasStateNotifier.notifier)
                                 .setAliasFormat(format);
                             Navigator.pop(context);

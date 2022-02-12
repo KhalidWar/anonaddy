@@ -16,15 +16,15 @@ class CreateAliasFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (context, watch, _) {
-        final showFab = watch(fabVisibilityStateNotifier);
+      builder: (context, ref, _) {
+        final showFab = ref.watch(fabVisibilityStateNotifier);
 
         return AnimatedFab(
           showFab: showFab,
           child: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
-              final accountState = context.read(accountStateNotifier);
+              final accountState = ref.read(accountStateNotifier);
 
               switch (accountState.status) {
                 case AccountStatus.loading:

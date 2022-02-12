@@ -6,18 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'create_alias_card.dart';
 
-class LocalPartInput extends StatelessWidget {
+class LocalPartInput extends ConsumerWidget {
   const LocalPartInput({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return CreateAliasCard(
       header: 'Local Part',
       subHeader: '',
       showIcon: false,
       child: TextFormField(
         onChanged: (input) =>
-            context.read(createAliasStateNotifier.notifier).setLocalPart(input),
+            ref.read(createAliasStateNotifier.notifier).setLocalPart(input),
         textInputAction: TextInputAction.next,
         decoration: kTextFormFieldDecoration.copyWith(
           hintText: kLocalPartFieldHint,

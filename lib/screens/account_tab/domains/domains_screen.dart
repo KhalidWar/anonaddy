@@ -20,23 +20,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'domain_default_recipient.dart';
 
-class DomainsScreen extends StatefulWidget {
+class DomainsScreen extends ConsumerStatefulWidget {
   const DomainsScreen({Key? key, required this.domain}) : super(key: key);
   final Domain domain;
 
   static const routeName = 'domainDetailedScreen';
 
   @override
-  State<DomainsScreen> createState() => _DomainsScreenState();
+  ConsumerState createState() => _DomainsScreenState();
 }
 
-class _DomainsScreenState extends State<DomainsScreen> {
+class _DomainsScreenState extends ConsumerState<DomainsScreen> {
   @override
   void initState() {
     super.initState();
-    context
-        .read(domainsScreenStateNotifier.notifier)
-        .fetchDomain(widget.domain);
+    ref.read(domainsScreenStateNotifier.notifier).fetchDomain(widget.domain);
   }
 
   @override
@@ -45,7 +43,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
       appBar: buildAppBar(context),
       body: Consumer(
         builder: (context, watch, _) {
-          final domainProvider = watch(domainsScreenStateNotifier);
+          final domainProvider = ref.watch(domainsScreenStateNotifier);
 
           switch (domainProvider.status!) {
             case DomainsScreenStatus.loading:
@@ -71,7 +69,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
     final size = MediaQuery.of(context).size;
 
     final domain = domainProvider.domain!;
-    final domainNotifier = context.read(domainsScreenStateNotifier.notifier);
+    final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
 
     return ListView(
       children: [
@@ -237,7 +235,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
   }
 
   Future buildEditDescriptionDialog(BuildContext context, Domain domain) {
-    final domainNotifier = context.read(domainsScreenStateNotifier.notifier);
+    final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
     final formKey = GlobalKey<FormState>();
     String newDescription = '';
 
@@ -289,7 +287,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     Future<void> deleteDomain() async {
-      await context
+      await ref
           .read(domainsScreenStateNotifier.notifier)
           .deleteDomain(widget.domain.id);
       Navigator.pop(context);

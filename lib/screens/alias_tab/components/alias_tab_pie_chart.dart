@@ -19,8 +19,8 @@ class AliasTabPieChart extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: size.height * 0.045),
       child: Consumer(
-        builder: (context, watch, child) {
-          final accountState = watch(accountStateNotifier);
+        builder: (context, ref, child) {
+          final accountState = ref.watch(accountStateNotifier);
 
           switch (accountState.status) {
             case AccountStatus.loading:

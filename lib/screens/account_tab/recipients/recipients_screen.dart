@@ -22,17 +22,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-class RecipientsScreen extends StatefulWidget {
+class RecipientsScreen extends ConsumerStatefulWidget {
   const RecipientsScreen({required this.recipient});
   final Recipient recipient;
 
   static const routeName = 'recipientDetailedScreen';
 
   @override
-  State<RecipientsScreen> createState() => _RecipientsScreenState();
+  ConsumerState createState() => _RecipientsScreenState();
 }
 
-class _RecipientsScreenState extends State<RecipientsScreen> {
+class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
   int calculateTotal(List<int> list) {
     if (list.isEmpty) {
       return 0;
@@ -45,7 +45,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
   @override
   void initState() {
     super.initState();
-    context
+    ref
         .read(recipientScreenStateNotifier.notifier)
         .fetchRecipient(widget.recipient);
   }
@@ -57,7 +57,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
       appBar: buildAppBar(context),
       body: Consumer(
         builder: (context, watch, _) {
-          final recipientScreenState = watch(recipientScreenStateNotifier);
+          final recipientScreenState = ref.watch(recipientScreenStateNotifier);
 
           switch (recipientScreenState.status) {
             case RecipientScreenStatus.loading:
@@ -82,8 +82,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
       BuildContext context, RecipientScreenState recipientScreenState) {
     final recipient = recipientScreenState.recipient!;
 
-    final recipientProvider =
-        context.read(recipientScreenStateNotifier.notifier);
+    final recipientProvider = ref.read(recipientScreenStateNotifier.notifier);
     final size = MediaQuery.of(context).size;
 
     final List<int> forwardedList = [];
@@ -271,7 +270,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
         title: 'Remove Public Key',
         content: kRemoveRecipientPublicKeyConfirmation,
         method: () async {
-          await context
+          await ref
               .read(recipientScreenStateNotifier.notifier)
               .removePublicGPGKey(recipient);
 
@@ -289,7 +288,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
 
     Future<void> addPublicKey() async {
       if (formKey.currentState!.validate()) {
-        await context
+        await ref
             .read(recipientScreenStateNotifier.notifier)
             .addPublicGPGKey(recipient, keyData);
         Navigator.pop(context);
@@ -361,7 +360,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
           title: 'Delete Recipient',
           content: kDeleteRecipientConfirmation,
           method: () async {
-            await context
+            await ref
                 .read(recipientScreenStateNotifier.notifier)
                 .removeRecipient(widget.recipient);
 

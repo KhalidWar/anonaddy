@@ -23,10 +23,10 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Settings')),
       body: Consumer(
-        builder: (_, watch, __) {
-          final settingsState = watch(settingsStateNotifier);
-          final settingsNotifier = context.read(settingsStateNotifier.notifier);
-          final biometric = watch(biometricNotifier);
+        builder: (_, ref, __) {
+          final settingsState = ref.watch(settingsStateNotifier);
+          final settingsNotifier = ref.read(settingsStateNotifier.notifier);
+          final biometric = ref.watch(biometricNotifier);
 
           return ListView(
             children: [
@@ -63,7 +63,7 @@ class SettingsScreen extends StatelessWidget {
                 subtitle: Text('Require biometric authentication'),
                 trailing: PlatformSwitch(
                   value: biometric.isEnabled,
-                  onChanged: (toggle) => context
+                  onChanged: (toggle) => ref
                       .read(biometricNotifier.notifier)
                       .toggleBiometric(toggle),
                 ),

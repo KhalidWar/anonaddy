@@ -13,11 +13,11 @@ import 'components/alias_shimmer_loading.dart';
 import 'components/alias_tab_pie_chart.dart';
 import 'components/empty_list_alias_tab.dart';
 
-class AliasTab extends StatelessWidget {
+class AliasTab extends ConsumerWidget {
   const AliasTab();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -27,7 +27,7 @@ class AliasTab extends StatelessWidget {
         length: 2,
         child: NestedScrollView(
           controller:
-              context.read(fabVisibilityStateNotifier.notifier).aliasController,
+              ref.read(fabVisibilityStateNotifier.notifier).aliasController,
           headerSliverBuilder: (context, _) {
             return [
               SliverAppBar(
@@ -50,8 +50,8 @@ class AliasTab extends StatelessWidget {
             ];
           },
           body: Consumer(
-            builder: (context, watch, _) {
-              final aliasTabState = watch(aliasTabStateNotifier);
+            builder: (context, ref, _) {
+              final aliasTabState = ref.watch(aliasTabStateNotifier);
 
               switch (aliasTabState.status) {
 
@@ -76,7 +76,7 @@ class AliasTab extends StatelessWidget {
                         color: kAccentColor,
                         displacement: 20,
                         onRefresh: () async {
-                          await context
+                          await ref
                               .read(aliasTabStateNotifier.notifier)
                               .refreshAliases();
                         },
@@ -98,7 +98,7 @@ class AliasTab extends StatelessWidget {
                       /// Deleted aliases list
                       RefreshIndicator(
                         onRefresh: () async {
-                          await context
+                          await ref
                               .read(aliasTabStateNotifier.notifier)
                               .refreshAliases();
                         },

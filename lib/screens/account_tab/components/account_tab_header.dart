@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'add_new_username.dart';
 
-class AccountTabHeader extends StatelessWidget {
+class AccountTabHeader extends ConsumerWidget {
   AccountTabHeader({Key? key, required this.account}) : super(key: key) {
     isSelfHosted = account.subscription == null;
   }
@@ -77,7 +77,7 @@ class AccountTabHeader extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     return Column(
@@ -107,7 +107,7 @@ class AccountTabHeader extends StatelessWidget {
           subtitle: 'Default Alias Domain',
           leadingIconData: Icons.dns_outlined,
           trailingIcon: Icon(Icons.open_in_new_outlined),
-          onTap: () => updateDefaultAliasFormatDomain(context),
+          onTap: () => updateDefaultAliasFormatDomain(ref),
         ),
         AccountListTile(
           title: account.defaultAliasFormat == null
@@ -116,7 +116,7 @@ class AccountTabHeader extends StatelessWidget {
           subtitle: 'Default Alias Format',
           leadingIconData: Icons.alternate_email_outlined,
           trailingIcon: Icon(Icons.open_in_new_outlined),
-          onTap: () => updateDefaultAliasFormatDomain(context),
+          onTap: () => updateDefaultAliasFormatDomain(ref),
         ),
         AccountListTile(
           title: _calculateRecipientsCount(),
@@ -136,8 +136,8 @@ class AccountTabHeader extends StatelessWidget {
     );
   }
 
-  Future<void> updateDefaultAliasFormatDomain(BuildContext context) async {
-    final instanceURL = await context.read(accessTokenService).getInstanceURL();
+  Future<void> updateDefaultAliasFormatDomain(WidgetRef ref) async {
+    final instanceURL = await ref.read(accessTokenService).getInstanceURL();
     await NicheMethod.launchURL('https://$instanceURL/settings');
   }
 

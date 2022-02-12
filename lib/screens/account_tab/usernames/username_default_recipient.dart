@@ -11,18 +11,16 @@ import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UsernameDefaultRecipientScreen extends StatefulWidget {
+class UsernameDefaultRecipientScreen extends ConsumerStatefulWidget {
   const UsernameDefaultRecipientScreen(this.username);
-
   final Username username;
 
   @override
-  _AliasDefaultRecipientScreenState createState() =>
-      _AliasDefaultRecipientScreenState();
+  ConsumerState createState() => _UsernameDefaultRecipientState();
 }
 
-class _AliasDefaultRecipientScreenState
-    extends State<UsernameDefaultRecipientScreen> {
+class _UsernameDefaultRecipientState
+    extends ConsumerState<UsernameDefaultRecipientScreen> {
   final _verifiedRecipients = <Recipient>[];
   Recipient? selectedRecipient;
 
@@ -53,7 +51,7 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final recipientTabState = context.read(recipientTabStateNotifier);
+    final recipientTabState = ref.read(recipientTabStateNotifier);
     if (recipientTabState.status == RecipientTabStatus.loaded) {
       final allRecipients = recipientTabState.recipients!;
       for (Recipient recipient in allRecipients) {
@@ -188,7 +186,8 @@ class _AliasDefaultRecipientScreenState
                 style: ElevatedButton.styleFrom(),
                 child: Consumer(
                   builder: (_, watch, __) {
-                    final isLoading = watch(usernamesScreenStateNotifier)
+                    final isLoading = ref
+                        .watch(usernamesScreenStateNotifier)
                         .updateRecipientLoading!;
                     return isLoading
                         ? PlatformLoadingIndicator()
@@ -196,7 +195,7 @@ class _AliasDefaultRecipientScreenState
                   },
                 ),
                 onPressed: () async {
-                  await context
+                  await ref
                       .read(usernamesScreenStateNotifier.notifier)
                       .updateDefaultRecipient(
                         widget.username,

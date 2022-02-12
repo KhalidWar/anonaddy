@@ -6,12 +6,14 @@ import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddNewUsername extends StatefulWidget {
+class AddNewUsername extends ConsumerStatefulWidget {
+  const AddNewUsername({Key? key}) : super(key: key);
+
   @override
-  State<AddNewUsername> createState() => _AddNewUsernameState();
+  ConsumerState createState() => _AddNewUserNameState();
 }
 
-class _AddNewUsernameState extends State<AddNewUsername> {
+class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
   final _textEditController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -27,7 +29,7 @@ class _AddNewUsernameState extends State<AddNewUsername> {
 
     Future<void> createUsername() async {
       if (_formKey.currentState!.validate()) {
-        await context
+        await ref
             .read(usernamesScreenStateNotifier.notifier)
             .createNewUsername(_textEditController.text.trim());
         Navigator.pop(context);

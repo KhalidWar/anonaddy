@@ -14,8 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UsernamesTab extends ConsumerWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
-    final accountState = watch(accountStateNotifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final accountState = ref.watch(accountStateNotifier);
 
     switch (accountState.status) {
       case AccountStatus.loading:
@@ -27,7 +27,7 @@ class UsernamesTab extends ConsumerWidget {
           return PaidFeatureWall();
         }
 
-        final usernameState = watch(usernameStateNotifier);
+        final usernameState = ref.watch(usernameStateNotifier);
         switch (usernameState.status) {
           case UsernamesStatus.loading:
             return RecipientsShimmerLoading();
