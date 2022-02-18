@@ -14,6 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'domains_screen.dart';
 
 class DomainsTab extends ConsumerWidget {
+  const DomainsTab();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final accountState = ref.watch(accountStateNotifier);

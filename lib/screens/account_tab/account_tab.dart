@@ -18,7 +18,6 @@ class AccountTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: DefaultTabController(
@@ -27,11 +26,10 @@ class AccountTab extends ConsumerWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                expandedHeight: size.height * 0.34,
+                expandedHeight: size.height * 0.3,
                 elevation: 0,
                 floating: true,
                 pinned: true,
-                backgroundColor: isDark ? Colors.black : Colors.white,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   background: Consumer(
@@ -39,7 +37,7 @@ class AccountTab extends ConsumerWidget {
                       final accountState = ref.watch(accountStateNotifier);
                       switch (accountState.status) {
                         case AccountStatus.loading:
-                          return Center(child: PlatformLoadingIndicator());
+                          return const PlatformLoadingIndicator();
 
                         case AccountStatus.loaded:
                           final account = accountState.account;
@@ -57,10 +55,9 @@ class AccountTab extends ConsumerWidget {
                     },
                   ),
                 ),
-                bottom: TabBar(
+                bottom: const TabBar(
                   isScrollable: true,
                   indicatorColor: kAccentColor,
-                  labelColor: isDark ? Colors.white : Colors.black,
                   tabs: [
                     Tab(child: Text('Recipients')),
                     Tab(child: Text('Usernames')),
@@ -71,7 +68,7 @@ class AccountTab extends ConsumerWidget {
               ),
             ];
           },
-          body: TabBarView(
+          body: const TabBarView(
             children: [
               RecipientsTab(),
               UsernamesTab(),

@@ -1,10 +1,17 @@
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
+import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../shared_components/constants/material_constants.dart';
+import '../../../shared_components/constants/official_anonaddy_strings.dart';
+import '../../../shared_components/constants/ui_strings.dart';
+import '../../../utilities/niche_method.dart';
+import '../components/add_new_recipient.dart';
 
 class RecipientsTab extends ConsumerStatefulWidget {
   const RecipientsTab({Key? key}) : super(key: key);
@@ -14,6 +21,38 @@ class RecipientsTab extends ConsumerStatefulWidget {
 }
 
 class _RecipientTabState extends ConsumerState<RecipientsTab> {
+  void addNewRecipient(BuildContext context) {
+    final account = ref.read(accountStateNotifier).account;
+
+    /// Draws UI for adding new recipient
+    Future buildAddNewRecipient(BuildContext context) {
+      return showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(kBottomSheetBorderRadius),
+          ),
+        ),
+        builder: (context) => const AddNewRecipient(),
+      );
+    }
+
+    /// If account data is unavailable, show an error message and exit method.
+    if (account == null) {
+      NicheMethod.showToast(kLoadAccountDataFailed);
+      return;
+    }
+
+    if (account.subscription == null) {
+      buildAddNewRecipient(context);
+    } else {
+      account.recipientCount == account.recipientLimit
+          ? NicheMethod.showToast(kReachedRecipientLimit)
+          : buildAddNewRecipient(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,21 +71,37 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
         return const RecipientsShimmerLoading();
 
       case RecipientTabStatus.loaded:
-        final recipientList = recipientTabState.recipients!;
-        if (recipientList.isEmpty)
-          return Center(
-            child: Text('No recipients found',
-                style: Theme.of(context).textTheme.bodyText1),
-          );
-        else
-          return ListView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: size.height * 0.004),
-            itemCount: recipientList.length,
-            itemBuilder: (context, index) {
-              return RecipientListTile(recipient: recipientList[index]);
-            },
-          );
+        final recipients = recipientTabState.recipients!;
+
+        return ListView(
+          shrinkWrap: true,
+          children: [
+            recipients.isEmpty
+                ? ListTile(
+                    title: Center(
+                      child: Text(
+                        'No recipients found',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.height * 0.004),
+                    itemCount: recipients.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final recipient = recipients[index];
+                      return RecipientListTile(recipient: recipient);
+                    },
+                  ),
+            TextButton(
+              child: const Text('Add New Recipient'),
+              onPressed: () => addNewRecipient(context),
+            ),
+          ],
+        );
 
       case RecipientTabStatus.failed:
         final error = recipientTabState.errorMessage;

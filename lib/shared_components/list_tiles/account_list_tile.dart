@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AccountListTile extends StatelessWidget {
-  const AccountListTile(
-      {Key? key,
-      this.title,
-      required this.subtitle,
-      required this.leadingIconData,
-      this.trailingIcon,
-      this.onTap})
-      : super(key: key);
+  const AccountListTile({
+    Key? key,
+    this.title,
+    required this.subtitle,
+    required this.leadingIconData,
+    this.trailingIcon,
+    this.onTap,
+  }) : super(key: key);
 
   final String? title;
   final String subtitle;
@@ -23,23 +23,32 @@ class AccountListTile extends StatelessWidget {
     return InkWell(
       onTap: onTap as void Function()?,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(leadingIconData),
+            Icon(leadingIconData, color: Colors.white),
             SizedBox(width: size.width * 0.04),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title ?? 'No default selected',
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2!
+                      .copyWith(color: Colors.white),
                 ),
-                Text(subtitle, style: Theme.of(context).textTheme.caption),
+                Text(
+                  subtitle,
+                  style: Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .copyWith(color: Colors.white),
+                ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             IgnorePointer(child: trailingIcon),
           ],
         ),
