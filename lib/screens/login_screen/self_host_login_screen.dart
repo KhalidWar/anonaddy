@@ -38,25 +38,25 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: AppBar(elevation: 0, title: Text('Change Instance')),
+        appBar: AppBar(elevation: 0, title: const Text('Change Instance')),
         backgroundColor: kPrimaryColor,
         body: Center(
           child: SingleChildScrollView(
             child: Container(
               height: size.height * 0.6,
               width: size.width * 0.88,
-              padding: EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
                 color: isDark
                     ? Theme.of(context).cardTheme.color
                     : Theme.of(context).cardColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -79,7 +79,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                                   color: Theme.of(context).accentColor,
                                 ),
                               ),
-                              border: OutlineInputBorder(),
+                              border: const OutlineInputBorder(),
                               hintText: 'app.anonaddy.com',
                             ),
                           ),
@@ -88,7 +88,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -98,7 +98,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                               'API Token ',
                               style: Theme.of(context).textTheme.headline6,
                             ),
-                            Text('(from the settings page)'),
+                            const Text('(from the settings page)'),
                           ],
                         ),
                         SizedBox(height: size.height * 0.01),
@@ -119,7 +119,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                                   color: Theme.of(context).accentColor,
                                 ),
                               ),
-                              border: OutlineInputBorder(),
+                              border: const OutlineInputBorder(),
                               hintText: 'Enter your API token',
                             ),
                           ),
@@ -130,7 +130,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                   Container(),
                   TextButton(
                     style: TextButton.styleFrom(),
-                    child: Text('How to self-host AnonAddy?'),
+                    child: const Text('How to self-host AnonAddy?'),
                     onPressed: () =>
                         NicheMethod.launchURL(kAnonAddySelfHostingURL),
                   ),
@@ -155,18 +155,18 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
           height: size.height * 0.1,
           width: size.width,
           decoration: BoxDecoration(
-            color: isDark ? Colors.black : Color(0xFFF5F7FA),
-            borderRadius: BorderRadius.only(
+            color: isDark ? Colors.black : const Color(0xFFF5F7FA),
+            borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(10),
               bottomLeft: Radius.circular(10),
             ),
           ),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(),
-            key: Key('loginButton'),
+            key: const Key('loginButton'),
             child: authState.loginLoading!
-                ? CircularProgressIndicator(
+                ? const CircularProgressIndicator(
                     key: Key('loginLoadingIndicator'),
                     backgroundColor: kPrimaryColor,
                   )

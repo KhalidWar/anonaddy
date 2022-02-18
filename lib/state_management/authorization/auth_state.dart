@@ -15,7 +15,7 @@ class AuthState {
   final bool? loginLoading;
 
   static initialState() {
-    return AuthState(
+    return const AuthState(
       authStatus: AuthStatus.initial,
       authLock: AuthLock.off,
       loginLoading: false,
@@ -23,7 +23,7 @@ class AuthState {
   }
 
   static freshStart() {
-    return AuthState(
+    return const AuthState(
       authStatus: AuthStatus.unauthorized,
       authLock: AuthLock.off,
       loginLoading: false,

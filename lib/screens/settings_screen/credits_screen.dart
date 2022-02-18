@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class CreditsScreen extends StatelessWidget {
+  const CreditsScreen({Key? key}) : super(key: key);
+
   static const routeName = 'creditsScreen';
 
   @override
@@ -10,17 +12,17 @@ class CreditsScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Credits')),
+      appBar: AppBar(title: const Text('Credits')),
       body: Column(
         children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(10),
             child: Text(
               'Listed below are third party assets used in AddyManager.',
             ),
           ),
           SizedBox(height: size.height * 0.02),
-          Divider(height: 0),
+          const Divider(height: 0),
           buildTile(
             context: context,
             lottieFile: 'assets/lottie/errorCone.json',
@@ -65,7 +67,7 @@ class CreditsScreen extends StatelessWidget {
 
     return InkWell(
       child: Padding(
-        padding: EdgeInsets.only(right: 10),
+        padding: const EdgeInsets.only(right: 10),
         child: Column(
           children: [
             Row(
@@ -79,7 +81,7 @@ class CreditsScreen extends StatelessWidget {
                       height: size.height * 0.18,
                       width: size.width * 0.35,
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -92,10 +94,10 @@ class CreditsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Icon(Icons.open_in_new_outlined),
+                const Icon(Icons.open_in_new_outlined),
               ],
             ),
-            Divider(height: 0),
+            const Divider(height: 0),
           ],
         ),
       ),

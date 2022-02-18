@@ -29,7 +29,7 @@ class LottieWidget extends StatelessWidget {
     return Stack(
       children: <Widget>[
         if (showLoading ?? false)
-          LinearProgressIndicator(
+          const LinearProgressIndicator(
             backgroundColor: Colors.transparent,
             color: kAccentColor,
           ),

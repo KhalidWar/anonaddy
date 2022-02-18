@@ -15,8 +15,6 @@ import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'create_alias_state.dart';
-
 /// This is the most complex part of this whole project.
 ///
 /// It requires data from several endpoints such as list of verified recipients
@@ -237,10 +235,5 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
       recipients.add(element.id);
     });
     return recipients;
-  }
-
-  void _throwError() {
-    final newState = state.copyWith();
-    _updateState(newState);
   }
 }

@@ -17,7 +17,7 @@ class SearchTabHeader extends StatelessWidget {
 
     return Column(
       children: [
-        Text(
+        const Text(
           kSearchAliasByEmailOrDesc,
           style: TextStyle(color: Colors.white),
         ),
@@ -35,11 +35,11 @@ class SearchTabHeader extends StatelessWidget {
                     validator: (input) =>
                         FormValidator.validateSearchField(input!),
                     textInputAction: TextInputAction.search,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     decoration: kTextFormFieldDecoration.copyWith(
                       hintText: kSearchFieldHint,
-                      hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: OutlineInputBorder(
+                      hintStyle: const TextStyle(color: Colors.white),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                       suffixIcon:
@@ -67,7 +67,7 @@ class SearchTabHeader extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Include deleted aliases',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -92,12 +92,13 @@ class SearchTabHeader extends StatelessWidget {
   Widget? closeIcon(BuildContext context, WidgetRef ref, bool showCloseIcon) {
     if (showCloseIcon) {
       return IconButton(
-        icon: Icon(Icons.close, color: Colors.white),
+        icon: const Icon(Icons.close, color: Colors.white),
         onPressed: () {
           FocusScope.of(context).requestFocus(FocusNode());
           ref.read(searchResultStateNotifier.notifier).closeSearch();
         },
       );
     }
+    return null;
   }
 }

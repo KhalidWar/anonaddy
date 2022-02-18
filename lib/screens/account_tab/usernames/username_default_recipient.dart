@@ -12,7 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UsernameDefaultRecipientScreen extends ConsumerStatefulWidget {
-  const UsernameDefaultRecipientScreen(this.username);
+  const UsernameDefaultRecipientScreen({
+    Key? key,
+    required this.username,
+  }) : super(key: key);
   final Username username;
 
   @override
@@ -116,14 +119,15 @@ class _UsernameDefaultRecipientState
               children: [
                 Column(
                   children: [
-                    BottomSheetHeader(headerLabel: 'Update Default Recipient'),
+                    const BottomSheetHeader(
+                        headerLabel: 'Update Default Recipient'),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text(kUpdateUsernameDefaultRecipient),
+                          const Text(kUpdateUsernameDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
-                          Divider(height: 0),
+                          const Divider(height: 0),
                         ],
                       ),
                     ),
@@ -140,7 +144,7 @@ class _UsernameDefaultRecipientState
                 else
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _verifiedRecipients.length,
                     itemBuilder: (context, index) {
                       final verifiedRecipient = _verifiedRecipients[index];
@@ -165,13 +169,13 @@ class _UsernameDefaultRecipientState
                     },
                   ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Divider(height: 0),
+                      const Divider(height: 0),
                       SizedBox(height: size.height * 0.01),
-                      Text(kUpdateAliasRecipientNote),
+                      const Text(kUpdateAliasRecipientNote),
                     ],
                   ),
                 ),
@@ -190,8 +194,8 @@ class _UsernameDefaultRecipientState
                         .watch(usernamesScreenStateNotifier)
                         .updateRecipientLoading!;
                     return isLoading
-                        ? PlatformLoadingIndicator()
-                        : Text('Update Default Recipients');
+                        ? const PlatformLoadingIndicator()
+                        : const Text('Update Default Recipients');
                   },
                 ),
                 onPressed: () async {

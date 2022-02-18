@@ -31,7 +31,7 @@ class AliasScreenState {
   static AliasScreenState initialState() {
     /// Initializing [AliasScreen] state to avoid null exception
     /// Then call [.copyWith()] method to update specific state variable
-    return AliasScreenState(
+    return const AliasScreenState(
       status: AliasScreenStatus.loading,
       errorMessage: '',
       isToggleLoading: false,

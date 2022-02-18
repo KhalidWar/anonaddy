@@ -1,3 +1,5 @@
+import 'package:anonaddy/screens/create_alias/components/recipients_note.dart';
+import 'package:anonaddy/screens/create_alias/components/recipients_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -7,9 +9,6 @@ import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart'
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'components/recipients_note.dart';
-import 'components/recipients_tile.dart';
 
 class AliasRecipientSelection extends ConsumerStatefulWidget {
   const AliasRecipientSelection({Key? key}) : super(key: key);
@@ -44,7 +43,7 @@ class _AliasRecipientSelectionState
 
             switch (recipientState.status) {
               case RecipientTabStatus.loading:
-                return Center(child: PlatformLoadingIndicator());
+                return const Center(child: PlatformLoadingIndicator());
 
               case RecipientTabStatus.loaded:
                 return Consumer(
@@ -59,13 +58,13 @@ class _AliasRecipientSelectionState
 
                     return Column(
                       children: [
-                        BottomSheetHeader(
+                        const BottomSheetHeader(
                             headerLabel: 'Select Default Recipients'),
                         Expanded(
                           child: ListView(
                             shrinkWrap: true,
                             controller: controller,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             children: [
                               if (verifiedRecipients.isEmpty)
                                 Center(
@@ -78,7 +77,7 @@ class _AliasRecipientSelectionState
                               else
                                 ListView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: verifiedRecipients.length,
                                   itemBuilder: (context, index) {
                                     final verifiedRecipient =
@@ -117,7 +116,7 @@ class _AliasRecipientSelectionState
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(),
-                              child: Text('Done'),
+                              child: const Text('Done'),
                               onPressed: () {
                                 ref
                                     .read(createAliasStateNotifier.notifier)

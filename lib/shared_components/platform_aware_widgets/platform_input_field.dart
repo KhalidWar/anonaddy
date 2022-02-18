@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 
 class PlatformInputField extends PlatformAware {
   const PlatformInputField({
+    Key? key,
     this.onChanged,
     this.onFieldSubmitted,
     this.placeholder,
-  });
+  }) : super(key: key);
   final void Function(String)? onChanged;
   final void Function(String)? onFieldSubmitted;
   final String? placeholder;
@@ -35,8 +36,8 @@ class PlatformInputField extends PlatformAware {
       onFieldSubmitted: onFieldSubmitted,
       decoration: InputDecoration(
         hintText: placeholder,
-        border: OutlineInputBorder(),
-        focusedBorder: OutlineInputBorder(
+        border: const OutlineInputBorder(),
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: kAccentColor),
         ),
       ),

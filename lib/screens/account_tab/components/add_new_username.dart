@@ -42,12 +42,13 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BottomSheetHeader(headerLabel: 'Add New Username'),
+          const BottomSheetHeader(headerLabel: 'Add New Username'),
           Container(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Column(
               children: [
-                Text(kAddNewUsernameString),
+                const Text(kAddNewUsernameString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: _formKey,
@@ -65,9 +66,9 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
                 SizedBox(height: size.height * 0.02),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom().copyWith(
-                    minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                    minimumSize: MaterialStateProperty.all(const Size(200, 50)),
                   ),
-                  child: Text('Add Username'),
+                  child: const Text('Add Username'),
                   onPressed: () => createUsername(),
                 ),
               ],

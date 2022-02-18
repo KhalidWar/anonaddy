@@ -12,11 +12,11 @@ class AliasCreatedAtWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         children: [
           Text(label),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Text(
             NicheMethod.fixDateTime(dateTime),
           ),

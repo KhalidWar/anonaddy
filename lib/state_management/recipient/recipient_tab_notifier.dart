@@ -21,7 +21,7 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
   RecipientTabNotifier({
     required this.recipientService,
     required this.offlineData,
-  }) : super(RecipientTabState(status: RecipientTabStatus.loading)) {
+  }) : super(const RecipientTabState(status: RecipientTabStatus.loading)) {
     _loadOfflineData();
   }
 
@@ -67,7 +67,7 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
 
   Future _retryOnError() async {
     if (state.status == RecipientTabStatus.failed) {
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       await fetchRecipients();
     }
   }

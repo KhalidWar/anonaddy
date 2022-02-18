@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
+import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -17,8 +18,6 @@ import 'package:anonaddy/state_management/domains/domains_screen_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'domain_default_recipient.dart';
 
 class DomainsScreen extends ConsumerStatefulWidget {
   const DomainsScreen({Key? key, required this.domain}) : super(key: key);
@@ -47,7 +46,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
 
           switch (domainProvider.status!) {
             case DomainsScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case DomainsScreenStatus.loaded:
               return buildListView(context, domainProvider);
@@ -95,17 +94,19 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
           title: domain.description ?? kNoDescription,
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Domain description',
           leadingIconData: Icons.comment_outlined,
-          trailing:
-              IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
+          trailing: IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () {},
+          ),
           trailingIconOnPress: () =>
               buildEditDescriptionDialog(context, domain),
         ),
         AliasDetailListTile(
           title: domain.active ? 'Domain is active' : 'Domain is inactive',
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Activity',
           leadingIconData: Icons.toggle_off_outlined,
           trailing:
@@ -118,7 +119,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         ),
         AliasDetailListTile(
           title: domain.catchAll ? 'Enabled' : 'Disabled',
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Catch All',
           leadingIconData: Icons.repeat,
           trailing: buildSwitch(
@@ -151,7 +152,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   IconButton(
-                    icon: Icon(Icons.edit_outlined),
+                    icon: const Icon(Icons.edit_outlined),
                     onPressed: () =>
                         buildUpdateDefaultRecipient(context, domain),
                   ),
@@ -160,8 +161,8 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
             ),
             if (domain.defaultRecipient == null)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('No default recipient found'),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: const Text('No default recipient found'),
               )
             else
               RecipientListTile(
@@ -187,13 +188,13 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
             ),
             if (domain.aliases!.isEmpty)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('No aliases found'),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: const Text('No aliases found'),
               )
             else
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: domain.aliases!.length,
                 itemBuilder: (context, index) {
                   return AliasListTile(
@@ -225,7 +226,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
   Widget buildSwitch(bool switchLoading, switchValue) {
     return Row(
       children: [
-        switchLoading ? PlatformLoadingIndicator(size: 20) : Container(),
+        switchLoading ? const PlatformLoadingIndicator(size: 20) : Container(),
         PlatformSwitch(
           value: switchValue,
           onChanged: (toggle) {},
@@ -254,7 +255,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
@@ -274,13 +275,13 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(kBottomSheetBorderRadius),
         ),
       ),
       builder: (context) {
-        return DomainDefaultRecipient(domain);
+        return DomainDefaultRecipient(domain: domain);
       },
     );
   }
@@ -295,7 +296,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
     }
 
     return AppBar(
-      title: Text('Domain', style: TextStyle(color: Colors.white)),
+      title: const Text('Domain', style: TextStyle(color: Colors.white)),
       leading: IconButton(
         icon: Icon(
           PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
@@ -333,15 +334,15 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
       height: size.height * 0.05,
       width: double.infinity,
       color: Colors.amber,
-      padding: EdgeInsets.symmetric(horizontal: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Row(
         children: [
-          Icon(Icons.warning_amber_outlined, color: Colors.black),
-          SizedBox(width: 16),
+          const Icon(Icons.warning_amber_outlined, color: Colors.black),
+          const SizedBox(width: 16),
           Expanded(
             child: Text(
               label,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
           ),
           Container(),

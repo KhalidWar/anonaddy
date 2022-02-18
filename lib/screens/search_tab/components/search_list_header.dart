@@ -38,7 +38,7 @@ class SearchListHeader extends StatelessWidget {
             ],
           ),
         ),
-        Divider(height: 0),
+        const Divider(height: 0),
       ],
     );
   }

@@ -89,7 +89,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> _initAuth() async {
     await biometricService.init();
     final accessToken = await tokenService.getAccessToken();
-    final bioAuthKey = BiometricNotifier.biometricAuthKey;
+    const bioAuthKey = BiometricNotifier.biometricAuthKey;
     final bioKeyValue = await secureStorage.read(key: bioAuthKey);
 
     if (accessToken.isEmpty) {

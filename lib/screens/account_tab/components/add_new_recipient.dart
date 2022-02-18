@@ -34,12 +34,13 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BottomSheetHeader(headerLabel: 'Add New Recipient'),
+          const BottomSheetHeader(headerLabel: 'Add New Recipient'),
           Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Column(
               children: [
-                Text(kAddRecipientString),
+                const Text(kAddRecipientString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: _formKey,
@@ -60,11 +61,13 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
                         ref.watch(recipientScreenStateNotifier);
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom().copyWith(
-                        minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                        minimumSize: MaterialStateProperty.all(
+                          const Size(200, 50),
+                        ),
                       ),
                       child: recipientState.isAddRecipientLoading!
-                          ? PlatformLoadingIndicator()
-                          : Text('Add Recipient'),
+                          ? const PlatformLoadingIndicator()
+                          : const Text('Add Recipient'),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           await ref

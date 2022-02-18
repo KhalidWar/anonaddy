@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LockScreen extends ConsumerStatefulWidget {
-  const LockScreen({
-    Key? key,
-  }) : super(key: key);
+  const LockScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState createState() => _LockScreenState();
@@ -30,11 +28,11 @@ class _LockScreenState extends ConsumerState<LockScreen> {
     return Scaffold(
       backgroundColor: kPrimaryColor,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(
+            const Expanded(
               child: LottieWidget(
                 lottie: 'assets/lottie/biometric.json',
                 repeat: true,
@@ -53,7 +51,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
   Widget unlockButton(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(),
-      child: Container(
+      child: SizedBox(
         height: 40,
         child: Center(
           child: Text(
@@ -69,7 +67,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
   Widget logoutButton(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(primary: Colors.red),
-      child: Container(
+      child: SizedBox(
         height: 40,
         child: Center(
           child: Text(

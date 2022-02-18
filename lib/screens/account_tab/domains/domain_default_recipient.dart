@@ -11,7 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DomainDefaultRecipient extends ConsumerStatefulWidget {
-  const DomainDefaultRecipient(this.domain);
+  const DomainDefaultRecipient({
+    Key? key,
+    required this.domain,
+  }) : super(key: key);
   final Domain domain;
 
   @override
@@ -125,12 +128,14 @@ class _DomainDefaultRecipientState
               children: [
                 Column(
                   children: [
-                    BottomSheetHeader(headerLabel: 'Update Default Recipient'),
+                    const BottomSheetHeader(
+                      headerLabel: 'Update Default Recipient',
+                    ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text(kUpdateDomainDefaultRecipient),
+                          const Text(kUpdateDomainDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
                           Consumer(
                             builder: (_, watch, __) {
@@ -138,8 +143,9 @@ class _DomainDefaultRecipientState
                                   .watch(domainsScreenStateNotifier)
                                   .updateRecipientLoading!;
                               return isLoading
-                                  ? LinearProgressIndicator(color: kAccentColor)
-                                  : Divider(height: 0);
+                                  ? const LinearProgressIndicator(
+                                      color: kAccentColor)
+                                  : const Divider(height: 0);
                             },
                           ),
                         ],
@@ -158,7 +164,7 @@ class _DomainDefaultRecipientState
                 else
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _verifiedRecipients.length,
                     itemBuilder: (context, index) {
                       final verifiedRecipient = _verifiedRecipients[index];
@@ -183,13 +189,13 @@ class _DomainDefaultRecipientState
                     },
                   ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Divider(height: 0),
+                      const Divider(height: 0),
                       SizedBox(height: size.height * 0.01),
-                      Text(kUpdateAliasRecipientNote),
+                      const Text(kUpdateAliasRecipientNote),
                     ],
                   ),
                 ),
@@ -202,7 +208,7 @@ class _DomainDefaultRecipientState
               right: 15,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
-                child: Text('Update Default Recipients'),
+                child: const Text('Update Default Recipients'),
                 onPressed: () => updateDefaultRecipient(),
               ),
             ),

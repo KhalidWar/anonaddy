@@ -1,10 +1,9 @@
 import 'dart:io';
 
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
-import '../constants/material_constants.dart';
 
 /// This class is used to display the appropriate widgets for
 /// whatever platform AddyManager is running on.
@@ -26,10 +25,11 @@ abstract class PlatformAware<C extends Widget, M extends Widget>
   /// iOS UI if you don't have an iOS device when developing.
   static bool isIOS() {
     // return true;
-    if (Platform.isIOS)
+    if (Platform.isIOS) {
       return true;
-    else
+    } else {
       return false;
+    }
   }
 
   /// Custom page route animation

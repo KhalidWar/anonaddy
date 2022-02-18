@@ -1,7 +1,6 @@
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:flutter/material.dart';
-
-import '../../../models/account/account.dart';
 
 class HeaderProfile extends StatelessWidget {
   const HeaderProfile({

@@ -24,7 +24,7 @@ class FormValidator {
   }
 
   static String? validateEmailField(String input) {
-    final emailPattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)';
+    const emailPattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)';
     final regExp = RegExp(emailPattern);
 
     if (input.isEmpty) {

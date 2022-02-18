@@ -1,3 +1,7 @@
+import 'package:anonaddy/screens/alias_tab/components/alias_animated_list.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_tab_pie_chart.dart';
+import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -8,13 +12,8 @@ import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'components/alias_animated_list.dart';
-import 'components/alias_shimmer_loading.dart';
-import 'components/alias_tab_pie_chart.dart';
-import 'components/empty_list_alias_tab.dart';
-
 class AliasTab extends ConsumerWidget {
-  const AliasTab();
+  const AliasTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,20 +27,20 @@ class AliasTab extends ConsumerWidget {
         child: NestedScrollView(
           controller:
               ref.read(fabVisibilityStateNotifier.notifier).aliasController,
-          headerSliverBuilder: (context, _) {
+          headerSliverBuilder: (_, __) {
             return [
               SliverAppBar(
                 expandedHeight: size.height * 0.25,
                 elevation: 0,
                 floating: true,
                 pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
+                flexibleSpace: const FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
-                  background: const AliasTabPieChart(),
+                  background: AliasTabPieChart(),
                 ),
-                bottom: TabBar(
+                bottom: const TabBar(
                   indicatorColor: kAccentColor,
-                  tabs: const [
+                  tabs: [
                     Tab(child: Text('Available Aliases')),
                     Tab(child: Text('Deleted Aliases')),
                   ],
@@ -50,15 +49,15 @@ class AliasTab extends ConsumerWidget {
             ];
           },
           body: Consumer(
-            builder: (context, ref, _) {
+            builder: (_, ref, __) {
               final aliasTabState = ref.watch(aliasTabStateNotifier);
 
               switch (aliasTabState.status) {
 
                 /// When AliasTab is fetching data (loading)
                 case AliasTabStatus.loading:
-                  return TabBarView(
-                    children: const [
+                  return const TabBarView(
+                    children: [
                       AliasShimmerLoading(),
                       AliasShimmerLoading(),
                     ],

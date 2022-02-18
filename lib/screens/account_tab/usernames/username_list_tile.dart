@@ -12,20 +12,20 @@ class UsernameListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.account_circle_outlined),
-            SizedBox(width: 15),
+            const Icon(Icons.account_circle_outlined),
+            const SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(username.username),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   username.description ?? kNoDescription,
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),

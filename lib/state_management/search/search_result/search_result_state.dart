@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:flutter/cupertino.dart';
 
-enum SearchResultStatus { Initial, Limited, Loading, Loaded, Failed }
+enum SearchResultStatus { initial, limited, loading, loaded, failed }
 
 class SearchResultState {
   SearchResultState({
@@ -23,7 +23,7 @@ class SearchResultState {
   static SearchResultState initial(
       TextEditingController controller, bool includeDeleted) {
     return SearchResultState(
-      status: SearchResultStatus.Initial,
+      status: SearchResultStatus.initial,
       aliases: [],
       errorMessage: '',
       searchController: controller,

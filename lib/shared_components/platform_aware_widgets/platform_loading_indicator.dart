@@ -5,20 +5,21 @@ import 'package:flutter/material.dart';
 
 class PlatformLoadingIndicator extends PlatformAware {
   const PlatformLoadingIndicator({
+    Key? key,
     this.color,
     this.size,
-  });
+  }) : super(key: key);
   final Color? color;
   final double? size;
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
-    return CupertinoActivityIndicator();
+    return const CupertinoActivityIndicator();
   }
 
   @override
   Widget buildMaterialWidget(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: size,
       width: size,
       child: CircularProgressIndicator(color: color ?? kAccentColor),

@@ -13,7 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDefaultRecipientScreen extends ConsumerStatefulWidget {
-  const AliasDefaultRecipientScreen(this.alias);
+  const AliasDefaultRecipientScreen({
+    Key? key,
+    required this.alias,
+  }) : super(key: key);
   final Alias alias;
 
   @override
@@ -47,7 +50,7 @@ class _AliasDefaultRecipientScreenState
 
           switch (recipientState.status) {
             case RecipientTabStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case RecipientTabStatus.loaded:
               return Consumer(builder: (context, watch, _) {
@@ -57,18 +60,19 @@ class _AliasDefaultRecipientScreenState
 
                 return Column(
                   children: [
-                    BottomSheetHeader(headerLabel: 'Update Alias Recipients'),
+                    const BottomSheetHeader(
+                        headerLabel: 'Update Alias Recipients'),
                     Expanded(
                       child: ListView(
                         shrinkWrap: true,
                         controller: controller,
                         children: [
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 15),
                             child: Text(kUpdateAliasRecipients),
                           ),
                           SizedBox(height: size.height * 0.02),
-                          Divider(height: 0),
+                          const Divider(height: 0),
                           if (verifiedRecipients.isEmpty)
                             Center(
                               child: Text(
@@ -79,7 +83,7 @@ class _AliasDefaultRecipientScreenState
                           else
                             ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: verifiedRecipients.length,
                               itemBuilder: (context, index) {
                                 final verifiedRecipient =
@@ -114,11 +118,11 @@ class _AliasDefaultRecipientScreenState
                               },
                             ),
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Divider(height: 0),
+                                const Divider(height: 0),
                                 SizedBox(height: size.height * 0.01),
                                 Text(
                                   kUpdateAliasRecipientNote,
@@ -132,7 +136,7 @@ class _AliasDefaultRecipientScreenState
                     ),
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(),
                         child: Consumer(
@@ -141,9 +145,9 @@ class _AliasDefaultRecipientScreenState
                                 .watch(aliasScreenStateNotifier)
                                 .updateRecipientLoading!;
                             return isLoading
-                                ? CircularProgressIndicator(
+                                ? const CircularProgressIndicator(
                                     color: kPrimaryColor)
-                                : Text('Update Recipients');
+                                : const Text('Update Recipients');
                           },
                         ),
                         onPressed: () {

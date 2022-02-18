@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AccountTabHeader extends ConsumerWidget {
-  AccountTabHeader({Key? key, required this.account}) : super(key: key) {
-    isSelfHosted = account.subscription == null;
-  }
+  const AccountTabHeader({
+    Key? key,
+    required this.account,
+    required this.isSelfHosted,
+  }) : super(key: key);
 
   final Account account;
-  late final isSelfHosted;
+  final bool isSelfHosted;
 
   String _calculateBandWidth() {
     String isUnlimited(dynamic input, String unit) {

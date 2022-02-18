@@ -23,7 +23,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RecipientsScreen extends ConsumerStatefulWidget {
-  const RecipientsScreen({required this.recipient});
+  const RecipientsScreen({Key? key, required this.recipient}) : super(key: key);
   final Recipient recipient;
 
   static const routeName = 'recipientDetailedScreen';
@@ -61,7 +61,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
 
           switch (recipientScreenState.status) {
             case RecipientScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case RecipientScreenStatus.loaded:
               return buildListView(context, recipientScreenState);
@@ -110,7 +110,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
         if (recipient.aliases == null || recipient.emailVerifiedAt == null)
           Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(vertical: 40),
+            padding: const EdgeInsets.symmetric(vertical: 40),
             child: SvgPicture.asset(
               'assets/images/envelope.svg',
               height: size.height * 0.22,
@@ -132,7 +132,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           leadingIconData: Icons.email_outlined,
           title: recipient.email,
           subtitle: 'Recipient Email',
-          trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
+          trailing: IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
           trailingIconOnPress: () => NicheMethod.copyOnTap(recipient.email),
         ),
         AliasDetailListTile(
@@ -143,10 +143,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           subtitle: 'GPG Key Fingerprint',
           trailing: recipient.fingerprint == null
               ? IconButton(
-                  icon: Icon(Icons.add_circle_outline_outlined),
+                  icon: const Icon(Icons.add_circle_outline_outlined),
                   onPressed: () {})
               : IconButton(
-                  icon: Icon(Icons.delete_outline_outlined, color: Colors.red),
+                  icon: const Icon(Icons.delete_outline_outlined,
+                      color: Colors.red),
                   onPressed: () {}),
           trailingIconOnPress: recipient.fingerprint == null
               ? () => buildAddPGPKeyDialog(context, recipient)
@@ -156,7 +157,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           leadingIconData:
               recipient.shouldEncrypt ? Icons.lock : Icons.lock_open,
           leadingIconColor: recipient.shouldEncrypt ? Colors.green : null,
-          title: '${recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
+          title: recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted',
           subtitle: 'Encryption',
           trailing: recipient.fingerprint == null
               ? Container()
@@ -169,8 +170,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 leadingIconData: Icons.verified_outlined,
                 title: recipient.emailVerifiedAt == null ? 'No' : 'Yes',
                 subtitle: 'Is Email Verified?',
-                trailing:
-                    TextButton(child: Text('Verify now!'), onPressed: () {}),
+                trailing: TextButton(
+                  child: const Text('Verify now!'),
+                  onPressed: () {},
+                ),
                 trailingIconOnPress: () =>
                     recipientProvider.verifyEmail(recipient),
               )
@@ -194,11 +197,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: Text('No aliases found'))
+                    child: const Text('No aliases found'))
               else
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: recipient.aliases!.length,
                   itemBuilder: (context, index) {
                     return AliasListTile(
@@ -231,7 +234,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     return Row(
       children: [
         recipientScreenState.isEncryptionToggleLoading!
-            ? PlatformLoadingIndicator(size: 20)
+            ? const PlatformLoadingIndicator(size: 20)
             : Container(),
         PlatformSwitch(
           value: recipientScreenState.recipient!.shouldEncrypt,
@@ -246,12 +249,12 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
       height: size.height * 0.05,
       width: double.infinity,
       color: Colors.amber,
-      padding: EdgeInsets.symmetric(horizontal: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Row(
         children: [
-          Icon(Icons.warning_amber_outlined, color: Colors.black),
-          SizedBox(width: 16),
-          Expanded(
+          const Icon(Icons.warning_amber_outlined, color: Colors.black),
+          const SizedBox(width: 16),
+          const Expanded(
             child: Text(
               kUnverifiedRecipientNote,
               style: TextStyle(color: Colors.black),
@@ -298,7 +301,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
@@ -311,12 +314,12 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              BottomSheetHeader(headerLabel: 'Add GPG Key'),
+              const BottomSheetHeader(headerLabel: 'Add GPG Key'),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   children: [
-                    Text(kAddPublicKeyNote),
+                    const Text(kAddPublicKeyNote),
                     SizedBox(height: size.height * 0.015),
                     Form(
                       key: formKey,
@@ -330,7 +333,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                         onChanged: (input) => keyData = input,
                         onFieldSubmitted: (submit) => addPublicKey(),
                         decoration: kTextFormFieldDecoration.copyWith(
-                          contentPadding: EdgeInsets.all(5),
+                          contentPadding: const EdgeInsets.all(5),
                           hintText: kPublicKeyFieldHint,
                         ),
                       ),
@@ -338,7 +341,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     SizedBox(height: size.height * 0.015),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(),
-                      child: Text('Add Key'),
+                      child: const Text('Add Key'),
                       onPressed: () => addPublicKey(),
                     ),
                     SizedBox(height: size.height * 0.015),
@@ -375,7 +378,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     }
 
     return AppBar(
-      title: Text('Recipient', style: TextStyle(color: Colors.white)),
+      title: const Text('Recipient', style: TextStyle(color: Colors.white)),
       leading: IconButton(
         icon: Icon(
           PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,

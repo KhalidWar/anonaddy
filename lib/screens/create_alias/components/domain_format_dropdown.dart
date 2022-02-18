@@ -21,7 +21,7 @@ class DomainFormatDropdown extends StatelessWidget {
       subHeader: label,
       child: ListTile(
         dense: true,
-        contentPadding: EdgeInsets.all(0),
+        contentPadding: const EdgeInsets.all(0),
         minVerticalPadding: 0,
         horizontalTitleGap: 0,
         title: Text(
@@ -31,7 +31,7 @@ class DomainFormatDropdown extends StatelessWidget {
               .subtitle1!
               .copyWith(fontWeight: FontWeight.bold),
         ),
-        trailing: Icon(Icons.keyboard_arrow_down_rounded),
+        trailing: const Icon(Icons.keyboard_arrow_down_rounded),
       ),
     );
   }

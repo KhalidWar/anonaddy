@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasFormatSelection extends ConsumerWidget {
-  const AliasFormatSelection();
+  const AliasFormatSelection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,12 +24,12 @@ class AliasFormatSelection extends ConsumerWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BottomSheetHeader(headerLabel: 'Select Alias Format'),
+            const BottomSheetHeader(headerLabel: 'Select Alias Format'),
             Expanded(
               child: ListView(
                 shrinkWrap: true,
                 controller: controller,
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   if (aliasFormatList.isEmpty)
                     Center(
@@ -41,7 +41,7 @@ class AliasFormatSelection extends ConsumerWidget {
                   else
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: aliasFormatList.length,
                       itemBuilder: (context, index) {
                         final format = aliasFormatList[index];

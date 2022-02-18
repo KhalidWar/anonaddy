@@ -9,7 +9,7 @@ class AliasesStatsShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final pieChartSectionRadius = 50.0;
+    const pieChartSectionRadius = 50.0;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -18,28 +18,28 @@ class AliasesStatsShimmer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            PieChartIndicator(
+            const PieChartIndicator(
               color: kFirstPieChartColor,
               label: 'emails forwarded',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
+            const PieChartIndicator(
               color: kSecondPieChartColor,
               label: 'emails blocked',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
+            const PieChartIndicator(
               color: kFourthPieChartColor,
               label: 'emails replied',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
+            const PieChartIndicator(
               color: kThirdPieChartColor,
               label: 'emails sent',
               count: 0,
@@ -47,7 +47,7 @@ class AliasesStatsShimmer extends StatelessWidget {
             ),
           ],
         ),
-        Container(
+        SizedBox(
           height: size.height * 0.18,
           width: size.height * 0.18,
           child: PieChart(

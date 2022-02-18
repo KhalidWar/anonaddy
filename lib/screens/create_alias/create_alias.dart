@@ -1,3 +1,8 @@
+import 'package:anonaddy/screens/create_alias/alias_domain_selection.dart';
+import 'package:anonaddy/screens/create_alias/alias_format_selection.dart';
+import 'package:anonaddy/screens/create_alias/alias_recipient_selection.dart';
+import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
+import 'package:anonaddy/screens/create_alias/components/local_part_input.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_dropdown.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -10,12 +15,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
-import 'alias_domain_selection.dart';
-import 'alias_format_selection.dart';
-import 'alias_recipient_selection.dart';
-import 'components/create_alias_card.dart';
-import 'components/local_part_input.dart';
 
 /// This is a deeply nested complex widget with multiple [BuildContext] that
 /// controls a full screen iOS style bottom sheet.
@@ -85,13 +84,13 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                       backgroundColor: isDark ? Colors.black12 : Colors.white,
                       brightness: Brightness.dark,
                       leading: CupertinoButton(
-                        padding: EdgeInsets.all(0),
-                        child: Text('Cancel'),
+                        padding: const EdgeInsets.all(0),
+                        child: const Text('Cancel'),
                         onPressed: () => Navigator.pop(rootContext),
                       ),
                       trailing: CupertinoButton(
-                        padding: EdgeInsets.all(0),
-                        child: Text('Done'),
+                        padding: const EdgeInsets.all(0),
+                        child: const Text('Done'),
                         onPressed: () => createAlias(rootContext),
                       ),
 
@@ -127,14 +126,14 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
           bottom: false,
           child: ListView(
             shrinkWrap: true,
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
             controller: ModalScrollController.of(builderContext),
             children: [
               Text(
                 createAliasState.headerText!,
                 style: Theme.of(consumerContext).textTheme.caption,
               ),
-              Divider(height: 20),
+              const Divider(height: 20),
               CreateAliasCard(
                 header: 'Description',
                 subHeader:
@@ -147,7 +146,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                       .setDescription(input),
                   decoration: kTextFormFieldDecoration.copyWith(
                     hintText: kDescriptionFieldHint,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   ),
                 ),
               ),
@@ -170,7 +169,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
                 onPress: () {
-                  displayModal(rootContext, AliasDomainSelection());
+                  displayModal(rootContext, const AliasDomainSelection());
                 },
               ),
               cardSpacer(size),
@@ -185,7 +184,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
                 onPress: () {
-                  displayModal(rootContext, AliasFormatSelection());
+                  displayModal(rootContext, const AliasFormatSelection());
                 },
               ),
               if (createAliasState.aliasFormat == kCustom)
@@ -196,11 +195,11 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
               cardSpacer(size),
               RecipientsDropdown(
                 onPress: () {
-                  displayModal(rootContext, AliasRecipientSelection());
+                  displayModal(rootContext, const AliasRecipientSelection());
                 },
               ),
               cardSpacer(size),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: PlatformButton(
                   child: createAliasState.isLoading!

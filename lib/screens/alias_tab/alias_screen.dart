@@ -25,7 +25,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasScreen extends ConsumerStatefulWidget {
-  const AliasScreen(this.alias);
+  const AliasScreen({Key? key, required this.alias}) : super(key: key);
   final Alias alias;
 
   static const routeName = 'aliasDetailedScreen';
@@ -54,7 +54,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
 
           switch (aliasState.status!) {
             case AliasScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case AliasScreenStatus.loaded:
               return buildListView(context, aliasState);
@@ -117,7 +117,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           subtitle: 'Activity',
           trailing: Row(
             children: [
-              if (isToggleLoading) PlatformLoadingIndicator(size: 20),
+              if (isToggleLoading) const PlatformLoadingIndicator(size: 20),
               PlatformSwitch(
                 value: alias.active,
                 onChanged: isAliasDeleted ? null : (toggle) {},
@@ -158,11 +158,11 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
           trailing: Row(
             children: [
-              if (deleteAliasLoading) PlatformLoadingIndicator(size: 20),
+              if (deleteAliasLoading) const PlatformLoadingIndicator(size: 20),
               IconButton(
                 icon: isAliasDeleted
-                    ? Icon(Icons.restore_outlined, color: Colors.green)
-                    : Icon(Icons.delete_outline, color: Colors.red),
+                    ? const Icon(Icons.restore_outlined, color: Colors.green)
+                    : const Icon(Icons.delete_outline, color: Colors.red),
                 onPressed: null,
               ),
             ],
@@ -186,7 +186,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     IconButton(
-                      icon: Icon(Icons.edit_outlined),
+                      icon: const Icon(Icons.edit_outlined),
                       onPressed: () =>
                           buildUpdateDefaultRecipient(context, alias),
                     ),
@@ -210,12 +210,12 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               if (alias.recipients!.isEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(children: [Text(kNoDefaultRecipientSet)]),
+                  child: Row(children: const [Text(kNoDefaultRecipientSet)]),
                 )
               else
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: alias.recipients!.length,
                   itemBuilder: (context, index) {
                     final recipients = alias.recipients;
@@ -256,13 +256,13 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(kBottomSheetBorderRadius),
         ),
       ),
       builder: (context) {
-        return AliasDefaultRecipientScreen(alias);
+        return AliasDefaultRecipientScreen(alias: alias);
       },
     );
   }
@@ -313,7 +313,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
@@ -326,14 +326,14 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              BottomSheetHeader(headerLabel: kSendFromAlias),
+              const BottomSheetHeader(headerLabel: kSendFromAlias),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(kSendFromAliasString),
+                    const Text(kSendFromAliasString),
                     SizedBox(height: size.height * 0.01),
                     TextFormField(
                       enabled: false,
@@ -361,12 +361,12 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                       ),
                     ),
                     SizedBox(height: size.height * 0.01),
-                    Text(kSendFromAliasNote),
+                    const Text(kSendFromAliasNote),
                     SizedBox(height: size.height * 0.01),
                     Center(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(),
-                        child: Text('Generate address'),
+                        child: const Text('Generate address'),
                         onPressed: () => generateAddress(),
                       ),
                     ),
@@ -401,7 +401,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
@@ -442,7 +442,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     }
 
     return AppBar(
-      title: Text(
+      title: const Text(
         'Alias',
         style: TextStyle(color: Colors.white),
       ),

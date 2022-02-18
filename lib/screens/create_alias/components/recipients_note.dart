@@ -9,11 +9,11 @@ class RecipientsNote extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(height: 0),
+          const Divider(height: 0),
           SizedBox(height: size.height * 0.01),
           Text(
             kUpdateAliasRecipientNote,

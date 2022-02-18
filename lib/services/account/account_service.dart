@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
@@ -26,15 +27,15 @@ class AccountService {
       );
 
       if (response.statusCode == 200) {
-        print('getUserData ${response.statusCode}');
+        log('getUserData ${response.statusCode}');
         final decodedData = jsonDecode(response.body)['data'];
         return Account.fromJson(decodedData);
       } else {
-        print('getUserData ${response.statusCode}');
+        log('getUserData ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

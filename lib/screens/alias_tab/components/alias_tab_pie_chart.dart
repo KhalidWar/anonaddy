@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/screens/alias_tab/components/aliases_stats_shimmer.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
@@ -6,8 +7,6 @@ import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'aliases_stats_shimmer.dart';
 
 class AliasTabPieChart extends StatelessWidget {
   const AliasTabPieChart({Key? key}) : super(key: key);
@@ -31,7 +30,7 @@ class AliasTabPieChart extends StatelessWidget {
               return buildAliasStat(context: context, account: account);
 
             case AccountStatus.failed:
-              return Center(
+              return const Center(
                 child: Text(
                   'Failed to load data',
                   style: TextStyle(color: Colors.white),
@@ -46,7 +45,7 @@ class AliasTabPieChart extends StatelessWidget {
   Widget buildAliasStat(
       {required BuildContext context, required Account account}) {
     final size = MediaQuery.of(context).size;
-    final pieChartSectionRadius = 50.0;
+    const pieChartSectionRadius = 50.0;
 
     final emailsForwarded = account.totalEmailsForwarded;
     final emailsBlocked = account.totalEmailsBlocked;
@@ -100,7 +99,7 @@ class AliasTabPieChart extends StatelessWidget {
             ),
           ],
         ),
-        Container(
+        SizedBox(
           height: size.height * 0.18,
           width: size.height * 0.18,
           child: PieChart(

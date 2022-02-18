@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
@@ -27,14 +28,14 @@ class DomainsService {
       );
 
       if (response.statusCode == 200) {
-        print('getAllDomains ${response.statusCode}');
+        log('getAllDomains ${response.statusCode}');
         return DomainModel.fromJson(jsonDecode(response.body));
       } else {
-        print('getAllDomains ${response.statusCode}');
+        log('getAllDomains ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -54,14 +55,14 @@ class DomainsService {
       );
 
       if (response.statusCode == 200) {
-        print('getSpecificDomain ${response.statusCode}');
+        log('getSpecificDomain ${response.statusCode}');
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print('getSpecificDomain ${response.statusCode}');
+        log('getSpecificDomain ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -78,18 +79,18 @@ class DomainsService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"domain": "$domain"}),
+        body: json.encode({"domain": domain}),
       );
 
       if (response.statusCode == 201) {
-        print("createNewDomain ${response.statusCode}");
+        log("createNewDomain ${response.statusCode}");
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("createNewDomain ${response.statusCode}");
+        log("createNewDomain ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -111,14 +112,14 @@ class DomainsService {
       );
 
       if (response.statusCode == 200) {
-        print("editDomainDescription ${response.statusCode}");
+        log("editDomainDescription ${response.statusCode}");
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("editDomainDescription ${response.statusCode}");
+        log("editDomainDescription ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -138,14 +139,14 @@ class DomainsService {
       );
 
       if (response.statusCode == 204) {
-        print("deleteDomain ${response.statusCode}");
+        log("deleteDomain ${response.statusCode}");
         return 204;
       } else {
-        print("deleteDomain ${response.statusCode}");
+        log("deleteDomain ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -168,14 +169,14 @@ class DomainsService {
       );
 
       if (response.statusCode == 200) {
-        print("updateDomainDefaultRecipient ${response.statusCode}");
+        log("updateDomainDefaultRecipient ${response.statusCode}");
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("updateDomainDefaultRecipient ${response.statusCode}");
+        log("updateDomainDefaultRecipient ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -192,18 +193,18 @@ class DomainsService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"id": "$domainID"}),
+        body: json.encode({"id": domainID}),
       );
 
       if (response.statusCode == 200) {
-        print("activateDomain ${response.statusCode}");
+        log("activateDomain ${response.statusCode}");
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("activateDomain ${response.statusCode}");
+        log("activateDomain ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -223,14 +224,14 @@ class DomainsService {
           });
 
       if (response.statusCode == 204) {
-        print("deactivateDomain ${response.statusCode}");
+        log("deactivateDomain ${response.statusCode}");
         return 204;
       } else {
-        print("deactivateDomain ${response.statusCode}");
+        log("deactivateDomain ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -247,18 +248,18 @@ class DomainsService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"id": "$domainID"}),
+        body: json.encode({"id": domainID}),
       );
 
       if (response.statusCode == 200) {
-        print("activateCatchAll ${response.statusCode}");
+        log("activateCatchAll ${response.statusCode}");
         return Domain.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("activateCatchAll ${response.statusCode}");
+        log("activateCatchAll ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -278,14 +279,14 @@ class DomainsService {
           });
 
       if (response.statusCode == 204) {
-        print("deactivateCatchAll ${response.statusCode}");
+        log("deactivateCatchAll ${response.statusCode}");
         return 204;
       } else {
-        print("deactivateCatchAll ${response.statusCode}");
+        log("deactivateCatchAll ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

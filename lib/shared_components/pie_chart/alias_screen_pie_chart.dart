@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class AliasScreenPieChart extends StatelessWidget {
   const AliasScreenPieChart({
+    Key? key,
     required this.emailsForwarded,
     required this.emailsBlocked,
     required this.emailsSent,
     required this.emailsReplied,
-  });
-
+  }) : super(key: key);
   final int emailsForwarded;
   final int emailsBlocked;
   final int emailsSent;
@@ -18,7 +18,7 @@ class AliasScreenPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pieChartSectionRadius = 60.0;
+    const pieChartSectionRadius = 60.0;
 
     bool isPieChartEmpty() {
       if (emailsForwarded == 0 &&
@@ -36,7 +36,7 @@ class AliasScreenPieChart extends StatelessWidget {
         Container(
           height: MediaQuery.of(context).size.height * 0.28,
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20),
           child: PieChart(
             PieChartData(
               borderData: FlBorderData(show: false),

@@ -37,7 +37,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        key: Key('loginScreenScaffold'),
+        key: const Key('loginScreenScaffold'),
         appBar: AppBar(elevation: 0, brightness: Brightness.dark),
         backgroundColor: kPrimaryColor,
         body: Center(
@@ -45,12 +45,12 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
             child: Container(
               height: size.height * 0.6,
               width: size.width * 0.88,
-              padding: EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
                 color: isDark
                     ? Theme.of(context).cardTheme.color
                     : Theme.of(context).cardColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,14 +61,14 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                   Column(
                     children: [
                       TextButton(
-                        key: Key('loginGetAccessToken'),
+                        key: const Key('loginGetAccessToken'),
                         style: TextButton.styleFrom(),
-                        child: Text(kWhatsAccessToken),
+                        child: const Text(kWhatsAccessToken),
                         onPressed: () => buildAccessTokenInfoSheet(context),
                       ),
                       TextButton(
                         style: TextButton.styleFrom(),
-                        child: Text('Self Hosted? Change Instance!'),
+                        child: const Text('Self Hosted? Change Instance!'),
                         onPressed: () => Navigator.pushNamed(
                             context, SelfHostLoginScreen.routeName),
                       ),
@@ -96,7 +96,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
         ),
         SizedBox(height: size.height * 0.01),
         Divider(
-          color: Color(0xFFE4E7EB),
+          color: const Color(0xFFE4E7EB),
           thickness: 2,
           indent: size.width * 0.30,
           endIndent: size.width * 0.30,
@@ -108,7 +108,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
   Widget buildTokenInputField(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -120,7 +120,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
           Form(
             key: _tokenFormKey,
             child: TextFormField(
-              key: Key('loginTextField'),
+              key: const Key('loginTextField'),
               validator: (input) => FormValidator.accessTokenValidator(input!),
               onChanged: (input) => _token = input,
               onFieldSubmitted: (input) => login(context),
@@ -134,7 +134,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                     color: Theme.of(context).accentColor,
                   ),
                 ),
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
                 hintText: kEnterAccessToken,
               ),
             ),
@@ -154,9 +154,9 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BottomSheetHeader(headerLabel: kWhatsAccessToken),
+            const BottomSheetHeader(headerLabel: kWhatsAccessToken),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -164,25 +164,25 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                     kWhatsAccessToken,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  SizedBox(height: 5),
-                  Text(kAccessTokenDefinition),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 5),
+                  const Text(kAccessTokenDefinition),
+                  const SizedBox(height: 20),
                   Text(
                     kAccessTokenRequired,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     kHowToGetAccessToken,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  SizedBox(height: 5),
-                  Text(kHowToGetAccessToken1),
-                  Text(kHowToGetAccessToken2),
-                  Text(kHowToGetAccessToken3),
-                  Text(kHowToGetAccessToken4),
-                  Text(kHowToGetAccessToken5),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 5),
+                  const Text(kHowToGetAccessToken1),
+                  const Text(kHowToGetAccessToken2),
+                  const Text(kHowToGetAccessToken3),
+                  const Text(kHowToGetAccessToken4),
+                  const Text(kHowToGetAccessToken5),
+                  const SizedBox(height: 20),
                   Text(
                     kAccessTokenSecurityNotice,
                     style: Theme.of(context).textTheme.bodyText1,
@@ -191,12 +191,12 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: const [
                     Text(kGetAccessToken),
                     SizedBox(width: 4),
                     Icon(Icons.open_in_new_outlined),
@@ -222,18 +222,18 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
           height: size.height * 0.1,
           width: size.width,
           decoration: BoxDecoration(
-            color: isDark ? Colors.black : Color(0xFFF5F7FA),
-            borderRadius: BorderRadius.only(
+            color: isDark ? Colors.black : const Color(0xFFF5F7FA),
+            borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(10),
               bottomLeft: Radius.circular(10),
             ),
           ),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(),
-            key: Key('loginButton'),
+            key: const Key('loginButton'),
             child: authState.loginLoading!
-                ? CircularProgressIndicator(
+                ? const CircularProgressIndicator(
                     key: Key('loginLoadingIndicator'),
                     backgroundColor: kPrimaryColor,
                   )

@@ -25,12 +25,10 @@ class _LogoutScreenState extends ConsumerState<LogoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: kPrimaryColor,
       body: Center(
-        child: Container(
-          child: CircularProgressIndicator(),
-        ),
+        child: CircularProgressIndicator(),
       ),
     );
   }

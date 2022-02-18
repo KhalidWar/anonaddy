@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
@@ -33,17 +34,17 @@ class SearchService {
       );
 
       if (response.statusCode == 200) {
-        print('_fetchMatchingAliases ${response.statusCode}');
+        log('_fetchMatchingAliases ${response.statusCode}');
         final decodedData = jsonDecode(response.body)['data'];
         return (decodedData as List).map((alias) {
           return Alias.fromJson(alias);
         }).toList();
       } else {
-        print('fetchMatchingAliases ${response.statusCode}');
+        log('fetchMatchingAliases ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

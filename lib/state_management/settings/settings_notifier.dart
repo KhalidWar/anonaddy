@@ -1,8 +1,7 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
 import 'package:anonaddy/state_management/settings/settings_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 final settingsStateNotifier =
     StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {

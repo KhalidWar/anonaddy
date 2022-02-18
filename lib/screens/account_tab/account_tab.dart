@@ -1,4 +1,8 @@
+import 'package:anonaddy/screens/account_tab/components/account_tab_header.dart';
+import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_tab.dart';
+import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
+import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -7,13 +11,8 @@ import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'components/account_tab_header.dart';
-import 'domains/domains_tab.dart';
-import 'rules/rules_tab.dart';
-import 'usernames/usernames_tab.dart';
-
 class AccountTab extends ConsumerWidget {
-  const AccountTab();
+  const AccountTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +40,10 @@ class AccountTab extends ConsumerWidget {
 
                         case AccountStatus.loaded:
                           final account = accountState.account;
-                          return AccountTabHeader(account: account!);
+                          return AccountTabHeader(
+                            account: account!,
+                            isSelfHosted: account.subscription == null,
+                          );
 
                         case AccountStatus.failed:
                           final error = accountState.errorMessage;

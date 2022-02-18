@@ -27,15 +27,15 @@ void main() {
       'Then scaffold, textField, and button load, '
       'and no loading or errors.', (WidgetTester tester) async {
     // Arrange
-    await tester.pumpWidget(rootWidget(child: AnonAddyLoginScreen()));
+    await tester.pumpWidget(rootWidget(child: const AnonAddyLoginScreen()));
 
     // LoginStateManagerTest().setIsLoading(true);
 
     // Act
-    final loginScreenScaffold = find.byKey(Key('loginScreenScaffold'));
-    final textField = find.byKey(Key('loginTextField'));
-    final loginButton = find.byKey(Key('loginButton'));
-    final loadingIndicator = find.byKey(Key('loginLoadingIndicator'));
+    final loginScreenScaffold = find.byKey(const Key('loginScreenScaffold'));
+    final textField = find.byKey(const Key('loginTextField'));
+    final loginButton = find.byKey(const Key('loginButton'));
+    final loadingIndicator = find.byKey(const Key('loginLoadingIndicator'));
 
     // Assert
     expect(loginScreenScaffold, findsOneWidget);
@@ -49,10 +49,10 @@ void main() {
       'When login button is tapped, '
       'Then throw a form validation error.', (WidgetTester tester) async {
     // Arrange
-    await tester.pumpWidget(rootWidget(child: AnonAddyLoginScreen()));
+    await tester.pumpWidget(rootWidget(child: const AnonAddyLoginScreen()));
 
     // Act
-    final loginButton = find.byKey(Key('loginButton'));
+    final loginButton = find.byKey(const Key('loginButton'));
     await tester.tap(loginButton);
     await tester.pump();
 
@@ -66,10 +66,10 @@ void main() {
       'When text is entered in textField, '
       'Then show entered text.', (WidgetTester tester) async {
     // Arrange
-    await tester.pumpWidget(rootWidget(child: AnonAddyLoginScreen()));
+    await tester.pumpWidget(rootWidget(child: const AnonAddyLoginScreen()));
 
     // Act
-    final textFormField = find.byKey(Key('loginTextField'));
+    final textFormField = find.byKey(const Key('loginTextField'));
     await tester.enterText(textFormField, 'text');
 
     // Assert
@@ -82,10 +82,10 @@ void main() {
       'When "How to get access Token?" is pressed, '
       'Then show a dialog.', (WidgetTester tester) async {
     // Arrange
-    await tester.pumpWidget(rootWidget(child: AnonAddyLoginScreen()));
+    await tester.pumpWidget(rootWidget(child: const AnonAddyLoginScreen()));
 
     // Act
-    final getAccessToken = find.byKey(Key('loginGetAccessToken'));
+    final getAccessToken = find.byKey(const Key('loginGetAccessToken'));
     await tester.tap(getAccessToken);
     await tester.pump();
 

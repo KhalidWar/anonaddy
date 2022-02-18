@@ -19,7 +19,7 @@ class PieChartIndicator extends StatelessWidget {
     return Row(
       children: [
         Container(height: 12, width: 12, color: color),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text(
           count.toString(),
           style: Theme.of(context)
@@ -27,7 +27,7 @@ class PieChartIndicator extends StatelessWidget {
               .bodyText1!
               .copyWith(fontWeight: FontWeight.bold, color: textColor),
         ),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         Text(
           label,
           style: Theme.of(context).textTheme.bodyText2!.copyWith(

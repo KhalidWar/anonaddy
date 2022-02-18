@@ -11,9 +11,10 @@ final fabVisibilityStateNotifier =
 });
 
 class FabVisibilityState extends StateNotifier<bool> {
-  FabVisibilityState(
-      {required ScrollController aliasTabController, searchTabController})
-      : aliasController = aliasTabController,
+  FabVisibilityState({
+    required ScrollController aliasTabController,
+    required ScrollController searchTabController,
+  })  : aliasController = aliasTabController,
         searchController = searchTabController,
         super(true) {
     addListeners(aliasController);

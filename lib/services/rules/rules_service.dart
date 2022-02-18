@@ -27,7 +27,7 @@ class RulesService {
       );
 
       if (response.statusCode == 200) {
-        print('getAllRules ${response.statusCode}');
+        log('getAllRules ${response.statusCode}');
         final decodedData = jsonDecode(response.body)['data'];
         log('decodedData: ' + decodedData.toString());
 
@@ -35,11 +35,11 @@ class RulesService {
           return Rules.fromJson(rule);
         }).toList();
       } else {
-        print('getAllRules ${response.statusCode}');
+        log('getAllRules ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

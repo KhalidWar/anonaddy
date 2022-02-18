@@ -25,8 +25,8 @@ class RecipientsDropdown extends StatelessWidget {
               : ListView.builder(
                   shrinkWrap: true,
                   itemCount: recipients.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 5),
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   itemBuilder: (context, index) {
                     final recipient = recipients[index];
                     return Text(

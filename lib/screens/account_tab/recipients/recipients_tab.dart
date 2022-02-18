@@ -1,17 +1,16 @@
+import 'package:anonaddy/screens/account_tab/components/add_new_recipient.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../shared_components/constants/material_constants.dart';
-import '../../../shared_components/constants/official_anonaddy_strings.dart';
-import '../../../shared_components/constants/ui_strings.dart';
-import '../../../utilities/niche_method.dart';
-import '../components/add_new_recipient.dart';
 
 class RecipientsTab extends ConsumerStatefulWidget {
   const RecipientsTab({Key? key}) : super(key: key);

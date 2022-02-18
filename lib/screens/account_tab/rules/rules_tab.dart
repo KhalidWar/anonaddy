@@ -24,7 +24,7 @@ class RulesTab extends ConsumerWidget {
 
       /// When Account data is loading
       case AccountStatus.loading:
-        return RecipientsShimmerLoading();
+        return const RecipientsShimmerLoading();
 
       /// When Account data is available
       case AccountStatus.loaded:
@@ -32,22 +32,24 @@ class RulesTab extends ConsumerWidget {
         /// [Rules] is a paid feature.
         /// Show paywall if user's account is free tier.
         final subscription = accountState.account!.subscription;
-        if (subscription == kFreeSubscription) return PaidFeatureWall();
+        if (subscription == kFreeSubscription) return const PaidFeatureWall();
 
         final rulesState = ref.watch(rulesTabStateNotifier);
         switch (rulesState.status) {
           case RulesTabStatus.loading:
-            return RecipientsShimmerLoading();
+            return const RecipientsShimmerLoading();
 
           case RulesTabStatus.loaded:
             final rules = rulesState.rules;
-            if (rules == null)
+            if (rules == null) {
               return buildEmptyList(context, 'Enroll in Rules BETA testing');
+            }
 
-            if (rules.isEmpty)
+            if (rules.isEmpty) {
               return buildEmptyList(context, 'No rules found');
-            else
+            } else {
               return buildRulesList(rules);
+            }
 
           case RulesTabStatus.failed:
             final error = rulesState.errorMessage;

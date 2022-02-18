@@ -2,6 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/screens/search_tab/components/search_history.dart';
+import 'package:anonaddy/screens/search_tab/components/search_list_header.dart';
 import 'package:anonaddy/screens/search_tab/components/search_text_field.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
@@ -13,10 +14,8 @@ import 'package:anonaddy/state_management/search/search_result/search_result_sta
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'components/search_list_header.dart';
-
 class SearchTab extends StatelessWidget {
-  const SearchTab();
+  const SearchTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class SearchTab extends StatelessWidget {
 
                 /// When search is NOT triggered, basically the default state for [SearchTab]
                 /// In this case, show [SearchHistory].
-                case SearchResultStatus.Initial:
+                case SearchResultStatus.initial:
                   return Column(
                     children: [
                       SearchListHeader(
@@ -69,12 +68,12 @@ class SearchTab extends StatelessWidget {
 
                 /// Displays limited search results based on searching through
                 /// locally available aliases, typically page 1 of user's aliases.
-                case SearchResultStatus.Limited:
+                case SearchResultStatus.limited:
                   final aliases = searchState.aliases!;
                   return buildResult(context, ref, aliases, true);
 
                 /// When search is loading e.g. fetching matching aliases
-                case SearchResultStatus.Loading:
+                case SearchResultStatus.loading:
                   return Column(
                     children: [
                       SearchListHeader(
@@ -93,12 +92,12 @@ class SearchTab extends StatelessWidget {
                   );
 
                 /// When search has finished loading and returns matching aliases
-                case SearchResultStatus.Loaded:
+                case SearchResultStatus.loaded:
                   final aliases = searchState.aliases ?? [];
                   return buildResult(context, ref, aliases, false);
 
                 /// When searching fails and returns an error
-                case SearchResultStatus.Failed:
+                case SearchResultStatus.failed:
                   return const LottieWidget(
                     lottie: 'assets/lottie/empty.json',
                     lottieHeight: 150,
@@ -149,7 +148,7 @@ class SearchTab extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: resultsList.length,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final alias = resultsList[index];
                   return InkWell(

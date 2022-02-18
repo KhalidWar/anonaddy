@@ -25,7 +25,7 @@ void main() {
     // final mockHttp = MockHttp();
 
     // Act
-    await Clipboard.setData(ClipboardData(text: 'data'));
+    await Clipboard.setData(const ClipboardData(text: 'data'));
     // loginState.pasteFromClipboard(textEditingController);
 
     //Assert

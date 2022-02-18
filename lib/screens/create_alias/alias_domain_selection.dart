@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDomainSelection extends StatelessWidget {
-  const AliasDomainSelection();
+  const AliasDomainSelection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,13 @@ class AliasDomainSelection extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                BottomSheetHeader(headerLabel: 'Select Alias Domain'),
+                const BottomSheetHeader(headerLabel: 'Select Alias Domain'),
                 Expanded(
                   child: PlatformScrollbar(
                     child: ListView(
                       shrinkWrap: true,
                       controller: controller,
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       children: [
                         if (domains.isEmpty)
                           Center(
@@ -44,7 +44,7 @@ class AliasDomainSelection extends StatelessWidget {
                         else
                           ListView.builder(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: domains.length,
                             itemBuilder: (context, index) {
                               final domain = domains[index];

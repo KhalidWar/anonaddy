@@ -21,8 +21,8 @@ class LoadingScreen extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.all(20),
-            child: CircularProgressIndicator(),
+            padding: const EdgeInsets.all(20),
+            child: const CircularProgressIndicator(),
           ),
         ],
       ),

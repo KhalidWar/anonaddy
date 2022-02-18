@@ -1,3 +1,4 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
@@ -8,8 +9,6 @@ import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../global_providers.dart';
 
 class FailedDeliveriesWidget extends ConsumerStatefulWidget {
   const FailedDeliveriesWidget({
@@ -56,7 +55,7 @@ class _FailedDeliveriesWidgetState
         final subscription = accountState.account!.subscription;
 
         if (subscription == kFreeSubscription) {
-          return PaidFeatureWall();
+          return const PaidFeatureWall();
         }
 
         final failedDeliveriesAsync = ref.watch(failedDeliveriesProvider);
@@ -66,7 +65,7 @@ class _FailedDeliveriesWidgetState
             failedDeliveries = data.failedDeliveries;
 
             if (failedDeliveries.isEmpty) {
-              return Text('No failed deliveries found');
+              return const Text('No failed deliveries found');
             } else {
               return failedDeliveriesList(data);
             }
@@ -92,13 +91,13 @@ class _FailedDeliveriesWidgetState
     return ListView.builder(
       shrinkWrap: true,
       itemCount: failedDeliveries.length,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final failedDeliveries = data.failedDeliveries[index];
         return ExpansionTile(
           expandedAlignment: Alignment.centerLeft,
-          tilePadding: EdgeInsets.all(0),
-          childrenPadding: EdgeInsets.symmetric(horizontal: 5),
+          tilePadding: const EdgeInsets.all(0),
+          childrenPadding: const EdgeInsets.symmetric(horizontal: 5),
           title: Text(
             failedDeliveries.aliasEmail,
             style: Theme.of(context).textTheme.bodyText1,
@@ -110,28 +109,28 @@ class _FailedDeliveriesWidgetState
           children: [
             ListTile(
               dense: true,
-              title: Text('Alias'),
+              title: const Text('Alias'),
               subtitle: Text(failedDeliveries.aliasEmail),
             ),
             ListTile(
               dense: true,
-              title: Text('Recipient'),
+              title: const Text('Recipient'),
               subtitle:
                   Text(failedDeliveries.recipientEmail ?? 'Not available'),
             ),
             ListTile(
               dense: true,
-              title: Text('Type'),
+              title: const Text('Type'),
               subtitle: Text(failedDeliveries.bounceType),
             ),
             ListTile(
               dense: true,
-              title: Text('Code'),
+              title: const Text('Code'),
               subtitle: Text(failedDeliveries.code),
             ),
             ListTile(
               dense: true,
-              title: Text('Remote MTA'),
+              title: const Text('Remote MTA'),
               subtitle: Text(
                 failedDeliveries.remoteMta.isEmpty
                     ? 'Not available'
@@ -140,12 +139,12 @@ class _FailedDeliveriesWidgetState
             ),
             ListTile(
               dense: true,
-              title: Text('Created'),
+              title: const Text('Created'),
               subtitle: Text(failedDeliveries.createdAt.toString()),
             ),
-            Divider(height: 0),
+            const Divider(height: 0),
             TextButton(
-              child: Text('Delete failed delivery'),
+              child: const Text('Delete failed delivery'),
               onPressed: () => deleteFailedDelivery(failedDeliveries.id),
             ),
           ],
@@ -157,8 +156,8 @@ class _FailedDeliveriesWidgetState
   Widget loadingWidget(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.all(20),
-      child: PlatformLoadingIndicator(),
+      padding: const EdgeInsets.all(20),
+      child: const PlatformLoadingIndicator(),
     );
   }
 }

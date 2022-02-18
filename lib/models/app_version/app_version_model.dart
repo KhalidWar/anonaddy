@@ -13,4 +13,9 @@ class AppVersion {
       _$AppVersionFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppVersionToJson(this);
+
+  @override
+  String toString() {
+    return 'AppVersion{version: $version, major: $major, minor: $minor, patch: $patch}';
+  }
 }

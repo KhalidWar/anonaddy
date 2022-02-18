@@ -11,6 +11,8 @@ import 'shared_components/constants/ui_strings.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class App extends ConsumerWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     /// Use [watch] method to access different providers
@@ -18,7 +20,7 @@ class App extends ConsumerWidget {
 
     /// Sets StatusBarColor for the whole app
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
 
     const _defaultLocalizations = [

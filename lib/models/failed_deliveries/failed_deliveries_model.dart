@@ -66,4 +66,9 @@ class FailedDeliveries {
       _$FailedDeliveriesFromJson(json);
 
   Map<String, dynamic> toJson() => _$FailedDeliveriesToJson(this);
+
+  @override
+  String toString() {
+    return 'FailedDeliveries{id: $id, userId: $userId, recipientId: $recipientId, recipientEmail: $recipientEmail, aliasId: $aliasId, aliasEmail: $aliasEmail, bounceType: $bounceType, remoteMta: $remoteMta, sender: $sender, emailType: $emailType, status: $status, code: $code, attemptedAt: $attemptedAt, createdAt: $createdAt, updatedAt: $updatedAt}';
+  }
 }

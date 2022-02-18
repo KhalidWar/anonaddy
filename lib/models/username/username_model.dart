@@ -52,4 +52,9 @@ class Username {
       _$UsernameFromJson(json);
 
   Map<String, dynamic> toJson() => _$UsernameToJson(this);
+
+  @override
+  String toString() {
+    return 'Username{id: $id, userId: $userId, username: $username, description: $description, aliases: $aliases, defaultRecipient: $defaultRecipient, active: $active, catchAll: $catchAll, createdAt: $createdAt, updatedAt: $updatedAt}';
+  }
 }

@@ -20,8 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UsernamesScreen extends ConsumerStatefulWidget {
-  const UsernamesScreen({required this.username});
+  const UsernamesScreen({Key? key, required this.username}) : super(key: key);
   final Username username;
+
   static const routeName = 'usernameDetailedScreen';
 
   @override
@@ -47,7 +48,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
 
           switch (usernameState.status) {
             case UsernamesScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case UsernamesScreenStatus.loaded:
               return buildListView(context, usernameState);
@@ -108,17 +109,19 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
           title: username.description ?? kNoDescription,
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Username description',
           leadingIconData: Icons.comment_outlined,
-          trailing:
-              IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
+          trailing: IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () {},
+          ),
           trailingIconOnPress: () => updateDescriptionDialog(context, username),
         ),
         AliasDetailListTile(
           title:
               username.active ? 'Username is active' : 'Username is inactive',
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Activity',
           leadingIconData: Icons.toggle_on_outlined,
           trailing:
@@ -127,7 +130,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
         ),
         AliasDetailListTile(
           title: username.catchAll ? 'Enabled' : 'Disabled',
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Catch All',
           leadingIconData: Icons.repeat,
           trailing: buildSwitch(
@@ -148,7 +151,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   IconButton(
-                    icon: Icon(Icons.edit_outlined),
+                    icon: const Icon(Icons.edit_outlined),
                     onPressed: () =>
                         buildUpdateDefaultRecipient(context, username),
                   ),
@@ -157,8 +160,8 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
             ),
             if (username.defaultRecipient == null)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('No default recipient found'),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: const Text('No default recipient found'),
               )
             else
               RecipientListTile(
@@ -184,13 +187,13 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
             ),
             if (username.aliases!.isEmpty)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('No aliases found'),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: const Text('No aliases found'),
               )
             else
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: username.aliases!.length,
                 itemBuilder: (context, index) {
                   return AliasListTile(
@@ -222,7 +225,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
   Widget buildSwitch(bool switchLoading, switchValue) {
     return Row(
       children: [
-        switchLoading ? PlatformLoadingIndicator(size: 20) : Container(),
+        switchLoading ? const PlatformLoadingIndicator(size: 20) : Container(),
         PlatformSwitch(
           value: switchValue,
           onChanged: (toggle) {},
@@ -251,7 +254,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
@@ -271,12 +274,12 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
             top: Radius.circular(kBottomSheetBorderRadius)),
       ),
       builder: (context) {
-        return UsernameDefaultRecipientScreen(username);
+        return UsernameDefaultRecipientScreen(username: username);
       },
     );
   }
@@ -304,7 +307,10 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
     }
 
     return AppBar(
-      title: Text('Additional Username', style: TextStyle(color: Colors.white)),
+      title: const Text(
+        'Additional Username',
+        style: TextStyle(color: Colors.white),
+      ),
       leading: IconButton(
         icon: Icon(
           PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,

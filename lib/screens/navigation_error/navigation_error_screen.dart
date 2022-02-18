@@ -14,10 +14,10 @@ class NavigationErrorScreen extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Navigation Error')),
+      appBar: AppBar(title: const Text('Navigation Error')),
       body: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Expanded(
@@ -34,10 +34,10 @@ class NavigationErrorScreen extends ConsumerWidget {
             ),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(top: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.red),
-                child: Text('logout'),
+                child: const Text('logout'),
                 onPressed: () => logout(context, ref),
               ),
             ),

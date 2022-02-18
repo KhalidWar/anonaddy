@@ -35,7 +35,7 @@ class FailedDeliveriesService {
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -63,7 +63,7 @@ class FailedDeliveriesService {
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

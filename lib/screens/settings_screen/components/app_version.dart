@@ -1,10 +1,9 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../global_providers.dart';
 
 class AppVersion extends ConsumerWidget {
   const AppVersion({Key? key}) : super(key: key);
@@ -33,8 +32,8 @@ class AppVersion extends ConsumerWidget {
                       'v' + appData.version,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
-                    subtitle: Text('App Version'),
-                    trailing: Icon(Icons.info_outlined),
+                    subtitle: const Text('App Version'),
+                    trailing: const Icon(Icons.info_outlined),
                     onTap: () {
                       NicheMethod.showToast(
                           'App Version number for self-hosted instance');

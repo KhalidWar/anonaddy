@@ -14,12 +14,12 @@ void main() {
       'Then scaffold is loaded, shows loading indicator, and no error.',
       (WidgetTester tester) async {
     // Arrange
-    await tester.pumpWidget(rootWidget(child: AuthorizationScreen()));
+    await tester.pumpWidget(rootWidget(child: const AuthorizationScreen()));
 
     // Act
-    final scaffold = find.byKey(Key('initialScreenScaffold'));
-    final loadingIndicator = find.byKey(Key('loadingIndicator'));
-    final errorWidget = find.byKey(Key('errorWidget'));
+    final scaffold = find.byKey(const Key('initialScreenScaffold'));
+    final loadingIndicator = find.byKey(const Key('loadingIndicator'));
+    final errorWidget = find.byKey(const Key('errorWidget'));
 
     // Assert
     expect(scaffold, findsOneWidget);

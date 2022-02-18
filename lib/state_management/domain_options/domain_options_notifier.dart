@@ -20,7 +20,7 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
   DomainOptionsNotifier({
     required this.domainOptionsService,
     required this.offlineData,
-  }) : super(DomainOptionsState(status: DomainOptionsStatus.loading)) {
+  }) : super(const DomainOptionsState(status: DomainOptionsStatus.loading)) {
     /// Initially load data from disk (secured device storage)
     _loadOfflineData();
 
@@ -59,7 +59,7 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
 
   Future _retryOnError() async {
     if (state.status == DomainOptionsStatus.failed) {
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       await fetchDomainOption();
     }
   }

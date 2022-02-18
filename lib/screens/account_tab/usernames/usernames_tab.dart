@@ -1,6 +1,9 @@
+import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/toast_messages.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
@@ -8,13 +11,9 @@ import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/usernames/usernames_tab_notifier.dart';
 import 'package:anonaddy/state_management/usernames/usernames_tab_state.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../shared_components/constants/material_constants.dart';
-import '../../../shared_components/constants/toast_messages.dart';
-import '../../../utilities/niche_method.dart';
-import '../components/add_new_username.dart';
 
 class UsernamesTab extends ConsumerStatefulWidget {
   const UsernamesTab({Key? key}) : super(key: key);

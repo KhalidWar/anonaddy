@@ -17,7 +17,7 @@ class SearchHistory extends ConsumerWidget {
       case SearchHistoryStatus.loading:
         return Padding(
           padding: EdgeInsets.all(size.height * 0.01),
-          child: Center(child: CircularProgressIndicator()),
+          child: const Center(child: CircularProgressIndicator()),
         );
 
       case SearchHistoryStatus.loaded:
@@ -26,7 +26,7 @@ class SearchHistory extends ConsumerWidget {
         if (aliases.isEmpty) {
           return Padding(
             padding: EdgeInsets.all(size.height * 0.01),
-            child: Row(children: [Text('Nothing to see here.')]),
+            child: Row(children: const [Text('Nothing to see here.')]),
           );
         } else {
           return Expanded(
@@ -34,7 +34,7 @@ class SearchHistory extends ConsumerWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: aliases.length,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return AliasListTile(aliasData: aliases[index]);
                 },

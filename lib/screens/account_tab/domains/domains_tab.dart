@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
+import 'package:anonaddy/screens/account_tab/domains/domains_screen.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -11,10 +12,8 @@ import 'package:anonaddy/state_management/domains/domains_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'domains_screen.dart';
-
 class DomainsTab extends ConsumerWidget {
-  const DomainsTab();
+  const DomainsTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,19 +21,18 @@ class DomainsTab extends ConsumerWidget {
 
     switch (accountState.status) {
       case AccountStatus.loading:
-        return RecipientsShimmerLoading();
+        return const RecipientsShimmerLoading();
 
       case AccountStatus.loaded:
         final subscription = accountState.account!.subscription;
         if (subscription == kFreeSubscription) {
-          return PaidFeatureWall();
+          return const PaidFeatureWall();
         }
 
         final domainsState = ref.watch(domainsStateNotifier);
-
         switch (domainsState.status) {
           case DomainsTabStatus.loading:
-            return RecipientsShimmerLoading();
+            return const RecipientsShimmerLoading();
 
           case DomainsTabStatus.loaded:
             final domains = domainsState.domainModel!.domains;
@@ -76,20 +74,20 @@ class DomainsTab extends ConsumerWidget {
 
         return InkWell(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.dns_outlined),
-                SizedBox(width: 15),
+                const Icon(Icons.dns_outlined),
+                const SizedBox(width: 15),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(domain.domain),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       domain.description ?? kNoDescription,
-                      style: TextStyle(color: Colors.grey),
+                      style: const TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),

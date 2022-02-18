@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
@@ -26,17 +27,17 @@ class RecipientService {
       );
 
       if (response.statusCode == 200) {
-        print('getAllRecipient ${response.statusCode}');
+        log('getAllRecipient ${response.statusCode}');
         final decodedData = jsonDecode(response.body)['data'];
         return (decodedData as List).map((recipient) {
           return Recipient.fromJson(recipient);
         }).toList();
       } else {
-        print('getAllRecipient ${response.statusCode}');
+        log('getAllRecipient ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -59,15 +60,15 @@ class RecipientService {
       );
 
       if (response.statusCode == 200) {
-        print('getSpecificAlias ${response.statusCode}');
+        log('getSpecificAlias ${response.statusCode}');
         final recipient = jsonDecode(response.body)['data'];
         return Recipient.fromJson(recipient);
       } else {
-        print('getSpecificAlias ${response.statusCode}');
+        log('getSpecificAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -84,18 +85,18 @@ class RecipientService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"id": "$recipientID"}),
+        body: json.encode({"id": recipientID}),
       );
 
       if (response.statusCode == 200) {
-        print('enableEncryption ${response.statusCode}');
+        log('enableEncryption ${response.statusCode}');
         return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print('enableEncryption ${response.statusCode}');
+        log('enableEncryption ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -115,14 +116,14 @@ class RecipientService {
         },
       );
       if (response.statusCode == 204) {
-        print('disableEncryption ${response.statusCode}');
+        log('disableEncryption ${response.statusCode}');
         return 204;
       } else {
-        print('disableEncryption ${response.statusCode}');
+        log('disableEncryption ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -140,18 +141,18 @@ class RecipientService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: jsonEncode({"key_data": "$keyData"}),
+        body: jsonEncode({"key_data": keyData}),
       );
 
       if (response.statusCode == 200) {
-        print("addPublicGPGKey ${response.statusCode}");
+        log("addPublicGPGKey ${response.statusCode}");
         return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("addPublicGPGKey ${response.statusCode}");
+        log("addPublicGPGKey ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -172,14 +173,14 @@ class RecipientService {
       );
 
       if (response.statusCode == 204) {
-        print('removePublicKey ${response.statusCode}');
+        log('removePublicKey ${response.statusCode}');
         return 204;
       } else {
-        print('removePublicKey ${response.statusCode}');
+        log('removePublicKey ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -196,18 +197,18 @@ class RecipientService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: jsonEncode({"email": "$email"}),
+        body: jsonEncode({"email": email}),
       );
 
       if (response.statusCode == 201) {
-        print("addRecipient ${response.statusCode}");
+        log("addRecipient ${response.statusCode}");
         return Recipient.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("addRecipient ${response.statusCode}");
+        log("addRecipient ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -228,14 +229,14 @@ class RecipientService {
       );
 
       if (response.statusCode == 204) {
-        print('removeRecipient ${response.statusCode}');
+        log('removeRecipient ${response.statusCode}');
         return 204;
       } else {
-        print('removeRecipient ${response.statusCode}');
+        log('removeRecipient ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -253,18 +254,18 @@ class RecipientService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"recipient_id": "$recipientID"}),
+        body: json.encode({"recipient_id": recipientID}),
       );
 
       if (response.statusCode == 200) {
-        print('sendVerificationEmail ${response.statusCode}');
+        log('sendVerificationEmail ${response.statusCode}');
         return 200;
       } else {
-        print('sendVerificationEmail ${response.statusCode}');
+        log('sendVerificationEmail ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

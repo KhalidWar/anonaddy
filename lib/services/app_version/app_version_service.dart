@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:anonaddy/models/app_version/app_version_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
@@ -26,14 +27,14 @@ class AppVersionService {
       );
 
       if (response.statusCode == 200) {
-        print('getAppVersionData ${response.statusCode}');
+        log('getAppVersionData ${response.statusCode}');
         return AppVersion.fromJson(jsonDecode(response.body));
       } else {
-        print('getAppVersionData ${response.statusCode}');
+        log('getAppVersionData ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

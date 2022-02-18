@@ -1,3 +1,5 @@
+import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
+import 'package:anonaddy/screens/authorization_screen/lock_screen.dart';
 import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
@@ -5,9 +7,6 @@ import 'package:anonaddy/state_management/authorization/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
-
-import 'loading_screen.dart';
-import 'lock_screen.dart';
 
 class AuthorizationScreen extends StatelessWidget {
   const AuthorizationScreen({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class AuthorizationScreen extends StatelessWidget {
 
         switch (authState.authStatus) {
           case AuthStatus.initial:
-            return LoadingScreen();
+            return const LoadingScreen();
 
           case AuthStatus.authorized:
 
@@ -46,21 +45,21 @@ class AuthorizationScreen extends StatelessWidget {
                       return SecureGate(
                         blurr: 20,
                         opacity: 0.6,
-                        child: LockScreen(),
+                        child: const LockScreen(),
                         lockedBuilder: (context, secureNotifier) {
-                          return LockScreen();
+                          return const LockScreen();
                         },
                       );
 
                     case AuthLock.off:
-                      return HomeScreen();
+                      return const HomeScreen();
                   }
                 },
               ),
             );
 
           case AuthStatus.unauthorized:
-            return AnonAddyLoginScreen();
+            return const AnonAddyLoginScreen();
         }
       },
     );

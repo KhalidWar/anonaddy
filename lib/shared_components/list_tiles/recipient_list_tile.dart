@@ -3,8 +3,10 @@ import 'package:anonaddy/screens/account_tab/recipients/recipients_screen.dart';
 import 'package:flutter/material.dart';
 
 class RecipientListTile extends StatelessWidget {
-  const RecipientListTile({Key? key, required this.recipient})
-      : super(key: key);
+  const RecipientListTile({
+    Key? key,
+    required this.recipient,
+  }) : super(key: key);
 
   final Recipient recipient;
 
@@ -12,23 +14,23 @@ class RecipientListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.email_outlined),
-            SizedBox(width: 15),
+            const Icon(Icons.email_outlined),
+            const SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(recipient.email),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 recipient.emailVerifiedAt == null
-                    ? Text(
+                    ? const Text(
                         'Unverified',
                         style: TextStyle(color: Colors.red),
                       )
-                    : Text(
+                    : const Text(
                         'Verified',
                         style: TextStyle(color: Colors.green),
                       ),

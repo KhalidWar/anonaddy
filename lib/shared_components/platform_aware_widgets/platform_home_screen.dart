@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class PlatformHomeScreen extends PlatformAware {
   const PlatformHomeScreen({
+    Key? key,
     required this.fab,
     required this.child,
     required this.actions,
@@ -15,7 +16,7 @@ class PlatformHomeScreen extends PlatformAware {
     required this.currentIndex,
     required this.androidOnTap,
     required this.iosOnTap,
-  });
+  }) : super(key: key);
 
   final Widget fab;
   final Widget child;
@@ -28,7 +29,7 @@ class PlatformHomeScreen extends PlatformAware {
   final Widget Function(BuildContext, int) iosOnTap;
 
   List<BottomNavigationBarItem> botNavBarItems() {
-    return [
+    return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.account_circle_outlined),
         label: kAccountBotNavLabel,
@@ -66,14 +67,14 @@ class PlatformHomeScreen extends PlatformAware {
         title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.error_outline),
+          icon: const Icon(Icons.error_outline),
           onPressed: () {
             Navigator.pushNamed(context, AlertCenterScreen.routeName);
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.pushNamed(context, SettingsScreen.routeName);
             },

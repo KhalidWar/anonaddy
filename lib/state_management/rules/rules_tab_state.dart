@@ -14,7 +14,7 @@ class RulesTabState {
   final String? errorMessage;
 
   static RulesTabState initialState() {
-    return RulesTabState(
+    return const RulesTabState(
       status: RulesTabStatus.loading,
       rules: [],
       errorMessage: '',

@@ -21,7 +21,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// Class Providers
-final flutterSecureStorage = Provider((ref) => FlutterSecureStorage());
+final flutterSecureStorage = Provider((ref) => const FlutterSecureStorage());
 
 final biometricAuthService =
     Provider((ref) => BiometricAuthService(LocalAuthentication()));

@@ -1,10 +1,9 @@
+import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_input_field.dart';
 import 'package:flutter/material.dart';
-
-import 'bottom_sheet_header.dart';
-import 'constants/ui_strings.dart';
-import 'platform_aware_widgets/platform_button.dart';
 
 class UpdateDescriptionWidget extends StatelessWidget {
   const UpdateDescriptionWidget({
@@ -32,13 +31,13 @@ class UpdateDescriptionWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BottomSheetHeader(headerLabel: kUpdateDescription),
+          const BottomSheetHeader(headerLabel: kUpdateDescription),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(kUpdateDescriptionString),
+                const Text(kUpdateDescriptionString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: descriptionFormKey,
@@ -55,7 +54,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     Expanded(
                       child: PlatformButton(
                         color: Colors.redAccent,
-                        child: Text(
+                        child: const Text(
                           kRemoveDescription,
                           style: TextStyle(color: Colors.black),
                         ),
@@ -66,7 +65,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     Expanded(
                       child: PlatformButton(
                         color: kAccentColor,
-                        child: Text(
+                        child: const Text(
                           kUpdateDescription,
                           style: TextStyle(color: Colors.black),
                         ),
