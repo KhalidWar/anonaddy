@@ -1,5 +1,5 @@
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_description_input_field.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_input_field.dart';
 import 'package:flutter/material.dart';
 
 import 'bottom_sheet_header.dart';
@@ -42,7 +42,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: descriptionFormKey,
-                  child: PlatformDescriptionInputField(
+                  child: PlatformInputField(
                     placeholder: description ?? 'No description',
                     onChanged: inputOnChanged,
                     onFieldSubmitted: (toggle) => updateDescription(),

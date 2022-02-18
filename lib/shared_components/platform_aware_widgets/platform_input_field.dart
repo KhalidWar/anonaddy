@@ -3,8 +3,8 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class PlatformDescriptionInputField extends PlatformAware {
-  const PlatformDescriptionInputField({
+class PlatformInputField extends PlatformAware {
+  const PlatformInputField({
     this.onChanged,
     this.onFieldSubmitted,
     this.placeholder,
