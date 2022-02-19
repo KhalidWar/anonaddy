@@ -23,6 +23,23 @@ class NicheMethod {
     });
   }
 
+  static showToastWithContext(BuildContext context, String message) async {
+    final flutterToast = FToast();
+    flutterToast.init(context);
+    flutterToast.showToast(
+      toastDuration: const Duration(seconds: 1),
+      gravity: ToastGravity.BOTTOM,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.grey[600],
+        ),
+        child: Text(message),
+      ),
+    );
+  }
+
   static showToast(String message) async {
     await Fluttertoast.showToast(
       msg: message,
