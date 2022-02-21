@@ -6,20 +6,27 @@ import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
 
 class BiometricAuthService {
-  BiometricAuthService(this.localAuth);
+  const BiometricAuthService(this.localAuth);
   final LocalAuthentication localAuth;
-
-  late bool canCheckBio;
 
   Future<void> init() async {
     try {
-      canCheckBio = await localAuth.canCheckBiometrics;
+      await localAuth.canCheckBiometrics;
+    } on PlatformException catch (e) {
+      throw e.message ?? 'Failed to authenticate';
+    }
+  }
+
+  Future<bool> doesPlatformSupportAuth() async {
+    try {
+      return await localAuth.canCheckBiometrics;
     } on PlatformException catch (e) {
       throw e.message ?? 'Failed to authenticate';
     }
   }
 
   Future<bool> authenticate() async {
+    final canCheckBio = await localAuth.canCheckBiometrics;
     if (canCheckBio) {
       try {
         return await localAuth.authenticate(

@@ -8,23 +8,77 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
 
-class AuthorizationScreen extends StatelessWidget {
+/// This widget manages user authentication and authorization
+/// flow for the whole app.
+class AuthorizationScreen extends ConsumerStatefulWidget {
   const AuthorizationScreen({Key? key}) : super(key: key);
 
   static const routeName = 'authorizationScreen';
 
   @override
+  ConsumerState createState() => _AuthorizationScreenState();
+}
+
+class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(authStateNotifier.notifier).initAuth();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, ref, _) {
-        final authState = ref.watch(authStateNotifier);
+    /// Watches for [authStateNotifier] changes and
+    /// updates UI accordingly.
+    final authState = ref.watch(authStateNotifier);
 
-        switch (authState.authStatus) {
-          case AuthStatus.initial:
-            return const LoadingScreen();
+    switch (authState.authorizationStatus) {
 
-          case AuthStatus.authorized:
+      /// Manages initial state, app startup.
+      case AuthorizationStatus.unknown:
+        return const LoadingScreen();
 
+      /// [SecureApplication] package isn't available for MacOS.
+      ///
+      /// Manages when a logged in user is found
+      case AuthorizationStatus.authorized:
+        switch (authState.authenticationStatus) {
+          case AuthenticationStatus.enabled:
+
+            /// Enables app security
+            /// Disables screenshot and blocks app view on Recent Apps
+            return SecureApplication(
+              nativeRemoveDelay: 0,
+              child: Builder(
+                builder: (context) {
+                  /// Access secureApp provider to control its state
+                  final secureAppProvider =
+                      SecureApplicationProvider.of(context)!;
+
+                  /// Blocks app view on Recent Apps and prevents screenshot/screen recording
+                  secureAppProvider.secure();
+
+                  /// Prevents app from locking if users switches to another app and comes back
+                  secureAppProvider.pause();
+
+                  /// Locks app and requires authentication
+                  secureAppProvider.lock();
+
+                  return SecureGate(
+                    blurr: 20,
+                    opacity: 0.6,
+                    child: const LockScreen(),
+                    lockedBuilder: (context, secureNotifier) {
+                      return const LockScreen();
+                    },
+                  );
+                },
+              ),
+            );
+
+          case AuthenticationStatus.disabled:
+
+            /// Enables app security
             /// Disables screenshot and blocks app view on Recent Apps
             return SecureApplication(
               nativeRemoveDelay: 0,
@@ -35,33 +89,18 @@ class AuthorizationScreen extends StatelessWidget {
                       SecureApplicationProvider.of(context)!;
                   secureAppProvider.secure();
                   secureAppProvider.pause();
-
-                  switch (authState.authLock) {
-                    case AuthLock.on:
-
-                      /// Locks app and requires authentication
-                      secureAppProvider.lock();
-
-                      return SecureGate(
-                        blurr: 20,
-                        opacity: 0.6,
-                        child: const LockScreen(),
-                        lockedBuilder: (context, secureNotifier) {
-                          return const LockScreen();
-                        },
-                      );
-
-                    case AuthLock.off:
-                      return const HomeScreen();
-                  }
+                  return const HomeScreen();
                 },
               ),
             );
 
-          case AuthStatus.unauthorized:
-            return const AnonAddyLoginScreen();
+          case AuthenticationStatus.unavailable:
+            return const HomeScreen();
         }
-      },
-    );
+
+      /// Manages when a user has logged out or no logged in user found.
+      case AuthorizationStatus.unauthorized:
+        return const AnonAddyLoginScreen();
+    }
   }
 }

@@ -1,44 +1,54 @@
-enum AuthStatus { initial, authorized, unauthorized }
-enum AuthLock { on, off }
+import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
+
+/// Manages user flow status
+enum AuthorizationStatus { unknown, authorized, unauthorized }
+
+/// Manages app biometric authentication lock status.
+enum AuthenticationStatus {
+  /// When user has enabled biometric auth and app requires biometric
+  /// unlock at next app startup.
+  enabled,
+
+  /// When user hasn't set up or enabled biometric authentication
+  disabled,
+
+  /// When current platform doesn't support biometric authentication.
+  /// At the moment, local auth doesn't support MacOS.
+  unavailable,
+}
 
 class AuthState {
   const AuthState({
-    required this.authStatus,
-    required this.authLock,
+    required this.authorizationStatus,
+    required this.authenticationStatus,
     this.errorMessage,
     this.loginLoading,
   });
 
-  final AuthStatus authStatus;
-  final AuthLock authLock;
+  final AuthorizationStatus authorizationStatus;
+  final AuthenticationStatus authenticationStatus;
   final String? errorMessage;
   final bool? loginLoading;
 
-  static initialState() {
+  /// Sets initial state for [AuthorizationScreen]
+  static AuthState initialState() {
     return const AuthState(
-      authStatus: AuthStatus.initial,
-      authLock: AuthLock.off,
+      authorizationStatus: AuthorizationStatus.unknown,
+      authenticationStatus: AuthenticationStatus.unavailable,
       loginLoading: false,
-    );
-  }
-
-  static freshStart() {
-    return const AuthState(
-      authStatus: AuthStatus.unauthorized,
-      authLock: AuthLock.off,
-      loginLoading: false,
+      errorMessage: '',
     );
   }
 
   AuthState copyWith({
-    AuthStatus? authStatus,
-    AuthLock? authLock,
+    AuthorizationStatus? authorizationStatus,
+    AuthenticationStatus? authenticationStatus,
     String? errorMessage,
     bool? loginLoading,
   }) {
     return AuthState(
-      authStatus: authStatus ?? this.authStatus,
-      authLock: authLock ?? this.authLock,
+      authorizationStatus: authorizationStatus ?? this.authorizationStatus,
+      authenticationStatus: authenticationStatus ?? this.authenticationStatus,
       errorMessage: errorMessage ?? this.errorMessage,
       loginLoading: loginLoading ?? this.loginLoading,
     );
@@ -46,6 +56,6 @@ class AuthState {
 
   @override
   String toString() {
-    return 'authStatus: $authStatus, bioStatus: $authLock, errorMessage: $errorMessage, loginLoading: $loginLoading';
+    return 'AuthState{authorizationStatus: $authorizationStatus, authenticationStatus: $authenticationStatus, errorMessage: $errorMessage, loginLoading: $loginLoading}';
   }
 }

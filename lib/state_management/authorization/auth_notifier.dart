@@ -1,6 +1,7 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
+import 'package:anonaddy/state_management/authorization/auth_state.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -9,18 +10,12 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'auth_state.dart';
-
 final authStateNotifier = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final secureStorage = ref.read(flutterSecureStorage);
-  final bioService = ref.read(biometricAuthService);
-  final tokenService = ref.read(accessTokenService);
-  final searchHistory = ref.read(searchHistoryStateNotifier.notifier);
   return AuthNotifier(
-    secureStorage: secureStorage,
-    biometricService: bioService,
-    tokenService: tokenService,
-    searchHistory: searchHistory,
+    secureStorage: ref.read(flutterSecureStorage),
+    biometricService: ref.read(biometricAuthService),
+    tokenService: ref.read(accessTokenService),
+    searchHistory: ref.read(searchHistoryStateNotifier.notifier),
   );
 });
 
@@ -30,30 +25,35 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required this.biometricService,
     required this.tokenService,
     required this.searchHistory,
-  }) : super(AuthState.initialState()) {
-    _initAuth();
-  }
+  }) : super(AuthState.initialState());
 
   final FlutterSecureStorage secureStorage;
   final BiometricAuthService biometricService;
   final AccessTokenService tokenService;
   final SearchHistoryNotifier searchHistory;
 
-  final showToast = NicheMethod.showToast;
+  void _updateState(AuthState newState) {
+    if (mounted) state = newState;
+  }
 
   Future<void> login(String url, String token) async {
-    state = state.copyWith(loginLoading: true);
+    _updateState(state.copyWith(loginLoading: true));
+
     try {
       final isTokenValid = await tokenService.validateAccessToken(url, token);
 
       if (isTokenValid) {
         await tokenService.saveLoginCredentials(url, token);
-        state = state.copyWith(
-            authStatus: AuthStatus.authorized, loginLoading: false);
+        final newState = state.copyWith(
+          authorizationStatus: AuthorizationStatus.authorized,
+          loginLoading: false,
+        );
+        _updateState(newState);
       }
     } catch (error) {
-      state = state.copyWith(loginLoading: false);
-      showToast(error.toString());
+      final newState = state.copyWith(loginLoading: false);
+      NicheMethod.showToast(error.toString());
+      _updateState(newState);
     }
   }
 
@@ -62,9 +62,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await secureStorage.deleteAll();
       await searchHistory.clearSearchHistory();
       Phoenix.rebirth(context);
-      state = AuthState.freshStart();
     } catch (error) {
-      showToast(error.toString());
+      NicheMethod.showToast(error.toString());
     }
   }
 
@@ -72,43 +71,63 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final didAuth = await biometricService.authenticate();
       if (didAuth) {
-        state = state.copyWith(
-          authStatus: state.authStatus,
-          authLock: AuthLock.off,
+        final newState = state.copyWith(
+          authorizationStatus: state.authorizationStatus,
+          authenticationStatus: AuthenticationStatus.disabled,
         );
+        _updateState(newState);
       } else {
-        state = state.copyWith(errorMessage: 'Failed to authenticate!');
-        showToast('Failed to authenticate!');
+        final newState =
+            state.copyWith(errorMessage: 'Failed to authenticate!');
+        _updateState(newState);
+        NicheMethod.showToast('Failed to authenticate!');
       }
     } catch (error) {
-      state =
+      final newState =
           state.copyWith(errorMessage: 'Authorization failed! Log in again!');
+      _updateState(newState);
     }
   }
 
-  Future<void> _initAuth() async {
-    await biometricService.init();
-    final accessToken = await tokenService.getAccessToken();
-    const bioAuthKey = BiometricNotifier.biometricAuthKey;
-    final bioKeyValue = await secureStorage.read(key: bioAuthKey);
+  /// Initializes
+  Future<void> initAuth() async {
+    try {
+      final accessToken = await tokenService.getAccessToken();
+      const bioAuthKey = BiometricNotifier.biometricAuthKey;
+      final bioKeyValue = await secureStorage.read(key: bioAuthKey);
 
-    if (accessToken.isEmpty) {
-      /// Fresh start after user logs out or AccessToken isn't found
-      state = AuthState.freshStart();
-    } else {
-      //todo validate accessToken and return unauthorized if it fails
-      state = state.copyWith(
-        authStatus: AuthStatus.authorized,
-        authLock: _initBioAuth(bioKeyValue),
-      );
+      /// When a logged in is NOT found
+      if (accessToken.isEmpty) {
+        final newState = state.copyWith(
+            authorizationStatus: AuthorizationStatus.unauthorized);
+        _updateState(newState);
+      } else {
+        /// When a logged in is NOT found
+        //todo validate accessToken and return unauthorized if it fails
+        final canCheck = await biometricService.doesPlatformSupportAuth();
+        final savedAuthStatus = _initBioAuth(bioKeyValue);
+
+        final newState = state.copyWith(
+          authorizationStatus: AuthorizationStatus.authorized,
+          authenticationStatus:
+              canCheck ? savedAuthStatus : AuthenticationStatus.unavailable,
+        );
+        _updateState(newState);
+      }
+    } catch (error) {
+      rethrow;
     }
   }
 
-  AuthLock _initBioAuth(String? input) {
+  AuthenticationStatus _initBioAuth(String? input) {
     if (input == null) {
-      return AuthLock.off;
+      return AuthenticationStatus.disabled;
+    }
+
+    if (input == 'true') {
+      return AuthenticationStatus.enabled;
     } else {
-      return input == 'true' ? AuthLock.on : AuthLock.off;
+      return AuthenticationStatus.disabled;
     }
   }
 }
