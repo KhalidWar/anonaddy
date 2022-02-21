@@ -20,10 +20,14 @@ class LoadingScreen extends ConsumerStatefulWidget {
 class _LoadingScreenState extends ConsumerState<LoadingScreen> {
   static const errorNote =
       'Process is taking longer than usual.\nIf it persists, please log out and login back in.';
-  bool showLogoutButton = false;
 
-  Future<void> showLogoutOption() async {
-    await Future.delayed(const Duration(seconds: 10), () async {
+  bool showLogoutButton = false;
+  late final Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer(const Duration(seconds: 10), () {
       setState(() {
         showLogoutButton = true;
       });
@@ -31,11 +35,9 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      showLogoutOption();
-    });
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
