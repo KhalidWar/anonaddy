@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_tab.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -49,7 +50,7 @@ class AccountTab extends ConsumerWidget {
                           final error = accountState.errorMessage;
                           return LottieWidget(
                             showLoading: true,
-                            lottie: 'assets/lottie/errorCone.json',
+                            lottie: LottieImages.errorCone,
                             lottieHeight: size.height * 0.2,
                             label: error.toString(),
                           );

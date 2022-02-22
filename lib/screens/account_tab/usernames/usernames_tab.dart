@@ -1,6 +1,7 @@
 import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_messages.dart';
@@ -113,7 +114,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
           case UsernamesStatus.failed:
             final error = usernameState.errorMessage;
             return LottieWidget(
-              lottie: 'assets/lottie/errorCone.json',
+              lottie: LottieImages.errorCone,
               lottieHeight: MediaQuery.of(context).size.height * 0.1,
               label: error.toString(),
             );
@@ -121,7 +122,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
 
       case AccountStatus.failed:
         return LottieWidget(
-          lottie: 'assets/lottie/errorCone.json',
+          lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
           label: kLoadAccountDataFailed,
         );

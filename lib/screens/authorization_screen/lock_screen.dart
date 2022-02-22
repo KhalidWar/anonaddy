@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -34,7 +35,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
           children: <Widget>[
             const Expanded(
               child: LottieWidget(
-                lottie: 'assets/lottie/biometric.json',
+                lottie: LottieImages.biometricAnimation,
                 repeat: true,
               ),
             ),

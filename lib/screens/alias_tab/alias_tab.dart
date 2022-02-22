@@ -2,6 +2,7 @@ import 'package:anonaddy/screens/alias_tab/components/alias_animated_list.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_pie_chart.dart';
 import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -123,12 +124,12 @@ class AliasTab extends ConsumerWidget {
                   return TabBarView(
                     children: [
                       LottieWidget(
-                        lottie: 'assets/lottie/errorCone.json',
+                        lottie: LottieImages.errorCone,
                         label: error.toString(),
                         lottieHeight: size.height * 0.2,
                       ),
                       LottieWidget(
-                        lottie: 'assets/lottie/errorCone.json',
+                        lottie: LottieImages.errorCone,
                         label: error.toString(),
                         lottieHeight: size.height * 0.2,
                       ),

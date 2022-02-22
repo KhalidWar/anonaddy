@@ -1,4 +1,5 @@
 import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
                 color: Colors.white,
                 margin: const EdgeInsets.all(20),
                 child: const LottieWidget(
-                  lottie: 'assets/lottie/coming_soon.json',
+                  lottie: LottieImages.comingSoon,
                   repeat: true,
                 ),
               ),

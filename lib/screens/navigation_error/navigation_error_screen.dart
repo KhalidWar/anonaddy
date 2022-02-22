@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
@@ -22,7 +23,7 @@ class NavigationErrorScreen extends ConsumerWidget {
           children: [
             Expanded(
               child: LottieWidget(
-                lottie: 'assets/lottie/errorCone.json',
+                lottie: LottieImages.errorCone,
                 lottieHeight: size.height * 0.25,
                 label: navigationErrorMessage,
               ),

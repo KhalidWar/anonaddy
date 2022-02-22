@@ -1,6 +1,7 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -72,7 +73,7 @@ class _FailedDeliveriesWidgetState
           },
           error: (error, stackTrace) {
             return LottieWidget(
-              lottie: 'assets/lottie/errorCone.json',
+              lottie: LottieImages.errorCone,
               label: error.toString(),
             );
           },
@@ -80,7 +81,7 @@ class _FailedDeliveriesWidgetState
 
       case AccountStatus.failed:
         return LottieWidget(
-          lottie: 'assets/lottie/errorCone.json',
+          lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
           label: kLoadAccountDataFailed,
         );

@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_screen.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -50,7 +51,7 @@ class DomainsTab extends ConsumerWidget {
           case DomainsTabStatus.failed:
             final error = domainsState.errorMessage;
             return LottieWidget(
-              lottie: 'assets/lottie/errorCone.json',
+              lottie: LottieImages.errorCone,
               lottieHeight: MediaQuery.of(context).size.height * 0.1,
               label: error.toString(),
             );
@@ -58,7 +59,7 @@ class DomainsTab extends ConsumerWidget {
 
       case AccountStatus.failed:
         return LottieWidget(
-          lottie: 'assets/lottie/errorCone.json',
+          lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
           label: kLoadAccountDataFailed,
         );

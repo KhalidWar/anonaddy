@@ -4,6 +4,7 @@ import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart
 import 'package:anonaddy/screens/search_tab/components/search_history.dart';
 import 'package:anonaddy/screens/search_tab/components/search_list_header.dart';
 import 'package:anonaddy/screens/search_tab/components/search_text_field.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -99,7 +100,7 @@ class SearchTab extends StatelessWidget {
                 /// When searching fails and returns an error
                 case SearchResultStatus.failed:
                   return const LottieWidget(
-                    lottie: 'assets/lottie/empty.json',
+                    lottie: LottieImages.emptyResult,
                     lottieHeight: 150,
                   );
               }
@@ -139,7 +140,7 @@ class SearchTab extends StatelessWidget {
         /// Show empty lottie if result from full search is empty
         if (resultsList.isEmpty)
           LottieWidget(
-            lottie: 'assets/lottie/empty.json',
+            lottie: LottieImages.emptyResult,
             lottieHeight: size.height * 0.12,
           )
         else

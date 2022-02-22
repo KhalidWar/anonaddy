@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -25,21 +26,21 @@ class CreditsScreen extends StatelessWidget {
           const Divider(height: 0),
           buildTile(
             context: context,
-            lottieFile: 'assets/lottie/errorCone.json',
+            lottieFile: LottieImages.errorCone,
             title: 'Error Cone',
             creator: 'Fernando Ron Pedrique',
             lottieURL: 'https://lottiefiles.com/38064-error-cone',
           ),
           buildTile(
             context: context,
-            lottieFile: 'assets/lottie/empty.json',
+            lottieFile: LottieImages.emptyResult,
             title: 'Empty',
             creator: '张先生',
             lottieURL: 'https://lottiefiles.com/13525-empty',
           ),
           buildTile(
             context: context,
-            lottieFile: 'assets/lottie/biometric.json',
+            lottieFile: LottieImages.biometricAnimation,
             title: 'Biometric Animation',
             creator: 'Clément Boissy',
             lottieURL:
@@ -47,7 +48,7 @@ class CreditsScreen extends StatelessWidget {
           ),
           buildTile(
             context: context,
-            lottieFile: 'assets/lottie/coming_soon.json',
+            lottieFile: LottieImages.comingSoon,
             title: 'Coming Soon',
             creator: 'Arno M. Scharinger',
             lottieURL: 'https://lottiefiles.com/34957-coming-soon',

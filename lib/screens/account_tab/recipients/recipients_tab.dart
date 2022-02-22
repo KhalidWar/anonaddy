@@ -1,4 +1,5 @@
 import 'package:anonaddy/screens/account_tab/components/add_new_recipient.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
@@ -106,7 +107,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
         final error = recipientTabState.errorMessage;
         return LottieWidget(
           showLoading: true,
-          lottie: 'assets/lottie/errorCone.json',
+          lottie: LottieImages.errorCone,
           lottieHeight: size.height * 0.1,
           label: error.toString(),
         );

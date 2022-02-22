@@ -1,6 +1,7 @@
 import 'package:anonaddy/screens/create_alias/components/recipients_note.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -138,7 +139,7 @@ class _AliasRecipientSelectionState
                 final error = recipientState.errorMessage;
                 return LottieWidget(
                   showLoading: true,
-                  lottie: 'assets/lottie/errorCone.json',
+                  lottie: LottieImages.errorCone,
                   lottieHeight: size.height * 0.1,
                   label: error.toString(),
                 );

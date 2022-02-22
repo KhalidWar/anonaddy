@@ -1,6 +1,7 @@
 import 'package:anonaddy/models/rules/rules.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -54,7 +55,7 @@ class RulesTab extends ConsumerWidget {
           case RulesTabStatus.failed:
             final error = rulesState.errorMessage;
             return LottieWidget(
-              lottie: 'assets/lottie/errorCone.json',
+              lottie: LottieImages.errorCone,
               lottieHeight: MediaQuery.of(context).size.height * 0.2,
               label: error,
             );
@@ -63,7 +64,7 @@ class RulesTab extends ConsumerWidget {
       /// When fetching Account data has failed
       case AccountStatus.failed:
         return LottieWidget(
-          lottie: 'assets/lottie/errorCone.json',
+          lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
           label: kLoadAccountDataFailed,
         );
