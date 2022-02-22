@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
-import 'package:anonaddy/shared_components/constants/toast_messages.dart';
+import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

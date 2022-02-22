@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/toast_messages.dart';
+import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:flutter/material.dart';
 
 class PaidFeatureWall extends StatelessWidget {
