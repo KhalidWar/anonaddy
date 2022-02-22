@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
@@ -176,7 +176,7 @@ class _UsernameDefaultRecipientState
                     children: [
                       const Divider(height: 0),
                       SizedBox(height: size.height * 0.01),
-                      const Text(kUpdateAliasRecipientNote),
+                      const Text(AddyManagerString.updateAliasRecipientNote),
                     ],
                   ),
                 ),

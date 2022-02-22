@@ -4,8 +4,8 @@ import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart
 import 'package:anonaddy/screens/search_tab/components/search_history.dart';
 import 'package:anonaddy/screens/search_tab/components/search_list_header.dart';
 import 'package:anonaddy/screens/search_tab/components/search_text_field.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
@@ -54,8 +54,9 @@ class SearchTab extends StatelessWidget {
                   return Column(
                     children: [
                       SearchListHeader(
-                        title: kSearchHistory,
-                        buttonLabel: kClearSearchHistoryButtonText,
+                        title: AddyManagerString.searchHistory,
+                        buttonLabel:
+                            AddyManagerString.clearSearchHistoryButtonText,
                         buttonTextColor: Colors.red,
                         onPress: () {
                           ref
@@ -78,8 +79,9 @@ class SearchTab extends StatelessWidget {
                   return Column(
                     children: [
                       SearchListHeader(
-                        title: kSearching,
-                        buttonLabel: kCancelSearchingButtonText,
+                        title: AddyManagerString.searching,
+                        buttonLabel:
+                            AddyManagerString.cancelSearchingButtonText,
                         buttonTextColor: Colors.red,
                         onPress: () {
                           /// Close current on-going search
@@ -117,8 +119,10 @@ class SearchTab extends StatelessWidget {
     return Column(
       children: [
         SearchListHeader(
-          title: isLimited ? kLimitedSearchResult : kSearchResult,
-          buttonLabel: kCloseSearchButtonText,
+          title: isLimited
+              ? AddyManagerString.limitedSearchResult
+              : AddyManagerString.searchResult,
+          buttonLabel: AddyManagerString.closeSearchButtonText,
           onPress: () {
             FocusScope.of(context).requestFocus(FocusNode());
             ref.read(searchResultStateNotifier.notifier).closeSearch();

@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +19,7 @@ class LocalPartInput extends ConsumerWidget {
             ref.read(createAliasStateNotifier.notifier).setLocalPart(input),
         textInputAction: TextInputAction.next,
         decoration: kTextFormFieldDecoration.copyWith(
-          hintText: kLocalPartFieldHint,
+          hintText: AddyManagerString.localPartFieldHint,
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
         ),
       ),

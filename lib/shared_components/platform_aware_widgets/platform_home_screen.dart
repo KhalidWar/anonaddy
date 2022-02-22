@@ -1,7 +1,7 @@
 import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,15 +32,15 @@ class PlatformHomeScreen extends PlatformAware {
     return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.account_circle_outlined),
-        label: kAccountBotNavLabel,
+        label: AddyManagerString.accountBotNavLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.alternate_email_outlined),
-        label: kAliasesBotNavLabel,
+        label: AddyManagerString.aliasesBotNavLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.search_outlined),
-        label: kSearchBotNavLabel,
+        label: AddyManagerString.searchBotNavLabel,
       ),
     ];
   }
@@ -64,7 +64,10 @@ class PlatformHomeScreen extends PlatformAware {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
+        title: const Text(
+          AddyManagerString.appName,
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.error_outline),

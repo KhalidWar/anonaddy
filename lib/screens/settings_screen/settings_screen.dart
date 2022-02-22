@@ -1,7 +1,7 @@
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/screens/settings_screen/about_app_screen.dart';
 import 'package:anonaddy/screens/settings_screen/components/app_version.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -153,7 +153,7 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       child: PlatformAlertDialog(
         title: 'Logout',
-        content: kLogOutAlertDialog,
+        content: AddyManagerString.logOutAlertDialog,
         method: () {
           Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
         },

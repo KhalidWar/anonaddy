@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
@@ -126,7 +126,7 @@ class _AliasDefaultRecipientScreenState
                                 const Divider(height: 0),
                                 SizedBox(height: size.height * 0.01),
                                 Text(
-                                  kUpdateAliasRecipientNote,
+                                  AddyManagerString.updateAliasRecipientNote,
                                   style: Theme.of(context).textTheme.caption,
                                 ),
                               ],

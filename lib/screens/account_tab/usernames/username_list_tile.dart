@@ -2,7 +2,7 @@ import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../../shared_components/constants/ui_strings.dart';
+import '../../../shared_components/constants/addymanager_string.dart';
 
 class UsernameListTile extends StatelessWidget {
   const UsernameListTile({Key? key, required this.username}) : super(key: key);
@@ -24,7 +24,7 @@ class UsernameListTile extends StatelessWidget {
                 Text(username.username),
                 const SizedBox(height: 2),
                 Text(
-                  username.description ?? kNoDescription,
+                  username.description ?? AddyManagerString.noDescription,
                   style: const TextStyle(color: Colors.grey),
                 ),
               ],

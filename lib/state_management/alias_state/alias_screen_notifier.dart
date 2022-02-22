@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -154,7 +154,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       await NicheMethod.copyOnTap(generatedAddress);
       showToast(ToastMessage.sendFromAliasSuccess);
     } catch (error) {
-      showToast(kSomethingWentWrong);
+      showToast(AddyManagerString.somethingWentWrong);
     }
   }
 }

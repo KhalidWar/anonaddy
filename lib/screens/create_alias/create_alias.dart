@@ -4,9 +4,9 @@ import 'package:anonaddy/screens/create_alias/alias_recipient_selection.dart';
 import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
 import 'package:anonaddy/screens/create_alias/components/local_part_input.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_dropdown.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
@@ -145,7 +145,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                       .read(createAliasStateNotifier.notifier)
                       .setDescription(input),
                   decoration: kTextFormFieldDecoration.copyWith(
-                    hintText: kDescriptionFieldHint,
+                    hintText: AddyManagerString.descriptionFieldHint,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   ),
                 ),
@@ -191,7 +191,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
               if (createAliasState.aliasFormat ==
                   AnonAddyString.aliasFormatCustom)
                 Text(
-                  kCreateAliasCustomFieldNote,
+                  AddyManagerString.createAliasCustomFieldNote,
                   style: Theme.of(consumerContext).textTheme.caption,
                 ),
               cardSpacer(size),
@@ -207,7 +207,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                   child: createAliasState.isLoading!
                       ? const PlatformLoadingIndicator()
                       : const Text(
-                          kCreateAlias,
+                          AddyManagerString.createAliasTitle,
                           style: TextStyle(color: Colors.black),
                         ),
                   onPress: createAliasState.isLoading!

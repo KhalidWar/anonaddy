@@ -1,5 +1,5 @@
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -25,7 +25,7 @@ class NavigationErrorScreen extends ConsumerWidget {
               child: LottieWidget(
                 lottie: LottieImages.errorCone,
                 lottieHeight: size.height * 0.25,
-                label: navigationErrorMessage,
+                label: AddyManagerString.navigationErrorMessage,
               ),
             ),
             Text(
@@ -54,7 +54,7 @@ class NavigationErrorScreen extends ConsumerWidget {
       context: context,
       child: PlatformAlertDialog(
         title: 'Logout',
-        content: kLogOutAlertDialog,
+        content: AddyManagerString.logOutAlertDialog,
         method: () async {
           await ref.read(authStateNotifier.notifier).logout(context);
         },

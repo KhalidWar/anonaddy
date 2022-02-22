@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
@@ -93,7 +93,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       context: context,
       child: PlatformAlertDialog(
         title: 'Logout',
-        content: kLogOutAlertDialog,
+        content: AddyManagerString.logOutAlertDialog,
         method: () async {
           await ref.read(authStateNotifier.notifier).logout(context);
         },

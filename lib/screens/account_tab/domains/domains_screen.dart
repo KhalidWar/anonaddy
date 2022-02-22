@@ -1,10 +1,10 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -94,7 +94,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: domain.description ?? kNoDescription,
+          title: domain.description ?? AddyManagerString.noDescription,
           titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Domain description',
           leadingIconData: Icons.comment_outlined,
@@ -132,10 +132,12 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           },
         ),
         if (domain.domainVerifiedAt == null)
-          buildUnverifiedEmailWarning(size, kUnverifiedDomainWarning),
+          buildUnverifiedEmailWarning(
+              size, AddyManagerString.unverifiedDomainWarning),
         // Divider(height: size.height * 0.02),
         if (domain.domainMxValidatedAt == null)
-          buildUnverifiedEmailWarning(size, kInvalidDomainMXWarning),
+          buildUnverifiedEmailWarning(
+              size, AddyManagerString.invalidDomainMXWarning),
         Divider(height: size.height * 0.02),
         // if (domain.domainSendingVerifiedAt == null)
         //   buildUnverifiedEmailWarning(size, kUnverifiedDomainNote),

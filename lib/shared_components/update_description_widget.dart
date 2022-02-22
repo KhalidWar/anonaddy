@@ -1,6 +1,6 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_input_field.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +31,14 @@ class UpdateDescriptionWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const BottomSheetHeader(headerLabel: kUpdateDescription),
+          const BottomSheetHeader(
+              headerLabel: AddyManagerString.updateDescriptionTitle),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(kUpdateDescriptionString),
+                const Text(AddyManagerString.updateDescriptionString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: descriptionFormKey,
@@ -55,7 +56,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                       child: PlatformButton(
                         color: Colors.redAccent,
                         child: const Text(
-                          kRemoveDescription,
+                          AddyManagerString.removeDescriptionTitle,
                           style: TextStyle(color: Colors.black),
                         ),
                         onPress: removeDescription,
@@ -66,7 +67,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                       child: PlatformButton(
                         color: kAccentColor,
                         child: const Text(
-                          kUpdateDescription,
+                          AddyManagerString.updateDescriptionTitle,
                           style: TextStyle(color: Colors.black),
                         ),
                         onPress: updateDescription,

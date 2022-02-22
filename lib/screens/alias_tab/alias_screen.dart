@@ -2,10 +2,10 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -155,8 +155,9 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           leadingIconData:
               isAliasDeleted ? Icons.restore_outlined : Icons.delete_outline,
           title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
-          subtitle:
-              isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
+          subtitle: isAliasDeleted
+              ? AddyManagerString.restoreAliasSubtitle
+              : AddyManagerString.deleteAliasSubtitle,
           trailing: Row(
             children: [
               if (deleteAliasLoading) const PlatformLoadingIndicator(size: 20),
@@ -211,7 +212,11 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               if (alias.recipients!.isEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(children: const [Text(kNoDefaultRecipientSet)]),
+                  child: Row(
+                    children: const [
+                      Text(AddyManagerString.noDefaultRecipientSet),
+                    ],
+                  ),
                 )
               else
                 ListView.builder(
@@ -328,14 +333,16 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const BottomSheetHeader(headerLabel: kSendFromAlias),
+              const BottomSheetHeader(
+                headerLabel: AddyManagerString.sendFromAlias,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(kSendFromAliasString),
+                    const Text(AddyManagerString.sendFromAliasString),
                     SizedBox(height: size.height * 0.01),
                     TextFormField(
                       enabled: false,
@@ -363,7 +370,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                       ),
                     ),
                     SizedBox(height: size.height * 0.01),
-                    const Text(kSendFromAliasNote),
+                    const Text(AddyManagerString.sendFromAliasNote),
                     SizedBox(height: size.height * 0.01),
                     Center(
                       child: ElevatedButton(
@@ -438,7 +445,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         child: PlatformAlertDialog(
           content: AnonAddyString.forgetAliasConfirmation,
           method: forget,
-          title: kForgetAlias,
+          title: AddyManagerString.forgetAlias,
         ),
       );
     }

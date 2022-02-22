@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:flutter/material.dart';
 
 class RecipientsNote extends StatelessWidget {
@@ -16,7 +16,7 @@ class RecipientsNote extends StatelessWidget {
           const Divider(height: 0),
           SizedBox(height: size.height * 0.01),
           Text(
-            kUpdateAliasRecipientNote,
+            AddyManagerString.updateAliasRecipientNote,
             style: Theme.of(context).textTheme.caption,
           ),
         ],

@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +47,7 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
             children: [
               buildHeadline('Failed deliveries'),
               Text(
-                kFailedDeliveriesNote,
+                AddyManagerString.failedDeliveriesNote,
                 style: Theme.of(context).textTheme.caption,
               ),
               const SizedBox(height: 10),

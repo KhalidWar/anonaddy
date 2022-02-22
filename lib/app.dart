@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'route_generator.dart';
 import 'screens/authorization_screen/authorization_screen.dart';
 import 'services/theme/theme.dart';
-import 'shared_components/constants/ui_strings.dart';
+import 'shared_components/constants/addymanager_string.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class App extends ConsumerWidget {
@@ -30,7 +30,7 @@ class App extends ConsumerWidget {
     ];
 
     return MaterialApp(
-      title: kAppBarTitle,
+      title: AddyManagerString.appName,
       debugShowCheckedModeBanner: false,
       theme: settingsState.isDarkTheme! ? darkTheme : lightTheme,
       darkTheme: darkTheme,

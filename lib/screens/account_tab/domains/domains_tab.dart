@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_screen.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
@@ -61,7 +61,7 @@ class DomainsTab extends ConsumerWidget {
         return LottieWidget(
           lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: kLoadAccountDataFailed,
+          label: AddyManagerString.loadAccountDataFailed,
         );
     }
   }
@@ -87,7 +87,7 @@ class DomainsTab extends ConsumerWidget {
                     Text(domain.domain),
                     const SizedBox(height: 2),
                     Text(
-                      domain.description ?? kNoDescription,
+                      domain.description ?? AddyManagerString.noDescription,
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],

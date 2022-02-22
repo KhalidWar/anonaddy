@@ -2,10 +2,10 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -257,7 +257,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           const SizedBox(width: 16),
           const Expanded(
             child: Text(
-              kUnverifiedRecipientNote,
+              AddyManagerString.unverifiedRecipientNote,
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -320,7 +320,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   children: [
-                    const Text(kAddPublicKeyNote),
+                    const Text(AddyManagerString.addPublicKeyNote),
                     SizedBox(height: size.height * 0.015),
                     Form(
                       key: formKey,
@@ -335,7 +335,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                         onFieldSubmitted: (submit) => addPublicKey(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           contentPadding: const EdgeInsets.all(5),
-                          hintText: kPublicKeyFieldHint,
+                          hintText: AddyManagerString.publicKeyFieldHint,
                         ),
                       ),
                     ),

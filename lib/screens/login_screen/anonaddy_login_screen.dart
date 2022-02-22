@@ -1,7 +1,7 @@
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -63,7 +63,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                       TextButton(
                         key: const Key('loginGetAccessToken'),
                         style: TextButton.styleFrom(),
-                        child: const Text(kWhatsAccessToken),
+                        child: const Text(AddyManagerString.whatsAccessToken),
                         onPressed: () => buildAccessTokenInfoSheet(context),
                       ),
                       TextButton(
@@ -135,7 +135,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                   ),
                 ),
                 border: const OutlineInputBorder(),
-                hintText: kEnterAccessToken,
+                hintText: AddyManagerString.enterAccessToken,
               ),
             ),
           ),
@@ -154,37 +154,39 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const BottomSheetHeader(headerLabel: kWhatsAccessToken),
+            const BottomSheetHeader(
+              headerLabel: AddyManagerString.whatsAccessToken,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    kWhatsAccessToken,
+                    AddyManagerString.whatsAccessToken,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   const SizedBox(height: 5),
-                  const Text(kAccessTokenDefinition),
+                  const Text(AddyManagerString.accessTokenDefinition),
                   const SizedBox(height: 20),
                   Text(
-                    kAccessTokenRequired,
+                    AddyManagerString.accessTokenRequired,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    kHowToGetAccessToken,
+                    AddyManagerString.howToGetAccessToken,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   const SizedBox(height: 5),
-                  const Text(kHowToGetAccessToken1),
-                  const Text(kHowToGetAccessToken2),
-                  const Text(kHowToGetAccessToken3),
-                  const Text(kHowToGetAccessToken4),
-                  const Text(kHowToGetAccessToken5),
+                  const Text(AddyManagerString.howToGetAccessToken1),
+                  const Text(AddyManagerString.howToGetAccessToken2),
+                  const Text(AddyManagerString.howToGetAccessToken3),
+                  const Text(AddyManagerString.howToGetAccessToken4),
+                  const Text(AddyManagerString.howToGetAccessToken5),
                   const SizedBox(height: 20),
                   Text(
-                    kAccessTokenSecurityNotice,
+                    AddyManagerString.accessTokenSecurityNotice,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -197,7 +199,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    Text(kGetAccessToken),
+                    Text(AddyManagerString.getAccessToken),
                     SizedBox(width: 4),
                     Icon(Icons.open_in_new_outlined),
                   ],

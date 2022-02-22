@@ -1,11 +1,11 @@
 import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
@@ -43,7 +43,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
 
     /// If account data is unavailable, show an error message and exit method.
     if (account == null) {
-      NicheMethod.showToast(kLoadAccountDataFailed);
+      NicheMethod.showToast(AddyManagerString.loadAccountDataFailed);
       return;
     }
 
@@ -124,7 +124,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
         return LottieWidget(
           lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: kLoadAccountDataFailed,
+          label: AddyManagerString.loadAccountDataFailed,
         );
     }
   }

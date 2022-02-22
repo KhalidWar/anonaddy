@@ -4,8 +4,8 @@ import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
 import 'package:anonaddy/screens/home_screen/components/create_alias_fab.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
@@ -74,15 +74,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_outlined),
-            label: kAccountBotNavLabel,
+            label: AddyManagerString.accountBotNavLabel,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.alternate_email_outlined),
-            label: kAliasesBotNavLabel,
+            label: AddyManagerString.aliasesBotNavLabel,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search_outlined),
-            label: kSearchBotNavLabel,
+            label: AddyManagerString.searchBotNavLabel,
           ),
         ],
       ),
@@ -92,7 +92,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 0,
-      title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
+      title: const Text(
+        AddyManagerString.appName,
+        style: TextStyle(color: Colors.white),
+      ),
       centerTitle: true,
       leading: IconButton(
         icon: const Icon(Icons.error_outline),
