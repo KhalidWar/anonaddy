@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
@@ -319,7 +319,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
             PlatformAware.platformDialog(
               context: context,
               child: PlatformAlertDialog(
-                content: kDeleteDomainConfirmation,
+                content: AnonAddyString.deleteDomainConfirmation,
                 method: deleteDomain,
                 title: 'Delete Domain',
               ),

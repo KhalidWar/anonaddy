@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
@@ -125,7 +125,8 @@ class _UsernameDefaultRecipientState
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          const Text(kUpdateUsernameDefaultRecipient),
+                          const Text(
+                              AnonAddyString.updateUsernameDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
                           const Divider(height: 0),
                         ],

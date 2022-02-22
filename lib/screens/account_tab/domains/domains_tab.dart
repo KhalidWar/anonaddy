@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_screen.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
@@ -26,7 +26,7 @@ class DomainsTab extends ConsumerWidget {
 
       case AccountStatus.loaded:
         final subscription = accountState.account!.subscription;
-        if (subscription == kFreeSubscription) {
+        if (subscription == AnonAddyString.subscriptionFree) {
           return const PaidFeatureWall();
         }
 

@@ -2,9 +2,9 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
@@ -272,7 +272,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
       context: context,
       child: PlatformAlertDialog(
         title: 'Remove Public Key',
-        content: kRemoveRecipientPublicKeyConfirmation,
+        content: AnonAddyString.removeRecipientPublicKeyConfirmation,
         method: () async {
           await ref
               .read(recipientScreenStateNotifier.notifier)
@@ -362,7 +362,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
         context: context,
         child: PlatformAlertDialog(
           title: 'Delete Recipient',
-          content: kDeleteRecipientConfirmation,
+          content: AnonAddyString.deleteRecipientConfirmation,
           method: () async {
             await ref
                 .read(recipientScreenStateNotifier.notifier)

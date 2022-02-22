@@ -1,6 +1,6 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
                 const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Column(
               children: [
-                const Text(kAddNewUsernameString),
+                const Text(AnonAddyString.addNewUsernameString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: _formKey,

@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -70,7 +70,7 @@ class _AliasDefaultRecipientScreenState
                         children: [
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: Text(kUpdateAliasRecipients),
+                            child: Text(AnonAddyString.updateAliasRecipients),
                           ),
                           SizedBox(height: size.height * 0.02),
                           const Divider(height: 0),

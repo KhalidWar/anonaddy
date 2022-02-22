@@ -4,8 +4,8 @@ import 'package:anonaddy/screens/create_alias/alias_recipient_selection.dart';
 import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
 import 'package:anonaddy/screens/create_alias/components/local_part_input.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_dropdown.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -151,7 +151,8 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                 ),
               ),
               cardSpacer(size),
-              if (createAliasState.aliasFormat == kCustom)
+              if (createAliasState.aliasFormat ==
+                  AnonAddyString.aliasFormatCustom)
                 Column(
                   children: [
                     const LocalPartInput(),
@@ -187,7 +188,8 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                   displayModal(rootContext, const AliasFormatSelection());
                 },
               ),
-              if (createAliasState.aliasFormat == kCustom)
+              if (createAliasState.aliasFormat ==
+                  AnonAddyString.aliasFormatCustom)
                 Text(
                   kCreateAliasCustomFieldNote,
                   style: Theme.of(consumerContext).textTheme.caption,

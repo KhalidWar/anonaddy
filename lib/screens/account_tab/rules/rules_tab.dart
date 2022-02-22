@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/rules/rules.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
@@ -33,7 +33,8 @@ class RulesTab extends ConsumerWidget {
         /// [Rules] is a paid feature.
         /// Show paywall if user's account is free tier.
         final subscription = accountState.account!.subscription;
-        if (subscription == kFreeSubscription) return const PaidFeatureWall();
+        if (subscription == AnonAddyString.subscriptionFree)
+          return const PaidFeatureWall();
 
         final rulesState = ref.watch(rulesTabStateNotifier);
         switch (rulesState.status) {

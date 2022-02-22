@@ -1,7 +1,7 @@
 import 'package:anonaddy/screens/account_tab/components/add_new_recipient.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -48,7 +48,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
       buildAddNewRecipient(context);
     } else {
       account.recipientCount == account.recipientLimit
-          ? NicheMethod.showToast(kReachedRecipientLimit)
+          ? NicheMethod.showToast(AnonAddyString.reachedRecipientLimit)
           : buildAddNewRecipient(context);
     }
   }

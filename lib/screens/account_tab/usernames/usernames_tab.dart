@@ -1,9 +1,9 @@
 import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -50,11 +50,11 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
     if (account.subscription == null) {
       buildAddNewUsername(context);
     } else {
-      if (account.subscription == kFreeSubscription) {
+      if (account.subscription == AnonAddyString.subscriptionFree) {
         NicheMethod.showToast(ToastMessage.onlyAvailableToPaid);
       } else {
         account.usernameCount == account.usernameLimit
-            ? NicheMethod.showToast(kReachedUsernameLimit)
+            ? NicheMethod.showToast(AnonAddyString.reachedUsernameLimit)
             : buildAddNewUsername(context);
       }
     }
@@ -70,7 +70,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
 
       case AccountStatus.loaded:
         final subscription = accountState.account!.subscription;
-        if (subscription == kFreeSubscription) {
+        if (subscription == AnonAddyString.subscriptionFree) {
           return const PaidFeatureWall();
         }
 

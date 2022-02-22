@@ -2,9 +2,9 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
 import 'package:anonaddy/shared_components/constants/ui_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -127,7 +127,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           ),
           trailingIconOnPress: () async {
             isAliasDeleted
-                ? NicheMethod.showToast(kRestoreBeforeActivate)
+                ? NicheMethod.showToast(AnonAddyString.restoreBeforeActivate)
                 : alias.active
                     ? await ref
                         .read(aliasScreenStateNotifier.notifier)
@@ -276,8 +276,9 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       context: context,
       child: PlatformAlertDialog(
         title: '${isDeleted ? 'Restore' : 'Delete'} Alias',
-        content:
-            isDeleted ? kRestoreAliasConfirmation : kDeleteAliasConfirmation,
+        content: isDeleted
+            ? AnonAddyString.restoreAliasConfirmation
+            : AnonAddyString.deleteAliasConfirmation,
         method: () async {
           /// Dismisses [platformDialog]
           Navigator.pop(context);
@@ -435,7 +436,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       PlatformAware.platformDialog(
         context: context,
         child: PlatformAlertDialog(
-          content: kForgetAliasConfirmation,
+          content: AnonAddyString.forgetAliasConfirmation,
           method: forget,
           title: kForgetAlias,
         ),
