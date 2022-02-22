@@ -1,5 +1,5 @@
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/search/search_result/search_result_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';

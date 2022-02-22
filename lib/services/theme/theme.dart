@@ -72,3 +72,11 @@ final fabThemeData = const FloatingActionButtonThemeData().copyWith(
   backgroundColor: const Color(0xFF62F4EB),
   foregroundColor: Colors.black,
 );
+
+/// UI Decoration
+const kBottomSheetBorderRadius = 12.0;
+const kTextFormFieldDecoration = InputDecoration(
+  border: OutlineInputBorder(),
+  focusedBorder:
+      OutlineInputBorder(borderSide: BorderSide(color: kAccentColor)),
+);

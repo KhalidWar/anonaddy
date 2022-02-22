@@ -1,4 +1,5 @@
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/material_constants.dart';
