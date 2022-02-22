@@ -2,8 +2,8 @@ import 'package:anonaddy/screens/alias_tab/components/alias_animated_list.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_pie_chart.dart';
 import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
@@ -40,7 +40,7 @@ class AliasTab extends ConsumerWidget {
                   background: AliasTabPieChart(),
                 ),
                 bottom: const TabBar(
-                  indicatorColor: kAccentColor,
+                  indicatorColor: AppColors.accentColor,
                   tabs: [
                     Tab(child: Text('Available Aliases')),
                     Tab(child: Text('Deleted Aliases')),
@@ -73,7 +73,7 @@ class AliasTab extends ConsumerWidget {
                     children: [
                       /// Available aliases list
                       RefreshIndicator(
-                        color: kAccentColor,
+                        color: AppColors.accentColor,
                         displacement: 20,
                         onRefresh: () async {
                           await ref

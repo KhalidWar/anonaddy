@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -19,28 +19,28 @@ class AliasesStatsShimmer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const PieChartIndicator(
-              color: kFirstPieChartColor,
+              color: AppColors.firstPieChartColor,
               label: 'emails forwarded',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
             const PieChartIndicator(
-              color: kSecondPieChartColor,
+              color: AppColors.secondPieChartColor,
               label: 'emails blocked',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
             const PieChartIndicator(
-              color: kFourthPieChartColor,
+              color: AppColors.fourthPieChartColor,
               label: 'emails replied',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
             const PieChartIndicator(
-              color: kThirdPieChartColor,
+              color: AppColors.thirdPieChartColor,
               label: 'emails sent',
               count: 0,
               textColor: Colors.white,

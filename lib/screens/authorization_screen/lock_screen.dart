@@ -1,6 +1,6 @@
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -27,7 +27,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: AppColors.primaryColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(

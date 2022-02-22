@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -31,7 +31,7 @@ class LottieWidget extends StatelessWidget {
         if (showLoading ?? false)
           const LinearProgressIndicator(
             backgroundColor: Colors.transparent,
-            color: kAccentColor,
+            color: AppColors.accentColor,
           ),
         Center(
           child: Column(

@@ -3,8 +3,8 @@ import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_tab.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
@@ -60,7 +60,7 @@ class AccountTab extends ConsumerWidget {
                 ),
                 bottom: const TabBar(
                   isScrollable: true,
-                  indicatorColor: kAccentColor,
+                  indicatorColor: AppColors.accentColor,
                   tabs: [
                     Tab(child: Text('Recipients')),
                     Tab(child: Text('Usernames')),

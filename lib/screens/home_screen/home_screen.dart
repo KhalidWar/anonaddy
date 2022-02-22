@@ -5,7 +5,7 @@ import 'package:anonaddy/screens/home_screen/components/create_alias_fab.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
@@ -70,7 +70,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: _switchIndex,
         currentIndex: _selectedIndex,
-        selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
+        selectedItemColor:
+            isDark ? AppColors.accentColor : AppColors.primaryColor,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_outlined),

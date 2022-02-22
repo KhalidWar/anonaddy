@@ -1,5 +1,5 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ class AliasDomainSelection extends StatelessWidget {
                               final domain = domains[index];
                               return ListTile(
                                 dense: true,
-                                selectedTileColor: kAccentColor,
+                                selectedTileColor: AppColors.accentColor,
                                 horizontalTitleGap: 0,
                                 title: Text(
                                   domain,

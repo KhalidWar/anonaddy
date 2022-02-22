@@ -2,7 +2,7 @@ import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -40,7 +40,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
       child: Scaffold(
         key: const Key('loginScreenScaffold'),
         appBar: AppBar(elevation: 0, brightness: Brightness.dark),
-        backgroundColor: kPrimaryColor,
+        backgroundColor: AppColors.primaryColor,
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -238,7 +238,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
             child: authState.loginLoading!
                 ? const CircularProgressIndicator(
                     key: Key('loginLoadingIndicator'),
-                    backgroundColor: kPrimaryColor,
+                    backgroundColor: AppColors.primaryColor,
                   )
                 : Text(
                     'Login',

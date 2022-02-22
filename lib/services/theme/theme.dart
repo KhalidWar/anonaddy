@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 final lightTheme = ThemeData.light().copyWith(
@@ -7,8 +7,8 @@ final lightTheme = ThemeData.light().copyWith(
   primaryColorLight: Colors.white,
   primaryColorDark: const Color(0xFFF5F7FA),
   appBarTheme: appBarTheme,
-  toggleableActiveColor: kAccentColor,
-  accentColor: kAccentColor,
+  toggleableActiveColor: AppColors.accentColor,
+  accentColor: AppColors.accentColor,
   buttonTheme: buttonThemeData,
   floatingActionButtonTheme: fabThemeData,
   cardTheme: cardTheme,
@@ -23,8 +23,8 @@ final darkTheme = ThemeData.dark().copyWith(
   primaryColorLight: const Color(0xFF0d0d0d),
   primaryColorDark: Colors.black,
   appBarTheme: appBarTheme,
-  toggleableActiveColor: kAccentColor,
-  accentColor: kAccentColor,
+  toggleableActiveColor: AppColors.accentColor,
+  accentColor: AppColors.accentColor,
   dividerColor: Colors.grey[600],
   buttonTheme: buttonThemeData,
   floatingActionButtonTheme: fabThemeData,
@@ -38,8 +38,8 @@ final darkTheme = ThemeData.dark().copyWith(
 final elevatedButtonThemeData = ElevatedButtonThemeData(
   style: ButtonStyle(
     foregroundColor: MaterialStateProperty.all(Colors.black),
-    overlayColor: MaterialStateProperty.all(kPrimaryColor),
-    backgroundColor: MaterialStateProperty.all(kAccentColor),
+    overlayColor: MaterialStateProperty.all(AppColors.primaryColor),
+    backgroundColor: MaterialStateProperty.all(AppColors.accentColor),
     minimumSize: MaterialStateProperty.all(const Size(180, 50)),
     shape: MaterialStateProperty.all(
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -64,7 +64,7 @@ final dialogTheme = const DialogTheme().copyWith(
 );
 
 final appBarTheme = const AppBarTheme().copyWith(
-  color: kPrimaryColor,
+  color: AppColors.primaryColor,
   brightness: Brightness.dark,
 );
 
@@ -77,6 +77,7 @@ final fabThemeData = const FloatingActionButtonThemeData().copyWith(
 const kBottomSheetBorderRadius = 12.0;
 const kTextFormFieldDecoration = InputDecoration(
   border: OutlineInputBorder(),
-  focusedBorder:
-      OutlineInputBorder(borderSide: BorderSide(color: kAccentColor)),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: AppColors.accentColor),
+  ),
 );

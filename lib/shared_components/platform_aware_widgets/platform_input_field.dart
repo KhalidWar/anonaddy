@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class PlatformInputField extends PlatformAware {
       onSubmitted: onFieldSubmitted,
       placeholder: placeholder,
       decoration: BoxDecoration(
-        border: Border.all(color: kAccentColor),
+        border: Border.all(color: AppColors.accentColor),
         borderRadius: BorderRadius.circular(5),
       ),
     );
@@ -38,7 +38,7 @@ class PlatformInputField extends PlatformAware {
         hintText: placeholder,
         border: const OutlineInputBorder(),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: kAccentColor),
+          borderSide: BorderSide(color: AppColors.accentColor),
         ),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
@@ -145,7 +145,7 @@ class _DomainDefaultRecipientState
                                   .updateRecipientLoading!;
                               return isLoading
                                   ? const LinearProgressIndicator(
-                                      color: kAccentColor)
+                                      color: AppColors.accentColor)
                                   : const Divider(height: 0);
                             },
                           ),
@@ -171,7 +171,7 @@ class _DomainDefaultRecipientState
                       final verifiedRecipient = _verifiedRecipients[index];
                       return ListTile(
                         selected: _isDefaultRecipient(verifiedRecipient),
-                        selectedTileColor: kAccentColor,
+                        selectedTileColor: AppColors.accentColor,
                         horizontalTitleGap: 0,
                         title: Text(
                           verifiedRecipient.email,

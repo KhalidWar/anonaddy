@@ -1,5 +1,5 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -47,7 +47,7 @@ class AliasFormatSelection extends ConsumerWidget {
                         final format = aliasFormatList[index];
                         return ListTile(
                           dense: true,
-                          selectedTileColor: kAccentColor,
+                          selectedTileColor: AppColors.accentColor,
                           horizontalTitleGap: 0,
                           title: Text(
                             NicheMethod.correctAliasString(format),

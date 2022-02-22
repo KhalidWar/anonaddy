@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/screens/alias_tab/components/aliases_stats_shimmer.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
@@ -71,28 +71,28 @@ class AliasTabPieChart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             PieChartIndicator(
-              color: kFirstPieChartColor,
+              color: AppColors.firstPieChartColor,
               label: 'emails forwarded',
               count: emailsForwarded,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
             PieChartIndicator(
-              color: kSecondPieChartColor,
+              color: AppColors.secondPieChartColor,
               label: 'emails blocked',
               count: emailsBlocked,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
             PieChartIndicator(
-              color: kFourthPieChartColor,
+              color: AppColors.fourthPieChartColor,
               label: 'emails replied',
               count: emailsReplied,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
             PieChartIndicator(
-              color: kThirdPieChartColor,
+              color: AppColors.thirdPieChartColor,
               label: 'emails sent',
               count: emailsSent,
               textColor: Colors.white,
@@ -119,25 +119,25 @@ class AliasTabPieChart extends StatelessWidget {
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
-                        color: kFirstPieChartColor,
+                        color: AppColors.firstPieChartColor,
                         value: emailsForwarded.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
-                        color: kSecondPieChartColor,
+                        color: AppColors.secondPieChartColor,
                         value: emailsBlocked.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
-                        color: kThirdPieChartColor,
+                        color: AppColors.thirdPieChartColor,
                         value: emailsSent.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
-                        color: kFourthPieChartColor,
+                        color: AppColors.fourthPieChartColor,
                         value: emailsReplied.toDouble(),
                       ),
                     ],

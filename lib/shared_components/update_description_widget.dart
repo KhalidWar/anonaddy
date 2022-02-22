@@ -1,6 +1,6 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_input_field.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +65,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     SizedBox(width: size.width * 0.03),
                     Expanded(
                       child: PlatformButton(
-                        color: kAccentColor,
+                        color: AppColors.accentColor,
                         child: const Text(
                           AddyManagerString.updateDescriptionTitle,
                           style: TextStyle(color: Colors.black),

@@ -1,7 +1,7 @@
 import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +89,8 @@ class PlatformHomeScreen extends PlatformAware {
       bottomNavigationBar: BottomNavigationBar(
         onTap: androidOnTap,
         currentIndex: currentIndex,
-        selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
+        selectedItemColor:
+            isDark ? AppColors.accentColor : AppColors.primaryColor,
         items: botNavBarItems(),
       ),
     );

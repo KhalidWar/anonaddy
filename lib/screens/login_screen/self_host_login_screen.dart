@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -39,7 +39,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         appBar: AppBar(elevation: 0, title: const Text('Change Instance')),
-        backgroundColor: kPrimaryColor,
+        backgroundColor: AppColors.primaryColor,
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -168,7 +168,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
             child: authState.loginLoading!
                 ? const CircularProgressIndicator(
                     key: Key('loginLoadingIndicator'),
-                    backgroundColor: kPrimaryColor,
+                    backgroundColor: AppColors.primaryColor,
                   )
                 : Text(
                     'Login',

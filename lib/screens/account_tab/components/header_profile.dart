@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/account/account.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class HeaderProfile extends StatelessWidget {
@@ -20,7 +20,7 @@ class HeaderProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: kAccentColor,
+        backgroundColor: AppColors.accentColor,
         child: avatarChild(context),
       ),
       title: Text(

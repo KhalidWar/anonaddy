@@ -2,8 +2,8 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
@@ -96,7 +96,7 @@ class _AliasDefaultRecipientScreenState
 
                                 return ListTile(
                                   selected: isDefault,
-                                  selectedTileColor: kAccentColor,
+                                  selectedTileColor: AppColors.accentColor,
                                   horizontalTitleGap: 0,
                                   title: Text(
                                     verifiedRecipient.email,
@@ -147,7 +147,8 @@ class _AliasDefaultRecipientScreenState
                                 .updateRecipientLoading!;
                             return isLoading
                                 ? const CircularProgressIndicator(
-                                    color: kPrimaryColor)
+                                    color: AppColors.primaryColor,
+                                  )
                                 : const Text('Update Recipients');
                           },
                         ),
