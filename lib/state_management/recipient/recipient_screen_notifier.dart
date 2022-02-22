@@ -81,7 +81,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
           await recipientService.addPublicGPGKey(recipient.id, keyData);
       recipient.fingerprint = updatedRecipient.fingerprint;
       recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
-      showToast(kAddGPGKeySuccess);
+      showToast(ToastMessage.addGPGKeySuccess);
       state = state.copyWith(recipient: recipient);
     } catch (error) {
       showToast(error.toString());
@@ -91,7 +91,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   Future<void> removePublicGPGKey(Recipient recipient) async {
     try {
       await recipientService.removePublicGPGKey(recipient.id);
-      showToast(kDeleteGPGKeySuccess);
+      showToast(ToastMessage.deleteGPGKeySuccess);
       recipient.fingerprint = null;
       recipient.shouldEncrypt = false;
       state = state.copyWith(recipient: recipient);

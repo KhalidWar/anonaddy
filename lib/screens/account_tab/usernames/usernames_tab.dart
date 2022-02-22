@@ -51,7 +51,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
       buildAddNewUsername(context);
     } else {
       if (account.subscription == kFreeSubscription) {
-        NicheMethod.showToast(kOnlyAvailableToPaid);
+        NicheMethod.showToast(ToastMessage.onlyAvailableToPaid);
       } else {
         account.usernameCount == account.usernameLimit
             ? NicheMethod.showToast(kReachedUsernameLimit)

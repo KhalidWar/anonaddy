@@ -30,7 +30,7 @@ class BiometricAuthService {
     if (canCheckBio) {
       try {
         return await localAuth.authenticate(
-          localizedReason: kAuthToProceed,
+          localizedReason: ToastMessage.authToProceed,
           useErrorDialogs: true,
           stickyAuth: true,
         );

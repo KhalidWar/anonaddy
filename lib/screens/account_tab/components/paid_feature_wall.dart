@@ -8,7 +8,7 @@ class PaidFeatureWall extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        kOnlyAvailableToPaid,
+        ToastMessage.onlyAvailableToPaid,
         style: Theme.of(context).textTheme.bodyText1,
       ),
     );

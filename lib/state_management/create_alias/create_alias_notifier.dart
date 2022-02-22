@@ -103,9 +103,9 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
       if (isAutoCopy) {
         await NicheMethod.copyOnTap(createdAlias.email);
-        NicheMethod.showToast(kCreateAliasAndCopyEmail);
+        NicheMethod.showToast(ToastMessage.createAliasAndCopyEmail);
       } else {
-        NicheMethod.showToast(kCreateAliasSuccess);
+        NicheMethod.showToast(ToastMessage.createAliasSuccess);
       }
 
       aliasTabNotifier.addAlias(createdAlias);

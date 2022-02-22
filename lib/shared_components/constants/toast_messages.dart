@@ -1,58 +1,63 @@
-/// Copy to clipboard
-const kCopiedToClipboard = 'Copied to Clipboard';
-const kFailedToCopy = 'Failed to Copy to Clipboard';
+/// Messages to show as toast
+class ToastMessage {
+  /// Copy to clipboard
+  static const copiedToClipboard = 'Copied to Clipboard';
+  static const failedToCopy = 'Failed to Copy to Clipboard';
 
-/// Alias Activate
-const kActivateAliasSuccess = 'Activated Alias Successfully';
-const kActivateAliasFailed = 'Failed to Activate Alias';
+  /// Alias Activate
+  static const activateAliasSuccess = 'Activated Alias Successfully';
+  static const activateAliasFailed = 'Failed to Activate Alias';
 
-/// Alias Deactivate
-const kDeactivateAliasSuccess = 'Deactivated Alias Successfully';
-const kDeactivateAliasFailed = 'Failed to Deactivate Alias';
+  /// Alias Deactivate
+  static const deactivateAliasSuccess = 'Deactivated Alias Successfully';
+  static const deactivateAliasFailed = 'Failed to Deactivate Alias';
 
-/// Alias Delete
-const kDeleteAliasSuccess = 'Deleted Alias Successfully';
-const kDeleteAliasFailed = 'Failed to Delete Alias';
+  /// Alias Delete
+  static const deleteAliasSuccess = 'Deleted Alias Successfully';
+  static const deleteAliasFailed = 'Failed to Delete Alias';
 
-/// Alias Restore
-const kRestoreAliasSuccess = 'Restored Alias Successfully';
-const kRestoreAliasFailed = 'Failed to Restore Alias';
+  /// Alias Restore
+  static const restoreAliasSuccess = 'Restored Alias Successfully';
+  static const restoreAliasFailed = 'Failed to Restore Alias';
 
-/// Alias Description
-const kEditDescriptionSuccess = 'Description Updated Successfully';
-const kClearDescriptionSuccess = 'Description Cleared Successfully';
-const kEditDescriptionFailed = 'Failed to update description';
+  /// Alias Description
+  static const editDescriptionSuccess = 'Description Updated Successfully';
+  static const clearDescriptionSuccess = 'Description Cleared Successfully';
+  static const editDescriptionFailed = 'Failed to update description';
 
-/// Alias Create Alias
-const kCreateAliasSuccess = 'Created Alias Successfully';
-const kCreateAliasAndCopyEmail = 'Alias Created and Email Copied';
+  /// Alias Create Alias
+  static const createAliasSuccess = 'Created Alias Successfully';
+  static const createAliasAndCopyEmail = 'Alias Created and Email Copied';
 
-/// Alias Forget
-const kForgetAliasSuccess = 'Forgotten Alias Successfully';
-const kForgetAliasFailed = 'Failed to Forget Alias';
+  /// Alias Forget
+  static const forgetAliasSuccess = 'Forgotten Alias Successfully';
+  static const forgetAliasFailed = 'Failed to Forget Alias';
 
-/// Alias Update Recipient
-const kUpdateAliasRecipientSuccess = 'Updated Alias Recipients Successfully';
-const kUpdateAliasRecipientFailed = 'Failed to Update Description';
+  /// Alias Update Recipient
+  static const updateAliasRecipientSuccess =
+      'Updated Alias Recipients Successfully';
+  static const updateAliasRecipientFailed = 'Failed to Update Description';
 
-/// Alias Send From
-const kSendFromAliasSuccess = 'Address is generated and copied to clipboard';
+  /// Alias Send From
+  static const sendFromAliasSuccess =
+      'Address is generated and copied to clipboard';
 
-/// Recipient Encryption
-const kEncryptionEnabled = 'Enabled Encryption Successfully';
-const kFailedToEnableEncryption = 'Failed to Enable Encryption';
-const kEncryptionDisabled = 'Disabled Encryption Successfully';
-const kFailedToDisableEncryption = 'Failed to Disable Encryption';
+  /// Recipient Encryption
+  static const encryptionEnabled = 'Enabled Encryption Successfully';
+  static const failedToEnableEncryption = 'Failed to Enable Encryption';
+  static const encryptionDisabled = 'Disabled Encryption Successfully';
+  static const failedToDisableEncryption = 'Failed to Disable Encryption';
 
-/// Recipient GPG Key
-const kAddGPGKeySuccess = 'Added GPG Key Successfully';
-const kAddGPGKeyFailed = 'Failed to Add GPG Key';
-const kDeleteGPGKeySuccess = 'Deleted GPG Key Successfully';
-const kDeleteGPGKeyFailed = 'Failed to Delete GPG Key';
+  /// Recipient GPG Key
+  static const addGPGKeySuccess = 'Added GPG Key Successfully';
+  static const addGPGKeyFailed = 'Failed to Add GPG Key';
+  static const deleteGPGKeySuccess = 'Deleted GPG Key Successfully';
+  static const deleteGPGKeyFailed = 'Failed to Delete GPG Key';
 
-/// Biometric Auth Messages
-const kAuthToProceed = 'Authenticate to proceed';
-const kFailedToAuthenticate = 'Failed to authenticate';
+  /// Biometric Auth Messages
+  static const authToProceed = 'Authenticate to proceed';
+  static const failedToAuthenticate = 'Failed to authenticate';
 
-/// Miscellaneous
-const kOnlyAvailableToPaid = 'Only available to paid users';
+  /// Miscellaneous
+  static const onlyAvailableToPaid = 'Only available to paid users';
+}

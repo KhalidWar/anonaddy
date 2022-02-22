@@ -17,9 +17,9 @@ class NicheMethod {
     await Clipboard.setData(
       ClipboardData(text: input),
     ).catchError((error) {
-      showToast("$kFailedToCopy: $error");
+      showToast("${ToastMessage.failedToCopy}: $error");
     }).whenComplete(() {
-      showToast(kCopiedToClipboard);
+      showToast(ToastMessage.copiedToClipboard);
     });
   }
 

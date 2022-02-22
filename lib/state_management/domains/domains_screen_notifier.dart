@@ -45,7 +45,7 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     try {
       final updatedDomain =
           await domainService.editDomainDescription(domainId, newDescription);
-      showToast(kEditDescriptionSuccess);
+      showToast(ToastMessage.editDescriptionSuccess);
       state = state.copyWith(domain: updatedDomain);
     } catch (error) {
       showToast(error.toString());
