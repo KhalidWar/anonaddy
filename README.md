@@ -21,14 +21,14 @@ Your support will help the continuous development of this project. Click on QR c
 
 ## Features
 - Get detailed view of all aliases (available or deleted).
-- Copy email address with a single tap. 
+- Copy alias email with a single tap. 
 - Search aliases by email address, domain, alias, or description.
 - Activate and deactivate aliases on the fly.
 - Create new alias with custom description, domain, and format (UUID and random words).
 - Delete and restore aliases.
 - Add or remove PGP key.
 - Enable or disable PGP Email encryption.
-- Adaptive and persistive Light and Dark themes.
+- Adaptive and persistent Light and Dark themes.
 - Offline support: access your data even if you're in an airplane.
 
 
@@ -47,9 +47,7 @@ Your account data, aliases, recipients, domains, search history...etc. do NOT le
 ## Packages used
 - [HTTP](https://pub.dev/packages/http)
 - [Flutter Riverpod](https://pub.dev/packages/flutter_riverpod)
-- [Shared Preference](https://pub.dev/packages/shared_preferences)
 - [Flutter SVG](https://pub.dev/packages/flutter_svg)
-- [Font Awesome Flutter](https://pub.dev/packages/font_awesome_flutter)
 - [URL Launcher](https://pub.dev/packages/url_launcher)
 - [Lottie](https://pub.dev/packages/lottie)
 - [Flutter Secure Storage](https://pub.dev/packages/flutter_secure_storage)
@@ -58,44 +56,50 @@ Your account data, aliases, recipients, domains, search history...etc. do NOT le
 - [Mockito](https://pub.dev/packages/mockito)
 - [Shimmer](https://pub.dev/packages/shimmer)
 - [FL Chart](https://pub.dev/packages/fl_chart)
-- [Connectivity](https://pub.dev/packages/connectivity)
 - [Secure Application](https://pub.dev/packages/secure_application)
 - [Local Auth](https://pub.dev/packages/local_auth)
-- [Package Info](https://pub.dev/packages/package_info)
+- [Package Info Plus](https://pub.dev/packages/package_info_plus)
 - [JSON Annotation](https://pub.dev/packages/json_annotation)
 - [JSON Serializable](https://pub.dev/packages/json_serializable)
+- [Modal Bottom Sheet](https://pub.dev/packages/modal_bottom_sheet)
+- [Hive](https://pub.dev/packages/hive)
+- [Hive Flutter](https://pub.dev/packages/hive_flutter)
+- [Flutter Phoenix](https://pub.dev/packages/flutter_phoenix)
 
 
 ## Development
 
 ### Contribution
-You can contribute by reporting bugs, suggesting improvements, or by helping out in code.
-UI/UX designers are always welcome.
+You can contribute by reporting bugs, suggesting improvements, and/or by helping out in code.
+UI/UX designers are always welcome. You can email directly at addymanager@khalidwar.com.
 1. Feel free to fork this repo and help out
 2. Make small, concise, and well documented commits.
+3. No idea where to start? Contact me and I'll assign you appropriate tasks.
 
 ### Getting Started
-Check out [Flutter's official guide](https://flutter.dev/docs/get-started/install) to installing and running flutter.
+Check out [Flutter's official guide](https://flutter.dev/docs/get-started/install) to installing and running Flutter on your system.
 
 ### Prerequisites
 - Download IDE either [Android Studio](https://developer.android.com/studio) or [VSC](https://code.visualstudio.com/)
 - Install Flutter SDK and Dart plugin.
-- Flutter channel stable is used for development.
+- Flutter stable channel is used for development.
 - Mobile device (emulator or physical).
 
 ### Steps
-- Clone this repo to your machine: `https://github.com/KhalidWar/anonaddy.git`
-- Make sure you're on master branch.
-- Run main.dart on emulator or physical device.
+- Clone this repo to your local machine: `git clone https://github.com/KhalidWar/anonaddy.git`
+- Run `flutter run pub get` in terminal inside project root directory.
+- Run `main.dart` on emulator or physical device.
 - Create AnonAddy account and generate your own [API Access Token](https://app.anonaddy.com/settings), found under API section.
 - Sign in with your API Access Token.
 - All set!
 
-## License
-This project is licensed under [MIT Licnese](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE).
+---
 
-## Acknowledgement
-Special thanks to AnonAddy's team for providing us with their free [API and excellent documentation](https://app.anonaddy.com/docs/).
+#### License
+This project is licensed under [MIT License](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). It means you're free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell this project.
 
-## Disclaimer
+#### Acknowledgement
+Special thanks to AnonAddy's team for providing us with their free and well documented [API](https://app.anonaddy.com/docs/).
+
+#### Disclaimer
 AddyManager is independently created by [Khalid War](https://github.com/khalidwar) as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com project or team.
