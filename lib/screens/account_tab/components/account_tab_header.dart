@@ -1,8 +1,10 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,15 +53,14 @@ class AccountTabHeader extends ConsumerWidget {
         HeaderProfile(
           account: account,
           onPress: () {
-            // PlatformAware.platformDialog(
-            //   context: context,
-            //   child: PlatformInfoDialog(
-            //     content: Text('Test'),
-            //     title: 'Test',
-            //     buttonLabel: 'Cancel',
-            //     // method: () {},
-            //   ),
-            // );
+            PlatformAware.platformDialog(
+              context: context,
+              child: PlatformInfoDialog(
+                title: AddyManagerString.accountBotNavLabel,
+                buttonLabel: AddyManagerString.doneText,
+                content: AccountPopupInfo(account: account),
+              ),
+            );
           },
         ),
         AccountListTile(
@@ -77,34 +78,7 @@ class AccountTabHeader extends ConsumerWidget {
           subtitle: 'Usernames',
           leadingIconData: Icons.account_circle_outlined,
         ),
-        // AccountListTile(
-        //   title: account.defaultAliasDomain,
-        //   subtitle: 'Default Alias Domain',
-        //   leadingIconData: Icons.dns_outlined,
-        //   trailingIcon: const Icon(
-        //     Icons.open_in_new_outlined,
-        //     color: Colors.white,
-        //   ),
-        //   onTap: () => updateDefaultAliasFormatDomain(ref),
-        // ),
-        // AccountListTile(
-        //   title: account.defaultAliasFormat == null
-        //       ? null
-        //       : NicheMethod.correctAliasString(account.defaultAliasFormat!),
-        //   subtitle: 'Default Alias Format',
-        //   leadingIconData: Icons.alternate_email_outlined,
-        //   trailingIcon: const Icon(
-        //     Icons.open_in_new_outlined,
-        //     color: Colors.white,
-        //   ),
-        //   onTap: () => updateDefaultAliasFormatDomain(ref),
-        // ),
       ],
     );
-  }
-
-  Future<void> updateDefaultAliasFormatDomain(WidgetRef ref) async {
-    final instanceURL = await ref.read(accessTokenService).getInstanceURL();
-    await NicheMethod.launchURL('https://$instanceURL/settings');
   }
 }

@@ -6,6 +6,11 @@ class AddyManagerString {
   static const aliasesBotNavLabel = 'Aliases';
   static const searchBotNavLabel = 'Search';
 
+  /// Account Tab
+  static const noDefaultSelected = 'No default selected';
+  static const defaultAliasFormat = 'Default Alias Format';
+  static const defaultAliasDomain = 'Default Alias Domain';
+
   /// Aliases Tab
   static const updateAliasRecipientNote =
       'Note: only verified recipients can be used as default recipients.';
@@ -80,6 +85,10 @@ class AddyManagerString {
 
   /// Error
   static const loadAccountDataFailed = 'Failed to Load Account Data';
+
+  /// Button Labels
+  static const doneText = 'Done';
+  static const cancelText = 'Cancel';
 
   /// No Internet (Offline Mode) Dialog
   static const noInternetOfflineData = 'No internet connection';

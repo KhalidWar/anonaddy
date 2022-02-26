@@ -16,7 +16,10 @@ class PlatformInfoDialog extends PlatformAware {
   Widget buildCupertinoWidget(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text(title),
-      content: content,
+      content: Material(
+        color: Colors.transparent,
+        child: content,
+      ),
       actions: [
         CupertinoDialogAction(
           isDestructiveAction: true,
