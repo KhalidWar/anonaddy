@@ -38,10 +38,10 @@ class AccountPopupInfo extends ConsumerWidget {
           dense: true,
           title: Text(
             account.subscriptionEndAt == null
-                ? 'Self Hosted'
+                ? AddyManagerString.selfHosted
                 : NicheMethod.fixDateTime(account.subscriptionEndAt),
           ),
-          subtitle: const Text('Subscription end date'),
+          subtitle: const Text(AddyManagerString.subscriptionEndDate),
         ),
       ],
     );

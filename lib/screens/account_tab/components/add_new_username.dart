@@ -1,5 +1,6 @@
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -42,7 +43,9 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const BottomSheetHeader(headerLabel: 'Add New Username'),
+          const BottomSheetHeader(
+            headerLabel: AddyManagerString.addNewUsername,
+          ),
           Container(
             padding:
                 const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
@@ -68,7 +71,7 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
                   style: ElevatedButton.styleFrom().copyWith(
                     minimumSize: MaterialStateProperty.all(const Size(200, 50)),
                   ),
-                  child: const Text('Add Username'),
+                  child: const Text(AddyManagerString.addUsername),
                   onPressed: () => createUsername(),
                 ),
               ],

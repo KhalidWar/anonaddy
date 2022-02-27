@@ -80,7 +80,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                 ? ListTile(
                     title: Center(
                       child: Text(
-                        'No recipients found',
+                        AddyManagerString.noRecipientsFound,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ),
@@ -97,7 +97,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                     },
                   ),
             TextButton(
-              child: const Text('Add New Recipient'),
+              child: const Text(AddyManagerString.addNewRecipient),
               onPressed: () => addNewRecipient(context),
             ),
           ],

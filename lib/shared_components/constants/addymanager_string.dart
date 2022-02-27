@@ -1,4 +1,4 @@
-/// Collection of all UI strings used in app.
+/// Collection of all text in UI used in app.
 class AddyManagerString {
   /// Home Screen
   static const appName = 'AddyManager';
@@ -7,9 +7,18 @@ class AddyManagerString {
   static const searchBotNavLabel = 'Search';
 
   /// Account Tab
+  static const monthlyBandwidth = 'Monthly Bandwidth';
+  static const recipients = 'Recipients';
+  static const usernames = 'Usernames';
+  static const domains = 'Domains';
+  static const rules = 'Rules';
+  static const selfHosted = 'Self Hosted';
+  static const subscriptionEndDate = 'Subscription end date';
   static const noDefaultSelected = 'No default selected';
   static const defaultAliasFormat = 'Default Alias Format';
   static const defaultAliasDomain = 'Default Alias Domain';
+  static const unlimited = 'Unlimited';
+  static const addNewRecipient = 'Add New Recipient';
 
   /// Aliases Tab
   static const updateAliasRecipientNote =
@@ -41,18 +50,31 @@ class AddyManagerString {
   static const createAliasCustomFieldNote =
       'Note: not available on shared domains';
 
-  /// Recipient
+  /// Recipients
   static const publicKeyFieldHint =
       'Begins with \'-----BEGIN PGP PUBLIC KEY BLOCK-----\'';
   static const addPublicKeyNote =
       'Enter your PUBLIC key data in the text area below. Make sure to remove Comment: and Version:';
   static const unverifiedRecipientNote =
       'Unverified recipient emails can NOT be set as default recipient for aliases.';
+  static const noRecipientsFound = 'No recipients found';
+  static const verified = 'Verified';
+  static const unverified = 'Unverified';
+
+  /// Usernames
+  static const addNewUsername = 'Add New Username';
+  static const addUsername = 'Add Username';
+  static const noAdditionalUsernamesFound = 'No additional usernames found';
 
   /// Domain
   static const unverifiedDomainWarning = 'Unverified domain';
   static const invalidDomainMXWarning =
       'Domain MX records are NOT validated or set correctly.';
+  static const noDomainsFound = 'No domains found';
+
+  /// Rules
+  static const noRulesFound = 'No rules found';
+  static const enrollRulesBetaTesting = 'Enroll in Rules BETA testing';
 
   /// Search Tab
   static const searchAliasByEmailOrDesc =

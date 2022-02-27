@@ -89,7 +89,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
                     ? ListTile(
                         title: Center(
                           child: Text(
-                            'No additional usernames found',
+                            AddyManagerString.noAdditionalUsernamesFound,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
@@ -105,7 +105,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
                         },
                       ),
                 TextButton(
-                  child: const Text('Add New Username'),
+                  child: const Text(AddyManagerString.addNewUsername),
                   onPressed: () => addNewUsername(context),
                 ),
               ],

@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:flutter/material.dart';
 
 class AccountListTile extends StatelessWidget {
@@ -33,7 +34,7 @@ class AccountListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title ?? 'No default selected',
+                  title ?? AddyManagerString.noDefaultSelected,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!

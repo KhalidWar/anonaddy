@@ -40,7 +40,7 @@ class DomainsTab extends ConsumerWidget {
             if (domains.isEmpty) {
               return Center(
                 child: Text(
-                  'No domains found',
+                  AddyManagerString.noDomainsFound,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               );

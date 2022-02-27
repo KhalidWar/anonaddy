@@ -33,8 +33,9 @@ class RulesTab extends ConsumerWidget {
         /// [Rules] is a paid feature.
         /// Show paywall if user's account is free tier.
         final subscription = accountState.account!.subscription;
-        if (subscription == AnonAddyString.subscriptionFree)
+        if (subscription == AnonAddyString.subscriptionFree) {
           return const PaidFeatureWall();
+        }
 
         final rulesState = ref.watch(rulesTabStateNotifier);
         switch (rulesState.status) {
@@ -44,11 +45,14 @@ class RulesTab extends ConsumerWidget {
           case RulesTabStatus.loaded:
             final rules = rulesState.rules;
             if (rules == null) {
-              return buildEmptyList(context, 'Enroll in Rules BETA testing');
+              return buildEmptyList(
+                context,
+                AddyManagerString.enrollRulesBetaTesting,
+              );
             }
 
             if (rules.isEmpty) {
-              return buildEmptyList(context, 'No rules found');
+              return buildEmptyList(context, AddyManagerString.noRulesFound);
             } else {
               return buildRulesList(rules);
             }
@@ -77,11 +81,9 @@ class RulesTab extends ConsumerWidget {
       shrinkWrap: true,
       itemCount: rules.length,
       itemBuilder: (context, index) {
-        final rule = rules[index];
-        const message = 'Coming soon';
         return RulesListTile(
-          rule: rule,
-          onTap: () => NicheMethod.showToast(message),
+          rule: rules[index],
+          onTap: () => NicheMethod.showToast(AddyManagerString.comingSoon),
         );
       },
     );

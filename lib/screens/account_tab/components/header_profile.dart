@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class HeaderProfile extends StatelessWidget {
             .copyWith(color: Colors.white),
       ),
       subtitle: Text(
-        _capitalize(account.subscription ?? 'Self Hosted'),
+        _capitalize(account.subscription ?? AddyManagerString.selfHosted),
         style: Theme.of(context)
             .textTheme
             .bodyText2!

@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_screen.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:flutter/material.dart';
 
 class RecipientListTile extends StatelessWidget {
@@ -27,11 +28,11 @@ class RecipientListTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 recipient.emailVerifiedAt == null
                     ? const Text(
-                        'Unverified',
+                        AddyManagerString.unverified,
                         style: TextStyle(color: Colors.red),
                       )
                     : const Text(
-                        'Verified',
+                        AddyManagerString.verified,
                         style: TextStyle(color: Colors.green),
                       ),
               ],

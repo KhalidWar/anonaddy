@@ -31,7 +31,7 @@ class AccountTabHeader extends ConsumerWidget {
 
   String _calculateRecipientsCount() {
     if (isSelfHosted) {
-      return 'Unlimited';
+      return AddyManagerString.unlimited;
     } else {
       return '${account.recipientCount} out of ${account.recipientLimit}';
     }
@@ -39,7 +39,7 @@ class AccountTabHeader extends ConsumerWidget {
 
   String _calculateUsernamesCount() {
     if (isSelfHosted) {
-      return 'Unlimited';
+      return AddyManagerString.unlimited;
     } else {
       return '${account.usernameCount} out of ${account.usernameLimit}';
     }
@@ -65,17 +65,17 @@ class AccountTabHeader extends ConsumerWidget {
         ),
         AccountListTile(
           title: _calculateBandWidth(),
-          subtitle: 'Monthly Bandwidth',
+          subtitle: AddyManagerString.monthlyBandwidth,
           leadingIconData: Icons.speed_outlined,
         ),
         AccountListTile(
           title: _calculateRecipientsCount(),
-          subtitle: 'Recipients',
+          subtitle: AddyManagerString.recipients,
           leadingIconData: Icons.email_outlined,
         ),
         AccountListTile(
           title: _calculateUsernamesCount(),
-          subtitle: 'Usernames',
+          subtitle: AddyManagerString.usernames,
           leadingIconData: Icons.account_circle_outlined,
         ),
       ],

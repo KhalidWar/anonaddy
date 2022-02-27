@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_tab.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
+import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -62,10 +63,10 @@ class AccountTab extends ConsumerWidget {
                   isScrollable: true,
                   indicatorColor: AppColors.accentColor,
                   tabs: [
-                    Tab(child: Text('Recipients')),
-                    Tab(child: Text('Usernames')),
-                    Tab(child: Text('Domains')),
-                    Tab(child: Text('Rules')),
+                    Tab(child: Text(AddyManagerString.recipients)),
+                    Tab(child: Text(AddyManagerString.usernames)),
+                    Tab(child: Text(AddyManagerString.domains)),
+                    Tab(child: Text(AddyManagerString.rules)),
                   ],
                 ),
               ),
