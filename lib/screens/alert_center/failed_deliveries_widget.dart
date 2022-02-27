@@ -1,8 +1,8 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';

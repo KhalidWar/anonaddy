@@ -1,8 +1,8 @@
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';

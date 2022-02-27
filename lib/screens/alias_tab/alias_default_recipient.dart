@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';

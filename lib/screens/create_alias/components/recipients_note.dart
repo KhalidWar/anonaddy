@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class RecipientsNote extends StatelessWidget {

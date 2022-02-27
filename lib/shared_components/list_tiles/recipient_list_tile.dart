@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_screen.dart';
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class RecipientListTile extends StatelessWidget {

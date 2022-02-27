@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';

@@ -1,5 +1,5 @@
 import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';

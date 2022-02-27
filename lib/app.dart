@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'route_generator.dart';
 import 'screens/authorization_screen/authorization_screen.dart';
 import 'services/theme/theme.dart';
-import 'shared_components/constants/addymanager_string.dart';
+import 'shared_components/constants/app_strings.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class App extends ConsumerWidget {

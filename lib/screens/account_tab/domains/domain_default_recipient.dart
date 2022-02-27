@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';

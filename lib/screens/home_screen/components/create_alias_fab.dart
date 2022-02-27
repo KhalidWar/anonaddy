@@ -1,7 +1,7 @@
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/constants/addymanager_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
