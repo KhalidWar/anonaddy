@@ -89,4 +89,8 @@ class AppIcons {
   /// Repeat, catch all,
   static const repeatMaterial = Icon(Icons.repeat_outlined);
   static const repeatCupertino = Icon(CupertinoIcons.repeat);
+
+  /// External link
+  static const openExternalMaterial = Icon(Icons.open_in_new_outlined);
+  static const openExternalCupertino = Icon(Icons.open_in_new_outlined);
 }
