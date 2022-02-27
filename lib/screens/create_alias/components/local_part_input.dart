@@ -18,7 +18,7 @@ class LocalPartInput extends ConsumerWidget {
         onChanged: (input) =>
             ref.read(createAliasStateNotifier.notifier).setLocalPart(input),
         textInputAction: TextInputAction.next,
-        decoration: kTextFormFieldDecoration.copyWith(
+        decoration: AppTheme.kTextFormFieldDecoration.copyWith(
           hintText: AppStrings.localPartFieldHint,
           contentPadding: const EdgeInsets.symmetric(horizontal: 10),
         ),

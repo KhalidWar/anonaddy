@@ -264,7 +264,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(kBottomSheetBorderRadius),
+          top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
         ),
       ),
       builder: (context) {
@@ -322,7 +322,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
@@ -346,7 +346,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     SizedBox(height: size.height * 0.01),
                     TextFormField(
                       enabled: false,
-                      decoration: kTextFormFieldDecoration.copyWith(
+                      decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                         hintText: alias.email,
                       ),
                     ),
@@ -364,7 +364,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                             FormValidator.validateEmailField(input!),
                         onChanged: (input) => destinationEmail = input,
                         onFieldSubmitted: (toggle) => generateAddress(),
-                        decoration: kTextFormFieldDecoration.copyWith(
+                        decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                           hintText: 'Enter email...',
                         ),
                       ),
@@ -412,7 +412,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         return UpdateDescriptionWidget(

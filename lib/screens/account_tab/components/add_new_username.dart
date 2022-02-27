@@ -61,7 +61,7 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
                     validator: (input) =>
                         FormValidator.validateUsernameInput(input!),
                     onFieldSubmitted: (toggle) => createUsername(),
-                    decoration: kTextFormFieldDecoration.copyWith(
+                    decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                       hintText: 'johndoe',
                     ),
                   ),

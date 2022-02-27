@@ -24,7 +24,7 @@ class ChangelogNotifier extends StateNotifier {
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-              top: Radius.circular(kBottomSheetBorderRadius)),
+              top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
         ),
         builder: (context) => const ChangelogWidget(),
       );

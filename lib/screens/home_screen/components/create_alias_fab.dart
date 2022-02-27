@@ -36,7 +36,7 @@ class CreateAliasFAB extends StatelessWidget {
                     context: context,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(kBottomSheetBorderRadius),
+                        top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
                       ),
                     ),
                     builder: (context) => const CreateAlias(),

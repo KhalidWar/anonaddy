@@ -149,7 +149,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
     return showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(kBottomSheetBorderRadius),
+        borderRadius: BorderRadius.circular(AppTheme.kBottomSheetBorderRadius),
       ),
       builder: (context) {
         return Column(

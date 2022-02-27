@@ -36,7 +36,7 @@ class SearchTabHeader extends StatelessWidget {
                         FormValidator.validateSearchField(input!),
                     textInputAction: TextInputAction.search,
                     style: const TextStyle(color: Colors.white),
-                    decoration: kTextFormFieldDecoration.copyWith(
+                    decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                       hintText: AppStrings.searchFieldHint,
                       hintStyle: const TextStyle(color: Colors.white),
                       enabledBorder: const OutlineInputBorder(

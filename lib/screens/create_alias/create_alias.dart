@@ -51,7 +51,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(kBottomSheetBorderRadius),
+          top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
         ),
       ),
       builder: (context) => child,
@@ -144,7 +144,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                   onChanged: (input) => ref
                       .read(createAliasStateNotifier.notifier)
                       .setDescription(input),
-                  decoration: kTextFormFieldDecoration.copyWith(
+                  decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                     hintText: AppStrings.descriptionFieldHint,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   ),

@@ -50,8 +50,8 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
                     validator: (input) =>
                         FormValidator.validateEmailField(input!),
                     textInputAction: TextInputAction.next,
-                    decoration: kTextFormFieldDecoration.copyWith(
-                        hintText: 'joedoe@example.com'),
+                    decoration: AppTheme.kTextFormFieldDecoration
+                        .copyWith(hintText: 'joedoe@example.com'),
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),

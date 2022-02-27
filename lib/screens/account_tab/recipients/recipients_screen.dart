@@ -304,7 +304,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
@@ -333,7 +333,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                         textInputAction: TextInputAction.done,
                         onChanged: (input) => keyData = input,
                         onFieldSubmitted: (submit) => addPublicKey(),
-                        decoration: kTextFormFieldDecoration.copyWith(
+                        decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                           contentPadding: const EdgeInsets.all(5),
                           hintText: AppStrings.publicKeyFieldHint,
                         ),

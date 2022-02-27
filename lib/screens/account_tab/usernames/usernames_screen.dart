@@ -257,7 +257,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         return UpdateDescriptionWidget(
@@ -277,7 +277,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         return UsernameDefaultRecipientScreen(username: username);

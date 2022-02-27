@@ -32,8 +32,8 @@ class App extends ConsumerWidget {
     return MaterialApp(
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
-      theme: settingsState.isDarkTheme! ? darkTheme : lightTheme,
-      darkTheme: darkTheme,
+      theme: settingsState.isDarkTheme! ? AppTheme.dark : AppTheme.light,
+      darkTheme: AppTheme.dark,
       onGenerateRoute: RouteGenerator.generateRoute,
       initialRoute: AuthorizationScreen.routeName,
       locale: const Locale('en', 'US'),
