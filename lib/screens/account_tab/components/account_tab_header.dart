@@ -31,7 +31,7 @@ class AccountTabHeader extends ConsumerWidget {
 
   String _calculateRecipientsCount() {
     if (isSelfHosted) {
-      return AddyManagerString.unlimited;
+      return AppStrings.unlimited;
     } else {
       return '${account.recipientCount} out of ${account.recipientLimit}';
     }
@@ -39,7 +39,7 @@ class AccountTabHeader extends ConsumerWidget {
 
   String _calculateUsernamesCount() {
     if (isSelfHosted) {
-      return AddyManagerString.unlimited;
+      return AppStrings.unlimited;
     } else {
       return '${account.usernameCount} out of ${account.usernameLimit}';
     }
@@ -56,8 +56,8 @@ class AccountTabHeader extends ConsumerWidget {
             PlatformAware.platformDialog(
               context: context,
               child: PlatformInfoDialog(
-                title: AddyManagerString.accountBotNavLabel,
-                buttonLabel: AddyManagerString.doneText,
+                title: AppStrings.accountBotNavLabel,
+                buttonLabel: AppStrings.doneText,
                 content: AccountPopupInfo(account: account),
               ),
             );
@@ -65,17 +65,17 @@ class AccountTabHeader extends ConsumerWidget {
         ),
         AccountListTile(
           title: _calculateBandWidth(),
-          subtitle: AddyManagerString.monthlyBandwidth,
+          subtitle: AppStrings.monthlyBandwidth,
           leadingIconData: Icons.speed_outlined,
         ),
         AccountListTile(
           title: _calculateRecipientsCount(),
-          subtitle: AddyManagerString.recipients,
+          subtitle: AppStrings.recipients,
           leadingIconData: Icons.email_outlined,
         ),
         AccountListTile(
           title: _calculateUsernamesCount(),
-          subtitle: AddyManagerString.usernames,
+          subtitle: AppStrings.usernames,
           leadingIconData: Icons.account_circle_outlined,
         ),
       ],

@@ -64,7 +64,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                       TextButton(
                         key: const Key('loginGetAccessToken'),
                         style: TextButton.styleFrom(),
-                        child: const Text(AddyManagerString.whatsAccessToken),
+                        child: const Text(AppStrings.whatsAccessToken),
                         onPressed: () => buildAccessTokenInfoSheet(context),
                       ),
                       TextButton(
@@ -136,7 +136,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                   ),
                 ),
                 border: const OutlineInputBorder(),
-                hintText: AddyManagerString.enterAccessToken,
+                hintText: AppStrings.enterAccessToken,
               ),
             ),
           ),
@@ -156,7 +156,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const BottomSheetHeader(
-              headerLabel: AddyManagerString.whatsAccessToken,
+              headerLabel: AppStrings.whatsAccessToken,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -164,30 +164,30 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    AddyManagerString.whatsAccessToken,
+                    AppStrings.whatsAccessToken,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   const SizedBox(height: 5),
-                  const Text(AddyManagerString.accessTokenDefinition),
+                  const Text(AppStrings.accessTokenDefinition),
                   const SizedBox(height: 20),
                   Text(
-                    AddyManagerString.accessTokenRequired,
+                    AppStrings.accessTokenRequired,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    AddyManagerString.howToGetAccessToken,
+                    AppStrings.howToGetAccessToken,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                   const SizedBox(height: 5),
-                  const Text(AddyManagerString.howToGetAccessToken1),
-                  const Text(AddyManagerString.howToGetAccessToken2),
-                  const Text(AddyManagerString.howToGetAccessToken3),
-                  const Text(AddyManagerString.howToGetAccessToken4),
-                  const Text(AddyManagerString.howToGetAccessToken5),
+                  const Text(AppStrings.howToGetAccessToken1),
+                  const Text(AppStrings.howToGetAccessToken2),
+                  const Text(AppStrings.howToGetAccessToken3),
+                  const Text(AppStrings.howToGetAccessToken4),
+                  const Text(AppStrings.howToGetAccessToken5),
                   const SizedBox(height: 20),
                   Text(
-                    AddyManagerString.accessTokenSecurityNotice,
+                    AppStrings.accessTokenSecurityNotice,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -200,7 +200,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    Text(AddyManagerString.getAccessToken),
+                    Text(AppStrings.getAccessToken),
                     SizedBox(width: 4),
                     Icon(Icons.open_in_new_outlined),
                   ],

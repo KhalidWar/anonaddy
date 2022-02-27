@@ -32,7 +32,7 @@ class HeaderProfile extends StatelessWidget {
             .copyWith(color: Colors.white),
       ),
       subtitle: Text(
-        _capitalize(account.subscription ?? AddyManagerString.selfHosted),
+        _capitalize(account.subscription ?? AppStrings.selfHosted),
         style: Theme.of(context)
             .textTheme
             .bodyText2!

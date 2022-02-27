@@ -40,7 +40,7 @@ class DomainsTab extends ConsumerWidget {
             if (domains.isEmpty) {
               return Center(
                 child: Text(
-                  AddyManagerString.noDomainsFound,
+                  AppStrings.noDomainsFound,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               );
@@ -61,7 +61,7 @@ class DomainsTab extends ConsumerWidget {
         return LottieWidget(
           lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AddyManagerString.loadAccountDataFailed,
+          label: AppStrings.loadAccountDataFailed,
         );
     }
   }
@@ -87,7 +87,7 @@ class DomainsTab extends ConsumerWidget {
                     Text(domain.domain),
                     const SizedBox(height: 2),
                     Text(
-                      domain.description ?? AddyManagerString.noDescription,
+                      domain.description ?? AppStrings.noDescription,
                       style: const TextStyle(color: Colors.grey),
                     ),
                   ],

@@ -83,7 +83,7 @@ class _FailedDeliveriesWidgetState
         return LottieWidget(
           lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AddyManagerString.loadAccountDataFailed,
+          label: AppStrings.loadAccountDataFailed,
         );
     }
   }

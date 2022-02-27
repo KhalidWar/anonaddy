@@ -16,7 +16,7 @@ class RecipientsNote extends StatelessWidget {
           const Divider(height: 0),
           SizedBox(height: size.height * 0.01),
           Text(
-            AddyManagerString.updateAliasRecipientNote,
+            AppStrings.updateAliasRecipientNote,
             style: Theme.of(context).textTheme.caption,
           ),
         ],

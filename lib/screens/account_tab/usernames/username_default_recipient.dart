@@ -176,7 +176,7 @@ class _UsernameDefaultRecipientState
                     children: [
                       const Divider(height: 0),
                       SizedBox(height: size.height * 0.01),
-                      const Text(AddyManagerString.updateAliasRecipientNote),
+                      const Text(AppStrings.updateAliasRecipientNote),
                     ],
                   ),
                 ),

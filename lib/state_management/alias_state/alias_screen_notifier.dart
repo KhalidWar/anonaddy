@@ -154,7 +154,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       await NicheMethod.copyOnTap(generatedAddress);
       showToast(ToastMessage.sendFromAliasSuccess);
     } catch (error) {
-      showToast(AddyManagerString.somethingWentWrong);
+      showToast(AppStrings.somethingWentWrong);
     }
   }
 }

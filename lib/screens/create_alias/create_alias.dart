@@ -145,7 +145,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                       .read(createAliasStateNotifier.notifier)
                       .setDescription(input),
                   decoration: kTextFormFieldDecoration.copyWith(
-                    hintText: AddyManagerString.descriptionFieldHint,
+                    hintText: AppStrings.descriptionFieldHint,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   ),
                 ),
@@ -191,7 +191,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
               if (createAliasState.aliasFormat ==
                   AnonAddyString.aliasFormatCustom)
                 Text(
-                  AddyManagerString.createAliasCustomFieldNote,
+                  AppStrings.createAliasCustomFieldNote,
                   style: Theme.of(consumerContext).textTheme.caption,
                 ),
               cardSpacer(size),
@@ -207,7 +207,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                   child: createAliasState.isLoading!
                       ? const PlatformLoadingIndicator()
                       : const Text(
-                          AddyManagerString.createAliasTitle,
+                          AppStrings.createAliasTitle,
                           style: TextStyle(color: Colors.black),
                         ),
                   onPress: createAliasState.isLoading!

@@ -19,18 +19,18 @@ class AccountPopupInfo extends ConsumerWidget {
           dense: true,
           tileColor: Colors.transparent,
           title: account.defaultAliasFormat == null
-              ? const Text(AddyManagerString.noDefaultSelected)
+              ? const Text(AppStrings.noDefaultSelected)
               : NicheMethod.correctAliasString(account.defaultAliasFormat!),
-          subtitle: const Text(AddyManagerString.defaultAliasFormat),
+          subtitle: const Text(AppStrings.defaultAliasFormat),
           trailing: const Icon(Icons.open_in_new_outlined),
           onTap: () => updateDefaultAliasFormatDomain(ref),
         ),
         ListTile(
           dense: true,
           title: Text(
-            account.defaultAliasDomain ?? AddyManagerString.noDefaultSelected,
+            account.defaultAliasDomain ?? AppStrings.noDefaultSelected,
           ),
-          subtitle: const Text(AddyManagerString.defaultAliasDomain),
+          subtitle: const Text(AppStrings.defaultAliasDomain),
           trailing: const Icon(Icons.open_in_new_outlined),
           onTap: () => updateDefaultAliasFormatDomain(ref),
         ),
@@ -38,10 +38,10 @@ class AccountPopupInfo extends ConsumerWidget {
           dense: true,
           title: Text(
             account.subscriptionEndAt == null
-                ? AddyManagerString.selfHosted
+                ? AppStrings.selfHosted
                 : NicheMethod.fixDateTime(account.subscriptionEndAt),
           ),
-          subtitle: const Text(AddyManagerString.subscriptionEndDate),
+          subtitle: const Text(AppStrings.subscriptionEndDate),
         ),
       ],
     );

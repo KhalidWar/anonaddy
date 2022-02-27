@@ -257,7 +257,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           const SizedBox(width: 16),
           const Expanded(
             child: Text(
-              AddyManagerString.unverifiedRecipientNote,
+              AppStrings.unverifiedRecipientNote,
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -320,7 +320,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   children: [
-                    const Text(AddyManagerString.addPublicKeyNote),
+                    const Text(AppStrings.addPublicKeyNote),
                     SizedBox(height: size.height * 0.015),
                     Form(
                       key: formKey,
@@ -335,7 +335,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                         onFieldSubmitted: (submit) => addPublicKey(),
                         decoration: kTextFormFieldDecoration.copyWith(
                           contentPadding: const EdgeInsets.all(5),
-                          hintText: AddyManagerString.publicKeyFieldHint,
+                          hintText: AppStrings.publicKeyFieldHint,
                         ),
                       ),
                     ),

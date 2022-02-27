@@ -93,7 +93,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
       context: context,
       child: PlatformAlertDialog(
         title: 'Logout',
-        content: AddyManagerString.logOutAlertDialog,
+        content: AppStrings.logOutAlertDialog,
         method: () async {
           await ref.read(authStateNotifier.notifier).logout(context);
         },

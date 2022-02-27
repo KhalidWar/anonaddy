@@ -34,7 +34,7 @@ class AccountListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title ?? AddyManagerString.noDefaultSelected,
+                  title ?? AppStrings.noDefaultSelected,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!

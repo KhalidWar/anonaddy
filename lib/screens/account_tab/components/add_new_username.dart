@@ -44,7 +44,7 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const BottomSheetHeader(
-            headerLabel: AddyManagerString.addNewUsername,
+            headerLabel: AppStrings.addNewUsername,
           ),
           Container(
             padding:
@@ -71,7 +71,7 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
                   style: ElevatedButton.styleFrom().copyWith(
                     minimumSize: MaterialStateProperty.all(const Size(200, 50)),
                   ),
-                  child: const Text(AddyManagerString.addUsername),
+                  child: const Text(AppStrings.addUsername),
                   onPressed: () => createUsername(),
                 ),
               ],

@@ -109,7 +109,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: username.description ?? AddyManagerString.noDescription,
+          title: username.description ?? AppStrings.noDescription,
           titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Username description',
           leadingIconData: Icons.comment_outlined,

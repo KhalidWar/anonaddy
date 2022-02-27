@@ -18,7 +18,7 @@ class SearchTabHeader extends StatelessWidget {
     return Column(
       children: [
         const Text(
-          AddyManagerString.searchAliasByEmailOrDesc,
+          AppStrings.searchAliasByEmailOrDesc,
           style: TextStyle(color: Colors.white),
         ),
         SizedBox(height: size.height * 0.01),
@@ -37,7 +37,7 @@ class SearchTabHeader extends StatelessWidget {
                     textInputAction: TextInputAction.search,
                     style: const TextStyle(color: Colors.white),
                     decoration: kTextFormFieldDecoration.copyWith(
-                      hintText: AddyManagerString.searchFieldHint,
+                      hintText: AppStrings.searchFieldHint,
                       hintStyle: const TextStyle(color: Colors.white),
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),

@@ -40,7 +40,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
 
     /// If account data is unavailable, show an error message and exit method.
     if (account == null) {
-      NicheMethod.showToast(AddyManagerString.loadAccountDataFailed);
+      NicheMethod.showToast(AppStrings.loadAccountDataFailed);
       return;
     }
 
@@ -80,7 +80,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                 ? ListTile(
                     title: Center(
                       child: Text(
-                        AddyManagerString.noRecipientsFound,
+                        AppStrings.noRecipientsFound,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ),
@@ -97,7 +97,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                     },
                   ),
             TextButton(
-              child: const Text(AddyManagerString.addNewRecipient),
+              child: const Text(AppStrings.addNewRecipient),
               onPressed: () => addNewRecipient(context),
             ),
           ],

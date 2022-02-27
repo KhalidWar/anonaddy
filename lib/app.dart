@@ -30,7 +30,7 @@ class App extends ConsumerWidget {
     ];
 
     return MaterialApp(
-      title: AddyManagerString.appName,
+      title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
       theme: settingsState.isDarkTheme! ? darkTheme : lightTheme,
       darkTheme: darkTheme,

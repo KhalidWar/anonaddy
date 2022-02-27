@@ -156,8 +156,8 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               isAliasDeleted ? Icons.restore_outlined : Icons.delete_outline,
           title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
           subtitle: isAliasDeleted
-              ? AddyManagerString.restoreAliasSubtitle
-              : AddyManagerString.deleteAliasSubtitle,
+              ? AppStrings.restoreAliasSubtitle
+              : AppStrings.deleteAliasSubtitle,
           trailing: Row(
             children: [
               if (deleteAliasLoading) const PlatformLoadingIndicator(size: 20),
@@ -214,7 +214,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
                   child: Row(
                     children: const [
-                      Text(AddyManagerString.noDefaultRecipientSet),
+                      Text(AppStrings.noDefaultRecipientSet),
                     ],
                   ),
                 )
@@ -334,7 +334,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const BottomSheetHeader(
-                headerLabel: AddyManagerString.sendFromAlias,
+                headerLabel: AppStrings.sendFromAlias,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -342,7 +342,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(AddyManagerString.sendFromAliasString),
+                    const Text(AppStrings.sendFromAliasString),
                     SizedBox(height: size.height * 0.01),
                     TextFormField(
                       enabled: false,
@@ -370,7 +370,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                       ),
                     ),
                     SizedBox(height: size.height * 0.01),
-                    const Text(AddyManagerString.sendFromAliasNote),
+                    const Text(AppStrings.sendFromAliasNote),
                     SizedBox(height: size.height * 0.01),
                     Center(
                       child: ElevatedButton(
@@ -445,7 +445,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         child: PlatformAlertDialog(
           content: AnonAddyString.forgetAliasConfirmation,
           method: forget,
-          title: AddyManagerString.forgetAlias,
+          title: AppStrings.forgetAlias,
         ),
       );
     }

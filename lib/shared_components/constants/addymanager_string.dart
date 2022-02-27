@@ -1,5 +1,5 @@
 /// Collection of all text in UI used in app.
-class AddyManagerString {
+class AppStrings {
   /// Home Screen
   static const appName = 'AddyManager';
   static const accountBotNavLabel = 'Account';

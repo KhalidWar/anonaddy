@@ -47,12 +47,12 @@ class RulesTab extends ConsumerWidget {
             if (rules == null) {
               return buildEmptyList(
                 context,
-                AddyManagerString.enrollRulesBetaTesting,
+                AppStrings.enrollRulesBetaTesting,
               );
             }
 
             if (rules.isEmpty) {
-              return buildEmptyList(context, AddyManagerString.noRulesFound);
+              return buildEmptyList(context, AppStrings.noRulesFound);
             } else {
               return buildRulesList(rules);
             }
@@ -71,7 +71,7 @@ class RulesTab extends ConsumerWidget {
         return LottieWidget(
           lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AddyManagerString.loadAccountDataFailed,
+          label: AppStrings.loadAccountDataFailed,
         );
     }
   }
@@ -83,7 +83,7 @@ class RulesTab extends ConsumerWidget {
       itemBuilder: (context, index) {
         return RulesListTile(
           rule: rules[index],
-          onTap: () => NicheMethod.showToast(AddyManagerString.comingSoon),
+          onTap: () => NicheMethod.showToast(AppStrings.comingSoon),
         );
       },
     );

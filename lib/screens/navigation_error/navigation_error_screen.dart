@@ -25,7 +25,7 @@ class NavigationErrorScreen extends ConsumerWidget {
               child: LottieWidget(
                 lottie: LottieImages.errorCone,
                 lottieHeight: size.height * 0.25,
-                label: AddyManagerString.navigationErrorMessage,
+                label: AppStrings.navigationErrorMessage,
               ),
             ),
             Text(
@@ -54,7 +54,7 @@ class NavigationErrorScreen extends ConsumerWidget {
       context: context,
       child: PlatformAlertDialog(
         title: 'Logout',
-        content: AddyManagerString.logOutAlertDialog,
+        content: AppStrings.logOutAlertDialog,
         method: () async {
           await ref.read(authStateNotifier.notifier).logout(context);
         },

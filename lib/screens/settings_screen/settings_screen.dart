@@ -153,7 +153,7 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       child: PlatformAlertDialog(
         title: 'Logout',
-        content: AddyManagerString.logOutAlertDialog,
+        content: AppStrings.logOutAlertDialog,
         method: () {
           Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
         },

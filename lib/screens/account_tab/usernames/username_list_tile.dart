@@ -24,7 +24,7 @@ class UsernameListTile extends StatelessWidget {
                 Text(username.username),
                 const SizedBox(height: 2),
                 Text(
-                  username.description ?? AddyManagerString.noDescription,
+                  username.description ?? AppStrings.noDescription,
                   style: const TextStyle(color: Colors.grey),
                 ),
               ],

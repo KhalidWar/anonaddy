@@ -43,7 +43,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
 
     /// If account data is unavailable, show an error message and exit method.
     if (account == null) {
-      NicheMethod.showToast(AddyManagerString.loadAccountDataFailed);
+      NicheMethod.showToast(AppStrings.loadAccountDataFailed);
       return;
     }
 
@@ -89,7 +89,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
                     ? ListTile(
                         title: Center(
                           child: Text(
-                            AddyManagerString.noAdditionalUsernamesFound,
+                            AppStrings.noAdditionalUsernamesFound,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
@@ -105,7 +105,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
                         },
                       ),
                 TextButton(
-                  child: const Text(AddyManagerString.addNewUsername),
+                  child: const Text(AppStrings.addNewUsername),
                   onPressed: () => addNewUsername(context),
                 ),
               ],
@@ -124,7 +124,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
         return LottieWidget(
           lottie: LottieImages.errorCone,
           lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AddyManagerString.loadAccountDataFailed,
+          label: AppStrings.loadAccountDataFailed,
         );
     }
   }

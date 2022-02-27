@@ -75,15 +75,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_outlined),
-            label: AddyManagerString.accountBotNavLabel,
+            label: AppStrings.accountBotNavLabel,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.alternate_email_outlined),
-            label: AddyManagerString.aliasesBotNavLabel,
+            label: AppStrings.aliasesBotNavLabel,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search_outlined),
-            label: AddyManagerString.searchBotNavLabel,
+            label: AppStrings.searchBotNavLabel,
           ),
         ],
       ),
@@ -94,7 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return AppBar(
       elevation: 0,
       title: const Text(
-        AddyManagerString.appName,
+        AppStrings.appName,
         style: TextStyle(color: Colors.white),
       ),
       centerTitle: true,

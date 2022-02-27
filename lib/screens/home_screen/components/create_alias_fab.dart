@@ -28,7 +28,7 @@ class CreateAliasFAB extends StatelessWidget {
 
               switch (accountState.status) {
                 case AccountStatus.loading:
-                  NicheMethod.showToast(AddyManagerString.loadingText);
+                  NicheMethod.showToast(AppStrings.loadingText);
                   break;
 
                 case AccountStatus.loaded:
@@ -44,8 +44,7 @@ class CreateAliasFAB extends StatelessWidget {
                   break;
 
                 case AccountStatus.failed:
-                  NicheMethod.showToast(
-                      AddyManagerString.loadAccountDataFailed);
+                  NicheMethod.showToast(AppStrings.loadAccountDataFailed);
                   break;
               }
             },

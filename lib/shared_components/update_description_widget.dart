@@ -32,13 +32,13 @@ class UpdateDescriptionWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const BottomSheetHeader(
-              headerLabel: AddyManagerString.updateDescriptionTitle),
+              headerLabel: AppStrings.updateDescriptionTitle),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(AddyManagerString.updateDescriptionString),
+                const Text(AppStrings.updateDescriptionString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: descriptionFormKey,
@@ -56,7 +56,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                       child: PlatformButton(
                         color: Colors.redAccent,
                         child: const Text(
-                          AddyManagerString.removeDescriptionTitle,
+                          AppStrings.removeDescriptionTitle,
                           style: TextStyle(color: Colors.black),
                         ),
                         onPress: removeDescription,
@@ -67,7 +67,7 @@ class UpdateDescriptionWidget extends StatelessWidget {
                       child: PlatformButton(
                         color: AppColors.accentColor,
                         child: const Text(
-                          AddyManagerString.updateDescriptionTitle,
+                          AppStrings.updateDescriptionTitle,
                           style: TextStyle(color: Colors.black),
                         ),
                         onPress: updateDescription,

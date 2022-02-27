@@ -94,7 +94,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: domain.description ?? AddyManagerString.noDescription,
+          title: domain.description ?? AppStrings.noDescription,
           titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Domain description',
           leadingIconData: Icons.comment_outlined,
@@ -132,12 +132,10 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           },
         ),
         if (domain.domainVerifiedAt == null)
-          buildUnverifiedEmailWarning(
-              size, AddyManagerString.unverifiedDomainWarning),
+          buildUnverifiedEmailWarning(size, AppStrings.unverifiedDomainWarning),
         // Divider(height: size.height * 0.02),
         if (domain.domainMxValidatedAt == null)
-          buildUnverifiedEmailWarning(
-              size, AddyManagerString.invalidDomainMXWarning),
+          buildUnverifiedEmailWarning(size, AppStrings.invalidDomainMXWarning),
         Divider(height: size.height * 0.02),
         // if (domain.domainSendingVerifiedAt == null)
         //   buildUnverifiedEmailWarning(size, kUnverifiedDomainNote),

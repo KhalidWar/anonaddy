@@ -54,9 +54,8 @@ class SearchTab extends StatelessWidget {
                   return Column(
                     children: [
                       SearchListHeader(
-                        title: AddyManagerString.searchHistory,
-                        buttonLabel:
-                            AddyManagerString.clearSearchHistoryButtonText,
+                        title: AppStrings.searchHistory,
+                        buttonLabel: AppStrings.clearSearchHistoryButtonText,
                         buttonTextColor: Colors.red,
                         onPress: () {
                           ref
@@ -79,9 +78,8 @@ class SearchTab extends StatelessWidget {
                   return Column(
                     children: [
                       SearchListHeader(
-                        title: AddyManagerString.searching,
-                        buttonLabel:
-                            AddyManagerString.cancelSearchingButtonText,
+                        title: AppStrings.searching,
+                        buttonLabel: AppStrings.cancelSearchingButtonText,
                         buttonTextColor: Colors.red,
                         onPress: () {
                           /// Close current on-going search
@@ -120,9 +118,9 @@ class SearchTab extends StatelessWidget {
       children: [
         SearchListHeader(
           title: isLimited
-              ? AddyManagerString.limitedSearchResult
-              : AddyManagerString.searchResult,
-          buttonLabel: AddyManagerString.closeSearchButtonText,
+              ? AppStrings.limitedSearchResult
+              : AppStrings.searchResult,
+          buttonLabel: AppStrings.closeSearchButtonText,
           onPress: () {
             FocusScope.of(context).requestFocus(FocusNode());
             ref.read(searchResultStateNotifier.notifier).closeSearch();

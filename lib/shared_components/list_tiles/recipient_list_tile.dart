@@ -28,11 +28,11 @@ class RecipientListTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 recipient.emailVerifiedAt == null
                     ? const Text(
-                        AddyManagerString.unverified,
+                        AppStrings.unverified,
                         style: TextStyle(color: Colors.red),
                       )
                     : const Text(
-                        AddyManagerString.verified,
+                        AppStrings.verified,
                         style: TextStyle(color: Colors.green),
                       ),
               ],

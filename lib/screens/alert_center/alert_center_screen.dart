@@ -47,7 +47,7 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
             children: [
               buildHeadline('Failed deliveries'),
               Text(
-                AddyManagerString.failedDeliveriesNote,
+                AppStrings.failedDeliveriesNote,
                 style: Theme.of(context).textTheme.caption,
               ),
               const SizedBox(height: 10),

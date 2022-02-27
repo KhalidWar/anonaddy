@@ -10,15 +10,15 @@ class OfflineBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       tileColor: Colors.red,
-      title: const Text(AddyManagerString.noInternetOfflineData),
+      title: const Text(AppStrings.noInternetOfflineData),
       leading: const Icon(Icons.warning_amber_outlined),
       onTap: () {
         PlatformAware.platformDialog(
           context: context,
           child: const PlatformInfoDialog(
-            title: AddyManagerString.noInternetDialogTitle,
-            content: Text(AddyManagerString.noInternetContent),
-            buttonLabel: AddyManagerString.noInternetDialogButton,
+            title: AppStrings.noInternetDialogTitle,
+            content: Text(AppStrings.noInternetContent),
+            buttonLabel: AppStrings.noInternetDialogButton,
           ),
         );
       },
