@@ -1,3 +1,4 @@
+import 'package:anonaddy/screens/login_screen/components/login_header.dart';
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
@@ -43,10 +44,11 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
         backgroundColor: AppColors.primaryColor,
         body: Center(
           child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             child: Container(
-              height: size.height * 0.6,
-              width: size.width * 0.88,
-              padding: const EdgeInsets.only(top: 25),
+              height: size.height * 0.63,
+              width: size.width * 0.85,
+              padding: const EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
                 color: isDark
                     ? Theme.of(context).cardTheme.color
@@ -56,18 +58,19 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  buildHeader(context, size),
-                  Container(),
+                  const LoginHeader(),
                   buildTokenInputField(context),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       TextButton(
-                        key: const Key('loginGetAccessToken'),
+                        key: const Key('loginScreenAccessTokenInfoButton'),
                         style: TextButton.styleFrom(),
                         child: const Text(AppStrings.whatsAccessToken),
                         onPressed: () => buildAccessTokenInfoSheet(context),
                       ),
                       TextButton(
+                        key: const Key('loginScreenChangeInstanceButton'),
                         style: TextButton.styleFrom(),
                         child: const Text('Self Hosted? Change Instance!'),
                         onPressed: () => Navigator.pushNamed(
@@ -85,27 +88,6 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
     );
   }
 
-  Widget buildHeader(BuildContext context, Size size) {
-    return Column(
-      children: [
-        Text(
-          'AddyManager',
-          style: Theme.of(context)
-              .textTheme
-              .headline5!
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: size.height * 0.01),
-        Divider(
-          color: const Color(0xFFE4E7EB),
-          thickness: 2,
-          indent: size.width * 0.30,
-          endIndent: size.width * 0.30,
-        ),
-      ],
-    );
-  }
-
   Widget buildTokenInputField(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Padding(
@@ -115,13 +97,13 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
         children: [
           Text(
             'Login with Access Token',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
           SizedBox(height: size.height * 0.01),
           Form(
             key: _tokenFormKey,
             child: TextFormField(
-              key: const Key('loginTextField'),
+              key: const Key('loginScreenTextField'),
               validator: (input) => FormValidator.accessTokenValidator(input!),
               onChanged: (input) => _token = input,
               onFieldSubmitted: (input) => login(context),
@@ -148,16 +130,17 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
   Future buildAccessTokenInfoSheet(BuildContext context) {
     return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppTheme.kBottomSheetBorderRadius),
       ),
       builder: (context) {
         return Column(
+          key: const Key('accessTokenInfoSheetColumn'),
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const BottomSheetHeader(
-              headerLabel: AppStrings.whatsAccessToken,
-            ),
+            const BottomSheetHeader(headerLabel: AppStrings.whatsAccessToken),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
@@ -188,26 +171,25 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                   const SizedBox(height: 20),
                   Text(
                     AppStrings.accessTokenSecurityNotice,
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.caption,
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(AppStrings.getAccessToken),
-                    SizedBox(width: 4),
-                    Icon(Icons.open_in_new_outlined),
-                  ],
-                ),
-                onPressed: () => NicheMethod.launchURL(kAnonAddySettingsURL),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Text(AppStrings.getAccessToken),
+                  SizedBox(width: 4),
+                  Icon(Icons.open_in_new_outlined),
+                ],
               ),
+              onPressed: () => NicheMethod.launchURL(kAnonAddySettingsURL),
             ),
+            const SizedBox(height: 20),
           ],
         );
       },
@@ -234,7 +216,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(),
-            key: const Key('loginButton'),
+            key: const Key('loginScreenLoginButton'),
             child: authState.loginLoading!
                 ? const CircularProgressIndicator(
                     key: Key('loginLoadingIndicator'),
@@ -242,6 +224,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                   )
                 : Text(
                     'Login',
+                    key: const Key('loginScreenLoginButtonText'),
                     style: Theme.of(context)
                         .textTheme
                         .headline5!

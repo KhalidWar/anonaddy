@@ -45,6 +45,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      key: const Key('loadingScreenScaffold'),
       backgroundColor: AppColors.primaryColor,
       body: Stack(
         children: [

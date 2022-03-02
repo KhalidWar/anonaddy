@@ -104,6 +104,7 @@ class AppStrings {
   static const accessTokenSecurityNotice =
       'Security Notice: do NOT re-use Access Tokens. Make sure to generate a new token for every service you use.';
   static const getAccessToken = 'Get Access Token';
+  static const enterYourApiToken = 'Enter your API token';
 
   /// Error
   static const loadAccountDataFailed = 'Failed to Load Account Data';

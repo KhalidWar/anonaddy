@@ -1,4 +1,6 @@
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/app_url.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -38,12 +40,20 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: AppBar(elevation: 0, title: const Text('Change Instance')),
+        key: const Key('selfHostedLoginScreenScaffold'),
+        appBar: AppBar(
+          key: const Key('selfHostedLoginScreenAppBar'),
+          elevation: 0,
+          title: const Text(
+            'Change Instance',
+            key: Key('selfHostedLoginScreenAppBarLabel'),
+          ),
+        ),
         backgroundColor: AppColors.primaryColor,
         body: Center(
           child: SingleChildScrollView(
             child: Container(
-              height: size.height * 0.6,
+              height: size.height * 0.64,
               width: size.width * 0.88,
               padding: const EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
@@ -62,12 +72,15 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                       children: [
                         Text(
                           'AnonAddy Instance',
+                          key: const Key('selfHostedLoginScreenUrlInputLabel'),
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         SizedBox(height: size.height * 0.01),
                         Form(
                           key: _urlFormKey,
                           child: TextFormField(
+                            key:
+                                const Key('selfHostedLoginScreenUrlInputField'),
                             validator: (input) =>
                                 FormValidator.validateInstanceURL(input!),
                             onChanged: (input) => _url = input,
@@ -80,7 +93,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                                 ),
                               ),
                               border: const OutlineInputBorder(),
-                              hintText: 'app.anonaddy.com',
+                              hintText: AppUrl.anonAddyAuthority,
                             ),
                           ),
                         ),
@@ -96,6 +109,8 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                           children: [
                             Text(
                               'API Token ',
+                              key: const Key(
+                                  'selfHostedLoginScreenTokenInputLabel'),
                               style: Theme.of(context).textTheme.headline6,
                             ),
                             const Text('(from the settings page)'),
@@ -105,6 +120,8 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                         Form(
                           key: _tokenFormKey,
                           child: TextFormField(
+                            key: const Key(
+                                'selfHostedLoginScreenTokenInputField'),
                             validator: (input) =>
                                 FormValidator.accessTokenValidator(input!),
                             onChanged: (input) => _token = input,
@@ -120,7 +137,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                                 ),
                               ),
                               border: const OutlineInputBorder(),
-                              hintText: 'Enter your API token',
+                              hintText: AppStrings.enterYourApiToken,
                             ),
                           ),
                         ),
@@ -129,6 +146,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                   ),
                   Container(),
                   TextButton(
+                    key: const Key('selfHostedLoginScreenSelfHostInfoButton'),
                     style: TextButton.styleFrom(),
                     child: const Text('How to self-host AnonAddy?'),
                     onPressed: () =>
@@ -163,15 +181,16 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
           ),
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
           child: ElevatedButton(
+            key: const Key('selfHostedLoginScreenLoginButton'),
             style: ElevatedButton.styleFrom(),
-            key: const Key('loginButton'),
             child: authState.loginLoading!
                 ? const CircularProgressIndicator(
-                    key: Key('loginLoadingIndicator'),
+                    key: Key('selfHostedLoginScreenLoginButtonLoading'),
                     backgroundColor: AppColors.primaryColor,
                   )
                 : Text(
                     'Login',
+                    key: const Key('selfHostedLoginScreenLoginButtonLabel'),
                     style: Theme.of(context)
                         .textTheme
                         .headline5!
