@@ -130,4 +130,14 @@ class AppStrings {
       'Sometimes when AnonAddy attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
   static const navigationErrorMessage =
       'Something has gone wrong with the navigation system. Please go back and try again.';
+
+  /// Form validation error messages
+  static const provideValidAccessToken = 'Provide a valid Access Token';
+  static const providePGPKey = 'Provide a PGP Key';
+  static const usernameIsRequired = 'Username is required';
+  static const fieldCannotBeEmpty = 'Field can not be empty';
+  static const enterValidEmail = 'Enter a valid email';
+  static const provideValidLocalPart = 'Provide a valid local part';
+  static const providerValidUrl = 'Provide a valid URL';
+  static const keywordMustBe3CharsLong = 'Keyword must be 3 characters long';
 }

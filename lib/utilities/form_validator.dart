@@ -1,7 +1,9 @@
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+
 class FormValidator {
   static String? accessTokenValidator(String input) {
     if (input.isEmpty) {
-      return 'Provide a valid Access Token';
+      return AppStrings.provideValidAccessToken;
     } else {
       return null;
     }
@@ -9,7 +11,7 @@ class FormValidator {
 
   static String? validatePGPKeyField(String input) {
     if (input.isEmpty) {
-      return 'Provide a PGP Key';
+      return AppStrings.providePGPKey;
     } else {
       return null;
     }
@@ -17,7 +19,7 @@ class FormValidator {
 
   static String? validateUsernameInput(String input) {
     if (input.isEmpty) {
-      return ' Username is required';
+      return AppStrings.usernameIsRequired;
     } else {
       return null;
     }
@@ -28,9 +30,9 @@ class FormValidator {
     final regExp = RegExp(emailPattern);
 
     if (input.isEmpty) {
-      return 'Field can not be empty';
+      return AppStrings.fieldCannotBeEmpty;
     } else if (!regExp.hasMatch(input)) {
-      return 'Enter a valid email';
+      return AppStrings.enterValidEmail;
     } else {
       return null;
     }
@@ -43,7 +45,7 @@ class FormValidator {
     // final regExp = RegExp('');
 
     if (input.isEmpty) {
-      return 'Provide a valid local part';
+      return AppStrings.provideValidLocalPart;
       // } else if (!regExp.hasMatch(input)) {
       //   return 'Invalid alias local part';
     } else {
@@ -53,7 +55,7 @@ class FormValidator {
 
   static String? validateInstanceURL(String input) {
     if (input.isEmpty) {
-      return 'Provide a valid URL';
+      return AppStrings.providerValidUrl;
     } else {
       return null;
     }
@@ -61,7 +63,7 @@ class FormValidator {
 
   static String? validateSearchField(String input) {
     if (input.length < 3) {
-      return 'Keyword must be 3 characters long';
+      return AppStrings.keywordMustBe3CharsLong;
     } else {
       return null;
     }
