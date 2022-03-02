@@ -22,6 +22,7 @@ class CreateAliasFAB extends StatelessWidget {
         return AnimatedFab(
           showFab: showFab,
           child: FloatingActionButton(
+            key: const Key('homeScreenFAB'),
             child: const Icon(Icons.add),
             onPressed: () {
               final accountState = ref.read(accountStateNotifier);

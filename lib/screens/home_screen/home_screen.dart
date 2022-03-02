@@ -57,9 +57,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      key: const Key('homeScreenScaffold'),
       appBar: buildAppBar(context),
       floatingActionButton: const CreateAliasFAB(),
       body: IndexedStack(
+        key: const Key('homeScreenBody'),
         index: _selectedIndex,
         children: const [
           AccountTab(),
@@ -68,21 +70,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        key: const Key('homeScreenBotNavBar'),
         onTap: _switchIndex,
         currentIndex: _selectedIndex,
         selectedItemColor:
             isDark ? AppColors.accentColor : AppColors.primaryColor,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_outlined),
+            icon: Icon(
+              Icons.account_circle_outlined,
+              key: Key('homeScreenBotNavBarFirstIcon'),
+            ),
             label: AppStrings.accountBotNavLabel,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.alternate_email_outlined),
+            icon: Icon(
+              Icons.alternate_email_outlined,
+              key: Key('homeScreenBotNavBarSecondIcon'),
+            ),
             label: AppStrings.aliasesBotNavLabel,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search_outlined),
+            icon: Icon(
+              Icons.search_outlined,
+              key: Key('homeScreenBotNavBarThirdIcon'),
+            ),
             label: AppStrings.searchBotNavLabel,
           ),
         ],
@@ -92,13 +104,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     return AppBar(
+      key: const Key('homeScreenAppBar'),
       elevation: 0,
       title: const Text(
         AppStrings.appName,
+        key: Key('homeScreenAppBarTitle'),
         style: TextStyle(color: Colors.white),
       ),
       centerTitle: true,
       leading: IconButton(
+        key: const Key('homeScreenAppBarLeading'),
         icon: const Icon(Icons.error_outline),
         onPressed: () {
           Navigator.pushNamed(context, AlertCenterScreen.routeName);
@@ -106,6 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       actions: [
         IconButton(
+          key: const Key('homeScreenAppBarTrailing'),
           icon: const Icon(Icons.settings),
           onPressed: () {
             Navigator.pushNamed(context, SettingsScreen.routeName);
