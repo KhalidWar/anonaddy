@@ -97,7 +97,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final bioKeyValue = await secureStorage.read(key: bioAuthKey);
 
       /// When a logged in is NOT found
-      if (accessToken.isEmpty) {
+      if (accessToken == null || accessToken.isEmpty) {
         final newState = state.copyWith(
             authorizationStatus: AuthorizationStatus.unauthorized);
         _updateState(newState);
