@@ -21,7 +21,7 @@ class UsernamesScreenState {
   final bool? updateRecipientLoading;
 
   static UsernamesScreenState initialState() {
-    return UsernamesScreenState(
+    return const UsernamesScreenState(
       status: UsernamesScreenStatus.loading,
       activeSwitchLoading: false,
       catchAllSwitchLoading: false,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
@@ -27,14 +28,14 @@ class UsernameService {
       );
 
       if (response.statusCode == 200) {
-        print('getUsernameData ${response.statusCode}');
+        log('getUsernameData ${response.statusCode}');
         return UsernameModel.fromJson(jsonDecode(response.body));
       } else {
-        print('getUsernameData ${response.statusCode}');
+        log('getUsernameData ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -54,14 +55,14 @@ class UsernameService {
       );
 
       if (response.statusCode == 200) {
-        print('getUsernameData ${response.statusCode}');
+        log('getUsernameData ${response.statusCode}');
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print('getUsernameData ${response.statusCode}');
+        log('getUsernameData ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -78,18 +79,18 @@ class UsernameService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"username": "$username"}),
+        body: json.encode({"username": username}),
       );
 
       if (response.statusCode == 201) {
-        print("createNewUsername ${response.statusCode}");
+        log("createNewUsername ${response.statusCode}");
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("createNewUsername ${response.statusCode}");
+        log("createNewUsername ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -111,14 +112,14 @@ class UsernameService {
       );
 
       if (response.statusCode == 200) {
-        print("editUsernameDescription ${response.statusCode}");
+        log("editUsernameDescription ${response.statusCode}");
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("editUsernameDescription ${response.statusCode}");
+        log("editUsernameDescription ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -138,14 +139,14 @@ class UsernameService {
       );
 
       if (response.statusCode == 204) {
-        print("deleteUsername ${response.statusCode}");
+        log("deleteUsername ${response.statusCode}");
         return 204;
       } else {
-        print("deleteUsername ${response.statusCode}");
+        log("deleteUsername ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -168,14 +169,14 @@ class UsernameService {
       );
 
       if (response.statusCode == 200) {
-        print("updateDefaultRecipient ${response.statusCode}");
+        log("updateDefaultRecipient ${response.statusCode}");
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("updateDefaultRecipient ${response.statusCode}");
+        log("updateDefaultRecipient ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -192,18 +193,18 @@ class UsernameService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"id": "$usernameID"}),
+        body: json.encode({"id": usernameID}),
       );
 
       if (response.statusCode == 200) {
-        print("activateUsername ${response.statusCode}");
+        log("activateUsername ${response.statusCode}");
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("activateUsername ${response.statusCode}");
+        log("activateUsername ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -223,14 +224,14 @@ class UsernameService {
           });
 
       if (response.statusCode == 204) {
-        print("deactivateUsername ${response.statusCode}");
+        log("deactivateUsername ${response.statusCode}");
         return 204;
       } else {
-        print("deactivateUsername ${response.statusCode}");
+        log("deactivateUsername ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -247,18 +248,18 @@ class UsernameService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"id": "$usernameID"}),
+        body: json.encode({"id": usernameID}),
       );
 
       if (response.statusCode == 200) {
-        print("activateCatchAll ${response.statusCode}");
+        log("activateCatchAll ${response.statusCode}");
         return Username.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("activateCatchAll ${response.statusCode}");
+        log("activateCatchAll ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -278,14 +279,14 @@ class UsernameService {
           });
 
       if (response.statusCode == 204) {
-        print("deactivateCatchAll ${response.statusCode}");
+        log("deactivateCatchAll ${response.statusCode}");
         return 204;
       } else {
-        print("deactivateCatchAll ${response.statusCode}");
+        log("deactivateCatchAll ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

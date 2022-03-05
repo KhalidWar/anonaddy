@@ -1,18 +1,18 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasFormatSelection extends StatelessWidget {
-  const AliasFormatSelection();
+class AliasFormatSelection extends ConsumerWidget {
+  const AliasFormatSelection({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final aliasFormatList =
-        context.read(createAliasStateNotifier).aliasFormatList ??
+        ref.read(createAliasStateNotifier).aliasFormatList ??
             CreateAliasState.paidTierNoSharedDomain;
 
     return DraggableScrollableSheet(
@@ -24,12 +24,12 @@ class AliasFormatSelection extends StatelessWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            BottomSheetHeader(headerLabel: 'Select Alias Format'),
+            const BottomSheetHeader(headerLabel: 'Select Alias Format'),
             Expanded(
               child: ListView(
                 shrinkWrap: true,
                 controller: controller,
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   if (aliasFormatList.isEmpty)
                     Center(
@@ -41,13 +41,13 @@ class AliasFormatSelection extends StatelessWidget {
                   else
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: aliasFormatList.length,
                       itemBuilder: (context, index) {
                         final format = aliasFormatList[index];
                         return ListTile(
                           dense: true,
-                          selectedTileColor: kAccentColor,
+                          selectedTileColor: AppColors.accentColor,
                           horizontalTitleGap: 0,
                           title: Text(
                             NicheMethod.correctAliasString(format),
@@ -55,7 +55,7 @@ class AliasFormatSelection extends StatelessWidget {
                             style: Theme.of(context).textTheme.subtitle1,
                           ),
                           onTap: () {
-                            context
+                            ref
                                 .read(createAliasStateNotifier.notifier)
                                 .setAliasFormat(format);
                             Navigator.pop(context);

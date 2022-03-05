@@ -1,14 +1,14 @@
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../platform_aware.dart';
-
 class PlatformInfoDialog extends PlatformAware {
   const PlatformInfoDialog({
+    Key? key,
     required this.title,
     required this.buttonLabel,
     required this.content,
-  });
+  }) : super(key: key);
   final String title, buttonLabel;
   final Widget content;
 
@@ -16,7 +16,10 @@ class PlatformInfoDialog extends PlatformAware {
   Widget buildCupertinoWidget(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text(title),
-      content: content,
+      content: Material(
+        color: Colors.transparent,
+        child: content,
+      ),
       actions: [
         CupertinoDialogAction(
           isDestructiveAction: true,

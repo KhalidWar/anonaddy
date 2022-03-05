@@ -1,6 +1,6 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 
 class CreateAliasState {
   CreateAliasState({
@@ -42,15 +42,31 @@ class CreateAliasState {
   /// Informational text at the top of [CreateAlias] sheet
   String? headerText;
 
-  static const sharedDomains = [kAnonAddyMe, kAddyMail, k4wrd, kMailerMe];
-  static const freeTierWithSharedDomain = [kUUID, kRandomChars];
-  static const freeTierNoSharedDomain = [kUUID, kRandomChars, kCustom];
-  static const paidTierWithSharedDomain = [kUUID, kRandomChars, kRandomWords];
+  static const sharedDomains = [
+    AnonAddyString.sharedDomainsAnonAddyMe,
+    AnonAddyString.sharedDomainsAddyMail,
+    AnonAddyString.sharedDomains4WRD,
+    AnonAddyString.sharedDomainsMailerMe
+  ];
+  static const freeTierWithSharedDomain = [
+    AnonAddyString.aliasFormatUUID,
+    AnonAddyString.aliasFormatRandomChars
+  ];
+  static const freeTierNoSharedDomain = [
+    AnonAddyString.aliasFormatUUID,
+    AnonAddyString.aliasFormatRandomChars,
+    AnonAddyString.aliasFormatCustom
+  ];
+  static const paidTierWithSharedDomain = [
+    AnonAddyString.aliasFormatUUID,
+    AnonAddyString.aliasFormatRandomChars,
+    AnonAddyString.aliasFormatRandomWords
+  ];
   static const paidTierNoSharedDomain = [
-    kUUID,
-    kRandomChars,
-    kRandomWords,
-    kCustom
+    AnonAddyString.aliasFormatUUID,
+    AnonAddyString.aliasFormatRandomChars,
+    AnonAddyString.aliasFormatRandomWords,
+    AnonAddyString.aliasFormatCustom
   ];
 
   /// The base initial state for [CreateAlias].

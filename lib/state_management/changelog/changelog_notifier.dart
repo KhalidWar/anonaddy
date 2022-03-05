@@ -1,7 +1,7 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,7 +24,7 @@ class ChangelogNotifier extends StateNotifier {
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-              top: Radius.circular(kBottomSheetBorderRadius)),
+              top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
         ),
         builder: (context) => const ChangelogWidget(),
       );

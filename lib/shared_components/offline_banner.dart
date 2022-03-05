@@ -1,9 +1,7 @@
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'constants/ui_strings.dart';
 
 class OfflineBanner extends StatelessWidget {
   const OfflineBanner({Key? key}) : super(key: key);
@@ -12,15 +10,15 @@ class OfflineBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       tileColor: Colors.red,
-      title: Text(kNoInternetOfflineData),
-      leading: Icon(Icons.warning_amber_outlined),
+      title: const Text(AppStrings.noInternetOfflineData),
+      leading: const Icon(Icons.warning_amber_outlined),
       onTap: () {
         PlatformAware.platformDialog(
           context: context,
-          child: PlatformInfoDialog(
-            title: kNoInternetDialogTitle,
-            content: Text(kNoInternetContent),
-            buttonLabel: kNoInternetDialogButton,
+          child: const PlatformInfoDialog(
+            title: AppStrings.noInternetDialogTitle,
+            content: Text(AppStrings.noInternetContent),
+            buttonLabel: AppStrings.noInternetDialogButton,
           ),
         );
       },

@@ -1,4 +1,6 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/app_url.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -6,14 +8,16 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SelfHostLoginScreen extends StatefulWidget {
+class SelfHostLoginScreen extends ConsumerStatefulWidget {
+  const SelfHostLoginScreen({Key? key}) : super(key: key);
+
   static const routeName = 'selfHostedScreen';
 
   @override
-  State<SelfHostLoginScreen> createState() => _SelfHostLoginScreenState();
+  ConsumerState createState() => _SelfHostLoginScreenState();
 }
 
-class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
+class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
   final _urlFormKey = GlobalKey<FormState>();
   final _tokenFormKey = GlobalKey<FormState>();
 
@@ -24,7 +28,7 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
     if (_urlFormKey.currentState!.validate() &&
         _tokenFormKey.currentState!.validate()) {
       //todo fix navigation issue. Screen stays on top.
-      await context.read(authStateNotifier.notifier).login(_url, _token);
+      await ref.read(authStateNotifier.notifier).login(_url, _token);
     }
   }
 
@@ -36,36 +40,47 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
-        appBar: AppBar(elevation: 0, title: Text('Change Instance')),
-        backgroundColor: kPrimaryColor,
+        key: const Key('selfHostedLoginScreenScaffold'),
+        appBar: AppBar(
+          key: const Key('selfHostedLoginScreenAppBar'),
+          elevation: 0,
+          title: const Text(
+            'Change Instance',
+            key: Key('selfHostedLoginScreenAppBarLabel'),
+          ),
+        ),
+        backgroundColor: AppColors.primaryColor,
         body: Center(
           child: SingleChildScrollView(
             child: Container(
-              height: size.height * 0.6,
+              height: size.height * 0.64,
               width: size.width * 0.88,
-              padding: EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
                 color: isDark
                     ? Theme.of(context).cardTheme.color
                     : Theme.of(context).cardColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'AnonAddy Instance',
+                          key: const Key('selfHostedLoginScreenUrlInputLabel'),
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         SizedBox(height: size.height * 0.01),
                         Form(
                           key: _urlFormKey,
                           child: TextFormField(
+                            key:
+                                const Key('selfHostedLoginScreenUrlInputField'),
                             validator: (input) =>
                                 FormValidator.validateInstanceURL(input!),
                             onChanged: (input) => _url = input,
@@ -77,8 +92,8 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                                   color: Theme.of(context).accentColor,
                                 ),
                               ),
-                              border: OutlineInputBorder(),
-                              hintText: 'app.anonaddy.com',
+                              border: const OutlineInputBorder(),
+                              hintText: AppUrl.anonAddyAuthority,
                             ),
                           ),
                         ),
@@ -86,7 +101,7 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -94,15 +109,19 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                           children: [
                             Text(
                               'API Token ',
+                              key: const Key(
+                                  'selfHostedLoginScreenTokenInputLabel'),
                               style: Theme.of(context).textTheme.headline6,
                             ),
-                            Text('(from the settings page)'),
+                            const Text('(from the settings page)'),
                           ],
                         ),
                         SizedBox(height: size.height * 0.01),
                         Form(
                           key: _tokenFormKey,
                           child: TextFormField(
+                            key: const Key(
+                                'selfHostedLoginScreenTokenInputField'),
                             validator: (input) =>
                                 FormValidator.accessTokenValidator(input!),
                             onChanged: (input) => _token = input,
@@ -117,8 +136,8 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                                   color: Theme.of(context).accentColor,
                                 ),
                               ),
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter your API token',
+                              border: const OutlineInputBorder(),
+                              hintText: AppStrings.enterYourApiToken,
                             ),
                           ),
                         ),
@@ -127,8 +146,9 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
                   ),
                   Container(),
                   TextButton(
+                    key: const Key('selfHostedLoginScreenSelfHostInfoButton'),
                     style: TextButton.styleFrom(),
-                    child: Text('How to self-host AnonAddy?'),
+                    child: const Text('How to self-host AnonAddy?'),
                     onPressed: () =>
                         NicheMethod.launchURL(kAnonAddySelfHostingURL),
                   ),
@@ -146,30 +166,31 @@ class _SelfHostLoginScreenState extends State<SelfHostLoginScreen> {
     final size = MediaQuery.of(context).size;
 
     return Consumer(
-      builder: (_, watch, __) {
-        final authState = watch(authStateNotifier);
+      builder: (_, ref, __) {
+        final authState = ref.watch(authStateNotifier);
 
         return Container(
           height: size.height * 0.1,
           width: size.width,
           decoration: BoxDecoration(
-            color: isDark ? Colors.black : Color(0xFFF5F7FA),
-            borderRadius: BorderRadius.only(
+            color: isDark ? Colors.black : const Color(0xFFF5F7FA),
+            borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(10),
               bottomLeft: Radius.circular(10),
             ),
           ),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
           child: ElevatedButton(
+            key: const Key('selfHostedLoginScreenLoginButton'),
             style: ElevatedButton.styleFrom(),
-            key: Key('loginButton'),
             child: authState.loginLoading!
-                ? CircularProgressIndicator(
-                    key: Key('loginLoadingIndicator'),
-                    backgroundColor: kPrimaryColor,
+                ? const CircularProgressIndicator(
+                    key: Key('selfHostedLoginScreenLoginButtonLoading'),
+                    backgroundColor: AppColors.primaryColor,
                   )
                 : Text(
                     'Login',
+                    key: const Key('selfHostedLoginScreenLoginButtonLabel'),
                     style: Theme.of(context)
                         .textTheme
                         .headline5!

@@ -2,8 +2,10 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/screens/search_tab/components/search_history.dart';
+import 'package:anonaddy/screens/search_tab/components/search_list_header.dart';
 import 'package:anonaddy/screens/search_tab/components/search_text_field.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
@@ -13,10 +15,8 @@ import 'package:anonaddy/state_management/search/search_result/search_result_sta
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'components/search_list_header.dart';
-
 class SearchTab extends StatelessWidget {
-  const SearchTab();
+  const SearchTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,22 +43,22 @@ class SearchTab extends StatelessWidget {
             ];
           },
           body: Consumer(
-            builder: (context, watch, _) {
-              final searchState = watch(searchResultStateNotifier);
+            builder: (context, ref, _) {
+              final searchState = ref.watch(searchResultStateNotifier);
 
               switch (searchState.status) {
 
                 /// When search is NOT triggered, basically the default state for [SearchTab]
                 /// In this case, show [SearchHistory].
-                case SearchResultStatus.Initial:
+                case SearchResultStatus.initial:
                   return Column(
                     children: [
                       SearchListHeader(
-                        title: kSearchHistory,
-                        buttonLabel: kClearSearchHistoryButtonText,
+                        title: AppStrings.searchHistory,
+                        buttonLabel: AppStrings.clearSearchHistoryButtonText,
                         buttonTextColor: Colors.red,
                         onPress: () {
-                          context
+                          ref
                               .read(searchHistoryStateNotifier.notifier)
                               .clearSearchHistory();
                         },
@@ -69,21 +69,21 @@ class SearchTab extends StatelessWidget {
 
                 /// Displays limited search results based on searching through
                 /// locally available aliases, typically page 1 of user's aliases.
-                case SearchResultStatus.Limited:
+                case SearchResultStatus.limited:
                   final aliases = searchState.aliases!;
-                  return buildResult(context, aliases, true);
+                  return buildResult(context, ref, aliases, true);
 
                 /// When search is loading e.g. fetching matching aliases
-                case SearchResultStatus.Loading:
+                case SearchResultStatus.loading:
                   return Column(
                     children: [
                       SearchListHeader(
-                        title: kSearching,
-                        buttonLabel: kCancelSearchingButtonText,
+                        title: AppStrings.searching,
+                        buttonLabel: AppStrings.cancelSearchingButtonText,
                         buttonTextColor: Colors.red,
                         onPress: () {
                           /// Close current on-going search
-                          context
+                          ref
                               .read(searchResultStateNotifier.notifier)
                               .closeSearch();
                         },
@@ -93,14 +93,14 @@ class SearchTab extends StatelessWidget {
                   );
 
                 /// When search has finished loading and returns matching aliases
-                case SearchResultStatus.Loaded:
+                case SearchResultStatus.loaded:
                   final aliases = searchState.aliases ?? [];
-                  return buildResult(context, aliases, false);
+                  return buildResult(context, ref, aliases, false);
 
                 /// When searching fails and returns an error
-                case SearchResultStatus.Failed:
+                case SearchResultStatus.failed:
                   return const LottieWidget(
-                    lottie: 'assets/lottie/empty.json',
+                    lottie: LottieImages.emptyResult,
                     lottieHeight: 150,
                   );
               }
@@ -111,17 +111,19 @@ class SearchTab extends StatelessWidget {
     );
   }
 
-  Widget buildResult(
-      BuildContext context, List<Alias> resultsList, bool isLimited) {
+  Widget buildResult(BuildContext context, WidgetRef ref,
+      List<Alias> resultsList, bool isLimited) {
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
         SearchListHeader(
-          title: isLimited ? kLimitedSearchResult : kSearchResult,
-          buttonLabel: kCloseSearchButtonText,
+          title: isLimited
+              ? AppStrings.limitedSearchResult
+              : AppStrings.searchResult,
+          buttonLabel: AppStrings.closeSearchButtonText,
           onPress: () {
             FocusScope.of(context).requestFocus(FocusNode());
-            context.read(searchResultStateNotifier.notifier).closeSearch();
+            ref.read(searchResultStateNotifier.notifier).closeSearch();
           },
         ),
 
@@ -140,7 +142,7 @@ class SearchTab extends StatelessWidget {
         /// Show empty lottie if result from full search is empty
         if (resultsList.isEmpty)
           LottieWidget(
-            lottie: 'assets/lottie/empty.json',
+            lottie: LottieImages.emptyResult,
             lottieHeight: size.height * 0.12,
           )
         else
@@ -149,7 +151,7 @@ class SearchTab extends StatelessWidget {
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: resultsList.length,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final alias = resultsList[index];
                   return InkWell(
@@ -161,7 +163,7 @@ class SearchTab extends StatelessWidget {
                       FocusScope.of(context).requestFocus(FocusNode());
 
                       /// Add selected Alias to Search History
-                      context
+                      ref
                           .read(searchHistoryStateNotifier.notifier)
                           .addAliasToSearchHistory(alias);
 

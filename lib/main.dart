@@ -29,7 +29,7 @@ void main() async {
     /// Phoenix restarts app upon logout
     Phoenix(
       /// Riverpod base widget to store provider state
-      child: ProviderScope(
+      child: const ProviderScope(
         child: App(),
       ),
     ),
@@ -52,7 +52,7 @@ Future<void> _initHive() async {
 
 /// Does housekeeping after app is updated. Does nothing otherwise.
 Future<void> _handleAppUpdate() async {
-  final secureStorage = FlutterSecureStorage();
+  const secureStorage = FlutterSecureStorage();
 
   final oldAppVersion =
       await secureStorage.read(key: ChangelogStorageKey.appVersionKey) ?? '';

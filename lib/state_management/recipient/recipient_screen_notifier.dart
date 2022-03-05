@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
-import 'package:anonaddy/shared_components/constants/toast_messages.dart';
+import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -81,7 +81,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
           await recipientService.addPublicGPGKey(recipient.id, keyData);
       recipient.fingerprint = updatedRecipient.fingerprint;
       recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
-      showToast(kAddGPGKeySuccess);
+      showToast(ToastMessage.addGPGKeySuccess);
       state = state.copyWith(recipient: recipient);
     } catch (error) {
       showToast(error.toString());
@@ -91,7 +91,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   Future<void> removePublicGPGKey(Recipient recipient) async {
     try {
       await recipientService.removePublicGPGKey(recipient.id);
-      showToast(kDeleteGPGKeySuccess);
+      showToast(ToastMessage.deleteGPGKeySuccess);
       recipient.fingerprint = null;
       recipient.shouldEncrypt = false;
       state = state.copyWith(recipient: recipient);

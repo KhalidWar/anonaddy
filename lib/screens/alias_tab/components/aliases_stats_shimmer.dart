@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ class AliasesStatsShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final pieChartSectionRadius = 50.0;
+    const pieChartSectionRadius = 50.0;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -18,36 +18,36 @@ class AliasesStatsShimmer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            PieChartIndicator(
-              color: kFirstPieChartColor,
+            const PieChartIndicator(
+              color: AppColors.firstPieChartColor,
               label: 'emails forwarded',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
-              color: kSecondPieChartColor,
+            const PieChartIndicator(
+              color: AppColors.secondPieChartColor,
               label: 'emails blocked',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
-              color: kFourthPieChartColor,
+            const PieChartIndicator(
+              color: AppColors.fourthPieChartColor,
               label: 'emails replied',
               count: 0,
               textColor: Colors.white,
             ),
             SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
-              color: kThirdPieChartColor,
+            const PieChartIndicator(
+              color: AppColors.thirdPieChartColor,
               label: 'emails sent',
               count: 0,
               textColor: Colors.white,
             ),
           ],
         ),
-        Container(
+        SizedBox(
           height: size.height * 0.18,
           width: size.height * 0.18,
           child: PieChart(

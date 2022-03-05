@@ -1,15 +1,14 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../global_providers.dart';
-
-class ChangelogWidget extends StatelessWidget {
+class ChangelogWidget extends ConsumerWidget {
   const ChangelogWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     return DraggableScrollableSheet(
@@ -27,7 +26,7 @@ class ChangelogWidget extends StatelessWidget {
               endIndent: size.width * 0.44,
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -36,11 +35,11 @@ class ChangelogWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   Consumer(
-                    builder: (_, watch, __) {
-                      final appInfo = watch(packageInfoProvider);
+                    builder: (_, ref, __) {
+                      final appInfo = ref.watch(packageInfoProvider);
                       return appInfo.when(
                         data: (data) => Text('Version: ${data.version}'),
-                        loading: () => CircularProgressIndicator(),
+                        loading: () => const CircularProgressIndicator(),
                         error: (error, stackTrace) => Text(error.toString()),
                       );
                     },
@@ -48,19 +47,17 @@ class ChangelogWidget extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 10),
-            Divider(height: 0),
+            const SizedBox(height: 10),
+            const Divider(height: 0),
             buildBody(context, controller),
             Container(
               width: double.infinity,
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
                 child: const Text('Continue to AddyManager'),
                 onPressed: () {
-                  context
-                      .read(changelogStateNotifier.notifier)
-                      .markChangelogRead();
+                  ref.read(changelogStateNotifier.notifier).markChangelogRead();
                   Navigator.pop(context);
                 },
               ),
@@ -101,11 +98,14 @@ class ChangelogWidget extends StatelessWidget {
       child: PlatformScrollbar(
         child: ListView(
           controller: controller,
-          physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
-            header('Hot Fix', Colors.blue),
-            label('1. Fixed CreateAlias recipients scroll bug.'),
+            header('Improved', Colors.blue),
+            label(
+                '1. Several under the hood improvements for a smoother running app.'),
+            label('2. Updated Account UI.'),
+            label('3. Squashed some bugs.'),
             // label('2. Fixed self-hosted recipient/username count errors.'),
             // SizedBox(height: size.height * 0.008),
             // header('Added', Colors.green),

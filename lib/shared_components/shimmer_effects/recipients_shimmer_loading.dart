@@ -14,7 +14,7 @@ class RecipientsShimmerLoading extends StatelessWidget {
       highlightColor: Colors.grey[100]!,
       enabled: true,
       child: ListView.builder(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         itemCount: 12,
         itemBuilder: (_, __) {
           return ListTile(
@@ -22,7 +22,7 @@ class RecipientsShimmerLoading extends StatelessWidget {
             horizontalTitleGap: 8,
             minVerticalPadding: 0,
             contentPadding:
-                EdgeInsets.only(left: 16, right: 40, top: 0, bottom: 0),
+                const EdgeInsets.only(left: 16, right: 40, top: 0, bottom: 0),
             leading: Container(
               width: 30.0,
               height: 25.0,

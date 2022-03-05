@@ -19,8 +19,8 @@ class AliasAnimatedList extends StatelessWidget {
       itemBuilder: (context, index, animation) {
         return SlideTransition(
           position: Tween<Offset>(
-            begin: Offset(0.7, 0),
-            end: Offset(0, 0),
+            begin: const Offset(0.7, 0),
+            end: const Offset(0, 0),
           ).animate(animation),
           child: itemBuilder(context, index),
         );

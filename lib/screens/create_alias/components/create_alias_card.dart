@@ -21,7 +21,7 @@ class CreateAliasCard extends StatelessWidget {
 
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.all(6),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         color: isDark ? Colors.grey[900] : Colors.grey[200],
         borderRadius: BorderRadius.circular(10),
@@ -35,23 +35,24 @@ class CreateAliasCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText1,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 6),
+            padding: const EdgeInsets.symmetric(vertical: 6),
             child: Text(
               subHeader,
               style: Theme.of(context).textTheme.caption,
             ),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           InkWell(
             onTap: onPress,
             child: ListTile(
               dense: true,
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               minVerticalPadding: 0,
               horizontalTitleGap: 0,
               title: child,
-              trailing:
-                  showIcon ? Icon(Icons.keyboard_arrow_down_rounded) : null,
+              trailing: showIcon
+                  ? const Icon(Icons.keyboard_arrow_down_rounded)
+                  : null,
             ),
           ),
         ],

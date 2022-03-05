@@ -1,10 +1,11 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -24,23 +25,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasScreen extends StatefulWidget {
-  const AliasScreen(this.alias);
+class AliasScreen extends ConsumerStatefulWidget {
+  const AliasScreen({Key? key, required this.alias}) : super(key: key);
   final Alias alias;
 
   static const routeName = 'aliasDetailedScreen';
 
   @override
-  State<AliasScreen> createState() => _AliasScreenState();
+  ConsumerState createState() => _AliasScreenState();
 }
 
-class _AliasScreenState extends State<AliasScreen> {
+class _AliasScreenState extends ConsumerState<AliasScreen> {
   @override
   void initState() {
     super.initState();
 
     /// Fetches latest data for this specific alias
-    context.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
+    ref.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
   }
 
   @override
@@ -50,11 +51,11 @@ class _AliasScreenState extends State<AliasScreen> {
       appBar: buildAppBar(context),
       body: Consumer(
         builder: (context, watch, _) {
-          final aliasState = watch(aliasScreenStateNotifier);
+          final aliasState = ref.watch(aliasScreenStateNotifier);
 
           switch (aliasState.status!) {
             case AliasScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case AliasScreenStatus.loaded:
               return buildListView(context, aliasState);
@@ -62,7 +63,7 @@ class _AliasScreenState extends State<AliasScreen> {
             case AliasScreenStatus.failed:
               final error = aliasState.errorMessage;
               return LottieWidget(
-                lottie: 'assets/lottie/errorCone.json',
+                lottie: LottieImages.errorCone,
                 label: error,
               );
           }
@@ -117,7 +118,7 @@ class _AliasScreenState extends State<AliasScreen> {
           subtitle: 'Activity',
           trailing: Row(
             children: [
-              if (isToggleLoading) PlatformLoadingIndicator(size: 20),
+              if (isToggleLoading) const PlatformLoadingIndicator(size: 20),
               PlatformSwitch(
                 value: alias.active,
                 onChanged: isAliasDeleted ? null : (toggle) {},
@@ -126,12 +127,12 @@ class _AliasScreenState extends State<AliasScreen> {
           ),
           trailingIconOnPress: () async {
             isAliasDeleted
-                ? NicheMethod.showToast(kRestoreBeforeActivate)
+                ? NicheMethod.showToast(AnonAddyString.restoreBeforeActivate)
                 : alias.active
-                    ? await context
+                    ? await ref
                         .read(aliasScreenStateNotifier.notifier)
                         .toggleOffAlias(alias.id)
-                    : await context
+                    : await ref
                         .read(aliasScreenStateNotifier.notifier)
                         .toggleOnAlias(alias.id);
           },
@@ -154,15 +155,16 @@ class _AliasScreenState extends State<AliasScreen> {
           leadingIconData:
               isAliasDeleted ? Icons.restore_outlined : Icons.delete_outline,
           title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
-          subtitle:
-              isAliasDeleted ? kRestoreAliasSubtitle : kDeleteAliasSubtitle,
+          subtitle: isAliasDeleted
+              ? AppStrings.restoreAliasSubtitle
+              : AppStrings.deleteAliasSubtitle,
           trailing: Row(
             children: [
-              if (deleteAliasLoading) PlatformLoadingIndicator(size: 20),
+              if (deleteAliasLoading) const PlatformLoadingIndicator(size: 20),
               IconButton(
                 icon: isAliasDeleted
-                    ? Icon(Icons.restore_outlined, color: Colors.green)
-                    : Icon(Icons.delete_outline, color: Colors.red),
+                    ? const Icon(Icons.restore_outlined, color: Colors.green)
+                    : const Icon(Icons.delete_outline, color: Colors.red),
                 onPressed: null,
               ),
             ],
@@ -186,7 +188,7 @@ class _AliasScreenState extends State<AliasScreen> {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     IconButton(
-                      icon: Icon(Icons.edit_outlined),
+                      icon: const Icon(Icons.edit_outlined),
                       onPressed: () =>
                           buildUpdateDefaultRecipient(context, alias),
                     ),
@@ -210,12 +212,16 @@ class _AliasScreenState extends State<AliasScreen> {
               if (alias.recipients!.isEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(children: [Text(kNoDefaultRecipientSet)]),
+                  child: Row(
+                    children: const [
+                      Text(AppStrings.noDefaultRecipientSet),
+                    ],
+                  ),
                 )
               else
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: alias.recipients!.length,
                   itemBuilder: (context, index) {
                     final recipients = alias.recipients;
@@ -256,13 +262,13 @@ class _AliasScreenState extends State<AliasScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(kBottomSheetBorderRadius),
+          top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
         ),
       ),
       builder: (context) {
-        return AliasDefaultRecipientScreen(alias);
+        return AliasDefaultRecipientScreen(alias: alias);
       },
     );
   }
@@ -275,18 +281,19 @@ class _AliasScreenState extends State<AliasScreen> {
       context: context,
       child: PlatformAlertDialog(
         title: '${isDeleted ? 'Restore' : 'Delete'} Alias',
-        content:
-            isDeleted ? kRestoreAliasConfirmation : kDeleteAliasConfirmation,
+        content: isDeleted
+            ? AnonAddyString.restoreAliasConfirmation
+            : AnonAddyString.deleteAliasConfirmation,
         method: () async {
           /// Dismisses [platformDialog]
           Navigator.pop(context);
 
           /// Delete [alias] if it's available or restore it if it's deleted
           isDeleted
-              ? await context
+              ? await ref
                   .read(aliasScreenStateNotifier.notifier)
                   .restoreAlias(alias.id)
-              : await context
+              : await ref
                   .read(aliasScreenStateNotifier.notifier)
                   .deleteAlias(alias.id);
 
@@ -303,7 +310,7 @@ class _AliasScreenState extends State<AliasScreen> {
 
     Future<void> generateAddress() async {
       if (sendFromFormKey.currentState!.validate()) {
-        await context
+        await ref
             .read(aliasScreenStateNotifier.notifier)
             .sendFromAlias(alias.email, destinationEmail);
         Navigator.pop(context);
@@ -313,9 +320,9 @@ class _AliasScreenState extends State<AliasScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
@@ -326,18 +333,20 @@ class _AliasScreenState extends State<AliasScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              BottomSheetHeader(headerLabel: kSendFromAlias),
+              const BottomSheetHeader(
+                headerLabel: AppStrings.sendFromAlias,
+              ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(kSendFromAliasString),
+                    const Text(AppStrings.sendFromAliasString),
                     SizedBox(height: size.height * 0.01),
                     TextFormField(
                       enabled: false,
-                      decoration: kTextFormFieldDecoration.copyWith(
+                      decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                         hintText: alias.email,
                       ),
                     ),
@@ -355,18 +364,18 @@ class _AliasScreenState extends State<AliasScreen> {
                             FormValidator.validateEmailField(input!),
                         onChanged: (input) => destinationEmail = input,
                         onFieldSubmitted: (toggle) => generateAddress(),
-                        decoration: kTextFormFieldDecoration.copyWith(
+                        decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                           hintText: 'Enter email...',
                         ),
                       ),
                     ),
                     SizedBox(height: size.height * 0.01),
-                    Text(kSendFromAliasNote),
+                    const Text(AppStrings.sendFromAliasNote),
                     SizedBox(height: size.height * 0.01),
                     Center(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(),
-                        child: Text('Generate address'),
+                        child: const Text('Generate address'),
                         onPressed: () => generateAddress(),
                       ),
                     ),
@@ -382,7 +391,7 @@ class _AliasScreenState extends State<AliasScreen> {
   }
 
   Future updateDescriptionDialog(BuildContext context, Alias alias) {
-    final aliasScreenNotifier = context.read(aliasScreenStateNotifier.notifier);
+    final aliasScreenNotifier = ref.read(aliasScreenStateNotifier.notifier);
     final descriptionFormKey = GlobalKey<FormState>();
     String newDescription = '';
 
@@ -401,9 +410,9 @@ class _AliasScreenState extends State<AliasScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         return UpdateDescriptionWidget(
@@ -419,7 +428,7 @@ class _AliasScreenState extends State<AliasScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     Future<void> forget() async {
-      await context
+      await ref
           .read(aliasScreenStateNotifier.notifier)
           .forgetAlias(widget.alias.id);
 
@@ -434,15 +443,15 @@ class _AliasScreenState extends State<AliasScreen> {
       PlatformAware.platformDialog(
         context: context,
         child: PlatformAlertDialog(
-          content: kForgetAliasConfirmation,
+          content: AnonAddyString.forgetAliasConfirmation,
           method: forget,
-          title: kForgetAlias,
+          title: AppStrings.forgetAlias,
         ),
       );
     }
 
     return AppBar(
-      title: Text(
+      title: const Text(
         'Alias',
         style: TextStyle(color: Colors.white),
       ),
@@ -452,7 +461,7 @@ class _AliasScreenState extends State<AliasScreen> {
         ),
         color: Colors.white,
         onPressed: () {
-          context.read(aliasTabStateNotifier.notifier).refreshAliases();
+          ref.read(aliasTabStateNotifier.notifier).refreshAliases();
           Navigator.pop(context);
         },
       ),

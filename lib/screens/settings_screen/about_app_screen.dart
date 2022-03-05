@@ -1,12 +1,13 @@
 import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'credits_screen.dart';
-
 class AboutAppScreen extends StatelessWidget {
+  const AboutAppScreen({Key? key}) : super(key: key);
+
   static const routeName = 'aboutAppScreen';
 
   @override
@@ -14,79 +15,79 @@ class AboutAppScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: Text('About App')),
+      appBar: AppBar(title: const Text('About App')),
       body: ListView(
         padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
         children: [
           buildHeader(context),
           SizedBox(height: size.height * 0.02),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
             dense: true,
-            title: Text('Khalid Warsame'),
-            subtitle: Text('AddyManager developer'),
-            trailing: Icon(Icons.account_circle_outlined),
+            title: const Text('Khalid Warsame'),
+            subtitle: const Text('AddyManager developer'),
+            trailing: const Icon(Icons.account_circle_outlined),
             onTap: () => NicheMethod.launchURL(kKhalidWarGithubURL),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
             dense: true,
-            title: Text('Will Browning (AnonAddy team)'),
-            subtitle: Text('Contributor'),
-            trailing: Icon(Icons.account_circle_outlined),
+            title: const Text('Will Browning (AnonAddy team)'),
+            subtitle: const Text('Contributor'),
+            trailing: const Icon(Icons.account_circle_outlined),
             onTap: () => NicheMethod.launchURL(kWillBrowningGithubURL),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
             dense: true,
-            title: Text('Exodus Privacy Report'),
-            subtitle: Text('Exodus\'s privacy report of AddyManager'),
-            trailing: Icon(Icons.shield_outlined),
+            title: const Text('Exodus Privacy Report'),
+            subtitle: const Text('Exodus\'s privacy report of AddyManager'),
+            trailing: const Icon(Icons.shield_outlined),
             onTap: () => NicheMethod.launchURL(kExodusPrivacyURL),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
             dense: true,
-            title: Text('Found a bug?'),
-            subtitle: Text('Report bugs and request features'),
-            trailing: Icon(Icons.bug_report_outlined),
+            title: const Text('Found a bug?'),
+            subtitle: const Text('Report bugs and request features'),
+            trailing: const Icon(Icons.bug_report_outlined),
             onTap: () => NicheMethod.launchURL(kAddyManagerIssuesURL),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
             dense: true,
-            title: Text('Source Code'),
-            subtitle: Text('AddyManager\'s open source code'),
-            trailing: Icon(Icons.code_outlined),
+            title: const Text('Source Code'),
+            subtitle: const Text('AddyManager\'s open source code'),
+            trailing: const Icon(Icons.code_outlined),
             onTap: () => NicheMethod.launchURL(kAddyManagerRepoURL),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
             dense: true,
-            title: Text('AddyManager License'),
-            subtitle: Text('MIT License'),
-            trailing: Icon(Icons.description_outlined),
+            title: const Text('AddyManager License'),
+            subtitle: const Text('MIT License'),
+            trailing: const Icon(Icons.description_outlined),
             onTap: () => NicheMethod.launchURL(kAddyManagerLicenseURL),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
             dense: true,
-            title: Text('Packages Licenses'),
-            subtitle: Text('Third party packages\' licenses'),
-            trailing: Icon(Icons.receipt_long),
+            title: const Text('Packages Licenses'),
+            subtitle: const Text('Third party packages\' licenses'),
+            trailing: const Icon(Icons.receipt_long),
             onTap: () => buildLicensePage(context),
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
           ListTile(
             dense: true,
-            title: Text('Credits'),
-            subtitle: Text('Credits for assets in AddyManager'),
-            trailing: Icon(Icons.image_outlined),
+            title: const Text('Credits'),
+            subtitle: const Text('Credits for assets in AddyManager'),
+            trailing: const Icon(Icons.image_outlined),
             onTap: () {
               Navigator.pushNamed(context, CreditsScreen.routeName);
             },
           ),
-          Divider(height: 0),
+          const Divider(height: 0),
         ],
       ),
     );
@@ -99,13 +100,13 @@ class AboutAppScreen extends StatelessWidget {
         Container(
           width: size.width * 0.35,
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(shape: BoxShape.circle),
+          decoration: const BoxDecoration(shape: BoxShape.circle),
           child: Image.asset('assets/images/app_logo.png'),
         ),
         SizedBox(height: size.height * 0.01),
         Consumer(
-          builder: (_, watch, __) {
-            final packageInfo = watch(packageInfoProvider);
+          builder: (_, ref, __) {
+            final packageInfo = ref.watch(packageInfoProvider);
             return packageInfo.when(
               data: (data) {
                 return Column(
@@ -118,7 +119,7 @@ class AboutAppScreen extends StatelessWidget {
                   ],
                 );
               },
-              loading: () => CircularProgressIndicator(),
+              loading: () => const CircularProgressIndicator(),
               error: (error, stackTrace) =>
                   Text('Failed to load package info: $error'),
             );
@@ -133,7 +134,7 @@ class AboutAppScreen extends StatelessWidget {
       context: context,
       applicationName: 'AddyManager',
       applicationIcon: Padding(
-        padding: EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.only(top: 20),
         child: buildHeader(context),
       ),
     );

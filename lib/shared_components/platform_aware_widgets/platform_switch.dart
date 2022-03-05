@@ -3,8 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformSwitch extends PlatformAware {
-  const PlatformSwitch({required this.value, required this.onChanged});
-
+  const PlatformSwitch({
+    Key? key,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
   final bool value;
   final Function(bool newValue)? onChanged;
 

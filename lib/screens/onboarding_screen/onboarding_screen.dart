@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class OnBoardingScreen extends StatefulWidget {
+  const OnBoardingScreen({Key? key}) : super(key: key);
+
   @override
   _OnBoardingScreenState createState() => _OnBoardingScreenState();
 }
@@ -8,6 +10,6 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }

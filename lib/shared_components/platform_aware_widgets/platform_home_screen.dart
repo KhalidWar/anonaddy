@@ -1,13 +1,14 @@
 import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformHomeScreen extends PlatformAware {
   const PlatformHomeScreen({
+    Key? key,
     required this.fab,
     required this.child,
     required this.actions,
@@ -15,7 +16,7 @@ class PlatformHomeScreen extends PlatformAware {
     required this.currentIndex,
     required this.androidOnTap,
     required this.iosOnTap,
-  });
+  }) : super(key: key);
 
   final Widget fab;
   final Widget child;
@@ -28,18 +29,18 @@ class PlatformHomeScreen extends PlatformAware {
   final Widget Function(BuildContext, int) iosOnTap;
 
   List<BottomNavigationBarItem> botNavBarItems() {
-    return [
+    return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.account_circle_outlined),
-        label: kAccountBotNavLabel,
+        label: AppStrings.accountBotNavLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.alternate_email_outlined),
-        label: kAliasesBotNavLabel,
+        label: AppStrings.aliasesBotNavLabel,
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.search_outlined),
-        label: kSearchBotNavLabel,
+        label: AppStrings.searchBotNavLabel,
       ),
     ];
   }
@@ -63,17 +64,20 @@ class PlatformHomeScreen extends PlatformAware {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text(kAppBarTitle, style: TextStyle(color: Colors.white)),
+        title: const Text(
+          AppStrings.appName,
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.error_outline),
+          icon: const Icon(Icons.error_outline),
           onPressed: () {
             Navigator.pushNamed(context, AlertCenterScreen.routeName);
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               Navigator.pushNamed(context, SettingsScreen.routeName);
             },
@@ -85,7 +89,8 @@ class PlatformHomeScreen extends PlatformAware {
       bottomNavigationBar: BottomNavigationBar(
         onTap: androidOnTap,
         currentIndex: currentIndex,
-        selectedItemColor: isDark ? kAccentColor : kPrimaryColor,
+        selectedItemColor:
+            isDark ? AppColors.accentColor : AppColors.primaryColor,
         items: botNavBarItems(),
       ),
     );

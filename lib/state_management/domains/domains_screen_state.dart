@@ -21,7 +21,7 @@ class DomainsScreenState {
   final bool? updateRecipientLoading;
 
   static DomainsScreenState initial() {
-    return DomainsScreenState(
+    return const DomainsScreenState(
       status: DomainsScreenStatus.loading,
       activeSwitchLoading: false,
       catchAllSwitchLoading: false,

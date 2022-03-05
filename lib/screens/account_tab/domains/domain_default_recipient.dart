@@ -1,25 +1,28 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DomainDefaultRecipient extends StatefulWidget {
-  const DomainDefaultRecipient(this.domain);
-
+class DomainDefaultRecipient extends ConsumerStatefulWidget {
+  const DomainDefaultRecipient({
+    Key? key,
+    required this.domain,
+  }) : super(key: key);
   final Domain domain;
 
   @override
-  _DomainDefaultRecipientState createState() => _DomainDefaultRecipientState();
+  ConsumerState createState() => _DomainDefaultRecipientState();
 }
 
-class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
+class _DomainDefaultRecipientState
+    extends ConsumerState<DomainDefaultRecipient> {
   final _verifiedRecipients = <Recipient>[];
   Recipient? selectedRecipient;
 
@@ -50,7 +53,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
   }
 
   void _setVerifiedRecipients() {
-    final recipientTabState = context.read(recipientTabStateNotifier);
+    final recipientTabState = ref.read(recipientTabStateNotifier);
     if (recipientTabState.status == RecipientTabStatus.loaded) {
       final allRecipients = recipientTabState.recipients!;
       for (Recipient recipient in allRecipients) {
@@ -91,7 +94,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
   }
 
   Future<void> updateDefaultRecipient() async {
-    await context
+    await ref
         .read(domainsScreenStateNotifier.notifier)
         .updateDomainDefaultRecipients(
           widget.domain.id,
@@ -125,21 +128,25 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
               children: [
                 Column(
                   children: [
-                    BottomSheetHeader(headerLabel: 'Update Default Recipient'),
+                    const BottomSheetHeader(
+                      headerLabel: 'Update Default Recipient',
+                    ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text(kUpdateDomainDefaultRecipient),
+                          const Text(
+                              AnonAddyString.updateDomainDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
                           Consumer(
                             builder: (_, watch, __) {
-                              final isLoading =
-                                  watch(domainsScreenStateNotifier)
-                                      .updateRecipientLoading!;
+                              final isLoading = ref
+                                  .watch(domainsScreenStateNotifier)
+                                  .updateRecipientLoading!;
                               return isLoading
-                                  ? LinearProgressIndicator(color: kAccentColor)
-                                  : Divider(height: 0);
+                                  ? const LinearProgressIndicator(
+                                      color: AppColors.accentColor)
+                                  : const Divider(height: 0);
                             },
                           ),
                         ],
@@ -158,13 +165,13 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
                 else
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _verifiedRecipients.length,
                     itemBuilder: (context, index) {
                       final verifiedRecipient = _verifiedRecipients[index];
                       return ListTile(
                         selected: _isDefaultRecipient(verifiedRecipient),
-                        selectedTileColor: kAccentColor,
+                        selectedTileColor: AppColors.accentColor,
                         horizontalTitleGap: 0,
                         title: Text(
                           verifiedRecipient.email,
@@ -183,13 +190,13 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
                     },
                   ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Divider(height: 0),
+                      const Divider(height: 0),
                       SizedBox(height: size.height * 0.01),
-                      Text(kUpdateAliasRecipientNote),
+                      const Text(AppStrings.updateAliasRecipientNote),
                     ],
                   ),
                 ),
@@ -202,7 +209,7 @@ class _DomainDefaultRecipientState extends State<DomainDefaultRecipient> {
               right: 15,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(),
-                child: Text('Update Default Recipients'),
+                child: const Text('Update Default Recipients'),
                 onPressed: () => updateDefaultRecipient(),
               ),
             ),

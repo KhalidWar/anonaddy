@@ -38,7 +38,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
   /// with matching list of aliases
   Future<void> searchAliases() async {
     _updateState(
-      state.copyWith(status: SearchResultStatus.Loading),
+      state.copyWith(status: SearchResultStatus.loading),
     );
 
     try {
@@ -51,13 +51,13 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
 
       /// Structure new state
       final newState = state.copyWith(
-          status: SearchResultStatus.Loaded, aliases: matchingAliases);
+          status: SearchResultStatus.loaded, aliases: matchingAliases);
 
       /// Trigger a UI update with the new state
       _updateState(newState);
     } catch (error) {
       final newState = state.copyWith(
-        status: SearchResultStatus.Failed,
+        status: SearchResultStatus.failed,
         errorMessage: error.toString(),
       );
       _updateState(newState);
@@ -90,7 +90,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
     });
 
     final newState = state.copyWith(
-        status: SearchResultStatus.Limited, aliases: matchingAliases);
+        status: SearchResultStatus.limited, aliases: matchingAliases);
     _updateState(newState);
   }
 

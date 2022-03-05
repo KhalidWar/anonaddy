@@ -19,7 +19,7 @@ class RecipientScreenState {
   final bool? isAddRecipientLoading;
 
   static RecipientScreenState initialState() {
-    return RecipientScreenState(
+    return const RecipientScreenState(
       status: RecipientScreenStatus.loading,
       errorMessage: '',
       isEncryptionToggleLoading: false,

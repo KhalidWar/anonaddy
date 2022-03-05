@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/toast_messages.dart';
+import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,10 +17,27 @@ class NicheMethod {
     await Clipboard.setData(
       ClipboardData(text: input),
     ).catchError((error) {
-      showToast("$kFailedToCopy: $error");
+      showToast("${ToastMessage.failedToCopy}: $error");
     }).whenComplete(() {
-      showToast(kCopiedToClipboard);
+      showToast(ToastMessage.copiedToClipboard);
     });
+  }
+
+  static showToastWithContext(BuildContext context, String message) async {
+    final flutterToast = FToast();
+    flutterToast.init(context);
+    flutterToast.showToast(
+      toastDuration: const Duration(seconds: 1),
+      gravity: ToastGravity.BOTTOM,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.grey[600],
+        ),
+        child: Text(message),
+      ),
+    );
   }
 
   static showToast(String message) async {

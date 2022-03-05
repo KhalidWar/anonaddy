@@ -67,4 +67,9 @@ class Domain {
   factory Domain.fromJson(Map<String, dynamic> json) => _$DomainFromJson(json);
 
   Map<String, dynamic> toJson() => _$DomainToJson(this);
+
+  @override
+  String toString() {
+    return 'Domain{id: $id, userId: $userId, domain: $domain, description: $description, aliases: $aliases, defaultRecipient: $defaultRecipient, active: $active, catchAll: $catchAll, domainVerifiedAt: $domainVerifiedAt, domainMxValidatedAt: $domainMxValidatedAt, domainSendingVerifiedAt: $domainSendingVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt}';
+  }
 }

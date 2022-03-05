@@ -1,4 +1,5 @@
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -6,25 +7,25 @@ import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NavigationErrorScreen extends StatelessWidget {
+class NavigationErrorScreen extends ConsumerWidget {
   const NavigationErrorScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Navigation Error')),
+      appBar: AppBar(title: const Text('Navigation Error')),
       body: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Expanded(
               child: LottieWidget(
-                lottie: 'assets/lottie/errorCone.json',
+                lottie: LottieImages.errorCone,
                 lottieHeight: size.height * 0.25,
-                label: navigationErrorMessage,
+                label: AppStrings.navigationErrorMessage,
               ),
             ),
             Text(
@@ -34,11 +35,11 @@ class NavigationErrorScreen extends StatelessWidget {
             ),
             Container(
               width: double.infinity,
-              margin: EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(top: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.red),
-                child: Text('logout'),
-                onPressed: () => logout(context),
+                child: const Text('logout'),
+                onPressed: () => logout(context, ref),
               ),
             ),
           ],
@@ -47,15 +48,15 @@ class NavigationErrorScreen extends StatelessWidget {
     );
   }
 
-  Future logout(BuildContext context) async {
+  Future logout(BuildContext context, WidgetRef ref) async {
     /// Show platform dialog
     PlatformAware.platformDialog(
       context: context,
       child: PlatformAlertDialog(
         title: 'Logout',
-        content: kLogOutAlertDialog,
+        content: AppStrings.logOutAlertDialog,
         method: () async {
-          await context.read(authStateNotifier.notifier).logout(context);
+          await ref.read(authStateNotifier.notifier).logout(context);
         },
       ),
     );

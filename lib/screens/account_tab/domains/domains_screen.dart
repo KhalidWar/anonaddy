@@ -1,8 +1,10 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
+import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.dart';
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -18,25 +20,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'domain_default_recipient.dart';
-
-class DomainsScreen extends StatefulWidget {
+class DomainsScreen extends ConsumerStatefulWidget {
   const DomainsScreen({Key? key, required this.domain}) : super(key: key);
   final Domain domain;
 
   static const routeName = 'domainDetailedScreen';
 
   @override
-  State<DomainsScreen> createState() => _DomainsScreenState();
+  ConsumerState createState() => _DomainsScreenState();
 }
 
-class _DomainsScreenState extends State<DomainsScreen> {
+class _DomainsScreenState extends ConsumerState<DomainsScreen> {
   @override
   void initState() {
     super.initState();
-    context
-        .read(domainsScreenStateNotifier.notifier)
-        .fetchDomain(widget.domain);
+    ref.read(domainsScreenStateNotifier.notifier).fetchDomain(widget.domain);
   }
 
   @override
@@ -45,11 +43,11 @@ class _DomainsScreenState extends State<DomainsScreen> {
       appBar: buildAppBar(context),
       body: Consumer(
         builder: (context, watch, _) {
-          final domainProvider = watch(domainsScreenStateNotifier);
+          final domainProvider = ref.watch(domainsScreenStateNotifier);
 
           switch (domainProvider.status!) {
             case DomainsScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case DomainsScreenStatus.loaded:
               return buildListView(context, domainProvider);
@@ -57,7 +55,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
             case DomainsScreenStatus.failed:
               final error = domainProvider.errorMessage;
               return LottieWidget(
-                lottie: 'assets/lottie/errorCone.json',
+                lottie: LottieImages.errorCone,
                 label: error,
               );
           }
@@ -71,7 +69,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
     final size = MediaQuery.of(context).size;
 
     final domain = domainProvider.domain!;
-    final domainNotifier = context.read(domainsScreenStateNotifier.notifier);
+    final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
 
     return ListView(
       children: [
@@ -96,18 +94,20 @@ class _DomainsScreenState extends State<DomainsScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: domain.description ?? kNoDescription,
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          title: domain.description ?? AppStrings.noDescription,
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Domain description',
           leadingIconData: Icons.comment_outlined,
-          trailing:
-              IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
+          trailing: IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () {},
+          ),
           trailingIconOnPress: () =>
               buildEditDescriptionDialog(context, domain),
         ),
         AliasDetailListTile(
           title: domain.active ? 'Domain is active' : 'Domain is inactive',
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Activity',
           leadingIconData: Icons.toggle_off_outlined,
           trailing:
@@ -120,7 +120,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
         ),
         AliasDetailListTile(
           title: domain.catchAll ? 'Enabled' : 'Disabled',
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Catch All',
           leadingIconData: Icons.repeat,
           trailing: buildSwitch(
@@ -132,10 +132,10 @@ class _DomainsScreenState extends State<DomainsScreen> {
           },
         ),
         if (domain.domainVerifiedAt == null)
-          buildUnverifiedEmailWarning(size, kUnverifiedDomainWarning),
+          buildUnverifiedEmailWarning(size, AppStrings.unverifiedDomainWarning),
         // Divider(height: size.height * 0.02),
         if (domain.domainMxValidatedAt == null)
-          buildUnverifiedEmailWarning(size, kInvalidDomainMXWarning),
+          buildUnverifiedEmailWarning(size, AppStrings.invalidDomainMXWarning),
         Divider(height: size.height * 0.02),
         // if (domain.domainSendingVerifiedAt == null)
         //   buildUnverifiedEmailWarning(size, kUnverifiedDomainNote),
@@ -153,7 +153,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   IconButton(
-                    icon: Icon(Icons.edit_outlined),
+                    icon: const Icon(Icons.edit_outlined),
                     onPressed: () =>
                         buildUpdateDefaultRecipient(context, domain),
                   ),
@@ -162,8 +162,8 @@ class _DomainsScreenState extends State<DomainsScreen> {
             ),
             if (domain.defaultRecipient == null)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('No default recipient found'),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: const Text('No default recipient found'),
               )
             else
               RecipientListTile(
@@ -189,13 +189,13 @@ class _DomainsScreenState extends State<DomainsScreen> {
             ),
             if (domain.aliases!.isEmpty)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('No aliases found'),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: const Text('No aliases found'),
               )
             else
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: domain.aliases!.length,
                 itemBuilder: (context, index) {
                   return AliasListTile(
@@ -227,7 +227,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
   Widget buildSwitch(bool switchLoading, switchValue) {
     return Row(
       children: [
-        switchLoading ? PlatformLoadingIndicator(size: 20) : Container(),
+        switchLoading ? const PlatformLoadingIndicator(size: 20) : Container(),
         PlatformSwitch(
           value: switchValue,
           onChanged: (toggle) {},
@@ -237,7 +237,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
   }
 
   Future buildEditDescriptionDialog(BuildContext context, Domain domain) {
-    final domainNotifier = context.read(domainsScreenStateNotifier.notifier);
+    final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
     final formKey = GlobalKey<FormState>();
     String newDescription = '';
 
@@ -256,9 +256,9 @@ class _DomainsScreenState extends State<DomainsScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         return UpdateDescriptionWidget(
@@ -276,20 +276,20 @@ class _DomainsScreenState extends State<DomainsScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(kBottomSheetBorderRadius),
+          top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
         ),
       ),
       builder: (context) {
-        return DomainDefaultRecipient(domain);
+        return DomainDefaultRecipient(domain: domain);
       },
     );
   }
 
   AppBar buildAppBar(BuildContext context) {
     Future<void> deleteDomain() async {
-      await context
+      await ref
           .read(domainsScreenStateNotifier.notifier)
           .deleteDomain(widget.domain.id);
       Navigator.pop(context);
@@ -297,7 +297,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
     }
 
     return AppBar(
-      title: Text('Domain', style: TextStyle(color: Colors.white)),
+      title: const Text('Domain', style: TextStyle(color: Colors.white)),
       leading: IconButton(
         icon: Icon(
           PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
@@ -319,7 +319,7 @@ class _DomainsScreenState extends State<DomainsScreen> {
             PlatformAware.platformDialog(
               context: context,
               child: PlatformAlertDialog(
-                content: kDeleteDomainConfirmation,
+                content: AnonAddyString.deleteDomainConfirmation,
                 method: deleteDomain,
                 title: 'Delete Domain',
               ),
@@ -335,15 +335,15 @@ class _DomainsScreenState extends State<DomainsScreen> {
       height: size.height * 0.05,
       width: double.infinity,
       color: Colors.amber,
-      padding: EdgeInsets.symmetric(horizontal: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Row(
         children: [
-          Icon(Icons.warning_amber_outlined, color: Colors.black),
-          SizedBox(width: 16),
+          const Icon(Icons.warning_amber_outlined, color: Colors.black),
+          const SizedBox(width: 16),
           Expanded(
             child: Text(
               label,
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
           ),
           Container(),

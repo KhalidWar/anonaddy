@@ -1,12 +1,12 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDomainSelection extends StatelessWidget {
-  const AliasDomainSelection();
+  const AliasDomainSelection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +19,20 @@ class AliasDomainSelection extends StatelessWidget {
       maxChildSize: 0.7,
       builder: (context, controller) {
         return Consumer(
-          builder: (context, watch, child) {
-            final createAliasState = watch(createAliasStateNotifier);
+          builder: (context, ref, child) {
+            final createAliasState = ref.watch(createAliasStateNotifier);
             final domains = createAliasState.domains!;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                BottomSheetHeader(headerLabel: 'Select Alias Domain'),
+                const BottomSheetHeader(headerLabel: 'Select Alias Domain'),
                 Expanded(
                   child: PlatformScrollbar(
                     child: ListView(
                       shrinkWrap: true,
                       controller: controller,
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       children: [
                         if (domains.isEmpty)
                           Center(
@@ -44,13 +44,13 @@ class AliasDomainSelection extends StatelessWidget {
                         else
                           ListView.builder(
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: domains.length,
                             itemBuilder: (context, index) {
                               final domain = domains[index];
                               return ListTile(
                                 dense: true,
-                                selectedTileColor: kAccentColor,
+                                selectedTileColor: AppColors.accentColor,
                                 horizontalTitleGap: 0,
                                 title: Text(
                                   domain,
@@ -58,7 +58,7 @@ class AliasDomainSelection extends StatelessWidget {
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                                 onTap: () {
-                                  context
+                                  ref
                                       .read(createAliasStateNotifier.notifier)
                                       .setAliasDomain(domain);
                                   Navigator.pop(context);

@@ -1,17 +1,20 @@
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddNewUsername extends StatefulWidget {
+class AddNewUsername extends ConsumerStatefulWidget {
+  const AddNewUsername({Key? key}) : super(key: key);
+
   @override
-  State<AddNewUsername> createState() => _AddNewUsernameState();
+  ConsumerState createState() => _AddNewUserNameState();
 }
 
-class _AddNewUsernameState extends State<AddNewUsername> {
+class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
   final _textEditController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -27,7 +30,7 @@ class _AddNewUsernameState extends State<AddNewUsername> {
 
     Future<void> createUsername() async {
       if (_formKey.currentState!.validate()) {
-        await context
+        await ref
             .read(usernamesScreenStateNotifier.notifier)
             .createNewUsername(_textEditController.text.trim());
         Navigator.pop(context);
@@ -40,12 +43,15 @@ class _AddNewUsernameState extends State<AddNewUsername> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BottomSheetHeader(headerLabel: 'Add New Username'),
+          const BottomSheetHeader(
+            headerLabel: AppStrings.addNewUsername,
+          ),
           Container(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Column(
               children: [
-                Text(kAddNewUsernameString),
+                const Text(AnonAddyString.addNewUsernameString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: _formKey,
@@ -55,7 +61,7 @@ class _AddNewUsernameState extends State<AddNewUsername> {
                     validator: (input) =>
                         FormValidator.validateUsernameInput(input!),
                     onFieldSubmitted: (toggle) => createUsername(),
-                    decoration: kTextFormFieldDecoration.copyWith(
+                    decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                       hintText: 'johndoe',
                     ),
                   ),
@@ -63,9 +69,9 @@ class _AddNewUsernameState extends State<AddNewUsername> {
                 SizedBox(height: size.height * 0.02),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom().copyWith(
-                    minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                    minimumSize: MaterialStateProperty.all(const Size(200, 50)),
                   ),
-                  child: Text('Add Username'),
+                  child: const Text(AppStrings.addUsername),
                   onPressed: () => createUsername(),
                 ),
               ],

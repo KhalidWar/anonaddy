@@ -5,10 +5,9 @@ import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'account_state.dart';
 
 final accountStateNotifier =
     StateNotifierProvider<AccountNotifier, AccountState>((ref) {
@@ -20,7 +19,7 @@ final accountStateNotifier =
 
 class AccountNotifier extends StateNotifier<AccountState> {
   AccountNotifier({required this.accountService, required this.offlineData})
-      : super(AccountState(status: AccountStatus.loading)) {
+      : super(const AccountState(status: AccountStatus.loading)) {
     /// Initially load data from disk (secured device storage)
     _loadOfflineData();
 
@@ -50,9 +49,6 @@ class AccountNotifier extends StateNotifier<AccountState> {
 
       /// Update UI with the latest state
       _updateState(newState);
-
-      /// To avoid spamming API, wait set amount of time before calling API again
-      await Future.delayed(Duration(seconds: 5));
     } on SocketException {
       /// Loads offline data when there's no internet connection
       await _loadOfflineData();
@@ -88,7 +84,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
   /// Triggers [fetchAccount] when it fails after a certain amount of time
   Future _retryOnError() async {
     if (state.status == AccountStatus.failed) {
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       await fetchAccount();
     }
   }

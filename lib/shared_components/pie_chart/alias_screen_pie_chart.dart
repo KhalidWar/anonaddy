@@ -1,16 +1,16 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class AliasScreenPieChart extends StatelessWidget {
   const AliasScreenPieChart({
+    Key? key,
     required this.emailsForwarded,
     required this.emailsBlocked,
     required this.emailsSent,
     required this.emailsReplied,
-  });
-
+  }) : super(key: key);
   final int emailsForwarded;
   final int emailsBlocked;
   final int emailsSent;
@@ -18,7 +18,7 @@ class AliasScreenPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pieChartSectionRadius = 60.0;
+    const pieChartSectionRadius = 60.0;
 
     bool isPieChartEmpty() {
       if (emailsForwarded == 0 &&
@@ -36,7 +36,7 @@ class AliasScreenPieChart extends StatelessWidget {
         Container(
           height: MediaQuery.of(context).size.height * 0.28,
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20),
           child: PieChart(
             PieChartData(
               borderData: FlBorderData(show: false),
@@ -54,25 +54,25 @@ class AliasScreenPieChart extends StatelessWidget {
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
-                        color: kFirstPieChartColor,
+                        color: AppColors.firstPieChartColor,
                         value: emailsForwarded.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
-                        color: kSecondPieChartColor,
+                        color: AppColors.secondPieChartColor,
                         value: emailsBlocked.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
-                        color: kThirdPieChartColor,
+                        color: AppColors.thirdPieChartColor,
                         value: emailsSent.toDouble(),
                       ),
                       PieChartSectionData(
                         showTitle: false,
                         radius: pieChartSectionRadius,
-                        color: kFourthPieChartColor,
+                        color: AppColors.fourthPieChartColor,
                         value: emailsReplied.toDouble(),
                       ),
                     ],
@@ -86,12 +86,12 @@ class AliasScreenPieChart extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PieChartIndicator(
-                  color: kFirstPieChartColor,
+                  color: AppColors.firstPieChartColor,
                   label: 'emails forwarded',
                   count: emailsForwarded,
                 ),
                 PieChartIndicator(
-                  color: kSecondPieChartColor,
+                  color: AppColors.secondPieChartColor,
                   label: 'emails blocked',
                   count: emailsBlocked,
                 ),
@@ -101,12 +101,12 @@ class AliasScreenPieChart extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PieChartIndicator(
-                  color: kFourthPieChartColor,
+                  color: AppColors.fourthPieChartColor,
                   label: 'emails replied',
                   count: emailsReplied,
                 ),
                 PieChartIndicator(
-                  color: kThirdPieChartColor,
+                  color: AppColors.thirdPieChartColor,
                   label: 'emails sent',
                   count: emailsSent,
                 ),

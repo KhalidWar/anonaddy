@@ -1,11 +1,10 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
+import 'package:anonaddy/state_management/alias_state/default_recipient/default_recipient_state.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../alias_screen_state.dart';
-import 'default_recipient_state.dart';
 
 final defaultRecipientStateNotifier = StateNotifierProvider.autoDispose<
     DefaultRecipientNotifier, DefaultRecipientState>((ref) {

@@ -1,8 +1,8 @@
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'failed_deliveries_widget.dart';
 
 class AlertCenterScreen extends StatefulWidget {
   const AlertCenterScreen({Key? key}) : super(key: key);
@@ -19,9 +19,9 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Alert Center')),
+      appBar: AppBar(title: const Text('Alert Center')),
       body: ListView(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,9 +33,9 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
               ),
               Container(
                 color: Colors.white,
-                margin: EdgeInsets.all(20),
-                child: LottieWidget(
-                  lottie: 'assets/lottie/coming_soon.json',
+                margin: const EdgeInsets.all(20),
+                child: const LottieWidget(
+                  lottie: LottieImages.comingSoon,
                   repeat: true,
                 ),
               ),
@@ -47,11 +47,11 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
             children: [
               buildHeadline('Failed deliveries'),
               Text(
-                kFailedDeliveriesNote,
+                AppStrings.failedDeliveriesNote,
                 style: Theme.of(context).textTheme.caption,
               ),
-              SizedBox(height: 10),
-              FailedDeliveriesWidget(),
+              const SizedBox(height: 10),
+              const FailedDeliveriesWidget(),
             ],
           ),
         ],
@@ -67,7 +67,7 @@ class _AlertCenterScreenState extends State<AlertCenterScreen> {
           label,
           style: Theme.of(context).textTheme.headline6,
         ),
-        Divider(),
+        const Divider(),
       ],
     );
   }

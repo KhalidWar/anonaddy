@@ -1,7 +1,7 @@
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
@@ -16,19 +16,20 @@ class CreateAliasFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (context, watch, _) {
-        final showFab = watch(fabVisibilityStateNotifier);
+      builder: (context, ref, _) {
+        final showFab = ref.watch(fabVisibilityStateNotifier);
 
         return AnimatedFab(
           showFab: showFab,
           child: FloatingActionButton(
+            key: const Key('homeScreenFAB'),
             child: const Icon(Icons.add),
             onPressed: () {
-              final accountState = context.read(accountStateNotifier);
+              final accountState = ref.read(accountStateNotifier);
 
               switch (accountState.status) {
                 case AccountStatus.loading:
-                  NicheMethod.showToast(kLoadingText);
+                  NicheMethod.showToast(AppStrings.loadingText);
                   break;
 
                 case AccountStatus.loaded:
@@ -36,7 +37,7 @@ class CreateAliasFAB extends StatelessWidget {
                     context: context,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(kBottomSheetBorderRadius),
+                        top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
                       ),
                     ),
                     builder: (context) => const CreateAlias(),
@@ -44,7 +45,7 @@ class CreateAliasFAB extends StatelessWidget {
                   break;
 
                 case AccountStatus.failed:
-                  NicheMethod.showToast(kLoadAccountDataFailed);
+                  NicheMethod.showToast(AppStrings.loadAccountDataFailed);
                   break;
               }
             },

@@ -1,9 +1,9 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
@@ -11,18 +11,19 @@ import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.da
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UsernameDefaultRecipientScreen extends StatefulWidget {
-  const UsernameDefaultRecipientScreen(this.username);
-
+class UsernameDefaultRecipientScreen extends ConsumerStatefulWidget {
+  const UsernameDefaultRecipientScreen({
+    Key? key,
+    required this.username,
+  }) : super(key: key);
   final Username username;
 
   @override
-  _AliasDefaultRecipientScreenState createState() =>
-      _AliasDefaultRecipientScreenState();
+  ConsumerState createState() => _UsernameDefaultRecipientState();
 }
 
-class _AliasDefaultRecipientScreenState
-    extends State<UsernameDefaultRecipientScreen> {
+class _UsernameDefaultRecipientState
+    extends ConsumerState<UsernameDefaultRecipientScreen> {
   final _verifiedRecipients = <Recipient>[];
   Recipient? selectedRecipient;
 
@@ -53,7 +54,7 @@ class _AliasDefaultRecipientScreenState
   }
 
   void _setVerifiedRecipients() {
-    final recipientTabState = context.read(recipientTabStateNotifier);
+    final recipientTabState = ref.read(recipientTabStateNotifier);
     if (recipientTabState.status == RecipientTabStatus.loaded) {
       final allRecipients = recipientTabState.recipients!;
       for (Recipient recipient in allRecipients) {
@@ -118,14 +119,16 @@ class _AliasDefaultRecipientScreenState
               children: [
                 Column(
                   children: [
-                    BottomSheetHeader(headerLabel: 'Update Default Recipient'),
+                    const BottomSheetHeader(
+                        headerLabel: 'Update Default Recipient'),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Text(kUpdateUsernameDefaultRecipient),
+                          const Text(
+                              AnonAddyString.updateUsernameDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
-                          Divider(height: 0),
+                          const Divider(height: 0),
                         ],
                       ),
                     ),
@@ -142,13 +145,13 @@ class _AliasDefaultRecipientScreenState
                 else
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _verifiedRecipients.length,
                     itemBuilder: (context, index) {
                       final verifiedRecipient = _verifiedRecipients[index];
                       return ListTile(
                         selected: _isDefaultRecipient(verifiedRecipient),
-                        selectedTileColor: kAccentColor,
+                        selectedTileColor: AppColors.accentColor,
                         horizontalTitleGap: 0,
                         title: Text(
                           verifiedRecipient.email,
@@ -167,13 +170,13 @@ class _AliasDefaultRecipientScreenState
                     },
                   ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Divider(height: 0),
+                      const Divider(height: 0),
                       SizedBox(height: size.height * 0.01),
-                      Text(kUpdateAliasRecipientNote),
+                      const Text(AppStrings.updateAliasRecipientNote),
                     ],
                   ),
                 ),
@@ -188,15 +191,16 @@ class _AliasDefaultRecipientScreenState
                 style: ElevatedButton.styleFrom(),
                 child: Consumer(
                   builder: (_, watch, __) {
-                    final isLoading = watch(usernamesScreenStateNotifier)
+                    final isLoading = ref
+                        .watch(usernamesScreenStateNotifier)
                         .updateRecipientLoading!;
                     return isLoading
-                        ? PlatformLoadingIndicator()
-                        : Text('Update Default Recipients');
+                        ? const PlatformLoadingIndicator()
+                        : const Text('Update Default Recipients');
                   },
                 ),
                 onPressed: () async {
-                  await context
+                  await ref
                       .read(usernamesScreenStateNotifier.notifier)
                       .updateDefaultRecipient(
                         widget.username,

@@ -19,4 +19,9 @@ class DomainOptions {
       _$DomainOptionsFromJson(json);
 
   Map<String, dynamic> toJson() => _$DomainOptionsToJson(this);
+
+  @override
+  String toString() {
+    return 'DomainOptions{domains: $domains, defaultAliasDomain: $defaultAliasDomain, defaultAliasFormat: $defaultAliasFormat}';
+  }
 }

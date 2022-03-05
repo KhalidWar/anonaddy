@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class ErrorScreen extends StatelessWidget {
@@ -9,7 +9,7 @@ class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Text(error),
       ),

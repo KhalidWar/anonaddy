@@ -1,5 +1,6 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -7,18 +8,18 @@ import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LockScreen extends StatefulWidget {
+class LockScreen extends ConsumerStatefulWidget {
   const LockScreen({Key? key}) : super(key: key);
 
   @override
-  State<LockScreen> createState() => _LockScreenState();
+  ConsumerState createState() => _LockScreenState();
 }
 
-class _LockScreenState extends State<LockScreen> {
+class _LockScreenState extends ConsumerState<LockScreen> {
   @override
   void initState() {
     super.initState();
-    context.read(authStateNotifier.notifier).authenticate();
+    ref.read(authStateNotifier.notifier).authenticate();
   }
 
   @override
@@ -26,15 +27,15 @@ class _LockScreenState extends State<LockScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: AppColors.primaryColor,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(
+            const Expanded(
               child: LottieWidget(
-                lottie: 'assets/lottie/biometric.json',
+                lottie: LottieImages.biometricAnimation,
                 repeat: true,
               ),
             ),
@@ -51,7 +52,7 @@ class _LockScreenState extends State<LockScreen> {
   Widget unlockButton(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(),
-      child: Container(
+      child: SizedBox(
         height: 40,
         child: Center(
           child: Text(
@@ -60,14 +61,14 @@ class _LockScreenState extends State<LockScreen> {
           ),
         ),
       ),
-      onPressed: () => context.read(authStateNotifier.notifier).authenticate(),
+      onPressed: () => ref.read(authStateNotifier.notifier).authenticate(),
     );
   }
 
   Widget logoutButton(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(primary: Colors.red),
-      child: Container(
+      child: SizedBox(
         height: 40,
         child: Center(
           child: Text(
@@ -82,9 +83,9 @@ class _LockScreenState extends State<LockScreen> {
           context: context,
           child: PlatformAlertDialog(
             title: 'Logout',
-            content: kLogOutAlertDialog,
+            content: AppStrings.logOutAlertDialog,
             method: () async {
-              await context.read(authStateNotifier.notifier).logout(context);
+              await ref.read(authStateNotifier.notifier).logout(context);
             },
           ),
         );

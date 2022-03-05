@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AliasShimmerLoading extends StatelessWidget {
-  const AliasShimmerLoading();
+  const AliasShimmerLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,14 @@ class AliasShimmerLoading extends StatelessWidget {
       highlightColor: Colors.grey[100]!,
       enabled: true,
       child: ListView.builder(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         itemCount: 12,
         itemBuilder: (_, __) {
           return ListTile(
             dense: true,
             horizontalTitleGap: 0,
             contentPadding:
-                EdgeInsets.only(left: 6, right: 18, top: 0, bottom: 0),
+                const EdgeInsets.only(left: 6, right: 18, top: 0, bottom: 0),
             leading: Container(
               width: 30.0,
               height: 30.0,
@@ -60,7 +60,7 @@ class AliasShimmerLoading extends StatelessWidget {
             trailing: Container(
               width: 20.0,
               height: 25.0,
-              margin: EdgeInsets.only(right: 10),
+              margin: const EdgeInsets.only(right: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),

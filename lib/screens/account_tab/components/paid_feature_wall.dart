@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/toast_messages.dart';
+import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:flutter/material.dart';
 
 class PaidFeatureWall extends StatelessWidget {
@@ -8,7 +8,7 @@ class PaidFeatureWall extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        kOnlyAvailableToPaid,
+        ToastMessage.onlyAvailableToPaid,
         style: Theme.of(context).textTheme.bodyText1,
       ),
     );

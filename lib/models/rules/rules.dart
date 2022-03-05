@@ -42,7 +42,8 @@ class Rules {
 
   Map<String, dynamic> toJson() => _$RulesToJson(this);
 
+  @override
   String toString() {
-    return toJson().toString();
+    return 'Rules{id: $id, userId: $userId, name: $name, order: $order, active: $active, operator: $operator, forwards: $forwards, replies: $replies, sends: $sends, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }

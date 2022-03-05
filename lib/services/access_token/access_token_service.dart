@@ -1,20 +1,20 @@
+import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 
 class AccessTokenService {
-  AccessTokenService(this.secureStorage);
+  AccessTokenService({
+    required this.secureStorage,
+    required this.httpClient,
+  });
   final FlutterSecureStorage secureStorage;
-
-  static const _accessTokenKey = 'accessToken';
-  static const _instanceURLKey = 'instanceURLKey';
-  String _accessTokenValue = '';
-  String _instanceURL = '';
+  final IOClient httpClient;
 
   Future<bool> validateAccessToken(String url, String token) async {
     try {
-      final response = await http.get(
+      final response = await httpClient.get(
         Uri.https(url, '$kUnEncodedBaseURL/$kAccountDetailsURL'),
         headers: {
           "Content-Type": "application/json",
@@ -29,32 +29,26 @@ class AccessTokenService {
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
   Future<void> saveLoginCredentials(String url, String token) async {
-    await secureStorage.write(key: _accessTokenKey, value: token);
-    await secureStorage.write(key: _instanceURLKey, value: url);
+    await secureStorage.write(
+        key: SecureStorageKeys.accessTokenKey, value: token);
+    await secureStorage.write(
+        key: SecureStorageKeys.instanceURLKey, value: url);
   }
 
-  Future<String> getAccessToken() async {
-    if (_accessTokenValue.isEmpty) {
-      _accessTokenValue = await secureStorage.read(key: _accessTokenKey) ?? '';
-      return _accessTokenValue;
-    } else {
-      return _accessTokenValue;
-    }
+  Future<String?> getAccessToken(
+      {String key = SecureStorageKeys.accessTokenKey}) async {
+    final accessToken = await secureStorage.read(key: key);
+    return accessToken;
   }
 
   Future<String> getInstanceURL() async {
-    final savedURL = await secureStorage.read(key: _instanceURLKey);
-    if (savedURL == null) _instanceURL = kAuthorityURL;
-    if (_instanceURL.isEmpty) {
-      _instanceURL = await secureStorage.read(key: _instanceURLKey) ?? '';
-      return _instanceURL;
-    } else {
-      return _instanceURL;
-    }
+    final savedURL =
+        await secureStorage.read(key: SecureStorageKeys.instanceURLKey);
+    return savedURL ?? '';
   }
 }

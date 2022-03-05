@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:http/http.dart' as http;
-
-import '../access_token/access_token_service.dart';
 
 class AliasService {
   const AliasService(this.accessTokenService);
@@ -29,17 +29,17 @@ class AliasService {
       );
 
       if (response.statusCode == 200) {
-        print('getAllAliasesData ${response.statusCode}');
+        log('getAllAliasesData ${response.statusCode}');
         final decodedData = jsonDecode(response.body)['data'];
         return (decodedData as List).map((alias) {
           return Alias.fromJson(alias);
         }).toList();
       } else {
-        print('getAllAliasesData ${response.statusCode}');
+        log('getAllAliasesData ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -60,15 +60,15 @@ class AliasService {
       );
 
       if (response.statusCode == 200) {
-        print('getSpecificAlias ${response.statusCode}');
+        log('getSpecificAlias ${response.statusCode}');
         final alias = jsonDecode(response.body)['data'];
         return Alias.fromJson(alias);
       } else {
-        print('getSpecificAlias ${response.statusCode}');
+        log('getSpecificAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -100,14 +100,14 @@ class AliasService {
       );
 
       if (response.statusCode == 201) {
-        print("createNewAlias ${response.statusCode}");
+        log("createNewAlias ${response.statusCode}");
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print("createNewAlias ${response.statusCode}");
+        log("createNewAlias ${response.statusCode}");
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -124,18 +124,18 @@ class AliasService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: json.encode({"id": "$aliasID"}),
+        body: json.encode({"id": aliasID}),
       );
 
       if (response.statusCode == 200) {
-        print('Network activateAlias ${response.statusCode}');
+        log('Network activateAlias ${response.statusCode}');
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print('Network activateAlias ${response.statusCode}');
+        log('Network activateAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -155,14 +155,14 @@ class AliasService {
       );
 
       if (response.statusCode == 204) {
-        print('Network deactivateAlias ${response.statusCode}');
+        log('Network deactivateAlias ${response.statusCode}');
         return 204;
       } else {
-        print('Network deactivateAlias ${response.statusCode}');
+        log('Network deactivateAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -179,18 +179,18 @@ class AliasService {
           "Accept": "application/json",
           "Authorization": "Bearer $accessToken",
         },
-        body: jsonEncode({"description": "$newDesc"}),
+        body: jsonEncode({"description": newDesc}),
       );
 
       if (response.statusCode == 200) {
-        print('Network editDescription ${response.statusCode}');
+        log('Network editDescription ${response.statusCode}');
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print('Network editDescription ${response.statusCode}');
+        log('Network editDescription ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -210,14 +210,14 @@ class AliasService {
       );
 
       if (response.statusCode == 204) {
-        print('Network deleteAlias ${response.statusCode}');
+        log('Network deleteAlias ${response.statusCode}');
         return 204;
       } else {
-        print('Network deleteAlias ${response.statusCode}');
+        log('Network deleteAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -238,14 +238,14 @@ class AliasService {
       );
 
       if (response.statusCode == 200) {
-        print('Network restoreAlias ${response.statusCode}');
+        log('Network restoreAlias ${response.statusCode}');
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print('Network restoreAlias ${response.statusCode}');
+        log('Network restoreAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -270,14 +270,14 @@ class AliasService {
       );
 
       if (response.statusCode == 200) {
-        print('editAliasRecipient ${response.statusCode}');
+        log('editAliasRecipient ${response.statusCode}');
         return Alias.fromJson(jsonDecode(response.body)['data']);
       } else {
-        print('editAliasRecipient ${response.statusCode}');
+        log('editAliasRecipient ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -298,14 +298,14 @@ class AliasService {
       );
 
       if (response.statusCode == 204) {
-        print('forgetAlias ${response.statusCode}');
+        log('forgetAlias ${response.statusCode}');
         return 204;
       } else {
-        print('forgetAlias ${response.statusCode}');
+        log('forgetAlias ${response.statusCode}');
         throw ApiErrorMessage.translateStatusCode(response.statusCode);
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 }

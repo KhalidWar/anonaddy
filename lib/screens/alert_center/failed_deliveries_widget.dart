@@ -1,7 +1,9 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
@@ -9,20 +11,21 @@ import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../global_providers.dart';
-
-class FailedDeliveriesWidget extends StatefulWidget {
-  const FailedDeliveriesWidget({Key? key}) : super(key: key);
+class FailedDeliveriesWidget extends ConsumerStatefulWidget {
+  const FailedDeliveriesWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  State<FailedDeliveriesWidget> createState() => _FailedDeliveriesWidgetState();
+  ConsumerState createState() => _FailedDeliveriesWidgetState();
 }
 
-class _FailedDeliveriesWidgetState extends State<FailedDeliveriesWidget> {
+class _FailedDeliveriesWidgetState
+    extends ConsumerState<FailedDeliveriesWidget> {
   List<FailedDeliveries> failedDeliveries = [];
 
   Future<void> deleteFailedDelivery(String failedDeliveryId) async {
-    final result = await context
+    final result = await ref
         .read(failedDeliveriesService)
         .deleteFailedDelivery(failedDeliveryId);
     if (result) {
@@ -38,68 +41,64 @@ class _FailedDeliveriesWidgetState extends State<FailedDeliveriesWidget> {
     /// Insures Flutter has finished rendering frame
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       /// Fetches latest account data
-      context.read(accountStateNotifier.notifier).fetchAccount();
+      ref.read(accountStateNotifier.notifier).fetchAccount();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(
-      builder: (context, watch, child) {
-        final accountState = watch(accountStateNotifier);
-        switch (accountState.status) {
-          case AccountStatus.loading:
-            return loadingWidget(context);
+    final accountState = ref.watch(accountStateNotifier);
+    switch (accountState.status) {
+      case AccountStatus.loading:
+        return loadingWidget(context);
 
-          case AccountStatus.loaded:
-            final subscription = accountState.account!.subscription;
+      case AccountStatus.loaded:
+        final subscription = accountState.account!.subscription;
 
-            if (subscription == kFreeSubscription) {
-              return PaidFeatureWall();
-            }
-
-            final failedDeliveriesAsync = watch(failedDeliveriesProvider);
-            return failedDeliveriesAsync.when(
-              loading: () => loadingWidget(context),
-              data: (data) {
-                failedDeliveries = data.failedDeliveries;
-
-                if (failedDeliveries.isEmpty) {
-                  return Text('No failed deliveries found');
-                } else {
-                  return failedDeliveriesList(data);
-                }
-              },
-              error: (error, stackTrace) {
-                return LottieWidget(
-                  lottie: 'assets/lottie/errorCone.json',
-                  label: error.toString(),
-                );
-              },
-            );
-
-          case AccountStatus.failed:
-            return LottieWidget(
-              lottie: 'assets/lottie/errorCone.json',
-              lottieHeight: MediaQuery.of(context).size.height * 0.2,
-              label: kLoadAccountDataFailed,
-            );
+        if (subscription == AnonAddyString.subscriptionFree) {
+          return const PaidFeatureWall();
         }
-      },
-    );
+
+        final failedDeliveriesAsync = ref.watch(failedDeliveriesProvider);
+        return failedDeliveriesAsync.when(
+          loading: () => loadingWidget(context),
+          data: (data) {
+            failedDeliveries = data.failedDeliveries;
+
+            if (failedDeliveries.isEmpty) {
+              return const Text('No failed deliveries found');
+            } else {
+              return failedDeliveriesList(data);
+            }
+          },
+          error: (error, stackTrace) {
+            return LottieWidget(
+              lottie: LottieImages.errorCone,
+              label: error.toString(),
+            );
+          },
+        );
+
+      case AccountStatus.failed:
+        return LottieWidget(
+          lottie: LottieImages.errorCone,
+          lottieHeight: MediaQuery.of(context).size.height * 0.2,
+          label: AppStrings.loadAccountDataFailed,
+        );
+    }
   }
 
   Widget failedDeliveriesList(FailedDeliveriesModel data) {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: failedDeliveries.length,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final failedDeliveries = data.failedDeliveries[index];
         return ExpansionTile(
           expandedAlignment: Alignment.centerLeft,
-          tilePadding: EdgeInsets.all(0),
-          childrenPadding: EdgeInsets.symmetric(horizontal: 5),
+          tilePadding: const EdgeInsets.all(0),
+          childrenPadding: const EdgeInsets.symmetric(horizontal: 5),
           title: Text(
             failedDeliveries.aliasEmail,
             style: Theme.of(context).textTheme.bodyText1,
@@ -111,28 +110,28 @@ class _FailedDeliveriesWidgetState extends State<FailedDeliveriesWidget> {
           children: [
             ListTile(
               dense: true,
-              title: Text('Alias'),
+              title: const Text('Alias'),
               subtitle: Text(failedDeliveries.aliasEmail),
             ),
             ListTile(
               dense: true,
-              title: Text('Recipient'),
+              title: const Text('Recipient'),
               subtitle:
                   Text(failedDeliveries.recipientEmail ?? 'Not available'),
             ),
             ListTile(
               dense: true,
-              title: Text('Type'),
+              title: const Text('Type'),
               subtitle: Text(failedDeliveries.bounceType),
             ),
             ListTile(
               dense: true,
-              title: Text('Code'),
+              title: const Text('Code'),
               subtitle: Text(failedDeliveries.code),
             ),
             ListTile(
               dense: true,
-              title: Text('Remote MTA'),
+              title: const Text('Remote MTA'),
               subtitle: Text(
                 failedDeliveries.remoteMta.isEmpty
                     ? 'Not available'
@@ -141,12 +140,12 @@ class _FailedDeliveriesWidgetState extends State<FailedDeliveriesWidget> {
             ),
             ListTile(
               dense: true,
-              title: Text('Created'),
+              title: const Text('Created'),
               subtitle: Text(failedDeliveries.createdAt.toString()),
             ),
-            Divider(height: 0),
+            const Divider(height: 0),
             TextButton(
-              child: Text('Delete failed delivery'),
+              child: const Text('Delete failed delivery'),
               onPressed: () => deleteFailedDelivery(failedDeliveries.id),
             ),
           ],
@@ -158,8 +157,8 @@ class _FailedDeliveriesWidgetState extends State<FailedDeliveriesWidget> {
   Widget loadingWidget(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      padding: EdgeInsets.all(20),
-      child: PlatformLoadingIndicator(),
+      padding: const EdgeInsets.all(20),
+      child: const PlatformLoadingIndicator(),
     );
   }
 }

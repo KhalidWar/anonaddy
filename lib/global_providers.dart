@@ -17,11 +17,12 @@ import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/io_client.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// Class Providers
-final flutterSecureStorage = Provider((ref) => FlutterSecureStorage());
+final flutterSecureStorage = Provider((ref) => const FlutterSecureStorage());
 
 final biometricAuthService =
     Provider((ref) => BiometricAuthService(LocalAuthentication()));
@@ -33,7 +34,10 @@ final offlineDataProvider = Provider<OfflineData>((ref) {
 
 final accessTokenService = Provider<AccessTokenService>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
-  return AccessTokenService(secureStorage);
+  return AccessTokenService(
+    secureStorage: secureStorage,
+    httpClient: IOClient(),
+  );
 });
 
 final changelogService = Provider<ChangelogService>((ref) {

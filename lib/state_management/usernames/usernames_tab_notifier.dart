@@ -20,7 +20,7 @@ class UsernamesNotifier extends StateNotifier<UsernamesState> {
   UsernamesNotifier({
     required this.usernameService,
     required this.offlineData,
-  }) : super(UsernamesState(status: UsernamesStatus.loading)) {
+  }) : super(const UsernamesState(status: UsernamesStatus.loading)) {
     fetchUsernames();
   }
 
@@ -50,7 +50,7 @@ class UsernamesNotifier extends StateNotifier<UsernamesState> {
 
   Future _retryOnError() async {
     if (state.status == UsernamesStatus.failed) {
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       await fetchUsernames();
     }
   }

@@ -1,4 +1,7 @@
+import 'package:anonaddy/screens/create_alias/components/recipients_note.dart';
+import 'package:anonaddy/screens/create_alias/components/recipients_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -8,23 +11,20 @@ import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'components/recipients_note.dart';
-import 'components/recipients_tile.dart';
-
-class AliasRecipientSelection extends StatefulWidget {
-  const AliasRecipientSelection();
+class AliasRecipientSelection extends ConsumerStatefulWidget {
+  const AliasRecipientSelection({Key? key}) : super(key: key);
 
   @override
-  State<AliasRecipientSelection> createState() =>
-      _AliasRecipientSelectionState();
+  ConsumerState createState() => _AliasRecipientSelectionState();
 }
 
-class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
+class _AliasRecipientSelectionState
+    extends ConsumerState<AliasRecipientSelection> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read(recipientTabStateNotifier.notifier).fetchRecipients();
+      ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
     });
   }
 
@@ -39,32 +39,33 @@ class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
       maxChildSize: 0.7,
       builder: (context, controller) {
         return Consumer(
-          builder: (context, watch, _) {
-            final recipientState = watch(recipientTabStateNotifier);
+          builder: (context, ref, _) {
+            final recipientState = ref.watch(recipientTabStateNotifier);
 
             switch (recipientState.status) {
               case RecipientTabStatus.loading:
-                return Center(child: PlatformLoadingIndicator());
+                return const Center(child: PlatformLoadingIndicator());
 
               case RecipientTabStatus.loaded:
                 return Consumer(
-                  builder: (context, watch, _) {
-                    final createAliasState = watch(createAliasStateNotifier);
+                  builder: (context, ref, _) {
+                    final createAliasState =
+                        ref.watch(createAliasStateNotifier);
                     final verifiedRecipients =
                         createAliasState.verifiedRecipients!;
 
                     final createAliasNotifier =
-                        context.read(createAliasStateNotifier.notifier);
+                        ref.read(createAliasStateNotifier.notifier);
 
                     return Column(
                       children: [
-                        BottomSheetHeader(
+                        const BottomSheetHeader(
                             headerLabel: 'Select Default Recipients'),
                         Expanded(
                           child: ListView(
                             shrinkWrap: true,
                             controller: controller,
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             children: [
                               if (verifiedRecipients.isEmpty)
                                 Center(
@@ -77,7 +78,7 @@ class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
                               else
                                 ListView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: verifiedRecipients.length,
                                   itemBuilder: (context, index) {
                                     final verifiedRecipient =
@@ -108,7 +109,7 @@ class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
                                     : 'Cancel',
                               ),
                               onPressed: () {
-                                context
+                                ref
                                     .read(createAliasStateNotifier.notifier)
                                     .clearSelectedRecipients();
                                 Navigator.pop(context);
@@ -116,9 +117,9 @@ class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
                             ),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(),
-                              child: Text('Done'),
+                              child: const Text('Done'),
                               onPressed: () {
-                                context
+                                ref
                                     .read(createAliasStateNotifier.notifier)
                                     .setSelectedRecipients();
                                 Navigator.pop(context);
@@ -138,7 +139,7 @@ class _AliasRecipientSelectionState extends State<AliasRecipientSelection> {
                 final error = recipientState.errorMessage;
                 return LottieWidget(
                   showLoading: true,
-                  lottie: 'assets/lottie/errorCone.json',
+                  lottie: LottieImages.errorCone,
                   lottieHeight: size.height * 0.1,
                   label: error.toString(),
                 );

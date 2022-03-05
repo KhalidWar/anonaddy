@@ -1,5 +1,5 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/search/search_result/search_result_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -17,14 +17,14 @@ class SearchTabHeader extends StatelessWidget {
 
     return Column(
       children: [
-        Text(
-          kSearchAliasByEmailOrDesc,
+        const Text(
+          AppStrings.searchAliasByEmailOrDesc,
           style: TextStyle(color: Colors.white),
         ),
         SizedBox(height: size.height * 0.01),
         Consumer(
-          builder: (context, watch, _) {
-            final searchState = watch(searchResultStateNotifier);
+          builder: (context, ref, _) {
+            final searchState = ref.watch(searchResultStateNotifier);
 
             return Column(
               children: [
@@ -35,21 +35,21 @@ class SearchTabHeader extends StatelessWidget {
                     validator: (input) =>
                         FormValidator.validateSearchField(input!),
                     textInputAction: TextInputAction.search,
-                    style: TextStyle(color: Colors.white),
-                    decoration: kTextFormFieldDecoration.copyWith(
-                      hintText: kSearchFieldHint,
-                      hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: OutlineInputBorder(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: AppTheme.kTextFormFieldDecoration.copyWith(
+                      hintText: AppStrings.searchFieldHint,
+                      hintStyle: const TextStyle(color: Colors.white),
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                       suffixIcon:
-                          closeIcon(context, searchState.showCloseIcon!),
+                          closeIcon(context, ref, searchState.showCloseIcon!),
                     ),
                     onChanged: (input) {
-                      context
+                      ref
                           .read(searchResultStateNotifier.notifier)
                           .toggleCloseIcon();
-                      context
+                      ref
                           .read(searchResultStateNotifier.notifier)
                           .searchAliasesLocally();
                     },
@@ -57,7 +57,7 @@ class SearchTabHeader extends StatelessWidget {
                       /// Validate input text characters are NOT less than 3 characters
                       if (_formKey.currentState!.validate()) {
                         /// Triggers Full Search
-                        context
+                        ref
                             .read(searchResultStateNotifier.notifier)
                             .searchAliases();
                       }
@@ -67,14 +67,14 @@ class SearchTabHeader extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Include deleted aliases',
                       style: TextStyle(color: Colors.white),
                     ),
                     PlatformSwitch(
                       value: searchState.includeDeleted!,
                       onChanged: (toggle) {
-                        context
+                        ref
                             .read(searchResultStateNotifier.notifier)
                             .toggleIncludeDeleted(toggle);
                       },
@@ -89,15 +89,16 @@ class SearchTabHeader extends StatelessWidget {
     );
   }
 
-  Widget? closeIcon(BuildContext context, bool showCloseIcon) {
+  Widget? closeIcon(BuildContext context, WidgetRef ref, bool showCloseIcon) {
     if (showCloseIcon) {
       return IconButton(
-        icon: Icon(Icons.close, color: Colors.white),
+        icon: const Icon(Icons.close, color: Colors.white),
         onPressed: () {
           FocusScope.of(context).requestFocus(FocusNode());
-          context.read(searchResultStateNotifier.notifier).closeSearch();
+          ref.read(searchResultStateNotifier.notifier).closeSearch();
         },
       );
     }
+    return null;
   }
 }

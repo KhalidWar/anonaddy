@@ -1,9 +1,10 @@
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_default_recipient.dart';
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -19,21 +20,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UsernamesScreen extends StatefulWidget {
-  const UsernamesScreen({required this.username});
+class UsernamesScreen extends ConsumerStatefulWidget {
+  const UsernamesScreen({Key? key, required this.username}) : super(key: key);
   final Username username;
 
   static const routeName = 'usernameDetailedScreen';
 
   @override
-  State<UsernamesScreen> createState() => _UsernamesScreenState();
+  ConsumerState createState() => _UsernameScreenState();
 }
 
-class _UsernamesScreenState extends State<UsernamesScreen> {
+class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
   @override
   void initState() {
     super.initState();
-    context
+    ref
         .read(usernamesScreenStateNotifier.notifier)
         .fetchUsername(widget.username);
   }
@@ -43,12 +44,12 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
     return Scaffold(
       appBar: buildAppBar(context),
       body: Consumer(
-        builder: (context, watch, _) {
-          final usernameState = watch(usernamesScreenStateNotifier);
+        builder: (context, ref, _) {
+          final usernameState = ref.watch(usernamesScreenStateNotifier);
 
           switch (usernameState.status) {
             case UsernamesScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case UsernamesScreenStatus.loaded:
               return buildListView(context, usernameState);
@@ -56,7 +57,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
             case UsernamesScreenStatus.failed:
               final error = usernameState.errorMessage!;
               return LottieWidget(
-                lottie: 'assets/lottie/errorCone.json',
+                lottie: LottieImages.errorCone,
                 label: error,
               );
           }
@@ -71,7 +72,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
 
     final username = usernameState.username!;
     final usernameStateProvider =
-        context.read(usernamesScreenStateNotifier.notifier);
+        ref.read(usernamesScreenStateNotifier.notifier);
 
     Future<void> toggleActivity() async {
       username.active
@@ -108,18 +109,20 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: username.description ?? kNoDescription,
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          title: username.description ?? AppStrings.noDescription,
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Username description',
           leadingIconData: Icons.comment_outlined,
-          trailing:
-              IconButton(icon: Icon(Icons.edit_outlined), onPressed: () {}),
+          trailing: IconButton(
+            icon: const Icon(Icons.edit_outlined),
+            onPressed: () {},
+          ),
           trailingIconOnPress: () => updateDescriptionDialog(context, username),
         ),
         AliasDetailListTile(
           title:
               username.active ? 'Username is active' : 'Username is inactive',
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Activity',
           leadingIconData: Icons.toggle_on_outlined,
           trailing:
@@ -128,7 +131,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
         ),
         AliasDetailListTile(
           title: username.catchAll ? 'Enabled' : 'Disabled',
-          titleTextStyle: TextStyle(fontWeight: FontWeight.bold),
+          titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Catch All',
           leadingIconData: Icons.repeat,
           trailing: buildSwitch(
@@ -149,7 +152,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   IconButton(
-                    icon: Icon(Icons.edit_outlined),
+                    icon: const Icon(Icons.edit_outlined),
                     onPressed: () =>
                         buildUpdateDefaultRecipient(context, username),
                   ),
@@ -158,8 +161,8 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
             ),
             if (username.defaultRecipient == null)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('No default recipient found'),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: const Text('No default recipient found'),
               )
             else
               RecipientListTile(
@@ -185,13 +188,13 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
             ),
             if (username.aliases!.isEmpty)
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text('No aliases found'),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: const Text('No aliases found'),
               )
             else
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: username.aliases!.length,
                 itemBuilder: (context, index) {
                   return AliasListTile(
@@ -223,7 +226,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
   Widget buildSwitch(bool switchLoading, switchValue) {
     return Row(
       children: [
-        switchLoading ? PlatformLoadingIndicator(size: 20) : Container(),
+        switchLoading ? const PlatformLoadingIndicator(size: 20) : Container(),
         PlatformSwitch(
           value: switchValue,
           onChanged: (toggle) {},
@@ -233,8 +236,7 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
   }
 
   Future updateDescriptionDialog(BuildContext context, Username username) {
-    final usernameNotifier =
-        context.read(usernamesScreenStateNotifier.notifier);
+    final usernameNotifier = ref.read(usernamesScreenStateNotifier.notifier);
     final formKey = GlobalKey<FormState>();
     String newDescription = '';
 
@@ -253,9 +255,9 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         return UpdateDescriptionWidget(
@@ -273,12 +275,12 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
-        return UsernameDefaultRecipientScreen(username);
+        return UsernameDefaultRecipientScreen(username: username);
       },
     );
   }
@@ -289,9 +291,9 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
         context: context,
         child: PlatformAlertDialog(
           title: 'Delete Username',
-          content: kDeleteUsernameConfirmation,
+          content: AnonAddyString.deleteUsernameConfirmation,
           method: () async {
-            await context
+            await ref
                 .read(usernamesScreenStateNotifier.notifier)
                 .deleteUsername(widget.username);
 
@@ -306,7 +308,10 @@ class _UsernamesScreenState extends State<UsernamesScreen> {
     }
 
     return AppBar(
-      title: Text('Additional Username', style: TextStyle(color: Colors.white)),
+      title: const Text(
+        'Additional Username',
+        style: TextStyle(color: Colors.white),
+      ),
       leading: IconButton(
         icon: Icon(
           PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,

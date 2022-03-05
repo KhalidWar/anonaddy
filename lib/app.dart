@@ -7,18 +7,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'route_generator.dart';
 import 'screens/authorization_screen/authorization_screen.dart';
 import 'services/theme/theme.dart';
-import 'shared_components/constants/ui_strings.dart';
+import 'shared_components/constants/app_strings.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class App extends ConsumerWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context, WidgetRef ref) {
     /// Use [watch] method to access different providers
-    final settingsState = watch(settingsStateNotifier);
+    final settingsState = ref.watch(settingsStateNotifier);
 
     /// Sets StatusBarColor for the whole app
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
 
     const _defaultLocalizations = [
@@ -28,10 +30,10 @@ class App extends ConsumerWidget {
     ];
 
     return MaterialApp(
-      title: kAppBarTitle,
+      title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
-      theme: settingsState.isDarkTheme! ? darkTheme : lightTheme,
-      darkTheme: darkTheme,
+      theme: settingsState.isDarkTheme! ? AppTheme.dark : AppTheme.light,
+      darkTheme: AppTheme.dark,
       onGenerateRoute: RouteGenerator.generateRoute,
       initialRoute: AuthorizationScreen.routeName,
       locale: const Locale('en', 'US'),

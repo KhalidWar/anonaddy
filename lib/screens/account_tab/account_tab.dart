@@ -1,5 +1,11 @@
+import 'package:anonaddy/screens/account_tab/components/account_tab_header.dart';
+import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_tab.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
+import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
@@ -7,18 +13,12 @@ import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'components/account_tab_header.dart';
-import 'domains/domains_tab.dart';
-import 'rules/rules_tab.dart';
-import 'usernames/usernames_tab.dart';
-
-class AccountTab extends StatelessWidget {
-  const AccountTab();
+class AccountTab extends ConsumerWidget {
+  const AccountTab({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       body: DefaultTabController(
@@ -27,29 +27,31 @@ class AccountTab extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                expandedHeight: size.height * 0.34,
+                expandedHeight: size.height * 0.3,
                 elevation: 0,
                 floating: true,
                 pinned: true,
-                backgroundColor: isDark ? Colors.black : Colors.white,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   background: Consumer(
                     builder: (_, watch, __) {
-                      final accountState = watch(accountStateNotifier);
+                      final accountState = ref.watch(accountStateNotifier);
                       switch (accountState.status) {
                         case AccountStatus.loading:
-                          return Center(child: PlatformLoadingIndicator());
+                          return const PlatformLoadingIndicator();
 
                         case AccountStatus.loaded:
                           final account = accountState.account;
-                          return AccountTabHeader(account: account!);
+                          return AccountTabHeader(
+                            account: account!,
+                            isSelfHosted: account.subscription == null,
+                          );
 
                         case AccountStatus.failed:
                           final error = accountState.errorMessage;
                           return LottieWidget(
                             showLoading: true,
-                            lottie: 'assets/lottie/errorCone.json',
+                            lottie: LottieImages.errorCone,
                             lottieHeight: size.height * 0.2,
                             label: error.toString(),
                           );
@@ -57,21 +59,20 @@ class AccountTab extends StatelessWidget {
                     },
                   ),
                 ),
-                bottom: TabBar(
+                bottom: const TabBar(
                   isScrollable: true,
-                  indicatorColor: kAccentColor,
-                  labelColor: isDark ? Colors.white : Colors.black,
+                  indicatorColor: AppColors.accentColor,
                   tabs: [
-                    Tab(child: Text('Recipients')),
-                    Tab(child: Text('Usernames')),
-                    Tab(child: Text('Domains')),
-                    Tab(child: Text('Rules')),
+                    Tab(child: Text(AppStrings.recipients)),
+                    Tab(child: Text(AppStrings.usernames)),
+                    Tab(child: Text(AppStrings.domains)),
+                    Tab(child: Text(AppStrings.rules)),
                   ],
                 ),
               ),
             ];
           },
-          body: TabBarView(
+          body: const TabBarView(
             children: [
               RecipientsTab(),
               UsernamesTab(),

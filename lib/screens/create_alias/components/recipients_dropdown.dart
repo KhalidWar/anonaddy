@@ -10,8 +10,9 @@ class RecipientsDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(
-      builder: (context, watch, _) {
-        final recipients = watch(createAliasStateNotifier).selectedRecipients!;
+      builder: (context, ref, _) {
+        final recipients =
+            ref.watch(createAliasStateNotifier).selectedRecipients!;
 
         return CreateAliasCard(
           header: 'Recipients',
@@ -24,8 +25,8 @@ class RecipientsDropdown extends StatelessWidget {
               : ListView.builder(
                   shrinkWrap: true,
                   itemCount: recipients.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(vertical: 5),
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   itemBuilder: (context, index) {
                     final recipient = recipients[index];
                     return Text(

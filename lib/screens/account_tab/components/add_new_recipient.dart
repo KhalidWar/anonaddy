@@ -1,18 +1,20 @@
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddNewRecipient extends StatefulWidget {
+class AddNewRecipient extends ConsumerStatefulWidget {
+  const AddNewRecipient({Key? key}) : super(key: key);
+
   @override
-  State<AddNewRecipient> createState() => _AddNewRecipientState();
+  ConsumerState createState() => _AddNewRecipientState();
 }
 
-class _AddNewRecipientState extends State<AddNewRecipient> {
+class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
   final _textEditController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -32,12 +34,13 @@ class _AddNewRecipientState extends State<AddNewRecipient> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BottomSheetHeader(headerLabel: 'Add New Recipient'),
+          const BottomSheetHeader(headerLabel: 'Add New Recipient'),
           Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Column(
               children: [
-                Text(kAddRecipientString),
+                const Text(AnonAddyString.addRecipientString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: _formKey,
@@ -47,24 +50,27 @@ class _AddNewRecipientState extends State<AddNewRecipient> {
                     validator: (input) =>
                         FormValidator.validateEmailField(input!),
                     textInputAction: TextInputAction.next,
-                    decoration: kTextFormFieldDecoration.copyWith(
-                        hintText: 'joedoe@example.com'),
+                    decoration: AppTheme.kTextFormFieldDecoration
+                        .copyWith(hintText: 'joedoe@example.com'),
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
                 Consumer(
                   builder: (context, watch, _) {
-                    final recipientState = watch(recipientScreenStateNotifier);
+                    final recipientState =
+                        ref.watch(recipientScreenStateNotifier);
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom().copyWith(
-                        minimumSize: MaterialStateProperty.all(Size(200, 50)),
+                        minimumSize: MaterialStateProperty.all(
+                          const Size(200, 50),
+                        ),
                       ),
                       child: recipientState.isAddRecipientLoading!
-                          ? PlatformLoadingIndicator()
-                          : Text('Add Recipient'),
+                          ? const PlatformLoadingIndicator()
+                          : const Text('Add Recipient'),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          await context
+                          await ref
                               .read(recipientScreenStateNotifier.notifier)
                               .addRecipient(_textEditController.text.trim());
                           Navigator.pop(context);

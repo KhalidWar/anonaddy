@@ -28,24 +28,24 @@ class AliasDetailListTile extends StatelessWidget {
         : InkWell(
             onTap: trailingIconOnPress as void Function()?,
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
               child: Row(
                 children: [
                   Icon(leadingIconData, color: leadingIconColor),
-                  SizedBox(width: 15),
+                  const SizedBox(width: 15),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           NicheMethod.fixDateTime(title),
-                          style: titleTextStyle ?? null,
+                          style: titleTextStyle,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 2),
+                          padding: const EdgeInsets.only(top: 2),
                           child: Text(
                             '$subtitle',
-                            style: TextStyle(color: Colors.grey),
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         ),
                       ],

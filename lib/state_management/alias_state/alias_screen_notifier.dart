@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
-import 'package:anonaddy/shared_components/constants/toast_messages.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/toast_message.dart';
+import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'alias_screen_state.dart';
-import 'alias_tab_notifier.dart';
 
 final aliasScreenStateNotifier =
     StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
@@ -59,7 +58,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       final updatedAlias =
           await aliasService.editAliasDescription(alias.id, newDesc);
-      showToast(kEditDescriptionSuccess);
+      showToast(ToastMessage.editDescriptionSuccess);
       state = state.copyWith(alias: updatedAlias);
     } catch (error) {
       showToast(error.toString());
@@ -96,7 +95,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     state = state.copyWith(deleteAliasLoading: true);
     try {
       await aliasService.deleteAlias(aliasId);
-      showToast(kDeleteAliasSuccess);
+      showToast(ToastMessage.deleteAliasSuccess);
       final oldAlias = state.alias!;
       oldAlias.deletedAt = null;
       aliasTabNotifier.refreshAliases();
@@ -111,7 +110,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     state = state.copyWith(deleteAliasLoading: true);
     try {
       final newAlias = await aliasService.restoreAlias(aliasId);
-      showToast(kRestoreAliasSuccess);
+      showToast(ToastMessage.restoreAliasSuccess);
       aliasTabNotifier.refreshAliases();
       state = state.copyWith(deleteAliasLoading: false, alias: newAlias);
     } catch (error) {
@@ -137,7 +136,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   Future<void> forgetAlias(String aliasID) async {
     try {
       await aliasService.forgetAlias(aliasID);
-      showToast(kForgetAliasSuccess);
+      showToast(ToastMessage.forgetAliasSuccess);
     } catch (error) {
       showToast(error.toString());
     }
@@ -153,9 +152,9 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
     try {
       await NicheMethod.copyOnTap(generatedAddress);
-      showToast(kSendFromAliasSuccess);
+      showToast(ToastMessage.sendFromAliasSuccess);
     } catch (error) {
-      showToast(kSomethingWentWrong);
+      showToast(AppStrings.somethingWentWrong);
     }
   }
 }

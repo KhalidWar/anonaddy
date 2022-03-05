@@ -29,25 +29,27 @@ class RouteGenerator {
 
       /// Authentication Screen
       case AuthorizationScreen.routeName:
-        return PlatformAware.customPageRoute(AuthorizationScreen());
+        return PlatformAware.customPageRoute(const AuthorizationScreen());
 
       /// Home Screen
       case HomeScreen.routeName:
-        return PlatformAware.customPageRoute(HomeScreen());
+        return PlatformAware.customPageRoute(const HomeScreen());
       case AlertCenterScreen.routeName:
-        return PlatformAware.customPageRoute(AlertCenterScreen());
+        return PlatformAware.customPageRoute(const AlertCenterScreen());
 
       /// Settings Screen
       case SettingsScreen.routeName:
-        return PlatformAware.customPageRoute(SettingsScreen());
+        return PlatformAware.customPageRoute(const SettingsScreen());
       case AboutAppScreen.routeName:
-        return PlatformAware.customPageRoute(AboutAppScreen());
+        return PlatformAware.customPageRoute(const AboutAppScreen());
       case CreditsScreen.routeName:
-        return PlatformAware.customPageRoute(CreditsScreen());
+        return PlatformAware.customPageRoute(const CreditsScreen());
 
       /// Alias Tab
       case AliasScreen.routeName:
-        return PlatformAware.customPageRoute(AliasScreen(argument as Alias));
+        return PlatformAware.customPageRoute(
+          AliasScreen(alias: argument as Alias),
+        );
 
       /// Account Tab
       case RecipientsScreen.routeName:
@@ -62,17 +64,17 @@ class RouteGenerator {
 
       /// Login Screen
       case AnonAddyLoginScreen.routeName:
-        return PlatformAware.customPageRoute(AnonAddyLoginScreen());
+        return PlatformAware.customPageRoute(const AnonAddyLoginScreen());
       case SelfHostLoginScreen.routeName:
-        return PlatformAware.customPageRoute(SelfHostLoginScreen());
+        return PlatformAware.customPageRoute(const SelfHostLoginScreen());
 
       /// Logout Screen
       case LogoutScreen.routeName:
-        return PlatformAware.customPageRoute(LogoutScreen());
+        return PlatformAware.customPageRoute(const LogoutScreen());
 
       /// Show ErrorScreen if screen doesn't exist or something goes wrong
       default:
-        return PlatformAware.customPageRoute(NavigationErrorScreen());
+        return PlatformAware.customPageRoute(const NavigationErrorScreen());
     }
   }
 }

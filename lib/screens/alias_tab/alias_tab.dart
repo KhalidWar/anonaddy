@@ -1,4 +1,9 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_animated_list.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_tab_pie_chart.dart';
+import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
@@ -8,16 +13,11 @@ import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'components/alias_animated_list.dart';
-import 'components/alias_shimmer_loading.dart';
-import 'components/alias_tab_pie_chart.dart';
-import 'components/empty_list_alias_tab.dart';
-
-class AliasTab extends StatelessWidget {
-  const AliasTab();
+class AliasTab extends ConsumerWidget {
+  const AliasTab({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -27,21 +27,21 @@ class AliasTab extends StatelessWidget {
         length: 2,
         child: NestedScrollView(
           controller:
-              context.read(fabVisibilityStateNotifier.notifier).aliasController,
-          headerSliverBuilder: (context, _) {
+              ref.read(fabVisibilityStateNotifier.notifier).aliasController,
+          headerSliverBuilder: (_, __) {
             return [
               SliverAppBar(
                 expandedHeight: size.height * 0.25,
                 elevation: 0,
                 floating: true,
                 pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
+                flexibleSpace: const FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
-                  background: const AliasTabPieChart(),
+                  background: AliasTabPieChart(),
                 ),
-                bottom: TabBar(
-                  indicatorColor: kAccentColor,
-                  tabs: const [
+                bottom: const TabBar(
+                  indicatorColor: AppColors.accentColor,
+                  tabs: [
                     Tab(child: Text('Available Aliases')),
                     Tab(child: Text('Deleted Aliases')),
                   ],
@@ -50,15 +50,15 @@ class AliasTab extends StatelessWidget {
             ];
           },
           body: Consumer(
-            builder: (context, watch, _) {
-              final aliasTabState = watch(aliasTabStateNotifier);
+            builder: (_, ref, __) {
+              final aliasTabState = ref.watch(aliasTabStateNotifier);
 
               switch (aliasTabState.status) {
 
                 /// When AliasTab is fetching data (loading)
                 case AliasTabStatus.loading:
-                  return TabBarView(
-                    children: const [
+                  return const TabBarView(
+                    children: [
                       AliasShimmerLoading(),
                       AliasShimmerLoading(),
                     ],
@@ -73,10 +73,10 @@ class AliasTab extends StatelessWidget {
                     children: [
                       /// Available aliases list
                       RefreshIndicator(
-                        color: kAccentColor,
+                        color: AppColors.accentColor,
                         displacement: 20,
                         onRefresh: () async {
-                          await context
+                          await ref
                               .read(aliasTabStateNotifier.notifier)
                               .refreshAliases();
                         },
@@ -98,7 +98,7 @@ class AliasTab extends StatelessWidget {
                       /// Deleted aliases list
                       RefreshIndicator(
                         onRefresh: () async {
-                          await context
+                          await ref
                               .read(aliasTabStateNotifier.notifier)
                               .refreshAliases();
                         },
@@ -124,12 +124,12 @@ class AliasTab extends StatelessWidget {
                   return TabBarView(
                     children: [
                       LottieWidget(
-                        lottie: 'assets/lottie/errorCone.json',
+                        lottie: LottieImages.errorCone,
                         label: error.toString(),
                         lottieHeight: size.height * 0.2,
                       ),
                       LottieWidget(
-                        lottie: 'assets/lottie/errorCone.json',
+                        lottie: LottieImages.errorCone,
                         label: error.toString(),
                         lottieHeight: size.height * 0.2,
                       ),

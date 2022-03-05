@@ -15,7 +15,7 @@ final searchHistoryStateNotifier =
 
 class SearchHistoryNotifier extends StateNotifier<SearchHistoryState> {
   SearchHistoryNotifier({required this.secureStorage})
-      : super(SearchHistoryState(
+      : super(const SearchHistoryState(
           status: SearchHistoryStatus.loading,
           aliases: [],
         )) {

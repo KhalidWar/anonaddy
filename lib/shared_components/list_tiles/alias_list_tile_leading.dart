@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AliasListTileLeading extends StatelessWidget {
-  AliasListTileLeading(
-      {Key? key, required this.isDeleted, required this.isActive})
-      : super(key: key);
+  const AliasListTileLeading({
+    Key? key,
+    required this.isDeleted,
+    required this.isActive,
+  }) : super(key: key);
 
   final bool isDeleted, isActive;
 
-  final activeGradient = [Color(0xff31b237), Colors.white];
-  final deactivatedGradient = [Colors.grey, Colors.white];
-  final deletedGradient = [Colors.red, Colors.white];
+  final activeGradient = const [Color(0xff31b237), Colors.white];
+  final deactivatedGradient = const [Colors.grey, Colors.white];
+  final deletedGradient = const [Colors.red, Colors.white];
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class AliasListTileLeading extends StatelessWidget {
         borderRadius: BorderRadius.circular(40),
         gradient: RadialGradient(
           radius: 0.7,
-          stops: [0.15, 1.0],
+          stops: const [0.15, 1.0],
           colors: isDeleted
               ? deletedGradient
               : isActive

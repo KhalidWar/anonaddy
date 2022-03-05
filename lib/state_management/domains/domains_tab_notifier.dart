@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/state_management/domains/domains_tab_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
 
 final domainsStateNotifier =
     StateNotifierProvider.autoDispose<DomainsTabNotifier, DomainsTabState>(
@@ -22,7 +21,7 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
   DomainsTabNotifier({
     required this.domainsService,
     required this.offlineData,
-  }) : super(DomainsTabState(status: DomainsTabStatus.loading)) {
+  }) : super(const DomainsTabState(status: DomainsTabStatus.loading)) {
     fetchDomains();
   }
 
@@ -52,7 +51,7 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
 
   Future _retryOnError() async {
     if (state.status == DomainsTabStatus.failed) {
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       await fetchDomains();
     }
   }

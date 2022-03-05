@@ -1,10 +1,9 @@
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_description_input_field.dart';
+import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_input_field.dart';
 import 'package:flutter/material.dart';
-
-import 'bottom_sheet_header.dart';
-import 'constants/ui_strings.dart';
-import 'platform_aware_widgets/platform_button.dart';
 
 class UpdateDescriptionWidget extends StatelessWidget {
   const UpdateDescriptionWidget({
@@ -32,17 +31,18 @@ class UpdateDescriptionWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          BottomSheetHeader(headerLabel: kUpdateDescription),
+          const BottomSheetHeader(
+              headerLabel: AppStrings.updateDescriptionTitle),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(kUpdateDescriptionString),
+                const Text(AppStrings.updateDescriptionString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: descriptionFormKey,
-                  child: PlatformDescriptionInputField(
+                  child: PlatformInputField(
                     placeholder: description ?? 'No description',
                     onChanged: inputOnChanged,
                     onFieldSubmitted: (toggle) => updateDescription(),
@@ -55,8 +55,8 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     Expanded(
                       child: PlatformButton(
                         color: Colors.redAccent,
-                        child: Text(
-                          kRemoveDescription,
+                        child: const Text(
+                          AppStrings.removeDescriptionTitle,
                           style: TextStyle(color: Colors.black),
                         ),
                         onPress: removeDescription,
@@ -65,9 +65,9 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     SizedBox(width: size.width * 0.03),
                     Expanded(
                       child: PlatformButton(
-                        color: kAccentColor,
-                        child: Text(
-                          kUpdateDescription,
+                        color: AppColors.accentColor,
+                        child: const Text(
+                          AppStrings.updateDescriptionTitle,
                           style: TextStyle(color: Colors.black),
                         ),
                         onPress: updateDescription,

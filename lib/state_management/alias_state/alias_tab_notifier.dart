@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../global_providers.dart';
-import 'alias_tab_state.dart';
 
 final aliasTabStateNotifier =
     StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {

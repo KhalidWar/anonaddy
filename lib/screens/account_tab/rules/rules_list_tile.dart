@@ -16,7 +16,7 @@ class RulesListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -24,15 +24,15 @@ class RulesListTile extends StatelessWidget {
               isActive: rule.active,
               isDeleted: false,
             ),
-            SizedBox(width: 15),
+            const SizedBox(width: 15),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(rule.name),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   'order ' + rule.order.toString(),
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),

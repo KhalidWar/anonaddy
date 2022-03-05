@@ -1,10 +1,11 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/material_constants.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/constants/ui_strings.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -22,17 +23,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-class RecipientsScreen extends StatefulWidget {
-  const RecipientsScreen({required this.recipient});
+class RecipientsScreen extends ConsumerStatefulWidget {
+  const RecipientsScreen({Key? key, required this.recipient}) : super(key: key);
   final Recipient recipient;
 
   static const routeName = 'recipientDetailedScreen';
 
   @override
-  State<RecipientsScreen> createState() => _RecipientsScreenState();
+  ConsumerState createState() => _RecipientsScreenState();
 }
 
-class _RecipientsScreenState extends State<RecipientsScreen> {
+class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
   int calculateTotal(List<int> list) {
     if (list.isEmpty) {
       return 0;
@@ -45,7 +46,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
   @override
   void initState() {
     super.initState();
-    context
+    ref
         .read(recipientScreenStateNotifier.notifier)
         .fetchRecipient(widget.recipient);
   }
@@ -57,11 +58,11 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
       appBar: buildAppBar(context),
       body: Consumer(
         builder: (context, watch, _) {
-          final recipientScreenState = watch(recipientScreenStateNotifier);
+          final recipientScreenState = ref.watch(recipientScreenStateNotifier);
 
           switch (recipientScreenState.status) {
             case RecipientScreenStatus.loading:
-              return Center(child: PlatformLoadingIndicator());
+              return const Center(child: PlatformLoadingIndicator());
 
             case RecipientScreenStatus.loaded:
               return buildListView(context, recipientScreenState);
@@ -69,7 +70,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
             case RecipientScreenStatus.failed:
               final error = recipientScreenState.errorMessage!;
               return LottieWidget(
-                lottie: 'assets/lottie/errorCone.json',
+                lottie: LottieImages.errorCone,
                 label: error,
               );
           }
@@ -82,8 +83,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
       BuildContext context, RecipientScreenState recipientScreenState) {
     final recipient = recipientScreenState.recipient!;
 
-    final recipientProvider =
-        context.read(recipientScreenStateNotifier.notifier);
+    final recipientProvider = ref.read(recipientScreenStateNotifier.notifier);
     final size = MediaQuery.of(context).size;
 
     final List<int> forwardedList = [];
@@ -111,7 +111,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
         if (recipient.aliases == null || recipient.emailVerifiedAt == null)
           Container(
             alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(vertical: 40),
+            padding: const EdgeInsets.symmetric(vertical: 40),
             child: SvgPicture.asset(
               'assets/images/envelope.svg',
               height: size.height * 0.22,
@@ -133,7 +133,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
           leadingIconData: Icons.email_outlined,
           title: recipient.email,
           subtitle: 'Recipient Email',
-          trailing: IconButton(icon: Icon(Icons.copy), onPressed: () {}),
+          trailing: IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
           trailingIconOnPress: () => NicheMethod.copyOnTap(recipient.email),
         ),
         AliasDetailListTile(
@@ -144,10 +144,11 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
           subtitle: 'GPG Key Fingerprint',
           trailing: recipient.fingerprint == null
               ? IconButton(
-                  icon: Icon(Icons.add_circle_outline_outlined),
+                  icon: const Icon(Icons.add_circle_outline_outlined),
                   onPressed: () {})
               : IconButton(
-                  icon: Icon(Icons.delete_outline_outlined, color: Colors.red),
+                  icon: const Icon(Icons.delete_outline_outlined,
+                      color: Colors.red),
                   onPressed: () {}),
           trailingIconOnPress: recipient.fingerprint == null
               ? () => buildAddPGPKeyDialog(context, recipient)
@@ -157,7 +158,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
           leadingIconData:
               recipient.shouldEncrypt ? Icons.lock : Icons.lock_open,
           leadingIconColor: recipient.shouldEncrypt ? Colors.green : null,
-          title: '${recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted'}',
+          title: recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted',
           subtitle: 'Encryption',
           trailing: recipient.fingerprint == null
               ? Container()
@@ -170,8 +171,10 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
                 leadingIconData: Icons.verified_outlined,
                 title: recipient.emailVerifiedAt == null ? 'No' : 'Yes',
                 subtitle: 'Is Email Verified?',
-                trailing:
-                    TextButton(child: Text('Verify now!'), onPressed: () {}),
+                trailing: TextButton(
+                  child: const Text('Verify now!'),
+                  onPressed: () {},
+                ),
                 trailingIconOnPress: () =>
                     recipientProvider.verifyEmail(recipient),
               )
@@ -195,11 +198,11 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
                 Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: Text('No aliases found'))
+                    child: const Text('No aliases found'))
               else
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: recipient.aliases!.length,
                   itemBuilder: (context, index) {
                     return AliasListTile(
@@ -232,7 +235,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     return Row(
       children: [
         recipientScreenState.isEncryptionToggleLoading!
-            ? PlatformLoadingIndicator(size: 20)
+            ? const PlatformLoadingIndicator(size: 20)
             : Container(),
         PlatformSwitch(
           value: recipientScreenState.recipient!.shouldEncrypt,
@@ -247,14 +250,14 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
       height: size.height * 0.05,
       width: double.infinity,
       color: Colors.amber,
-      padding: EdgeInsets.symmetric(horizontal: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Row(
         children: [
-          Icon(Icons.warning_amber_outlined, color: Colors.black),
-          SizedBox(width: 16),
-          Expanded(
+          const Icon(Icons.warning_amber_outlined, color: Colors.black),
+          const SizedBox(width: 16),
+          const Expanded(
             child: Text(
-              kUnverifiedRecipientNote,
+              AppStrings.unverifiedRecipientNote,
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -269,9 +272,9 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
       context: context,
       child: PlatformAlertDialog(
         title: 'Remove Public Key',
-        content: kRemoveRecipientPublicKeyConfirmation,
+        content: AnonAddyString.removeRecipientPublicKeyConfirmation,
         method: () async {
-          await context
+          await ref
               .read(recipientScreenStateNotifier.notifier)
               .removePublicGPGKey(recipient);
 
@@ -289,7 +292,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
 
     Future<void> addPublicKey() async {
       if (formKey.currentState!.validate()) {
-        await context
+        await ref
             .read(recipientScreenStateNotifier.notifier)
             .addPublicGPGKey(recipient, keyData);
         Navigator.pop(context);
@@ -299,9 +302,9 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(kBottomSheetBorderRadius)),
+            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
       ),
       builder: (context) {
         final size = MediaQuery.of(context).size;
@@ -312,12 +315,12 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              BottomSheetHeader(headerLabel: 'Add GPG Key'),
+              const BottomSheetHeader(headerLabel: 'Add GPG Key'),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Column(
                   children: [
-                    Text(kAddPublicKeyNote),
+                    const Text(AppStrings.addPublicKeyNote),
                     SizedBox(height: size.height * 0.015),
                     Form(
                       key: formKey,
@@ -330,16 +333,16 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
                         textInputAction: TextInputAction.done,
                         onChanged: (input) => keyData = input,
                         onFieldSubmitted: (submit) => addPublicKey(),
-                        decoration: kTextFormFieldDecoration.copyWith(
-                          contentPadding: EdgeInsets.all(5),
-                          hintText: kPublicKeyFieldHint,
+                        decoration: AppTheme.kTextFormFieldDecoration.copyWith(
+                          contentPadding: const EdgeInsets.all(5),
+                          hintText: AppStrings.publicKeyFieldHint,
                         ),
                       ),
                     ),
                     SizedBox(height: size.height * 0.015),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(),
-                      child: Text('Add Key'),
+                      child: const Text('Add Key'),
                       onPressed: () => addPublicKey(),
                     ),
                     SizedBox(height: size.height * 0.015),
@@ -359,9 +362,9 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
         context: context,
         child: PlatformAlertDialog(
           title: 'Delete Recipient',
-          content: kDeleteRecipientConfirmation,
+          content: AnonAddyString.deleteRecipientConfirmation,
           method: () async {
-            await context
+            await ref
                 .read(recipientScreenStateNotifier.notifier)
                 .removeRecipient(widget.recipient);
 
@@ -376,7 +379,7 @@ class _RecipientsScreenState extends State<RecipientsScreen> {
     }
 
     return AppBar(
-      title: Text('Recipient', style: TextStyle(color: Colors.white)),
+      title: const Text('Recipient', style: TextStyle(color: Colors.white)),
       leading: IconButton(
         icon: Icon(
           PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,

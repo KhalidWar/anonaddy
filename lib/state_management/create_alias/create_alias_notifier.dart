@@ -1,8 +1,8 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
-import 'package:anonaddy/shared_components/constants/official_anonaddy_strings.dart';
-import 'package:anonaddy/shared_components/constants/toast_messages.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
@@ -14,8 +14,6 @@ import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'create_alias_state.dart';
 
 /// This is the most complex part of this whole project.
 ///
@@ -52,19 +50,19 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
     if (domainOptions.domainOptions != null) {
       /// If null, default to "anonaddy.me".
-      setAliasDomain(
-          domainOptions.domainOptions!.defaultAliasDomain ?? kAnonAddyMe);
+      setAliasDomain(domainOptions.domainOptions!.defaultAliasDomain ??
+          AnonAddyString.sharedDomainsAnonAddyMe);
 
       /// If null, default to "random_characters".
-      setAliasFormat(
-          domainOptions.domainOptions!.defaultAliasFormat ?? kRandomChars);
+      setAliasFormat(domainOptions.domainOptions!.defaultAliasFormat ??
+          AnonAddyString.aliasFormatRandomChars);
 
       ///
       _setDomains(domainOptions.domainOptions!.domains);
     } else {
       /// If [domainOptions] fails to load data, set the following parameters to be used.
-      setAliasDomain(kAnonAddyMe);
-      setAliasFormat(kRandomChars);
+      setAliasDomain(AnonAddyString.sharedDomainsAnonAddyMe);
+      setAliasFormat(AnonAddyString.aliasFormatRandomChars);
       _setDomains([]);
     }
 
@@ -87,7 +85,8 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
   Future createNewAlias() async {
     /// Handles if "Custom" aliasFormat is selected and local part is empty
-    if (state.aliasFormat == kCustom && state.localPart!.isEmpty) {
+    if (state.aliasFormat == AnonAddyString.aliasFormatCustom &&
+        state.localPart!.isEmpty) {
       throw NicheMethod.showToast('Provide a valid local part');
     }
 
@@ -105,9 +104,9 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
       if (isAutoCopy) {
         await NicheMethod.copyOnTap(createdAlias.email);
-        NicheMethod.showToast(kCreateAliasAndCopyEmail);
+        NicheMethod.showToast(ToastMessage.createAliasAndCopyEmail);
       } else {
-        NicheMethod.showToast(kCreateAliasSuccess);
+        NicheMethod.showToast(ToastMessage.createAliasSuccess);
       }
 
       aliasTabNotifier.addAlias(createdAlias);
@@ -128,12 +127,15 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
     /// Set [AliasFormat] field to [kUUID] if the current [AliasFormatList] does NOT
     /// contain "Custom".
-    final isCustomIncluded = state.aliasFormatList!.contains(kCustom);
+    final isCustomIncluded =
+        state.aliasFormatList!.contains(AnonAddyString.aliasFormatCustom);
 
     /// Update UI according to the latest AliasFormat and AliasDomain
     final newState = state.copyWith(
       aliasDomain: aliasDomain,
-      aliasFormat: isCustomIncluded ? state.aliasFormat : kRandomChars,
+      aliasFormat: isCustomIncluded
+          ? state.aliasFormat
+          : AnonAddyString.aliasFormatRandomChars,
     );
     _updateState(newState);
   }
@@ -185,17 +187,17 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
   /// Sets which list to be used for [AliasFormat] selection. For example, if selected
   /// [AliasDomain] is a shared domain, e.g. from [CreateAliasState.sharedDomains],
   /// [AliasFormat] list can NOT contain "Custom" and user can NOT use "Custom" (Local Part).
-  /// Another example is that [kRandomWords] is NOT available for [kFreeSubscription] users.
+  /// Another example is that [aliasFormatRandomWords] is NOT available for [subscriptionFree] users.
   void _setAliasFormatList(String aliasDomain) {
     final subscription = accountState.account!.subscription;
     if (CreateAliasState.sharedDomains.contains(aliasDomain)) {
-      if (subscription == kFreeSubscription) {
+      if (subscription == AnonAddyString.subscriptionFree) {
         state.aliasFormatList = CreateAliasState.freeTierWithSharedDomain;
       } else {
         state.aliasFormatList = CreateAliasState.paidTierWithSharedDomain;
       }
     } else {
-      if (subscription == kFreeSubscription) {
+      if (subscription == AnonAddyString.subscriptionFree) {
         state.aliasFormatList = CreateAliasState.freeTierNoSharedDomain;
       } else {
         state.aliasFormatList = CreateAliasState.paidTierNoSharedDomain;
@@ -237,10 +239,5 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
       recipients.add(element.id);
     });
     return recipients;
-  }
-
-  void _throwError() {
-    final newState = state.copyWith();
-    _updateState(newState);
   }
 }

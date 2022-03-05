@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 
 class DefaultRecipientState {
-  DefaultRecipientState({
+  const DefaultRecipientState({
     required this.verifiedRecipients,
     required this.defaultRecipients,
   });
@@ -15,7 +15,10 @@ class DefaultRecipientState {
   final List<Recipient>? defaultRecipients;
 
   static initial() {
-    return DefaultRecipientState(defaultRecipients: [], verifiedRecipients: []);
+    return const DefaultRecipientState(
+      defaultRecipients: [],
+      verifiedRecipients: [],
+    );
   }
 
   DefaultRecipientState copyWith({
