@@ -101,8 +101,11 @@ class ChangelogWidget extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
-            header('Hot Fix', Colors.blue),
-            label('1. Fixed CreateAlias recipients scroll bug.'),
+            header('Improved', Colors.blue),
+            label(
+                '1. Several under the hood improvements for a smoother running app.'),
+            label('2. Updated Account UI.'),
+            label('3. Squashed some bugs.'),
             // label('2. Fixed self-hosted recipient/username count errors.'),
             // SizedBox(height: size.height * 0.008),
             // header('Added', Colors.green),
