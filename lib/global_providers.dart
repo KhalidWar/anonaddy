@@ -34,7 +34,10 @@ final offlineDataProvider = Provider<OfflineData>((ref) {
 
 final accessTokenService = Provider<AccessTokenService>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
-  return AccessTokenService(secureStorage);
+  return AccessTokenService(
+    secureStorage: secureStorage,
+    httpClient: IOClient(),
+  );
 });
 
 final changelogService = Provider<ChangelogService>((ref) {
