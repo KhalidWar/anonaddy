@@ -18,9 +18,11 @@ class AccountPopupInfo extends ConsumerWidget {
         ListTile(
           dense: true,
           tileColor: Colors.transparent,
-          title: account.defaultAliasFormat == null
-              ? const Text(AppStrings.noDefaultSelected)
-              : NicheMethod.correctAliasString(account.defaultAliasFormat!),
+          title: Text(
+            account.defaultAliasFormat == null
+                ? AppStrings.noDefaultSelected
+                : NicheMethod.correctAliasString(account.defaultAliasFormat!),
+          ),
           subtitle: const Text(AppStrings.defaultAliasFormat),
           trailing: const Icon(Icons.open_in_new_outlined),
           onTap: () => updateDefaultAliasFormatDomain(ref),
