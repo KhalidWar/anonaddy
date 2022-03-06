@@ -13,11 +13,27 @@ import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccountTab extends ConsumerWidget {
+class AccountTab extends ConsumerStatefulWidget {
   const AccountTab({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _AccountTabState();
+}
+
+class _AccountTabState extends ConsumerState<AccountTab> {
+  @override
+  void initState() {
+    super.initState();
+
+    /// Initially load data from disk (secured device storage)
+    ref.read(accountStateNotifier.notifier).loadOfflineData();
+
+    /// Fetch latest data from server
+    ref.read(accountStateNotifier.notifier).fetchAccount();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(

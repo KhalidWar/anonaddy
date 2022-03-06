@@ -19,13 +19,7 @@ final accountStateNotifier =
 
 class AccountNotifier extends StateNotifier<AccountState> {
   AccountNotifier({required this.accountService, required this.offlineData})
-      : super(const AccountState(status: AccountStatus.loading)) {
-    /// Initially load data from disk (secured device storage)
-    _loadOfflineData();
-
-    /// Fetch latest data from server
-    fetchAccount();
-  }
+      : super(const AccountState(status: AccountStatus.loading));
 
   final AccountService accountService;
   final OfflineData offlineData;
@@ -51,7 +45,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
       _updateState(newState);
     } on SocketException {
       /// Loads offline data when there's no internet connection
-      await _loadOfflineData();
+      await loadOfflineData();
     } catch (error) {
       /// On error, update UI state with the error message
       final newState = state.copyWith(
@@ -90,7 +84,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
   }
 
   /// Loads [Account] data from disk
-  Future<void> _loadOfflineData() async {
+  Future<void> loadOfflineData() async {
     /// Load data from disk if state is NOT showing an error
     if (state.status != AccountStatus.failed) {
       final securedData = await offlineData.readAccountOfflineData();
