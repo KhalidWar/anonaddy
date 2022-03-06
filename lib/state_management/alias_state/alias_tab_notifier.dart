@@ -22,13 +22,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   AliasTabNotifier({
     required this.aliasService,
     required this.offlineData,
-  }) : super(AliasTabState.initialState()) {
-    /// Initially, get data from disk (secure device storage) and assign it
-    _setOfflineState();
-
-    /// Fetch the latest Aliases data from server
-    fetchAliases();
-  }
+  }) : super(AliasTabState.initialState());
 
   final AliasService aliasService;
   final OfflineData offlineData;
@@ -57,7 +51,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       );
       _updateState(newState);
     } on SocketException {
-      _setOfflineState();
+      loadOfflineState();
     } catch (error) {
       final newState = state.copyWith(
         status: AliasTabStatus.failed,
@@ -92,7 +86,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
   Future _retryOnError() async {
     if (state.status == AliasTabStatus.failed) {
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 5));
       await fetchAliases();
     }
   }
@@ -115,7 +109,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Fetches aliases from disk and displays them, used at initial app
   /// startup since fetching from disk is a lot faster than fetching from API.
   /// It's also used to when there's no internet connection.
-  Future<void> _setOfflineState() async {
+  Future<void> loadOfflineState() async {
     if (state.status != AliasTabStatus.failed) {
       final savedAliases = await _loadOfflineData();
       if (savedAliases.isNotEmpty) {
@@ -151,7 +145,10 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   }
 
   List<Alias>? getAliases() {
-    if (mounted) return state.aliases;
+    if (mounted) {
+      return state.aliases;
+    }
+    return null;
   }
 
   /// Adds specific alias to aliases, mainly used to add newly

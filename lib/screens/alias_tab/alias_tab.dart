@@ -13,37 +13,64 @@ import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasTab extends ConsumerWidget {
+class AliasTab extends ConsumerStatefulWidget {
   const AliasTab({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _AlisTabState();
+}
+
+class _AlisTabState extends ConsumerState<AliasTab> {
+  @override
+  void initState() {
+    super.initState();
+
+    /// Initially, get data from disk (secure device storage) and assign it
+    ref.read(aliasTabStateNotifier.notifier).loadOfflineState();
+
+    /// Fetch the latest Aliases data from server
+    ref.read(aliasTabStateNotifier.notifier).fetchAliases();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      key: const Key('aliasTabScaffold'),
+
       /// [DefaultTabController] is required when using [TabBar]s without
       /// a custom [TabController]
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
+          key: const Key('aliasTabScrollView'),
           controller:
               ref.read(fabVisibilityStateNotifier.notifier).aliasController,
           headerSliverBuilder: (_, __) {
             return [
               SliverAppBar(
+                key: const Key('aliasTabAppBar'),
                 expandedHeight: size.height * 0.25,
                 elevation: 0,
                 floating: true,
                 pinned: true,
                 flexibleSpace: const FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
-                  background: AliasTabPieChart(),
+                  background: AliasTabPieChart(key: Key('aliasTabPieChart')),
                 ),
                 bottom: const TabBar(
+                  key: Key('aliasTabTabBar'),
                   indicatorColor: AppColors.accentColor,
                   tabs: [
-                    Tab(child: Text('Available Aliases')),
-                    Tab(child: Text('Deleted Aliases')),
+                    Tab(
+                      key: Key('aliasTabAvailableAliasesTab'),
+                      child: Text('Available Aliases'),
+                    ),
+                    Tab(
+                      key: Key('aliasTabDeletedAliasesTab'),
+                      child: Text('Deleted Aliases'),
+                    ),
                   ],
                 ),
               ),
@@ -58,6 +85,7 @@ class AliasTab extends ConsumerWidget {
                 /// When AliasTab is fetching data (loading)
                 case AliasTabStatus.loading:
                   return const TabBarView(
+                    key: Key('aliasTabTabBarView'),
                     children: [
                       AliasShimmerLoading(),
                       AliasShimmerLoading(),

@@ -55,7 +55,7 @@ class NicheMethod {
     });
   }
 
-  static correctAliasString(String input) {
+  static String correctAliasString(String input) {
     switch (input) {
       case 'random_characters':
         return 'Random Characters';
