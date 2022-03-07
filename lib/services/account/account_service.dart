@@ -8,10 +8,10 @@ class AccountService {
   const AccountService(this.dio);
   final Dio dio;
 
-  Future<Account> getAccountData() async {
+  Future<Account> getAccountData([String? path]) async {
     try {
       const urlPath = '$kUnEncodedBaseURL/$kAccountDetailsURL';
-      final response = await dio.get(urlPath);
+      final response = await dio.get(path ?? urlPath);
       final account = Account.fromJson(response.data['data']);
       log('getAccountData ${response.statusCode}');
 
