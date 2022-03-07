@@ -7,7 +7,6 @@ import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/services/dio_client/dio_client.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
@@ -17,6 +16,7 @@ import 'package:anonaddy/services/rules/rules_service.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/io_client.dart';
@@ -34,8 +34,11 @@ final offlineDataProvider = Provider<OfflineData>((ref) {
   return OfflineData(secureStorage);
 });
 
-final dioClientProvider = Provider<DioClient>((ref) {
-  return DioClient(ref.read(dioInterceptorProvider));
+final dioProvider = Provider<Dio>((ref) {
+  final interceptors = ref.read(dioInterceptorProvider);
+  final dio = Dio();
+  dio.interceptors.add(interceptors);
+  return dio;
 });
 
 final dioInterceptorProvider = Provider((ref) {
@@ -61,8 +64,8 @@ final usernameService = Provider<UsernameService>((ref) {
 });
 
 final accountService = Provider<AccountService>((ref) {
-  final accessToken = ref.read(dioClientProvider);
-  return AccountService(accessToken);
+  final dio = ref.read(dioProvider);
+  return AccountService(dio);
 });
 
 final aliasService = Provider<AliasService>((ref) {
