@@ -54,7 +54,9 @@ class _AccountTabState extends ConsumerState<AccountTab> {
                       final accountState = ref.watch(accountStateNotifier);
                       switch (accountState.status) {
                         case AccountStatus.loading:
-                          return const PlatformLoadingIndicator();
+                          return const Center(
+                            child: PlatformLoadingIndicator(),
+                          );
 
                         case AccountStatus.loaded:
                           final account = accountState.account;
