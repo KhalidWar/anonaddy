@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/account/account.dart';
@@ -7,6 +6,7 @@ import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final accountStateNotifier =
@@ -43,17 +43,23 @@ class AccountNotifier extends StateNotifier<AccountState> {
 
       /// Update UI with the latest state
       _updateState(newState);
-    } on SocketException {
-      /// Loads offline data when there's no internet connection
-      await loadOfflineData();
     } catch (error) {
-      /// On error, update UI state with the error message
-      final newState = state.copyWith(
-          status: AccountStatus.failed, errorMessage: error.toString());
-      _updateState(newState);
+      final dioError = (error as DioError);
+
+      /// on SockException load offline data
+      if (dioError.type == DioErrorType.other) {
+        /// Loads offline data when there's no internet connection
+        await loadOfflineData();
+      } else {
+        final newState = state.copyWith(
+          status: AccountStatus.failed,
+          errorMessage: dioError.message.toString(),
+        );
+        _updateState(newState);
+      }
 
       /// Retry after facing an error
-      await _retryOnError();
+      _retryOnError();
     }
   }
 
@@ -71,7 +77,8 @@ class AccountNotifier extends StateNotifier<AccountState> {
       /// Update UI with the latest state
       _updateState(newState);
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      final dioError = error as DioError;
+      NicheMethod.showToast(dioError.message.toString());
     }
   }
 

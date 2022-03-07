@@ -1,41 +1,25 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:anonaddy/models/account/account.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/services/dio_client/dio_client.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_error_message.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class AccountService {
-  const AccountService(this.accessTokenService);
-  final AccessTokenService accessTokenService;
+  const AccountService(this.dioClient);
+  final DioClient dioClient;
 
   Future<Account> getAccountData() async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
     try {
-      final response = await http.get(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAccountDetailsURL'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
+      const urlPath = '$kUnEncodedBaseURL/$kAccountDetailsURL';
+      final response = await dioClient.dio.get(urlPath);
+      final account = Account.fromJson(response.data['data']);
+      log('getAccountData ${response.statusCode}');
 
-      if (response.statusCode == 200) {
-        log('getUserData ${response.statusCode}');
-        final decodedData = jsonDecode(response.body)['data'];
-        return Account.fromJson(decodedData);
-      } else {
-        log('getUserData ${response.statusCode}');
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
-    } catch (e) {
-      rethrow;
+      return account;
+    } catch (error) {
+      final dioError = error as DioError;
+      throw dioError;
     }
   }
 }

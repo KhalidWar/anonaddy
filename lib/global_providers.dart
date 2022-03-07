@@ -7,6 +7,8 @@ import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/changelog_service/changelog_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/services/dio_client/dio_client.dart';
+import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
@@ -32,6 +34,14 @@ final offlineDataProvider = Provider<OfflineData>((ref) {
   return OfflineData(secureStorage);
 });
 
+final dioClientProvider = Provider<DioClient>((ref) {
+  return DioClient(ref.read(dioInterceptorProvider));
+});
+
+final dioInterceptorProvider = Provider((ref) {
+  return DioInterceptors(ref.read(accessTokenService));
+});
+
 final accessTokenService = Provider<AccessTokenService>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);
   return AccessTokenService(
@@ -51,7 +61,7 @@ final usernameService = Provider<UsernameService>((ref) {
 });
 
 final accountService = Provider<AccountService>((ref) {
-  final accessToken = ref.read(accessTokenService);
+  final accessToken = ref.read(dioClientProvider);
   return AccountService(accessToken);
 });
 

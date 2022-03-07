@@ -25,6 +25,7 @@ dependencies:
 
   # Internet Connectivity
   http: ^0.13.1
+  dio: ^4.0.4
   url_launcher: ^6.0.3
 
   # Storage
