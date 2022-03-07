@@ -34,6 +34,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key('aliasScreenScaffold'),
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
       body: Consumer(
@@ -68,6 +69,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     final isAliasDeleted = alias.deletedAt != null;
 
     return ListView(
+      physics: const ClampingScrollPhysics(),
       children: [
         if (aliasState.isOffline!) const OfflineBanner(),
         AliasScreenPieChart(
