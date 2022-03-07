@@ -6,11 +6,13 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 class AliasService {
-  const AliasService(this.accessTokenService);
+  const AliasService(this.accessTokenService, this.dio);
   final AccessTokenService accessTokenService;
+  final Dio dio;
 
   Future<List<Alias>> getAllAliasesData(String? deleted) async {
     final accessToken = await accessTokenService.getAccessToken();
@@ -44,29 +46,14 @@ class AliasService {
   }
 
   Future<Alias> getSpecificAlias(String aliasID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
     try {
-      final response = await http.get(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL/$aliasID',
-            {'deleted': 'with'}),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
+      log(aliasID);
+      final path = '$kUnEncodedBaseURL/$kAliasesURL/$aliasID';
+      final response = await dio.get(path);
+      final alias = Alias.fromJson(response.data['data']);
+      log('getSpecificAlias ${response.statusCode}');
 
-      if (response.statusCode == 200) {
-        log('getSpecificAlias ${response.statusCode}');
-        final alias = jsonDecode(response.body)['data'];
-        return Alias.fromJson(alias);
-      } else {
-        log('getSpecificAlias ${response.statusCode}');
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      return alias;
     } catch (e) {
       rethrow;
     }

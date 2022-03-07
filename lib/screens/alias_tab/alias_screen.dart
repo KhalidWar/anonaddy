@@ -28,7 +28,9 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     super.initState();
 
     /// Fetches latest data for this specific alias
-    ref.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
+    ref
+        .read(aliasScreenStateNotifier.notifier)
+        .fetchSpecificAlias(widget.alias);
   }
 
   @override

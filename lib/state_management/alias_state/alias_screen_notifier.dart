@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
@@ -8,6 +6,7 @@ import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final aliasScreenStateNotifier =
@@ -30,27 +29,37 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   final showToast = NicheMethod.showToast;
 
-  Future<void> fetchAliases(Alias alias) async {
+  void _updateState(AliasScreenState newState) {
+    if (mounted) state = newState;
+  }
+
+  Future<void> fetchSpecificAlias(Alias alias) async {
     /// Initially set AliasScreen to loading
-    state = state.copyWith(status: AliasScreenStatus.loading);
+    final newState = state.copyWith(status: AliasScreenStatus.loading);
+    _updateState(newState);
     try {
       final updatedAlias = await aliasService.getSpecificAlias(alias.id);
 
       /// Assign newly fetched alias data to AliasScreen state
-      state =
+      final newState =
           state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
-    } on SocketException {
-      /// Return old alias data if there's no internet connection
-      state = state.copyWith(
-        status: AliasScreenStatus.loaded,
-        isOffline: true,
-        alias: alias,
-      );
+      _updateState(newState);
     } catch (error) {
-      state = state.copyWith(
-        status: AliasScreenStatus.failed,
-        errorMessage: error.toString(),
-      );
+      final dioError = error as DioError;
+      if (dioError.type == DioErrorType.other) {
+        final newState = state.copyWith(
+          status: AliasScreenStatus.loaded,
+          isOffline: true,
+          alias: alias,
+        );
+        _updateState(newState);
+      } else {
+        final newState = state.copyWith(
+          status: AliasScreenStatus.failed,
+          errorMessage: dioError.message.toString(),
+        );
+        _updateState(newState);
+      }
     }
   }
 

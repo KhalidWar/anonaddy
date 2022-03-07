@@ -70,7 +70,7 @@ final accountService = Provider<AccountService>((ref) {
 
 final aliasService = Provider<AliasService>((ref) {
   final accessToken = ref.read(accessTokenService);
-  return AliasService(accessToken);
+  return AliasService(accessToken, ref.read(dioProvider));
 });
 
 final searchService = Provider<SearchService>((ref) {
