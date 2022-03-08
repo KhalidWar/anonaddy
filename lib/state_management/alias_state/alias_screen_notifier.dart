@@ -87,16 +87,17 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     }
   }
 
-  Future<void> toggleOnAlias(String aliasId) async {
+  Future<void> activateAlias(String aliasId) async {
     state = state.copyWith(isToggleLoading: true);
     try {
       final newAlias = await aliasService.activateAlias(aliasId);
       final oldAlias = state.alias!;
       oldAlias.active = newAlias.active;
-      state = state.copyWith(isToggleLoading: false, alias: oldAlias);
+      _updateState(state.copyWith(isToggleLoading: false, alias: oldAlias));
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(isToggleLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message.toString());
+      _updateState(state.copyWith(isToggleLoading: false));
     }
   }
 

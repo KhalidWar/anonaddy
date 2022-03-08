@@ -98,29 +98,16 @@ class AliasService {
     }
   }
 
-  Future<Alias> activateAlias(String aliasID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
+  Future<Alias> activateAlias(String aliasId) async {
     try {
-      final response = await http.post(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kActiveAliasURL'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: json.encode({"id": aliasID}),
+      const path = '$kUnEncodedBaseURL/$kActiveAliasURL';
+      final response = await dio.post(
+        path,
+        data: json.encode({"id": aliasId}),
       );
-
-      if (response.statusCode == 200) {
-        log('Network activateAlias ${response.statusCode}');
-        return Alias.fromJson(jsonDecode(response.body)['data']);
-      } else {
-        log('Network activateAlias ${response.statusCode}');
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final alias = Alias.fromJson(response.data['data']);
+      log('activateAlias: ' + response.statusCode.toString());
+      return alias;
     } catch (e) {
       rethrow;
     }
