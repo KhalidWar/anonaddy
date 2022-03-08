@@ -122,7 +122,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 : alias.active
                     ? await ref
                         .read(aliasScreenStateNotifier.notifier)
-                        .toggleOffAlias(alias.id)
+                        .deactivateAlias(alias.id)
                     : await ref
                         .read(aliasScreenStateNotifier.notifier)
                         .activateAlias(alias.id);

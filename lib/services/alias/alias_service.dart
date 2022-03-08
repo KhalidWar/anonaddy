@@ -113,28 +113,11 @@ class AliasService {
     }
   }
 
-  Future deactivateAlias(String aliasID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
+  Future deactivateAlias(String aliasId) async {
     try {
-      final response = await http.delete(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kActiveAliasURL/$aliasID'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
-
-      if (response.statusCode == 204) {
-        log('Network deactivateAlias ${response.statusCode}');
-        return 204;
-      } else {
-        log('Network deactivateAlias ${response.statusCode}');
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final path = '$kUnEncodedBaseURL/$kActiveAliasURL/$aliasId';
+      final response = await dio.delete(path);
+      log('deactivateAlias: ' + response.statusCode.toString());
     } catch (e) {
       rethrow;
     }
