@@ -113,7 +113,7 @@ class AliasService {
     }
   }
 
-  Future deactivateAlias(String aliasId) async {
+  Future<void> deactivateAlias(String aliasId) async {
     try {
       final path = '$kUnEncodedBaseURL/$kActiveAliasURL/$aliasId';
       final response = await dio.delete(path);
