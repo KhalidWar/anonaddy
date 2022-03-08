@@ -19,7 +19,7 @@ class MockDio extends Mock implements Dio {
         type: DioErrorType.response,
         response: Response<T>(
           data: dummyAliasData as T?,
-          statusCode: 200,
+          statusCode: 404,
           requestOptions: RequestOptions(path: path),
         ),
       );
@@ -47,7 +47,7 @@ class MockDio extends Mock implements Dio {
         type: DioErrorType.response,
         response: Response<T>(
           data: dummyAliasData as T?,
-          statusCode: 200,
+          statusCode: 404,
           requestOptions: RequestOptions(path: path),
         ),
       );
@@ -73,7 +73,7 @@ class MockDio extends Mock implements Dio {
         type: DioErrorType.response,
         response: Response<T>(
           data: dummyAliasData as T?,
-          statusCode: 200,
+          statusCode: 404,
           requestOptions: RequestOptions(path: path),
         ),
       );
