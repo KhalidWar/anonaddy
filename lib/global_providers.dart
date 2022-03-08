@@ -99,8 +99,7 @@ final rulesService = Provider<RulesService>((ref) {
 });
 
 final appVersionService = Provider<AppVersionService>((ref) {
-  final accessToken = ref.read(accessTokenService);
-  return AppVersionService(accessToken);
+  return AppVersionService(ref.read(dioProvider));
 });
 
 final failedDeliveriesService = Provider<FailedDeliveriesService>((ref) {
