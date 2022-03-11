@@ -103,8 +103,9 @@ final appVersionService = Provider<AppVersionService>((ref) {
 });
 
 final failedDeliveriesService = Provider<FailedDeliveriesService>((ref) {
+  final dio = ref.read(dioProvider);
   final accessToken = ref.read(accessTokenService);
-  return FailedDeliveriesService(accessToken);
+  return FailedDeliveriesService(accessToken, dio);
 });
 
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
@@ -121,6 +122,6 @@ final appVersionProvider = FutureProvider.autoDispose<AppVersion>((ref) async {
 });
 
 final failedDeliveriesProvider =
-    FutureProvider.autoDispose<FailedDeliveriesModel>((ref) async {
+    FutureProvider.autoDispose<List<FailedDeliveries>>((ref) async {
   return await ref.read(failedDeliveriesService).getFailedDeliveries();
 });

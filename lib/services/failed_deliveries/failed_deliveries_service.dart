@@ -1,39 +1,28 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 class FailedDeliveriesService {
-  const FailedDeliveriesService(this.accessTokenService);
+  const FailedDeliveriesService(this.accessTokenService, this.dio);
   final AccessTokenService accessTokenService;
+  final Dio dio;
 
-  Future<FailedDeliveriesModel> getFailedDeliveries() async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
+  Future<List<FailedDeliveries>> getFailedDeliveries([String? path]) async {
     try {
-      final response = await http.get(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kFailedDeliveriesURL'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
+      const urlPath = '$kUnEncodedBaseURL/$kFailedDeliveriesURL';
+      final response = await dio.get(path ?? urlPath);
+      final deliveries = response.data['data'];
+      log('getFailedDeliveries: ' + response.statusCode.toString());
 
-      if (response.statusCode == 200) {
-        log('getFailedDeliveries: ' + response.statusCode.toString());
-        return FailedDeliveriesModel.fromJson(jsonDecode(response.body));
-      } else {
-        log('getFailedDeliveries: ' + response.statusCode.toString());
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      return (deliveries as List).map((delivery) {
+        return FailedDeliveries.fromJson(delivery);
+      }).toList();
     } catch (e) {
       rethrow;
     }

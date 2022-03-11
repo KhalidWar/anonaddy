@@ -1,6 +1,7 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
+import 'package:anonaddy/screens/alert_center/components/failed_delivery_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
@@ -63,12 +64,23 @@ class _FailedDeliveriesWidgetState
         return failedDeliveriesAsync.when(
           loading: () => loadingWidget(context),
           data: (data) {
-            failedDeliveries = data.failedDeliveries;
+            failedDeliveries = data;
 
             if (failedDeliveries.isEmpty) {
               return const Text('No failed deliveries found');
             } else {
-              return failedDeliveriesList(data);
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: failedDeliveries.length,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final failedDelivery = failedDeliveries[index];
+                  return FailedDeliveryListTile(
+                    delivery: failedDelivery,
+                    onPress: () => deleteFailedDelivery(failedDelivery.id),
+                  );
+                },
+              );
             }
           },
           error: (error, stackTrace) {
@@ -86,72 +98,6 @@ class _FailedDeliveriesWidgetState
           label: AppStrings.loadAccountDataFailed,
         );
     }
-  }
-
-  Widget failedDeliveriesList(FailedDeliveriesModel data) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: failedDeliveries.length,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        final failedDeliveries = data.failedDeliveries[index];
-        return ExpansionTile(
-          expandedAlignment: Alignment.centerLeft,
-          tilePadding: const EdgeInsets.all(0),
-          childrenPadding: const EdgeInsets.symmetric(horizontal: 5),
-          title: Text(
-            failedDeliveries.aliasEmail,
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-          subtitle: Text(
-            failedDeliveries.code,
-            style: Theme.of(context).textTheme.caption,
-          ),
-          children: [
-            ListTile(
-              dense: true,
-              title: const Text('Alias'),
-              subtitle: Text(failedDeliveries.aliasEmail),
-            ),
-            ListTile(
-              dense: true,
-              title: const Text('Recipient'),
-              subtitle:
-                  Text(failedDeliveries.recipientEmail ?? 'Not available'),
-            ),
-            ListTile(
-              dense: true,
-              title: const Text('Type'),
-              subtitle: Text(failedDeliveries.bounceType),
-            ),
-            ListTile(
-              dense: true,
-              title: const Text('Code'),
-              subtitle: Text(failedDeliveries.code),
-            ),
-            ListTile(
-              dense: true,
-              title: const Text('Remote MTA'),
-              subtitle: Text(
-                failedDeliveries.remoteMta.isEmpty
-                    ? 'Not available'
-                    : failedDeliveries.remoteMta,
-              ),
-            ),
-            ListTile(
-              dense: true,
-              title: const Text('Created'),
-              subtitle: Text(failedDeliveries.createdAt.toString()),
-            ),
-            const Divider(height: 0),
-            TextButton(
-              child: const Text('Delete failed delivery'),
-              onPressed: () => deleteFailedDelivery(failedDeliveries.id),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Widget loadingWidget(BuildContext context) {
