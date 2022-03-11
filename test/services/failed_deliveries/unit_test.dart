@@ -1,5 +1,4 @@
 import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,18 +8,13 @@ import 'mock_dio.dart';
 
 class MockFailedDeliveries extends Mock implements FailedDeliveries {}
 
-class MockAccessTokenService extends Mock implements AccessTokenService {}
-
 void main() async {
-  late MockAccessTokenService mockAccessTokenService;
   late MockDio mockDio;
   late FailedDeliveriesService deliveriesService;
 
   setUp(() {
-    mockAccessTokenService = MockAccessTokenService();
     mockDio = MockDio();
-    deliveriesService =
-        FailedDeliveriesService(mockAccessTokenService, mockDio);
+    deliveriesService = FailedDeliveriesService(mockDio);
   });
 
   test(
@@ -58,5 +52,40 @@ void main() async {
 
     // Assert
     expect(() => dioGet, throwsError);
+  });
+
+  test(
+      'Given aliasService and dio are up and running, '
+      'When deliveriesService.deleteFailedDelivery(path) is called, '
+      'Then delete failedDelivery without errors.', () async {
+    // Arrange
+    const deliveryId = 'id';
+
+    // Act
+    final dioDelete = mockDio.delete(deliveryId);
+    final response = await deliveriesService.deleteFailedDelivery(deliveryId);
+
+    // Assert
+    expectLater(dioDelete, completes);
+    expect(await dioDelete, isA<Response>());
+
+    expectLater(response, true);
+  });
+
+  test(
+      'Given deliveriesService and dio are up and running, '
+      'When deliveriesService.deleteFailedDelivery(error) is called, '
+      'Then throw an error.', () async {
+    // Arrange
+    const deliveryId = 'error';
+
+    // Act
+    final dioGet = mockDio.delete(deliveryId);
+    final dioError = isA<DioError>();
+    final throwsDioError = throwsA(dioError);
+
+    // Assert
+    expectLater(dioGet, throwsException);
+    expect(dioGet, throwsDioError);
   });
 }
