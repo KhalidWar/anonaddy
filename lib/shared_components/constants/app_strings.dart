@@ -126,7 +126,7 @@ class AppStrings {
   static const noInternetOfflineData = 'No internet connection';
   static const noInternetDialogTitle = 'Offline Mode';
   static const noInternetContent =
-      'No internet connection. Displaying cached offline data.';
+      'No internet connection; displaying cached offline data.';
   static const noInternetDialogButton = 'Close';
 
   /// Miscellaneous
