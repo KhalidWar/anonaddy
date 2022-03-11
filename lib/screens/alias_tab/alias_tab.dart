@@ -62,6 +62,7 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                 bottom: const TabBar(
                   key: Key('aliasTabTabBar'),
                   indicatorColor: AppColors.accentColor,
+                  indicatorWeight: 3,
                   tabs: [
                     Tab(
                       key: Key('aliasTabAvailableAliasesTab'),

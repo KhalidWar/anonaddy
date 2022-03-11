@@ -16,7 +16,7 @@ class AliasTabPieChart extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Container(
-      margin: EdgeInsets.only(bottom: size.height * 0.045),
+      margin: EdgeInsets.only(bottom: size.height * 0.05),
       child: Consumer(
         builder: (context, ref, child) {
           final accountState = ref.watch(accountStateNotifier);
@@ -45,6 +45,7 @@ class AliasTabPieChart extends StatelessWidget {
   Widget buildAliasStat(
       {required BuildContext context, required Account account}) {
     final size = MediaQuery.of(context).size;
+    final sectionWidth = size.width * 0.4;
     const pieChartSectionRadius = 50.0;
 
     final emailsForwarded = account.totalEmailsForwarded;
@@ -63,88 +64,99 @@ class AliasTabPieChart extends StatelessWidget {
       }
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            PieChartIndicator(
-              color: AppColors.firstPieChartColor,
-              label: 'emails forwarded',
-              count: emailsForwarded,
-              textColor: Colors.white,
-            ),
-            SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
-              color: AppColors.secondPieChartColor,
-              label: 'emails blocked',
-              count: emailsBlocked,
-              textColor: Colors.white,
-            ),
-            SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
-              color: AppColors.fourthPieChartColor,
-              label: 'emails replied',
-              count: emailsReplied,
-              textColor: Colors.white,
-            ),
-            SizedBox(height: size.height * 0.02),
-            PieChartIndicator(
-              color: AppColors.thirdPieChartColor,
-              label: 'emails sent',
-              count: emailsSent,
-              textColor: Colors.white,
-            ),
-          ],
-        ),
-        SizedBox(
-          height: size.height * 0.18,
-          width: size.height * 0.18,
-          child: PieChart(
-            PieChartData(
-              borderData: FlBorderData(show: false),
-              sectionsSpace: 0,
-              sections: isPieChartEmpty()
-                  ? [
-                      PieChartSectionData(
-                        showTitle: false,
-                        radius: pieChartSectionRadius,
-                        color: Colors.white54,
-                        value: 1,
-                      ),
-                    ]
-                  : [
-                      PieChartSectionData(
-                        showTitle: false,
-                        radius: pieChartSectionRadius,
-                        color: AppColors.firstPieChartColor,
-                        value: emailsForwarded.toDouble(),
-                      ),
-                      PieChartSectionData(
-                        showTitle: false,
-                        radius: pieChartSectionRadius,
-                        color: AppColors.secondPieChartColor,
-                        value: emailsBlocked.toDouble(),
-                      ),
-                      PieChartSectionData(
-                        showTitle: false,
-                        radius: pieChartSectionRadius,
-                        color: AppColors.thirdPieChartColor,
-                        value: emailsSent.toDouble(),
-                      ),
-                      PieChartSectionData(
-                        showTitle: false,
-                        radius: pieChartSectionRadius,
-                        color: AppColors.fourthPieChartColor,
-                        value: emailsReplied.toDouble(),
-                      ),
-                    ],
+    Widget indicatorSeparator() {
+      return const SizedBox(height: 10);
+    }
+
+    return Container(
+      color: Colors.yellow,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            color: Colors.blue,
+            width: sectionWidth,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PieChartIndicator(
+                  color: AppColors.firstPieChartColor,
+                  label: 'emails forwarded',
+                  count: emailsForwarded,
+                  textColor: Colors.white,
+                ),
+                indicatorSeparator(),
+                PieChartIndicator(
+                  color: AppColors.secondPieChartColor,
+                  label: 'emails blocked',
+                  count: emailsBlocked,
+                  textColor: Colors.white,
+                ),
+                indicatorSeparator(),
+                PieChartIndicator(
+                  color: AppColors.fourthPieChartColor,
+                  label: 'emails replied',
+                  count: emailsReplied,
+                  textColor: Colors.white,
+                ),
+                indicatorSeparator(),
+                PieChartIndicator(
+                  color: AppColors.thirdPieChartColor,
+                  label: 'emails sent',
+                  count: emailsSent,
+                  textColor: Colors.white,
+                ),
+              ],
             ),
           ),
-        ),
-      ],
+          Container(
+            color: Colors.red,
+            width: sectionWidth,
+            child: PieChart(
+              PieChartData(
+                borderData: FlBorderData(show: false),
+                sectionsSpace: 0,
+                sections: isPieChartEmpty()
+                    ? [
+                        PieChartSectionData(
+                          showTitle: false,
+                          radius: pieChartSectionRadius,
+                          color: Colors.white54,
+                          value: 1,
+                        ),
+                      ]
+                    : [
+                        PieChartSectionData(
+                          showTitle: false,
+                          radius: pieChartSectionRadius,
+                          color: AppColors.firstPieChartColor,
+                          value: emailsForwarded.toDouble(),
+                        ),
+                        PieChartSectionData(
+                          showTitle: false,
+                          radius: pieChartSectionRadius,
+                          color: AppColors.secondPieChartColor,
+                          value: emailsBlocked.toDouble(),
+                        ),
+                        PieChartSectionData(
+                          showTitle: false,
+                          radius: pieChartSectionRadius,
+                          color: AppColors.thirdPieChartColor,
+                          value: emailsSent.toDouble(),
+                        ),
+                        PieChartSectionData(
+                          showTitle: false,
+                          radius: pieChartSectionRadius,
+                          color: AppColors.fourthPieChartColor,
+                          value: emailsReplied.toDouble(),
+                        ),
+                      ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
