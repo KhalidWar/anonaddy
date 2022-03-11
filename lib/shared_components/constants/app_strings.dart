@@ -88,6 +88,15 @@ class AppStrings {
   static const limitedSearchResult = 'Limited Result';
   static const closeSearchButtonText = 'Close Search';
 
+  /// Alert Center
+  static const alertCenter = 'Alert Center';
+  static const notifications = 'Notifications';
+  static const notificationsNote =
+      'One central location for your account alerts and notifications.';
+  static const failedDeliveries = 'Failed deliveries';
+  static const failedDeliveriesNote =
+      'Sometimes when AnonAddy attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
+
   /// Login Screen
   static const enterAccessToken = 'Enter Access Token';
   static const whatsAccessToken = 'What is Access Token?';
@@ -127,8 +136,6 @@ class AppStrings {
       'Are you sure you want to log out?\n\nAll app data will be deleted.';
   static const noDescription = 'No description';
   static const somethingWentWrong = 'Something went wrong';
-  static const failedDeliveriesNote =
-      'Sometimes when AnonAddy attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
   static const navigationErrorMessage =
       'Something has gone wrong with the navigation system. Please go back and try again.';
 
