@@ -95,32 +95,30 @@ class AliasAdapter extends TypeAdapter<Alias> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-Alias _$AliasFromJson(Map<String, dynamic> json) {
-  return Alias(
-    id: json['id'] as String,
-    userId: json['user_id'] as String,
-    aliasableId: json['aliasable_id'] as String?,
-    aliasableType: json['aliasable_type'] as String?,
-    localPart: json['local_part'] as String,
-    extension: json['extension'] as String?,
-    domain: json['domain'] as String,
-    email: json['email'] as String,
-    active: json['active'] as bool,
-    description: json['description'] as String?,
-    emailsForwarded: json['emails_forwarded'] as int,
-    emailsBlocked: json['emails_blocked'] as int,
-    emailsReplied: json['emails_replied'] as int,
-    emailsSent: json['emails_sent'] as int,
-    recipients: (json['recipients'] as List<dynamic>?)
-        ?.map((e) => Recipient.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    createdAt: DateTime.parse(json['created_at'] as String),
-    updatedAt: DateTime.parse(json['updated_at'] as String),
-    deletedAt: json['deleted_at'] == null
-        ? null
-        : DateTime.parse(json['deleted_at'] as String),
-  );
-}
+Alias _$AliasFromJson(Map<String, dynamic> json) => Alias(
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      aliasableId: json['aliasable_id'] as String?,
+      aliasableType: json['aliasable_type'] as String?,
+      localPart: json['local_part'] as String,
+      extension: json['extension'] as String?,
+      domain: json['domain'] as String,
+      email: json['email'] as String,
+      active: json['active'] as bool,
+      description: json['description'] as String?,
+      emailsForwarded: json['emails_forwarded'] as int,
+      emailsBlocked: json['emails_blocked'] as int,
+      emailsReplied: json['emails_replied'] as int,
+      emailsSent: json['emails_sent'] as int,
+      recipients: (json['recipients'] as List<dynamic>?)
+          ?.map((e) => Recipient.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
+    );
 
 Map<String, dynamic> _$AliasToJson(Alias instance) => <String, dynamic>{
       'id': instance.id,

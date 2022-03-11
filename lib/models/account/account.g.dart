@@ -6,38 +6,36 @@ part of 'account.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Account _$AccountFromJson(Map<String, dynamic> json) {
-  return Account(
-    id: json['id'] as String,
-    username: json['username'] as String,
-    fromName: json['from_name'] as String?,
-    emailSubject: json['email_subject'] as String?,
-    bannerLocation: json['banner_location'] as String,
-    bandwidth: json['bandwidth'] as int,
-    bandwidthLimit: json['bandwidth_limit'] as int?,
-    usernameCount: json['username_count'] as int?,
-    usernameLimit: json['username_limit'] as int?,
-    defaultRecipientId: json['default_recipient_id'] as String,
-    defaultAliasDomain: json['default_alias_domain'] as String?,
-    defaultAliasFormat: json['default_alias_format'] as String?,
-    subscription: json['subscription'] as String?,
-    subscriptionEndAt: json['subscription_ends_at'] == null
-        ? null
-        : DateTime.parse(json['subscription_ends_at'] as String),
-    recipientCount: json['recipient_count'] as int?,
-    recipientLimit: json['recipient_limit'] as int?,
-    activeDomainCount: json['active_domain_count'] as int?,
-    activeDomainLimit: json['active_domain_limit'] as int?,
-    aliasCount: json['active_shared_domain_alias_count'] as int?,
-    aliasLimit: json['active_shared_domain_alias_limit'] as int?,
-    totalEmailsForwarded: json['total_emails_forwarded'] as int,
-    totalEmailsBlocked: json['total_emails_blocked'] as int,
-    totalEmailsReplied: json['total_emails_replied'] as int,
-    totalEmailsSent: json['total_emails_sent'] as int,
-    createdAt: DateTime.parse(json['created_at'] as String),
-    lastUpdated: DateTime.parse(json['updated_at'] as String),
-  );
-}
+Account _$AccountFromJson(Map<String, dynamic> json) => Account(
+      id: json['id'] as String,
+      username: json['username'] as String,
+      fromName: json['from_name'] as String?,
+      emailSubject: json['email_subject'] as String?,
+      bannerLocation: json['banner_location'] as String,
+      bandwidth: json['bandwidth'] as int,
+      bandwidthLimit: json['bandwidth_limit'] as int?,
+      usernameCount: json['username_count'] as int?,
+      usernameLimit: json['username_limit'] as int?,
+      defaultRecipientId: json['default_recipient_id'] as String,
+      defaultAliasDomain: json['default_alias_domain'] as String?,
+      defaultAliasFormat: json['default_alias_format'] as String?,
+      subscription: json['subscription'] as String?,
+      subscriptionEndAt: json['subscription_ends_at'] == null
+          ? null
+          : DateTime.parse(json['subscription_ends_at'] as String),
+      recipientCount: json['recipient_count'] as int?,
+      recipientLimit: json['recipient_limit'] as int?,
+      activeDomainCount: json['active_domain_count'] as int?,
+      activeDomainLimit: json['active_domain_limit'] as int?,
+      aliasCount: json['active_shared_domain_alias_count'] as int?,
+      aliasLimit: json['active_shared_domain_alias_limit'] as int?,
+      totalEmailsForwarded: json['total_emails_forwarded'] as int,
+      totalEmailsBlocked: json['total_emails_blocked'] as int,
+      totalEmailsReplied: json['total_emails_replied'] as int,
+      totalEmailsSent: json['total_emails_sent'] as int,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      lastUpdated: DateTime.parse(json['updated_at'] as String),
+    );
 
 Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
       'id': instance.id,
