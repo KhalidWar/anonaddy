@@ -103,9 +103,7 @@ final appVersionService = Provider<AppVersionService>((ref) {
 });
 
 final failedDeliveriesService = Provider<FailedDeliveriesService>((ref) {
-  final dio = ref.read(dioProvider);
-  final accessToken = ref.read(accessTokenService);
-  return FailedDeliveriesService(accessToken, dio);
+  return FailedDeliveriesService(ref.read(dioProvider));
 });
 
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
