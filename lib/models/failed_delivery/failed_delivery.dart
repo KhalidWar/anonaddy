@@ -1,23 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'failed_deliveries_model.g.dart';
-
-@JsonSerializable(explicitToJson: true)
-class FailedDeliveriesModel {
-  const FailedDeliveriesModel({required this.failedDeliveries});
-
-  @JsonKey(name: 'data')
-  final List<FailedDeliveries> failedDeliveries;
-
-  factory FailedDeliveriesModel.fromJson(Map<String, dynamic> json) =>
-      _$FailedDeliveriesModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$FailedDeliveriesModelToJson(this);
-}
+part 'failed_delivery.g.dart';
 
 @JsonSerializable()
-class FailedDeliveries {
-  const FailedDeliveries({
+class FailedDelivery {
+  const FailedDelivery({
     required this.id,
     required this.userId,
     required this.recipientId,
@@ -62,13 +49,13 @@ class FailedDeliveries {
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
-  factory FailedDeliveries.fromJson(Map<String, dynamic> json) =>
-      _$FailedDeliveriesFromJson(json);
+  factory FailedDelivery.fromJson(Map<String, dynamic> json) =>
+      _$FailedDeliveryFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FailedDeliveriesToJson(this);
+  Map<String, dynamic> toJson() => _$FailedDeliveryToJson(this);
 
   @override
   String toString() {
-    return 'FailedDeliveries{id: $id, userId: $userId, recipientId: $recipientId, recipientEmail: $recipientEmail, aliasId: $aliasId, aliasEmail: $aliasEmail, bounceType: $bounceType, remoteMta: $remoteMta, sender: $sender, emailType: $emailType, status: $status, code: $code, attemptedAt: $attemptedAt, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'FailedDelivery{id: $id, userId: $userId, recipientId: $recipientId, recipientEmail: $recipientEmail, aliasId: $aliasId, aliasEmail: $aliasEmail, bounceType: $bounceType, remoteMta: $remoteMta, sender: $sender, emailType: $emailType, status: $status, code: $code, attemptedAt: $attemptedAt, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }

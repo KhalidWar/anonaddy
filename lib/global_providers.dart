@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/app_version/app_version_model.dart';
-import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
+import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
@@ -120,6 +120,6 @@ final appVersionProvider = FutureProvider.autoDispose<AppVersion>((ref) async {
 });
 
 final failedDeliveriesProvider =
-    FutureProvider.autoDispose<List<FailedDeliveries>>((ref) async {
+    FutureProvider.autoDispose<List<FailedDelivery>>((ref) async {
   return await ref.read(failedDeliveriesService).getFailedDeliveries();
 });

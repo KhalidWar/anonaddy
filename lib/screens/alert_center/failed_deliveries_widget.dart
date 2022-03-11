@@ -1,5 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
+import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/alert_center/components/failed_delivery_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
@@ -23,7 +23,7 @@ class FailedDeliveriesWidget extends ConsumerStatefulWidget {
 
 class _FailedDeliveriesWidgetState
     extends ConsumerState<FailedDeliveriesWidget> {
-  List<FailedDeliveries> failedDeliveries = [];
+  List<FailedDelivery> failedDeliveries = [];
 
   Future<void> deleteFailedDelivery(String failedDeliveryId) async {
     final result = await ref

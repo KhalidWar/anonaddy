@@ -1,12 +1,9 @@
-import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
+import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 
 import 'mock_dio.dart';
-
-class MockFailedDeliveries extends Mock implements FailedDeliveries {}
 
 void main() async {
   late MockDio mockDio;
@@ -32,7 +29,7 @@ void main() async {
     expectLater(dioGet, completes);
     expect(await dioGet, isA<Response>());
 
-    expect(deliveries, isA<List<FailedDeliveries>>());
+    expect(deliveries, isA<List<FailedDelivery>>());
     expect(deliveries.length, 2);
     expect(deliveries[0].aliasEmail, 'alias@anonaddy.com');
     expect(deliveries[0].recipientEmail, 'user@recipient.com');

@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/failed_deliveries/failed_deliveries_model.dart';
+import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:flutter/material.dart';
 
 class FailedDeliveryListTile extends StatelessWidget {
@@ -7,7 +7,7 @@ class FailedDeliveryListTile extends StatelessWidget {
     required this.delivery,
     required this.onPress,
   }) : super(key: key);
-  final FailedDeliveries delivery;
+  final FailedDelivery delivery;
   final Function() onPress;
 
   @override
