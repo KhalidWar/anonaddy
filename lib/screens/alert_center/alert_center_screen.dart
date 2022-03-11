@@ -16,7 +16,7 @@ class AlertCenterScreen extends StatelessWidget {
       appBar: AppBar(title: const Text(AppStrings.alertCenter)),
       body: ListView(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         padding: const EdgeInsets.all(10),
         children: const [
           AlertHeader(
