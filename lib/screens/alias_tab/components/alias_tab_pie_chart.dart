@@ -68,95 +68,90 @@ class AliasTabPieChart extends StatelessWidget {
       return const SizedBox(height: 10);
     }
 
-    return Container(
-      color: Colors.yellow,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            color: Colors.blue,
-            width: sectionWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PieChartIndicator(
-                  color: AppColors.firstPieChartColor,
-                  label: 'emails forwarded',
-                  count: emailsForwarded,
-                  textColor: Colors.white,
-                ),
-                indicatorSeparator(),
-                PieChartIndicator(
-                  color: AppColors.secondPieChartColor,
-                  label: 'emails blocked',
-                  count: emailsBlocked,
-                  textColor: Colors.white,
-                ),
-                indicatorSeparator(),
-                PieChartIndicator(
-                  color: AppColors.fourthPieChartColor,
-                  label: 'emails replied',
-                  count: emailsReplied,
-                  textColor: Colors.white,
-                ),
-                indicatorSeparator(),
-                PieChartIndicator(
-                  color: AppColors.thirdPieChartColor,
-                  label: 'emails sent',
-                  count: emailsSent,
-                  textColor: Colors.white,
-                ),
-              ],
-            ),
-          ),
-          Container(
-            color: Colors.red,
-            width: sectionWidth,
-            child: PieChart(
-              PieChartData(
-                borderData: FlBorderData(show: false),
-                sectionsSpace: 0,
-                sections: isPieChartEmpty()
-                    ? [
-                        PieChartSectionData(
-                          showTitle: false,
-                          radius: pieChartSectionRadius,
-                          color: Colors.white54,
-                          value: 1,
-                        ),
-                      ]
-                    : [
-                        PieChartSectionData(
-                          showTitle: false,
-                          radius: pieChartSectionRadius,
-                          color: AppColors.firstPieChartColor,
-                          value: emailsForwarded.toDouble(),
-                        ),
-                        PieChartSectionData(
-                          showTitle: false,
-                          radius: pieChartSectionRadius,
-                          color: AppColors.secondPieChartColor,
-                          value: emailsBlocked.toDouble(),
-                        ),
-                        PieChartSectionData(
-                          showTitle: false,
-                          radius: pieChartSectionRadius,
-                          color: AppColors.thirdPieChartColor,
-                          value: emailsSent.toDouble(),
-                        ),
-                        PieChartSectionData(
-                          showTitle: false,
-                          radius: pieChartSectionRadius,
-                          color: AppColors.fourthPieChartColor,
-                          value: emailsReplied.toDouble(),
-                        ),
-                      ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        SizedBox(
+          width: sectionWidth,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              PieChartIndicator(
+                color: AppColors.firstPieChartColor,
+                label: 'emails forwarded',
+                count: emailsForwarded,
+                textColor: Colors.white,
               ),
+              indicatorSeparator(),
+              PieChartIndicator(
+                color: AppColors.secondPieChartColor,
+                label: 'emails blocked',
+                count: emailsBlocked,
+                textColor: Colors.white,
+              ),
+              indicatorSeparator(),
+              PieChartIndicator(
+                color: AppColors.fourthPieChartColor,
+                label: 'emails replied',
+                count: emailsReplied,
+                textColor: Colors.white,
+              ),
+              indicatorSeparator(),
+              PieChartIndicator(
+                color: AppColors.thirdPieChartColor,
+                label: 'emails sent',
+                count: emailsSent,
+                textColor: Colors.white,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          width: sectionWidth,
+          child: PieChart(
+            PieChartData(
+              borderData: FlBorderData(show: false),
+              sectionsSpace: 0,
+              sections: isPieChartEmpty()
+                  ? [
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: Colors.white54,
+                        value: 1,
+                      ),
+                    ]
+                  : [
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: AppColors.firstPieChartColor,
+                        value: emailsForwarded.toDouble(),
+                      ),
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: AppColors.secondPieChartColor,
+                        value: emailsBlocked.toDouble(),
+                      ),
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: AppColors.thirdPieChartColor,
+                        value: emailsSent.toDouble(),
+                      ),
+                      PieChartSectionData(
+                        showTitle: false,
+                        radius: pieChartSectionRadius,
+                        color: AppColors.fourthPieChartColor,
+                        value: emailsReplied.toDouble(),
+                      ),
+                    ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
