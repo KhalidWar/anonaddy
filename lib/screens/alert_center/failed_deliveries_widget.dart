@@ -1,5 +1,3 @@
-import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/alert_center/components/failed_delivery_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
@@ -9,13 +7,13 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
+import 'package:anonaddy/state_management/failed_delivery/failed_delivery_notifier.dart';
+import 'package:anonaddy/state_management/failed_delivery/failed_delivery_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FailedDeliveriesWidget extends ConsumerStatefulWidget {
-  const FailedDeliveriesWidget({
-    Key? key,
-  }) : super(key: key);
+  const FailedDeliveriesWidget({Key? key}) : super(key: key);
 
   @override
   ConsumerState createState() => _FailedDeliveriesWidgetState();
@@ -23,26 +21,17 @@ class FailedDeliveriesWidget extends ConsumerStatefulWidget {
 
 class _FailedDeliveriesWidgetState
     extends ConsumerState<FailedDeliveriesWidget> {
-  List<FailedDelivery> failedDeliveries = [];
-
-  Future<void> deleteFailedDelivery(String failedDeliveryId) async {
-    final result = await ref
-        .read(failedDeliveriesService)
-        .deleteFailedDelivery(failedDeliveryId);
-    if (result) {
-      failedDeliveries.removeWhere((element) => element.id == failedDeliveryId);
-      setState(() {});
-    }
-  }
-
   @override
   void initState() {
     super.initState();
 
     /// Insures Flutter has finished rendering frame
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      /// Fetches latest account data
-      ref.read(accountStateNotifier.notifier).fetchAccount();
+      /// Fetches latest account data first to get the latest subscription status.
+      ref.read(accountStateNotifier.notifier).fetchAccount().then((value) {
+        /// Then, fetches Failed deliveries.
+        ref.read(failedDeliveryStateNotifier.notifier).getFailedDeliveries();
+      });
     });
   }
 
@@ -51,7 +40,7 @@ class _FailedDeliveriesWidgetState
     final accountState = ref.watch(accountStateNotifier);
     switch (accountState.status) {
       case AccountStatus.loading:
-        return loadingWidget(context);
+        return const Center(child: PlatformLoadingIndicator());
 
       case AccountStatus.loaded:
         final subscription = accountState.account!.subscription;
@@ -60,36 +49,40 @@ class _FailedDeliveriesWidgetState
           return const PaidFeatureWall();
         }
 
-        final failedDeliveriesAsync = ref.watch(failedDeliveriesProvider);
-        return failedDeliveriesAsync.when(
-          loading: () => loadingWidget(context),
-          data: (data) {
-            failedDeliveries = data;
+        final failedDeliveryState = ref.watch(failedDeliveryStateNotifier);
+        switch (failedDeliveryState.status) {
+          case FailedDeliveryStatus.loading:
+            return const Center(child: PlatformLoadingIndicator());
 
-            if (failedDeliveries.isEmpty) {
+          case FailedDeliveryStatus.loaded:
+            final deliveries = failedDeliveryState.failedDeliveries;
+
+            if (deliveries.isEmpty) {
               return const Text('No failed deliveries found');
             } else {
               return ListView.builder(
                 shrinkWrap: true,
-                itemCount: failedDeliveries.length,
+                itemCount: deliveries.length,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  final failedDelivery = failedDeliveries[index];
+                  final failedDelivery = deliveries[index];
                   return FailedDeliveryListTile(
                     delivery: failedDelivery,
-                    onPress: () => deleteFailedDelivery(failedDelivery.id),
+                    onPress: () => ref
+                        .read(failedDeliveryStateNotifier.notifier)
+                        .deleteFailedDelivery(failedDelivery.id),
                   );
                 },
               );
             }
-          },
-          error: (error, stackTrace) {
+
+          case FailedDeliveryStatus.failed:
+            final error = failedDeliveryState.errorMessage;
             return LottieWidget(
               lottie: LottieImages.errorCone,
-              label: error.toString(),
+              label: error,
             );
-          },
-        );
+        }
 
       case AccountStatus.failed:
         return LottieWidget(
@@ -98,13 +91,5 @@ class _FailedDeliveriesWidgetState
           label: AppStrings.loadAccountDataFailed,
         );
     }
-  }
-
-  Widget loadingWidget(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(20),
-      child: const PlatformLoadingIndicator(),
-    );
   }
 }

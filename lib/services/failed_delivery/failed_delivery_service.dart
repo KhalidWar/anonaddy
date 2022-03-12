@@ -5,8 +5,8 @@ import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 
-class FailedDeliveriesService {
-  const FailedDeliveriesService(this.dio);
+class FailedDeliveryService {
+  const FailedDeliveryService(this.dio);
   final Dio dio;
 
   Future<List<FailedDelivery>> getFailedDeliveries([String? path]) async {
@@ -24,13 +24,11 @@ class FailedDeliveriesService {
     }
   }
 
-  Future<bool> deleteFailedDelivery(String failedDeliveryId) async {
+  Future<void> deleteFailedDelivery(String failedDeliveryId) async {
     try {
       final path = '$kUnEncodedBaseURL/$kFailedDeliveriesURL/$failedDeliveryId';
       final response = await dio.delete(path);
       log('deleteFailedDelivery: ' + response.statusCode.toString());
-
-      return true;
     } catch (e) {
       rethrow;
     }

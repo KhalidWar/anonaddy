@@ -1,5 +1,4 @@
 import 'package:anonaddy/models/app_version/app_version_model.dart';
-import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
@@ -10,7 +9,7 @@ import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
-import 'package:anonaddy/services/failed_deliveries/failed_deliveries_service.dart';
+import 'package:anonaddy/services/failed_delivery/failed_delivery_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/services/rules/rules_service.dart';
 import 'package:anonaddy/services/search/search_service.dart';
@@ -102,8 +101,8 @@ final appVersionService = Provider<AppVersionService>((ref) {
   return AppVersionService(ref.read(dioProvider));
 });
 
-final failedDeliveriesService = Provider<FailedDeliveriesService>((ref) {
-  return FailedDeliveriesService(ref.read(dioProvider));
+final failedDeliveryService = Provider<FailedDeliveryService>((ref) {
+  return FailedDeliveryService(ref.read(dioProvider));
 });
 
 final settingsDataStorage = Provider<SettingsDataStorage>((ref) {
@@ -117,9 +116,4 @@ final packageInfoProvider =
 
 final appVersionProvider = FutureProvider.autoDispose<AppVersion>((ref) async {
   return await ref.read(appVersionService).getAppVersionData();
-});
-
-final failedDeliveriesProvider =
-    FutureProvider.autoDispose<List<FailedDelivery>>((ref) async {
-  return await ref.read(failedDeliveriesService).getFailedDeliveries();
 });
