@@ -49,7 +49,7 @@ void main() {
     final token = await accessTokenService.getAccessToken(key: 'awef');
 
     // Assert
-    expect(token, null);
+    expect(token, isEmpty);
   });
 
   test(
