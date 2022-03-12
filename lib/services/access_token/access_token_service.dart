@@ -40,10 +40,10 @@ class AccessTokenService {
         key: SecureStorageKeys.instanceURLKey, value: url);
   }
 
-  Future<String?> getAccessToken(
+  Future<String> getAccessToken(
       {String key = SecureStorageKeys.accessTokenKey}) async {
     final accessToken = await secureStorage.read(key: key);
-    return accessToken;
+    return accessToken ?? '';
   }
 
   Future<String> getInstanceURL() async {
