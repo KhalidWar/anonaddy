@@ -36,6 +36,8 @@ class AppStrings {
       'Use this to automatically create the correct address to send an email to in order to send an email from this alias.';
   static const sendFromAliasNote =
       'Note: you must send the email from a verified recipient on your account.';
+  static const actions = 'Actions';
+  static const description = 'Description';
 
   /// Create Alias
   static const createNewAlias = 'Create New Alias';

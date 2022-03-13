@@ -7,7 +7,7 @@ enum AliasScreenStatus { loading, loaded, failed }
 /// States which [AliasScreen] and its components can be in
 class AliasScreenState {
   const AliasScreenState({
-    this.status,
+    required this.status,
     this.alias,
     this.errorMessage,
     this.isToggleLoading,
@@ -17,7 +17,7 @@ class AliasScreenState {
   });
 
   /// [AliasScreen] status when fetching for [alias]
-  final AliasScreenStatus? status;
+  final AliasScreenStatus status;
 
   /// Alias shown in [AliasScreen]
   final Alias? alias;
@@ -64,6 +64,6 @@ class AliasScreenState {
 
   @override
   String toString() {
-    return 'AliasScreenState{status: $status, alias: $alias, errorMessage: $errorMessage}';
+    return 'AliasScreenState{status: $status, alias: $alias, errorMessage: $errorMessage, isToggleLoading: $isToggleLoading, deleteAliasLoading: $deleteAliasLoading, updateRecipientLoading: $updateRecipientLoading, isOffline: $isOffline}';
   }
 }

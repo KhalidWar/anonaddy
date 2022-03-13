@@ -47,11 +47,10 @@ class AliasService {
 
   Future<Alias> getSpecificAlias(String aliasID) async {
     try {
-      log(aliasID);
       final path = '$kUnEncodedBaseURL/$kAliasesURL/$aliasID';
       final response = await dio.get(path);
       final alias = Alias.fromJson(response.data['data']);
-      log('getSpecificAlias ${response.statusCode}');
+      log('getSpecificAlias: ' + response.statusCode.toString());
 
       return alias;
     } catch (e) {

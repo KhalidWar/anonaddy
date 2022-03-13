@@ -35,6 +35,8 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       key: const Key('aliasScreenScaffold'),
       resizeToAvoidBottomInset: false,
@@ -43,7 +45,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         builder: (context, watch, _) {
           final aliasState = ref.watch(aliasScreenStateNotifier);
 
-          switch (aliasState.status!) {
+          switch (aliasState.status) {
             case AliasScreenStatus.loading:
               return const Center(child: PlatformLoadingIndicator());
 
@@ -53,6 +55,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             case AliasScreenStatus.failed:
               final error = aliasState.errorMessage;
               return LottieWidget(
+                lottieHeight: size.height * 0.3,
                 lottie: LottieImages.errorCone,
                 label: error,
               );
@@ -71,6 +74,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     final isAliasDeleted = alias.deletedAt != null;
 
     return ListView(
+      key: const Key('aliasScreenListView'),
       physics: const ClampingScrollPhysics(),
       children: [
         if (aliasState.isOffline!) const OfflineBanner(),
@@ -84,7 +88,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
           child: Text(
-            'Actions',
+            AppStrings.actions,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -130,8 +134,8 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         ),
         AliasDetailListTile(
           leadingIconData: Icons.comment_outlined,
-          title: alias.description ?? 'No description',
-          subtitle: 'Description',
+          title: alias.description ?? AppStrings.noDescription,
+          subtitle: AppStrings.description,
           trailingIconData: Icons.edit_outlined,
           trailingIconOnPress: () => updateDescriptionDialog(context, alias),
         ),
@@ -176,6 +180,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   children: [
                     Text(
                       'Default Recipient${alias.recipients!.length >= 2 ? 's' : ''}',
+                      key: const Key('aliasScreenDefaultRecipient'),
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     IconButton(
