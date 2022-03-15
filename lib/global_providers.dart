@@ -18,7 +18,6 @@ import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/io_client.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -45,10 +44,9 @@ final dioInterceptorProvider = Provider((ref) {
 });
 
 final accessTokenService = Provider<AccessTokenService>((ref) {
-  final secureStorage = ref.read(flutterSecureStorage);
   return AccessTokenService(
-    secureStorage: secureStorage,
-    httpClient: IOClient(),
+    secureStorage: ref.read(flutterSecureStorage),
+    dio: Dio(),
   );
 });
 
