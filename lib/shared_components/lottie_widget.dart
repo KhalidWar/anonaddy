@@ -35,6 +35,7 @@ class LottieWidget extends StatelessWidget {
           ),
         ListView(
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             if (lottie != null)
               Center(
