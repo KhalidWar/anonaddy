@@ -1,21 +1,20 @@
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 
 import 'mock_flutter_secure_storage.dart';
 import 'mock_io_client.dart';
 
 void main() {
   late MockFlutterSecureStorage mockSecureStorage;
-  late MockIoClient mockHttpClient;
+  late MockDio mockDio;
   late AccessTokenService accessTokenService;
 
   setUp(() {
     mockSecureStorage = MockFlutterSecureStorage();
-    mockHttpClient = MockIoClient();
-    accessTokenService = AccessTokenService(
-      secureStorage: mockSecureStorage,
-      httpClient: mockHttpClient,
-    );
+    mockDio = MockDio();
+    accessTokenService =
+        AccessTokenService(secureStorage: mockSecureStorage, dio: mockDio);
   });
 
   test(
@@ -28,6 +27,7 @@ void main() {
 
     // Assert
     expect(isValid, true);
+    verifyNoMoreInteractions(mockDio);
   });
 
   test(

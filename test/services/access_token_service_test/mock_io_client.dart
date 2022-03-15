@@ -1,10 +1,15 @@
-import 'package:http/http.dart' as http;
-import 'package:http/io_client.dart';
+import 'package:dio/dio.dart';
 import 'package:mockito/mockito.dart';
 
-class MockIoClient extends Mock implements IOClient {
+class MockDio extends Mock implements Dio {
   @override
-  Future<http.Response> get(Uri url, {Map<String, String>? headers}) async {
-    return http.Response('body', 200);
+  Future<Response<T>> getUri<T>(Uri uri,
+      {Options? options,
+      CancelToken? cancelToken,
+      ProgressCallback? onReceiveProgress}) async {
+    return Response(
+      statusCode: 200,
+      requestOptions: RequestOptions(path: uri.path),
+    );
   }
 }
