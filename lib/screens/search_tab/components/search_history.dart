@@ -5,11 +5,22 @@ import 'package:anonaddy/state_management/search/search_history/search_history_s
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SearchHistory extends ConsumerWidget {
+class SearchHistory extends ConsumerStatefulWidget {
   const SearchHistory({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _SearchHistoryState();
+}
+
+class _SearchHistoryState extends ConsumerState<SearchHistory> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(searchHistoryStateNotifier.notifier).initSearchHistory();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final searchState = ref.watch(searchHistoryStateNotifier);
 

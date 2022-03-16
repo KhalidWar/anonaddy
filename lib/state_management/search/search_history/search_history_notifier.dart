@@ -15,28 +15,31 @@ final searchHistoryStateNotifier =
 
 class SearchHistoryNotifier extends StateNotifier<SearchHistoryState> {
   SearchHistoryNotifier({required this.secureStorage})
-      : super(const SearchHistoryState(
-          status: SearchHistoryStatus.loading,
-          aliases: [],
-        )) {
-    _initState();
-  }
+      : super(SearchHistoryState.initialState());
 
   final FlutterSecureStorage secureStorage;
 
   static const _kHiveSecureKey = 'hiveSecureKey';
   static const _kSearchHistoryBox = 'searchHistoryBoxKey';
 
+  /// Updates UI to latest state
+  void _updateState(SearchHistoryState newState) {
+    if (mounted) state = newState;
+  }
+
   Future<void> addAliasToSearchHistory(Alias alias) async {
     try {
       final box = Hive.box<Alias>(_kSearchHistoryBox);
       box.add(alias);
-      state = state.copyWith(aliases: box.values.toList().cast<Alias>());
+      final newState =
+          state.copyWith(aliases: box.values.toList().cast<Alias>());
+      _updateState(newState);
     } catch (error) {
-      state.copyWith(
+      final newState = state.copyWith(
         status: SearchHistoryStatus.failed,
         errorMessage: error.toString(),
       );
+      _updateState(newState);
     }
   }
 
@@ -44,54 +47,69 @@ class SearchHistoryNotifier extends StateNotifier<SearchHistoryState> {
     try {
       final box = Hive.box<Alias>(_kSearchHistoryBox);
       await box.clear();
-      state = state.copyWith(
+
+      final newState = state.copyWith(
         status: SearchHistoryStatus.loaded,
         aliases: [],
       );
+      _updateState(newState);
     } catch (error) {
-      state.copyWith(
+      final newState = state.copyWith(
         status: SearchHistoryStatus.failed,
         errorMessage: error.toString(),
       );
+      _updateState(newState);
     }
   }
 
-  Future<void> _initState() async {
+  Future<void> initSearchHistory() async {
     try {
-      await _generateKeys();
+      final encryptionKey = await _getEncryptionKey();
 
-      final data = await secureStorage.read(key: _kHiveSecureKey);
-      final encryptionKey = base64Url.decode(data!);
       final box = await Hive.openBox<Alias>(
         _kSearchHistoryBox,
         encryptionCipher: HiveAesCipher(encryptionKey),
       );
-      state = state.copyWith(
+
+      final newState = state.copyWith(
         status: SearchHistoryStatus.loaded,
         aliases: box.isEmpty ? [] : box.values.toList().cast<Alias>(),
       );
+      _updateState(newState);
     } catch (error) {
-      state.copyWith(
+      final newState = state.copyWith(
         status: SearchHistoryStatus.failed,
         errorMessage: error.toString(),
       );
+      _updateState(newState);
     }
   }
 
-  Future<void> _generateKeys() async {
+  Future<List<int>> _getEncryptionKey() async {
     try {
-      final containsEncryptionKey =
-          await secureStorage.containsKey(key: _kHiveSecureKey);
-      if (!containsEncryptionKey) {
-        final key = Hive.generateSecureKey();
+      /// Encryption key is [List<int>] according to the documentation.
+      late List<int> encryptionKey;
+
+      /// Fetch saved encryptionKey from device storage
+      final savedEncryptionKey = await secureStorage.read(key: _kHiveSecureKey);
+
+      /// If encryptionKey doesn't exist, generate a new key and save it.
+      if (savedEncryptionKey == null) {
+        final newKey = Hive.generateSecureKey();
         await secureStorage.write(
-            key: _kHiveSecureKey, value: base64UrlEncode(key));
+          key: _kHiveSecureKey,
+          value: base64UrlEncode(newKey),
+        );
       }
+
+      /// Load encryptionKey from device storage and decode it
+      final savedKey = await secureStorage.read(key: _kHiveSecureKey);
+      if (savedKey == null) throw 'Failed to load encryption keys';
+      encryptionKey = base64Url.decode(savedKey);
+
+      return encryptionKey;
     } catch (error) {
-      state.copyWith(
-        status: SearchHistoryStatus.failed,
-        errorMessage: error.toString(),
-      );
+      rethrow;
     }
   }
 }
