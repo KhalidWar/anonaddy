@@ -26,18 +26,15 @@ class SearchTab extends StatelessWidget {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         body: NestedScrollView(
+          physics: const ClampingScrollPhysics(),
           headerSliverBuilder: (context, _) {
             return [
               SliverAppBar(
-                expandedHeight: size.height * 0.2,
+                expandedHeight: size.height * 0.19,
                 elevation: 0,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
-                  background: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: SearchTabHeader(),
-                  ),
+                  background: SearchTabHeader(),
                 ),
               ),
             ];
