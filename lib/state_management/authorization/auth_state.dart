@@ -1,7 +1,20 @@
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 
 /// Manages user flow status
-enum AuthorizationStatus { unknown, authorized, unauthorized }
+enum AuthorizationStatus {
+  /// Default status at app startup when user data hasn't been fetched yet.
+  unknown,
+
+  /// When user decides to log in with AnonAddy account.
+  anonAddyLogin,
+
+  /// When user decides to log in with a self hosted instance.
+  selfHostedLogin,
+
+  /// When user logs in successfully and/or user account has been fetched from
+  /// device storage.
+  authorized,
+}
 
 /// Manages app biometric authentication lock status.
 enum AuthenticationStatus {

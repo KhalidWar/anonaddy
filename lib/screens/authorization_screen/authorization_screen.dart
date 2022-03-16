@@ -2,6 +2,7 @@ import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
 import 'package:anonaddy/screens/authorization_screen/lock_screen.dart';
 import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
+import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/state_management/authorization/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,9 @@ class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(authStateNotifier.notifier).initAuth();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(authStateNotifier.notifier).initAuth();
+    });
   }
 
   @override
@@ -99,8 +102,12 @@ class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
         }
 
       /// Manages when a user has logged out or no logged in user found.
-      case AuthorizationStatus.unauthorized:
+      case AuthorizationStatus.anonAddyLogin:
         return const AnonAddyLoginScreen();
+
+      /// Manages when a user has logged out or no logged in user found.
+      case AuthorizationStatus.selfHostedLogin:
+        return const SelfHostLoginScreen();
     }
   }
 }

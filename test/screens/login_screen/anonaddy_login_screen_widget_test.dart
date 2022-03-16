@@ -3,23 +3,13 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-
-class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
-  final mockObserver = MockNavigatorObserver();
-
-  setUp(() {
-    reset(mockObserver);
-  });
-
   /// Builds login screen to be tested
   Widget buildAnonAddyLoginScreen() {
-    return ProviderScope(
+    return const ProviderScope(
       child: MaterialApp(
-        navigatorObservers: [mockObserver],
-        home: const AnonAddyLoginScreen(),
+        home: AnonAddyLoginScreen(),
       ),
     );
   }
@@ -34,9 +24,11 @@ void main() {
     // Act
     final loginScreenScaffold = find.byKey(const Key('loginScreenScaffold'));
     final textField = find.byKey(const Key('loginScreenTextField'));
-    final loginButton = find.byKey(const Key('loginScreenLoginButton'));
-    final loginButtonText = find.byKey(const Key('loginScreenLoginButtonText'));
-    final loadingIndicator = find.byKey(const Key('loginLoadingIndicator'));
+    final loginButton = find.byKey(const Key('loginFooterLoginButton'));
+    final loginButtonText =
+        find.byKey(const Key('loginFooterLoginButtonLabel'));
+    final loadingIndicator =
+        find.byKey(const Key('loginFooterLoginButtonLoading'));
     final accessTokenInfoButton =
         find.byKey(const Key('loginScreenAccessTokenInfoButton'));
 
@@ -58,7 +50,7 @@ void main() {
     await tester.pumpWidget(buildAnonAddyLoginScreen());
 
     // Act
-    final loginButton = find.byKey(const Key('loginScreenLoginButton'));
+    final loginButton = find.byKey(const Key('loginFooterLoginButton'));
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
 
@@ -94,7 +86,7 @@ void main() {
 
     // Act
     final inputField = find.byKey(const Key('loginScreenTextField'));
-    final loginButton = find.byKey(const Key('loginScreenLoginButton'));
+    final loginButton = find.byKey(const Key('loginFooterLoginButton'));
 
     await tester.enterText(inputField, 'text');
     await tester.tap(loginButton);

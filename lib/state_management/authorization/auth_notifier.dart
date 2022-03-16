@@ -36,6 +36,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
     if (mounted) state = newState;
   }
 
+  void goToAnonAddyLogin() {
+    final newState = state.copyWith(
+      authorizationStatus: AuthorizationStatus.anonAddyLogin,
+    );
+    _updateState(newState);
+  }
+
+  void goToSelfHostedLogin() {
+    final newState = state.copyWith(
+      authorizationStatus: AuthorizationStatus.selfHostedLogin,
+    );
+    _updateState(newState);
+  }
+
   Future<void> login(String url, String token) async {
     _updateState(state.copyWith(loginLoading: true));
 
@@ -112,7 +126,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         _updateState(newState);
       } else {
         final newState = state.copyWith(
-          authorizationStatus: AuthorizationStatus.unauthorized,
+          authorizationStatus: AuthorizationStatus.anonAddyLogin,
           authenticationStatus:
               canCheck ? authStatus : AuthenticationStatus.unavailable,
         );

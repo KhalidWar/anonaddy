@@ -15,17 +15,15 @@ void main() async {
   }
 
   testWidgets(
-      'Given self hosted login screen,'
-      'When screen is loaded,'
-      'Then show screen.', (WidgetTester tester) async {
+      'Given SelfHostLoginScreen is loaded, '
+      'When no input is given, '
+      'Then show screen with no errors.', (WidgetTester tester) async {
     // Arrange
     await tester.pumpWidget(buildSelfHostedScreen());
 
     // Act
     final scaffold = find.byKey(const Key('selfHostedLoginScreenScaffold'));
-    final appBar = find.byKey(const Key('selfHostedLoginScreenAppBar'));
-    final appBarLabel =
-        find.byKey(const Key('selfHostedLoginScreenAppBarLabel'));
+    final appBar = find.byType(AppBar);
     final urlInputLabel =
         find.byKey(const Key('selfHostedLoginScreenUrlInputLabel'));
     final urlInputField =
@@ -36,19 +34,17 @@ void main() async {
         find.byKey(const Key('selfHostedLoginScreenTokenInputField'));
     final infoButton =
         find.byKey(const Key('selfHostedLoginScreenSelfHostInfoButton'));
-    final loginButton =
-        find.byKey(const Key('selfHostedLoginScreenLoginButton'));
+    final loginButton = find.byKey(const Key('loginFooterLoginButton'));
     final loginButtonLoading =
-        find.byKey(const Key('selfHostedLoginScreenLoginButtonLoading'));
+        find.byKey(const Key('loginFooterLoginButtonLoading'));
     final loginButtonLabel =
-        find.byKey(const Key('selfHostedLoginScreenLoginButtonLabel'));
+        find.byKey(const Key('loginFooterLoginButtonLabel'));
     final urlInputHintText = find.text(AppUrl.anonAddyAuthority);
     final tokenInputHintText = find.text(AppStrings.enterYourApiToken);
 
     // Assert
     expect(scaffold, findsOneWidget);
     expect(appBar, findsOneWidget);
-    expect(appBarLabel, findsOneWidget);
     expect(urlInputLabel, findsOneWidget);
     expect(urlInputField, findsOneWidget);
     expect(tokenInputLabel, findsOneWidget);
@@ -62,16 +58,15 @@ void main() async {
   });
 
   testWidgets(
-      'Given instance URL input field is empty,'
-      'When login button is tapped,'
-      'Then display URL validator error text and not token validator error.',
+      'Given instance URL input field is empty, '
+      'When login button is tapped, '
+      'Then display URL validator error text and no token validator error.',
       (WidgetTester tester) async {
     // Arrange
     await tester.pumpWidget(buildSelfHostedScreen());
 
     // Act
-    final loginButton =
-        find.byKey(const Key('selfHostedLoginScreenLoginButton'));
+    final loginButton = find.byKey(const Key('loginFooterLoginButton'));
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
 
@@ -85,9 +80,9 @@ void main() async {
   });
 
   testWidgets(
-      'Given instance URL input field is populated,'
+      'Given instance URL input field is populated, '
       'When login button is tapped,'
-      'Then display token validator error text and not url validator error.',
+      'Then display token validator error text and no url validator error.',
       (WidgetTester tester) async {
     // Arrange
     await tester.pumpWidget(buildSelfHostedScreen());
@@ -97,8 +92,7 @@ void main() async {
         find.byKey(const Key('selfHostedLoginScreenUrlInputField'));
     await tester.enterText(urlInput, 'text');
 
-    final loginButton =
-        find.byKey(const Key('selfHostedLoginScreenLoginButton'));
+    final loginButton = find.byKey(const Key('loginFooterLoginButton'));
     await tester.tap(loginButton);
     await tester.pumpAndSettle();
 

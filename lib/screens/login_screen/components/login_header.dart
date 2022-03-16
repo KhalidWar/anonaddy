@@ -13,7 +13,7 @@ class LoginHeader extends StatelessWidget {
           'AddyManager',
           style: Theme.of(context)
               .textTheme
-              .headline5!
+              .headline6!
               .copyWith(fontWeight: FontWeight.bold),
         ),
         Divider(
