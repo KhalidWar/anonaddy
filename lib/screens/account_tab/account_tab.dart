@@ -40,6 +40,7 @@ class _AccountTabState extends ConsumerState<AccountTab> {
       body: DefaultTabController(
         length: 4,
         child: NestedScrollView(
+          physics: const ClampingScrollPhysics(),
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
@@ -79,6 +80,7 @@ class _AccountTabState extends ConsumerState<AccountTab> {
                 ),
                 bottom: const TabBar(
                   isScrollable: true,
+                  physics: ClampingScrollPhysics(),
                   indicatorColor: AppColors.accentColor,
                   tabs: [
                     Tab(child: Text(AppStrings.recipients)),
@@ -91,11 +93,12 @@ class _AccountTabState extends ConsumerState<AccountTab> {
             ];
           },
           body: const TabBarView(
+            physics: ClampingScrollPhysics(),
             children: [
               RecipientsTab(),
               UsernamesTab(),
               DomainsTab(),
-              RulesTab()
+              RulesTab(),
             ],
           ),
         ),

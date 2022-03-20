@@ -116,6 +116,7 @@ class _UsernameDefaultRecipientState
           children: [
             ListView(
               controller: controller,
+              physics: const ClampingScrollPhysics(),
               children: [
                 Column(
                   children: [

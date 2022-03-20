@@ -84,6 +84,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
 
             return ListView(
               shrinkWrap: true,
+              physics: const ClampingScrollPhysics(),
               children: [
                 usernames.isEmpty
                     ? ListTile(

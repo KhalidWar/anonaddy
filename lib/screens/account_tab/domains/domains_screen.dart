@@ -72,6 +72,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
     final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
 
     return ListView(
+      physics: const ClampingScrollPhysics(),
       children: [
         Padding(
           padding: EdgeInsets.all(size.height * 0.01),

@@ -69,6 +69,7 @@ class DomainsTab extends ConsumerWidget {
   ListView domainsList(List<Domain> domains) {
     return ListView.builder(
       shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       itemCount: domains.length,
       itemBuilder: (context, index) {
         final domain = domains[index];

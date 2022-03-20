@@ -87,6 +87,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
     }
 
     return ListView(
+      physics: const ClampingScrollPhysics(),
       children: [
         Padding(
           padding: EdgeInsets.all(size.height * 0.01),

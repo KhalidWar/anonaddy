@@ -125,6 +125,7 @@ class _DomainDefaultRecipientState
           children: [
             ListView(
               controller: controller,
+              physics: const ClampingScrollPhysics(),
               children: [
                 Column(
                   children: [

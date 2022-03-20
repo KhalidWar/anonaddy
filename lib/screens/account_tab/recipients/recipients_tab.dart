@@ -75,6 +75,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
 
         return ListView(
           shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
           children: [
             recipients.isEmpty
                 ? ListTile(

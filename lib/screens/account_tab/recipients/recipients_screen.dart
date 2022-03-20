@@ -107,6 +107,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     }
 
     return ListView(
+      physics: const ClampingScrollPhysics(),
       children: [
         if (recipient.aliases == null || recipient.emailVerifiedAt == null)
           Container(

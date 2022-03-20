@@ -79,6 +79,7 @@ class RulesTab extends ConsumerWidget {
   Widget buildRulesList(List<Rules> rules) {
     return ListView.builder(
       shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       itemCount: rules.length,
       itemBuilder: (context, index) {
         return RulesListTile(
