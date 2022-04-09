@@ -76,7 +76,7 @@ final searchService = Provider<SearchService>((ref) {
 
 final domainOptionsService = Provider<DomainOptionsService>((ref) {
   final accessToken = ref.read(accessTokenService);
-  return DomainOptionsService(accessToken);
+  return DomainOptionsService(ref.read(dioProvider));
 });
 
 final recipientService = Provider<RecipientService>((ref) {

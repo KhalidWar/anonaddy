@@ -6,6 +6,7 @@ import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainOptionsStateNotifier =
@@ -23,9 +24,6 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
   }) : super(const DomainOptionsState(status: DomainOptionsStatus.loading)) {
     /// Initially load data from disk (secured device storage)
     _loadOfflineData();
-
-    /// Fetch latest data from server
-    fetchDomainOption();
   }
 
   final DomainOptionsService domainOptionsService;
@@ -48,8 +46,11 @@ class DomainOptionsNotifier extends StateNotifier<DomainOptionsState> {
       /// Loads offline data when there's no internet connection
       await _loadOfflineData();
     } catch (error) {
+      final dioError = error as DioError;
       final newState = DomainOptionsState(
-          status: DomainOptionsStatus.failed, errorMessage: error.toString());
+        status: DomainOptionsStatus.failed,
+        errorMessage: dioError.message,
+      );
       _updateState(newState);
 
       /// Retry after facing an error
