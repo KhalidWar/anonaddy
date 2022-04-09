@@ -13,7 +13,8 @@ class AppStrings {
   static const domains = 'Domains';
   static const rules = 'Rules';
   static const selfHosted = 'Self Hosted';
-  static const subscriptionEndDate = 'Subscription end date';
+  static const subscriptionEndDate = 'Subscription End Date';
+  static const subscriptionEndDateNotAvailable = 'Not available';
   static const noDefaultSelected = 'No default selected';
   static const defaultAliasFormat = 'Default Alias Format';
   static const defaultAliasDomain = 'Default Alias Domain';
