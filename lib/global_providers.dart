@@ -91,7 +91,7 @@ final domainService = Provider<DomainsService>((ref) {
 
 final rulesService = Provider<RulesService>((ref) {
   final accessToken = ref.read(accessTokenService);
-  return RulesService(accessToken);
+  return RulesService(ref.read(dioProvider));
 });
 
 final appVersionService = Provider<AppVersionService>((ref) {

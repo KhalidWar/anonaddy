@@ -1,6 +1,7 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/services/rules/rules_service.dart';
 import 'package:anonaddy/state_management/rules/rules_tab_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final rulesTabStateNotifier =
@@ -34,8 +35,11 @@ class RulesTabNotifier extends StateNotifier<RulesTabState> {
           RulesTabState(status: RulesTabStatus.loaded, rules: rules);
       _updateState(newState);
     } catch (error) {
+      final dioError = error as DioError;
       final newState = RulesTabState(
-          status: RulesTabStatus.failed, errorMessage: error.toString());
+        status: RulesTabStatus.failed,
+        errorMessage: dioError.message,
+      );
       _updateState(newState);
     }
   }
