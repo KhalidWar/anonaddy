@@ -96,7 +96,9 @@ class SearchTab extends StatelessWidget {
 
                 /// When searching fails and returns an error
                 case SearchResultStatus.failed:
-                  return const LottieWidget(
+                  final errorMessage = searchState.errorMessage;
+                  return LottieWidget(
+                    label: errorMessage,
                     lottie: LottieImages.emptyResult,
                     lottieHeight: 150,
                   );
