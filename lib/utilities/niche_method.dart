@@ -49,7 +49,7 @@ class NicheMethod {
     );
   }
 
-  static launchURL(String url) async {
+  static Future<void> launchURL(String url) async {
     await launch(url).catchError((error, stackTrace) {
       throw showToast(error.toString());
     });
@@ -66,5 +66,10 @@ class NicheMethod {
       default:
         return 'UUID';
     }
+  }
+
+  static String capitalizeFirstLetter(String input) {
+    final firstLetter = input[0];
+    return input.replaceFirst(firstLetter, firstLetter.toUpperCase());
   }
 }
