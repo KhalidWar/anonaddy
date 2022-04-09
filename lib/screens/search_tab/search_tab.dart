@@ -30,7 +30,7 @@ class SearchTab extends StatelessWidget {
           headerSliverBuilder: (context, _) {
             return [
               SliverAppBar(
-                expandedHeight: size.height * 0.19,
+                expandedHeight: size.height * 0.21,
                 elevation: 0,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
