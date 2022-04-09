@@ -64,6 +64,7 @@ class AppStrings {
   static const unverified = 'Unverified';
 
   /// Usernames
+  static const addNewDomain = 'Add New Domain';
   static const addNewUsername = 'Add New Username';
   static const addUsername = 'Add Username';
   static const noAdditionalUsernamesFound = 'No additional usernames found';
