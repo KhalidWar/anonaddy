@@ -21,9 +21,7 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
   DomainsTabNotifier({
     required this.domainsService,
     required this.offlineData,
-  }) : super(const DomainsTabState(status: DomainsTabStatus.loading)) {
-    fetchDomains();
-  }
+  }) : super(const DomainsTabState(status: DomainsTabStatus.loading));
 
   final DomainsService domainsService;
   final OfflineData offlineData;
