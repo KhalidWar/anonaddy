@@ -1,23 +1,17 @@
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 
 import 'mock_dio.dart';
 
-class MockAccessTokenService extends Mock implements AccessTokenService {}
-
 void main() async {
   late MockDio mockDio;
-  late MockAccessTokenService mockAccessTokenService;
   late AliasService aliasService;
 
   setUp(() {
     mockDio = MockDio();
-    mockAccessTokenService = MockAccessTokenService();
-    aliasService = AliasService(mockAccessTokenService, mockDio);
+    aliasService = AliasService(mockDio);
   });
 
   test(
