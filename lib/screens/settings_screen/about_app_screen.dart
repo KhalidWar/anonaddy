@@ -17,6 +17,7 @@ class AboutAppScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('About App')),
       body: ListView(
+        physics: const ClampingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
         children: [
           buildHeader(context),

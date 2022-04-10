@@ -30,6 +30,7 @@ class SettingsScreen extends StatelessWidget {
           final biometric = ref.watch(biometricNotifier);
 
           return ListView(
+            physics: const ClampingScrollPhysics(),
             children: [
               ListTile(
                 dense: true,
