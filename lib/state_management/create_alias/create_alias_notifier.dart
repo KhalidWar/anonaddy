@@ -13,6 +13,7 @@ import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart'
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// This is the most complex part of this whole project.
@@ -111,7 +112,8 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
       aliasTabNotifier.addAlias(createdAlias);
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      final dioError = error as DioError;
+      NicheMethod.showToast(dioError.message);
     }
     _updateState(state.copyWith(isLoading: false));
   }

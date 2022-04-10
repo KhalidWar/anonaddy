@@ -29,6 +29,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   final showToast = NicheMethod.showToast;
 
+  /// Update AliasScreen state
   void _updateState(AliasScreenState newState) {
     if (mounted) state = newState;
   }
@@ -56,7 +57,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       } else {
         final newState = state.copyWith(
           status: AliasScreenStatus.failed,
-          errorMessage: dioError.message.toString(),
+          errorMessage: dioError.message,
         );
         _updateState(newState);
       }
@@ -66,11 +67,12 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   Future<void> editDescription(Alias alias, String newDesc) async {
     try {
       final updatedAlias =
-          await aliasService.editAliasDescription(alias.id, newDesc);
+          await aliasService.updateAliasDescription(alias.id, newDesc);
       showToast(ToastMessage.editDescriptionSuccess);
-      state = state.copyWith(alias: updatedAlias);
+      _updateState(state.copyWith(alias: updatedAlias));
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
@@ -83,7 +85,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       _updateState(state.copyWith(isToggleLoading: false, alias: oldAlias));
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message.toString());
+      showToast(dioError.message);
       _updateState(state.copyWith(isToggleLoading: false));
     }
   }
@@ -97,59 +99,70 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       _updateState(state.copyWith(isToggleLoading: false, alias: oldAlias));
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message.toString());
+      showToast(dioError.message);
       _updateState(state.copyWith(isToggleLoading: false));
     }
   }
 
   Future<void> deleteAlias(String aliasId) async {
-    state = state.copyWith(deleteAliasLoading: true);
+    _updateState(state.copyWith(deleteAliasLoading: true));
     try {
       await aliasService.deleteAlias(aliasId);
       showToast(ToastMessage.deleteAliasSuccess);
       final oldAlias = state.alias!;
       oldAlias.deletedAt = null;
-      aliasTabNotifier.refreshAliases();
-      state = state.copyWith(deleteAliasLoading: false, alias: oldAlias);
+      await aliasTabNotifier.refreshAliases();
+
+      final newState =
+          state.copyWith(deleteAliasLoading: false, alias: oldAlias);
+      _updateState(newState);
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(deleteAliasLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(deleteAliasLoading: false));
     }
   }
 
   Future<void> restoreAlias(String aliasId) async {
-    state = state.copyWith(deleteAliasLoading: true);
+    _updateState(state.copyWith(deleteAliasLoading: true));
     try {
       final newAlias = await aliasService.restoreAlias(aliasId);
       showToast(ToastMessage.restoreAliasSuccess);
       aliasTabNotifier.refreshAliases();
-      state = state.copyWith(deleteAliasLoading: false, alias: newAlias);
+      final newState =
+          state.copyWith(deleteAliasLoading: false, alias: newAlias);
+      _updateState(newState);
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(deleteAliasLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(deleteAliasLoading: false));
     }
   }
 
   Future<void> updateAliasDefaultRecipient(
       Alias alias, List<String> recipients) async {
-    state = state.copyWith(updateRecipientLoading: true);
+    _updateState(state.copyWith(updateRecipientLoading: true));
     try {
       final updatedAlias =
           await aliasService.updateAliasDefaultRecipient(alias.id, recipients);
-      state =
+      final newState =
           state.copyWith(updateRecipientLoading: false, alias: updatedAlias);
+      _updateState(newState);
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
-    state = state.copyWith(updateRecipientLoading: false);
+    _updateState(state.copyWith(updateRecipientLoading: false));
   }
 
   Future<void> forgetAlias(String aliasID) async {
     try {
       await aliasService.forgetAlias(aliasID);
       showToast(ToastMessage.forgetAliasSuccess);
+      //todo refresh aliases after forgetting an alias.
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 

@@ -8,6 +8,7 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final aliasTabStateNotifier =
@@ -37,7 +38,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     _updateState(newState);
 
     try {
-      final aliases = await aliasService.getAllAliasesData('with');
+      final aliases = await aliasService.getAllAliases('with');
       await _saveOfflineData(aliases);
 
       /// Fetches more aliases if there's not enough
@@ -53,9 +54,10 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     } on SocketException {
       loadOfflineState();
     } catch (error) {
+      final dioError = error as DioError;
       final newState = state.copyWith(
         status: AliasTabStatus.failed,
-        errorMessage: error.toString(),
+        errorMessage: dioError.message,
       );
       _updateState(newState);
 
@@ -66,7 +68,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Silently fetches the latest aliases data and displays them
   Future<void> refreshAliases() async {
     try {
-      final aliases = await aliasService.getAllAliasesData('with');
+      final aliases = await aliasService.getAllAliases('with');
       await _saveOfflineData(aliases);
 
       /// Fetches more aliases if there's not enough
@@ -80,7 +82,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       );
       _updateState(newState);
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      final dioError = error as DioError;
+      NicheMethod.showToast(dioError.message);
     }
   }
 
@@ -96,13 +99,13 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     try {
       /// Fetches 100 additional available aliases if there are less than 20
       if (_getAvailableAliases(aliases).length < 20) {
-        final moreAliases = await aliasService.getAllAliasesData(null);
+        final moreAliases = await aliasService.getAllAliases(null);
         aliases.addAll(moreAliases);
       }
 
       /// Fetches 100 additional deleted aliases if there are less than 10
       if (_getDeletedAliases(aliases).length < 20) {
-        final moreAliases = await aliasService.getAllAliasesData('only');
+        final moreAliases = await aliasService.getAllAliases('only');
         aliases.addAll(moreAliases);
       }
     } catch (error) {
