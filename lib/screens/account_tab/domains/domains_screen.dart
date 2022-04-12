@@ -115,8 +115,8 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
               buildSwitch(domainProvider.activeSwitchLoading!, domain.active),
           trailingIconOnPress: () {
             domain.active
-                ? domainNotifier.toggleOffActivity(domain.id)
-                : domainNotifier.toggleOnActivity(domain.id);
+                ? domainNotifier.deactivateDomain(domain.id)
+                : domainNotifier.activateDomain(domain.id);
           },
         ),
         AliasDetailListTile(
@@ -128,8 +128,8 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
               domainProvider.catchAllSwitchLoading!, domain.catchAll),
           trailingIconOnPress: () {
             domain.catchAll
-                ? domainNotifier.toggleOffCatchAll(domain.id)
-                : domainNotifier.toggleOnCatchAll(domain.id);
+                ? domainNotifier.deactivateCatchAll(domain.id)
+                : domainNotifier.activateCatchAll(domain.id);
           },
         ),
         if (domain.domainVerifiedAt == null)

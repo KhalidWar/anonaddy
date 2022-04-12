@@ -6,6 +6,7 @@ import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/state_management/domains/domains_tab_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsStateNotifier =
@@ -26,24 +27,26 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
   final DomainsService domainsService;
   final OfflineData offlineData;
 
+  /// Updates DomainTab state
+  void _updateState(DomainsTabState newState) {
+    if (mounted) state = newState;
+  }
+
   Future<void> fetchDomains() async {
     try {
-      final domains = await domainsService.getAllDomains();
+      final domains = await domainsService.getDomains();
       await _saveOfflineData(domains);
-      state = DomainsTabState(
-        status: DomainsTabStatus.loaded,
-        domainModel: domains,
-      );
+      final newState = DomainsTabState(
+          status: DomainsTabStatus.loaded, domainModel: domains);
+      _updateState(newState);
     } on SocketException {
       await _loadOfflineData();
     } catch (error) {
-      if (mounted) {
-        state = DomainsTabState(
-          status: DomainsTabStatus.failed,
-          errorMessage: error.toString(),
-        );
-        await _retryOnError();
-      }
+      final dioError = error as DioError;
+      final newState = DomainsTabState(
+          status: DomainsTabStatus.failed, errorMessage: dioError.message);
+      _updateState(newState);
+      await _retryOnError();
     }
   }
 

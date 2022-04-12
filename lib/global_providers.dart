@@ -83,7 +83,7 @@ final recipientService = Provider<RecipientService>((ref) {
 
 final domainService = Provider<DomainsService>((ref) {
   final accessToken = ref.read(accessTokenService);
-  return DomainsService(accessToken);
+  return DomainsService(accessToken, ref.read(dioProvider));
 });
 
 final rulesService = Provider<RulesService>((ref) {

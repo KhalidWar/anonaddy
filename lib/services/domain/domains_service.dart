@@ -5,146 +5,68 @@ import 'dart:developer';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_error_message.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class DomainsService {
-  const DomainsService(this.accessTokenService);
+  const DomainsService(this.accessTokenService, this.dio);
   final AccessTokenService accessTokenService;
+  final Dio dio;
 
-  Future<DomainModel> getAllDomains() async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
+  Future<DomainModel> getDomains() async {
     try {
-      final response = await http.get(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kDomainsURL'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
-
-      if (response.statusCode == 200) {
-        log('getAllDomains ${response.statusCode}');
-        return DomainModel.fromJson(jsonDecode(response.body));
-      } else {
-        log('getAllDomains ${response.statusCode}');
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      const path = '$kUnEncodedBaseURL/$kDomainsURL';
+      final response = await dio.get(path);
+      log('getDomains: ' + response.statusCode.toString());
+      return DomainModel.fromJson(response.data);
     } catch (e) {
       rethrow;
     }
   }
 
   Future<Domain> getSpecificDomain(String domainId) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
     try {
-      final response = await http.get(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kDomainsURL/$domainId'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
-
-      if (response.statusCode == 200) {
-        log('getSpecificDomain ${response.statusCode}');
-        return Domain.fromJson(jsonDecode(response.body)['data']);
-      } else {
-        log('getSpecificDomain ${response.statusCode}');
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainId';
+      final response = await dio.get(path);
+      log('getSpecificDomain: ' + response.statusCode.toString());
+      final domain = response.data['data'];
+      return Domain.fromJson(domain);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<Domain> createNewDomain(String domain) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
+  Future<Domain> addNewDomain(String domain) async {
     try {
-      final response = await http.post(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kDomainsURL'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: json.encode({"domain": domain}),
-      );
-
-      if (response.statusCode == 201) {
-        log("createNewDomain ${response.statusCode}");
-        return Domain.fromJson(jsonDecode(response.body)['data']);
-      } else {
-        log("createNewDomain ${response.statusCode}");
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      const path = '$kUnEncodedBaseURL/$kDomainsURL';
+      final data = json.encode({"domain": domain});
+      final response = await dio.post(path, data: data);
+      log('addNewDomain: ' + response.statusCode.toString());
+      final newDomain = response.data['data'];
+      return Domain.fromJson(newDomain);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<Domain> editDomainDescription(
+  Future<Domain> updateDomainDescription(
       String domainID, String description) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
     try {
-      final response = await http.patch(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kDomainsURL/$domainID'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: jsonEncode({"description": description}),
-      );
-
-      if (response.statusCode == 200) {
-        log("editDomainDescription ${response.statusCode}");
-        return Domain.fromJson(jsonDecode(response.body)['data']);
-      } else {
-        log("editDomainDescription ${response.statusCode}");
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainID';
+      final data = jsonEncode({"description": description});
+      final response = await dio.patch(path, data: data);
+      log('updateDomainDescription: ' + response.statusCode.toString());
+      final domain = response.data['data'];
+      return Domain.fromJson(domain);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future deleteDomain(String domainID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
+  Future<void> deleteDomain(String domainID) async {
     try {
-      final response = await http.delete(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kDomainsURL/$domainID'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
-
-      if (response.statusCode == 204) {
-        log("deleteDomain ${response.statusCode}");
-        return 204;
-      } else {
-        log("deleteDomain ${response.statusCode}");
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainID';
+      final response = await dio.delete(path);
+      log('deleteDomain: ' + response.statusCode.toString());
     } catch (e) {
       rethrow;
     }
@@ -152,139 +74,60 @@ class DomainsService {
 
   Future<Domain> updateDomainDefaultRecipient(
       String domainID, String recipientID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
     try {
-      final response = await http.patch(
-        Uri.https(instanceURL,
-            '$kUnEncodedBaseURL/$kDomainsURL/$domainID/$kDefaultRecipientURL'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: jsonEncode({"default_recipient": recipientID}),
-      );
-
-      if (response.statusCode == 200) {
-        log("updateDomainDefaultRecipient ${response.statusCode}");
-        return Domain.fromJson(jsonDecode(response.body)['data']);
-      } else {
-        log("updateDomainDefaultRecipient ${response.statusCode}");
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final path =
+          '$kUnEncodedBaseURL/$kDomainsURL/$domainID/$kDefaultRecipientURL';
+      final data = jsonEncode({"default_recipient": recipientID});
+      final response = await dio.patch(path, data: data);
+      log('updateDomainDefaultRecipient: ' + response.statusCode.toString());
+      final domain = response.data['data'];
+      return Domain.fromJson(domain);
     } catch (e) {
       rethrow;
     }
   }
 
   Future<Domain> activateDomain(String domainID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
     try {
-      final response = await http.post(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kActiveDomainURL'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: json.encode({"id": domainID}),
-      );
-
-      if (response.statusCode == 200) {
-        log("activateDomain ${response.statusCode}");
-        return Domain.fromJson(jsonDecode(response.body)['data']);
-      } else {
-        log("activateDomain ${response.statusCode}");
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      const path = '$kUnEncodedBaseURL/$kActiveDomainURL';
+      final data = json.encode({"id": domainID});
+      final response = await dio.post(path, data: data);
+      log('activateDomain: ' + response.statusCode.toString());
+      final domain = response.data['data'];
+      return Domain.fromJson(domain);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future deactivateDomain(String domainID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
+  Future<void> deactivateDomain(String domainID) async {
     try {
-      final response = await http.delete(
-          Uri.https(
-              instanceURL, '$kUnEncodedBaseURL/$kActiveDomainURL/$domainID'),
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "Accept": "application/json",
-            "Authorization": "Bearer $accessToken",
-          });
-
-      if (response.statusCode == 204) {
-        log("deactivateDomain ${response.statusCode}");
-        return 204;
-      } else {
-        log("deactivateDomain ${response.statusCode}");
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final path = '$kUnEncodedBaseURL/$kActiveDomainURL/$domainID';
+      final response = await dio.delete(path);
+      log('deactivateDomain: ' + response.statusCode.toString());
     } catch (e) {
       rethrow;
     }
   }
 
   Future<Domain> activateCatchAll(String domainID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
     try {
-      final response = await http.post(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kCatchAllDomainURL'),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-        body: json.encode({"id": domainID}),
-      );
-
-      if (response.statusCode == 200) {
-        log("activateCatchAll ${response.statusCode}");
-        return Domain.fromJson(jsonDecode(response.body)['data']);
-      } else {
-        log("activateCatchAll ${response.statusCode}");
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      const path = '$kUnEncodedBaseURL/$kCatchAllDomainURL';
+      final data = json.encode({"id": domainID});
+      final response = await dio.post(path, data: data);
+      log('activateCatchAll: ' + response.statusCode.toString());
+      final domain = response.data['data'];
+      return Domain.fromJson(domain);
     } catch (e) {
       rethrow;
     }
   }
 
   Future deactivateCatchAll(String domainID) async {
-    final accessToken = await accessTokenService.getAccessToken();
-    final instanceURL = await accessTokenService.getInstanceURL();
-
     try {
-      final response = await http.delete(
-          Uri.https(
-              instanceURL, '$kUnEncodedBaseURL/$kCatchAllDomainURL/$domainID'),
-          headers: {
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "Accept": "application/json",
-            "Authorization": "Bearer $accessToken",
-          });
-
-      if (response.statusCode == 204) {
-        log("deactivateCatchAll ${response.statusCode}");
-        return 204;
-      } else {
-        log("deactivateCatchAll ${response.statusCode}");
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final path = '$kUnEncodedBaseURL/$kCatchAllDomainURL/$domainID';
+      final response = await dio.delete(path);
+      log('deactivateCatchAll: ' + response.statusCode.toString());
     } catch (e) {
       rethrow;
     }
