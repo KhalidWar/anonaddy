@@ -6,6 +6,7 @@ import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_state.dart';
 import 'package:anonaddy/state_management/usernames/usernames_tab_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernamesScreenStateNotifier = StateNotifierProvider.autoDispose<
@@ -27,32 +28,39 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
 
   final Function showToast = NicheMethod.showToast;
 
+  void _updateState(UsernamesScreenState newState) {
+    if (mounted) state = newState;
+  }
+
   Future<void> fetchUsername(Username username) async {
-    state = state.copyWith(status: UsernamesScreenStatus.loading);
+    _updateState(state.copyWith(status: UsernamesScreenStatus.loading));
     try {
       final updatedUsername =
           await usernameService.getSpecificUsername(username.id);
-      state = state.copyWith(
+      final newState = state.copyWith(
           status: UsernamesScreenStatus.loaded, username: updatedUsername);
+      _updateState(newState);
     } on SocketException {
       /// Return old alias data if there's no internet connection
-      state = state.copyWith(
+      final newState = state.copyWith(
           status: UsernamesScreenStatus.loaded, username: username);
+      _updateState(newState);
     } catch (error) {
-      state = state.copyWith(
-        status: UsernamesScreenStatus.failed,
-        errorMessage: error.toString(),
-      );
+      final dioError = error as DioError;
+      final newState = state.copyWith(
+          status: UsernamesScreenStatus.failed, errorMessage: dioError.message);
+      _updateState(newState);
     }
   }
 
-  Future<void> createNewUsername(String username) async {
+  Future<void> addNewUsername(String username) async {
     try {
-      await usernameService.createNewUsername(username);
+      await usernameService.addNewUsername(username);
       showToast('Username added successfully!');
       usernamesNotifier.fetchUsernames();
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
@@ -62,81 +70,89 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
       showToast('Username deleted successfully!');
       usernamesNotifier.fetchUsernames();
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
-  Future editDescription(Username username, String description) async {
+  Future updateUsernameDescription(
+      Username username, String description) async {
     try {
-      final newUsername = await usernameService.editUsernameDescription(
+      final newUsername = await usernameService.updateUsernameDescription(
           username.id, description);
       state.username!.description = newUsername.description;
       showToast('Description updated successfully!');
-      state = state.copyWith();
+      _updateState(state.copyWith());
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
   Future updateDefaultRecipient(Username username, String recipientID) async {
-    state = state.copyWith(updateRecipientLoading: true);
+    _updateState(state.copyWith(updateRecipientLoading: true));
     try {
       final newUsername = await usernameService.updateDefaultRecipient(
           username.id, recipientID);
       state.username!.defaultRecipient = newUsername.defaultRecipient;
       showToast('Default recipient updated successfully!');
-      state = state.copyWith(updateRecipientLoading: false);
+      _updateState(state.copyWith(updateRecipientLoading: false));
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(updateRecipientLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(updateRecipientLoading: false));
     }
   }
 
   Future<void> activateUsername(Username username) async {
-    state = state.copyWith(activeSwitchLoading: true);
+    _updateState(state.copyWith(activeSwitchLoading: true));
     try {
       final newUsername = await usernameService.activateUsername(username.id);
       state.username!.active = newUsername.active;
-      state = state.copyWith(activeSwitchLoading: false);
+      _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(activeSwitchLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
 
   Future<void> deactivateUsername(Username username) async {
-    state = state.copyWith(activeSwitchLoading: true);
+    _updateState(state.copyWith(activeSwitchLoading: true));
     try {
       await usernameService.deactivateUsername(username.id);
       username.active = false;
-      state = state.copyWith(activeSwitchLoading: false);
+      _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(activeSwitchLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
 
   Future<void> activateCatchAll(Username username) async {
-    state = state.copyWith(catchAllSwitchLoading: true);
+    _updateState(state.copyWith(catchAllSwitchLoading: true));
     try {
       final newUsername = await usernameService.activateCatchAll(username.id);
       state.username!.catchAll = newUsername.catchAll;
-      state = state.copyWith(catchAllSwitchLoading: false);
+      _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(catchAllSwitchLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
 
   Future<void> deactivateCatchAll(Username username) async {
-    state = state.copyWith(catchAllSwitchLoading: true);
+    _updateState(state.copyWith(catchAllSwitchLoading: true));
     try {
       await usernameService.deactivateCatchAll(username.id);
       state.username!.catchAll = false;
-      state = state.copyWith(catchAllSwitchLoading: false);
+      _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(catchAllSwitchLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
 }

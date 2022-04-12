@@ -6,6 +6,7 @@ import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/usernames/usernames_tab_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernameStateNotifier =
@@ -27,24 +28,30 @@ class UsernamesNotifier extends StateNotifier<UsernamesState> {
   final UsernameService usernameService;
   final OfflineData offlineData;
 
+  /// Updates Usernames state
+  void _updateState(UsernamesState newState) {
+    if (mounted) state = newState;
+  }
+
   Future fetchUsernames() async {
     try {
-      final domains = await usernameService.getUsernameData();
+      final domains = await usernameService.getUsernames();
       await _saveOfflineData(domains);
-      state = UsernamesState(
+      final newState = UsernamesState(
         status: UsernamesStatus.loaded,
         usernameModel: domains,
       );
+      _updateState(newState);
     } on SocketException {
       await _loadOfflineData();
     } catch (error) {
-      if (mounted) {
-        state = UsernamesState(
-          status: UsernamesStatus.failed,
-          errorMessage: error.toString(),
-        );
-        await _retryOnError();
-      }
+      final dioError = error as DioError;
+      final newState = UsernamesState(
+        status: UsernamesStatus.failed,
+        errorMessage: dioError.message,
+      );
+      _updateState(newState);
+      await _retryOnError();
     }
   }
 

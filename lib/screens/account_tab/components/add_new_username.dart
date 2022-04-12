@@ -32,7 +32,7 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
       if (_formKey.currentState!.validate()) {
         await ref
             .read(usernamesScreenStateNotifier.notifier)
-            .createNewUsername(_textEditController.text.trim());
+            .addNewUsername(_textEditController.text.trim());
         Navigator.pop(context);
       }
     }

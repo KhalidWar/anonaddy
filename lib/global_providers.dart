@@ -56,8 +56,7 @@ final changelogService = Provider<ChangelogService>((ref) {
 });
 
 final usernameService = Provider<UsernameService>((ref) {
-  final accessToken = ref.read(accessTokenService);
-  return UsernameService(accessToken);
+  return UsernameService(dio: ref.read(dioProvider));
 });
 
 final accountService = Provider<AccountService>((ref) {

@@ -243,13 +243,14 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
 
     Future<void> updateDescription() async {
       if (formKey.currentState!.validate()) {
-        await usernameNotifier.editDescription(username, newDescription);
+        await usernameNotifier.updateUsernameDescription(
+            username, newDescription);
         Navigator.pop(context);
       }
     }
 
     Future<void> removeDescription() async {
-      await usernameNotifier.editDescription(username, '');
+      await usernameNotifier.updateUsernameDescription(username, '');
       Navigator.pop(context);
     }
 
