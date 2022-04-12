@@ -7,6 +7,7 @@ import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientScreenStateNotifier = StateNotifierProvider.autoDispose<
@@ -28,50 +29,60 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
 
   final showToast = NicheMethod.showToast;
 
+  void _updateState(RecipientScreenState newState) {
+    if (mounted) state = newState;
+  }
+
   Future<void> fetchRecipient(Recipient recipient) async {
     /// Initially set RecipientScreen to loading
-    state = state.copyWith(status: RecipientScreenStatus.loading);
+    _updateState(state.copyWith(status: RecipientScreenStatus.loading));
     try {
       final newRecipient =
           await recipientService.getSpecificRecipient(recipient.id);
 
       /// Assign newly fetched recipient data to RecipientScreen state
-      state = state.copyWith(
+      final newState = state.copyWith(
           status: RecipientScreenStatus.loaded, recipient: newRecipient);
+      _updateState(newState);
     } on SocketException {
       /// Return old recipient data if there's no internet connection
-      state = state.copyWith(
+      final newState = state.copyWith(
           status: RecipientScreenStatus.loaded, recipient: recipient);
+      _updateState(newState);
     } catch (error) {
-      state = state.copyWith(
+      final dioError = error as DioError;
+      final newState = state.copyWith(
         status: RecipientScreenStatus.failed,
-        errorMessage: error.toString(),
+        errorMessage: dioError.message,
       );
+      _updateState(newState);
     }
   }
 
   Future enableEncryption(Recipient recipient) async {
-    state = state.copyWith(isEncryptionToggleLoading: true);
+    _updateState(state.copyWith(isEncryptionToggleLoading: true));
     try {
       final updatedRecipient =
           await recipientService.enableEncryption(recipient.id);
       recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
-      state = state.copyWith(isEncryptionToggleLoading: false);
+      _updateState(state.copyWith(isEncryptionToggleLoading: false));
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(isEncryptionToggleLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(isEncryptionToggleLoading: false));
     }
   }
 
   Future disableEncryption(Recipient recipient) async {
-    state = state.copyWith(isEncryptionToggleLoading: true);
+    _updateState(state.copyWith(isEncryptionToggleLoading: true));
     try {
       await recipientService.disableEncryption(recipient.id);
       recipient.shouldEncrypt = false;
-      state = state.copyWith(isEncryptionToggleLoading: false);
+      _updateState(state.copyWith(isEncryptionToggleLoading: false));
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(isEncryptionToggleLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(isEncryptionToggleLoading: false));
     }
   }
 
@@ -82,9 +93,10 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       recipient.fingerprint = updatedRecipient.fingerprint;
       recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
       showToast(ToastMessage.addGPGKeySuccess);
-      state = state.copyWith(recipient: recipient);
+      _updateState(state.copyWith(recipient: recipient));
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
@@ -94,9 +106,10 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       showToast(ToastMessage.deleteGPGKeySuccess);
       recipient.fingerprint = null;
       recipient.shouldEncrypt = false;
-      state = state.copyWith(recipient: recipient);
+      _updateState(state.copyWith(recipient: recipient));
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
@@ -106,29 +119,32 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       showToast('Recipient deleted successfully!');
       recipientTabNotifier.fetchRecipients();
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
-  Future<void> verifyEmail(Recipient recipient) async {
+  Future<void> resendVerificationEmail(Recipient recipient) async {
     try {
-      await recipientService.sendVerificationEmail(recipient.id);
+      await recipientService.resendVerificationEmail(recipient.id);
       showToast('Verification email is sent');
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
   Future<void> addRecipient(String email) async {
-    state = state.copyWith(isAddRecipientLoading: true);
+    _updateState(state.copyWith(isAddRecipientLoading: true));
     try {
       await recipientService.addRecipient(email);
       showToast('Recipient added successfully!');
-      state = state.copyWith(isAddRecipientLoading: false);
+      _updateState(state.copyWith(isAddRecipientLoading: false));
       recipientTabNotifier.fetchRecipients();
     } catch (error) {
-      state = state.copyWith(isAddRecipientLoading: false);
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(isAddRecipientLoading: false));
     }
   }
 }

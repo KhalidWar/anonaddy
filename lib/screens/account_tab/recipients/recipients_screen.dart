@@ -177,7 +177,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   onPressed: () {},
                 ),
                 trailingIconOnPress: () =>
-                    recipientProvider.verifyEmail(recipient),
+                    recipientProvider.resendVerificationEmail(recipient),
               )
             : Container(),
         if (recipient.aliases == null)

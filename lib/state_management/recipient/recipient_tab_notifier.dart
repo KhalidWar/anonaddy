@@ -7,6 +7,7 @@ import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientTabStateNotifier =
@@ -36,7 +37,7 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
     _updateState(state.copyWith(status: RecipientTabStatus.loading));
 
     try {
-      final recipients = await recipientService.getAllRecipient();
+      final recipients = await recipientService.getRecipients();
       await _saveOfflineData(recipients);
       final newState = state.copyWith(
           status: RecipientTabStatus.loaded, recipients: recipients);
@@ -44,8 +45,11 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
     } on SocketException {
       await _loadOfflineData();
     } catch (error) {
+      final dioError = error as DioError;
       final newState = state.copyWith(
-          status: RecipientTabStatus.failed, errorMessage: error.toString());
+        status: RecipientTabStatus.failed,
+        errorMessage: dioError.message,
+      );
       _updateState(newState);
       await _retryOnError();
     }
@@ -54,14 +58,15 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
   /// Silently fetches the latest recipient data and displays them
   Future<void> refreshRecipients() async {
     try {
-      final recipients = await recipientService.getAllRecipient();
+      final recipients = await recipientService.getRecipients();
       await _saveOfflineData(recipients);
 
       final newState = state.copyWith(
           status: RecipientTabStatus.loaded, recipients: recipients);
       _updateState(newState);
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      final dioError = error as DioError;
+      NicheMethod.showToast(dioError.message);
     }
   }
 

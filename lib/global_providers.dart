@@ -79,8 +79,7 @@ final domainOptionsService = Provider<DomainOptionsService>((ref) {
 });
 
 final recipientService = Provider<RecipientService>((ref) {
-  final accessToken = ref.read(accessTokenService);
-  return RecipientService(accessToken);
+  return RecipientService(dio: ref.read(dioProvider));
 });
 
 final domainService = Provider<DomainsService>((ref) {
