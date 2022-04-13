@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final aliasTabStateNotifier =
     StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {
   return AliasTabNotifier(
-    aliasService: ref.read(aliasService),
+    aliasService: ref.read(aliasServiceProvider),
     offlineData: ref.read(offlineDataProvider),
   );
 });
@@ -38,7 +38,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     _updateState(newState);
 
     try {
-      final aliases = await aliasService.getAllAliases('with');
+      final aliases = await aliasService.getAliases('with');
       await _saveOfflineData(aliases);
 
       /// Fetches more aliases if there's not enough
@@ -68,7 +68,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Silently fetches the latest aliases data and displays them
   Future<void> refreshAliases() async {
     try {
-      final aliases = await aliasService.getAllAliases('with');
+      final aliases = await aliasService.getAliases('with');
       await _saveOfflineData(aliases);
 
       /// Fetches more aliases if there's not enough
@@ -99,13 +99,13 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     try {
       /// Fetches 100 additional available aliases if there are less than 20
       if (_getAvailableAliases(aliases).length < 20) {
-        final moreAliases = await aliasService.getAllAliases(null);
+        final moreAliases = await aliasService.getAliases(null);
         aliases.addAll(moreAliases);
       }
 
       /// Fetches 100 additional deleted aliases if there are less than 10
       if (_getDeletedAliases(aliases).length < 20) {
-        final moreAliases = await aliasService.getAllAliases('only');
+        final moreAliases = await aliasService.getAliases('only');
         aliases.addAll(moreAliases);
       }
     } catch (error) {

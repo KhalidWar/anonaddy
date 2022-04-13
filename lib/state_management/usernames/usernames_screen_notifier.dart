@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/username/username_model.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_state.dart';
@@ -12,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final usernamesScreenStateNotifier = StateNotifierProvider.autoDispose<
     UsernamesScreenNotifier, UsernamesScreenState>((ref) {
   return UsernamesScreenNotifier(
-    usernameService: ref.read(usernameService),
+    usernameService: ref.read(usernameServiceProvider),
     usernamesNotifier: ref.read(usernameStateNotifier.notifier),
   );
 });

@@ -1,4 +1,3 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -13,7 +12,7 @@ final aliasScreenStateNotifier =
     StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
         (ref) {
   return AliasScreenNotifier(
-    aliasService: ref.read(aliasService),
+    aliasService: ref.read(aliasServiceProvider),
     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
   );
 });

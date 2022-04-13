@@ -1,8 +1,14 @@
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final dioInterceptorProvider = Provider<DioInterceptors>((ref) {
+  final accessTokenService = ref.read(accessTokenServiceProvider);
+  return DioInterceptors(accessTokenService: accessTokenService);
+});
 
 class DioInterceptors extends Interceptor {
-  DioInterceptors(this.accessTokenService);
+  DioInterceptors({required this.accessTokenService});
   final AccessTokenService accessTokenService;
 
   @override

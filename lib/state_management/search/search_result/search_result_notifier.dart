@@ -1,4 +1,3 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
@@ -10,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final searchResultStateNotifier =
     StateNotifierProvider<SearchResultNotifier, SearchResultState>((ref) {
   return SearchResultNotifier(
-    searchService: ref.read(searchService),
+    searchService: ref.read(searchServiceProvider),
     aliasTabState: ref.read(aliasTabStateNotifier.notifier),
     controller: TextEditingController(),
   );

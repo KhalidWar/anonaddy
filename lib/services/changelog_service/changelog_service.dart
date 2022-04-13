@@ -1,8 +1,15 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/changelog_storage_key.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+final changelogServiceProvider = Provider<ChangelogService>((ref) {
+  final secureStorage = ref.read(flutterSecureStorage);
+  return ChangelogService(secureStorage: secureStorage);
+});
+
 class ChangelogService {
-  ChangelogService(this.secureStorage);
+  ChangelogService({required this.secureStorage});
   final FlutterSecureStorage secureStorage;
 
   Future<String?> getChangelogStatus() async {

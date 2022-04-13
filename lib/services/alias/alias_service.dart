@@ -2,15 +2,21 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final aliasServiceProvider = Provider<AliasService>((ref) {
+  return AliasService(dio: ref.read(dioProvider));
+});
 
 class AliasService {
-  const AliasService(this.dio);
+  const AliasService({required this.dio});
   final Dio dio;
 
-  Future<List<Alias>> getAllAliases(String? deleted) async {
+  Future<List<Alias>> getAliases(String? deleted) async {
     try {
       const path = '$kUnEncodedBaseURL/$kAliasesURL';
       final params = {'deleted': deleted};

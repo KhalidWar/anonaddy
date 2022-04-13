@@ -12,7 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final usernameStateNotifier =
     StateNotifierProvider.autoDispose<UsernamesNotifier, UsernamesState>((ref) {
   return UsernamesNotifier(
-    usernameService: ref.read(usernameService),
+    usernameService: ref.read(usernameServiceProvider),
     offlineData: ref.read(offlineDataProvider),
   );
 });

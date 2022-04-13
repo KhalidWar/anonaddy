@@ -24,7 +24,7 @@ void main() async {
 
     // Act
     final dioGet = mockDio.get(urlPath);
-    final account = await accountService.getAccountData();
+    final account = await accountService.getAccounts();
 
     // Assert
     expectLater(dioGet, completes);

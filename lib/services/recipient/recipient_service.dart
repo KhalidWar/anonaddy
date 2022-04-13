@@ -1,9 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final recipientService = Provider<RecipientService>((ref) {
+  return RecipientService(dio: ref.read(dioProvider));
+});
 
 class RecipientService {
   const RecipientService({required this.dio});

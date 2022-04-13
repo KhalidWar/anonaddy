@@ -13,8 +13,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 final authStateNotifier = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
     secureStorage: ref.read(flutterSecureStorage),
-    biometricService: ref.read(biometricAuthService),
-    tokenService: ref.read(accessTokenService),
+    biometricService: ref.read(biometricAuthServiceProvider),
+    tokenService: ref.read(accessTokenServiceProvider),
     searchHistory: ref.read(searchHistoryStateNotifier.notifier),
   );
 });

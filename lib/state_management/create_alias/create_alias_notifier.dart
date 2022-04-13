@@ -1,4 +1,3 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
@@ -27,7 +26,7 @@ final createAliasStateNotifier =
     StateNotifierProvider.autoDispose<CreateAliasNotifier, CreateAliasState>(
         (ref) {
   return CreateAliasNotifier(
-    aliasService: ref.read(aliasService),
+    aliasService: ref.read(aliasServiceProvider),
     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
     domainOptions: ref.read(domainOptionsStateNotifier),
     accountState: ref.read(accountStateNotifier),

@@ -1,5 +1,5 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -72,7 +72,8 @@ class AccountPopupInfo extends ConsumerWidget {
   }
 
   Future<void> updateDefaultAliasFormatDomain(WidgetRef ref) async {
-    final instanceURL = await ref.read(accessTokenService).getInstanceURL();
+    final instanceURL =
+        await ref.read(accessTokenServiceProvider).getInstanceURL();
     await NicheMethod.launchURL('https://$instanceURL/settings');
   }
 }

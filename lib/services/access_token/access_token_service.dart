@@ -1,10 +1,19 @@
 import 'dart:developer';
 
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final accessTokenServiceProvider = Provider<AccessTokenService>((ref) {
+  return AccessTokenService(
+    secureStorage: ref.read(flutterSecureStorage),
+    dio: Dio(),
+  );
+});
 
 class AccessTokenService {
   AccessTokenService({

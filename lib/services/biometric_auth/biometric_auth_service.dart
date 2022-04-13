@@ -2,11 +2,16 @@ import 'dart:developer';
 
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
 
+final biometricAuthServiceProvider = Provider<BiometricAuthService>((ref) {
+  return BiometricAuthService(localAuth: LocalAuthentication());
+});
+
 class BiometricAuthService {
-  const BiometricAuthService(this.localAuth);
+  const BiometricAuthService({required this.localAuth});
   final LocalAuthentication localAuth;
 
   Future<void> init() async {

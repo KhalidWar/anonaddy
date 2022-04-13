@@ -12,7 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final accountStateNotifier =
     StateNotifierProvider<AccountNotifier, AccountState>((ref) {
   return AccountNotifier(
-    accountService: ref.read(accountService),
+    accountService: ref.read(accountServiceProvider),
     offlineData: ref.read(offlineDataProvider),
   );
 });
@@ -34,7 +34,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
     _updateState(newState);
 
     try {
-      final account = await accountService.getAccountData();
+      final account = await accountService.getAccounts();
       await _saveOfflineData(account);
 
       /// Construct new state
@@ -67,7 +67,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
   Future<void> refreshAccount() async {
     try {
       /// Only trigger fetch API when app is Foreground to avoid API spamming
-      final account = await accountService.getAccountData();
+      final account = await accountService.getAccounts();
       await _saveOfflineData(account);
 
       /// Construct new state

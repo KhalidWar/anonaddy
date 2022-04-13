@@ -1,18 +1,24 @@
 import 'dart:developer';
 
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final searchServiceProvider = Provider<SearchService>((ref) {
+  return SearchService(dio: ref.read(dioProvider));
+});
 
 class SearchService {
-  const SearchService(this.dio);
+  const SearchService({required this.dio});
   final Dio dio;
 
   /// Fetches matching aliases from API
   Future<List<Alias>> searchAliases(
       String searchKeyword, bool includeDeleted) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kAliasesURL';
+      const path = '$kUnEncodedBaseURL/$kAliasesURL';
       final params = {
         'deleted': includeDeleted ? 'with' : null,
         "filter[search]": searchKeyword,
