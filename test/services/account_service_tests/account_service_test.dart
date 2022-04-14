@@ -12,7 +12,7 @@ void main() async {
 
   setUp(() {
     mockDio = MockDio();
-    accountService = AccountService(mockDio);
+    accountService = AccountService(dio: mockDio);
   });
 
   test(

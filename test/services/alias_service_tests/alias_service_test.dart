@@ -11,7 +11,7 @@ void main() async {
 
   setUp(() {
     mockDio = MockDio();
-    aliasService = AliasService(mockDio);
+    aliasService = AliasService(dio: mockDio);
   });
 
   test(

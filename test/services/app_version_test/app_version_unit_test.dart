@@ -11,7 +11,7 @@ void main() async {
 
   setUp(() {
     mockDio = MockDio();
-    appVersionService = AppVersionService(mockDio);
+    appVersionService = AppVersionService(dio: mockDio);
   });
 
   test(

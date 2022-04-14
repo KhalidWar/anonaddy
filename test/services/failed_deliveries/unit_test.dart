@@ -11,7 +11,7 @@ void main() async {
 
   setUp(() {
     mockDio = MockDio();
-    deliveriesService = FailedDeliveryService(mockDio);
+    deliveriesService = FailedDeliveryService(dio: mockDio);
   });
 
   test(
