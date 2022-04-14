@@ -25,11 +25,13 @@ class _AlisTabState extends ConsumerState<AliasTab> {
   void initState() {
     super.initState();
 
-    /// Initially, get data from disk (secure device storage) and assign it
-    ref.read(aliasTabStateNotifier.notifier).loadOfflineState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      /// Initially, get data from disk (secure device storage) and assign it
+      ref.read(aliasTabStateNotifier.notifier).loadOfflineState();
 
-    /// Fetch the latest Aliases data from server
-    ref.read(aliasTabStateNotifier.notifier).fetchAliases();
+      /// Fetch the latest Aliases data from server
+      ref.read(aliasTabStateNotifier.notifier).fetchAliases();
+    });
   }
 
   @override
