@@ -3,6 +3,7 @@ import 'package:anonaddy/screens/alert_center/components/section_separator.dart'
 import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
 import 'package:anonaddy/screens/alert_center/notifications_widget.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class AlertCenterScreen extends StatelessWidget {
@@ -13,7 +14,11 @@ class AlertCenterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(AppStrings.alertCenter)),
+      appBar: CustomAppBar(
+        title: AppStrings.alertCenter,
+        leadingOnPress: () => Navigator.pop(context),
+        showTrailing: false,
+      ),
       body: ListView(
         shrinkWrap: true,
         physics: const ClampingScrollPhysics(),

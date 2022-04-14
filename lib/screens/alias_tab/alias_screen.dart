@@ -2,13 +2,13 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/list_tiles/list_tiles_exports.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_exports.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
 import 'package:anonaddy/state_management/alias_state/alias_state_export.dart';
 import 'package:anonaddy/utilities/utilities_export.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -423,57 +423,36 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    Future<void> forget() async {
-      await ref
-          .read(aliasScreenStateNotifier.notifier)
-          .forgetAlias(widget.alias.id);
-
-      /// Dismisses [platformDialog]
-      Navigator.pop(context);
-
-      /// Dismisses [AliasScreen] after forgetting [alias]
-      Navigator.pop(context);
-    }
-
     Future forgetOnPress() async {
       PlatformAware.platformDialog(
         context: context,
         child: PlatformAlertDialog(
-          content: AnonAddyString.forgetAliasConfirmation,
-          method: forget,
           title: AppStrings.forgetAlias,
+          content: AnonAddyString.forgetAliasConfirmation,
+          method: () async {
+            await ref
+                .read(aliasScreenStateNotifier.notifier)
+                .forgetAlias(widget.alias.id);
+
+            /// Dismisses [platformDialog]
+            Navigator.pop(context);
+
+            /// Dismisses [AliasScreen] after forgetting [alias]
+            Navigator.pop(context);
+          },
         ),
       );
     }
 
-    return AppBar(
-      title: const Text(
-        'Alias',
-        style: TextStyle(color: Colors.white),
-      ),
-      leading: IconButton(
-        icon: Icon(
-          PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
-        ),
-        color: Colors.white,
-        onPressed: () {
-          ref.read(aliasTabStateNotifier.notifier).refreshAliases();
-          Navigator.pop(context);
-        },
-      ),
-      actions: [
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) {
-            return ['Forget Alias'].map((String choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Text(choice),
-              );
-            }).toList();
-          },
-          onSelected: (String choice) => forgetOnPress(),
-        ),
-      ],
+    return CustomAppBar(
+      title: 'Alias',
+      leadingOnPress: () {
+        ref.read(aliasTabStateNotifier.notifier).refreshAliases();
+        Navigator.pop(context);
+      },
+      showTrailing: true,
+      trailingLabel: 'Forget Alias',
+      trailingOnPress: (choice) => forgetOnPress(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +16,11 @@ class AboutAppScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('About App')),
+      appBar: CustomAppBar(
+        title: 'About App',
+        leadingOnPress: () => Navigator.pop(context),
+        showTrailing: false,
+      ),
       body: ListView(
         physics: const ClampingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
