@@ -29,6 +29,10 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      /// Fetch offline state initially
+      ref.watch(domainsStateNotifier.notifier).loadOfflineState();
+
+      /// Fetch domains from server
       ref.watch(domainsStateNotifier.notifier).fetchDomains();
     });
   }
@@ -53,7 +57,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
             return const RecipientsShimmerLoading();
 
           case DomainsTabStatus.loaded:
-            final domains = domainsState.domainModel!.domains;
+            final domains = domainsState.domains;
 
             return ListView(
               shrinkWrap: true,

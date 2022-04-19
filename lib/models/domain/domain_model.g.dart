@@ -6,17 +6,6 @@ part of 'domain_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DomainModel _$DomainModelFromJson(Map<String, dynamic> json) => DomainModel(
-      domains: (json['data'] as List<dynamic>)
-          .map((e) => Domain.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$DomainModelToJson(DomainModel instance) =>
-    <String, dynamic>{
-      'data': instance.domains.map((e) => e.toJson()).toList(),
-    };
-
 Domain _$DomainFromJson(Map<String, dynamic> json) => Domain(
       id: json['id'] as String,
       userId: json['user_id'] as String,

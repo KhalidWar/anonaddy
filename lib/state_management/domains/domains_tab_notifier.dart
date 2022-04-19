@@ -22,7 +22,7 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
   DomainsTabNotifier({
     required this.domainsService,
     required this.offlineData,
-  }) : super(const DomainsTabState(status: DomainsTabStatus.loading));
+  }) : super(DomainsTabState.initialState());
 
   final DomainsService domainsService;
   final OfflineData offlineData;
@@ -36,14 +36,14 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
     try {
       final domains = await domainsService.getDomains();
       await _saveOfflineData(domains);
-      final newState = DomainsTabState(
-          status: DomainsTabStatus.loaded, domainModel: domains);
+      final newState =
+          state.copyWith(status: DomainsTabStatus.loaded, domains: domains);
       _updateState(newState);
     } on SocketException {
-      await _loadOfflineData();
+      loadOfflineState();
     } catch (error) {
       final dioError = error as DioError;
-      final newState = DomainsTabState(
+      final newState = state.copyWith(
           status: DomainsTabStatus.failed, errorMessage: dioError.message);
       _updateState(newState);
       await _retryOnError();
@@ -57,17 +57,31 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
     }
   }
 
-  Future<void> _loadOfflineData() async {
-    final securedData = await offlineData.readDomainOfflineData();
-    if (securedData.isNotEmpty) {
-      final data = DomainModel.fromJson(jsonDecode(securedData));
-      state =
-          DomainsTabState(status: DomainsTabStatus.loaded, domainModel: data);
+  Future<void> loadOfflineState() async {
+    if (state.status != DomainsTabStatus.failed) {
+      final savedDomains = await _loadOfflineDomains();
+      if (savedDomains.isNotEmpty) {
+        final newState = state.copyWith(
+          status: DomainsTabStatus.loaded,
+          domains: savedDomains,
+        );
+        _updateState(newState);
+      }
     }
   }
 
-  Future<void> _saveOfflineData(DomainModel domain) async {
-    final encodedData = jsonEncode(domain.toJson());
+  Future<List<Domain>> _loadOfflineDomains() async {
+    List<dynamic> decodedData = [];
+    final securedData = await offlineData.readDomainOfflineData();
+    if (securedData.isNotEmpty) decodedData = jsonDecode(securedData);
+
+    return decodedData.map((alias) {
+      return Domain.fromJson(alias);
+    }).toList();
+  }
+
+  Future<void> _saveOfflineData(List<Domain> domain) async {
+    final encodedData = jsonEncode(domain);
     await offlineData.writeDomainOfflineData(encodedData);
   }
 }

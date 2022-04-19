@@ -16,12 +16,13 @@ class DomainsService {
   const DomainsService({required this.dio});
   final Dio dio;
 
-  Future<DomainModel> getDomains() async {
+  Future<List<Domain>> getDomains() async {
     try {
       const path = '$kUnEncodedBaseURL/$kDomainsURL';
       final response = await dio.get(path);
       log('getDomains: ' + response.statusCode.toString());
-      return DomainModel.fromJson(response.data);
+      final domains = response.data['data'] as List;
+      return domains.map((domain) => Domain.fromJson(domain)).toList();
     } catch (e) {
       rethrow;
     }
