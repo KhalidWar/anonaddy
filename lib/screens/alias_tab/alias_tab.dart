@@ -27,7 +27,7 @@ class _AlisTabState extends ConsumerState<AliasTab> {
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       /// Initially, get data from disk (secure device storage) and assign it
-      ref.read(aliasTabStateNotifier.notifier).loadOfflineState();
+      ref.read(aliasTabStateNotifier.notifier).loadOfflineAliases();
 
       /// Fetch the latest Aliases data from server
       ref.read(aliasTabStateNotifier.notifier).fetchAliases();

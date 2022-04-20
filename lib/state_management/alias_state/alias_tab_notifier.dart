@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
@@ -51,15 +50,19 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         deletedAliasList: _getDeletedAliases(aliases),
       );
       _updateState(newState);
-    } on SocketException {
-      loadOfflineState();
     } catch (error) {
       final dioError = error as DioError;
-      final newState = state.copyWith(
-        status: AliasTabStatus.failed,
-        errorMessage: dioError.message,
-      );
-      _updateState(newState);
+
+      /// If offline, load offline data and exit.
+      if (dioError.type == DioErrorType.other) {
+        await loadOfflineAliases();
+      } else {
+        final newState = state.copyWith(
+          status: AliasTabStatus.failed,
+          errorMessage: dioError.message,
+        );
+        _updateState(newState);
+      }
 
       await _retryOnError();
     }
@@ -116,33 +119,23 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Fetches aliases from disk and displays them, used at initial app
   /// startup since fetching from disk is a lot faster than fetching from API.
   /// It's also used to when there's no internet connection.
-  Future<void> loadOfflineState() async {
+  Future<void> loadOfflineAliases() async {
     if (state.status != AliasTabStatus.failed) {
-      final savedAliases = await _loadOfflineData();
-      if (savedAliases.isNotEmpty) {
+      List<dynamic> encodedAliases = [];
+      final securedData = await offlineData.readAliasOfflineData();
+      if (securedData.isNotEmpty) encodedAliases = jsonDecode(securedData);
+      final aliases =
+          encodedAliases.map((alias) => Alias.fromJson(alias)).toList();
+
+      if (aliases.isNotEmpty) {
         final newState = state.copyWith(
           status: AliasTabStatus.loaded,
-          aliases: savedAliases,
-          availableAliasList: _getAvailableAliases(savedAliases),
-          deletedAliasList: _getDeletedAliases(savedAliases),
+          aliases: aliases,
+          availableAliasList: _getAvailableAliases(aliases),
+          deletedAliasList: _getDeletedAliases(aliases),
         );
         _updateState(newState);
       }
-    }
-  }
-
-  Future<List<Alias>> _loadOfflineData() async {
-    List<dynamic> decodedData = [];
-    final securedData = await offlineData.readAliasOfflineData();
-    if (securedData.isNotEmpty) decodedData = jsonDecode(securedData);
-
-    if (decodedData.isNotEmpty) {
-      final aliases = decodedData.map((alias) {
-        return Alias.fromJson(alias);
-      }).toList();
-      return aliases;
-    } else {
-      return [];
     }
   }
 
