@@ -64,4 +64,14 @@ class OfflineData {
         await secureStorage.read(key: OfflineDataKey.domain) ?? '';
     return domainData;
   }
+
+  Future<void> writeRulesOfflineData(String data) async {
+    await secureStorage.write(key: OfflineDataKey.rules, value: data);
+  }
+
+  Future<String> readRulesOfflineData() async {
+    final domainData =
+        await secureStorage.read(key: OfflineDataKey.rules) ?? '';
+    return domainData;
+  }
 }
