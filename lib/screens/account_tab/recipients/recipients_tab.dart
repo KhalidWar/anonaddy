@@ -57,6 +57,10 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      /// Initially, load offline data.
+      ref.read(recipientTabStateNotifier.notifier).loadOfflineState();
+
+      /// Then, load API data.
       ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
     });
   }

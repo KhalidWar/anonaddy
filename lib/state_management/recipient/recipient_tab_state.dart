@@ -2,6 +2,10 @@ import 'package:anonaddy/models/recipient/recipient.dart';
 
 enum RecipientTabStatus { loading, loaded, failed }
 
+extension Shortcuts on RecipientTabStatus {
+  bool isFailed() => this == RecipientTabStatus.failed;
+}
+
 class RecipientTabState {
   const RecipientTabState({
     required this.status,
