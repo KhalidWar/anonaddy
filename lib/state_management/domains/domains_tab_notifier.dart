@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
@@ -39,14 +38,18 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
       final newState =
           state.copyWith(status: DomainsTabStatus.loaded, domains: domains);
       _updateState(newState);
-    } on SocketException {
-      loadOfflineState();
     } catch (error) {
       final dioError = error as DioError;
-      final newState = state.copyWith(
-          status: DomainsTabStatus.failed, errorMessage: dioError.message);
-      _updateState(newState);
-      await _retryOnError();
+
+      /// If offline, load offline data.
+      if (dioError.type == DioErrorType.other) {
+        await loadOfflineState();
+      } else {
+        final newState = state.copyWith(
+            status: DomainsTabStatus.failed, errorMessage: dioError.message);
+        _updateState(newState);
+        await _retryOnError();
+      }
     }
   }
 
@@ -57,27 +60,27 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
     }
   }
 
+  /// Fetches recipients from disk and displays them, used at initial app
+  /// startup since fetching from disk is a lot faster than fetching from API.
+  /// It's also used to when there's no internet connection.
   Future<void> loadOfflineState() async {
+    /// Only load offline data when state is NOT failed.
+    /// Otherwise, it would always show offline data even if there's error.
     if (state.status != DomainsTabStatus.failed) {
-      final savedDomains = await _loadOfflineDomains();
-      if (savedDomains.isNotEmpty) {
+      List<dynamic> decodedData = [];
+      final securedData = await offlineData.readDomainOfflineData();
+      if (securedData.isNotEmpty) decodedData = jsonDecode(securedData);
+      final domains =
+          decodedData.map((domain) => Domain.fromJson(domain)).toList();
+
+      if (domains.isNotEmpty) {
         final newState = state.copyWith(
           status: DomainsTabStatus.loaded,
-          domains: savedDomains,
+          domains: domains,
         );
         _updateState(newState);
       }
     }
-  }
-
-  Future<List<Domain>> _loadOfflineDomains() async {
-    List<dynamic> decodedData = [];
-    final securedData = await offlineData.readDomainOfflineData();
-    if (securedData.isNotEmpty) decodedData = jsonDecode(securedData);
-
-    return decodedData.map((alias) {
-      return Domain.fromJson(alias);
-    }).toList();
   }
 
   Future<void> _saveOfflineData(List<Domain> domain) async {
