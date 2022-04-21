@@ -2,6 +2,10 @@ import 'package:anonaddy/models/rules/rules.dart';
 
 enum RulesTabStatus { loading, loaded, failed }
 
+extension Shortcuts on RulesTabStatus {
+  bool isFailed() => this == RulesTabStatus.failed;
+}
+
 class RulesTabState {
   const RulesTabState({
     required this.status,
