@@ -55,7 +55,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
       /// If offline, load offline data and exit.
       if (dioError.type == DioErrorType.other) {
-        await loadOfflineAliases();
+        await loadOfflineState();
       } else {
         final newState = state.copyWith(
           status: AliasTabStatus.failed,
@@ -119,7 +119,9 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Fetches aliases from disk and displays them, used at initial app
   /// startup since fetching from disk is a lot faster than fetching from API.
   /// It's also used to when there's no internet connection.
-  Future<void> loadOfflineAliases() async {
+  Future<void> loadOfflineState() async {
+    /// Only load offline data when state is NOT failed.
+    /// Otherwise, it would always show offline data even if there's error.
     if (state.status != AliasTabStatus.failed) {
       List<dynamic> encodedAliases = [];
       final securedData = await offlineData.readAliasOfflineData();
