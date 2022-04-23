@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
+import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -15,6 +15,7 @@ final recipientScreenStateNotifier = StateNotifierProvider.autoDispose<
   return RecipientScreenNotifier(
     recipientService: ref.read(recipientService),
     recipientTabNotifier: ref.read(recipientTabStateNotifier.notifier),
+    accountNotifier: ref.read(accountStateNotifier.notifier),
   );
 });
 
@@ -22,10 +23,12 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   RecipientScreenNotifier({
     required this.recipientService,
     required this.recipientTabNotifier,
+    required this.accountNotifier,
   }) : super(RecipientScreenState.initialState());
 
   final RecipientService recipientService;
   final RecipientTabNotifier recipientTabNotifier;
+  final AccountNotifier accountNotifier;
 
   final showToast = NicheMethod.showToast;
 
@@ -117,7 +120,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     try {
       await recipientService.removeRecipient(recipient.id);
       showToast('Recipient deleted successfully!');
-      recipientTabNotifier.fetchRecipients();
+      _refreshRecipientAndAccountData();
     } catch (error) {
       final dioError = error as DioError;
       showToast(dioError.message);
@@ -140,11 +143,19 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       await recipientService.addRecipient(email);
       showToast('Recipient added successfully!');
       _updateState(state.copyWith(isAddRecipientLoading: false));
-      recipientTabNotifier.fetchRecipients();
+      _refreshRecipientAndAccountData();
     } catch (error) {
       final dioError = error as DioError;
       showToast(dioError.message);
       _updateState(state.copyWith(isAddRecipientLoading: false));
     }
+  }
+
+  void _refreshRecipientAndAccountData() {
+    /// Refresh RecipientState after adding/removing a recipient.
+    recipientTabNotifier.refreshRecipients();
+
+    /// Refresh AccountState data after adding a recipient.
+    accountNotifier.refreshAccount();
   }
 }
