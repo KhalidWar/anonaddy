@@ -1,32 +1,44 @@
-import 'package:anonaddy/models/username/username_model.dart';
+import 'package:anonaddy/models/username/username.dart';
 
 enum UsernamesStatus { loading, loaded, failed }
 
-class UsernamesState {
-  const UsernamesState({
+extension Shortcut on UsernamesStatus {
+  bool isFailed() => this == UsernamesStatus.failed;
+}
+
+class UsernamesTabState {
+  const UsernamesTabState({
     required this.status,
-    this.usernameModel,
+    required this.usernames,
     this.errorMessage,
   });
 
   final UsernamesStatus status;
-  final UsernameModel? usernameModel;
+  final List<Username> usernames;
   final String? errorMessage;
 
-  UsernamesState copyWith({
+  static UsernamesTabState initialState() {
+    return const UsernamesTabState(
+      status: UsernamesStatus.loading,
+      usernames: [],
+      errorMessage: '',
+    );
+  }
+
+  UsernamesTabState copyWith({
     UsernamesStatus? status,
-    UsernameModel? usernameModel,
+    List<Username>? usernames,
     String? errorMessage,
   }) {
-    return UsernamesState(
+    return UsernamesTabState(
       status: status ?? this.status,
-      usernameModel: usernameModel ?? this.usernameModel,
+      usernames: usernames ?? this.usernames,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
   String toString() {
-    return 'UsernamesState{status: $status, usernameModel: $usernameModel, errorMessage: $errorMessage}';
+    return 'UsernamesState{status: $status, usernames: $usernames, errorMessage: $errorMessage}';
   }
 }

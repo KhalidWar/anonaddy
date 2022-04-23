@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:anonaddy/models/username/username_model.dart';
+import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_state.dart';
 import 'package:anonaddy/state_management/usernames/usernames_tab_notifier.dart';

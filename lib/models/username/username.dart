@@ -2,20 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'username_model.g.dart';
-
-@JsonSerializable(explicitToJson: true)
-class UsernameModel {
-  UsernameModel({required this.usernames});
-
-  @JsonKey(name: 'data')
-  List<Username> usernames;
-
-  factory UsernameModel.fromJson(Map<String, dynamic> json) =>
-      _$UsernameModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UsernameModelToJson(this);
-}
+part 'username.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Username {

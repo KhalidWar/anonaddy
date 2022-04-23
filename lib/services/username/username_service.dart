@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/models/username/username_model.dart';
+import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,12 +16,13 @@ class UsernameService {
   const UsernameService({required this.dio});
   final Dio dio;
 
-  Future<UsernameModel> getUsernames() async {
+  Future<List<Username>> getUsernames() async {
     try {
       const path = '$kUnEncodedBaseURL/$kUsernamesURL';
       final response = await dio.get(path);
       log('getUsernames: ' + response.statusCode.toString());
-      return UsernameModel.fromJson(response.data);
+      final usernames = response.data['data'] as List;
+      return usernames.map((username) => Username.fromJson(username)).toList();
     } catch (e) {
       rethrow;
     }

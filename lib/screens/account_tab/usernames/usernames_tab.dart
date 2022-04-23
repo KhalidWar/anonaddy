@@ -80,7 +80,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
             return const RecipientsShimmerLoading();
 
           case UsernamesStatus.loaded:
-            final usernames = usernameState.usernameModel!.usernames;
+            final usernames = usernameState.usernames;
 
             return ListView(
               shrinkWrap: true,

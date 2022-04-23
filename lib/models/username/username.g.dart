@@ -1,22 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'username_model.dart';
+part of 'username.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
-
-UsernameModel _$UsernameModelFromJson(Map<String, dynamic> json) =>
-    UsernameModel(
-      usernames: (json['data'] as List<dynamic>)
-          .map((e) => Username.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$UsernameModelToJson(UsernameModel instance) =>
-    <String, dynamic>{
-      'data': instance.usernames.map((e) => e.toJson()).toList(),
-    };
 
 Username _$UsernameFromJson(Map<String, dynamic> json) => Username(
       id: json['id'] as String,
