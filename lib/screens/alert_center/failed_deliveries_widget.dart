@@ -1,6 +1,5 @@
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/alert_center/components/failed_delivery_list_tile.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -43,9 +42,7 @@ class _FailedDeliveriesWidgetState
         return const Center(child: PlatformLoadingIndicator());
 
       case AccountStatus.loaded:
-        final subscription = accountState.account!.subscription;
-
-        if (subscription == AnonAddyString.subscriptionFree) {
+        if (accountState.isSubscriptionFree()) {
           return const PaidFeatureWall();
         }
 

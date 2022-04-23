@@ -190,7 +190,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
   /// [AliasFormat] list can NOT contain "Custom" and user can NOT use "Custom" (Local Part).
   /// Another example is that [aliasFormatRandomWords] is NOT available for [subscriptionFree] users.
   void _setAliasFormatList(String aliasDomain) {
-    final subscription = accountState.account!.subscription;
+    final subscription = accountState.account.subscription;
     if (CreateAliasState.sharedDomains.contains(aliasDomain)) {
       if (subscription == AnonAddyString.subscriptionFree) {
         state.aliasFormatList = CreateAliasState.freeTierWithSharedDomain;
@@ -226,7 +226,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
   }
 
   void _setHeaderText() {
-    final username = accountState.account!.username;
+    final username = accountState.account.username;
     final text =
         'Other aliases e.g. alias@$username.anonaddy.com or .me can also be created automatically when they receive their first email.';
     final newState = state.copyWith(headerText: text);

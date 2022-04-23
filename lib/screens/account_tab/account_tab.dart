@@ -60,19 +60,17 @@ class _AccountTabState extends ConsumerState<AccountTab> {
                           );
 
                         case AccountStatus.loaded:
-                          final account = accountState.account;
                           return AccountTabHeader(
-                            account: account!,
-                            isSelfHosted: account.subscription == null,
+                            account: accountState.account,
+                            isSelfHosted: accountState.isSelfHosted(),
                           );
 
                         case AccountStatus.failed:
-                          final error = accountState.errorMessage;
                           return LottieWidget(
                             showLoading: true,
                             lottie: LottieImages.errorCone,
                             lottieHeight: size.height * 0.2,
-                            label: error.toString(),
+                            label: accountState.errorMessage,
                           );
                       }
                     },

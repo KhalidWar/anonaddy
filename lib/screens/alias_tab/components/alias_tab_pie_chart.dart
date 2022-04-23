@@ -26,7 +26,7 @@ class AliasTabPieChart extends StatelessWidget {
               return const AliasesStatsShimmer();
 
             case AccountStatus.loaded:
-              final account = accountState.account!;
+              final account = accountState.account;
               return buildAliasStat(context: context, account: account);
 
             case AccountStatus.failed:

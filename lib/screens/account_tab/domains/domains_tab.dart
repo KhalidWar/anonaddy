@@ -46,8 +46,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
         return const RecipientsShimmerLoading();
 
       case AccountStatus.loaded:
-        final subscription = accountState.account!.subscription;
-        if (subscription == AnonAddyString.subscriptionFree) {
+        if (accountState.isSubscriptionFree()) {
           return const PaidFeatureWall();
         }
 
@@ -100,7 +99,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
   }
 
   void _addNewDomain(BuildContext context) {
-    final account = ref.read(accountStateNotifier).account;
+    final accountState = ref.read(accountStateNotifier);
 
     /// Draws UI for adding new recipient
     Future buildAddNewDomain(BuildContext context) {
@@ -116,17 +115,11 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
       );
     }
 
-    /// If account data is unavailable, show an error message and exit method.
-    if (account == null) {
-      NicheMethod.showToast(AppStrings.loadAccountDataFailed);
-      return;
-    }
-
-    if (account.subscription == null) {
+    if (accountState.isSelfHosted()) {
       buildAddNewDomain(context);
     } else {
-      account.recipientCount == account.recipientLimit
-          ? NicheMethod.showToast(AnonAddyString.reachedRecipientLimit)
+      accountState.hasDomainsReachedLimit()
+          ? NicheMethod.showToast(AnonAddyString.reachedDomainLimit)
           : buildAddNewDomain(context);
     }
   }

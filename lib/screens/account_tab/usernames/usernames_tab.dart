@@ -25,7 +25,7 @@ class UsernamesTab extends ConsumerStatefulWidget {
 
 class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   void addNewUsername(BuildContext context) {
-    final account = ref.read(accountStateNotifier).account;
+    final accountState = ref.read(accountStateNotifier);
 
     /// Draws UI for adding new username
     Future buildAddNewUsername(BuildContext context) {
@@ -41,19 +41,13 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
       );
     }
 
-    /// If account data is unavailable, show an error message and exit method.
-    if (account == null) {
-      NicheMethod.showToast(AppStrings.loadAccountDataFailed);
-      return;
-    }
-
-    if (account.subscription == null) {
+    if (accountState.isSelfHosted()) {
       buildAddNewUsername(context);
     } else {
-      if (account.subscription == AnonAddyString.subscriptionFree) {
+      if (accountState.isSubscriptionFree()) {
         NicheMethod.showToast(ToastMessage.onlyAvailableToPaid);
       } else {
-        account.usernameCount == account.usernameLimit
+        accountState.hasUsernamesReachedLimit()
             ? NicheMethod.showToast(AnonAddyString.reachedUsernameLimit)
             : buildAddNewUsername(context);
       }
@@ -69,8 +63,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
         return const RecipientsShimmerLoading();
 
       case AccountStatus.loaded:
-        final subscription = accountState.account!.subscription;
-        if (subscription == AnonAddyString.subscriptionFree) {
+        if (accountState.isSubscriptionFree()) {
           return const PaidFeatureWall();
         }
 

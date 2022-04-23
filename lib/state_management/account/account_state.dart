@@ -1,17 +1,26 @@
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 
 enum AccountStatus { loading, loaded, failed }
 
 class AccountState {
   const AccountState({
     required this.status,
-    this.account,
-    this.errorMessage,
+    required this.account,
+    required this.errorMessage,
   });
 
   final AccountStatus status;
-  final Account? account;
-  final String? errorMessage;
+  final Account account;
+  final String errorMessage;
+
+  static AccountState initialState() {
+    return AccountState(
+      status: AccountStatus.loading,
+      account: Account.dummy(),
+      errorMessage: 'Something went wrong',
+    );
+  }
 
   AccountState copyWith({
     AccountStatus? status,
@@ -29,4 +38,20 @@ class AccountState {
   String toString() {
     return 'AccountState{status: $status, account: $account, errorMessage: $errorMessage}';
   }
+}
+
+extension AccountStateShortcuts on AccountState {
+  bool isSubscriptionFree() =>
+      account.subscription == AnonAddyString.subscriptionFree;
+
+  bool isSelfHosted() => account.subscription == null;
+
+  bool hasRecipientsReachedLimit() =>
+      account.recipientCount == account.recipientLimit;
+
+  bool hasUsernamesReachedLimit() =>
+      account.usernameCount == account.usernameLimit;
+
+  bool hasDomainsReachedLimit() =>
+      account.recipientCount == account.recipientLimit;
 }

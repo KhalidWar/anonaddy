@@ -17,9 +17,7 @@ class AppVersion extends ConsumerWidget {
         return Container();
 
       case AccountStatus.loaded:
-        final subscription = accountState.account!.subscription;
-
-        if (subscription == null) {
+        if (accountState.isSelfHosted()) {
           return Consumer(
             builder: (_, ref, __) {
               final appVersionData = ref.watch(appVersionProvider);

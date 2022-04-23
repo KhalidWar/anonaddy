@@ -19,7 +19,7 @@ final accountStateNotifier =
 
 class AccountNotifier extends StateNotifier<AccountState> {
   AccountNotifier({required this.accountService, required this.offlineData})
-      : super(const AccountState(status: AccountStatus.loading));
+      : super(AccountState.initialState());
 
   final AccountService accountService;
   final OfflineData offlineData;
