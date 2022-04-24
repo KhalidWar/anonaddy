@@ -1,4 +1,3 @@
-import 'package:anonaddy/models/rules/rules.dart';
 import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -42,18 +41,26 @@ class RulesTab extends ConsumerWidget {
 
           case RulesTabStatus.loaded:
             final rules = rulesState.rules;
-            if (rules == null) {
-              return buildEmptyList(
-                context,
-                AppStrings.enrollRulesBetaTesting,
-              );
-            }
 
-            if (rules.isEmpty) {
-              return buildEmptyList(context, AppStrings.noRulesFound);
-            } else {
-              return buildRulesList(rules);
-            }
+            return rules.isEmpty
+                ? Center(
+                    child: Text(
+                      AppStrings.noRulesFound,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: rules.length,
+                    itemBuilder: (context, index) {
+                      return RulesListTile(
+                        rule: rules[index],
+                        onTap: () =>
+                            NicheMethod.showToast(AppStrings.comingSoon),
+                      );
+                    },
+                  );
 
           case RulesTabStatus.failed:
             final error = rulesState.errorMessage;
@@ -72,28 +79,5 @@ class RulesTab extends ConsumerWidget {
           label: AppStrings.loadAccountDataFailed,
         );
     }
-  }
-
-  Widget buildRulesList(List<Rules> rules) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const ClampingScrollPhysics(),
-      itemCount: rules.length,
-      itemBuilder: (context, index) {
-        return RulesListTile(
-          rule: rules[index],
-          onTap: () => NicheMethod.showToast(AppStrings.comingSoon),
-        );
-      },
-    );
-  }
-
-  Widget buildEmptyList(BuildContext context, String label) {
-    return Center(
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.bodyText1,
-      ),
-    );
   }
 }
