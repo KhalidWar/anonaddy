@@ -6,9 +6,11 @@ class PaidFeatureWall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
+      padding: const EdgeInsets.all(20),
       child: Text(
         ToastMessage.onlyAvailableToPaid,
+        textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodyText1,
       ),
     );
