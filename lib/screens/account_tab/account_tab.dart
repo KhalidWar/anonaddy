@@ -7,6 +7,7 @@ import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/paid_feature_blocker.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
@@ -94,7 +95,7 @@ class _AccountTabState extends ConsumerState<AccountTab> {
             physics: ClampingScrollPhysics(),
             children: [
               RecipientsTab(),
-              UsernamesTab(),
+              PaidFeatureBlocker(child: UsernamesTab()),
               DomainsTab(),
               RulesTab(),
             ],

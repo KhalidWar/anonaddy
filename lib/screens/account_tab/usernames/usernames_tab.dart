@@ -1,5 +1,4 @@
 import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
-import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_list_tile.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
@@ -55,70 +54,56 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final accountState = ref.watch(accountStateNotifier);
+  void initState() {
+    super.initState();
+    ref.read(usernameStateNotifier.notifier).loadOfflineState();
+    ref.read(usernameStateNotifier.notifier).fetchUsernames();
+  }
 
-    switch (accountState.status) {
-      case AccountStatus.loading:
+  @override
+  Widget build(BuildContext context) {
+    final usernameState = ref.watch(usernameStateNotifier);
+
+    switch (usernameState.status) {
+      case UsernamesStatus.loading:
         return const RecipientsShimmerLoading();
 
-      case AccountStatus.loaded:
-        if (accountState.isSubscriptionFree()) {
-          return const PaidFeatureWall();
-        }
-
-        final usernameState = ref.watch(usernameStateNotifier);
-        switch (usernameState.status) {
-          case UsernamesStatus.loading:
-            return const RecipientsShimmerLoading();
-
-          case UsernamesStatus.loaded:
-            final usernames = usernameState.usernames;
-
-            return ListView(
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              children: [
-                usernames.isEmpty
-                    ? ListTile(
-                        title: Center(
-                          child: Text(
-                            AppStrings.noAdditionalUsernamesFound,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(vertical: 0),
-                        itemCount: usernames.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final username = usernames[index];
-                          return UsernameListTile(username: username);
-                        },
+      case UsernamesStatus.loaded:
+        final usernames = usernameState.usernames;
+        return ListView(
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          children: [
+            usernames.isEmpty
+                ? ListTile(
+                    title: Center(
+                      child: Text(
+                        AppStrings.noAdditionalUsernamesFound,
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
-                TextButton(
-                  child: const Text(AppStrings.addNewUsername),
-                  onPressed: () => addNewUsername(context),
-                ),
-              ],
-            );
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    itemCount: usernames.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (_, index) {
+                      return UsernameListTile(username: usernames[index]);
+                    },
+                  ),
+            TextButton(
+              child: const Text(AppStrings.addNewUsername),
+              onPressed: () => addNewUsername(context),
+            ),
+          ],
+        );
 
-          case UsernamesStatus.failed:
-            final error = usernameState.errorMessage;
-            return LottieWidget(
-              lottie: LottieImages.errorCone,
-              lottieHeight: MediaQuery.of(context).size.height * 0.1,
-              label: error.toString(),
-            );
-        }
-
-      case AccountStatus.failed:
+      case UsernamesStatus.failed:
         return LottieWidget(
           lottie: LottieImages.errorCone,
-          lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AppStrings.loadAccountDataFailed,
+          lottieHeight: MediaQuery.of(context).size.height * 0.1,
+          label: usernameState.errorMessage,
         );
     }
   }
