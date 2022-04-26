@@ -96,8 +96,8 @@ class _AccountTabState extends ConsumerState<AccountTab> {
             children: [
               RecipientsTab(),
               PaidFeatureBlocker(child: UsernamesTab()),
-              DomainsTab(),
-              RulesTab(),
+              PaidFeatureBlocker(child: DomainsTab()),
+              PaidFeatureBlocker(child: RulesTab()),
             ],
           ),
         ),
