@@ -20,13 +20,7 @@ class RulesTabNotifier extends StateNotifier<RulesTabState> {
   RulesTabNotifier({
     required this.rulesService,
     required this.offlineData,
-  }) : super(RulesTabState.initialState()) {
-    /// Load offline data initially
-    loadOfflineState();
-
-    /// Fetch fresh rules data
-    fetchRules();
-  }
+  }) : super(RulesTabState.initialState());
 
   final RulesService rulesService;
   final OfflineData offlineData;
