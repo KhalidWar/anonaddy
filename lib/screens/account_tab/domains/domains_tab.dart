@@ -1,8 +1,6 @@
-import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/domains/components/add_new_domain.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
@@ -25,80 +23,7 @@ class DomainsTab extends ConsumerStatefulWidget {
 }
 
 class _DomainsTabState extends ConsumerState<DomainsTab> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      /// Fetch offline state initially
-      ref.watch(domainsStateNotifier.notifier).loadOfflineState();
-
-      /// Fetch domains from server
-      ref.watch(domainsStateNotifier.notifier).fetchDomains();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final accountState = ref.watch(accountStateNotifier);
-
-    switch (accountState.status) {
-      case AccountStatus.loading:
-        return const RecipientsShimmerLoading();
-
-      case AccountStatus.loaded:
-        if (accountState.isSubscriptionFree()) {
-          return const PaidFeatureWall();
-        }
-
-        final domainsState = ref.watch(domainsStateNotifier);
-        switch (domainsState.status) {
-          case DomainsTabStatus.loading:
-            return const RecipientsShimmerLoading();
-
-          case DomainsTabStatus.loaded:
-            final domains = domainsState.domains;
-
-            return ListView(
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              children: [
-                domains.isEmpty
-                    ? const EmptyDomainTile()
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: domains.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final domain = domains[index];
-                          return DomainListTile(domain: domain);
-                        },
-                      ),
-                // TextButton(
-                //   child: const Text(AppStrings.addNewDomain),
-                //   onPressed: () => _addNewDomain(context),
-                // ),
-              ],
-            );
-
-          case DomainsTabStatus.failed:
-            final error = domainsState.errorMessage;
-            return LottieWidget(
-              lottie: LottieImages.errorCone,
-              lottieHeight: MediaQuery.of(context).size.height * 0.1,
-              label: error.toString(),
-            );
-        }
-
-      case AccountStatus.failed:
-        return LottieWidget(
-          lottie: LottieImages.errorCone,
-          lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AppStrings.loadAccountDataFailed,
-        );
-    }
-  }
-
-  void _addNewDomain(BuildContext context) {
+  void addNewDomain(BuildContext context) {
     final accountState = ref.read(accountStateNotifier);
 
     /// Draws UI for adding new recipient
@@ -121,6 +46,61 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
       accountState.hasDomainsReachedLimit()
           ? NicheMethod.showToast(AnonAddyString.reachedDomainLimit)
           : buildAddNewDomain(context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      /// Fetch offline state initially
+      ref.watch(domainsStateNotifier.notifier).loadOfflineState();
+
+      /// Fetch domains from server
+      ref.watch(domainsStateNotifier.notifier).fetchDomains();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final domainsState = ref.watch(domainsStateNotifier);
+
+    switch (domainsState.status) {
+      case DomainsTabStatus.loading:
+        return const RecipientsShimmerLoading();
+
+      case DomainsTabStatus.loaded:
+        final domains = domainsState.domains;
+
+        return ListView(
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          children: [
+            domains.isEmpty
+                ? const EmptyDomainTile()
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: domains.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final domain = domains[index];
+                      return DomainListTile(domain: domain);
+                    },
+                  ),
+            // TextButton(
+            //   child: const Text(AppStrings.addNewDomain),
+            //   onPressed: () => addNewDomain(context),
+            // ),
+          ],
+        );
+
+      case DomainsTabStatus.failed:
+        final error = domainsState.errorMessage;
+        return LottieWidget(
+          lottie: LottieImages.errorCone,
+          lottieHeight: MediaQuery.of(context).size.height * 0.1,
+          label: error.toString(),
+        );
     }
   }
 }
