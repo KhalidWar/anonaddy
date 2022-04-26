@@ -21,13 +21,7 @@ class UsernamesNotifier extends StateNotifier<UsernamesTabState> {
   UsernamesNotifier({
     required this.usernameService,
     required this.offlineData,
-  }) : super(UsernamesTabState.initialState()) {
-    /// Initially, load offline data
-    loadOfflineState();
-
-    /// Then, load API data
-    fetchUsernames();
-  }
+  }) : super(UsernamesTabState.initialState());
 
   final UsernameService usernameService;
   final OfflineData offlineData;

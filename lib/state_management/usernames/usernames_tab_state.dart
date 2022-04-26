@@ -10,18 +10,18 @@ class UsernamesTabState {
   const UsernamesTabState({
     required this.status,
     required this.usernames,
-    this.errorMessage,
+    required this.errorMessage,
   });
 
   final UsernamesStatus status;
   final List<Username> usernames;
-  final String? errorMessage;
+  final String errorMessage;
 
   static UsernamesTabState initialState() {
     return const UsernamesTabState(
       status: UsernamesStatus.loading,
       usernames: [],
-      errorMessage: '',
+      errorMessage: 'Something went wrong',
     );
   }
 
