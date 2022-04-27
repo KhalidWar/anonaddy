@@ -4,6 +4,8 @@ import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
 import 'package:anonaddy/screens/alert_center/notifications_widget.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
+import 'package:anonaddy/shared_components/paid_feature_blocker.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:flutter/material.dart';
 
 class AlertCenterScreen extends StatelessWidget {
@@ -34,7 +36,10 @@ class AlertCenterScreen extends StatelessWidget {
             title: AppStrings.failedDeliveries,
             subtitle: AppStrings.failedDeliveriesNote,
           ),
-          FailedDeliveriesWidget(),
+          PaidFeatureBlocker(
+            loadingWidget: Center(child: PlatformLoadingIndicator()),
+            child: FailedDeliveriesWidget(),
+          ),
           SectionSeparator(),
         ],
       ),

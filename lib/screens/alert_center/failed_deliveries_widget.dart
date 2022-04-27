@@ -1,11 +1,7 @@
-import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/alert_center/components/failed_delivery_list_tile.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/state_management/failed_delivery/failed_delivery_state.dart';
 import 'package:flutter/material.dart';
@@ -23,41 +19,24 @@ class _FailedDeliveriesWidgetState
   @override
   void initState() {
     super.initState();
-
-    /// Insures Flutter has finished rendering frame
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      /// Fetches latest account data first to get the latest subscription status.
-      ref.read(accountStateNotifier.notifier).fetchAccount().then((value) {
-        /// Then, fetches Failed deliveries.
-        ref.read(failedDeliveryStateNotifier.notifier).getFailedDeliveries();
-      });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      ref.read(failedDeliveryStateNotifier.notifier).getFailedDeliveries();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final accountState = ref.watch(accountStateNotifier);
-    switch (accountState.status) {
-      case AccountStatus.loading:
+    final failedDeliveryState = ref.watch(failedDeliveryStateNotifier);
+    switch (failedDeliveryState.status) {
+      case FailedDeliveryStatus.loading:
         return const Center(child: PlatformLoadingIndicator());
 
-      case AccountStatus.loaded:
-        if (accountState.isSubscriptionFree()) {
-          return const PaidFeatureWall();
-        }
+      case FailedDeliveryStatus.loaded:
+        final deliveries = failedDeliveryState.failedDeliveries;
 
-        final failedDeliveryState = ref.watch(failedDeliveryStateNotifier);
-        switch (failedDeliveryState.status) {
-          case FailedDeliveryStatus.loading:
-            return const Center(child: PlatformLoadingIndicator());
-
-          case FailedDeliveryStatus.loaded:
-            final deliveries = failedDeliveryState.failedDeliveries;
-
-            if (deliveries.isEmpty) {
-              return const Text('No failed deliveries found');
-            } else {
-              return ListView.builder(
+        return deliveries.isEmpty
+            ? const Text('No failed deliveries found')
+            : ListView.builder(
                 shrinkWrap: true,
                 itemCount: deliveries.length,
                 physics: const NeverScrollableScrollPhysics(),
@@ -71,21 +50,11 @@ class _FailedDeliveriesWidgetState
                   );
                 },
               );
-            }
 
-          case FailedDeliveryStatus.failed:
-            final error = failedDeliveryState.errorMessage;
-            return LottieWidget(
-              lottie: LottieImages.errorCone,
-              label: error,
-            );
-        }
-
-      case AccountStatus.failed:
+      case FailedDeliveryStatus.failed:
         return LottieWidget(
           lottie: LottieImages.errorCone,
-          lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AppStrings.loadAccountDataFailed,
+          label: failedDeliveryState.errorMessage,
         );
     }
   }
