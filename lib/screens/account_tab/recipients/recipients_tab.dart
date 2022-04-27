@@ -39,10 +39,10 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
       );
     }
 
-    if (accountState.isSelfHosted()) {
+    if (accountState.isSelfHosted) {
       buildAddNewRecipient(context);
     } else {
-      accountState.hasRecipientsReachedLimit()
+      accountState.hasRecipientsReachedLimit
           ? NicheMethod.showToast(AnonAddyString.reachedRecipientLimit)
           : buildAddNewRecipient(context);
     }

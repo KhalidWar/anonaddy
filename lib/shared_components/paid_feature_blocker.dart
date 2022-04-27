@@ -41,7 +41,7 @@ class PaidFeatureBlocker extends ConsumerWidget {
         return loadingWidget ?? const RecipientsShimmerLoading();
 
       case AccountStatus.loaded:
-        return accountState.isSubscriptionFree()
+        return accountState.isSubscriptionFree
             ? Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(

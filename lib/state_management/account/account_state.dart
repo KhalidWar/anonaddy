@@ -41,17 +41,17 @@ class AccountState {
 }
 
 extension AccountStateShortcuts on AccountState {
-  bool isSubscriptionFree() =>
+  bool get isSubscriptionFree =>
       account.subscription == AnonAddyString.subscriptionFree;
 
-  bool isSelfHosted() => account.subscription == null;
+  bool get isSelfHosted => account.subscription == null;
 
-  bool hasRecipientsReachedLimit() =>
+  bool get hasRecipientsReachedLimit =>
       account.recipientCount == account.recipientLimit;
 
-  bool hasUsernamesReachedLimit() =>
+  bool get hasUsernamesReachedLimit =>
       account.usernameCount == account.usernameLimit;
 
-  bool hasDomainsReachedLimit() =>
+  bool get hasDomainsReachedLimit =>
       account.recipientCount == account.recipientLimit;
 }

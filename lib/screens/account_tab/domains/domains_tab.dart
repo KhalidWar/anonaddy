@@ -40,10 +40,10 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
       );
     }
 
-    if (accountState.isSelfHosted()) {
+    if (accountState.isSelfHosted) {
       buildAddNewDomain(context);
     } else {
-      accountState.hasDomainsReachedLimit()
+      accountState.hasDomainsReachedLimit
           ? NicheMethod.showToast(AnonAddyString.reachedDomainLimit)
           : buildAddNewDomain(context);
     }

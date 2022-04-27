@@ -40,13 +40,13 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
       );
     }
 
-    if (accountState.isSelfHosted()) {
+    if (accountState.isSelfHosted) {
       buildAddNewUsername(context);
     } else {
-      if (accountState.isSubscriptionFree()) {
+      if (accountState.isSubscriptionFree) {
         NicheMethod.showToast(ToastMessage.onlyAvailableToPaid);
       } else {
-        accountState.hasUsernamesReachedLimit()
+        accountState.hasUsernamesReachedLimit
             ? NicheMethod.showToast(AnonAddyString.reachedUsernameLimit)
             : buildAddNewUsername(context);
       }
@@ -56,10 +56,10 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   @override
   void initState() {
     super.initState();
-   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-     ref.read(usernameStateNotifier.notifier).loadOfflineState();
-     ref.read(usernameStateNotifier.notifier).fetchUsernames();
-   });
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(usernameStateNotifier.notifier).loadOfflineState();
+      ref.read(usernameStateNotifier.notifier).fetchUsernames();
+    });
   }
 
   @override

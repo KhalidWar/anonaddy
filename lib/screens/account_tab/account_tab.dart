@@ -63,7 +63,7 @@ class _AccountTabState extends ConsumerState<AccountTab> {
                         case AccountStatus.loaded:
                           return AccountTabHeader(
                             account: accountState.account,
-                            isSelfHosted: accountState.isSelfHosted(),
+                            isSelfHosted: accountState.isSelfHosted,
                           );
 
                         case AccountStatus.failed:
