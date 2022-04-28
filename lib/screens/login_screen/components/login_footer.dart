@@ -30,7 +30,7 @@ class LoginFooter extends StatelessWidget {
         child: Consumer(
           builder: (context, ref, _) {
             final authState = ref.watch(authStateNotifier);
-            return authState.loginLoading!
+            return authState.loginLoading
                 ? const CircularProgressIndicator(
                     key: Key('loginFooterLoginButtonLoading'),
                     backgroundColor: AppColors.primaryColor,
