@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 /// Status for when fetching [alias] data
 enum AliasScreenStatus { loading, loaded, failed }
@@ -33,7 +34,7 @@ class AliasScreenState {
     /// Then call [.copyWith()] method to update specific state variable
     return const AliasScreenState(
       status: AliasScreenStatus.loading,
-      errorMessage: '',
+      errorMessage: AppStrings.somethingWentWrong,
       isToggleLoading: false,
       deleteAliasLoading: false,
       updateRecipientLoading: false,

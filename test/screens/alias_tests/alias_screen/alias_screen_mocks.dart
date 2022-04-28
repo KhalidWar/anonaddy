@@ -22,6 +22,7 @@ class _MockAliasService extends Mock implements AliasService {
   Future<Alias> getSpecificAlias(String aliasID) async {
     if (aliasID == 'error') {
       throw DioError(
+        error: AppStrings.somethingWentWrong,
         type: DioErrorType.response,
         requestOptions: RequestOptions(path: 'error'),
       );

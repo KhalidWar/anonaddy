@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
@@ -38,7 +39,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      key: const Key('aliasScreenScaffold'),
+      key: AliasTabWidgetKeys.aliasScreenScaffold,
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
       body: Consumer(
@@ -47,7 +48,11 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
 
           switch (aliasState.status) {
             case AliasScreenStatus.loading:
-              return const Center(child: PlatformLoadingIndicator());
+              return const Center(
+                child: PlatformLoadingIndicator(
+                  key: AliasTabWidgetKeys.aliasScreenLoadingIndicator,
+                ),
+              );
 
             case AliasScreenStatus.loaded:
               return buildListView(context, aliasState);
@@ -55,6 +60,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             case AliasScreenStatus.failed:
               final error = aliasState.errorMessage;
               return LottieWidget(
+                key: AliasTabWidgetKeys.aliasScreenLottieWidget,
                 lottieHeight: size.height * 0.3,
                 lottie: LottieImages.errorCone,
                 label: error,
@@ -74,7 +80,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     final isAliasDeleted = alias.deletedAt != null;
 
     return ListView(
-      key: const Key('aliasScreenListView'),
+      key: AliasTabWidgetKeys.aliasScreenBodyListView,
       physics: const ClampingScrollPhysics(),
       children: [
         if (aliasState.isOffline!) const OfflineBanner(),
@@ -180,7 +186,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   children: [
                     Text(
                       'Default Recipient${alias.recipients!.length >= 2 ? 's' : ''}',
-                      key: const Key('aliasScreenDefaultRecipient'),
+                      key: AliasTabWidgetKeys.aliasScreenDefaultRecipient,
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     IconButton(
@@ -445,6 +451,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     }
 
     return CustomAppBar(
+      key: AliasTabWidgetKeys.aliasScreenAppBar,
       title: 'Alias',
       leadingOnPress: () {
         ref.read(aliasTabStateNotifier.notifier).refreshAliases();
