@@ -119,8 +119,9 @@ class AppStrings {
   static const getAccessToken = 'Get Access Token';
   static const enterYourApiToken = 'Enter your API token';
 
-  /// Error
+  /// Errors
   static const loadAccountDataFailed = 'Failed to Load Account Data';
+  static const somethingWentWrong = 'Something went wrong';
 
   /// Button Labels
   static const doneText = 'Done';
@@ -139,7 +140,6 @@ class AppStrings {
   static const logOutAlertDialog =
       'Are you sure you want to log out?\n\nAll app data will be deleted.';
   static const noDescription = 'No description';
-  static const somethingWentWrong = 'Something went wrong';
   static const navigationErrorMessage =
       'Something has gone wrong with the navigation system. Please go back and try again.';
 

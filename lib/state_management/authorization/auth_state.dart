@@ -1,4 +1,5 @@
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 /// Manages user flow status
 enum AuthorizationStatus {
@@ -34,14 +35,14 @@ class AuthState {
   const AuthState({
     required this.authorizationStatus,
     required this.authenticationStatus,
-    this.errorMessage,
-    this.loginLoading,
+    required this.errorMessage,
+    required this.loginLoading,
   });
 
   final AuthorizationStatus authorizationStatus;
   final AuthenticationStatus authenticationStatus;
-  final String? errorMessage;
-  final bool? loginLoading;
+  final String errorMessage;
+  final bool loginLoading;
 
   /// Sets initial state for [AuthorizationScreen]
   static AuthState initialState() {
@@ -49,7 +50,7 @@ class AuthState {
       authorizationStatus: AuthorizationStatus.unknown,
       authenticationStatus: AuthenticationStatus.unavailable,
       loginLoading: false,
-      errorMessage: '',
+      errorMessage: AppStrings.somethingWentWrong,
     );
   }
 
