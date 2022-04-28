@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../test_data/test_alias_data.dart';
-import 'alias_screen_mocks.dart';
+import '../alias_tab_mocks.dart';
 
 /// Widget test for [AliasScreen]
 void main() async {

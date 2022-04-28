@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../alias_screen/alias_screen_mocks.dart';
+import '../alias_tab_mocks.dart';
 
 void main() {
   Widget buildAliasTab() {
