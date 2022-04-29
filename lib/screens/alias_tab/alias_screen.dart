@@ -440,6 +440,8 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 .read(aliasScreenStateNotifier.notifier)
                 .forgetAlias(widget.alias.id);
 
+            ref.read(aliasTabStateNotifier.notifier).refreshAliases();
+
             /// Dismisses [platformDialog]
             Navigator.pop(context);
 

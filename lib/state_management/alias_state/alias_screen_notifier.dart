@@ -158,7 +158,6 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       await aliasService.forgetAlias(aliasID);
       showToast(ToastMessage.forgetAliasSuccess);
-      await aliasTabNotifier.refreshAliases();
     } catch (error) {
       final dioError = error as DioError;
       showToast(dioError.message);
