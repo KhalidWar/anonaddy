@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
 
+import 'components/auth_screen_widget_keys.dart';
+
 /// This widget manages user authentication and authorization
 /// flow for the whole app.
 class AuthorizationScreen extends ConsumerStatefulWidget {
@@ -39,7 +41,9 @@ class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
 
       /// Manages initial state, app startup.
       case AuthorizationStatus.unknown:
-        return const LoadingScreen();
+        return const LoadingScreen(
+          key: AuthScreenWidgetKeys.authScreenLoadingScreen,
+        );
 
       /// [SecureApplication] package isn't available for MacOS.
       ///
@@ -98,16 +102,22 @@ class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
             );
 
           case AuthenticationStatus.unavailable:
-            return const HomeScreen();
+            return const HomeScreen(
+              key: AuthScreenWidgetKeys.authScreenHomeScreen,
+            );
         }
 
       /// Manages when a user has logged out or no logged in user found.
       case AuthorizationStatus.anonAddyLogin:
-        return const AnonAddyLoginScreen();
+        return const AnonAddyLoginScreen(
+          key: AuthScreenWidgetKeys.authScreenAnonAddyLoginScreen,
+        );
 
       /// Manages when a user has logged out or no logged in user found.
       case AuthorizationStatus.selfHostedLogin:
-        return const SelfHostLoginScreen();
+        return const SelfHostLoginScreen(
+          key: AuthScreenWidgetKeys.authScreenSelfHostedLoginScreen,
+        );
     }
   }
 }

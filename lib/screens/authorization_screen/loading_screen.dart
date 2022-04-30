@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
@@ -45,7 +46,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      key: const Key('loadingScreenScaffold'),
+      key: AuthScreenWidgetKeys.loadingScreenScaffold,
       backgroundColor: AppColors.primaryColor,
       body: Stack(
         children: [
@@ -53,6 +54,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
             alignment: Alignment.center,
             child: Image.asset(
               'assets/images/play_store.png',
+              key: AuthScreenWidgetKeys.loadingScreenAppLogo,
               height: size.height * 0.3,
             ),
           ),
@@ -74,13 +76,18 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                         width: double.infinity,
                         margin: const EdgeInsets.only(top: 10),
                         child: PlatformButton(
+                          key: AuthScreenWidgetKeys.loadingScreenLogoutButton,
                           color: Colors.red,
                           child: const Text('Logout'),
                           onPress: () => logout(),
                         ),
                       ),
                     ]
-                  : [const PlatformLoadingIndicator()],
+                  : [
+                      const PlatformLoadingIndicator(
+                        key: AuthScreenWidgetKeys.loadingScreenLoadingIndicator,
+                      )
+                    ],
             ),
           ),
         ],
