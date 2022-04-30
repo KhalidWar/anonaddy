@@ -31,8 +31,23 @@ final testAliasScreenProvider =
 class _MockAliasService extends Mock implements AliasService {
   @override
   Future<List<Alias>> getAliases(String? deleted) async {
-    final alias = Alias.fromJson(testAliasData['data']);
-    return [alias, alias, alias];
+    final availableAlias = Alias.fromJson(testAliasData['data']);
+
+    /// Generate a deleted alias by giving its [deleted_at] a value.
+    Map<String, dynamic> deletedAliasData = {};
+    deletedAliasData.addAll(testAliasData['data']);
+    deletedAliasData['deleted_at'] = "2022-02-22 18:08:15";
+    final deletedAlias = Alias.fromJson(deletedAliasData);
+
+    /// When fetchMoreAliases() is called to fetch mixed aliases
+    if (deleted == 'with') return [availableAlias, deletedAlias];
+
+    /// When fetchMoreAliases() is called to only fetch deleted aliases
+    if (deleted == 'only') return [deletedAlias, deletedAlias];
+
+    /// When fetchMoreAliases() is called to only fetch available aliases
+    /// which is the default behavior.
+    return [availableAlias, availableAlias, availableAlias, availableAlias];
   }
 
   @override

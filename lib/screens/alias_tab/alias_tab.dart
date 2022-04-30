@@ -91,7 +91,7 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                 /// When AliasTab is fetching data (loading)
                 case AliasTabStatus.loading:
                   return const TabBarView(
-                    key: AliasTabWidgetKeys.aliasTabTabBarView,
+                    key: AliasTabWidgetKeys.aliasTabLoadingTabBarView,
                     children: [
                       AliasShimmerLoading(
                         key: AliasTabWidgetKeys.aliasTabAvailableAliasesLoading,
@@ -108,6 +108,7 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                   final deletedAliasList = aliasTabState.deletedAliasList;
 
                   return TabBarView(
+                    key: AliasTabWidgetKeys.aliasTabLoadedTabBarView,
                     children: [
                       /// Available aliases list
                       RefreshIndicator(
@@ -126,6 +127,8 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                                   itemCount: availableAliasList.length,
                                   itemBuilder: (context, index) {
                                     return AliasListTile(
+                                      key: AliasTabWidgetKeys
+                                          .aliasTabAvailableAliasListTile,
                                       aliasData: availableAliasList[index],
                                     );
                                   },
@@ -147,6 +150,8 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                                   itemCount: deletedAliasList.length,
                                   itemBuilder: (context, index) {
                                     return AliasListTile(
+                                      key: AliasTabWidgetKeys
+                                          .aliasTabDeletedAliasListTile,
                                       aliasData: deletedAliasList[index],
                                     );
                                   },

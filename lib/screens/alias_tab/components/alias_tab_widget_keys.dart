@@ -9,11 +9,16 @@ class AliasTabWidgetKeys {
   static const aliasTabTabBar = Key('aliasTabTabBar');
   static const aliasTabAvailableAliasesTab = Key('aliasTabAvailableAliasesTab');
   static const aliasTabDeletedAliasesTab = Key('aliasTabDeletedAliasesTab');
-  static const aliasTabTabBarView = Key('aliasTabTabBarView');
+  static const aliasTabLoadingTabBarView = Key('aliasTabLoadingTabBarView');
+  static const aliasTabLoadedTabBarView = Key('aliasTabLoadedTabBarView');
   static const aliasTabAvailableAliasesLoading =
       Key('aliasTabAvailableAliasesLoading');
   static const aliasTabDeletedAliasesLoading =
       Key('aliasTabDeletedAliasesLoading');
+  static const aliasTabAvailableAliasListTile =
+      Key('aliasTabAvailableAliasListTile');
+  static const aliasTabDeletedAliasListTile =
+      Key('aliasTabDeletedAliasListTile');
 
   /// Alias Screen
   static const aliasScreenScaffold = Key('aliasScreenScaffold');
