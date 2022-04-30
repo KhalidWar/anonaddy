@@ -100,16 +100,35 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Fetches more available aliases if there's less than 20
   Future<void> fetchMoreAliases(List<Alias> aliases) async {
     try {
+      final availableAliases = _getAvailableAliases(aliases);
+      final deletedAliases = _getDeletedAliases(aliases);
+
       /// Fetches 100 additional available aliases if there are less than 20
-      if (_getAvailableAliases(aliases).length < 20) {
+      if (availableAliases.length < 20) {
         final moreAliases = await aliasService.getAliases(null);
-        aliases.addAll(moreAliases);
+
+        /// Checks if newly fetched aliases exist in available aliases
+        for (Alias moreAlias in moreAliases) {
+          for (Alias availableAlias in availableAliases) {
+            /// Adds new aliases that don't match any aliases in available aliases.
+            if (moreAlias.id != availableAlias.id) {
+              aliases.add(moreAlias);
+            }
+          }
+        }
       }
 
-      /// Fetches 100 additional deleted aliases if there are less than 10
-      if (_getDeletedAliases(aliases).length < 20) {
+      /// Fetches 100 additional deleted aliases if there are less than 20
+      if (deletedAliases.length < 20) {
         final moreAliases = await aliasService.getAliases('only');
-        aliases.addAll(moreAliases);
+
+        for (Alias moreAlias in moreAliases) {
+          for (Alias deletedAlias in deletedAliases) {
+            if (moreAlias.id != deletedAlias.id) {
+              aliases.add(moreAlias);
+            }
+          }
+        }
       }
     } catch (error) {
       rethrow;
