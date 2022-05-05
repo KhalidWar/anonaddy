@@ -1,4 +1,3 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/services/failed_delivery/failed_delivery_service.dart';
 import 'package:anonaddy/state_management/failed_delivery/failed_delivery_state.dart';
 import 'package:dio/dio.dart';
