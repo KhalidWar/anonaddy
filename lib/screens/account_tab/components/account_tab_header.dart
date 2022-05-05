@@ -22,14 +22,17 @@ class AccountTabHeader extends ConsumerStatefulWidget {
 
 class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
   String _calculateBandWidth(Account account) {
-    String isUnlimited(dynamic input, String unit) {
-      return input == 0 ? 'unlimited' : '${input.hashCode.round()} $unit';
+    /// AnonAddy instances always have a [bandwidthLimit] value.
+    /// If unlimited, it's "0". If not, it's an int.
+    /// Self hosted instances do NOT have any [bandwidthLimit] value.
+    if (account.bandwidthLimit == null || account.bandwidthLimit == 0) {
+      return AppStrings.unlimited;
+    } else {
+      final bandwidth = (account.bandwidth / 1048576).toStringAsFixed(2);
+      final bandwidthLimit =
+          ((account.bandwidthLimit ?? 0) / 1048576).toStringAsFixed(2);
+      return '$bandwidth out of $bandwidthLimit MB';
     }
-
-    final bandwidth = (account.bandwidth / 1048576).toStringAsFixed(2);
-    final bandwidthLimit =
-        isUnlimited(account.bandwidthLimit ?? 0 / 1048576, 'MB');
-    return '$bandwidth MB out of $bandwidthLimit';
   }
 
   String _calculateRecipientsCount(Account account, bool isSelfHosted) {
