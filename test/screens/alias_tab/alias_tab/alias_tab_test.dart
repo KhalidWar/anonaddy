@@ -31,7 +31,7 @@ void main() {
       final scaffold = find.byKey(AliasTabWidgetKeys.aliasTabScaffold);
       final scrollView = find.byKey(AliasTabWidgetKeys.aliasTabScrollView);
       final appBar = find.byKey(AliasTabWidgetKeys.aliasTabSliverAppBar);
-      final pieChart = find.byKey(AliasTabWidgetKeys.aliasTabPieChart);
+      final pieChart = find.byKey(AliasTabWidgetKeys.aliasTabEmailsStats);
       final tapBar = find.byKey(AliasTabWidgetKeys.aliasTabTabBar);
       final availableAliasesTab =
           find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasesTab);
@@ -68,7 +68,7 @@ void main() {
       final scaffold = find.byKey(AliasTabWidgetKeys.aliasTabScaffold);
       final scrollView = find.byKey(AliasTabWidgetKeys.aliasTabScrollView);
       final appBar = find.byKey(AliasTabWidgetKeys.aliasTabSliverAppBar);
-      final pieChart = find.byKey(AliasTabWidgetKeys.aliasTabPieChart);
+      final pieChart = find.byKey(AliasTabWidgetKeys.aliasTabEmailsStats);
       final tapBar = find.byKey(AliasTabWidgetKeys.aliasTabTabBar);
       final availableAliasesTab =
           find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasesTab);
