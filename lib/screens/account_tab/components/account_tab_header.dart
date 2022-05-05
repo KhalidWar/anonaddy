@@ -21,10 +21,10 @@ class AccountTabHeader extends ConsumerStatefulWidget {
 }
 
 class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
+  /// AnonAddy instances always have a [bandwidthLimit] value.
+  /// If unlimited, it's "0". If not, it's an int.
+  /// Self hosted instances do NOT have any [bandwidthLimit] value.
   String _calculateBandWidth(Account account) {
-    /// AnonAddy instances always have a [bandwidthLimit] value.
-    /// If unlimited, it's "0". If not, it's an int.
-    /// Self hosted instances do NOT have any [bandwidthLimit] value.
     if (account.bandwidthLimit == null || account.bandwidthLimit == 0) {
       return AppStrings.unlimited;
     } else {
@@ -35,12 +35,14 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
     }
   }
 
-  String _calculateRecipientsCount(Account account, bool isSelfHosted) {
-    if (isSelfHosted) {
-      return AppStrings.unlimited;
-    } else {
-      return '${account.recipientCount} out of ${account.recipientLimit}';
-    }
+  /// AnonAddy instances' [recipientLimit] is not unlimited.
+  /// It always returns an int value representing the max [recipientLimit].
+  /// Self hosted instances' [recipientLimit] are unlimited.
+  /// It returns [null] which means there's no value.
+  String _calculateRecipientsCount(Account account) {
+    return account.recipientLimit == null
+        ? '${account.recipientCount} out of ${AppStrings.unlimited}'
+        : '${account.recipientCount} out of ${account.recipientLimit}';
   }
 
   String _calculateUsernamesCount(Account account, bool isSelfHosted) {
@@ -101,7 +103,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
               leadingIconData: Icons.speed_outlined,
             ),
             AccountListTile(
-              title: _calculateRecipientsCount(account, isSelfHosted),
+              title: _calculateRecipientsCount(account),
               subtitle: AppStrings.recipients,
               leadingIconData: Icons.email_outlined,
             ),
