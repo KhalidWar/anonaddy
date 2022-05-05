@@ -163,7 +163,7 @@ class _AlisTabState extends ConsumerState<AliasTab> {
 
                 /// When AliasTab has failed and has an error message
                 case AliasTabStatus.failed:
-                  final error = aliasTabState.errorMessage!;
+                  final error = aliasTabState.errorMessage;
                   return TabBarView(
                     children: [
                       LottieWidget(

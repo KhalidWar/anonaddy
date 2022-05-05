@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 enum AliasTabStatus { loading, loaded, failed }
@@ -6,16 +7,16 @@ enum AliasTabStatus { loading, loaded, failed }
 class AliasTabState {
   const AliasTabState({
     required this.status,
-    this.aliases,
-    this.errorMessage,
+    required this.aliases,
+    required this.errorMessage,
     required this.availableAliasList,
     required this.deletedAliasList,
     required this.availableListKey,
   });
 
   final AliasTabStatus status;
-  final List<Alias>? aliases;
-  final String? errorMessage;
+  final List<Alias> aliases;
+  final String errorMessage;
 
   final List<Alias> availableAliasList;
   final GlobalKey<AnimatedListState> availableListKey;
@@ -24,10 +25,11 @@ class AliasTabState {
   static AliasTabState initialState() {
     return AliasTabState(
       status: AliasTabStatus.loading,
-      aliases: [],
-      availableAliasList: [],
+      aliases: const <Alias>[],
+      errorMessage: AppStrings.somethingWentWrong,
+      availableAliasList: const <Alias>[],
       availableListKey: GlobalKey<AnimatedListState>(),
-      deletedAliasList: [],
+      deletedAliasList: const <Alias>[],
     );
   }
 
