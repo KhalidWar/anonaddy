@@ -5,7 +5,7 @@ class AliasTabWidgetKeys {
   static const aliasTabScaffold = Key('aliasScreenScaffold');
   static const aliasTabScrollView = Key('aliasTabScrollView');
   static const aliasTabSliverAppBar = Key('aliasTabSliverAppBar');
-  static const aliasTabPieChart = Key('aliasTabPieChart');
+  static const aliasTabEmailsStats = Key('aliasTabEmailsStats');
   static const aliasTabTabBar = Key('aliasTabTabBar');
   static const aliasTabAvailableAliasesTab = Key('aliasTabAvailableAliasesTab');
   static const aliasTabDeletedAliasesTab = Key('aliasTabDeletedAliasesTab');
