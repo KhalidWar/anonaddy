@@ -23,6 +23,7 @@ class FailedDeliveryNotifier extends StateNotifier<FailedDeliveryState> {
   }
 
   Future<void> getFailedDeliveries() async {
+    _updateState(state.copyWith(status: FailedDeliveryStatus.loading));
     try {
       final deliveries = await deliveriesService.getFailedDeliveries();
       final newState = state.copyWith(

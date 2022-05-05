@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 enum AccountStatus { loading, loaded, failed }
 
@@ -18,7 +19,7 @@ class AccountState {
     return AccountState(
       status: AccountStatus.loading,
       account: Account.dummy(),
-      errorMessage: 'Something went wrong',
+      errorMessage: AppStrings.somethingWentWrong,
     );
   }
 

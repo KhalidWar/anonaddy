@@ -29,9 +29,11 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     super.initState();
 
     /// Fetches latest data for this specific alias
-    ref
-        .read(aliasScreenStateNotifier.notifier)
-        .fetchSpecificAlias(widget.alias);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      ref
+          .read(aliasScreenStateNotifier.notifier)
+          .fetchSpecificAlias(widget.alias);
+    });
   }
 
   @override
@@ -372,7 +374,10 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                       ),
                     ),
                     SizedBox(height: size.height * 0.01),
-                    const Text(AppStrings.sendFromAliasNote),
+                    Text(
+                      AppStrings.sendFromAliasNote,
+                      style: Theme.of(context).textTheme.caption,
+                    ),
                     SizedBox(height: size.height * 0.01),
                     Center(
                       child: ElevatedButton(

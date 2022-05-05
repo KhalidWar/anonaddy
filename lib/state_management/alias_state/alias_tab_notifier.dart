@@ -214,6 +214,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
   /// Sorts through aliases and returns available aliases
   List<Alias> _getAvailableAliases(List<Alias> aliases) {
+    if (aliases.isEmpty) return <Alias>[];
+
     final availableAliasList = <Alias>[];
     for (Alias alias in aliases) {
       if (alias.deletedAt == null) {
@@ -225,6 +227,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
   /// Sorts through aliases and returns deleted aliases
   List<Alias> _getDeletedAliases(List<Alias> aliases) {
+    if (aliases.isEmpty) return <Alias>[];
+
     final deletedAliasList = <Alias>[];
     for (Alias alias in aliases) {
       if (alias.deletedAt != null) {
