@@ -45,12 +45,18 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
         : '${account.recipientCount} out of ${account.recipientLimit}';
   }
 
-  String _calculateUsernamesCount(Account account, bool isSelfHosted) {
-    if (isSelfHosted) {
-      return AppStrings.unlimited;
-    } else {
-      return '${account.usernameCount} out of ${account.usernameLimit}';
-    }
+  /// AnonAddy instances' [usernameLimit] is not unlimited.
+  /// It always returns an int value representing the max [usernameLimit].
+  /// [Username] is a paid feature NOT available for "free" users.
+  /// Free users have a [usernameLimit] of "0".
+  /// Paid users have a int value representing [usernameLimit].
+  ///
+  /// Self hosted instances' [usernameLimit] are unlimited.
+  /// It returns [null] which means there's no value.
+  String calculateUsernamesCount(Account account) {
+    return account.usernameLimit == null
+        ? '${account.usernameCount} out of ${AppStrings.unlimited}'
+        : '${account.usernameCount} out of ${account.usernameLimit}';
   }
 
   @override
@@ -108,7 +114,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
               leadingIconData: Icons.email_outlined,
             ),
             AccountListTile(
-              title: _calculateUsernamesCount(account, isSelfHosted),
+              title: calculateUsernamesCount(account),
               subtitle: AppStrings.usernames,
               leadingIconData: Icons.account_circle_outlined,
             ),
