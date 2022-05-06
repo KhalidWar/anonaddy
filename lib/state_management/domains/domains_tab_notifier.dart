@@ -39,16 +39,18 @@ class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
           state.copyWith(status: DomainsTabStatus.loaded, domains: domains);
       _updateState(newState);
     } catch (error) {
-      final dioError = error as DioError;
+      if (error == DioError) {
+        final dioError = error as DioError;
 
-      /// If offline, load offline data.
-      if (dioError.type == DioErrorType.other) {
-        await loadOfflineState();
-      } else {
-        final newState = state.copyWith(
-            status: DomainsTabStatus.failed, errorMessage: dioError.message);
-        _updateState(newState);
-        await _retryOnError();
+        /// If offline, load offline data.
+        if (dioError.type == DioErrorType.other) {
+          await loadOfflineState();
+        } else {
+          final newState = state.copyWith(
+              status: DomainsTabStatus.failed, errorMessage: dioError.message);
+          _updateState(newState);
+          await _retryOnError();
+        }
       }
     }
   }

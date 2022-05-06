@@ -40,18 +40,20 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
           status: RecipientTabStatus.loaded, recipients: recipients);
       _updateState(newState);
     } catch (error) {
-      final dioError = error as DioError;
+      if (error == DioError) {
+        final dioError = error as DioError;
 
-      /// If offline, load offline data.
-      if (dioError.type == DioErrorType.other) {
-        await loadOfflineState();
-      } else {
-        final newState = state.copyWith(
-          status: RecipientTabStatus.failed,
-          errorMessage: dioError.message,
-        );
-        _updateState(newState);
-        await _retryOnError();
+        /// If offline, load offline data.
+        if (dioError.type == DioErrorType.other) {
+          await loadOfflineState();
+        } else {
+          final newState = state.copyWith(
+            status: RecipientTabStatus.failed,
+            errorMessage: dioError.message,
+          );
+          _updateState(newState);
+          await _retryOnError();
+        }
       }
     }
   }
