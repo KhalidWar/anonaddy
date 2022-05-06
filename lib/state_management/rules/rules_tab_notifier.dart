@@ -75,7 +75,7 @@ class RulesTabNotifier extends StateNotifier<RulesTabState> {
     /// Otherwise, it would always show offline data even if there's error.
     if (!state.status.isFailed()) {
       List<dynamic> decodedData = [];
-      final securedData = await offlineData.readDomainOfflineData();
+      final securedData = await offlineData.readRulesOfflineData();
       if (securedData.isNotEmpty) decodedData = jsonDecode(securedData);
       final rules = decodedData.map((rule) => Rules.fromJson(rule)).toList();
 
