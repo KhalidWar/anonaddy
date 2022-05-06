@@ -11,11 +11,9 @@ class OfflineBanner extends StatelessWidget {
     return ListTile(
       tileColor: Colors.redAccent,
       iconColor: Colors.black,
-      title: const Text(
-        AppStrings.noInternetOfflineData,
-      ),
+      minLeadingWidth: 0,
+      title: const Text(AppStrings.noInternetOfflineData),
       leading: const Icon(Icons.warning_amber_outlined),
-      trailing: const Icon(Icons.info_outline),
       onTap: () {
         PlatformAware.platformDialog(
           context: context,
