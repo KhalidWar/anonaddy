@@ -10,6 +10,7 @@ import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/offline_banner.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -46,9 +47,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
   @override
   void initState() {
     super.initState();
-    ref
-        .read(recipientScreenStateNotifier.notifier)
-        .fetchRecipient(widget.recipient);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      ref
+          .read(recipientScreenStateNotifier.notifier)
+          .fetchRecipient(widget.recipient);
+    });
   }
 
   @override
@@ -109,6 +112,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     return ListView(
       physics: const ClampingScrollPhysics(),
       children: [
+        if (recipientScreenState.isOffline!) const OfflineBanner(),
         if (recipient.aliases == null || recipient.emailVerifiedAt == null)
           Container(
             alignment: Alignment.center,

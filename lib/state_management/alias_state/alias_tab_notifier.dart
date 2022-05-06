@@ -177,15 +177,15 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// request and forcing the user to wait before interacting with the new alias.
   void addAlias(Alias alias) async {
     /// Injects [alias] into the first slot in the list
-    state.aliases!.insert(0, alias);
+    state.aliases.insert(0, alias);
 
     /// Saves current list of aliases into disk
-    _saveOfflineData(state.aliases!);
+    _saveOfflineData(state.aliases);
 
     final newState = state.copyWith(
-      aliases: state.aliases!,
-      availableAliasList: _getAvailableAliases(state.aliases!),
-      deletedAliasList: _getDeletedAliases(state.aliases!),
+      aliases: state.aliases,
+      availableAliasList: _getAvailableAliases(state.aliases),
+      deletedAliasList: _getDeletedAliases(state.aliases),
     );
     _updateState(newState);
 
@@ -197,23 +197,25 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   void deleteAlias(String aliasId) {
     /// Emulates deleting alias by setting its [deletedAt] to now.
     /// Then add it to aliases so it can show up in deletedAliases.
-    final alias = state.aliases!.firstWhere((alias) => alias.id == aliasId);
+    final alias = state.aliases.firstWhere((alias) => alias.id == aliasId);
     alias.deletedAt = DateTime.now();
-    state.aliases!.insert(0, alias);
+    state.aliases.insert(0, alias);
 
     /// Saves current list of aliases into disk
-    _saveOfflineData(state.aliases!);
+    _saveOfflineData(state.aliases);
 
     final newState = state.copyWith(
       aliases: state.aliases,
-      availableAliasList: _getAvailableAliases(state.aliases!),
-      deletedAliasList: _getDeletedAliases(state.aliases!),
+      availableAliasList: _getAvailableAliases(state.aliases),
+      deletedAliasList: _getDeletedAliases(state.aliases),
     );
     _updateState(newState);
   }
 
   /// Sorts through aliases and returns available aliases
   List<Alias> _getAvailableAliases(List<Alias> aliases) {
+    if (aliases.isEmpty) return <Alias>[];
+
     final availableAliasList = <Alias>[];
     for (Alias alias in aliases) {
       if (alias.deletedAt == null) {
@@ -225,6 +227,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
   /// Sorts through aliases and returns deleted aliases
   List<Alias> _getDeletedAliases(List<Alias> aliases) {
+    if (aliases.isEmpty) return <Alias>[];
+
     final deletedAliasList = <Alias>[];
     for (Alias alias in aliases) {
       if (alias.deletedAt != null) {

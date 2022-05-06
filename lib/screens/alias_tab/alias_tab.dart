@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/alias_tab/components/alias_animated_list.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_tab_pie_chart.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_tab_emails_stats.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
@@ -60,8 +60,8 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                 pinned: true,
                 flexibleSpace: const FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
-                  background: AliasTabPieChart(
-                    key: AliasTabWidgetKeys.aliasTabPieChart,
+                  background: AliasTabEmailsStats(
+                    key: AliasTabWidgetKeys.aliasTabEmailsStats,
                   ),
                 ),
                 bottom: const TabBar(
@@ -163,7 +163,7 @@ class _AlisTabState extends ConsumerState<AliasTab> {
 
                 /// When AliasTab has failed and has an error message
                 case AliasTabStatus.failed:
-                  final error = aliasTabState.errorMessage!;
+                  final error = aliasTabState.errorMessage;
                   return TabBarView(
                     children: [
                       LottieWidget(

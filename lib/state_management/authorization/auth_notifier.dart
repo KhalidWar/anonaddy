@@ -114,21 +114,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> initAuth() async {
     try {
       final isLoginValid = await _validateLoginCredential();
-      final canCheck = await biometricService.doesPlatformSupportAuth();
+      // final canCheck = await biometricService.doesPlatformSupportAuth();
       final authStatus = await _getBioAuthState();
 
       if (isLoginValid) {
         final newState = state.copyWith(
           authorizationStatus: AuthorizationStatus.authorized,
-          authenticationStatus:
-              canCheck ? authStatus : AuthenticationStatus.unavailable,
+          authenticationStatus: authStatus,
         );
         _updateState(newState);
       } else {
         final newState = state.copyWith(
           authorizationStatus: AuthorizationStatus.anonAddyLogin,
-          authenticationStatus:
-              canCheck ? authStatus : AuthenticationStatus.unavailable,
+          authenticationStatus: authStatus,
         );
         _updateState(newState);
       }

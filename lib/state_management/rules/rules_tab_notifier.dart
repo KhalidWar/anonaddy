@@ -42,18 +42,20 @@ class RulesTabNotifier extends StateNotifier<RulesTabState> {
           state.copyWith(status: RulesTabStatus.loaded, rules: rules);
       _updateState(newState);
     } catch (error) {
-      final dioError = error as DioError;
+      if (error == DioError) {
+        final dioError = error as DioError;
 
-      /// If offline, load offline data.
-      if (dioError.type == DioErrorType.other) {
-        await loadOfflineState();
-      } else {
-        final newState = state.copyWith(
-          status: RulesTabStatus.failed,
-          errorMessage: dioError.message,
-        );
-        _updateState(newState);
-        await _retryOnError();
+        /// If offline, load offline data.
+        if (dioError.type == DioErrorType.other) {
+          await loadOfflineState();
+        } else {
+          final newState = state.copyWith(
+            status: RulesTabStatus.failed,
+            errorMessage: dioError.message,
+          );
+          _updateState(newState);
+          await _retryOnError();
+        }
       }
     }
   }
@@ -73,7 +75,7 @@ class RulesTabNotifier extends StateNotifier<RulesTabState> {
     /// Otherwise, it would always show offline data even if there's error.
     if (!state.status.isFailed()) {
       List<dynamic> decodedData = [];
-      final securedData = await offlineData.readDomainOfflineData();
+      final securedData = await offlineData.readRulesOfflineData();
       if (securedData.isNotEmpty) decodedData = jsonDecode(securedData);
       final rules = decodedData.map((rule) => Rules.fromJson(rule)).toList();
 

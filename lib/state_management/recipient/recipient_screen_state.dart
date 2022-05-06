@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 enum RecipientScreenStatus { loading, loaded, failed }
 
@@ -9,6 +10,7 @@ class RecipientScreenState {
     this.errorMessage,
     this.isEncryptionToggleLoading,
     this.isAddRecipientLoading,
+    this.isOffline,
   });
 
   final RecipientScreenStatus status;
@@ -17,13 +19,15 @@ class RecipientScreenState {
 
   final bool? isEncryptionToggleLoading;
   final bool? isAddRecipientLoading;
+  final bool? isOffline;
 
   static RecipientScreenState initialState() {
     return const RecipientScreenState(
       status: RecipientScreenStatus.loading,
-      errorMessage: '',
+      errorMessage: AppStrings.somethingWentWrong,
       isEncryptionToggleLoading: false,
       isAddRecipientLoading: false,
+      isOffline: false,
     );
   }
 
@@ -33,6 +37,7 @@ class RecipientScreenState {
     String? errorMessage,
     bool? isEncryptionToggleLoading,
     bool? isAddRecipientLoading,
+    bool? isOffline,
   }) {
     return RecipientScreenState(
       status: status ?? this.status,
@@ -42,11 +47,12 @@ class RecipientScreenState {
           isEncryptionToggleLoading ?? this.isEncryptionToggleLoading,
       isAddRecipientLoading:
           isAddRecipientLoading ?? this.isAddRecipientLoading,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 
   @override
   String toString() {
-    return 'RecipientScreenState{status: $status, recipient: $recipient, errorMessage: $errorMessage, isEncryptionToggleLoading: $isEncryptionToggleLoading}';
+    return 'RecipientScreenState{status: $status, recipient: $recipient, errorMessage: $errorMessage, isEncryptionToggleLoading: $isEncryptionToggleLoading, isAddRecipientLoading: $isAddRecipientLoading, isOffline: $isOffline}';
   }
 }

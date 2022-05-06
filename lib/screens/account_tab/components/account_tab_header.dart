@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -23,12 +24,15 @@ class AccountTabHeader extends ConsumerStatefulWidget {
 class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
   /// AnonAddy instances always have a [bandwidthLimit] value.
   /// If unlimited, it's "0". If not, it's an int.
+  ///
   /// Self hosted instances do NOT have any [bandwidthLimit] value.
-  String _calculateBandWidth(Account account) {
+  /// So, it returns a [null] value.
+  String calculateBandWidth(Account account) {
+    final bandwidth = (account.bandwidth / 1048576).toStringAsFixed(2);
+
     if (account.bandwidthLimit == null || account.bandwidthLimit == 0) {
-      return AppStrings.unlimited;
+      return '$bandwidth MB out of ${AppStrings.unlimited}';
     } else {
-      final bandwidth = (account.bandwidth / 1048576).toStringAsFixed(2);
       final bandwidthLimit =
           ((account.bandwidthLimit ?? 0) / 1048576).toStringAsFixed(2);
       return '$bandwidth out of $bandwidthLimit MB';
@@ -37,20 +41,27 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
 
   /// AnonAddy instances' [recipientLimit] is not unlimited.
   /// It always returns an int value representing the max [recipientLimit].
+  ///
   /// Self hosted instances' [recipientLimit] are unlimited.
   /// It returns [null] which means there's no value.
-  String _calculateRecipientsCount(Account account) {
+  String calculateRecipientsCount(Account account) {
     return account.recipientLimit == null
         ? '${account.recipientCount} out of ${AppStrings.unlimited}'
         : '${account.recipientCount} out of ${account.recipientLimit}';
   }
 
-  String _calculateUsernamesCount(Account account, bool isSelfHosted) {
-    if (isSelfHosted) {
-      return AppStrings.unlimited;
-    } else {
-      return '${account.usernameCount} out of ${account.usernameLimit}';
-    }
+  /// AnonAddy instances' [usernameLimit] is not unlimited.
+  /// It always returns an int value representing the max [usernameLimit].
+  /// [Username] is a paid feature NOT available for "free" users.
+  /// Free users have a [usernameLimit] of "0".
+  /// Paid users have a int value representing [usernameLimit].
+  ///
+  /// Self hosted instances' [usernameLimit] are unlimited.
+  /// It returns [null] which means there's no value.
+  String calculateUsernamesCount(Account account) {
+    return account.usernameLimit == null
+        ? '${account.usernameCount} out of ${AppStrings.unlimited}'
+        : '${account.usernameCount} out of ${account.usernameLimit}';
   }
 
   @override
@@ -79,7 +90,6 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
 
       case AccountStatus.loaded:
         final account = accountState.account;
-        final isSelfHosted = accountState.isSelfHosted;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,23 +102,23 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
                   child: PlatformInfoDialog(
                     title: AppStrings.accountBotNavLabel,
                     buttonLabel: AppStrings.doneText,
-                    content: AccountPopupInfo(account: account),
+                    content: AccountPopupInfo(accountState: accountState),
                   ),
                 );
               },
             ),
             AccountListTile(
-              title: _calculateBandWidth(account),
+              title: calculateBandWidth(account),
               subtitle: AppStrings.monthlyBandwidth,
               leadingIconData: Icons.speed_outlined,
             ),
             AccountListTile(
-              title: _calculateRecipientsCount(account),
+              title: calculateRecipientsCount(account),
               subtitle: AppStrings.recipients,
               leadingIconData: Icons.email_outlined,
             ),
             AccountListTile(
-              title: _calculateUsernamesCount(account, isSelfHosted),
+              title: calculateUsernamesCount(account),
               subtitle: AppStrings.usernames,
               leadingIconData: Icons.account_circle_outlined,
             ),

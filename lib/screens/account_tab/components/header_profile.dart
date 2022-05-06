@@ -44,8 +44,10 @@ class HeaderProfile extends StatelessWidget {
     final firstLetter = account.username[0];
     return Text(
       firstLetter.toUpperCase(),
-      style:
-          Theme.of(context).textTheme.headline5!.copyWith(color: Colors.black),
+      style: Theme.of(context)
+          .textTheme
+          .headline5!
+          .copyWith(fontWeight: FontWeight.bold, color: Colors.black),
     );
   }
 }

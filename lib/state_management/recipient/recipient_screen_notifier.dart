@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
@@ -47,18 +45,23 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       final newState = state.copyWith(
           status: RecipientScreenStatus.loaded, recipient: newRecipient);
       _updateState(newState);
-    } on SocketException {
-      /// Return old recipient data if there's no internet connection
-      final newState = state.copyWith(
-          status: RecipientScreenStatus.loaded, recipient: recipient);
-      _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      final newState = state.copyWith(
-        status: RecipientScreenStatus.failed,
-        errorMessage: dioError.message,
-      );
-      _updateState(newState);
+
+      if (dioError.type == DioErrorType.other) {
+        final newState = state.copyWith(
+          status: RecipientScreenStatus.loaded,
+          isOffline: true,
+          recipient: recipient,
+        );
+        _updateState(newState);
+      } else {
+        final newState = state.copyWith(
+          status: RecipientScreenStatus.failed,
+          errorMessage: dioError.message,
+        );
+        _updateState(newState);
+      }
     }
   }
 

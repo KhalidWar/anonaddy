@@ -102,10 +102,10 @@ class ChangelogWidget extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
             header('Improved', Colors.blue),
-            label(
-                '1. Several under the hood improvements for a smoother running app.'),
-            label('2. Updated Account UI.'),
-            label('3. Squashed some bugs.'),
+            label('1. Improved app responsiveness.'),
+            label('2. Made lots of under the hood improvements.'),
+            label('3. Tweaked several UI components.'),
+            label('4. Fixed several minor bugs.'),
             // label('2. Fixed self-hosted recipient/username count errors.'),
             // SizedBox(height: size.height * 0.008),
             // header('Added', Colors.green),
