@@ -33,28 +33,29 @@ class LottieWidget extends StatelessWidget {
             backgroundColor: Colors.transparent,
             color: AppColors.accentColor,
           ),
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (lottie != null)
-                Lottie.asset(
+        ListView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            if (lottie != null)
+              Center(
+                child: Lottie.asset(
                   lottie!,
                   height: lottieHeight,
                   fit: BoxFit.fitHeight,
                   repeat: repeat ?? false,
                 ),
-              if (label != null)
-                Text(
-                  '$label',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2!
-                      .copyWith(fontWeight: FontWeight.normal),
-                ),
-            ],
-          ),
+              ),
+            if (label != null)
+              Text(
+                label!,
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(fontWeight: FontWeight.normal),
+              ),
+          ],
         ),
       ],
     );

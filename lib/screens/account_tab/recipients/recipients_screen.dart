@@ -6,6 +6,7 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
+import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
@@ -18,7 +19,6 @@ import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.da
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -107,6 +107,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     }
 
     return ListView(
+      physics: const ClampingScrollPhysics(),
       children: [
         if (recipient.aliases == null || recipient.emailVerifiedAt == null)
           Container(
@@ -176,7 +177,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   onPressed: () {},
                 ),
                 trailingIconOnPress: () =>
-                    recipientProvider.verifyEmail(recipient),
+                    recipientProvider.resendVerificationEmail(recipient),
               )
             : Container(),
         if (recipient.aliases == null)
@@ -357,7 +358,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    void showDialog() {
+    void deleteRecipient() {
       PlatformAware.platformDialog(
         context: context,
         child: PlatformAlertDialog(
@@ -378,28 +379,12 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
       );
     }
 
-    return AppBar(
-      title: const Text('Recipient', style: TextStyle(color: Colors.white)),
-      leading: IconButton(
-        icon: Icon(
-          PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
-        ),
-        color: Colors.white,
-        onPressed: () => Navigator.pop(context),
-      ),
-      actions: [
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) {
-            return ['Delete Recipient'].map((String choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Text(choice),
-              );
-            }).toList();
-          },
-          onSelected: (String choice) => showDialog(),
-        ),
-      ],
+    return CustomAppBar(
+      title: 'Recipient',
+      leadingOnPress: () => Navigator.pop(context),
+      showTrailing: true,
+      trailingLabel: 'Delete Recipient',
+      trailingOnPress: (choice) => deleteRecipient(),
     );
   }
 }

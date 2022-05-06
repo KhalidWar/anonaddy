@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 /// Status for when fetching [alias] data
 enum AliasScreenStatus { loading, loaded, failed }
@@ -7,7 +8,7 @@ enum AliasScreenStatus { loading, loaded, failed }
 /// States which [AliasScreen] and its components can be in
 class AliasScreenState {
   const AliasScreenState({
-    this.status,
+    required this.status,
     this.alias,
     this.errorMessage,
     this.isToggleLoading,
@@ -17,7 +18,7 @@ class AliasScreenState {
   });
 
   /// [AliasScreen] status when fetching for [alias]
-  final AliasScreenStatus? status;
+  final AliasScreenStatus status;
 
   /// Alias shown in [AliasScreen]
   final Alias? alias;
@@ -33,7 +34,7 @@ class AliasScreenState {
     /// Then call [.copyWith()] method to update specific state variable
     return const AliasScreenState(
       status: AliasScreenStatus.loading,
-      errorMessage: '',
+      errorMessage: AppStrings.somethingWentWrong,
       isToggleLoading: false,
       deleteAliasLoading: false,
       updateRecipientLoading: false,
@@ -64,6 +65,6 @@ class AliasScreenState {
 
   @override
   String toString() {
-    return 'AliasScreenState{status: $status, alias: $alias, errorMessage: $errorMessage}';
+    return 'AliasScreenState{status: $status, alias: $alias, errorMessage: $errorMessage, isToggleLoading: $isToggleLoading, deleteAliasLoading: $deleteAliasLoading, updateRecipientLoading: $updateRecipientLoading, isOffline: $isOffline}';
   }
 }

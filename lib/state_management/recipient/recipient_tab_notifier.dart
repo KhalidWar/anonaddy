@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
@@ -7,6 +6,7 @@ import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientTabStateNotifier =
@@ -21,9 +21,7 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
   RecipientTabNotifier({
     required this.recipientService,
     required this.offlineData,
-  }) : super(const RecipientTabState(status: RecipientTabStatus.loading)) {
-    _loadOfflineData();
-  }
+  }) : super(const RecipientTabState(status: RecipientTabStatus.loading));
 
   final RecipientService recipientService;
   final OfflineData offlineData;
@@ -36,53 +34,71 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
     _updateState(state.copyWith(status: RecipientTabStatus.loading));
 
     try {
-      final recipients = await recipientService.getAllRecipient();
+      final recipients = await recipientService.getRecipients();
       await _saveOfflineData(recipients);
       final newState = state.copyWith(
           status: RecipientTabStatus.loaded, recipients: recipients);
       _updateState(newState);
-    } on SocketException {
-      await _loadOfflineData();
     } catch (error) {
-      final newState = state.copyWith(
-          status: RecipientTabStatus.failed, errorMessage: error.toString());
-      _updateState(newState);
-      await _retryOnError();
+      final dioError = error as DioError;
+
+      /// If offline, load offline data.
+      if (dioError.type == DioErrorType.other) {
+        await loadOfflineState();
+      } else {
+        final newState = state.copyWith(
+          status: RecipientTabStatus.failed,
+          errorMessage: dioError.message,
+        );
+        _updateState(newState);
+        await _retryOnError();
+      }
     }
   }
 
   /// Silently fetches the latest recipient data and displays them
   Future<void> refreshRecipients() async {
     try {
-      final recipients = await recipientService.getAllRecipient();
+      final recipients = await recipientService.getRecipients();
       await _saveOfflineData(recipients);
 
       final newState = state.copyWith(
           status: RecipientTabStatus.loaded, recipients: recipients);
       _updateState(newState);
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      final dioError = error as DioError;
+      NicheMethod.showToast(dioError.message);
     }
   }
 
   Future _retryOnError() async {
-    if (state.status == RecipientTabStatus.failed) {
+    if (state.status.isFailed()) {
       await Future.delayed(const Duration(seconds: 5));
       await fetchRecipients();
     }
   }
 
-  Future<void> _loadOfflineData() async {
-    final securedData = await offlineData.readRecipientsOfflineData();
-    if (securedData.isNotEmpty) {
-      final decodedData = jsonDecode(securedData);
-      final recipients = (decodedData as List).map((alias) {
-        return Recipient.fromJson(alias);
-      }).toList();
+  /// Fetches recipients from disk and displays them, used at initial app
+  /// startup since fetching from disk is a lot faster than fetching from API.
+  /// It's also used to when there's no internet connection.
+  Future<void> loadOfflineState() async {
+    /// Only load offline data when state is NOT failed.
+    /// Otherwise, it would always show offline data even if there's error.
+    if (!state.status.isFailed()) {
+      List<dynamic> encodedRecipients = [];
+      final securedData = await offlineData.readRecipientsOfflineData();
+      if (securedData.isNotEmpty) encodedRecipients = jsonDecode(securedData);
+      final recipients = encodedRecipients
+          .map((recipient) => Recipient.fromJson(recipient))
+          .toList();
 
-      final newState = state.copyWith(
-          status: RecipientTabStatus.loaded, recipients: recipients);
-      _updateState(newState);
+      if (recipients.isNotEmpty) {
+        final newState = state.copyWith(
+          status: RecipientTabStatus.loaded,
+          recipients: recipients,
+        );
+        _updateState(newState);
+      }
     }
   }
 

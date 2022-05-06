@@ -1,5 +1,4 @@
 import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
-import 'package:anonaddy/screens/account_tab/components/paid_feature_wall.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_list_tile.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
@@ -25,7 +24,7 @@ class UsernamesTab extends ConsumerStatefulWidget {
 
 class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   void addNewUsername(BuildContext context) {
-    final account = ref.read(accountStateNotifier).account;
+    final accountState = ref.read(accountStateNotifier);
 
     /// Draws UI for adding new username
     Future buildAddNewUsername(BuildContext context) {
@@ -41,19 +40,13 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
       );
     }
 
-    /// If account data is unavailable, show an error message and exit method.
-    if (account == null) {
-      NicheMethod.showToast(AppStrings.loadAccountDataFailed);
-      return;
-    }
-
-    if (account.subscription == null) {
+    if (accountState.isSelfHosted) {
       buildAddNewUsername(context);
     } else {
-      if (account.subscription == AnonAddyString.subscriptionFree) {
+      if (accountState.isSubscriptionFree) {
         NicheMethod.showToast(ToastMessage.onlyAvailableToPaid);
       } else {
-        account.usernameCount == account.usernameLimit
+        accountState.hasUsernamesReachedLimit
             ? NicheMethod.showToast(AnonAddyString.reachedUsernameLimit)
             : buildAddNewUsername(context);
       }
@@ -61,70 +54,58 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final accountState = ref.watch(accountStateNotifier);
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(usernameStateNotifier.notifier).loadOfflineState();
+      ref.read(usernameStateNotifier.notifier).fetchUsernames();
+    });
+  }
 
-    switch (accountState.status) {
-      case AccountStatus.loading:
+  @override
+  Widget build(BuildContext context) {
+    final usernameState = ref.watch(usernameStateNotifier);
+
+    switch (usernameState.status) {
+      case UsernamesStatus.loading:
         return const RecipientsShimmerLoading();
 
-      case AccountStatus.loaded:
-        final subscription = accountState.account!.subscription;
-        if (subscription == AnonAddyString.subscriptionFree) {
-          return const PaidFeatureWall();
-        }
-
-        final usernameState = ref.watch(usernameStateNotifier);
-        switch (usernameState.status) {
-          case UsernamesStatus.loading:
-            return const RecipientsShimmerLoading();
-
-          case UsernamesStatus.loaded:
-            final usernames = usernameState.usernameModel!.usernames;
-
-            return ListView(
-              shrinkWrap: true,
-              children: [
-                usernames.isEmpty
-                    ? ListTile(
-                        title: Center(
-                          child: Text(
-                            AppStrings.noAdditionalUsernamesFound,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(vertical: 0),
-                        itemCount: usernames.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final username = usernames[index];
-                          return UsernameListTile(username: username);
-                        },
+      case UsernamesStatus.loaded:
+        final usernames = usernameState.usernames;
+        return ListView(
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          children: [
+            usernames.isEmpty
+                ? ListTile(
+                    title: Center(
+                      child: Text(
+                        AppStrings.noAdditionalUsernamesFound,
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
-                TextButton(
-                  child: const Text(AppStrings.addNewUsername),
-                  onPressed: () => addNewUsername(context),
-                ),
-              ],
-            );
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(vertical: 0),
+                    itemCount: usernames.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (_, index) {
+                      return UsernameListTile(username: usernames[index]);
+                    },
+                  ),
+            TextButton(
+              child: const Text(AppStrings.addNewUsername),
+              onPressed: () => addNewUsername(context),
+            ),
+          ],
+        );
 
-          case UsernamesStatus.failed:
-            final error = usernameState.errorMessage;
-            return LottieWidget(
-              lottie: LottieImages.errorCone,
-              lottieHeight: MediaQuery.of(context).size.height * 0.1,
-              label: error.toString(),
-            );
-        }
-
-      case AccountStatus.failed:
+      case UsernamesStatus.failed:
         return LottieWidget(
           lottie: LottieImages.errorCone,
-          lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AppStrings.loadAccountDataFailed,
+          lottieHeight: MediaQuery.of(context).size.height * 0.1,
+          label: usernameState.errorMessage,
         );
     }
   }

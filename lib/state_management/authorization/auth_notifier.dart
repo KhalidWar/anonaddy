@@ -13,8 +13,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 final authStateNotifier = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
     secureStorage: ref.read(flutterSecureStorage),
-    biometricService: ref.read(biometricAuthService),
-    tokenService: ref.read(accessTokenService),
+    biometricService: ref.read(biometricAuthServiceProvider),
+    tokenService: ref.read(accessTokenServiceProvider),
     searchHistory: ref.read(searchHistoryStateNotifier.notifier),
   );
 });
@@ -34,6 +34,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   void _updateState(AuthState newState) {
     if (mounted) state = newState;
+  }
+
+  void goToAnonAddyLogin() {
+    final newState = state.copyWith(
+      authorizationStatus: AuthorizationStatus.anonAddyLogin,
+    );
+    _updateState(newState);
+  }
+
+  void goToSelfHostedLogin() {
+    final newState = state.copyWith(
+      authorizationStatus: AuthorizationStatus.selfHostedLogin,
+    );
+    _updateState(newState);
   }
 
   Future<void> login(String url, String token) async {
@@ -89,45 +103,77 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  /// Initializes
+  /// Manages authentication flow at app startup.
+  ///   1. Fetches stored access token and instance url.
+  ///   2. Attempts to login to check if token and url are valid.
+  ///   3. If valid, set [state] to [AuthorizationStatus.authorized].
+  ///   4. If invalid, set [state] to [AuthorizationStatus.unauthorized].
+  ///
+  /// It also checks if user's device supports biometric authentication.
+  /// Then sets [state] accordingly.
   Future<void> initAuth() async {
     try {
-      final accessToken = await tokenService.getAccessToken();
-      const bioAuthKey = BiometricNotifier.biometricAuthKey;
-      final bioKeyValue = await secureStorage.read(key: bioAuthKey);
+      final isLoginValid = await _validateLoginCredential();
+      final canCheck = await biometricService.doesPlatformSupportAuth();
+      final authStatus = await _getBioAuthState();
 
-      /// When a logged in is NOT found
-      if (accessToken == null || accessToken.isEmpty) {
-        final newState = state.copyWith(
-            authorizationStatus: AuthorizationStatus.unauthorized);
-        _updateState(newState);
-      } else {
-        /// When a logged in is NOT found
-        //todo validate accessToken and return unauthorized if it fails
-        final canCheck = await biometricService.doesPlatformSupportAuth();
-        final savedAuthStatus = _initBioAuth(bioKeyValue);
-
+      if (isLoginValid) {
         final newState = state.copyWith(
           authorizationStatus: AuthorizationStatus.authorized,
           authenticationStatus:
-              canCheck ? savedAuthStatus : AuthenticationStatus.unavailable,
+              canCheck ? authStatus : AuthenticationStatus.unavailable,
+        );
+        _updateState(newState);
+      } else {
+        final newState = state.copyWith(
+          authorizationStatus: AuthorizationStatus.anonAddyLogin,
+          authenticationStatus:
+              canCheck ? authStatus : AuthenticationStatus.unavailable,
         );
         _updateState(newState);
       }
+    } catch (error) {
+      NicheMethod.showToast(error.toString());
+
+      /// Authenticate user regardless of error.
+      /// This is a temp solution until I'm able to handle different errors.
+      _updateState(
+        state.copyWith(authorizationStatus: AuthorizationStatus.authorized),
+      );
+    }
+  }
+
+  /// Fetches and validates stored login credentials
+  /// and returns bool if valid or not
+  Future<bool> _validateLoginCredential() async {
+    try {
+      final token = await tokenService.getAccessToken();
+      final url = await tokenService.getInstanceURL();
+      if (token.isEmpty || url.isEmpty) return false;
+
+      /// Temporarily override token and url validation check until I find
+      /// a way of handling different errors.
+      return true;
+
+      // final isValid = await tokenService.validateAccessToken(url, token);
+      // return isValid;
     } catch (error) {
       rethrow;
     }
   }
 
-  AuthenticationStatus _initBioAuth(String? input) {
-    if (input == null) {
-      return AuthenticationStatus.disabled;
-    }
+  Future<AuthenticationStatus> _getBioAuthState() async {
+    try {
+      const bioAuthKey = BiometricNotifier.biometricAuthKey;
+      final bioAuthValue = await secureStorage.read(key: bioAuthKey);
 
-    if (input == 'true') {
-      return AuthenticationStatus.enabled;
-    } else {
-      return AuthenticationStatus.disabled;
+      if (bioAuthValue == null) return AuthenticationStatus.disabled;
+
+      return bioAuthValue == 'true'
+          ? AuthenticationStatus.enabled
+          : AuthenticationStatus.disabled;
+    } catch (error) {
+      rethrow;
     }
   }
 }

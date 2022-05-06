@@ -5,4 +5,5 @@ class OfflineDataKey {
   static const recipients = 'recipientsDataKey';
   static const domainOptions = 'domainOptionsDataKey';
   static const domain = 'domainDataKey';
+  static const rules = 'rulesDataKey';
 }

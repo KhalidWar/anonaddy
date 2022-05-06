@@ -1,21 +1,35 @@
+import 'dart:developer';
+
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/io_client.dart';
+
+final accessTokenServiceProvider = Provider<AccessTokenService>((ref) {
+  return AccessTokenService(
+    secureStorage: ref.read(flutterSecureStorage),
+    dio: Dio(),
+  );
+});
 
 class AccessTokenService {
   AccessTokenService({
     required this.secureStorage,
-    required this.httpClient,
+    required this.dio,
   });
   final FlutterSecureStorage secureStorage;
-  final IOClient httpClient;
+  final Dio dio;
 
   Future<bool> validateAccessToken(String url, String token) async {
     try {
-      final response = await httpClient.get(
-        Uri.https(url, '$kUnEncodedBaseURL/$kAccountDetailsURL'),
+      const path = '$kUnEncodedBaseURL/$kAccountDetailsURL';
+      final uri = Uri.https(url, path);
+      final options = Options(
+        sendTimeout: 5000,
+        receiveTimeout: 5000,
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -23,12 +37,20 @@ class AccessTokenService {
           "Authorization": "Bearer $token",
         },
       );
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
+
+      final response = await dio.getUri(uri, options: options);
+      log('validateAccessToken: ' + response.statusCode.toString());
+
+      return response.statusCode == 200 ? true : false;
+    } on DioError catch (dioError) {
+      if (dioError.type == DioErrorType.response) {
+        throw dioError.response == null
+            ? dioError.message
+            : ApiErrorMessage.translateStatusCode(
+                dioError.response!.statusCode ?? 0);
       }
-    } catch (e) {
+      throw dioError.error.message;
+    } catch (error) {
       rethrow;
     }
   }
@@ -40,10 +62,10 @@ class AccessTokenService {
         key: SecureStorageKeys.instanceURLKey, value: url);
   }
 
-  Future<String?> getAccessToken(
+  Future<String> getAccessToken(
       {String key = SecureStorageKeys.accessTokenKey}) async {
     final accessToken = await secureStorage.read(key: key);
-    return accessToken;
+    return accessToken ?? '';
   }
 
   Future<String> getInstanceURL() async {

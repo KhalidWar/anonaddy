@@ -1,5 +1,6 @@
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
@@ -38,19 +39,41 @@ class AccountPopupInfo extends ConsumerWidget {
         ),
         ListTile(
           dense: true,
-          title: Text(
-            account.subscriptionEndAt == null
-                ? AppStrings.selfHosted
-                : NicheMethod.fixDateTime(account.subscriptionEndAt),
-          ),
+          title: Text(getSubscriptionExpirationDate()),
           subtitle: const Text(AppStrings.subscriptionEndDate),
         ),
       ],
     );
   }
 
+  String getSubscriptionExpirationDate() {
+    final subscription = account.subscription;
+
+    /// Self hosted does NOT have a subscription and does not expire
+    if (subscription == null) {
+      return AppStrings.selfHosted;
+    }
+
+    /// Free subscription does NOT expire
+    if (subscription == AnonAddyString.subscriptionFree) {
+      return 'Does not expire';
+    }
+
+    /// Lite and Pro subscription expire
+    final liteSubscription = subscription == AnonAddyString.subscriptionLite;
+    final proSubscription = subscription == AnonAddyString.subscriptionPro;
+    if (liteSubscription || proSubscription) {
+      return NicheMethod.fixDateTime(
+        account.subscriptionEndAt ?? AppStrings.subscriptionEndDateNotAvailable,
+      );
+    }
+
+    return AppStrings.subscriptionEndDateNotAvailable;
+  }
+
   Future<void> updateDefaultAliasFormatDomain(WidgetRef ref) async {
-    final instanceURL = await ref.read(accessTokenService).getInstanceURL();
+    final instanceURL =
+        await ref.read(accessTokenServiceProvider).getInstanceURL();
     await NicheMethod.launchURL('https://$instanceURL/settings');
   }
 }

@@ -1,48 +1,34 @@
-import 'dart:convert';
 import 'dart:developer';
 
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_error_message.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final searchServiceProvider = Provider<SearchService>((ref) {
+  return SearchService(dio: ref.read(dioProvider));
+});
 
 class SearchService {
-  SearchService(this.tokenService);
-  final AccessTokenService tokenService;
+  const SearchService({required this.dio});
+  final Dio dio;
 
   /// Fetches matching aliases from API
-  Future<List<Alias>> fetchMatchingAliases(
+  Future<List<Alias>> searchAliases(
       String searchKeyword, bool includeDeleted) async {
-    final accessToken = await tokenService.getAccessToken();
-    final instanceURL = await tokenService.getInstanceURL();
-
     try {
-      /// https:/app.anonaddy.com/api/v1/aliases
+      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      final params = {
+        'deleted': includeDeleted ? 'with' : null,
+        "filter[search]": searchKeyword,
+      };
 
-      final response = await http.get(
-        Uri.https(instanceURL, '$kUnEncodedBaseURL/$kAliasesURL', {
-          'deleted': includeDeleted ? 'with' : null,
-          "filter[search]": searchKeyword,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $accessToken",
-        },
-      );
+      final response = await dio.get(path, queryParameters: params);
+      log('searchAliases: ' + response.statusCode.toString());
 
-      if (response.statusCode == 200) {
-        log('_fetchMatchingAliases ${response.statusCode}');
-        final decodedData = jsonDecode(response.body)['data'];
-        return (decodedData as List).map((alias) {
-          return Alias.fromJson(alias);
-        }).toList();
-      } else {
-        log('fetchMatchingAliases ${response.statusCode}');
-        throw ApiErrorMessage.translateStatusCode(response.statusCode);
-      }
+      final aliasesList = response.data['data'] as List;
+      return aliasesList.map((alias) => Alias.fromJson(alias)).toList();
     } catch (e) {
       rethrow;
     }

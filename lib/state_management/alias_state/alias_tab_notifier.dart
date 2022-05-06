@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
@@ -8,12 +7,13 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final aliasTabStateNotifier =
     StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {
   return AliasTabNotifier(
-    aliasService: ref.read(aliasService),
+    aliasService: ref.read(aliasServiceProvider),
     offlineData: ref.read(offlineDataProvider),
   );
 });
@@ -37,7 +37,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     _updateState(newState);
 
     try {
-      final aliases = await aliasService.getAllAliasesData('with');
+      final aliases = await aliasService.getAliases('with');
       await _saveOfflineData(aliases);
 
       /// Fetches more aliases if there's not enough
@@ -50,14 +50,19 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         deletedAliasList: _getDeletedAliases(aliases),
       );
       _updateState(newState);
-    } on SocketException {
-      loadOfflineState();
     } catch (error) {
-      final newState = state.copyWith(
-        status: AliasTabStatus.failed,
-        errorMessage: error.toString(),
-      );
-      _updateState(newState);
+      final dioError = error as DioError;
+
+      /// If offline, load offline data and exit.
+      if (dioError.type == DioErrorType.other) {
+        await loadOfflineState();
+      } else {
+        final newState = state.copyWith(
+          status: AliasTabStatus.failed,
+          errorMessage: dioError.message,
+        );
+        _updateState(newState);
+      }
 
       await _retryOnError();
     }
@@ -66,7 +71,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Silently fetches the latest aliases data and displays them
   Future<void> refreshAliases() async {
     try {
-      final aliases = await aliasService.getAllAliasesData('with');
+      final aliases = await aliasService.getAliases('with');
       await _saveOfflineData(aliases);
 
       /// Fetches more aliases if there's not enough
@@ -80,7 +85,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       );
       _updateState(newState);
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      final dioError = error as DioError;
+      NicheMethod.showToast(dioError.message);
     }
   }
 
@@ -93,16 +99,39 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
   /// Fetches more available aliases if there's less than 20
   Future<void> fetchMoreAliases(List<Alias> aliases) async {
-    /// Fetches 100 additional available aliases if there are less than 20
-    if (_getAvailableAliases(aliases).length < 20) {
-      final moreAliases = await aliasService.getAllAliasesData(null);
-      aliases.addAll(moreAliases);
-    }
+    try {
+      final availableAliases = _getAvailableAliases(aliases);
+      final deletedAliases = _getDeletedAliases(aliases);
 
-    /// Fetches 100 additional deleted aliases if there are less than 10
-    if (_getDeletedAliases(aliases).length < 20) {
-      final moreAliases = await aliasService.getAllAliasesData('only');
-      aliases.addAll(moreAliases);
+      /// Fetches 100 additional available aliases if there are less than 20
+      if (availableAliases.length < 20) {
+        final moreAliases = await aliasService.getAliases(null);
+
+        /// Checks if newly fetched aliases exist in available aliases
+        for (Alias moreAlias in moreAliases) {
+          for (Alias availableAlias in availableAliases) {
+            /// Adds new aliases that don't match any aliases in available aliases.
+            if (moreAlias.id != availableAlias.id) {
+              aliases.add(moreAlias);
+            }
+          }
+        }
+      }
+
+      /// Fetches 100 additional deleted aliases if there are less than 20
+      if (deletedAliases.length < 20) {
+        final moreAliases = await aliasService.getAliases('only');
+
+        for (Alias moreAlias in moreAliases) {
+          for (Alias deletedAlias in deletedAliases) {
+            if (moreAlias.id != deletedAlias.id) {
+              aliases.add(moreAlias);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      rethrow;
     }
   }
 
@@ -110,32 +139,24 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// startup since fetching from disk is a lot faster than fetching from API.
   /// It's also used to when there's no internet connection.
   Future<void> loadOfflineState() async {
+    /// Only load offline data when state is NOT failed.
+    /// Otherwise, it would always show offline data even if there's error.
     if (state.status != AliasTabStatus.failed) {
-      final savedAliases = await _loadOfflineData();
-      if (savedAliases.isNotEmpty) {
+      List<dynamic> encodedAliases = [];
+      final securedData = await offlineData.readAliasOfflineData();
+      if (securedData.isNotEmpty) encodedAliases = jsonDecode(securedData);
+      final aliases =
+          encodedAliases.map((alias) => Alias.fromJson(alias)).toList();
+
+      if (aliases.isNotEmpty) {
         final newState = state.copyWith(
           status: AliasTabStatus.loaded,
-          aliases: savedAliases,
-          availableAliasList: _getAvailableAliases(savedAliases),
-          deletedAliasList: _getDeletedAliases(savedAliases),
+          aliases: aliases,
+          availableAliasList: _getAvailableAliases(aliases),
+          deletedAliasList: _getDeletedAliases(aliases),
         );
         _updateState(newState);
       }
-    }
-  }
-
-  Future<List<Alias>> _loadOfflineData() async {
-    List<dynamic> decodedData = [];
-    final securedData = await offlineData.readAliasOfflineData();
-    if (securedData.isNotEmpty) decodedData = jsonDecode(securedData);
-
-    if (decodedData.isNotEmpty) {
-      final aliases = decodedData.map((alias) {
-        return Alias.fromJson(alias);
-      }).toList();
-      return aliases;
-    } else {
-      return [];
     }
   }
 

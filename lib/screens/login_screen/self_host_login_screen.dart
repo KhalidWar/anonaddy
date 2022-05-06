@@ -1,3 +1,7 @@
+import 'package:anonaddy/screens/login_screen/components/label_input_field_separator.dart';
+import 'package:anonaddy/screens/login_screen/components/login_card.dart';
+import 'package:anonaddy/screens/login_screen/components/login_footer.dart';
+import 'package:anonaddy/screens/login_screen/components/login_header.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/app_url.dart';
@@ -27,44 +31,26 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
   Future<void> login() async {
     if (_urlFormKey.currentState!.validate() &&
         _tokenFormKey.currentState!.validate()) {
-      //todo fix navigation issue. Screen stays on top.
       await ref.read(authStateNotifier.notifier).login(_url, _token);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         key: const Key('selfHostedLoginScreenScaffold'),
-        appBar: AppBar(
-          key: const Key('selfHostedLoginScreenAppBar'),
-          elevation: 0,
-          title: const Text(
-            'Change Instance',
-            key: Key('selfHostedLoginScreenAppBarLabel'),
-          ),
-        ),
+        appBar: AppBar(elevation: 0, brightness: Brightness.dark),
         backgroundColor: AppColors.primaryColor,
         body: Center(
           child: SingleChildScrollView(
-            child: Container(
-              height: size.height * 0.64,
-              width: size.width * 0.88,
-              padding: const EdgeInsets.only(top: 25),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? Theme.of(context).cardTheme.color
-                    : Theme.of(context).cardColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-              ),
+            physics: const ClampingScrollPhysics(),
+            child: LoginCard(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  const LoginHeader(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
@@ -73,9 +59,9 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                         Text(
                           'AnonAddy Instance',
                           key: const Key('selfHostedLoginScreenUrlInputLabel'),
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
-                        SizedBox(height: size.height * 0.01),
+                        const LabelInputFieldSeparator(),
                         Form(
                           key: _urlFormKey,
                           child: TextFormField(
@@ -111,12 +97,15 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                               'API Token ',
                               key: const Key(
                                   'selfHostedLoginScreenTokenInputLabel'),
-                              style: Theme.of(context).textTheme.headline6,
+                              style: Theme.of(context).textTheme.bodyText1,
                             ),
-                            const Text('(from the settings page)'),
+                            Text(
+                              '(from the settings page)',
+                              style: Theme.of(context).textTheme.caption,
+                            ),
                           ],
                         ),
-                        SizedBox(height: size.height * 0.01),
+                        const LabelInputFieldSeparator(),
                         Form(
                           key: _tokenFormKey,
                           child: TextFormField(
@@ -128,8 +117,8 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                             onFieldSubmitted: (input) => login(),
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.multiline,
-                            minLines: 5,
-                            maxLines: 6,
+                            minLines: 3,
+                            maxLines: 4,
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -144,62 +133,35 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                       ],
                     ),
                   ),
-                  Container(),
-                  TextButton(
-                    key: const Key('selfHostedLoginScreenSelfHostInfoButton'),
-                    style: TextButton.styleFrom(),
-                    child: const Text('How to self-host AnonAddy?'),
-                    onPressed: () =>
-                        NicheMethod.launchURL(kAnonAddySelfHostingURL),
+                  Column(
+                    children: [
+                      TextButton(
+                        key: const Key(
+                            'selfHostedLoginScreenSelfHostInfoButton'),
+                        child: const Text('How to self-host AnonAddy?'),
+                        onPressed: () =>
+                            NicheMethod.launchURL(kAnonAddySelfHostingURL),
+                      ),
+                      TextButton(
+                        key: const Key(
+                            'selfHostedLoginScreenAnonAddyLoginButton'),
+                        child: const Text('Login with AnonAddy instead!'),
+                        onPressed: () => ref
+                            .read(authStateNotifier.notifier)
+                            .goToAnonAddyLogin(),
+                      ),
+                    ],
                   ),
-                  loginButton(context, isDark),
+                  LoginFooter(
+                    key: const Key('selfHostedLoginScreenLoginFooter'),
+                    onPress: () => login(),
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Consumer loginButton(BuildContext context, bool isDark) {
-    final size = MediaQuery.of(context).size;
-
-    return Consumer(
-      builder: (_, ref, __) {
-        final authState = ref.watch(authStateNotifier);
-
-        return Container(
-          height: size.height * 0.1,
-          width: size.width,
-          decoration: BoxDecoration(
-            color: isDark ? Colors.black : const Color(0xFFF5F7FA),
-            borderRadius: const BorderRadius.only(
-              bottomRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-          child: ElevatedButton(
-            key: const Key('selfHostedLoginScreenLoginButton'),
-            style: ElevatedButton.styleFrom(),
-            child: authState.loginLoading!
-                ? const CircularProgressIndicator(
-                    key: Key('selfHostedLoginScreenLoginButtonLoading'),
-                    backgroundColor: AppColors.primaryColor,
-                  )
-                : Text(
-                    'Login',
-                    key: const Key('selfHostedLoginScreenLoginButtonLabel'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline5!
-                        .copyWith(color: Colors.black),
-                  ),
-            onPressed: () => login(),
-          ),
-        );
-      },
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
+import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -22,7 +23,7 @@ class RecipientsTab extends ConsumerStatefulWidget {
 
 class _RecipientTabState extends ConsumerState<RecipientsTab> {
   void addNewRecipient(BuildContext context) {
-    final account = ref.read(accountStateNotifier).account;
+    final accountState = ref.read(accountStateNotifier);
 
     /// Draws UI for adding new recipient
     Future buildAddNewRecipient(BuildContext context) {
@@ -38,16 +39,10 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
       );
     }
 
-    /// If account data is unavailable, show an error message and exit method.
-    if (account == null) {
-      NicheMethod.showToast(AppStrings.loadAccountDataFailed);
-      return;
-    }
-
-    if (account.subscription == null) {
+    if (accountState.isSelfHosted) {
       buildAddNewRecipient(context);
     } else {
-      account.recipientCount == account.recipientLimit
+      accountState.hasRecipientsReachedLimit
           ? NicheMethod.showToast(AnonAddyString.reachedRecipientLimit)
           : buildAddNewRecipient(context);
     }
@@ -57,6 +52,10 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      /// Initially, load offline data.
+      ref.read(recipientTabStateNotifier.notifier).loadOfflineState();
+
+      /// Then, load API data.
       ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
     });
   }
@@ -75,6 +74,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
 
         return ListView(
           shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
           children: [
             recipients.isEmpty
                 ? ListTile(

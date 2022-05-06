@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/username/username_model.dart';
+import 'package:anonaddy/models/username/username.dart';
 
 enum UsernamesScreenStatus { loading, loaded, failed }
 

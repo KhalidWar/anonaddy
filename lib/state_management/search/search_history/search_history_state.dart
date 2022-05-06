@@ -13,6 +13,13 @@ class SearchHistoryState {
   final List<Alias> aliases;
   final String? errorMessage;
 
+  static SearchHistoryState initialState() {
+    return const SearchHistoryState(
+      status: SearchHistoryStatus.loading,
+      aliases: [],
+    );
+  }
+
   SearchHistoryState copyWith({
     SearchHistoryStatus? status,
     List<Alias>? aliases,

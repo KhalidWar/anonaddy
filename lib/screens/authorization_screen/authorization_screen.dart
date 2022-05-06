@@ -2,11 +2,14 @@ import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
 import 'package:anonaddy/screens/authorization_screen/lock_screen.dart';
 import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
+import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/state_management/authorization/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
+
+import 'components/auth_screen_widget_keys.dart';
 
 /// This widget manages user authentication and authorization
 /// flow for the whole app.
@@ -23,7 +26,9 @@ class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(authStateNotifier.notifier).initAuth();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      ref.read(authStateNotifier.notifier).initAuth();
+    });
   }
 
   @override
@@ -36,7 +41,9 @@ class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
 
       /// Manages initial state, app startup.
       case AuthorizationStatus.unknown:
-        return const LoadingScreen();
+        return const LoadingScreen(
+          key: AuthScreenWidgetKeys.authScreenLoadingScreen,
+        );
 
       /// [SecureApplication] package isn't available for MacOS.
       ///
@@ -95,12 +102,22 @@ class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
             );
 
           case AuthenticationStatus.unavailable:
-            return const HomeScreen();
+            return const HomeScreen(
+              key: AuthScreenWidgetKeys.authScreenHomeScreen,
+            );
         }
 
       /// Manages when a user has logged out or no logged in user found.
-      case AuthorizationStatus.unauthorized:
-        return const AnonAddyLoginScreen();
+      case AuthorizationStatus.anonAddyLogin:
+        return const AnonAddyLoginScreen(
+          key: AuthScreenWidgetKeys.authScreenAnonAddyLoginScreen,
+        );
+
+      /// Manages when a user has logged out or no logged in user found.
+      case AuthorizationStatus.selfHostedLogin:
+        return const SelfHostLoginScreen(
+          key: AuthScreenWidgetKeys.authScreenSelfHostedLoginScreen,
+        );
     }
   }
 }

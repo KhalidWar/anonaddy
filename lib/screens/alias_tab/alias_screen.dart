@@ -1,27 +1,15 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
-import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
-import 'package:anonaddy/shared_components/offline_banner.dart';
-import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
-import 'package:anonaddy/shared_components/update_description_widget.dart';
-import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
-import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
-import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/shared_components/custom_app_bar.dart';
+import 'package:anonaddy/shared_components/list_tiles/list_tiles_exports.dart';
+import 'package:anonaddy/shared_components/pie_chart/pie_chart_exports.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
+import 'package:anonaddy/shared_components/shared_components_exports.dart';
+import 'package:anonaddy/state_management/alias_state/alias_state_export.dart';
+import 'package:anonaddy/utilities/utilities_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,21 +29,30 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     super.initState();
 
     /// Fetches latest data for this specific alias
-    ref.read(aliasScreenStateNotifier.notifier).fetchAliases(widget.alias);
+    ref
+        .read(aliasScreenStateNotifier.notifier)
+        .fetchSpecificAlias(widget.alias);
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
+      key: AliasTabWidgetKeys.aliasScreenScaffold,
       resizeToAvoidBottomInset: false,
       appBar: buildAppBar(context),
       body: Consumer(
         builder: (context, watch, _) {
           final aliasState = ref.watch(aliasScreenStateNotifier);
 
-          switch (aliasState.status!) {
+          switch (aliasState.status) {
             case AliasScreenStatus.loading:
-              return const Center(child: PlatformLoadingIndicator());
+              return const Center(
+                child: PlatformLoadingIndicator(
+                  key: AliasTabWidgetKeys.aliasScreenLoadingIndicator,
+                ),
+              );
 
             case AliasScreenStatus.loaded:
               return buildListView(context, aliasState);
@@ -63,6 +60,8 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             case AliasScreenStatus.failed:
               final error = aliasState.errorMessage;
               return LottieWidget(
+                key: AliasTabWidgetKeys.aliasScreenLottieWidget,
+                lottieHeight: size.height * 0.3,
                 lottie: LottieImages.errorCone,
                 label: error,
               );
@@ -81,6 +80,8 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     final isAliasDeleted = alias.deletedAt != null;
 
     return ListView(
+      key: AliasTabWidgetKeys.aliasScreenBodyListView,
+      physics: const ClampingScrollPhysics(),
       children: [
         if (aliasState.isOffline!) const OfflineBanner(),
         AliasScreenPieChart(
@@ -93,7 +94,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
           child: Text(
-            'Actions',
+            AppStrings.actions,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -131,16 +132,16 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 : alias.active
                     ? await ref
                         .read(aliasScreenStateNotifier.notifier)
-                        .toggleOffAlias(alias.id)
+                        .deactivateAlias(alias.id)
                     : await ref
                         .read(aliasScreenStateNotifier.notifier)
-                        .toggleOnAlias(alias.id);
+                        .activateAlias(alias.id);
           },
         ),
         AliasDetailListTile(
           leadingIconData: Icons.comment_outlined,
-          title: alias.description ?? 'No description',
-          subtitle: 'Description',
+          title: alias.description ?? AppStrings.noDescription,
+          subtitle: AppStrings.description,
           trailingIconData: Icons.edit_outlined,
           trailingIconOnPress: () => updateDescriptionDialog(context, alias),
         ),
@@ -185,6 +186,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   children: [
                     Text(
                       'Default Recipient${alias.recipients!.length >= 2 ? 's' : ''}',
+                      key: AliasTabWidgetKeys.aliasScreenDefaultRecipient,
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     IconButton(
@@ -427,57 +429,39 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    Future<void> forget() async {
-      await ref
-          .read(aliasScreenStateNotifier.notifier)
-          .forgetAlias(widget.alias.id);
-
-      /// Dismisses [platformDialog]
-      Navigator.pop(context);
-
-      /// Dismisses [AliasScreen] after forgetting [alias]
-      Navigator.pop(context);
-    }
-
     Future forgetOnPress() async {
       PlatformAware.platformDialog(
         context: context,
         child: PlatformAlertDialog(
-          content: AnonAddyString.forgetAliasConfirmation,
-          method: forget,
           title: AppStrings.forgetAlias,
+          content: AnonAddyString.forgetAliasConfirmation,
+          method: () async {
+            await ref
+                .read(aliasScreenStateNotifier.notifier)
+                .forgetAlias(widget.alias.id);
+
+            ref.read(aliasTabStateNotifier.notifier).refreshAliases();
+
+            /// Dismisses [platformDialog]
+            Navigator.pop(context);
+
+            /// Dismisses [AliasScreen] after forgetting [alias]
+            Navigator.pop(context);
+          },
         ),
       );
     }
 
-    return AppBar(
-      title: const Text(
-        'Alias',
-        style: TextStyle(color: Colors.white),
-      ),
-      leading: IconButton(
-        icon: Icon(
-          PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
-        ),
-        color: Colors.white,
-        onPressed: () {
-          ref.read(aliasTabStateNotifier.notifier).refreshAliases();
-          Navigator.pop(context);
-        },
-      ),
-      actions: [
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) {
-            return ['Forget Alias'].map((String choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Text(choice),
-              );
-            }).toList();
-          },
-          onSelected: (String choice) => forgetOnPress(),
-        ),
-      ],
+    return CustomAppBar(
+      key: AliasTabWidgetKeys.aliasScreenAppBar,
+      title: 'Alias',
+      leadingOnPress: () {
+        ref.read(aliasTabStateNotifier.notifier).refreshAliases();
+        Navigator.pop(context);
+      },
+      showTrailing: true,
+      trailingLabel: 'Forget Alias',
+      trailingOnPress: (choice) => forgetOnPress(),
     );
   }
 }

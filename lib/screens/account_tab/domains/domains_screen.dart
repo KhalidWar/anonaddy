@@ -5,6 +5,7 @@ import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
+import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -16,7 +17,6 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switc
 import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_notifier.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -72,6 +72,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
     final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
 
     return ListView(
+      physics: const ClampingScrollPhysics(),
       children: [
         Padding(
           padding: EdgeInsets.all(size.height * 0.01),
@@ -114,8 +115,8 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
               buildSwitch(domainProvider.activeSwitchLoading!, domain.active),
           trailingIconOnPress: () {
             domain.active
-                ? domainNotifier.toggleOffActivity(domain.id)
-                : domainNotifier.toggleOnActivity(domain.id);
+                ? domainNotifier.deactivateDomain(domain.id)
+                : domainNotifier.activateDomain(domain.id);
           },
         ),
         AliasDetailListTile(
@@ -127,8 +128,8 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
               domainProvider.catchAllSwitchLoading!, domain.catchAll),
           trailingIconOnPress: () {
             domain.catchAll
-                ? domainNotifier.toggleOffCatchAll(domain.id)
-                : domainNotifier.toggleOnCatchAll(domain.id);
+                ? domainNotifier.deactivateCatchAll(domain.id)
+                : domainNotifier.activateCatchAll(domain.id);
           },
         ),
         if (domain.domainVerifiedAt == null)
@@ -289,44 +290,28 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
 
   AppBar buildAppBar(BuildContext context) {
     Future<void> deleteDomain() async {
-      await ref
-          .read(domainsScreenStateNotifier.notifier)
-          .deleteDomain(widget.domain.id);
-      Navigator.pop(context);
-      Navigator.pop(context);
+      PlatformAware.platformDialog(
+        context: context,
+        child: PlatformAlertDialog(
+          title: 'Delete Domain',
+          content: AnonAddyString.deleteDomainConfirmation,
+          method: () async {
+            await ref
+                .read(domainsScreenStateNotifier.notifier)
+                .deleteDomain(widget.domain.id);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+      );
     }
 
-    return AppBar(
-      title: const Text('Domain', style: TextStyle(color: Colors.white)),
-      leading: IconButton(
-        icon: Icon(
-          PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
-        ),
-        color: Colors.white,
-        onPressed: () => Navigator.pop(context),
-      ),
-      actions: [
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) {
-            return ['Delete Domain'].map((String choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Text(choice),
-              );
-            }).toList();
-          },
-          onSelected: (String choice) {
-            PlatformAware.platformDialog(
-              context: context,
-              child: PlatformAlertDialog(
-                content: AnonAddyString.deleteDomainConfirmation,
-                method: deleteDomain,
-                title: 'Delete Domain',
-              ),
-            );
-          },
-        ),
-      ],
+    return CustomAppBar(
+      title: 'Domain',
+      leadingOnPress: () => Navigator.pop(context),
+      showTrailing: true,
+      trailingLabel: 'Delete Domain',
+      trailingOnPress: (choice) => deleteDomain(),
     );
   }
 

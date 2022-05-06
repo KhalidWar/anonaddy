@@ -26,18 +26,15 @@ class SearchTab extends StatelessWidget {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         body: NestedScrollView(
+          physics: const ClampingScrollPhysics(),
           headerSliverBuilder: (context, _) {
             return [
               SliverAppBar(
-                expandedHeight: size.height * 0.2,
+                expandedHeight: size.height * 0.21,
                 elevation: 0,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
-                  background: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: SearchTabHeader(),
-                  ),
+                  background: SearchTabHeader(),
                 ),
               ),
             ];
@@ -99,7 +96,9 @@ class SearchTab extends StatelessWidget {
 
                 /// When searching fails and returns an error
                 case SearchResultStatus.failed:
-                  return const LottieWidget(
+                  final errorMessage = searchState.errorMessage;
+                  return LottieWidget(
+                    label: errorMessage,
                     lottie: LottieImages.emptyResult,
                     lottieHeight: 150,
                   );

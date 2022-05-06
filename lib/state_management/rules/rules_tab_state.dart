@@ -2,22 +2,26 @@ import 'package:anonaddy/models/rules/rules.dart';
 
 enum RulesTabStatus { loading, loaded, failed }
 
+extension Shortcuts on RulesTabStatus {
+  bool isFailed() => this == RulesTabStatus.failed;
+}
+
 class RulesTabState {
   const RulesTabState({
     required this.status,
-    this.rules,
-    this.errorMessage,
+    required this.rules,
+    required this.errorMessage,
   });
 
   final RulesTabStatus status;
-  final List<Rules>? rules;
-  final String? errorMessage;
+  final List<Rules> rules;
+  final String errorMessage;
 
   static RulesTabState initialState() {
     return const RulesTabState(
       status: RulesTabStatus.loading,
       rules: [],
-      errorMessage: '',
+      errorMessage: 'Something went wrong',
     );
   }
 

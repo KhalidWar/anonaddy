@@ -1,17 +1,15 @@
-import 'dart:developer';
-
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/search/search_result/search_result_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final searchResultStateNotifier =
     StateNotifierProvider<SearchResultNotifier, SearchResultState>((ref) {
   return SearchResultNotifier(
-    searchService: ref.read(searchService),
+    searchService: ref.read(searchServiceProvider),
     aliasTabState: ref.read(aliasTabStateNotifier.notifier),
     controller: TextEditingController(),
   );
@@ -30,7 +28,6 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
 
   /// Updates UI state
   _updateState(SearchResultState newState) {
-    log('_updateState: ' + newState.toString());
     if (mounted) state = newState;
   }
 
@@ -46,7 +43,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
       final searchKeyword = state.searchController!.text.trim();
 
       /// Fetches matching aliases from AnonAddy servers
-      final matchingAliases = await searchService.fetchMatchingAliases(
+      final matchingAliases = await searchService.searchAliases(
           searchKeyword, state.includeDeleted!);
 
       /// Structure new state
@@ -56,9 +53,10 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
       /// Trigger a UI update with the new state
       _updateState(newState);
     } catch (error) {
+      final dioError = error as DioError;
       final newState = state.copyWith(
         status: SearchResultStatus.failed,
-        errorMessage: error.toString(),
+        errorMessage: dioError.message,
       );
       _updateState(newState);
     }
@@ -72,7 +70,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
     final text = state.searchController!.text.trim();
     final aliases = aliasTabState.getAliases() ?? [];
 
-    aliases.forEach((element) {
+    for (var element in aliases) {
       final filterByEmail =
           element.email.toLowerCase().contains(text.toLowerCase());
       if (element.description == null) {
@@ -87,7 +85,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
           matchingAliases.add(element);
         }
       }
-    });
+    }
 
     final newState = state.copyWith(
         status: SearchResultStatus.limited, aliases: matchingAliases);

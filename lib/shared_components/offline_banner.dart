@@ -9,9 +9,13 @@ class OfflineBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      tileColor: Colors.red,
-      title: const Text(AppStrings.noInternetOfflineData),
+      tileColor: Colors.redAccent,
+      iconColor: Colors.black,
+      title: const Text(
+        AppStrings.noInternetOfflineData,
+      ),
       leading: const Icon(Icons.warning_amber_outlined),
+      trailing: const Icon(Icons.info_outline),
       onTap: () {
         PlatformAware.platformDialog(
           context: context,

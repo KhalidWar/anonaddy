@@ -1,13 +1,14 @@
+import 'package:anonaddy/screens/login_screen/components/access_token_info.dart';
+import 'package:anonaddy/screens/login_screen/components/label_input_field_separator.dart';
+import 'package:anonaddy/screens/login_screen/components/login_card.dart';
+import 'package:anonaddy/screens/login_screen/components/login_footer.dart';
 import 'package:anonaddy/screens/login_screen/components/login_header.dart';
-import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,7 +26,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
 
   String _token = '';
 
-  Future<void> login(BuildContext context) async {
+  Future<void> login() async {
     if (_tokenFormKey.currentState!.validate()) {
       await ref.read(authStateNotifier.notifier).login(kAuthorityURL, _token);
     }
@@ -33,9 +34,6 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
@@ -45,40 +43,32 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
         body: Center(
           child: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
-            child: Container(
-              height: size.height * 0.63,
-              width: size.width * 0.85,
-              padding: const EdgeInsets.only(top: 20),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? Theme.of(context).cardTheme.color
-                    : Theme.of(context).cardColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-              ),
+            child: LoginCard(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const LoginHeader(),
                   buildTokenInputField(context),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       TextButton(
                         key: const Key('loginScreenAccessTokenInfoButton'),
-                        style: TextButton.styleFrom(),
                         child: const Text(AppStrings.whatsAccessToken),
                         onPressed: () => buildAccessTokenInfoSheet(context),
                       ),
                       TextButton(
                         key: const Key('loginScreenChangeInstanceButton'),
-                        style: TextButton.styleFrom(),
                         child: const Text('Self Hosted? Change Instance!'),
-                        onPressed: () => Navigator.pushNamed(
-                            context, SelfHostLoginScreen.routeName),
+                        onPressed: () => ref
+                            .read(authStateNotifier.notifier)
+                            .goToSelfHostedLogin(),
                       ),
                     ],
                   ),
-                  buildFooter(context, isDark),
+                  LoginFooter(
+                    key: const Key('anonAddyLoginScreenLoginFooter'),
+                    onPress: () => login(),
+                  ),
                 ],
               ),
             ),
@@ -89,7 +79,6 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
   }
 
   Widget buildTokenInputField(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
@@ -99,18 +88,18 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
             'Login with Access Token',
             style: Theme.of(context).textTheme.bodyText1,
           ),
-          SizedBox(height: size.height * 0.01),
+          const LabelInputFieldSeparator(),
           Form(
             key: _tokenFormKey,
             child: TextFormField(
               key: const Key('loginScreenTextField'),
               validator: (input) => FormValidator.accessTokenValidator(input!),
               onChanged: (input) => _token = input,
-              onFieldSubmitted: (input) => login(context),
+              onFieldSubmitted: (input) => login(),
               textInputAction: TextInputAction.go,
               keyboardType: TextInputType.multiline,
-              minLines: 5,
-              maxLines: 6,
+              minLines: 6,
+              maxLines: 7,
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -134,106 +123,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppTheme.kBottomSheetBorderRadius),
       ),
-      builder: (context) {
-        return Column(
-          key: const Key('accessTokenInfoSheetColumn'),
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const BottomSheetHeader(headerLabel: AppStrings.whatsAccessToken),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppStrings.whatsAccessToken,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  const SizedBox(height: 5),
-                  const Text(AppStrings.accessTokenDefinition),
-                  const SizedBox(height: 20),
-                  Text(
-                    AppStrings.accessTokenRequired,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    AppStrings.howToGetAccessToken,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  const SizedBox(height: 5),
-                  const Text(AppStrings.howToGetAccessToken1),
-                  const Text(AppStrings.howToGetAccessToken2),
-                  const Text(AppStrings.howToGetAccessToken3),
-                  const Text(AppStrings.howToGetAccessToken4),
-                  const Text(AppStrings.howToGetAccessToken5),
-                  const SizedBox(height: 20),
-                  Text(
-                    AppStrings.accessTokenSecurityNotice,
-                    style: Theme.of(context).textTheme.caption,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text(AppStrings.getAccessToken),
-                  SizedBox(width: 4),
-                  Icon(Icons.open_in_new_outlined),
-                ],
-              ),
-              onPressed: () => NicheMethod.launchURL(kAnonAddySettingsURL),
-            ),
-            const SizedBox(height: 20),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget buildFooter(BuildContext context, bool isDark) {
-    final size = MediaQuery.of(context).size;
-
-    return Consumer(
-      builder: (context, ref, child) {
-        final authState = ref.watch(authStateNotifier);
-
-        return Container(
-          height: size.height * 0.1,
-          width: size.width,
-          decoration: BoxDecoration(
-            color: isDark ? Colors.black : const Color(0xFFF5F7FA),
-            borderRadius: const BorderRadius.only(
-              bottomRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(),
-            key: const Key('loginScreenLoginButton'),
-            child: authState.loginLoading!
-                ? const CircularProgressIndicator(
-                    key: Key('loginLoadingIndicator'),
-                    backgroundColor: AppColors.primaryColor,
-                  )
-                : Text(
-                    'Login',
-                    key: const Key('loginScreenLoginButtonText'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline5!
-                        .copyWith(color: Colors.black),
-                  ),
-            onPressed: () => login(context),
-          ),
-        );
-      },
+      builder: (context) => const AccessTokenInfo(),
     );
   }
 }

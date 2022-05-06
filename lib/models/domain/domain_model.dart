@@ -5,19 +5,6 @@ import 'package:json_annotation/json_annotation.dart';
 part 'domain_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class DomainModel {
-  const DomainModel({required this.domains});
-
-  @JsonKey(name: 'data')
-  final List<Domain> domains;
-
-  factory DomainModel.fromJson(Map<String, dynamic> json) =>
-      _$DomainModelFromJson(json);
-
-  Map<String, dynamic> toJson() => _$DomainModelToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
 class Domain {
   Domain({
     required this.id,

@@ -6,6 +6,7 @@ import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsScreenStateNotifier = StateNotifierProvider.autoDispose<
@@ -23,100 +24,122 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
 
   final showToast = NicheMethod.showToast;
 
+  /// Updates DomainScreen state
+  void _updateState(DomainsScreenState newState) {
+    if (mounted) state = newState;
+  }
+
   Future<void> fetchDomain(Domain domain) async {
-    state = state.copyWith(status: DomainsScreenStatus.loading);
+    _updateState(state.copyWith(status: DomainsScreenStatus.loading));
     try {
       final updatedDomain = await domainService.getSpecificDomain(domain.id);
-      state = state.copyWith(
+      final newState = state.copyWith(
           status: DomainsScreenStatus.loaded, domain: updatedDomain);
+      _updateState(newState);
     } on SocketException {
       /// Return old domain data if there's no internet connection
-      state =
+      final newState =
           state.copyWith(status: DomainsScreenStatus.loaded, domain: domain);
+      _updateState(newState);
     } catch (error) {
-      state = state.copyWith(
-        status: DomainsScreenStatus.failed,
-        errorMessage: error.toString(),
-      );
+      final dioError = error as DioError;
+      final newState = state.copyWith(
+          status: DomainsScreenStatus.failed, errorMessage: dioError.message);
+      _updateState(newState);
     }
   }
 
   Future editDescription(String domainId, newDescription) async {
     try {
       final updatedDomain =
-          await domainService.editDomainDescription(domainId, newDescription);
+          await domainService.updateDomainDescription(domainId, newDescription);
       showToast(ToastMessage.editDescriptionSuccess);
-      state = state.copyWith(domain: updatedDomain);
+      _updateState(state.copyWith(domain: updatedDomain));
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
 
-  Future<void> toggleOnActivity(String domainId) async {
-    state = state.copyWith(activeSwitchLoading: true);
+  Future<void> activateDomain(String domainId) async {
+    _updateState(state.copyWith(activeSwitchLoading: true));
     try {
       final newDomain = await domainService.activateDomain(domainId);
       final oldDomain = state.domain!;
       oldDomain.active = newDomain.active;
-      state = state.copyWith(activeSwitchLoading: false, domain: oldDomain);
+      final newState =
+          state.copyWith(activeSwitchLoading: false, domain: oldDomain);
+      _updateState(newState);
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(activeSwitchLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
 
-  Future<void> toggleOffActivity(String domainId) async {
-    state = state.copyWith(activeSwitchLoading: true);
+  Future<void> deactivateDomain(String domainId) async {
+    _updateState(state.copyWith(activeSwitchLoading: true));
     try {
       await domainService.deactivateDomain(domainId);
       final oldDomain = state.domain!;
       oldDomain.active = false;
-      state = state.copyWith(activeSwitchLoading: false, domain: oldDomain);
+      final newState =
+          state.copyWith(activeSwitchLoading: false, domain: oldDomain);
+      _updateState(newState);
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(activeSwitchLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
 
-  Future<void> toggleOnCatchAll(String domainId) async {
-    state = state.copyWith(catchAllSwitchLoading: true);
+  Future<void> activateCatchAll(String domainId) async {
+    _updateState(state.copyWith(catchAllSwitchLoading: true));
     try {
       final newDomain = await domainService.activateCatchAll(domainId);
       final oldDomain = state.domain!;
       oldDomain.catchAll = newDomain.catchAll;
-      state = state.copyWith(catchAllSwitchLoading: false, domain: oldDomain);
+      final newState =
+          state.copyWith(catchAllSwitchLoading: false, domain: oldDomain);
+      _updateState(newState);
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(catchAllSwitchLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
 
-  Future<void> toggleOffCatchAll(String domainId) async {
-    state = state.copyWith(catchAllSwitchLoading: true);
+  Future<void> deactivateCatchAll(String domainId) async {
+    _updateState(state.copyWith(catchAllSwitchLoading: true));
     try {
       await domainService.deactivateCatchAll(domainId);
       final oldDomain = state.domain!;
       oldDomain.catchAll = false;
-      state = state.copyWith(catchAllSwitchLoading: false, domain: oldDomain);
+      final newState =
+          state.copyWith(catchAllSwitchLoading: false, domain: oldDomain);
+      _updateState(newState);
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(catchAllSwitchLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
 
   Future<void> updateDomainDefaultRecipients(
       String domainId, String recipientId) async {
-    state = state.copyWith(updateRecipientLoading: true);
+    _updateState(state.copyWith(updateRecipientLoading: true));
     try {
       final updatedDomain = await domainService.updateDomainDefaultRecipient(
           domainId, recipientId);
       state.domain!.defaultRecipient = updatedDomain.defaultRecipient;
       showToast('Default recipient updated successfully!');
-      state =
+      final newState =
           state.copyWith(updateRecipientLoading: false, domain: state.domain);
+      _updateState(newState);
     } catch (error) {
-      showToast(error.toString());
-      state = state.copyWith(updateRecipientLoading: false);
+      final dioError = error as DioError;
+      showToast(dioError.message);
+      _updateState(state.copyWith(updateRecipientLoading: false));
     }
   }
 
@@ -125,19 +148,8 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
       await domainService.deleteDomain(domainId);
       showToast('Domain deleted successfully!');
     } catch (error) {
-      showToast(error.toString());
+      final dioError = error as DioError;
+      showToast(dioError.message);
     }
   }
-
-  // Future<void> createNewDomain(BuildContext context, String domain) async {
-  //   final createDomainFormKey = GlobalKey<FormState>();
-  //   if (createDomainFormKey.currentState!.validate()) {
-  //     await domainService.createNewDomain(domain).then((domain) {
-  //       showToast('domain added successfully!');
-  //       Navigator.pop(context);
-  //     }).catchError((error) {
-  //       showToast(error.toString());
-  //     });
-  //   }
-  // }
 }

@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final biometricNotifier = ChangeNotifierProvider<BiometricNotifier>((ref) {
   return BiometricNotifier(
-    biometricService: ref.read(biometricAuthService),
+    biometricService: ref.read(biometricAuthServiceProvider),
     secureStorage: ref.read(flutterSecureStorage),
   );
 });

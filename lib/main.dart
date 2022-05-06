@@ -40,13 +40,8 @@ void main() async {
 Future<void> _initHive() async {
   await Hive.initFlutter();
 
-  /// @HiveType(typeId: 0)
   Hive.registerAdapter(AliasAdapter());
-
-  /// @HiveType(typeId: 1)
   Hive.registerAdapter(RecipientAdapter());
-
-  /// @HiveType(typeId: 2)
   Hive.registerAdapter(ProfileAdapter());
 }
 

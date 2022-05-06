@@ -1,10 +1,11 @@
-import 'package:anonaddy/models/username/username_model.dart';
+import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_default_recipient.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
+import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -16,7 +17,6 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switc
 import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_notifier.dart';
 import 'package:anonaddy/state_management/usernames/usernames_screen_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -87,6 +87,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
     }
 
     return ListView(
+      physics: const ClampingScrollPhysics(),
       children: [
         Padding(
           padding: EdgeInsets.all(size.height * 0.01),
@@ -242,13 +243,14 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
 
     Future<void> updateDescription() async {
       if (formKey.currentState!.validate()) {
-        await usernameNotifier.editDescription(username, newDescription);
+        await usernameNotifier.updateUsernameDescription(
+            username, newDescription);
         Navigator.pop(context);
       }
     }
 
     Future<void> removeDescription() async {
-      await usernameNotifier.editDescription(username, '');
+      await usernameNotifier.updateUsernameDescription(username, '');
       Navigator.pop(context);
     }
 
@@ -286,7 +288,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
   }
 
   AppBar buildAppBar(BuildContext context) {
-    void showDialog() {
+    void deleteUsername() {
       PlatformAware.platformDialog(
         context: context,
         child: PlatformAlertDialog(
@@ -307,31 +309,12 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
       );
     }
 
-    return AppBar(
-      title: const Text(
-        'Additional Username',
-        style: TextStyle(color: Colors.white),
-      ),
-      leading: IconButton(
-        icon: Icon(
-          PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
-        ),
-        color: Colors.white,
-        onPressed: () => Navigator.pop(context),
-      ),
-      actions: [
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) {
-            return ['Delete Username'].map((String choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Text(choice),
-              );
-            }).toList();
-          },
-          onSelected: (String choice) => showDialog(),
-        ),
-      ],
+    return CustomAppBar(
+      title: 'Additional Username',
+      leadingOnPress: () => Navigator.pop(context),
+      showTrailing: true,
+      trailingLabel: 'Delete Username',
+      trailingOnPress: (choice) => deleteUsername(),
     );
   }
 }

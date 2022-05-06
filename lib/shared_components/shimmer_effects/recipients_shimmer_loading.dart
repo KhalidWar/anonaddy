@@ -15,6 +15,7 @@ class RecipientsShimmerLoading extends StatelessWidget {
       enabled: true,
       child: ListView.builder(
         padding: const EdgeInsets.all(0),
+        physics: const ClampingScrollPhysics(),
         itemCount: 12,
         itemBuilder: (_, __) {
           return ListTile(

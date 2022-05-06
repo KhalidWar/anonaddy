@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/models/username/username_model.dart';
+import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
@@ -116,6 +116,7 @@ class _UsernameDefaultRecipientState
           children: [
             ListView(
               controller: controller,
+              physics: const ClampingScrollPhysics(),
               children: [
                 Column(
                   children: [

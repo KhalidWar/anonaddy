@@ -1,11 +1,12 @@
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/shared_components/constants/hive_type_id.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'recipient.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@HiveType(typeId: 1)
+@HiveType(typeId: HiveTypeId.recipient)
 class Recipient extends HiveObject {
   Recipient({
     required this.id,

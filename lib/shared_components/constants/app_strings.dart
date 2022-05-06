@@ -13,7 +13,8 @@ class AppStrings {
   static const domains = 'Domains';
   static const rules = 'Rules';
   static const selfHosted = 'Self Hosted';
-  static const subscriptionEndDate = 'Subscription end date';
+  static const subscriptionEndDate = 'Subscription End Date';
+  static const subscriptionEndDateNotAvailable = 'Not available';
   static const noDefaultSelected = 'No default selected';
   static const defaultAliasFormat = 'Default Alias Format';
   static const defaultAliasDomain = 'Default Alias Domain';
@@ -36,6 +37,8 @@ class AppStrings {
       'Use this to automatically create the correct address to send an email to in order to send an email from this alias.';
   static const sendFromAliasNote =
       'Note: you must send the email from a verified recipient on your account.';
+  static const actions = 'Actions';
+  static const description = 'Description';
 
   /// Create Alias
   static const createNewAlias = 'Create New Alias';
@@ -62,6 +65,7 @@ class AppStrings {
   static const unverified = 'Unverified';
 
   /// Usernames
+  static const addNewDomain = 'Add New Domain';
   static const addNewUsername = 'Add New Username';
   static const addUsername = 'Add Username';
   static const noAdditionalUsernamesFound = 'No additional usernames found';
@@ -88,6 +92,15 @@ class AppStrings {
   static const limitedSearchResult = 'Limited Result';
   static const closeSearchButtonText = 'Close Search';
 
+  /// Alert Center
+  static const alertCenter = 'Alert Center';
+  static const notifications = 'Notifications';
+  static const notificationsNote =
+      'One central location for your account alerts and notifications.';
+  static const failedDeliveries = 'Failed deliveries';
+  static const failedDeliveriesNote =
+      'Sometimes when AnonAddy attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
+
   /// Login Screen
   static const enterAccessToken = 'Enter Access Token';
   static const whatsAccessToken = 'What is Access Token?';
@@ -106,8 +119,9 @@ class AppStrings {
   static const getAccessToken = 'Get Access Token';
   static const enterYourApiToken = 'Enter your API token';
 
-  /// Error
+  /// Errors
   static const loadAccountDataFailed = 'Failed to Load Account Data';
+  static const somethingWentWrong = 'Something went wrong';
 
   /// Button Labels
   static const doneText = 'Done';
@@ -117,7 +131,7 @@ class AppStrings {
   static const noInternetOfflineData = 'No internet connection';
   static const noInternetDialogTitle = 'Offline Mode';
   static const noInternetContent =
-      'No internet connection. Displaying cached offline data.';
+      'No internet connection; displaying cached offline data.';
   static const noInternetDialogButton = 'Close';
 
   /// Miscellaneous
@@ -126,9 +140,6 @@ class AppStrings {
   static const logOutAlertDialog =
       'Are you sure you want to log out?\n\nAll app data will be deleted.';
   static const noDescription = 'No description';
-  static const somethingWentWrong = 'Something went wrong';
-  static const failedDeliveriesNote =
-      'Sometimes when AnonAddy attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
   static const navigationErrorMessage =
       'Something has gone wrong with the navigation system. Please go back and try again.';
 

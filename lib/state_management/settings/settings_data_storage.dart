@@ -1,7 +1,14 @@
+import 'package:anonaddy/global_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+final settingsDataStorageProvider = Provider<SettingsDataStorage>((ref) {
+  final secureStorage = ref.read(flutterSecureStorage);
+  return SettingsDataStorage(secureStorage: secureStorage);
+});
+
 class SettingsDataStorage {
-  const SettingsDataStorage(this.secureStorage);
+  const SettingsDataStorage({required this.secureStorage});
   final FlutterSecureStorage secureStorage;
 
   Future<void> saveBoolState(String key, bool bool) async {
