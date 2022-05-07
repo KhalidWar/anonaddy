@@ -3,8 +3,7 @@ import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/recipients/recipients_tab.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/paid_feature_blocker.dart';
 import 'package:flutter/material.dart';
 

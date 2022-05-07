@@ -4,8 +4,7 @@ import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
 import 'package:anonaddy/screens/home_screen/components/create_alias_fab.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
@@ -114,6 +113,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       centerTitle: true,
       leading: IconButton(
         key: const Key('homeScreenAppBarLeading'),
+        tooltip: AppStrings.alertCenter,
         icon: const Icon(Icons.error_outline),
         onPressed: () {
           Navigator.pushNamed(context, AlertCenterScreen.routeName);
@@ -122,6 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       actions: [
         IconButton(
           key: const Key('homeScreenAppBarTrailing'),
+          tooltip: AppStrings.settings,
           icon: const Icon(Icons.settings),
           onPressed: () {
             Navigator.pushNamed(context, SettingsScreen.routeName);
