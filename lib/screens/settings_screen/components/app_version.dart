@@ -1,4 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
@@ -27,14 +28,13 @@ class AppVersion extends ConsumerWidget {
                   return ListTile(
                     dense: true,
                     title: Text(
-                      'v' + appData.version,
+                      'v${appData.version}',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
-                    subtitle: const Text('App Version'),
+                    subtitle: const Text(AppStrings.appVersion),
                     trailing: const Icon(Icons.info_outlined),
                     onTap: () {
-                      NicheMethod.showToast(
-                          'App Version number for self-hosted instance');
+                      NicheMethod.showToast(ToastMessage.appVersionMessage);
                     },
                   );
                 },
