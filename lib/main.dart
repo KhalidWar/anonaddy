@@ -83,6 +83,7 @@ Future<void> _handleAppUpdate() async {
     await secureStorage.delete(key: OfflineDataKey.recipients);
     await secureStorage.delete(key: OfflineDataKey.domainOptions);
     await secureStorage.delete(key: OfflineDataKey.domain);
+    await secureStorage.delete(key: OfflineDataKey.rules);
   }
 }
 
