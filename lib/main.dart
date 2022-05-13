@@ -15,14 +15,16 @@ import 'shared_components/constants/changelog_storage_key.dart';
 import 'shared_components/constants/offline_data_key.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
   /// Keeps SplashScreen on until following methods are completed.
-  FlutterNativeSplash.removeAfter((BuildContext context) async {
-    await _initHive();
-  });
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  await _initHive();
   await _handleAppUpdate();
+
+  /// Removes SplashScreen
+  FlutterNativeSplash.remove();
 
   /// Launches app
   runApp(
