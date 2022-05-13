@@ -51,12 +51,17 @@ Future<void> _initHive() async {
 Future<void> _handleAppUpdate() async {
   const secureStorage = FlutterSecureStorage();
 
-  final oldAppVersion =
-      await secureStorage.read(key: ChangelogStorageKey.appVersionKey) ?? '';
+  /// Fetch stored old app version from device storage.
+  final oldAppVersion = await _getOldAppVersion(secureStorage);
 
-  /// Gets current app version number using [PackageInfo]
-  final appVersion = await PackageInfo.fromPlatform();
-  final currentAppVersion = appVersion.version;
+  /// If no old app version found, exit method.
+  if (oldAppVersion == null) return;
+
+  /// Fetch stored current app version from device storage.
+  final currentAppVersion = await _getCurrentAppVersion();
+
+  /// If no current app version found, exit method.
+  if (currentAppVersion == null) return;
 
   /// Number NOT matching means app has been updated.
   if (oldAppVersion != currentAppVersion) {
@@ -78,5 +83,26 @@ Future<void> _handleAppUpdate() async {
     await secureStorage.delete(key: OfflineDataKey.recipients);
     await secureStorage.delete(key: OfflineDataKey.domainOptions);
     await secureStorage.delete(key: OfflineDataKey.domain);
+  }
+}
+
+/// Fetches current app version number.
+Future<String?> _getCurrentAppVersion() async {
+  try {
+    final appVersion = await PackageInfo.fromPlatform();
+    return appVersion.version;
+  } catch (error) {
+    return null;
+  }
+}
+
+/// Fetches current app version number.
+Future<String?> _getOldAppVersion(FlutterSecureStorage secureStorage) async {
+  try {
+    const key = ChangelogStorageKey.appVersionKey;
+    final version = await secureStorage.read(key: key);
+    return version;
+  } catch (error) {
+    return null;
   }
 }
