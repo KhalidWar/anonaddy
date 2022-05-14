@@ -54,26 +54,25 @@ Future<void> _handleAppUpdate() async {
   /// Fetch stored old app version from device storage.
   final oldAppVersion = await _getOldAppVersion(secureStorage);
 
-  /// If no old app version found, exit method.
-  if (oldAppVersion == null) return;
-
   /// Fetch stored current app version from device storage.
   final currentAppVersion = await _getCurrentAppVersion();
 
   /// If no current app version found, exit method.
-  if (currentAppVersion == null) return;
-
-  /// Number NOT matching means app has been updated.
-  if (oldAppVersion != currentAppVersion) {
-    /// delete changelog value from the storage so that [ChangelogWidget] is displayed
-    await secureStorage.delete(key: ChangelogStorageKey.changelogKey);
-
+  if (currentAppVersion == null) {
+    return;
+  } else {
     /// Saves current AppVersion's number to acknowledge that the user
     /// has opened app with this version before.
     await secureStorage.write(
       key: ChangelogStorageKey.appVersionKey,
       value: currentAppVersion,
     );
+  }
+
+  /// Number NOT matching means app has been updated.
+  if (oldAppVersion != currentAppVersion) {
+    /// delete changelog value from the storage so that [ChangelogWidget] is displayed
+    await secureStorage.delete(key: ChangelogStorageKey.changelogKey);
 
     /// Deletes stored offline data after an app has been updated.
     /// This is to prevent bugs that may arise from conflicting stored data scheme.
