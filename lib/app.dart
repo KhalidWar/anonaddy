@@ -1,13 +1,12 @@
+import 'package:anonaddy/route_generator.dart';
+import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
+import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'route_generator.dart';
-import 'screens/authorization_screen/authorization_screen.dart';
-import 'services/theme/theme.dart';
-import 'shared_components/constants/app_strings.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class App extends ConsumerWidget {

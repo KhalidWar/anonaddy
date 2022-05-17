@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_screen.dart';
@@ -18,8 +19,6 @@ import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'models/domain/domain_model.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {

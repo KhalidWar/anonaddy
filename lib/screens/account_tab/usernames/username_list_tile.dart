@@ -1,8 +1,7 @@
 import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_screen.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
-
-import '../../../shared_components/constants/app_strings.dart';
 
 class UsernameListTile extends StatelessWidget {
   const UsernameListTile({Key? key, required this.username}) : super(key: key);
