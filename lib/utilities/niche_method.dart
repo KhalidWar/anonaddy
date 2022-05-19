@@ -1,3 +1,4 @@
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,53 +7,71 @@ import 'package:url_launcher/url_launcher.dart';
 
 class NicheMethod {
   static String fixDateTime(dynamic input) {
+    // if (input == null) return '';
     if (input.runtimeType == DateTime) {
-      return '${input.month}/${input.day}/${input.year.toString().substring(2)} ${input.hour}:${input.minute}';
+      final year = input.year.toString().substring(2);
+      final month = input.month;
+      final day = input.day;
+      final hour = input.hour;
+      final min = input.minute;
+      return '$month/$day/$year $hour:$min';
+      // return '${input.month}/${input.day}/${input.year.toString().substring(2)} ${input.hour}:${input.minute}';
     } else {
       return '$input';
     }
   }
 
   static copyOnTap(String input) async {
-    await Clipboard.setData(
-      ClipboardData(text: input),
-    ).catchError((error) {
-      showToast("${ToastMessage.failedToCopy}: $error");
-    }).whenComplete(() {
+    try {
+      await Clipboard.setData(ClipboardData(text: input));
       showToast(ToastMessage.copiedToClipboard);
-    });
+    } catch (_) {
+      showToast(ToastMessage.failedToCopy);
+    }
   }
 
   static showToastWithContext(BuildContext context, String message) async {
-    final flutterToast = FToast();
-    flutterToast.init(context);
-    flutterToast.showToast(
-      toastDuration: const Duration(seconds: 1),
-      gravity: ToastGravity.BOTTOM,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: Colors.grey[600],
+    try {
+      final flutterToast = FToast();
+      flutterToast.init(context);
+      flutterToast.showToast(
+        toastDuration: const Duration(seconds: 1),
+        gravity: ToastGravity.BOTTOM,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0),
+            color: Colors.grey[600],
+          ),
+          child: Text(message),
         ),
-        child: Text(message),
-      ),
-    );
+      );
+    } catch (error) {
+      return;
+    }
   }
 
   static showToast(String message) async {
-    await Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.grey[600],
-    );
+    try {
+      await Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.grey[600],
+      );
+    } catch (error) {
+      return;
+    }
   }
 
   static Future<void> launchURL(String url) async {
-    await launch(url).catchError((error, stackTrace) {
-      throw showToast(error.toString());
-    });
+    try {
+      await launch(url);
+      // final uri = Uri();
+      // await launchUrl(uri);
+    } catch (_) {
+      showToast(AppStrings.failedToLaunchUrl);
+    }
   }
 
   static String correctAliasString(String input) {
@@ -69,6 +88,7 @@ class NicheMethod {
   }
 
   static String capitalizeFirstLetter(String input) {
+    if (input.isEmpty) return '?';
     final firstLetter = input[0];
     return input.replaceFirst(firstLetter, firstLetter.toUpperCase());
   }

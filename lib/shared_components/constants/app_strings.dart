@@ -146,6 +146,7 @@ class AppStrings {
   /// Errors
   static const loadAccountDataFailed = 'Failed to Load Account Data';
   static const somethingWentWrong = 'Something went wrong';
+  static const failedToLaunchUrl = 'Failed to launch URL';
 
   /// Button Labels
   static const doneText = 'Done';
