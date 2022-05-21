@@ -3,8 +3,7 @@ import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_emails_stats.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';

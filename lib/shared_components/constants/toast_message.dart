@@ -60,4 +60,6 @@ class ToastMessage {
 
   /// Miscellaneous
   static const onlyAvailableToPaid = 'Only available to paid users';
+  static const appVersionMessage =
+      'App Version number for self-hosted instance';
 }

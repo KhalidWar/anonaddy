@@ -1,4 +1,6 @@
 import 'package:anonaddy/screens/account_tab/domains/components/add_new_domain.dart';
+import 'package:anonaddy/screens/account_tab/domains/components/domain_list_tile.dart';
+import 'package:anonaddy/screens/account_tab/domains/components/empty_domain_tile.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
@@ -11,9 +13,6 @@ import 'package:anonaddy/state_management/domains/domains_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'components/domain_list_tile.dart';
-import 'components/empty_domain_tile.dart';
 
 class DomainsTab extends ConsumerStatefulWidget {
   const DomainsTab({Key? key}) : super(key: key);

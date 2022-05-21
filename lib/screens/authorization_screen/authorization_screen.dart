@@ -1,3 +1,4 @@
+import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
 import 'package:anonaddy/screens/authorization_screen/lock_screen.dart';
 import 'package:anonaddy/screens/home_screen/home_screen.dart';
@@ -8,8 +9,6 @@ import 'package:anonaddy/state_management/authorization/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
-
-import 'components/auth_screen_widget_keys.dart';
 
 /// This widget manages user authentication and authorization
 /// flow for the whole app.

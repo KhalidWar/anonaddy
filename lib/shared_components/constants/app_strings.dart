@@ -93,6 +93,29 @@ class AppStrings {
   static const limitedSearchResult = 'Limited Result';
   static const closeSearchButtonText = 'Close Search';
 
+  /// Settings Screen
+  static const settings = 'Settings';
+  static const settingsDarkTheme = 'Dark Theme';
+  static const settingsDarkThemeSubtitle = 'App follows system by default';
+  static const settingsAutoCopyEmail = 'Auto Copy Email';
+  static const settingsAutoCopyEmailSubtitle =
+      'Automatically copy email after alias creation';
+  static const settingsBiometricAuth = 'Biometric Authentication';
+  static const settingsBiometricAuthSubtitle =
+      'Require biometric authentication';
+  static const settingsAnonAddyHelpCenter = 'AnonAddy Help Center';
+  static const settingsAnonAddyHelpCenterSubtitle =
+      'AnonAddy\'s terminologies...etc.';
+  static const settingsAnonAddyFAQ = 'AnonAddy FAQ';
+  static const settingsAnonAddyFAQSubtitle = 'Learn more about AnonAddy';
+  static const settingsAboutApp = 'About App';
+  static const settingsAboutAppSubtitle = 'View AddyManager details';
+  static const settingsEnjoyingApp = 'Enjoying AddyManager?';
+  static const settingsEnjoyingAppSubtitle = 'Tap to rate it on the App Store';
+  static const settingsLogout = 'Logout';
+  static const settingsLogoutSubtitle = 'All app data will be deleted';
+  static const appVersion = 'App Version';
+
   /// Alert Center
   static const alertCenter = 'Alert Center';
   static const notifications = 'Notifications';
@@ -123,6 +146,7 @@ class AppStrings {
   /// Errors
   static const loadAccountDataFailed = 'Failed to Load Account Data';
   static const somethingWentWrong = 'Something went wrong';
+  static const failedToLaunchUrl = 'Failed to launch URL';
 
   /// Button Labels
   static const doneText = 'Done';

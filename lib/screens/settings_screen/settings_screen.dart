@@ -1,8 +1,7 @@
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/screens/settings_screen/about_app_screen.dart';
 import 'package:anonaddy/screens/settings_screen/components/app_version.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -24,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Settings',
+        title: AppStrings.settings,
         leadingOnPress: () => Navigator.pop(context),
         showTrailing: false,
       ),
@@ -40,10 +39,10 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 dense: true,
                 title: Text(
-                  'Dark Theme',
+                  AppStrings.settingsDarkTheme,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle: const Text('App follows system by default'),
+                subtitle: const Text(AppStrings.settingsDarkThemeSubtitle),
                 trailing: PlatformSwitch(
                   value: settingsState.isDarkTheme!,
                   onChanged: (toggle) => settingsNotifier.toggleTheme(),
@@ -52,12 +51,10 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 dense: true,
                 title: Text(
-                  'Auto Copy Email',
+                  AppStrings.settingsAutoCopyEmail,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle: const Text(
-                  'Automatically copy email after alias creation',
-                ),
+                subtitle: const Text(AppStrings.settingsAutoCopyEmailSubtitle),
                 trailing: PlatformSwitch(
                   value: settingsState.isAutoCopy!,
                   onChanged: (toggle) => settingsNotifier.toggleAutoCopy(),
@@ -66,10 +63,10 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 dense: true,
                 title: Text(
-                  'Biometric Authentication',
+                  AppStrings.settingsBiometricAuth,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle: const Text('Require biometric authentication'),
+                subtitle: const Text(AppStrings.settingsBiometricAuthSubtitle),
                 trailing: PlatformSwitch(
                   value: biometric.isEnabled,
                   onChanged: (toggle) => ref
@@ -81,20 +78,21 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 dense: true,
                 title: Text(
-                  'AnonAddy Help Center',
+                  AppStrings.settingsAnonAddyHelpCenter,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle: const Text('AnonAddy\'s terminologies...etc.'),
+                subtitle:
+                    const Text(AppStrings.settingsAnonAddyHelpCenterSubtitle),
                 trailing: const Icon(Icons.open_in_new_outlined),
                 onTap: () => NicheMethod.launchURL(kAnonAddyHelpCenterURL),
               ),
               ListTile(
                 dense: true,
                 title: Text(
-                  'AnonAddy FAQ',
+                  AppStrings.settingsAnonAddyFAQ,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle: const Text('Learn more about AnonAddy'),
+                subtitle: const Text(AppStrings.settingsAnonAddyFAQSubtitle),
                 trailing: const Icon(Icons.open_in_new_outlined),
                 onTap: () => NicheMethod.launchURL(kAnonAddyFAQURL),
               ),
@@ -103,10 +101,10 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 dense: true,
                 title: Text(
-                  'About App',
+                  AppStrings.settingsAboutApp,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle: const Text('View AddyManager details'),
+                subtitle: const Text(AppStrings.settingsAboutAppSubtitle),
                 trailing: const Icon(Icons.help_outline),
                 onTap: () {
                   Navigator.pushNamed(context, AboutAppScreen.routeName);
@@ -115,10 +113,10 @@ class SettingsScreen extends StatelessWidget {
               ListTile(
                 dense: true,
                 title: Text(
-                  'Enjoying AddyManager?',
+                  AppStrings.settingsEnjoyingApp,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle: const Text('Tap to rate it on the App Store'),
+                subtitle: const Text(AppStrings.settingsEnjoyingAppSubtitle),
                 trailing: const Icon(Icons.help_outline),
                 onTap: () {
                   NicheMethod.launchURL(
@@ -139,10 +137,10 @@ class SettingsScreen extends StatelessWidget {
                 child: ListTile(
                   dense: true,
                   title: Text(
-                    'Logout',
+                    AppStrings.settingsLogout,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
-                  subtitle: const Text('All app data will be deleted'),
+                  subtitle: const Text(AppStrings.settingsLogoutSubtitle),
                   trailing: const Icon(Icons.logout),
                   onTap: () => buildLogoutDialog(context),
                 ),
@@ -158,7 +156,7 @@ class SettingsScreen extends StatelessWidget {
     PlatformAware.platformDialog(
       context: context,
       child: PlatformAlertDialog(
-        title: 'Logout',
+        title: AppStrings.settingsLogout,
         content: AppStrings.logOutAlertDialog,
         method: () {
           Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
