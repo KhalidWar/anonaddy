@@ -39,20 +39,8 @@ abstract class PlatformAware<C extends Widget, M extends Widget>
         builder: (BuildContext context) => child,
       );
     } else {
-      return PageRouteBuilder(
-        transitionsBuilder: (context, animation, secondAnimation, child) {
-          final tween = Tween(
-            begin: const Offset(1.0, 0.0),
-            end: const Offset(0.0, 0.0),
-          );
-          animation =
-              CurvedAnimation(parent: animation, curve: Curves.linearToEaseOut);
-          return SlideTransition(
-            position: tween.animate(animation),
-            child: child,
-          );
-        },
-        pageBuilder: (context, animation, secondAnimation) => child,
+      return MaterialPageRoute(
+        builder: (BuildContext context) => child,
       );
     }
   }

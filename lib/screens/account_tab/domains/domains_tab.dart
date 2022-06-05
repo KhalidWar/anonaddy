@@ -51,7 +51,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       /// Fetch offline state initially
       ref.watch(domainsStateNotifier.notifier).loadOfflineState();
 

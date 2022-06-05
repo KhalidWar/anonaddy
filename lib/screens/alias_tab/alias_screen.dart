@@ -29,7 +29,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     super.initState();
 
     /// Fetches latest data for this specific alias
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(aliasScreenStateNotifier.notifier)
           .fetchSpecificAlias(widget.alias);

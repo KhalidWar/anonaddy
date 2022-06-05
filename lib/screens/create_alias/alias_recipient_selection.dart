@@ -23,7 +23,7 @@ class _AliasRecipientSelectionState
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
     });
   }

@@ -31,7 +31,7 @@ class _AliasDefaultRecipientScreenState
     super.initState();
 
     /// After widgets are built, fetch recipients and display verified ones.
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
     });
   }

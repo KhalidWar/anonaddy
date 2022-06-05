@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         applicationId "com.khalidwar.anonaddy"
-        minSdkVersion 21
+        minSdkVersion 27
         targetSdkVersion 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
