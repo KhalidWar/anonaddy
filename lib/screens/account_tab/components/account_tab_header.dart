@@ -68,7 +68,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       /// Initially load data from disk (secured device storage)
       ref.read(accountStateNotifier.notifier).loadOfflineData();
 

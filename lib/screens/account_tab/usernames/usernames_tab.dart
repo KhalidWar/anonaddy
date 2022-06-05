@@ -56,7 +56,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(usernameStateNotifier.notifier).loadOfflineState();
       ref.read(usernameStateNotifier.notifier).fetchUsernames();
     });

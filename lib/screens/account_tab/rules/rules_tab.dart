@@ -20,7 +20,7 @@ class _RulesTabState extends ConsumerState<RulesTab> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.read(rulesTabStateNotifier.notifier).loadOfflineState();
       ref.read(rulesTabStateNotifier.notifier).fetchRules();
     });
