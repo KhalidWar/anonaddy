@@ -68,7 +68,7 @@ class _MockSecureStorage extends Mock implements FlutterSecureStorage {
 
 class _MockBiometricService extends Mock implements BiometricAuthService {
   @override
-  Future<bool> doesPlatformSupportAuth() async => false;
+  Future<bool> _doesDeviceSupportBioAuth() async => false;
 }
 
 class _MockFailedAccessTokenService extends Mock implements AccessTokenService {

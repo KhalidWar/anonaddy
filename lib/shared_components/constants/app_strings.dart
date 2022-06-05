@@ -147,6 +147,9 @@ class AppStrings {
   static const loadAccountDataFailed = 'Failed to Load Account Data';
   static const somethingWentWrong = 'Something went wrong';
   static const failedToLaunchUrl = 'Failed to launch URL';
+  static const deviceDoesNotSupportBioAuth =
+      'Device doesn\'t support biometric authentication';
+  static const failedToAuthenticate = 'Failed to authenticate';
 
   /// Button Labels
   static const doneText = 'Done';

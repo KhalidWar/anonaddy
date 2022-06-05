@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:anonaddy/shared_components/constants/toast_message.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
@@ -14,40 +14,42 @@ class BiometricAuthService {
   const BiometricAuthService({required this.localAuth});
   final LocalAuthentication localAuth;
 
-  Future<void> init() async {
+  Future<bool> authenticate() async {
     try {
-      await localAuth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      throw e.message ?? 'Failed to authenticate';
+      final supportsBioAuth = await _doesDeviceSupportBioAuth();
+      if (supportsBioAuth) {
+        return await _authenticate();
+      } else {
+        return false;
+      }
+    } catch (error) {
+      rethrow;
     }
   }
 
-  Future<bool> doesPlatformSupportAuth() async {
+  Future<bool> _doesDeviceSupportBioAuth() async {
     try {
       return await localAuth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      throw e.message ?? 'Failed to authenticate';
+    } catch (error) {
+      throw AppStrings.deviceDoesNotSupportBioAuth;
     }
   }
 
-  Future<bool> authenticate() async {
-    final canCheckBio = await localAuth.canCheckBiometrics;
-    if (canCheckBio) {
-      try {
-        return await localAuth.authenticate(
-          localizedReason: ToastMessage.authToProceed,
-          useErrorDialogs: true,
-          stickyAuth: true,
-        );
-      } on PlatformException catch (e) {
-        log(e.toString());
-        if (e.code == auth_error.notAvailable) {
-          throw e.message!;
-        }
-        throw e.message!;
+  Future<bool> _authenticate() async {
+    try {
+      return await localAuth.authenticate(
+        localizedReason: ToastMessage.authToProceed,
+        useErrorDialogs: true,
+        stickyAuth: true,
+      );
+    } on PlatformException catch (e) {
+      log('BiometricAuthService _authenticate: ${e.toString()}');
+      if (e.code == auth_error.notAvailable) {
+        throw e.message ?? AppStrings.deviceDoesNotSupportBioAuth;
       }
-    } else {
-      throw 'Failed to authenticate';
+      throw e.message ?? AppStrings.somethingWentWrong;
+    } catch (error) {
+      throw AppStrings.failedToAuthenticate;
     }
   }
 }

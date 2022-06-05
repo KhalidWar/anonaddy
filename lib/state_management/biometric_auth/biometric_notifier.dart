@@ -18,14 +18,11 @@ class BiometricNotifier extends ChangeNotifier {
     required this.secureStorage,
   }) : super() {
     isEnabled = false;
-    biometricService.init();
     _loadBiometricState();
   }
 
   final BiometricAuthService biometricService;
   final FlutterSecureStorage secureStorage;
-
-  final showToast = NicheMethod.showToast;
 
   static const biometricAuthKey = 'biometricAuthKey';
 
@@ -33,30 +30,41 @@ class BiometricNotifier extends ChangeNotifier {
 
   Future<void> toggleBiometric(bool input) async {
     try {
-      final isAuth = await biometricService.authenticate();
-      if (isAuth) {
+      final didAuth = await biometricService.authenticate();
+      if (didAuth) {
         isEnabled = input;
         await _saveBiometricState(input);
       } else {
-        showToast('Failed to authenticate');
+        NicheMethod.showToast('Failed to authenticate');
       }
       notifyListeners();
     } catch (error) {
-      showToast(error.toString());
+      NicheMethod.showToast(error.toString());
     }
   }
 
   Future<void> _loadBiometricState() async {
-    final boolValue = await secureStorage.read(key: biometricAuthKey);
-    if (boolValue == null) {
-      isEnabled = false;
-    } else {
-      boolValue == 'true' ? isEnabled = true : isEnabled = false;
+    try {
+      final boolValue = await secureStorage.read(key: biometricAuthKey);
+      if (boolValue == null) {
+        isEnabled = false;
+      } else {
+        boolValue == 'true' ? isEnabled = true : isEnabled = false;
+      }
+      notifyListeners();
+    } catch (error) {
+      NicheMethod.showToast('Failed to load biometric authentication state');
+      return;
     }
-    notifyListeners();
   }
 
   Future<void> _saveBiometricState(bool input) async {
-    await secureStorage.write(key: biometricAuthKey, value: input.toString());
+    try {
+      await secureStorage.write(key: biometricAuthKey, value: input.toString());
+    } catch (error) {
+      NicheMethod.showToast('Failed to save biometric authentication state');
+
+      return;
+    }
   }
 }

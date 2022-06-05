@@ -1,6 +1,7 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/authorization/auth_state.dart';
 import 'package:anonaddy/state_management/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
@@ -92,9 +93,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
         _updateState(newState);
       } else {
         final newState =
-            state.copyWith(errorMessage: 'Failed to authenticate!');
+            state.copyWith(errorMessage: AppStrings.failedToAuthenticate);
         _updateState(newState);
-        NicheMethod.showToast('Failed to authenticate!');
+        NicheMethod.showToast(AppStrings.failedToAuthenticate);
       }
     } catch (error) {
       final newState =
