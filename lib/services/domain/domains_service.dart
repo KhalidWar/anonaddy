@@ -20,7 +20,7 @@ class DomainsService {
     try {
       const path = '$kUnEncodedBaseURL/$kDomainsURL';
       final response = await dio.get(path);
-      log('getDomains: ' + response.statusCode.toString());
+      log('getDomains: ${response.statusCode}');
       final domains = response.data['data'] as List;
       return domains.map((domain) => Domain.fromJson(domain)).toList();
     } catch (e) {
@@ -32,7 +32,7 @@ class DomainsService {
     try {
       final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainId';
       final response = await dio.get(path);
-      log('getSpecificDomain: ' + response.statusCode.toString());
+      log('getSpecificDomain: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
     } catch (e) {
@@ -45,7 +45,7 @@ class DomainsService {
       const path = '$kUnEncodedBaseURL/$kDomainsURL';
       final data = json.encode({"domain": domain});
       final response = await dio.post(path, data: data);
-      log('addNewDomain: ' + response.statusCode.toString());
+      log('addNewDomain: ${response.statusCode}');
       final newDomain = response.data['data'];
       return Domain.fromJson(newDomain);
     } catch (e) {
@@ -59,7 +59,7 @@ class DomainsService {
       final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainID';
       final data = jsonEncode({"description": description});
       final response = await dio.patch(path, data: data);
-      log('updateDomainDescription: ' + response.statusCode.toString());
+      log('updateDomainDescription: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
     } catch (e) {
@@ -71,7 +71,7 @@ class DomainsService {
     try {
       final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainID';
       final response = await dio.delete(path);
-      log('deleteDomain: ' + response.statusCode.toString());
+      log('deleteDomain: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }
@@ -84,7 +84,7 @@ class DomainsService {
           '$kUnEncodedBaseURL/$kDomainsURL/$domainID/$kDefaultRecipientURL';
       final data = jsonEncode({"default_recipient": recipientID});
       final response = await dio.patch(path, data: data);
-      log('updateDomainDefaultRecipient: ' + response.statusCode.toString());
+      log('updateDomainDefaultRecipient: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
     } catch (e) {
@@ -97,7 +97,7 @@ class DomainsService {
       const path = '$kUnEncodedBaseURL/$kActiveDomainURL';
       final data = json.encode({"id": domainID});
       final response = await dio.post(path, data: data);
-      log('activateDomain: ' + response.statusCode.toString());
+      log('activateDomain: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
     } catch (e) {
@@ -109,7 +109,7 @@ class DomainsService {
     try {
       final path = '$kUnEncodedBaseURL/$kActiveDomainURL/$domainID';
       final response = await dio.delete(path);
-      log('deactivateDomain: ' + response.statusCode.toString());
+      log('deactivateDomain: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }
@@ -120,7 +120,7 @@ class DomainsService {
       const path = '$kUnEncodedBaseURL/$kCatchAllDomainURL';
       final data = json.encode({"id": domainID});
       final response = await dio.post(path, data: data);
-      log('activateCatchAll: ' + response.statusCode.toString());
+      log('activateCatchAll: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
     } catch (e) {
@@ -132,7 +132,7 @@ class DomainsService {
     try {
       final path = '$kUnEncodedBaseURL/$kCatchAllDomainURL/$domainID';
       final response = await dio.delete(path);
-      log('deactivateCatchAll: ' + response.statusCode.toString());
+      log('deactivateCatchAll: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }

@@ -18,7 +18,7 @@ class RulesService {
     try {
       const path = '$kUnEncodedBaseURL/$kRulesURL';
       final response = await dio.get(path);
-      log('getAllRules: ' + response.statusCode.toString());
+      log('getAllRules: ${response.statusCode}');
 
       final rules = response.data['data'] as List;
       return rules.map((rule) => Rules.fromJson(rule)).toList();

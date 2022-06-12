@@ -19,7 +19,7 @@ class AppVersionService {
       const urlPath = '$kUnEncodedBaseURL/$kAppVersionURL';
       final response = await dio.get(path ?? urlPath);
       final appVersion = AppVersion.fromJson(response.data);
-      log('getAppVersionData: ' + response.statusCode.toString());
+      log('getAppVersionData: ${response.statusCode}');
 
       return appVersion;
     } catch (e) {

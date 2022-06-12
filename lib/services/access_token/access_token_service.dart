@@ -39,7 +39,7 @@ class AccessTokenService {
       );
 
       final response = await dio.getUri(uri, options: options);
-      log('validateAccessToken: ' + response.statusCode.toString());
+      log('validateAccessToken: ${response.statusCode}');
 
       return response.statusCode == 200 ? true : false;
     } on DioError catch (dioError) {

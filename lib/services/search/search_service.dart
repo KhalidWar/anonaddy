@@ -25,7 +25,7 @@ class SearchService {
       };
 
       final response = await dio.get(path, queryParameters: params);
-      log('searchAliases: ' + response.statusCode.toString());
+      log('searchAliases: ${response.statusCode}');
 
       final aliasesList = response.data['data'] as List;
       return aliasesList.map((alias) => Alias.fromJson(alias)).toList();

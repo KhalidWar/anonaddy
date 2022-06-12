@@ -20,7 +20,7 @@ class FailedDeliveryService {
       const urlPath = '$kUnEncodedBaseURL/$kFailedDeliveriesURL';
       final response = await dio.get(path ?? urlPath);
       final deliveries = response.data['data'];
-      log('getFailedDeliveries: ' + response.statusCode.toString());
+      log('getFailedDeliveries: ${response.statusCode}');
 
       return (deliveries as List).map((delivery) {
         return FailedDelivery.fromJson(delivery);
@@ -34,7 +34,7 @@ class FailedDeliveryService {
     try {
       final path = '$kUnEncodedBaseURL/$kFailedDeliveriesURL/$failedDeliveryId';
       final response = await dio.delete(path);
-      log('deleteFailedDelivery: ' + response.statusCode.toString());
+      log('deleteFailedDelivery: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }

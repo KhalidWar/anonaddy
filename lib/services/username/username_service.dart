@@ -20,7 +20,7 @@ class UsernameService {
     try {
       const path = '$kUnEncodedBaseURL/$kUsernamesURL';
       final response = await dio.get(path);
-      log('getUsernames: ' + response.statusCode.toString());
+      log('getUsernames: ${response.statusCode}');
       final usernames = response.data['data'] as List;
       return usernames.map((username) => Username.fromJson(username)).toList();
     } catch (e) {
@@ -32,7 +32,7 @@ class UsernameService {
     try {
       final path = '$kUnEncodedBaseURL/$kUsernamesURL/$usernameId';
       final response = await dio.get(path);
-      log('getSpecificUsername: ' + response.statusCode.toString());
+      log('getSpecificUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
     } catch (e) {
@@ -45,7 +45,7 @@ class UsernameService {
       const path = '$kUnEncodedBaseURL/$kUsernamesURL';
       final data = json.encode({"username": newUsername});
       final response = await dio.post(path, data: data);
-      log('addNewUsername: ' + response.statusCode.toString());
+      log('addNewUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
     } catch (e) {
@@ -59,7 +59,7 @@ class UsernameService {
       final path = '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID';
       final data = jsonEncode({"description": description});
       final response = await dio.patch(path, data: data);
-      log('updateUsernameDescription: ' + response.statusCode.toString());
+      log('updateUsernameDescription: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
     } catch (e) {
@@ -71,7 +71,7 @@ class UsernameService {
     try {
       final path = '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID';
       final response = await dio.delete(path);
-      log('deleteUsername: ' + response.statusCode.toString());
+      log('deleteUsername: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }
@@ -84,7 +84,7 @@ class UsernameService {
           '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID/$kDefaultRecipientURL';
       final data = jsonEncode({"default_recipient": recipientID});
       final response = await dio.patch(path, data: data);
-      log('updateDefaultRecipient: ' + response.statusCode.toString());
+      log('updateDefaultRecipient: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
     } catch (e) {
@@ -97,7 +97,7 @@ class UsernameService {
       const path = '$kUnEncodedBaseURL/$kActiveUsernamesURL';
       final data = json.encode({"id": usernameID});
       final response = await dio.post(path, data: data);
-      log('activateUsername: ' + response.statusCode.toString());
+      log('activateUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
     } catch (e) {
@@ -109,7 +109,7 @@ class UsernameService {
     try {
       final path = '$kUnEncodedBaseURL/$kActiveUsernamesURL/$usernameID';
       final response = await dio.delete(path);
-      log('deactivateUsername: ' + response.statusCode.toString());
+      log('deactivateUsername: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }
@@ -120,7 +120,7 @@ class UsernameService {
       const path = '$kUnEncodedBaseURL/$kCatchAllUsernameURL';
       final data = json.encode({"id": usernameID});
       final response = await dio.post(path, data: data);
-      log('activateCatchAll: ' + response.statusCode.toString());
+      log('activateCatchAll: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
     } catch (e) {
@@ -132,7 +132,7 @@ class UsernameService {
     try {
       final path = '$kUnEncodedBaseURL/$kCatchAllUsernameURL/$usernameID';
       final response = await dio.delete(path);
-      log('deactivateCatchAll: ' + response.statusCode.toString());
+      log('deactivateCatchAll: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }
