@@ -22,12 +22,6 @@ class App extends ConsumerWidget {
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
 
-    const _defaultLocalizations = [
-      DefaultMaterialLocalizations.delegate,
-      DefaultCupertinoLocalizations.delegate,
-      DefaultWidgetsLocalizations.delegate,
-    ];
-
     return MaterialApp(
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
@@ -36,7 +30,11 @@ class App extends ConsumerWidget {
       onGenerateRoute: RouteGenerator.generateRoute,
       initialRoute: AuthorizationScreen.routeName,
       locale: const Locale('en', 'US'),
-      localizationsDelegates: _defaultLocalizations,
+      localizationsDelegates: const [
+        DefaultMaterialLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+      ],
     );
   }
 }

@@ -12,7 +12,7 @@ class AnimatedFab extends StatefulWidget {
   final Widget child;
 
   @override
-  _AnimatedFabState createState() => _AnimatedFabState();
+  State<AnimatedFab> createState() => _AnimatedFabState();
 }
 
 class _AnimatedFabState extends State<AnimatedFab>
