@@ -16,12 +16,20 @@ class CustomAppBar extends AppBar {
             icon: Icon(
               PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
             ),
+            color: Colors.white,
             onPressed: leadingOnPress,
           ),
-          title: Text(title),
+          title: Text(
+            title,
+            style: const TextStyle(color: Colors.white),
+          ),
           actions: showTrailing
               ? [
                   PopupMenuButton(
+                    icon: Icon(
+                      Icons.adaptive.more,
+                      color: Colors.white,
+                    ),
                     itemBuilder: (BuildContext context) {
                       return [trailingLabel ?? ''].map((String choice) {
                         return PopupMenuItem<String>(
