@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
