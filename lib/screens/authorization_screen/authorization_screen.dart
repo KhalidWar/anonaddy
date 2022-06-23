@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
 import 'package:anonaddy/screens/authorization_screen/lock_screen.dart';
 import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
+import 'package:anonaddy/screens/macos/macos_screen.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/state_management/authorization/auth_state.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +51,8 @@ class _AuthorizationScreenState extends ConsumerState<AuthorizationScreen> {
       ///
       /// Manages when a logged in user is found
       case AuthorizationStatus.authorized:
+        if (Platform.isMacOS) return const MacosScreen();
+
         switch (authState.authenticationStatus) {
           case AuthenticationStatus.enabled:
 
