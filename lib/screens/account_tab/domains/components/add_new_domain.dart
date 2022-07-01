@@ -73,7 +73,7 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
                           await ref
                               .read(recipientScreenStateNotifier.notifier)
                               .addRecipient(_textEditController.text.trim());
-                          Navigator.pop(context);
+                          if (mounted) Navigator.pop(context);
                         }
                       },
                     );

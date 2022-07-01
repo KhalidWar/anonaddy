@@ -204,15 +204,15 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
               SizedBox(
                 width: double.infinity,
                 child: PlatformButton(
+                  onPress: createAliasState.isLoading!
+                      ? () {}
+                      : () => createAlias(rootContext),
                   child: createAliasState.isLoading!
                       ? const PlatformLoadingIndicator()
                       : const Text(
                           AppStrings.createAliasTitle,
                           style: TextStyle(color: Colors.black),
                         ),
-                  onPress: createAliasState.isLoading!
-                      ? () {}
-                      : () => createAlias(rootContext),
                 ),
               ),
               cardSpacer(size),

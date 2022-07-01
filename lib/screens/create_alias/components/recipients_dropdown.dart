@@ -17,6 +17,7 @@ class RecipientsDropdown extends StatelessWidget {
         return CreateAliasCard(
           header: 'Recipients',
           subHeader: 'Default recipient(s) for alias.',
+          onPress: onPress,
           child: recipients.isEmpty
               ? Text(
                   'Select recipient(s) (optional)...',
@@ -38,7 +39,6 @@ class RecipientsDropdown extends StatelessWidget {
                     );
                   },
                 ),
-          onPress: onPress,
         );
       },
     );

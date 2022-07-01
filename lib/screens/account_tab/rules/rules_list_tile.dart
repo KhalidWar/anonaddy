@@ -15,6 +15,7 @@ class RulesListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
         child: Row(
@@ -31,7 +32,7 @@ class RulesListTile extends StatelessWidget {
                 Text(rule.name),
                 const SizedBox(height: 2),
                 Text(
-                  'order ' + rule.order.toString(),
+                  'order ${rule.order}',
                   style: const TextStyle(color: Colors.grey),
                 ),
               ],
@@ -39,7 +40,6 @@ class RulesListTile extends StatelessWidget {
           ],
         ),
       ),
-      onTap: onTap,
     );
   }
 }

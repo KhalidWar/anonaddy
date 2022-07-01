@@ -284,7 +284,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               .removePublicGPGKey(recipient);
 
           /// Dismisses this dialog
-          Navigator.pop(context);
+          if (mounted) Navigator.pop(context);
         },
       ),
     );
@@ -300,7 +300,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
         await ref
             .read(recipientScreenStateNotifier.notifier)
             .addPublicGPGKey(recipient, keyData);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
@@ -374,10 +374,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 .removeRecipient(widget.recipient);
 
             /// Dismisses this dialog
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
 
             /// Dismisses [RecipientScreen] after recipient deletion
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
           },
         ),
       );

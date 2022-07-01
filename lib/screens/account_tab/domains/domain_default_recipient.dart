@@ -100,7 +100,7 @@ class _DomainDefaultRecipientState
           widget.domain.id,
           selectedRecipient == null ? '' : selectedRecipient!.id,
         );
-    Navigator.pop(context);
+    if (mounted) Navigator.pop(context);
   }
 
   @override

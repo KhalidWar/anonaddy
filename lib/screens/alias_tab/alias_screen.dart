@@ -302,7 +302,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   .deleteAlias(alias.id);
 
           /// Dismisses [AliasScreen] if [alias] is deleted
-          if (!isDeleted) Navigator.pop(context);
+          if (!isDeleted && mounted) Navigator.pop(context);
         },
       ),
     );
@@ -405,7 +405,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     Future<void> updateDescription() async {
       if (descriptionFormKey.currentState!.validate()) {
         await aliasScreenNotifier.editDescription(alias, newDescription);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
@@ -448,10 +448,10 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             ref.read(aliasTabStateNotifier.notifier).refreshAliases();
 
             /// Dismisses [platformDialog]
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
 
             /// Dismisses [AliasScreen] after forgetting [alias]
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
           },
         ),
       );

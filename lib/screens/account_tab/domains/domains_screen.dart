@@ -245,13 +245,13 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
     Future<void> updateDescription() async {
       if (formKey.currentState!.validate()) {
         await domainNotifier.editDescription(domain.id, newDescription);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
     Future<void> removeDescription() async {
       await domainNotifier.editDescription(domain.id, '');
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
 
     return showModalBottomSheet(
@@ -299,8 +299,10 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
             await ref
                 .read(domainsScreenStateNotifier.notifier)
                 .deleteDomain(widget.domain.id);
-            Navigator.pop(context);
-            Navigator.pop(context);
+            if (mounted) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
           },
         ),
       );

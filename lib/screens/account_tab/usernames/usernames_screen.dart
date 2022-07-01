@@ -245,13 +245,13 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
       if (formKey.currentState!.validate()) {
         await usernameNotifier.updateUsernameDescription(
             username, newDescription);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
     Future<void> removeDescription() async {
       await usernameNotifier.updateUsernameDescription(username, '');
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
 
     return showModalBottomSheet(
@@ -300,10 +300,10 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
                 .deleteUsername(widget.username);
 
             /// Dismisses this dialog
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
 
             /// Dismisses [UsernamesScreen] after deletion
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
           },
         ),
       );

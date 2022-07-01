@@ -207,7 +207,7 @@ class _UsernameDefaultRecipientState
                         widget.username,
                         selectedRecipient == null ? '' : selectedRecipient!.id,
                       );
-                  Navigator.pop(context);
+                  if (mounted) Navigator.pop(context);
                 },
               ),
             ),

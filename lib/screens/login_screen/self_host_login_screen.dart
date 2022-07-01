@@ -10,6 +10,7 @@ import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SelfHostLoginScreen extends ConsumerStatefulWidget {
@@ -41,7 +42,10 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         key: const Key('selfHostedLoginScreenScaffold'),
-        appBar: AppBar(elevation: 0, brightness: Brightness.dark),
+        appBar: AppBar(
+          elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
         backgroundColor: AppColors.primaryColor,
         body: Center(
           child: SingleChildScrollView(
@@ -75,7 +79,8 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).accentColor,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                               border: const OutlineInputBorder(),
@@ -122,7 +127,8 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Theme.of(context).accentColor,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                               border: const OutlineInputBorder(),
