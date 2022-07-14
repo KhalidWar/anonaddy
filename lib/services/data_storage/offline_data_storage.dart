@@ -1,5 +1,12 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/offline_data_key.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final offlineDataProvider = Provider<OfflineData>((ref) {
+  final secureStorage = ref.read(flutterSecureStorage);
+  return OfflineData(secureStorage);
+});
 
 class OfflineData {
   OfflineData(this.secureStorage);
