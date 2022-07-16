@@ -29,6 +29,31 @@ class AliasService {
     }
   }
 
+  Future<List<Alias>> getAvailableAliases() async {
+    try {
+      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      final response = await dio.get(path);
+      log('getAvailableAliases: ${response.statusCode}');
+      final aliases = response.data['data'] as List;
+      return aliases.map((alias) => Alias.fromJson(alias)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Alias>> getDeletedAliases() async {
+    try {
+      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      final params = {'deleted': 'only'};
+      final response = await dio.get(path, queryParameters: params);
+      log('getAllAliases: ${response.statusCode}');
+      final aliases = response.data['data'] as List;
+      return aliases.map((alias) => Alias.fromJson(alias)).toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Alias> getSpecificAlias(String aliasID) async {
     try {
       final path = '$kUnEncodedBaseURL/$kAliasesURL/$aliasID';
