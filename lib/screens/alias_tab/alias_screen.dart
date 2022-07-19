@@ -79,7 +79,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     final deleteAliasLoading = aliasState.deleteAliasLoading!;
     final size = MediaQuery.of(context).size;
 
-    final isAliasDeleted = alias.deletedAt != null;
+    final isAliasDeleted = alias.deletedAt.isNotEmpty;
 
     return ListView(
       key: AliasTabWidgetKeys.aliasScreenBodyListView,
@@ -142,7 +142,9 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         ),
         AliasDetailListTile(
           leadingIconData: Icons.comment_outlined,
-          title: alias.description ?? AppStrings.noDescription,
+          title: alias.description.isEmpty
+              ? AppStrings.noDescription
+              : alias.description,
           subtitle: AppStrings.description,
           trailingIconData: Icons.edit_outlined,
           trailingIconOnPress: () => updateDescriptionDialog(context, alias),
@@ -175,69 +177,66 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           trailingIconOnPress: () =>
               buildDeleteOrRestoreAliasDialog(context, alias),
         ),
-        if (alias.recipients == null)
-          Container()
-        else
-          Column(
-            children: [
-              Divider(height: size.height * 0.01),
-              Padding(
+        Column(
+          children: [
+            Divider(height: size.height * 0.01),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Default Recipient${alias.recipients.length >= 2 ? 's' : ''}',
+                    key: AliasTabWidgetKeys.aliasScreenDefaultRecipient,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.edit_outlined),
+                    onPressed: () =>
+                        buildUpdateDefaultRecipient(context, alias),
+                  ),
+                ],
+              ),
+            ),
+            if (alias.recipients.isNotEmpty)
+              Container(
+                alignment: Alignment.centerLeft,
                 padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
                     Text(
-                      'Default Recipient${alias.recipients!.length >= 2 ? 's' : ''}',
-                      key: AliasTabWidgetKeys.aliasScreenDefaultRecipient,
-                      style: Theme.of(context).textTheme.headline6,
+                      'To manage recipients, go to Recipients under Account tab.',
+                      style: Theme.of(context).textTheme.caption,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.edit_outlined),
-                      onPressed: () =>
-                          buildUpdateDefaultRecipient(context, alias),
-                    ),
+                    SizedBox(height: size.height * 0.01),
                   ],
                 ),
               ),
-              if (alias.recipients!.isNotEmpty)
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Column(
-                    children: [
-                      Text(
-                        'To manage recipients, go to Recipients under Account tab.',
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                      SizedBox(height: size.height * 0.01),
-                    ],
-                  ),
+            if (alias.recipients.isEmpty)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                child: Row(
+                  children: const [
+                    Text(AppStrings.noDefaultRecipientSet),
+                  ],
                 ),
-              if (alias.recipients!.isEmpty)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(
-                    children: const [
-                      Text(AppStrings.noDefaultRecipientSet),
-                    ],
-                  ),
-                )
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: alias.recipients!.length,
-                  itemBuilder: (context, index) {
-                    final recipients = alias.recipients;
-                    return IgnorePointer(
-                      child: RecipientListTile(
-                        recipient: recipients![index],
-                      ),
-                    );
-                  },
-                ),
-            ],
-          ),
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: alias.recipients.length,
+                itemBuilder: (context, index) {
+                  final recipients = alias.recipients;
+                  return IgnorePointer(
+                    child: RecipientListTile(
+                      recipient: recipients[index],
+                    ),
+                  );
+                },
+              ),
+          ],
+        ),
         Divider(height: size.height * 0.03),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -278,7 +277,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   }
 
   void buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
-    final isDeleted = alias.deletedAt != null;
+    final isDeleted = alias.deletedAt.isEmpty;
 
     /// Display platform appropriate dialog
     PlatformAware.platformDialog(

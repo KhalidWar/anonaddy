@@ -73,13 +73,13 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
     for (var element in aliases) {
       final filterByEmail =
           element.email.toLowerCase().contains(text.toLowerCase());
-      if (element.description == null) {
+      if (element.description.isEmpty) {
         if (filterByEmail) {
           matchingAliases.add(element);
         }
       } else {
         final filterByDescription =
-            element.description!.toLowerCase().contains(text.toLowerCase());
+            element.description.toLowerCase().contains(text.toLowerCase());
 
         if (filterByEmail || filterByDescription) {
           matchingAliases.add(element);
