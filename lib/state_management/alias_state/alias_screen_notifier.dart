@@ -26,8 +26,6 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   final AliasService aliasService;
   final AliasTabNotifier aliasTabNotifier;
 
-  final showToast = NicheMethod.showToast;
-
   /// Update AliasScreen state
   void _updateState(AliasScreenState newState) {
     if (mounted) state = newState;
@@ -67,11 +65,11 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       final updatedAlias =
           await aliasService.updateAliasDescription(alias.id, newDesc);
-      showToast(ToastMessage.editDescriptionSuccess);
+      NicheMethod.showToast(ToastMessage.editDescriptionSuccess);
       _updateState(state.copyWith(alias: updatedAlias));
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
     }
   }
 
@@ -82,10 +80,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       final updatedAlias = state.alias.copyWith(active: false);
       _updateState(state.copyWith(isToggleLoading: false, alias: updatedAlias));
     } on DioError catch (dioError) {
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(isToggleLoading: false));
     } catch (error) {
-      showToast(error.toString());
+      NicheMethod.showToast(error.toString());
       _updateState(state.copyWith(isToggleLoading: false));
     }
   }
@@ -97,10 +95,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       final updateAlias = state.alias.copyWith(active: newAlias.active);
       _updateState(state.copyWith(isToggleLoading: false, alias: updateAlias));
     } on DioError catch (dioError) {
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(isToggleLoading: false));
     } catch (error) {
-      showToast(error.toString());
+      NicheMethod.showToast(error.toString());
       _updateState(state.copyWith(isToggleLoading: false));
     }
   }
@@ -109,7 +107,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       _updateState(state.copyWith(deleteAliasLoading: true));
       await aliasService.deleteAlias(aliasId);
-      showToast(ToastMessage.deleteAliasSuccess);
+      NicheMethod.showToast(ToastMessage.deleteAliasSuccess);
       final updatedAlias = state.alias.copyWith(deletedAt: '');
       aliasTabNotifier.refreshAliases();
 
@@ -117,10 +115,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
           state.copyWith(deleteAliasLoading: false, alias: updatedAlias);
       _updateState(newState);
     } on DioError catch (dioError) {
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(deleteAliasLoading: false));
     } catch (error) {
-      showToast(error.toString());
+      NicheMethod.showToast(error.toString());
       _updateState(state.copyWith(deleteAliasLoading: false));
     }
   }
@@ -129,17 +127,17 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       _updateState(state.copyWith(deleteAliasLoading: true));
       final newAlias = await aliasService.restoreAlias(aliasId);
-      showToast(ToastMessage.restoreAliasSuccess);
+      NicheMethod.showToast(ToastMessage.restoreAliasSuccess);
       aliasTabNotifier.refreshAliases();
 
       final newState =
           state.copyWith(deleteAliasLoading: false, alias: newAlias);
       _updateState(newState);
     } on DioError catch (dioError) {
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(deleteAliasLoading: false));
     } catch (error) {
-      showToast(error.toString());
+      NicheMethod.showToast(error.toString());
       _updateState(state.copyWith(deleteAliasLoading: false));
     }
   }
@@ -155,7 +153,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
     }
     _updateState(state.copyWith(updateRecipientLoading: false));
   }
@@ -163,10 +161,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   Future<void> forgetAlias(String aliasID) async {
     try {
       await aliasService.forgetAlias(aliasID);
-      showToast(ToastMessage.forgetAliasSuccess);
+      NicheMethod.showToast(ToastMessage.forgetAliasSuccess);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
     }
   }
 
@@ -180,9 +178,9 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
     try {
       await NicheMethod.copyOnTap(generatedAddress);
-      showToast(ToastMessage.sendFromAliasSuccess);
+      NicheMethod.showToast(ToastMessage.sendFromAliasSuccess);
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
     }
   }
 }
