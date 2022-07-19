@@ -74,9 +74,9 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   }
 
   Widget buildListView(BuildContext context, AliasScreenState aliasState) {
-    final alias = aliasState.alias!;
-    final isToggleLoading = aliasState.isToggleLoading!;
-    final deleteAliasLoading = aliasState.deleteAliasLoading!;
+    final alias = aliasState.alias;
+    final isToggleLoading = aliasState.isToggleLoading;
+    final deleteAliasLoading = aliasState.deleteAliasLoading;
     final size = MediaQuery.of(context).size;
 
     final isAliasDeleted = alias.deletedAt.isNotEmpty;
@@ -85,7 +85,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       key: AliasTabWidgetKeys.aliasScreenBodyListView,
       physics: const ClampingScrollPhysics(),
       children: [
-        if (aliasState.isOffline!) const OfflineBanner(),
+        if (aliasState.isOffline) const OfflineBanner(),
         AliasScreenPieChart(
           emailsForwarded: alias.emailsForwarded,
           emailsBlocked: alias.emailsBlocked,
