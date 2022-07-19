@@ -5,16 +5,20 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 
 class AliasListTile extends StatelessWidget {
-  const AliasListTile({Key? key, required this.aliasData}) : super(key: key);
-  final Alias aliasData;
+  const AliasListTile({Key? key, required this.alias}) : super(key: key);
+  final Alias alias;
+
+  bool isAliasDeleted() {
+    return alias.deletedAt.isEmpty ? false : true;
+  }
+
+  String getDescription() {
+    return alias.description.isEmpty ? 'No description' : alias.description;
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    bool isAliasDeleted() {
-      return aliasData.deletedAt == null ? false : true;
-    }
 
     return InkWell(
       child: Padding(
@@ -23,7 +27,7 @@ class AliasListTile extends StatelessWidget {
           children: [
             AliasListTileLeading(
               isDeleted: isAliasDeleted(),
-              isActive: aliasData.active,
+              isActive: alias.active,
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -31,7 +35,7 @@ class AliasListTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    aliasData.email,
+                    alias.email,
                     style: TextStyle(
                       color: isAliasDeleted()
                           ? Colors.grey
@@ -41,7 +45,7 @@ class AliasListTile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    aliasData.description ?? 'No description',
+                    getDescription(),
                     style: const TextStyle(color: Colors.grey),
                   ),
                 ],
@@ -51,7 +55,7 @@ class AliasListTile extends StatelessWidget {
               icon: const Icon(Icons.copy),
               onPressed: isAliasDeleted()
                   ? null
-                  : () => NicheMethod.copyOnTap(aliasData.email),
+                  : () => NicheMethod.copyOnTap(alias.email),
             ),
           ],
         ),
@@ -60,7 +64,7 @@ class AliasListTile extends StatelessWidget {
         Navigator.pushNamed(
           context,
           AliasScreen.routeName,
-          arguments: aliasData,
+          arguments: alias,
         );
       },
     );
