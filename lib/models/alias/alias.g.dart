@@ -19,22 +19,22 @@ class AliasAdapter extends TypeAdapter<Alias> {
     return Alias(
       id: fields[0] as String,
       userId: fields[1] as String,
-      aliasableId: fields[2] as String?,
-      aliasableType: fields[3] as String?,
+      aliasableId: fields[2] as String,
+      aliasableType: fields[3] as String,
       localPart: fields[4] as String,
-      extension: fields[5] as String?,
+      extension: fields[5] as String,
       domain: fields[6] as String,
       email: fields[7] as String,
       active: fields[8] as bool,
-      description: fields[9] as String?,
+      description: fields[9] as String,
       emailsForwarded: fields[10] as int,
       emailsBlocked: fields[11] as int,
       emailsReplied: fields[12] as int,
       emailsSent: fields[13] as int,
-      recipients: (fields[14] as List?)?.cast<Recipient>(),
-      createdAt: fields[15] as DateTime,
-      updatedAt: fields[16] as DateTime,
-      deletedAt: fields[17] as DateTime?,
+      recipients: (fields[14] as List).cast<Recipient>(),
+      createdAt: fields[15] as String,
+      updatedAt: fields[16] as String,
+      deletedAt: fields[17] as String,
     );
   }
 
@@ -96,28 +96,27 @@ class AliasAdapter extends TypeAdapter<Alias> {
 // **************************************************************************
 
 Alias _$AliasFromJson(Map<String, dynamic> json) => Alias(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      aliasableId: json['aliasable_id'] as String?,
-      aliasableType: json['aliasable_type'] as String?,
-      localPart: json['local_part'] as String,
-      extension: json['extension'] as String?,
-      domain: json['domain'] as String,
-      email: json['email'] as String,
-      active: json['active'] as bool,
-      description: json['description'] as String?,
-      emailsForwarded: json['emails_forwarded'] as int,
-      emailsBlocked: json['emails_blocked'] as int,
-      emailsReplied: json['emails_replied'] as int,
-      emailsSent: json['emails_sent'] as int,
+      id: json['id'] as String? ?? '',
+      userId: json['user_id'] as String? ?? '',
+      aliasableId: json['aliasable_id'] as String? ?? '',
+      aliasableType: json['aliasable_type'] as String? ?? '',
+      localPart: json['local_part'] as String? ?? '',
+      extension: json['extension'] as String? ?? '',
+      domain: json['domain'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      active: json['active'] as bool? ?? false,
+      description: json['description'] as String? ?? '',
+      emailsForwarded: json['emails_forwarded'] as int? ?? 0,
+      emailsBlocked: json['emails_blocked'] as int? ?? 0,
+      emailsReplied: json['emails_replied'] as int? ?? 0,
+      emailsSent: json['emails_sent'] as int? ?? 0,
       recipients: (json['recipients'] as List<dynamic>?)
-          ?.map((e) => Recipient.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      deletedAt: json['deleted_at'] == null
-          ? null
-          : DateTime.parse(json['deleted_at'] as String),
+              ?.map((e) => Recipient.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <Recipient>[],
+      createdAt: json['created_at'] as String? ?? '',
+      updatedAt: json['updated_at'] as String? ?? '',
+      deletedAt: json['deleted_at'] as String? ?? '',
     );
 
 Map<String, dynamic> _$AliasToJson(Alias instance) => <String, dynamic>{
@@ -135,8 +134,8 @@ Map<String, dynamic> _$AliasToJson(Alias instance) => <String, dynamic>{
       'emails_blocked': instance.emailsBlocked,
       'emails_replied': instance.emailsReplied,
       'emails_sent': instance.emailsSent,
-      'recipients': instance.recipients?.map((e) => e.toJson()).toList(),
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
-      'deleted_at': instance.deletedAt?.toIso8601String(),
+      'recipients': instance.recipients.map((e) => e.toJson()).toList(),
+      'created_at': instance.createdAt,
+      'updated_at': instance.updatedAt,
+      'deleted_at': instance.deletedAt,
     };

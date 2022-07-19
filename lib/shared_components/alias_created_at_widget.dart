@@ -7,7 +7,7 @@ class AliasCreatedAtWidget extends StatelessWidget {
       : super(key: key);
 
   final String label;
-  final DateTime dateTime;
+  final String dateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class AliasCreatedAtWidget extends StatelessWidget {
           Text(label),
           const SizedBox(width: 5),
           Text(
-            NicheMethod.fixDateTime(dateTime),
+            NicheMethod.convertStringToDateTime(dateTime),
           ),
         ],
       ),

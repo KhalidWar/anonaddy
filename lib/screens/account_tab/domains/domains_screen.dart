@@ -212,11 +212,11 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           children: [
             AliasCreatedAtWidget(
               label: 'Created:',
-              dateTime: domain.createdAt,
+              dateTime: domain.createdAt.toString(),
             ),
             AliasCreatedAtWidget(
               label: 'Updated:',
-              dateTime: domain.updatedAt,
+              dateTime: domain.updatedAt.toString(),
             ),
           ],
         ),

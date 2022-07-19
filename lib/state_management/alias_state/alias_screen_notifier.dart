@@ -109,7 +109,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       await aliasService.deleteAlias(aliasId);
       showToast(ToastMessage.deleteAliasSuccess);
       final oldAlias = state.alias!;
-      oldAlias.deletedAt = null;
+      oldAlias.deletedAt = '';
       aliasTabNotifier.refreshAliases();
 
       final newState =

@@ -246,14 +246,14 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               label: 'Created:',
               dateTime: alias.createdAt,
             ),
-            alias.deletedAt == null
+            alias.deletedAt.isEmpty
                 ? AliasCreatedAtWidget(
                     label: 'Updated:',
                     dateTime: alias.updatedAt,
                   )
                 : AliasCreatedAtWidget(
                     label: 'Deleted:',
-                    dateTime: alias.deletedAt!,
+                    dateTime: alias.deletedAt,
                   ),
           ],
         ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
@@ -198,7 +197,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     /// Emulates deleting alias by setting its [deletedAt] to now.
     /// Then add it to aliases so it can show up in deletedAliases.
     final alias = state.aliases.firstWhere((alias) => alias.id == aliasId);
-    alias.deletedAt = DateTime.now();
+    alias.deletedAt = '';
     state.aliases.insert(0, alias);
 
     /// Saves current list of aliases into disk
@@ -218,7 +217,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
     final availableAliasList = <Alias>[];
     for (Alias alias in aliases) {
-      if (alias.deletedAt == null) {
+      if (alias.deletedAt.isEmpty) {
         availableAliasList.add(alias);
       }
     }
@@ -231,7 +230,7 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
     final deletedAliasList = <Alias>[];
     for (Alias alias in aliases) {
-      if (alias.deletedAt != null) {
+      if (alias.deletedAt.isNotEmpty) {
         deletedAliasList.add(alias);
       }
     }

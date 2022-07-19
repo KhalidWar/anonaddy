@@ -211,11 +211,11 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
           children: [
             AliasCreatedAtWidget(
               label: 'Created:',
-              dateTime: username.createdAt,
+              dateTime: username.createdAt.toString(),
             ),
             AliasCreatedAtWidget(
               label: 'Updated:',
-              dateTime: username.updatedAt,
+              dateTime: username.updatedAt.toString(),
             ),
           ],
         ),

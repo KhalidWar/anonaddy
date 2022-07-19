@@ -9,24 +9,24 @@ part 'alias.g.dart';
 @HiveType(typeId: HiveTypeId.alias)
 class Alias extends HiveObject {
   Alias({
-    required this.id,
-    required this.userId,
-    this.aliasableId,
-    this.aliasableType,
-    required this.localPart,
-    this.extension,
-    required this.domain,
-    required this.email,
-    required this.active,
-    this.description,
-    required this.emailsForwarded,
-    required this.emailsBlocked,
-    required this.emailsReplied,
-    required this.emailsSent,
-    required this.recipients,
-    required this.createdAt,
-    required this.updatedAt,
-    this.deletedAt,
+    this.id = '',
+    this.userId = '',
+    this.aliasableId = '',
+    this.aliasableType = '',
+    this.localPart = '',
+    this.extension = '',
+    this.domain = '',
+    this.email = '',
+    this.active = false,
+    this.description = '',
+    this.emailsForwarded = 0,
+    this.emailsBlocked = 0,
+    this.emailsReplied = 0,
+    this.emailsSent = 0,
+    this.recipients = const <Recipient>[],
+    this.createdAt = '',
+    this.updatedAt = '',
+    this.deletedAt = '',
   });
 
   @HiveField(0)
@@ -38,18 +38,18 @@ class Alias extends HiveObject {
 
   @JsonKey(name: 'aliasable_id')
   @HiveField(2)
-  String? aliasableId;
+  String aliasableId;
 
   @JsonKey(name: 'aliasable_type')
   @HiveField(3)
-  String? aliasableType;
+  String aliasableType;
 
   @JsonKey(name: 'local_part')
   @HiveField(4)
   String localPart;
 
   @HiveField(5)
-  String? extension;
+  String extension;
 
   @HiveField(6)
   String domain;
@@ -61,7 +61,7 @@ class Alias extends HiveObject {
   bool active;
 
   @HiveField(9)
-  String? description;
+  String description;
 
   @JsonKey(name: 'emails_forwarded')
   @HiveField(10)
@@ -80,19 +80,19 @@ class Alias extends HiveObject {
   int emailsSent;
 
   @HiveField(14)
-  List<Recipient>? recipients;
+  List<Recipient> recipients;
 
   @JsonKey(name: 'created_at')
   @HiveField(15)
-  DateTime createdAt;
+  String createdAt;
 
   @JsonKey(name: 'updated_at')
   @HiveField(16)
-  DateTime updatedAt;
+  String updatedAt;
 
   @JsonKey(name: 'deleted_at')
   @HiveField(17)
-  DateTime? deletedAt;
+  String deletedAt;
 
   factory Alias.fromJson(Map<String, dynamic> json) => _$AliasFromJson(json);
 

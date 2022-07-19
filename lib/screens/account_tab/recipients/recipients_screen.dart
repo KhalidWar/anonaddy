@@ -223,11 +223,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           children: [
             AliasCreatedAtWidget(
               label: 'Created:',
-              dateTime: recipient.createdAt,
+              dateTime: recipient.createdAt.toString(),
             ),
             AliasCreatedAtWidget(
               label: 'Updated:',
-              dateTime: recipient.updatedAt,
+              dateTime: recipient.updatedAt.toString(),
             ),
           ],
         ),
