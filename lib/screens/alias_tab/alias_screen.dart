@@ -316,7 +316,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         await ref
             .read(aliasScreenStateNotifier.notifier)
             .sendFromAlias(alias.email, destinationEmail);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
@@ -410,7 +410,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
 
     Future<void> removeDescription() async {
       await aliasScreenNotifier.editDescription(alias, '');
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
 
     return showModalBottomSheet(
