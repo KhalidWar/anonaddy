@@ -277,7 +277,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   }
 
   void buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
-    final isDeleted = alias.deletedAt.isEmpty;
+    final isDeleted = alias.deletedAt.isNotEmpty;
 
     /// Display platform appropriate dialog
     PlatformAware.platformDialog(
