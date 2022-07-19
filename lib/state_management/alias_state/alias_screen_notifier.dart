@@ -79,7 +79,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       _updateState(state.copyWith(isToggleLoading: true));
       await aliasService.deactivateAlias(aliasId);
-      final updatedAlias = state.alias!.copyWith(active: false);
+      final updatedAlias = state.alias.copyWith(active: false);
       _updateState(state.copyWith(isToggleLoading: false, alias: updatedAlias));
     } on DioError catch (dioError) {
       showToast(dioError.message);
@@ -94,7 +94,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       _updateState(state.copyWith(isToggleLoading: true));
       final newAlias = await aliasService.activateAlias(aliasId);
-      final updateAlias = state.alias!.copyWith(active: newAlias.active);
+      final updateAlias = state.alias.copyWith(active: newAlias.active);
       _updateState(state.copyWith(isToggleLoading: false, alias: updateAlias));
     } on DioError catch (dioError) {
       showToast(dioError.message);
@@ -110,7 +110,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       _updateState(state.copyWith(deleteAliasLoading: true));
       await aliasService.deleteAlias(aliasId);
       showToast(ToastMessage.deleteAliasSuccess);
-      final updatedAlias = state.alias!.copyWith(deletedAt: '');
+      final updatedAlias = state.alias.copyWith(deletedAt: '');
       aliasTabNotifier.refreshAliases();
 
       final newState =
