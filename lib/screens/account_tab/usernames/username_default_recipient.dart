@@ -193,7 +193,7 @@ class _UsernameDefaultRecipientState
                   builder: (_, watch, __) {
                     final isLoading = ref
                         .watch(usernamesScreenStateNotifier)
-                        .updateRecipientLoading!;
+                        .updateRecipientLoading;
                     return isLoading
                         ? const PlatformLoadingIndicator()
                         : const Text('Update Default Recipients');

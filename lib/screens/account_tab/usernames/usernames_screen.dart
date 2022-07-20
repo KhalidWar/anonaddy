@@ -55,7 +55,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
               return buildListView(context, usernameState);
 
             case UsernamesScreenStatus.failed:
-              final error = usernameState.errorMessage!;
+              final error = usernameState.errorMessage;
               return LottieWidget(
                 lottie: LottieImages.errorCone,
                 label: error,
@@ -70,7 +70,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
       BuildContext context, UsernamesScreenState usernameState) {
     final size = MediaQuery.of(context).size;
 
-    final username = usernameState.username!;
+    final username = usernameState.username;
     final usernameStateProvider =
         ref.read(usernamesScreenStateNotifier.notifier);
 
@@ -110,7 +110,9 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: username.description ?? AppStrings.noDescription,
+          title: username.description.isEmpty
+              ? AppStrings.noDescription
+              : username.description,
           titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Username description',
           leadingIconData: Icons.comment_outlined,
@@ -127,7 +129,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
           subtitle: 'Activity',
           leadingIconData: Icons.toggle_on_outlined,
           trailing:
-              buildSwitch(usernameState.activeSwitchLoading!, username.active),
+              buildSwitch(usernameState.activeSwitchLoading, username.active),
           trailingIconOnPress: () => toggleActivity(),
         ),
         AliasDetailListTile(
@@ -136,7 +138,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
           subtitle: 'Catch All',
           leadingIconData: Icons.repeat,
           trailing: buildSwitch(
-              usernameState.catchAllSwitchLoading!, username.catchAll),
+              usernameState.catchAllSwitchLoading, username.catchAll),
           trailingIconOnPress: () => toggleCatchAll(),
         ),
         Divider(height: size.height * 0.02),
@@ -187,7 +189,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
                 ],
               ),
             ),
-            if (username.aliases!.isEmpty)
+            if (username.aliases.isEmpty)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: const Text('No aliases found'),
@@ -196,10 +198,10 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: username.aliases!.length,
+                itemCount: username.aliases.length,
                 itemBuilder: (context, index) {
                   return AliasListTile(
-                    aliasData: username.aliases![index],
+                    alias: username.aliases[index],
                   );
                 },
               ),
