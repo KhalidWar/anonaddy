@@ -86,8 +86,7 @@ class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
   void _setDefaultRecipients() {
     final defaultRecipients = <Recipient>[];
     for (Recipient verifiedRecipient in state.verifiedRecipients!) {
-      final aliasDefaultRecipients = aliasState.alias!.recipients ?? [];
-      for (Recipient aliasRecipient in aliasDefaultRecipients) {
+      for (Recipient aliasRecipient in aliasState.alias.recipients) {
         if (verifiedRecipient.id == aliasRecipient.id) {
           defaultRecipients.add(verifiedRecipient);
         }

@@ -144,7 +144,7 @@ class _AliasDefaultRecipientScreenState
                           builder: (_, watch, __) {
                             final isLoading = ref
                                 .watch(aliasScreenStateNotifier)
-                                .updateRecipientLoading!;
+                                .updateRecipientLoading;
                             return isLoading
                                 ? const CircularProgressIndicator(
                                     color: AppColors.primaryColor,
