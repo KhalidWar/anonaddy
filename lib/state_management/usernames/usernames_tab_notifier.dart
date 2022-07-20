@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/username/username_service.dart';

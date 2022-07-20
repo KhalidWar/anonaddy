@@ -20,7 +20,7 @@ class UsernamesTabState {
   static UsernamesTabState initialState() {
     return const UsernamesTabState(
       status: UsernamesStatus.loading,
-      usernames: [],
+      usernames: <Username>[],
       errorMessage: 'Something went wrong',
     );
   }
