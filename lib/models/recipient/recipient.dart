@@ -9,53 +9,77 @@ part 'recipient.g.dart';
 @HiveType(typeId: HiveTypeId.recipient)
 class Recipient extends HiveObject {
   Recipient({
-    required this.id,
-    required this.userId,
-    required this.email,
-    required this.shouldEncrypt,
-    this.fingerprint,
-    this.emailVerifiedAt,
-    required this.aliases,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id = '',
+    this.userId = '',
+    this.email = '',
+    this.shouldEncrypt = false,
+    this.fingerprint = '',
+    this.emailVerifiedAt = '',
+    this.aliases = const <Alias>[],
+    this.createdAt = '',
+    this.updatedAt = '',
   });
 
   @HiveField(0)
-  String id;
+  final String id;
 
   @JsonKey(name: 'user_id')
   @HiveField(1)
-  String userId;
+  final String userId;
 
   @HiveField(2)
-  String email;
+  final String email;
 
   @JsonKey(name: 'should_encrypt')
   @HiveField(3)
-  bool shouldEncrypt;
+  final bool shouldEncrypt;
 
   @HiveField(4)
-  String? fingerprint;
+  final String fingerprint;
 
   @JsonKey(name: 'email_verified_at')
   @HiveField(5)
-  DateTime? emailVerifiedAt;
+  final String emailVerifiedAt;
 
   @HiveField(6)
-  List<Alias>? aliases;
+  final List<Alias> aliases;
 
   @JsonKey(name: 'created_at')
   @HiveField(7)
-  DateTime createdAt;
+  final String createdAt;
 
   @JsonKey(name: 'updated_at')
   @HiveField(8)
-  DateTime updatedAt;
+  final String updatedAt;
 
   factory Recipient.fromJson(Map<String, dynamic> json) =>
       _$RecipientFromJson(json);
 
   Map<String, dynamic> toJson() => _$RecipientToJson(this);
+
+  Recipient copyWith({
+    String? id,
+    String? userId,
+    String? email,
+    bool? shouldEncrypt,
+    String? fingerprint,
+    String? emailVerifiedAt,
+    List<Alias>? aliases,
+    String? createdAt,
+    String? updatedAt,
+  }) {
+    return Recipient(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      email: email ?? this.email,
+      shouldEncrypt: shouldEncrypt ?? this.shouldEncrypt,
+      fingerprint: fingerprint ?? this.fingerprint,
+      emailVerifiedAt: emailVerifiedAt ?? this.emailVerifiedAt,
+      aliases: aliases ?? this.aliases,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 
   @override
   String toString() {

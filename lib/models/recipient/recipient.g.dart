@@ -21,11 +21,11 @@ class RecipientAdapter extends TypeAdapter<Recipient> {
       userId: fields[1] as String,
       email: fields[2] as String,
       shouldEncrypt: fields[3] as bool,
-      fingerprint: fields[4] as String?,
-      emailVerifiedAt: fields[5] as DateTime?,
-      aliases: (fields[6] as List?)?.cast<Alias>(),
-      createdAt: fields[7] as DateTime,
-      updatedAt: fields[8] as DateTime,
+      fingerprint: fields[4] as String,
+      emailVerifiedAt: fields[5] as String,
+      aliases: (fields[6] as List).cast<Alias>(),
+      createdAt: fields[7] as String,
+      updatedAt: fields[8] as String,
     );
   }
 
@@ -69,19 +69,18 @@ class RecipientAdapter extends TypeAdapter<Recipient> {
 // **************************************************************************
 
 Recipient _$RecipientFromJson(Map<String, dynamic> json) => Recipient(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      email: json['email'] as String,
-      shouldEncrypt: json['should_encrypt'] as bool,
-      fingerprint: json['fingerprint'] as String?,
-      emailVerifiedAt: json['email_verified_at'] == null
-          ? null
-          : DateTime.parse(json['email_verified_at'] as String),
+      id: json['id'] as String? ?? '',
+      userId: json['user_id'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      shouldEncrypt: json['should_encrypt'] as bool? ?? false,
+      fingerprint: json['fingerprint'] as String? ?? '',
+      emailVerifiedAt: json['email_verified_at'] as String? ?? '',
       aliases: (json['aliases'] as List<dynamic>?)
-          ?.map((e) => Alias.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+              ?.map((e) => Alias.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <Alias>[],
+      createdAt: json['created_at'] as String? ?? '',
+      updatedAt: json['updated_at'] as String? ?? '',
     );
 
 Map<String, dynamic> _$RecipientToJson(Recipient instance) => <String, dynamic>{
@@ -90,8 +89,8 @@ Map<String, dynamic> _$RecipientToJson(Recipient instance) => <String, dynamic>{
       'email': instance.email,
       'should_encrypt': instance.shouldEncrypt,
       'fingerprint': instance.fingerprint,
-      'email_verified_at': instance.emailVerifiedAt?.toIso8601String(),
-      'aliases': instance.aliases?.map((e) => e.toJson()).toList(),
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
+      'email_verified_at': instance.emailVerifiedAt,
+      'aliases': instance.aliases.map((e) => e.toJson()).toList(),
+      'created_at': instance.createdAt,
+      'updated_at': instance.updatedAt,
     };
