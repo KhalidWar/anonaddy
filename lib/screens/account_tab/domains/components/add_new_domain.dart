@@ -65,7 +65,7 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
                           const Size(200, 50),
                         ),
                       ),
-                      child: recipientState.isAddRecipientLoading!
+                      child: recipientState.isAddRecipientLoading
                           ? const PlatformLoadingIndicator()
                           : const Text('Add Recipient'),
                       onPressed: () async {
