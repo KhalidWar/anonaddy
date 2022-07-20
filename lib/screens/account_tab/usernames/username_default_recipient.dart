@@ -56,9 +56,8 @@ class _UsernameDefaultRecipientState
   void _setVerifiedRecipients() {
     final recipientTabState = ref.read(recipientTabStateNotifier);
     if (recipientTabState.status == RecipientTabStatus.loaded) {
-      final allRecipients = recipientTabState.recipients!;
-      for (Recipient recipient in allRecipients) {
-        if (recipient.emailVerifiedAt != null) {
+      for (Recipient recipient in recipientTabState.recipients) {
+        if (recipient.emailVerifiedAt.isNotEmpty) {
           _verifiedRecipients.add(recipient);
         }
       }

@@ -211,13 +211,11 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
     final verifiedRecipients = <Recipient>[];
 
     /// Get all recipients related to user's account
-    final allRecipients = recipientState.recipients ?? [];
-
     /// Extract verified recipients
-    for (Recipient recipient in allRecipients) {
+    for (Recipient recipient in recipientState.recipients) {
       /// Verified recipients have confirmed emails meaning
       /// [emailVerifiedAt] has a value, a timestamp of when email was confirmed.
-      if (recipient.emailVerifiedAt != null) {
+      if (recipient.emailVerifiedAt.isNotEmpty) {
         verifiedRecipients.add(recipient);
       }
     }
