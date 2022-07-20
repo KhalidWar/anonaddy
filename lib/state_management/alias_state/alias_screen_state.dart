@@ -9,31 +9,32 @@ enum AliasScreenStatus { loading, loaded, failed }
 class AliasScreenState {
   const AliasScreenState({
     required this.status,
-    this.alias,
-    this.errorMessage,
-    this.isToggleLoading,
-    this.deleteAliasLoading,
-    this.updateRecipientLoading,
-    this.isOffline,
+    required this.alias,
+    required this.errorMessage,
+    required this.isToggleLoading,
+    required this.deleteAliasLoading,
+    required this.updateRecipientLoading,
+    required this.isOffline,
   });
 
   /// [AliasScreen] status when fetching for [alias]
   final AliasScreenStatus status;
 
   /// Alias shown in [AliasScreen]
-  final Alias? alias;
-  final String? errorMessage;
+  final Alias alias;
+  final String errorMessage;
 
-  final bool? isToggleLoading;
-  final bool? deleteAliasLoading;
-  final bool? updateRecipientLoading;
-  final bool? isOffline;
+  final bool isToggleLoading;
+  final bool deleteAliasLoading;
+  final bool updateRecipientLoading;
+  final bool isOffline;
 
   static AliasScreenState initialState() {
     /// Initializing [AliasScreen] state to avoid null exception
     /// Then call [.copyWith()] method to update specific state variable
-    return const AliasScreenState(
+    return AliasScreenState(
       status: AliasScreenStatus.loading,
+      alias: Alias(),
       errorMessage: AppStrings.somethingWentWrong,
       isToggleLoading: false,
       deleteAliasLoading: false,
