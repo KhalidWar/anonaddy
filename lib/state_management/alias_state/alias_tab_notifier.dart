@@ -197,8 +197,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     /// Emulates deleting alias by setting its [deletedAt] to now.
     /// Then add it to aliases so it can show up in deletedAliases.
     final alias = state.aliases.firstWhere((alias) => alias.id == aliasId);
-    alias.deletedAt = '';
-    state.aliases.insert(0, alias);
+    final updatedAlias = alias.copyWith(deletedAt: '');
+    state.aliases.insert(0, updatedAlias);
 
     /// Saves current list of aliases into disk
     _saveOfflineData(state.aliases);
