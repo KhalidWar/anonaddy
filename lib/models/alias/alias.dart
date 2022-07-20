@@ -30,73 +30,115 @@ class Alias extends HiveObject {
   });
 
   @HiveField(0)
-  String id;
+  final String id;
 
   @JsonKey(name: 'user_id')
   @HiveField(1)
-  String userId;
+  final String userId;
 
   @JsonKey(name: 'aliasable_id')
   @HiveField(2)
-  String aliasableId;
+  final String aliasableId;
 
   @JsonKey(name: 'aliasable_type')
   @HiveField(3)
-  String aliasableType;
+  final String aliasableType;
 
   @JsonKey(name: 'local_part')
   @HiveField(4)
-  String localPart;
+  final String localPart;
 
   @HiveField(5)
-  String extension;
+  final String extension;
 
   @HiveField(6)
-  String domain;
+  final String domain;
 
   @HiveField(7)
-  String email;
+  final String email;
 
   @HiveField(8)
-  bool active;
+  final bool active;
 
   @HiveField(9)
-  String description;
+  final String description;
 
   @JsonKey(name: 'emails_forwarded')
   @HiveField(10)
-  int emailsForwarded;
+  final int emailsForwarded;
 
   @JsonKey(name: 'emails_blocked')
   @HiveField(11)
-  int emailsBlocked;
+  final int emailsBlocked;
 
   @JsonKey(name: 'emails_replied')
   @HiveField(12)
-  int emailsReplied;
+  final int emailsReplied;
 
   @JsonKey(name: 'emails_sent')
   @HiveField(13)
-  int emailsSent;
+  final int emailsSent;
 
   @HiveField(14)
-  List<Recipient> recipients;
+  final List<Recipient> recipients;
 
   @JsonKey(name: 'created_at')
   @HiveField(15)
-  String createdAt;
+  final String createdAt;
 
   @JsonKey(name: 'updated_at')
   @HiveField(16)
-  String updatedAt;
+  final String updatedAt;
 
   @JsonKey(name: 'deleted_at')
   @HiveField(17)
-  String deletedAt;
+  final String deletedAt;
 
   factory Alias.fromJson(Map<String, dynamic> json) => _$AliasFromJson(json);
 
   Map<String, dynamic> toJson() => _$AliasToJson(this);
+
+  Alias copyWith({
+    String? id,
+    String? userId,
+    String? aliasableId,
+    String? aliasableType,
+    String? localPart,
+    String? extension,
+    String? domain,
+    String? email,
+    bool? active,
+    String? description,
+    int? emailsForwarded,
+    int? emailsBlocked,
+    int? emailsReplied,
+    int? emailsSent,
+    List<Recipient>? recipients,
+    String? createdAt,
+    String? updatedAt,
+    String? deletedAt,
+  }) {
+    return Alias(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      aliasableId: aliasableId ?? this.aliasableId,
+      aliasableType: aliasableType ?? this.aliasableType,
+      localPart: localPart ?? this.localPart,
+      extension: extension ?? this.extension,
+      domain: domain ?? this.domain,
+      email: email ?? this.email,
+      active: active ?? this.active,
+      description: description ?? this.description,
+      emailsForwarded: emailsForwarded ?? this.emailsForwarded,
+      emailsBlocked: emailsBlocked ?? this.emailsBlocked,
+      emailsReplied: emailsReplied ?? this.emailsReplied,
+      emailsSent: emailsSent ?? this.emailsSent,
+      recipients: recipients ?? this.recipients,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+    );
+  }
 
   @override
   String toString() {
