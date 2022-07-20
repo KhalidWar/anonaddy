@@ -5,27 +5,29 @@ enum UsernamesScreenStatus { loading, loaded, failed }
 class UsernamesScreenState {
   const UsernamesScreenState({
     required this.status,
-    this.username,
-    this.errorMessage,
-    this.activeSwitchLoading,
-    this.catchAllSwitchLoading,
-    this.updateRecipientLoading,
+    required this.username,
+    required this.errorMessage,
+    required this.activeSwitchLoading,
+    required this.catchAllSwitchLoading,
+    required this.updateRecipientLoading,
   });
 
   final UsernamesScreenStatus status;
-  final Username? username;
-  final String? errorMessage;
+  final Username username;
+  final String errorMessage;
 
-  final bool? activeSwitchLoading;
-  final bool? catchAllSwitchLoading;
-  final bool? updateRecipientLoading;
+  final bool activeSwitchLoading;
+  final bool catchAllSwitchLoading;
+  final bool updateRecipientLoading;
 
   static UsernamesScreenState initialState() {
-    return const UsernamesScreenState(
+    return UsernamesScreenState(
       status: UsernamesScreenStatus.loading,
+      username: Username(),
       activeSwitchLoading: false,
       catchAllSwitchLoading: false,
       updateRecipientLoading: false,
+      errorMessage: '',
     );
   }
 
