@@ -33,31 +33,34 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   Future<void> fetchSpecificAlias(Alias alias) async {
     /// Initially set AliasScreen to loading
-    final newState = state.copyWith(status: AliasScreenStatus.loading);
-    _updateState(newState);
     try {
+      _updateState(state.copyWith(status: AliasScreenStatus.loading));
+
       final updatedAlias = await aliasService.getSpecificAlias(alias.id);
 
       /// Assign newly fetched alias data to AliasScreen state
       final newState =
           state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
       _updateState(newState);
+    } on DioError catch (dioError) {
+      final offlineState = state.copyWith(
+        status: AliasScreenStatus.loaded,
+        isOffline: true,
+        alias: alias,
+      );
+      final errorState = state.copyWith(
+        status: AliasScreenStatus.failed,
+        errorMessage: dioError.message,
+      );
+      _updateState(
+        dioError.type == DioErrorType.other ? offlineState : errorState,
+      );
     } catch (error) {
-      final dioError = error as DioError;
-      if (dioError.type == DioErrorType.other) {
-        final newState = state.copyWith(
-          status: AliasScreenStatus.loaded,
-          isOffline: true,
-          alias: alias,
-        );
-        _updateState(newState);
-      } else {
-        final newState = state.copyWith(
-          status: AliasScreenStatus.failed,
-          errorMessage: dioError.message,
-        );
-        _updateState(newState);
-      }
+      final newState = state.copyWith(
+        status: AliasScreenStatus.failed,
+        errorMessage: AppStrings.somethingWentWrong,
+      );
+      _updateState(newState);
     }
   }
 
