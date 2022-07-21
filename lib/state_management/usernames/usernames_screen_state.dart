@@ -10,6 +10,7 @@ class UsernamesScreenState {
     required this.activeSwitchLoading,
     required this.catchAllSwitchLoading,
     required this.updateRecipientLoading,
+    required this.isOffline,
   });
 
   final UsernamesScreenStatus status;
@@ -19,6 +20,7 @@ class UsernamesScreenState {
   final bool activeSwitchLoading;
   final bool catchAllSwitchLoading;
   final bool updateRecipientLoading;
+  final bool isOffline;
 
   static UsernamesScreenState initialState() {
     return UsernamesScreenState(
@@ -28,6 +30,7 @@ class UsernamesScreenState {
       catchAllSwitchLoading: false,
       updateRecipientLoading: false,
       errorMessage: '',
+      isOffline: false,
     );
   }
 
@@ -38,6 +41,7 @@ class UsernamesScreenState {
     bool? activeSwitchLoading,
     bool? catchAllSwitchLoading,
     bool? updateRecipientLoading,
+    bool? isOffline,
   }) {
     return UsernamesScreenState(
       status: status ?? this.status,
@@ -48,11 +52,12 @@ class UsernamesScreenState {
           catchAllSwitchLoading ?? this.catchAllSwitchLoading,
       updateRecipientLoading:
           updateRecipientLoading ?? this.updateRecipientLoading,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 
   @override
   String toString() {
-    return 'UsernamesScreenState{status: $status, username: $username, errorMessage: $errorMessage, activeSwitchLoading: $activeSwitchLoading, catchAllSwitchLoading: $catchAllSwitchLoading, updateRecipientLoading: $updateRecipientLoading}';
+    return 'UsernamesScreenState{status: $status, username: $username, errorMessage: $errorMessage, activeSwitchLoading: $activeSwitchLoading, catchAllSwitchLoading: $catchAllSwitchLoading, updateRecipientLoading: $updateRecipientLoading, isOffline: $isOffline}';
   }
 }
