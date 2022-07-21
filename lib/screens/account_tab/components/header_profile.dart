@@ -29,7 +29,10 @@ class HeaderProfile extends StatelessWidget {
       ),
       subtitle: Text(
         NicheMethod.capitalizeFirstLetter(
-            account.subscription ?? AppStrings.selfHosted),
+          account.subscription.isEmpty
+              ? AppStrings.selfHosted
+              : account.subscription,
+        ),
         style: Theme.of(context)
             .textTheme
             .bodyText2!

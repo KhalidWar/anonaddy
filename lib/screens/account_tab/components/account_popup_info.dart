@@ -25,8 +25,9 @@ class AccountPopupInfo extends ConsumerWidget {
 
     /// AnonAddy Lite and Pro subscriptions do expire.
     return NicheMethod.fixDateTime(
-      accountState.account.subscriptionEndAt ??
-          AppStrings.subscriptionEndDateNotAvailable,
+      accountState.account.subscriptionEndAt.isEmpty
+          ? AppStrings.subscriptionEndDateNotAvailable
+          : accountState.account.subscriptionEndAt,
     );
   }
 
@@ -48,9 +49,9 @@ class AccountPopupInfo extends ConsumerWidget {
           dense: true,
           tileColor: Colors.transparent,
           title: Text(
-            account.defaultAliasFormat == null
+            account.defaultAliasFormat.isEmpty
                 ? AppStrings.noDefaultSelected
-                : NicheMethod.correctAliasString(account.defaultAliasFormat!),
+                : NicheMethod.correctAliasString(account.defaultAliasFormat),
           ),
           subtitle: const Text(AppStrings.defaultAliasFormat),
           trailing: const Icon(Icons.open_in_new_outlined),
@@ -59,7 +60,9 @@ class AccountPopupInfo extends ConsumerWidget {
         ListTile(
           dense: true,
           title: Text(
-            account.defaultAliasDomain ?? AppStrings.noDefaultSelected,
+            account.defaultAliasDomain.isEmpty
+                ? AppStrings.noDefaultSelected
+                : account.defaultAliasDomain,
           ),
           subtitle: const Text(AppStrings.defaultAliasDomain),
           trailing: const Icon(Icons.open_in_new_outlined),
