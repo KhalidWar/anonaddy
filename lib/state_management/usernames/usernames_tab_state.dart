@@ -21,7 +21,7 @@ class UsernamesTabState {
     return const UsernamesTabState(
       status: UsernamesStatus.loading,
       usernames: <Username>[],
-      errorMessage: 'Something went wrong',
+      errorMessage: '',
     );
   }
 

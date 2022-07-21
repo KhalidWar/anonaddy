@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/username/username_service.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/usernames/usernames_tab_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,22 +40,23 @@ class UsernamesNotifier extends StateNotifier<UsernamesTabState> {
         usernames: domains,
       );
       _updateState(newState);
-    } catch (error) {
-      if (error == DioError) {
-        final dioError = error as DioError;
-
-        /// If offline, load offline data.
-        if (dioError.type == DioErrorType.other) {
-          await loadOfflineState();
-        } else {
-          final newState = state.copyWith(
-            status: UsernamesStatus.failed,
-            errorMessage: dioError.message,
-          );
-          _updateState(newState);
-          await _retryOnError();
-        }
+    } on DioError catch (dioError) {
+      /// If offline, load offline data.
+      if (dioError.type == DioErrorType.other) {
+        await loadOfflineState();
+      } else {
+        _updateState(state.copyWith(
+          status: UsernamesStatus.failed,
+          errorMessage: dioError.message,
+        ));
+        await _retryOnError();
       }
+    } catch (error) {
+      _updateState(state.copyWith(
+        status: UsernamesStatus.failed,
+        errorMessage: AppStrings.somethingWentWrong,
+      ));
+      await _retryOnError();
     }
   }
 
