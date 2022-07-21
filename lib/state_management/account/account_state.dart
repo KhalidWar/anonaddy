@@ -18,7 +18,7 @@ class AccountState {
   static AccountState initialState() {
     return AccountState(
       status: AccountStatus.loading,
-      account: Account.dummy(),
+      account: Account(),
       errorMessage: AppStrings.somethingWentWrong,
     );
   }
@@ -45,7 +45,7 @@ extension AccountStateShortcuts on AccountState {
   bool get isSubscriptionFree =>
       account.subscription == AnonAddyString.subscriptionFree;
 
-  bool get isSelfHosted => account.subscription == null;
+  bool get isSelfHosted => account.subscription.isEmpty;
 
   bool get hasRecipientsReachedLimit =>
       account.recipientCount == account.recipientLimit;
