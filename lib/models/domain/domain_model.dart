@@ -7,53 +7,88 @@ part 'domain_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Domain {
   Domain({
-    required this.id,
-    required this.userId,
-    required this.domain,
-    this.description,
-    required this.aliases,
+    this.id = '',
+    this.userId = '',
+    this.domain = '',
+    this.description = '',
+    this.aliases = const <Alias>[],
     this.defaultRecipient,
-    required this.active,
-    required this.catchAll,
-    this.domainVerifiedAt,
-    required this.createdAt,
-    required this.updatedAt,
+    this.active = false,
+    this.catchAll = false,
+    this.domainVerifiedAt = '',
+    this.domainMxValidatedAt = '',
+    this.domainSendingVerifiedAt = '',
+    this.createdAt = '',
+    this.updatedAt = '',
   });
 
   String id;
 
   @JsonKey(name: 'user_id')
-  String userId;
+  final String userId;
 
-  String domain;
-  String? description;
-  List<Alias>? aliases;
+  final String domain;
+  final String description;
+  final List<Alias> aliases;
 
   @JsonKey(name: 'default_recipient')
-  Recipient? defaultRecipient;
-  bool active;
+  final Recipient? defaultRecipient;
+  final bool active;
 
   @JsonKey(name: 'catch_all')
-  bool catchAll;
+  final bool catchAll;
 
   @JsonKey(name: 'domain_verified_at')
-  DateTime? domainVerifiedAt;
+  final String domainVerifiedAt;
 
   @JsonKey(name: 'domain_mx_validated_at')
-  DateTime? domainMxValidatedAt;
+  final String domainMxValidatedAt;
 
   @JsonKey(name: 'domain_sending_verified_at')
-  DateTime? domainSendingVerifiedAt;
+  final String domainSendingVerifiedAt;
 
   @JsonKey(name: 'created_at')
-  DateTime createdAt;
+  final String createdAt;
 
   @JsonKey(name: 'updated_at')
-  DateTime updatedAt;
+  final String updatedAt;
 
   factory Domain.fromJson(Map<String, dynamic> json) => _$DomainFromJson(json);
 
   Map<String, dynamic> toJson() => _$DomainToJson(this);
+
+  Domain copyWith({
+    String? id,
+    String? userId,
+    String? domain,
+    String? description,
+    List<Alias>? aliases,
+    Recipient? defaultRecipient,
+    bool? active,
+    bool? catchAll,
+    String? domainVerifiedAt,
+    String? domainMxValidatedAt,
+    String? domainSendingVerifiedAt,
+    String? createdAt,
+    String? updatedAt,
+  }) {
+    return Domain(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      domain: domain ?? this.domain,
+      description: description ?? this.description,
+      aliases: aliases ?? this.aliases,
+      defaultRecipient: defaultRecipient ?? this.defaultRecipient,
+      active: active ?? this.active,
+      catchAll: catchAll ?? this.catchAll,
+      domainVerifiedAt: domainVerifiedAt ?? this.domainVerifiedAt,
+      domainMxValidatedAt: domainMxValidatedAt ?? this.domainMxValidatedAt,
+      domainSendingVerifiedAt:
+          domainSendingVerifiedAt ?? this.domainSendingVerifiedAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 
   @override
   String toString() {
