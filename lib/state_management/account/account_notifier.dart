@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:dio/dio.dart';
@@ -30,10 +30,9 @@ class AccountNotifier extends StateNotifier<AccountState> {
   }
 
   Future<void> fetchAccount() async {
-    final newState = state.copyWith(status: AccountStatus.loading);
-    _updateState(newState);
-
     try {
+      _updateState(state.copyWith(status: AccountStatus.loading));
+
       final account = await accountService.getAccounts();
       await _saveOfflineData(account);
 
@@ -43,22 +42,27 @@ class AccountNotifier extends StateNotifier<AccountState> {
 
       /// Update UI with the latest state
       _updateState(newState);
-    } catch (error) {
-      final dioError = (error as DioError);
-
+    } on DioError catch (dioError) {
       /// on SockException load offline data
       if (dioError.type == DioErrorType.other) {
         /// Loads offline data when there's no internet connection
         await loadOfflineData();
       } else {
-        final newState = state.copyWith(
+        _updateState(state.copyWith(
           status: AccountStatus.failed,
-          errorMessage: dioError.message.toString(),
-        );
-        _updateState(newState);
+          errorMessage: dioError.message,
+        ));
       }
 
-      /// Retry after facing an error
+      /// Retry after an error
+      _retryOnError();
+    } catch (error) {
+      _updateState(state.copyWith(
+        status: AccountStatus.failed,
+        errorMessage: AppStrings.somethingWentWrong,
+      ));
+
+      /// Retry after an error
       _retryOnError();
     }
   }
@@ -70,21 +74,21 @@ class AccountNotifier extends StateNotifier<AccountState> {
       final account = await accountService.getAccounts();
       await _saveOfflineData(account);
 
-      /// Construct new state
-      final newState =
-          state.copyWith(status: AccountStatus.loaded, account: account);
-
       /// Update UI with the latest state
-      _updateState(newState);
+      _updateState(state.copyWith(
+        status: AccountStatus.loaded,
+        account: account,
+      ));
+    } on DioError catch (dioError) {
+      NicheMethod.showToast(dioError.message);
     } catch (error) {
-      final dioError = error as DioError;
-      NicheMethod.showToast(dioError.message.toString());
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
     }
   }
 
   /// Triggers [fetchAccount] when it fails after a certain amount of time
   Future _retryOnError() async {
-    if (state.status == AccountStatus.failed) {
+    if (state.isFailed) {
       await Future.delayed(const Duration(seconds: 5));
       await fetchAccount();
     }
@@ -93,7 +97,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
   /// Loads [Account] data from disk
   Future<void> loadOfflineData() async {
     /// Load data from disk if state is NOT showing an error
-    if (state.status != AccountStatus.failed) {
+    if (state.isFailed) {
       final securedData = await offlineData.readAccountOfflineData();
       if (securedData.isNotEmpty) {
         final account = Account.fromJson(jsonDecode(securedData));

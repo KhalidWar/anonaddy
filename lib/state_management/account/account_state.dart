@@ -47,6 +47,8 @@ extension AccountStateShortcuts on AccountState {
 
   bool get isSelfHosted => account.subscription.isEmpty;
 
+  bool get isFailed => status == AccountStatus.failed;
+
   bool get hasRecipientsReachedLimit =>
       account.recipientCount == account.recipientLimit;
 
