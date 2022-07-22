@@ -17,11 +17,9 @@ final domainsScreenStateNotifier = StateNotifierProvider.autoDispose<
 
 class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
   DomainsScreenNotifier({required this.domainService})
-      : super(DomainsScreenState.initial());
+      : super(DomainsScreenState.initialState());
 
   final DomainsService domainService;
-
-  final showToast = NicheMethod.showToast;
 
   /// Updates DomainScreen state
   void _updateState(DomainsScreenState newState) {
@@ -52,11 +50,11 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     try {
       final updatedDomain =
           await domainService.updateDomainDescription(domainId, newDescription);
-      showToast(ToastMessage.editDescriptionSuccess);
+      NicheMethod.showToast(ToastMessage.editDescriptionSuccess);
       _updateState(state.copyWith(domain: updatedDomain));
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
     }
   }
 
@@ -64,14 +62,14 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     _updateState(state.copyWith(activeSwitchLoading: true));
     try {
       final newDomain = await domainService.activateDomain(domainId);
-      final oldDomain = state.domain!;
+      final oldDomain = state.domain;
       oldDomain.active = newDomain.active;
       final newState =
           state.copyWith(activeSwitchLoading: false, domain: oldDomain);
       _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -80,14 +78,14 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     _updateState(state.copyWith(activeSwitchLoading: true));
     try {
       await domainService.deactivateDomain(domainId);
-      final oldDomain = state.domain!;
+      final oldDomain = state.domain;
       oldDomain.active = false;
       final newState =
           state.copyWith(activeSwitchLoading: false, domain: oldDomain);
       _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -96,14 +94,14 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     _updateState(state.copyWith(catchAllSwitchLoading: true));
     try {
       final newDomain = await domainService.activateCatchAll(domainId);
-      final oldDomain = state.domain!;
+      final oldDomain = state.domain;
       oldDomain.catchAll = newDomain.catchAll;
       final newState =
           state.copyWith(catchAllSwitchLoading: false, domain: oldDomain);
       _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -112,14 +110,14 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     _updateState(state.copyWith(catchAllSwitchLoading: true));
     try {
       await domainService.deactivateCatchAll(domainId);
-      final oldDomain = state.domain!;
+      final oldDomain = state.domain;
       oldDomain.catchAll = false;
       final newState =
           state.copyWith(catchAllSwitchLoading: false, domain: oldDomain);
       _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -131,13 +129,13 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
       final updatedDomain = await domainService.updateDomainDefaultRecipient(
           domainId, recipientId);
       state.domain!.defaultRecipient = updatedDomain.defaultRecipient;
-      showToast('Default recipient updated successfully!');
+      NicheMethod.showToast('Default recipient updated successfully!');
       final newState =
           state.copyWith(updateRecipientLoading: false, domain: state.domain);
       _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
       _updateState(state.copyWith(updateRecipientLoading: false));
     }
   }
@@ -145,10 +143,10 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
   Future<void> deleteDomain(String domainId) async {
     try {
       await domainService.deleteDomain(domainId);
-      showToast('Domain deleted successfully!');
+      NicheMethod.showToast('Domain deleted successfully!');
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
     }
   }
 }
