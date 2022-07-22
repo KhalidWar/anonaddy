@@ -61,7 +61,7 @@ class UsernamesNotifier extends StateNotifier<UsernamesTabState> {
   }
 
   Future<void> _retryOnError() async {
-    if (state.status.isFailed()) {
+    if (state.status.isFailed) {
       await Future.delayed(const Duration(seconds: 5));
       await fetchUsernames();
     }
@@ -73,7 +73,7 @@ class UsernamesNotifier extends StateNotifier<UsernamesTabState> {
   Future<void> loadOfflineState() async {
     /// Only load offline data when state is NOT failed.
     /// Otherwise, it would always show offline data even if there's error.
-    if (!state.status.isFailed()) {
+    if (!state.status.isFailed) {
       List<dynamic> savedUsernames = [];
       final securedData = await offlineData.readUsernameOfflineData();
       if (securedData.isNotEmpty) savedUsernames = jsonDecode(securedData);

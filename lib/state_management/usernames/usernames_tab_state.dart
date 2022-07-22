@@ -3,7 +3,7 @@ import 'package:anonaddy/models/username/username.dart';
 enum UsernamesStatus { loading, loaded, failed }
 
 extension Shortcut on UsernamesStatus {
-  bool isFailed() => this == UsernamesStatus.failed;
+  bool get isFailed => this == UsernamesStatus.failed;
 }
 
 class UsernamesTabState {
