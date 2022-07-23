@@ -142,7 +142,7 @@ class _DomainDefaultRecipientState
                             builder: (_, watch, __) {
                               final isLoading = ref
                                   .watch(domainsScreenStateNotifier)
-                                  .updateRecipientLoading!;
+                                  .updateRecipientLoading;
                               return isLoading
                                   ? const LinearProgressIndicator(
                                       color: AppColors.accentColor)
