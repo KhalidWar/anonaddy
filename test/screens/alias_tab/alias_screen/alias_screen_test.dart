@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../test_data/test_alias_data.dart';
+import '../../../test_data/alias_test_data.dart';
 import '../alias_tab_mocks.dart';
 
 /// Widget test for [AliasScreen]
 void main() async {
-  final testSuccessAlias = Alias.fromJson(testAliasData['data']);
-  final testFailedAlias = Alias.fromJson(testErrorAliasData['data']);
+  final testSuccessAlias = Alias.fromJson(AliasTestData.validAliasJson);
+  final testFailedAlias = Alias.fromJson(AliasTestData.invalidAliasJson);
 
   Widget aliasScreen(
       AutoDisposeStateNotifierProvider<AliasScreenNotifier, AliasScreenState>

@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../test_data/test_alias_data.dart';
+import '../../test_data/alias_test_data.dart';
 
 final testAliasTabProvider =
     StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {
@@ -31,11 +31,11 @@ final testAliasScreenProvider =
 class _MockAliasService extends Mock implements AliasService {
   @override
   Future<List<Alias>> getAliases(String? deleted) async {
-    final availableAlias = Alias.fromJson(testAliasData['data']);
+    final availableAlias = Alias.fromJson(AliasTestData.validAliasJson['data']);
 
     /// Generate a deleted alias by giving its [deleted_at] a value.
     Map<String, dynamic> deletedAliasData = {};
-    deletedAliasData.addAll(testAliasData['data']);
+    deletedAliasData.addAll(AliasTestData.validAliasJson['data']);
     deletedAliasData['deleted_at'] = "2022-02-22 18:08:15";
     final deletedAlias = Alias.fromJson(deletedAliasData);
 
@@ -60,7 +60,7 @@ class _MockAliasService extends Mock implements AliasService {
       );
     }
 
-    return Alias.fromJson(testAliasData['data']);
+    return Alias.fromJson(AliasTestData.validAliasJson['data']);
   }
 }
 
