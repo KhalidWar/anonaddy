@@ -1,8 +1,6 @@
-import 'dart:io';
-
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
-import 'package:anonaddy/shared_components/constants/toast_message.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/domains/domains_screen_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:dio/dio.dart';
@@ -27,22 +25,32 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
   }
 
   Future<void> fetchDomain(Domain domain) async {
-    _updateState(state.copyWith(status: DomainsScreenStatus.loading));
     try {
+      _updateState(state.copyWith(status: DomainsScreenStatus.loading));
       final updatedDomain = await domainService.getSpecificDomain(domain.id);
-      final newState = state.copyWith(
-          status: DomainsScreenStatus.loaded, domain: updatedDomain);
-      _updateState(newState);
-    } on SocketException {
+
+      _updateState(state.copyWith(
+        status: DomainsScreenStatus.loaded,
+        domain: updatedDomain,
+      ));
+    } on DioError catch (dioError) {
       /// Return old domain data if there's no internet connection
-      final newState =
-          state.copyWith(status: DomainsScreenStatus.loaded, domain: domain);
-      _updateState(newState);
+      if (dioError.type == DioErrorType.other) {
+        _updateState(state.copyWith(
+          status: DomainsScreenStatus.loaded,
+          domain: domain,
+        ));
+      } else {
+        _updateState(state.copyWith(
+          status: DomainsScreenStatus.failed,
+          errorMessage: dioError.message,
+        ));
+      }
     } catch (error) {
-      final dioError = error as DioError;
-      final newState = state.copyWith(
-          status: DomainsScreenStatus.failed, errorMessage: dioError.message);
-      _updateState(newState);
+      _updateState(state.copyWith(
+        status: DomainsScreenStatus.failed,
+        errorMessage: AppStrings.somethingWentWrong,
+      ));
     }
   }
 
@@ -52,24 +60,28 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
           await domainService.updateDomainDescription(domainId, newDescription);
       NicheMethod.showToast(ToastMessage.editDescriptionSuccess);
       _updateState(state.copyWith(domain: updatedDomain));
-    } catch (error) {
-      final dioError = error as DioError;
+    } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
     }
   }
 
   Future<void> activateDomain(String domainId) async {
-    _updateState(state.copyWith(activeSwitchLoading: true));
     try {
+      _updateState(state.copyWith(activeSwitchLoading: true));
       final newDomain = await domainService.activateDomain(domainId);
-      final oldDomain = state.domain;
-      oldDomain.active = newDomain.active;
-      final newState =
-          state.copyWith(activeSwitchLoading: false, domain: oldDomain);
-      _updateState(newState);
-    } catch (error) {
-      final dioError = error as DioError;
+      final updatedDomain = state.domain.copyWith(active: newDomain.active);
+
+      _updateState(state.copyWith(
+        activeSwitchLoading: false,
+        domain: updatedDomain,
+      ));
+    } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(activeSwitchLoading: false));
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -78,14 +90,18 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     _updateState(state.copyWith(activeSwitchLoading: true));
     try {
       await domainService.deactivateDomain(domainId);
-      final oldDomain = state.domain;
-      oldDomain.active = false;
-      final newState =
-          state.copyWith(activeSwitchLoading: false, domain: oldDomain);
-      _updateState(newState);
-    } catch (error) {
-      final dioError = error as DioError;
+
+      final updatedDomain = state.domain.copyWith(active: false);
+
+      _updateState(state.copyWith(
+        activeSwitchLoading: false,
+        domain: updatedDomain,
+      ));
+    } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(activeSwitchLoading: false));
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -94,14 +110,18 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     _updateState(state.copyWith(catchAllSwitchLoading: true));
     try {
       final newDomain = await domainService.activateCatchAll(domainId);
-      final oldDomain = state.domain;
-      oldDomain.catchAll = newDomain.catchAll;
-      final newState =
-          state.copyWith(catchAllSwitchLoading: false, domain: oldDomain);
-      _updateState(newState);
-    } catch (error) {
-      final dioError = error as DioError;
+
+      final updatedDomain = state.domain.copyWith(catchAll: newDomain.catchAll);
+
+      _updateState(state.copyWith(
+        catchAllSwitchLoading: false,
+        domain: updatedDomain,
+      ));
+    } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(catchAllSwitchLoading: false));
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -110,32 +130,43 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     _updateState(state.copyWith(catchAllSwitchLoading: true));
     try {
       await domainService.deactivateCatchAll(domainId);
-      final oldDomain = state.domain;
-      oldDomain.catchAll = false;
-      final newState =
-          state.copyWith(catchAllSwitchLoading: false, domain: oldDomain);
-      _updateState(newState);
-    } catch (error) {
-      final dioError = error as DioError;
+
+      final updatedDomain = state.domain.copyWith(catchAll: false);
+
+      _updateState(state.copyWith(
+        catchAllSwitchLoading: false,
+        domain: updatedDomain,
+      ));
+    } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(catchAllSwitchLoading: false));
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
 
   Future<void> updateDomainDefaultRecipients(
       String domainId, String recipientId) async {
-    _updateState(state.copyWith(updateRecipientLoading: true));
     try {
-      final updatedDomain = await domainService.updateDomainDefaultRecipient(
+      _updateState(state.copyWith(updateRecipientLoading: true));
+      final newDomain = await domainService.updateDomainDefaultRecipient(
           domainId, recipientId);
-      state.domain!.defaultRecipient = updatedDomain.defaultRecipient;
+
       NicheMethod.showToast('Default recipient updated successfully!');
-      final newState =
-          state.copyWith(updateRecipientLoading: false, domain: state.domain);
-      _updateState(newState);
-    } catch (error) {
-      final dioError = error as DioError;
+
+      final updatedDomain =
+          state.domain.copyWith(defaultRecipient: newDomain.defaultRecipient);
+
+      _updateState(state.copyWith(
+        updateRecipientLoading: false,
+        domain: updatedDomain,
+      ));
+    } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(updateRecipientLoading: false));
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(updateRecipientLoading: false));
     }
   }
@@ -144,9 +175,10 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     try {
       await domainService.deleteDomain(domainId);
       NicheMethod.showToast('Domain deleted successfully!');
-    } catch (error) {
-      final dioError = error as DioError;
+    } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
     }
   }
 }
