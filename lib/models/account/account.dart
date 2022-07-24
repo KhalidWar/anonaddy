@@ -106,41 +106,72 @@ class Account {
   @JsonKey(name: 'updated_at')
   final String lastUpdated;
 
-  // static Account dummy() {
-  //   return Account.fromJson({
-  //     "id": "50c9e585-e7f5-41c4-9016-9014c15454bc",
-  //     "username": "johndoe",
-  //     "from_name": "John Doe",
-  //     "email_subject": "Private Subject",
-  //     "banner_location": "off",
-  //     "bandwidth": 10485760,
-  //     "username_count": 2,
-  //     "username_limit": 3,
-  //     "default_recipient_id": "46eebc50-f7f8-46d7-beb9-c37f04c29a84",
-  //     "default_alias_domain": "anonaddy.me",
-  //     "default_alias_format": "random_words",
-  //     "subscription": "free",
-  //     "subscription_ends_at": null,
-  //     "bandwidth_limit": 0,
-  //     "recipient_count": 12,
-  //     "recipient_limit": 20,
-  //     "active_domain_count": 4,
-  //     "active_domain_limit": 10,
-  //     "active_shared_domain_alias_count": 50,
-  //     "active_shared_domain_alias_limit": 0,
-  //     "total_emails_forwarded": 488,
-  //     "total_emails_blocked": 6,
-  //     "total_emails_replied": 95,
-  //     "total_emails_sent": 17,
-  //     "created_at": "2019-10-01 09:00:00",
-  //     "updated_at": "2019-10-01 09:00:00"
-  //   });
-  // }
+  static Account dummy() {
+    return Account.fromJson({});
+  }
 
   factory Account.fromJson(Map<String, dynamic> json) =>
       _$AccountFromJson(json);
 
   Map<String, dynamic> toJson() => _$AccountToJson(this);
+
+  Account copyWith({
+    String? id,
+    String? username,
+    String? fromName,
+    String? emailSubject,
+    String? bannerLocation,
+    int? bandwidth,
+    int? bandwidthLimit,
+    int? usernameCount,
+    int? usernameLimit,
+    String? defaultRecipientId,
+    String? defaultAliasDomain,
+    String? defaultAliasFormat,
+    String? subscription,
+    String? subscriptionEndAt,
+    int? recipientCount,
+    int? recipientLimit,
+    int? activeDomainCount,
+    int? activeDomainLimit,
+    int? aliasCount,
+    int? aliasLimit,
+    int? totalEmailsForwarded,
+    int? totalEmailsBlocked,
+    int? totalEmailsReplied,
+    int? totalEmailsSent,
+    String? createdAt,
+    String? lastUpdated,
+  }) {
+    return Account(
+      id: id ?? this.id,
+      username: username ?? this.username,
+      fromName: fromName ?? this.fromName,
+      emailSubject: emailSubject ?? this.emailSubject,
+      bannerLocation: bannerLocation ?? this.bannerLocation,
+      bandwidth: bandwidth ?? this.bandwidth,
+      bandwidthLimit: bandwidthLimit ?? this.bandwidthLimit,
+      usernameCount: usernameCount ?? this.usernameCount,
+      usernameLimit: usernameLimit ?? this.usernameLimit,
+      defaultRecipientId: defaultRecipientId ?? this.defaultRecipientId,
+      defaultAliasDomain: defaultAliasDomain ?? this.defaultAliasDomain,
+      defaultAliasFormat: defaultAliasFormat ?? this.defaultAliasFormat,
+      subscription: subscription ?? this.subscription,
+      subscriptionEndAt: subscriptionEndAt ?? this.subscriptionEndAt,
+      recipientCount: recipientCount ?? this.recipientCount,
+      recipientLimit: recipientLimit ?? this.recipientLimit,
+      activeDomainCount: activeDomainCount ?? this.activeDomainCount,
+      activeDomainLimit: activeDomainLimit ?? this.activeDomainLimit,
+      aliasCount: aliasCount ?? this.aliasCount,
+      aliasLimit: aliasLimit ?? this.aliasLimit,
+      totalEmailsForwarded: totalEmailsForwarded ?? this.totalEmailsForwarded,
+      totalEmailsBlocked: totalEmailsBlocked ?? this.totalEmailsBlocked,
+      totalEmailsReplied: totalEmailsReplied ?? this.totalEmailsReplied,
+      totalEmailsSent: totalEmailsSent ?? this.totalEmailsSent,
+      createdAt: createdAt ?? this.createdAt,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+    );
+  }
 
   @override
   String toString() {
