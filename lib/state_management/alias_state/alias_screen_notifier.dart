@@ -21,7 +21,8 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   AliasScreenNotifier({
     required this.aliasService,
     required this.aliasTabNotifier,
-  }) : super(AliasScreenState.initialState());
+    AliasScreenState? initialState,
+  }) : super(initialState ?? AliasScreenState.initialState());
 
   final AliasService aliasService;
   final AliasTabNotifier aliasTabNotifier;

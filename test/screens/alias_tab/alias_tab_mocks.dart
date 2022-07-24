@@ -50,19 +50,18 @@ class MockAliasService extends Mock implements AliasService {
 
   @override
   Future<Alias> getSpecificAlias(String aliasID) async {
-    if (aliasID == 'error') {
+    if (aliasID.isEmpty) {
       throw DioError(
         error: AppStrings.somethingWentWrong,
         type: DioErrorType.response,
         requestOptions: RequestOptions(path: 'error'),
       );
     }
-
-    return Alias.fromJson(AliasTestData.validAliasJson['data']);
+    return AliasTestData.validAliasWithRecipients();
   }
 }
 
-class _MockAliasTabNotifier extends Mock implements AliasTabNotifier {}
+class MockAliasTabNotifier extends Mock implements AliasTabNotifier {}
 
 class MockOfflineData extends Mock implements OfflineData {
   @override
