@@ -4,29 +4,9 @@ import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/state_management/alias_state/alias_state_export.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 
 import '../../test_data/alias_test_data.dart';
-
-final testAliasTabProvider =
-    StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {
-  return AliasTabNotifier(
-    aliasService: MockAliasService(),
-    offlineData: MockOfflineData(),
-    // state: AliasScreenState.initialState(),
-  );
-});
-
-final testAliasScreenProvider =
-    StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
-        (ref) {
-  return AliasScreenNotifier(
-    aliasService: MockAliasService(),
-    aliasTabNotifier: _MockAliasTabNotifier(),
-    // state: AliasScreenState.initialState(),
-  );
-});
 
 class MockAliasService extends Mock implements AliasService {
   @override
