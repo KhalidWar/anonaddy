@@ -30,7 +30,7 @@ void main() {
 
   group('Alias methods testing ', () {
     test('fromJson()', () async {
-      final alias = Alias.fromJson(AliasTestData.validAliasJson);
+      final alias = Alias.fromJson(AliasTestData.validAliasJson['data']);
 
       expect(alias, isA<Alias>());
       expect(alias.id, 'fd2258a0-9a40-4825-96c8-ed0f8c38a429');
