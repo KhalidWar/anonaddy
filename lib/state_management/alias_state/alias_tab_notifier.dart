@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:dio/dio.dart';
@@ -49,20 +50,23 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         deletedAliasList: _getDeletedAliases(aliases),
       );
       _updateState(newState);
-    } catch (error) {
-      final dioError = error as DioError;
-
+    } on DioError catch (dioError) {
       /// If offline, load offline data and exit.
       if (dioError.type == DioErrorType.other) {
         await loadOfflineState();
       } else {
-        final newState = state.copyWith(
+        _updateState(state.copyWith(
           status: AliasTabStatus.failed,
           errorMessage: dioError.message,
-        );
-        _updateState(newState);
+        ));
       }
 
+      await _retryOnError();
+    } catch (error) {
+      _updateState(state.copyWith(
+        status: AliasTabStatus.failed,
+        errorMessage: AppStrings.somethingWentWrong,
+      ));
       await _retryOnError();
     }
   }
@@ -83,9 +87,10 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         deletedAliasList: _getDeletedAliases(aliases),
       );
       _updateState(newState);
-    } catch (error) {
-      final dioError = error as DioError;
+    } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
     }
   }
 
