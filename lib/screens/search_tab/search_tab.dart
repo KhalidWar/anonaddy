@@ -154,7 +154,7 @@ class SearchTab extends StatelessWidget {
                   final alias = resultsList[index];
                   return InkWell(
                     child: IgnorePointer(
-                      child: AliasListTile(aliasData: alias),
+                      child: AliasListTile(alias: alias),
                     ),
                     onTap: () {
                       /// Dismisses keyboard

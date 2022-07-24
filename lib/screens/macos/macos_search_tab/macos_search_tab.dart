@@ -147,7 +147,7 @@ class _MacosSearchTabState extends State<MacosSearchTab> {
                 final alias = resultsList[index];
                 return InkWell(
                   child: IgnorePointer(
-                    child: AliasListTile(aliasData: alias),
+                    child: AliasListTile(alias: alias),
                   ),
                   onTap: () {
                     FocusScope.of(context).requestFocus(FocusNode());

@@ -90,7 +90,7 @@ class _MacosAliasesTabState extends State<MacosAliasesTab> {
                                     return AliasListTile(
                                       key: AliasTabWidgetKeys
                                           .aliasTabAvailableAliasListTile,
-                                      aliasData: availableAliasList[index],
+                                      alias: availableAliasList[index],
                                     );
                                   },
                                 );
@@ -104,7 +104,7 @@ class _MacosAliasesTabState extends State<MacosAliasesTab> {
                                   return AliasListTile(
                                     key: AliasTabWidgetKeys
                                         .aliasTabAvailableAliasListTile,
-                                    aliasData: deletedAliasList[index],
+                                    alias: deletedAliasList[index],
                                   );
                                 },
                               );
