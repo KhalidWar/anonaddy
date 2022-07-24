@@ -22,7 +22,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   AliasTabNotifier({
     required this.aliasService,
     required this.offlineData,
-  }) : super(AliasTabState.initialState());
+    AliasTabState? initialState,
+  }) : super(initialState ?? AliasTabState.initialState());
 
   final AliasService aliasService;
   final OfflineData offlineData;
@@ -33,10 +34,9 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   }
 
   Future<void> fetchAliases() async {
-    final newState = state.copyWith(status: AliasTabStatus.loading);
-    _updateState(newState);
-
     try {
+      _updateState(state.copyWith(status: AliasTabStatus.loading));
+
       final aliases = await aliasService.getAliases('with');
       await _saveOfflineData(aliases);
 
