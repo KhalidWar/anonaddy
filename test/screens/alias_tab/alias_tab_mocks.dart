@@ -11,7 +11,7 @@ import '../../test_data/alias_test_data.dart';
 class MockAliasService extends Mock implements AliasService {
   @override
   Future<List<Alias>> getAliases(String? deleted) async {
-    final availableAlias = Alias.fromJson(AliasTestData.validAliasJson);
+    final availableAlias = AliasTestData.validAliasWithRecipients();
 
     /// Generate a deleted alias by giving its [deletedAt] a value.
     final deletedAlias =
