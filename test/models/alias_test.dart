@@ -56,7 +56,7 @@ void main() {
       expect(updatedAlias.emailsForwarded, 42);
     });
 
-    test('copyWith()', () async {
+    test('toString()', () async {
       final alias = AliasTestData.defaultAlias();
       final stringAlias = alias.toString();
 
