@@ -30,7 +30,10 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
 
   /// Updates UI to the newest state
   void _updateState(AliasTabState newState) {
-    if (mounted) state = newState;
+    if (mounted) {
+      state = newState;
+      if (state.status == AliasTabStatus.loaded) _saveState();
+    }
   }
 
   Future<void> fetchAvailableAliases() async {
@@ -43,7 +46,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         status: AliasTabStatus.loaded,
         availableAliasList: aliases,
       ));
-      _saveState();
     } on DioError catch (dioError) {
       /// If offline, load offline data and exit.
       if (dioError.type == DioErrorType.other) {
@@ -74,7 +76,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         status: AliasTabStatus.loaded,
         deletedAliasList: aliases,
       ));
-      _saveState();
     } on DioError catch (dioError) {
       /// If offline, load offline data and exit.
       if (dioError.type == DioErrorType.other) {
@@ -103,7 +104,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         availableAliasList: availableAliases,
         deletedAliasList: deletedAliases,
       ));
-      _saveState();
     } on DioError catch (dioError) {
       NicheMethod.showToast(dioError.message);
     } catch (error) {
