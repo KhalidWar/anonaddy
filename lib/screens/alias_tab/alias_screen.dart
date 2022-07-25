@@ -151,13 +151,14 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           trailingIconData: Icons.edit_outlined,
           trailingIconOnPress: () => updateDescriptionDialog(context, alias),
         ),
-        AliasDetailListTile(
-          leadingIconData: Icons.check_circle_outline,
-          title: alias.extension,
-          subtitle: 'extension',
-          trailingIconData: Icons.edit_outlined,
-          trailingIconOnPress: () {},
-        ),
+        if (alias.extension.isNotEmpty)
+          AliasDetailListTile(
+            leadingIconData: Icons.check_circle_outline,
+            title: alias.extension,
+            subtitle: 'extension',
+            trailingIconData: Icons.edit_outlined,
+            trailingIconOnPress: () {},
+          ),
         AliasDetailListTile(
           leadingIconData:
               isAliasDeleted ? Icons.restore_outlined : Icons.delete_outline,
