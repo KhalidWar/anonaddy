@@ -32,12 +32,10 @@ void main() {
     'When no input and state is loading, '
     'Then AliasTab widgets load along with loading indicators.',
     (WidgetTester tester) async {
-      final loadingState = AliasTabState(
+      const loadingState = AliasTabState(
         status: AliasTabStatus.loading,
-        aliases: <Alias>[],
         errorMessage: '',
         availableAliasList: <Alias>[],
-        availableListKey: GlobalKey<AnimatedListState>(),
         deletedAliasList: <Alias>[],
       );
 
@@ -77,12 +75,10 @@ void main() {
     'When no input and state is loaded, '
     'Then AliasTab widgets load and show list of aliases.',
     (WidgetTester tester) async {
-      final loadedState = AliasTabState(
+      const loadedState = AliasTabState(
         status: AliasTabStatus.loaded,
-        aliases: <Alias>[],
         errorMessage: '',
         availableAliasList: <Alias>[],
-        availableListKey: GlobalKey<AnimatedListState>(),
         deletedAliasList: <Alias>[],
       );
 
@@ -119,7 +115,7 @@ void main() {
       expect(deletedAliasesTab, findsOneWidget);
       expect(tabBarView, findsOneWidget);
       expect(availableAliasesLoading, findsNothing);
-      expect(availableAliases, findsNWidgets(1));
+      expect(availableAliases, findsNWidgets(4));
       expect(deletedAliases, findsNothing);
     },
   );
@@ -129,17 +125,16 @@ void main() {
   //   'When no input and state is error, '
   //   'Then AliasTab error widget.',
   //   (WidgetTester tester) async {
-  //     final errorState = AliasTabState(
+  //     const errorState = AliasTabState(
   //       status: AliasTabStatus.failed,
   //       errorMessage: AppStrings.somethingWentWrong,
-  //       aliases: <Alias>[],
-  //       availableListKey: GlobalKey<AnimatedListState>(),
   //       availableAliasList: <Alias>[],
   //       deletedAliasList: <Alias>[],
   //     );
   //
   //     // Arrange
   //     await tester.pumpWidget(aliasTab(errorState));
+  //     await tester.pumpAndSettle();
   //     await tester.pumpAndSettle();
   //
   //     // Act
@@ -165,7 +160,7 @@ void main() {
   //     expect(pieChart, findsOneWidget);
   //     expect(tapBar, findsOneWidget);
   //     expect(availableAliasesTab, findsOneWidget);
-  //     expect(deletedAliasesTab, findsOneWidget);
+  //     // expect(deletedAliasesTab, findsOneWidget);
   //     expect(tabBarView, findsOneWidget);
   //     expect(availableAliasesLoading, findsNothing);
   //     expect(errorWidget, findsOneWidget);

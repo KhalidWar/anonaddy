@@ -2,7 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/state_management/alias_state/alias_state_export.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:mockito/mockito.dart';
 
@@ -10,22 +10,17 @@ import '../../test_data/alias_test_data.dart';
 
 class MockAliasService extends Mock implements AliasService {
   @override
-  Future<List<Alias>> getAliases(String? deleted) async {
+  Future<List<Alias>> getAvailableAliases() async {
     final availableAlias = AliasTestData.validAliasWithRecipients();
+    return [availableAlias, availableAlias, availableAlias, availableAlias];
+  }
 
-    /// Generate a deleted alias by giving its [deletedAt] a value.
+  @override
+  Future<List<Alias>> getDeletedAliases() async {
+    final availableAlias = AliasTestData.validAliasWithRecipients();
     final deletedAlias =
         availableAlias.copyWith(deletedAt: '2022-02-22 18:08:15');
-
-    /// When fetchMoreAliases() is called to fetch mixed aliases
-    if (deleted == 'with') return [availableAlias, deletedAlias];
-
-    /// When fetchMoreAliases() is called to only fetch deleted aliases
-    if (deleted == 'only') return [deletedAlias, deletedAlias];
-
-    /// When fetchMoreAliases() is called to only fetch available aliases
-    /// which is the default behavior.
-    return [availableAlias, availableAlias, availableAlias, availableAlias];
+    return [deletedAlias, deletedAlias, deletedAlias, deletedAlias];
   }
 
   @override
