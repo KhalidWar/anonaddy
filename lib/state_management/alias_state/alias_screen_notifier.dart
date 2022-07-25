@@ -107,13 +107,13 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     }
   }
 
-  Future<void> deleteAlias(String aliasId) async {
+  Future<void> deleteAlias(Alias alias) async {
     try {
       _updateState(state.copyWith(deleteAliasLoading: true));
-      await aliasService.deleteAlias(aliasId);
+      await aliasService.deleteAlias(alias.id);
       NicheMethod.showToast(ToastMessage.deleteAliasSuccess);
       final updatedAlias = state.alias.copyWith(deletedAt: '');
-      aliasTabNotifier.refreshAliases();
+      aliasTabNotifier.deleteAlias(alias);
 
       final newState =
           state.copyWith(deleteAliasLoading: false, alias: updatedAlias);
@@ -127,12 +127,12 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     }
   }
 
-  Future<void> restoreAlias(String aliasId) async {
+  Future<void> restoreAlias(Alias alias) async {
     try {
       _updateState(state.copyWith(deleteAliasLoading: true));
-      final newAlias = await aliasService.restoreAlias(aliasId);
+      final newAlias = await aliasService.restoreAlias(alias.id);
       NicheMethod.showToast(ToastMessage.restoreAliasSuccess);
-      aliasTabNotifier.refreshAliases();
+      aliasTabNotifier.restoreAlias(alias);
 
       final newState =
           state.copyWith(deleteAliasLoading: false, alias: newAlias);

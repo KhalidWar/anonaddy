@@ -295,10 +295,10 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           isDeleted
               ? await ref
                   .read(aliasScreenStateNotifier.notifier)
-                  .restoreAlias(alias.id)
+                  .restoreAlias(alias)
               : await ref
                   .read(aliasScreenStateNotifier.notifier)
-                  .deleteAlias(alias.id);
+                  .deleteAlias(alias);
 
           /// Dismisses [AliasScreen] if [alias] is deleted
           if (!isDeleted && mounted) Navigator.pop(context);

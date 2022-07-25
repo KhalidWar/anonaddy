@@ -1,5 +1,4 @@
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 enum AliasTabStatus { loading, loaded, failed }
@@ -11,25 +10,21 @@ class AliasTabState {
     required this.errorMessage,
     required this.availableAliasList,
     required this.deletedAliasList,
-    required this.availableListKey,
   });
 
   final AliasTabStatus status;
   final List<Alias> aliases;
   final String errorMessage;
-
   final List<Alias> availableAliasList;
-  final GlobalKey<AnimatedListState> availableListKey;
   final List<Alias> deletedAliasList;
 
   static AliasTabState initialState() {
-    return AliasTabState(
+    return const AliasTabState(
       status: AliasTabStatus.loading,
-      aliases: const <Alias>[],
-      errorMessage: AppStrings.somethingWentWrong,
-      availableAliasList: const <Alias>[],
-      availableListKey: GlobalKey<AnimatedListState>(),
-      deletedAliasList: const <Alias>[],
+      aliases: <Alias>[],
+      errorMessage: '',
+      availableAliasList: <Alias>[],
+      deletedAliasList: <Alias>[],
     );
   }
 
@@ -46,13 +41,36 @@ class AliasTabState {
       aliases: aliases ?? this.aliases,
       errorMessage: errorMessage ?? this.errorMessage,
       availableAliasList: availableAliasList ?? this.availableAliasList,
-      availableListKey: availableListKey ?? this.availableListKey,
       deletedAliasList: deletedAliasList ?? this.deletedAliasList,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'status': status.index,
+      'aliases': aliases,
+      'errorMessage': errorMessage,
+      'availableAliasList': availableAliasList,
+      'deletedAliasList': deletedAliasList,
+    };
+  }
+
+  factory AliasTabState.fromMap(Map<String, dynamic> map) {
+    List<Alias> convertMaps(List<dynamic> list) {
+      return list.map((alias) => Alias.fromJson(alias)).toList();
+    }
+
+    return AliasTabState(
+      status: AliasTabStatus.values[map['status']],
+      aliases: convertMaps(map['aliases']),
+      errorMessage: map['errorMessage'] as String,
+      availableAliasList: convertMaps(map['availableAliasList']),
+      deletedAliasList: convertMaps(map['deletedAliasList']),
     );
   }
 
   @override
   String toString() {
-    return 'AliasTabState{status: $status, aliases: $aliases, errorMessage: $errorMessage, availableAliasList: $availableAliasList, availableListKey: $availableListKey, deletedAliasList: $deletedAliasList}';
+    return 'AliasTabState{status: $status, aliases: $aliases, errorMessage: $errorMessage, availableAliasList: $availableAliasList, deletedAliasList: $deletedAliasList}';
   }
 }

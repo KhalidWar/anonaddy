@@ -45,10 +45,10 @@ class MockAliasTabNotifier extends Mock implements AliasTabNotifier {}
 
 class MockOfflineData extends Mock implements OfflineData {
   @override
-  Future<String> readAliasOfflineData() async {
+  Future<String> loadAliasTabState() async {
     return '';
   }
 
   @override
-  Future<void> writeAliasOfflineData(String data) async {}
+  Future<void> saveAliasTabState(String data) async {}
 }

@@ -12,11 +12,11 @@ class OfflineData {
   OfflineData(this.secureStorage);
   final FlutterSecureStorage secureStorage;
 
-  Future<void> writeAliasOfflineData(String data) async {
+  Future<void> saveAliasTabState(String data) async {
     await secureStorage.write(key: OfflineDataKey.aliases, value: data);
   }
 
-  Future<String> readAliasOfflineData() async {
+  Future<String> loadAliasTabState() async {
     final aliasData =
         await secureStorage.read(key: OfflineDataKey.aliases) ?? '';
     return aliasData;

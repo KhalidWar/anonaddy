@@ -32,8 +32,9 @@ class _MacHomeScreenState extends ConsumerState<MacosScreen> {
   initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(aliasTabStateNotifier.notifier).loadOfflineState();
-      ref.read(aliasTabStateNotifier.notifier).fetchAliases();
+      ref.read(aliasTabStateNotifier.notifier).loadState();
+      ref.read(aliasTabStateNotifier.notifier).fetchAvailableAliases();
+      ref.read(aliasTabStateNotifier.notifier).fetchDeletedAliases();
     });
   }
 

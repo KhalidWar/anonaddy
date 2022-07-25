@@ -46,7 +46,7 @@ class AliasService {
       const path = '$kUnEncodedBaseURL/$kAliasesURL';
       final params = {'deleted': 'only'};
       final response = await dio.get(path, queryParameters: params);
-      log('getAllAliases: ${response.statusCode}');
+      log('getDeletedAliases: ${response.statusCode}');
       final aliases = response.data['data'] as List;
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
     } catch (e) {
