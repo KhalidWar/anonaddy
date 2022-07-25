@@ -6,14 +6,12 @@ enum AliasTabStatus { loading, loaded, failed }
 class AliasTabState {
   const AliasTabState({
     required this.status,
-    required this.aliases,
     required this.errorMessage,
     required this.availableAliasList,
     required this.deletedAliasList,
   });
 
   final AliasTabStatus status;
-  final List<Alias> aliases;
   final String errorMessage;
   final List<Alias> availableAliasList;
   final List<Alias> deletedAliasList;
@@ -21,7 +19,6 @@ class AliasTabState {
   static AliasTabState initialState() {
     return const AliasTabState(
       status: AliasTabStatus.loading,
-      aliases: <Alias>[],
       errorMessage: '',
       availableAliasList: <Alias>[],
       deletedAliasList: <Alias>[],
@@ -38,7 +35,6 @@ class AliasTabState {
   }) {
     return AliasTabState(
       status: status ?? this.status,
-      aliases: aliases ?? this.aliases,
       errorMessage: errorMessage ?? this.errorMessage,
       availableAliasList: availableAliasList ?? this.availableAliasList,
       deletedAliasList: deletedAliasList ?? this.deletedAliasList,
@@ -48,7 +44,6 @@ class AliasTabState {
   Map<String, dynamic> toMap() {
     return {
       'status': status.index,
-      'aliases': aliases,
       'errorMessage': errorMessage,
       'availableAliasList': availableAliasList,
       'deletedAliasList': deletedAliasList,
@@ -62,7 +57,6 @@ class AliasTabState {
 
     return AliasTabState(
       status: AliasTabStatus.values[map['status']],
-      aliases: convertMaps(map['aliases']),
       errorMessage: map['errorMessage'] as String,
       availableAliasList: convertMaps(map['availableAliasList']),
       deletedAliasList: convertMaps(map['deletedAliasList']),
@@ -71,6 +65,6 @@ class AliasTabState {
 
   @override
   String toString() {
-    return 'AliasTabState{status: $status, aliases: $aliases, errorMessage: $errorMessage, availableAliasList: $availableAliasList, deletedAliasList: $deletedAliasList}';
+    return 'AliasTabState{status: $status, errorMessage: $errorMessage, availableAliasList: $availableAliasList, deletedAliasList: $deletedAliasList}';
   }
 }
