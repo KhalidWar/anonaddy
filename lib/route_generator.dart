@@ -13,6 +13,7 @@ import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/screens/navigation_error/navigation_error_screen.dart';
+import 'package:anonaddy/screens/search_tab/quick_search_screen.dart';
 import 'package:anonaddy/screens/settings_screen/about_app_screen.dart';
 import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
@@ -35,6 +36,8 @@ class RouteGenerator {
         return PlatformAware.customPageRoute(const HomeScreen());
       case AlertCenterScreen.routeName:
         return PlatformAware.customPageRoute(const AlertCenterScreen());
+      case QuickSearchScreen.routeName:
+        return PlatformAware.customPageRoute(const QuickSearchScreen());
 
       /// Settings Screen
       case SettingsScreen.routeName:

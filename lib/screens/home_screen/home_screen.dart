@@ -123,6 +123,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
       ),
       actions: [
+        // IconButton(
+        //   key: const Key('homeScreenQuickSearchTrailing'),
+        //   tooltip: AppStrings.settings,
+        //   icon: const Icon(
+        //     Icons.search,
+        //     color: Colors.white,
+        //   ),
+        //   onPressed: () {
+        //     Navigator.pushNamed(context, QuickSearchScreen.routeName);
+        //   },
+        // ),
         IconButton(
           key: const Key('homeScreenAppBarTrailing'),
           tooltip: AppStrings.settings,
