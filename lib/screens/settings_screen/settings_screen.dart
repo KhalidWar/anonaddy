@@ -12,7 +12,7 @@ import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsScreen extends ConsumerStatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({
     Key? key,
   }) : super(key: key);
@@ -20,12 +20,7 @@ class SettingsScreen extends ConsumerStatefulWidget {
   static const routeName = 'settingsScreen';
 
   @override
-  ConsumerState createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends ConsumerState<SettingsScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     final settingsState = ref.watch(settingsStateNotifier);
