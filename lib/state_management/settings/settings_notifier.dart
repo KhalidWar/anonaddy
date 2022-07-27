@@ -1,41 +1,79 @@
-import 'package:anonaddy/state_management/settings/settings_data_storage.dart';
+import 'dart:convert';
+
+import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/settings/settings_state.dart';
+import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final settingsStateNotifier =
     StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
-  final storage = ref.read(settingsDataStorageProvider);
-  return SettingsNotifier(settingsStorage: storage);
+  return SettingsNotifier(
+    offlineData: ref.read(offlineDataProvider),
+  );
 });
 
 class SettingsNotifier extends StateNotifier<SettingsState> {
-  SettingsNotifier({required this.settingsStorage})
-      : super(SettingsState.initial()) {
-    _initState();
+  SettingsNotifier({
+    required this.offlineData,
+    SettingsState? initialState,
+  }) : super(initialState ?? SettingsState.initial());
+
+  final OfflineData offlineData;
+
+  void _updateState(SettingsState newState) {
+    if (mounted) {
+      state = newState;
+      _saveSettingsState();
+    }
   }
 
-  final SettingsDataStorage settingsStorage;
-
-  final _autoCopyKey = 'autoCopyKey';
-  final _darkThemeKey = 'darkTheme';
-
-  Future<void> toggleTheme() async {
-    state.isDarkTheme = !state.isDarkTheme!;
-    await settingsStorage.saveBoolState(_darkThemeKey, state.isDarkTheme!);
-    state = state.copyWith();
+  void toggleTheme() {
+    try {
+      _updateState(state.copyWith(isDarkTheme: !state.isDarkTheme));
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
+    }
   }
 
   void toggleAutoCopy() {
-    state.isAutoCopy = !state.isAutoCopy!;
-    settingsStorage.saveBoolState(_autoCopyKey, state.isAutoCopy!);
-    state = state.copyWith();
+    try {
+      _updateState(state.copyWith(isAutoCopyEnabled: !state.isAutoCopyEnabled));
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
+    }
   }
 
-  void _initState() async {
-    final bool isDarkTheme =
-        await settingsStorage.loadBoolState(_darkThemeKey) ?? false;
-    final bool isAutoCopy =
-        await settingsStorage.loadBoolState(_autoCopyKey) ?? false;
-    state = state.copyWith(isDarkTheme: isDarkTheme, isAutoCopy: isAutoCopy);
+  void toggleBiometric() {
+    try {
+      _updateState(
+        state.copyWith(isBiometricEnabled: !state.isBiometricEnabled),
+      );
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
+    }
+  }
+
+  Future<void> _saveSettingsState() async {
+    try {
+      final mappedState = state.toMap();
+      final encodedState = json.encode(mappedState);
+      await offlineData.saveSettingsState(encodedState);
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
+    }
+  }
+
+  Future<void> loadSettingsState() async {
+    try {
+      final securedData = await offlineData.loadSettingsState();
+      if (securedData.isNotEmpty) {
+        final mappedState = json.decode(securedData);
+        final storedState = SettingsState.fromMap(mappedState);
+        _updateState(storedState);
+      }
+    } catch (error) {
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
+    }
   }
 }

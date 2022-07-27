@@ -12,11 +12,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
-class App extends ConsumerWidget {
-  const App({Key? key}) : super(key: key);
+class App extends ConsumerStatefulWidget {
+  const App({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _AppState();
+}
+
+class _AppState extends ConsumerState<App> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(settingsStateNotifier.notifier).loadSettingsState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     /// Use [watch] method to access different providers
     final settingsState = ref.watch(settingsStateNotifier);
 
@@ -29,7 +42,7 @@ class App extends ConsumerWidget {
       return MacosApp(
         title: AppStrings.appName,
         debugShowCheckedModeBanner: false,
-        theme: settingsState.isDarkTheme!
+        theme: settingsState.isDarkTheme
             ? AppTheme.macOSThemeDark
             : AppTheme.macOSThemeLight,
         darkTheme: AppTheme.macOSThemeDark,
@@ -48,7 +61,7 @@ class App extends ConsumerWidget {
     return MaterialApp(
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
-      theme: settingsState.isDarkTheme! ? AppTheme.dark : AppTheme.light,
+      theme: settingsState.isDarkTheme ? AppTheme.dark : AppTheme.light,
       darkTheme: AppTheme.dark,
       onGenerateRoute: RouteGenerator.generateRoute,
       initialRoute: AuthorizationScreen.routeName,

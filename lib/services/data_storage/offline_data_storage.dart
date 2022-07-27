@@ -81,4 +81,22 @@ class OfflineData {
         await secureStorage.read(key: OfflineDataKey.rules) ?? '';
     return domainData;
   }
+
+  Future<void> saveSettingsState(String data) async {
+    try {
+      await secureStorage.write(key: OfflineDataKey.settings, value: data);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<String> loadSettingsState() async {
+    try {
+      final aliasData =
+          await secureStorage.read(key: OfflineDataKey.settings) ?? '';
+      return aliasData;
+    } catch (error) {
+      rethrow;
+    }
+  }
 }
