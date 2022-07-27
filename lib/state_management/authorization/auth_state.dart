@@ -1,5 +1,4 @@
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 /// Manages user flow status
 enum AuthorizationStatus {
@@ -50,7 +49,7 @@ class AuthState {
       authorizationStatus: AuthorizationStatus.unknown,
       authenticationStatus: AuthenticationStatus.unavailable,
       loginLoading: false,
-      errorMessage: AppStrings.somethingWentWrong,
+      errorMessage: '',
     );
   }
 
