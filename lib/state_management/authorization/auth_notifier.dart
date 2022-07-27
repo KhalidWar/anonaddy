@@ -26,7 +26,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required this.biometricService,
     required this.tokenService,
     required this.searchHistory,
-  }) : super(AuthState.initialState());
+    AuthState? initialState,
+  }) : super(initialState ?? AuthState.initialState());
 
   final FlutterSecureStorage secureStorage;
   final BiometricAuthService biometricService;
@@ -115,7 +116,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> initAuth() async {
     try {
       final isLoginValid = await _validateLoginCredential();
-      // final canCheck = await biometricService.doesPlatformSupportAuth();
       final authStatus = await _getBioAuthState();
 
       if (isLoginValid) {
@@ -137,7 +137,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       /// Authenticate user regardless of error.
       /// This is a temp solution until I'm able to handle different errors.
       _updateState(
-        state.copyWith(authorizationStatus: AuthorizationStatus.authorized),
+        state.copyWith(
+          authorizationStatus: AuthorizationStatus.anonAddyLogin,
+        ),
       );
     }
   }
@@ -172,7 +174,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           ? AuthenticationStatus.enabled
           : AuthenticationStatus.disabled;
     } catch (error) {
-      rethrow;
+      return AuthenticationStatus.disabled;
     }
   }
 }
