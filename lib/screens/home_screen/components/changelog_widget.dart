@@ -101,10 +101,13 @@ class ChangelogWidget extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
-            header('Improved', Colors.blue),
-            label('1. Several under the hood improvements.'),
+            header('Fixed', Colors.blue),
+            label('1. Duplicate aliases.'),
             label('2. Minor bug fixes.'),
-            label('3. Minor UI tweaks.'),
+
+            header('Improved', Colors.orange),
+            label('1. Several under the hood improvements.'),
+            label('2. Minor UI tweaks.'),
             // label('2. Fixed self-hosted recipient/username count errors.'),
             // SizedBox(height: size.height * 0.008),
             // header('Added', Colors.green),
