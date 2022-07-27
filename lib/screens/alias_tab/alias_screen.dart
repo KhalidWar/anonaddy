@@ -8,7 +8,9 @@ import 'package:anonaddy/shared_components/list_tiles/list_tiles_exports.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_exports.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
-import 'package:anonaddy/state_management/alias_state/alias_state_export.dart';
+import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
+import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
+import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/utilities/utilities_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,18 +76,18 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   }
 
   Widget buildListView(BuildContext context, AliasScreenState aliasState) {
-    final alias = aliasState.alias!;
-    final isToggleLoading = aliasState.isToggleLoading!;
-    final deleteAliasLoading = aliasState.deleteAliasLoading!;
+    final alias = aliasState.alias;
+    final isToggleLoading = aliasState.isToggleLoading;
+    final deleteAliasLoading = aliasState.deleteAliasLoading;
     final size = MediaQuery.of(context).size;
 
-    final isAliasDeleted = alias.deletedAt != null;
+    final isAliasDeleted = alias.deletedAt.isNotEmpty;
 
     return ListView(
       key: AliasTabWidgetKeys.aliasScreenBodyListView,
       physics: const ClampingScrollPhysics(),
       children: [
-        if (aliasState.isOffline!) const OfflineBanner(),
+        if (aliasState.isOffline) const OfflineBanner(),
         AliasScreenPieChart(
           emailsForwarded: alias.emailsForwarded,
           emailsBlocked: alias.emailsBlocked,
@@ -142,18 +144,21 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         ),
         AliasDetailListTile(
           leadingIconData: Icons.comment_outlined,
-          title: alias.description ?? AppStrings.noDescription,
+          title: alias.description.isEmpty
+              ? AppStrings.noDescription
+              : alias.description,
           subtitle: AppStrings.description,
           trailingIconData: Icons.edit_outlined,
           trailingIconOnPress: () => updateDescriptionDialog(context, alias),
         ),
-        AliasDetailListTile(
-          leadingIconData: Icons.check_circle_outline,
-          title: alias.extension,
-          subtitle: 'extension',
-          trailingIconData: Icons.edit_outlined,
-          trailingIconOnPress: () {},
-        ),
+        if (alias.extension.isNotEmpty)
+          AliasDetailListTile(
+            leadingIconData: Icons.check_circle_outline,
+            title: alias.extension,
+            subtitle: 'extension',
+            trailingIconData: Icons.edit_outlined,
+            trailingIconOnPress: () {},
+          ),
         AliasDetailListTile(
           leadingIconData:
               isAliasDeleted ? Icons.restore_outlined : Icons.delete_outline,
@@ -175,69 +180,66 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           trailingIconOnPress: () =>
               buildDeleteOrRestoreAliasDialog(context, alias),
         ),
-        if (alias.recipients == null)
-          Container()
-        else
-          Column(
-            children: [
-              Divider(height: size.height * 0.01),
-              Padding(
+        Column(
+          children: [
+            Divider(height: size.height * 0.01),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Default Recipient${alias.recipients.length >= 2 ? 's' : ''}',
+                    key: AliasTabWidgetKeys.aliasScreenDefaultRecipient,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.edit_outlined),
+                    onPressed: () =>
+                        buildUpdateDefaultRecipient(context, alias),
+                  ),
+                ],
+              ),
+            ),
+            if (alias.recipients.isNotEmpty)
+              Container(
+                alignment: Alignment.centerLeft,
                 padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
                     Text(
-                      'Default Recipient${alias.recipients!.length >= 2 ? 's' : ''}',
-                      key: AliasTabWidgetKeys.aliasScreenDefaultRecipient,
-                      style: Theme.of(context).textTheme.headline6,
+                      'To manage recipients, go to Recipients under Account tab.',
+                      style: Theme.of(context).textTheme.caption,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.edit_outlined),
-                      onPressed: () =>
-                          buildUpdateDefaultRecipient(context, alias),
-                    ),
+                    SizedBox(height: size.height * 0.01),
                   ],
                 ),
               ),
-              if (alias.recipients!.isNotEmpty)
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Column(
-                    children: [
-                      Text(
-                        'To manage recipients, go to Recipients under Account tab.',
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                      SizedBox(height: size.height * 0.01),
-                    ],
-                  ),
+            if (alias.recipients.isEmpty)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                child: Row(
+                  children: const [
+                    Text(AppStrings.noDefaultRecipientSet),
+                  ],
                 ),
-              if (alias.recipients!.isEmpty)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: Row(
-                    children: const [
-                      Text(AppStrings.noDefaultRecipientSet),
-                    ],
-                  ),
-                )
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: alias.recipients!.length,
-                  itemBuilder: (context, index) {
-                    final recipients = alias.recipients;
-                    return IgnorePointer(
-                      child: RecipientListTile(
-                        recipient: recipients![index],
-                      ),
-                    );
-                  },
-                ),
-            ],
-          ),
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: alias.recipients.length,
+                itemBuilder: (context, index) {
+                  final recipients = alias.recipients;
+                  return IgnorePointer(
+                    child: RecipientListTile(
+                      recipient: recipients[index],
+                    ),
+                  );
+                },
+              ),
+          ],
+        ),
         Divider(height: size.height * 0.03),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -246,14 +248,14 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               label: 'Created:',
               dateTime: alias.createdAt,
             ),
-            alias.deletedAt == null
+            alias.deletedAt.isEmpty
                 ? AliasCreatedAtWidget(
                     label: 'Updated:',
                     dateTime: alias.updatedAt,
                   )
                 : AliasCreatedAtWidget(
                     label: 'Deleted:',
-                    dateTime: alias.deletedAt!,
+                    dateTime: alias.deletedAt,
                   ),
           ],
         ),
@@ -278,7 +280,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   }
 
   void buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
-    final isDeleted = alias.deletedAt != null;
+    final isDeleted = alias.deletedAt.isNotEmpty;
 
     /// Display platform appropriate dialog
     PlatformAware.platformDialog(
@@ -296,13 +298,13 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           isDeleted
               ? await ref
                   .read(aliasScreenStateNotifier.notifier)
-                  .restoreAlias(alias.id)
+                  .restoreAlias(alias)
               : await ref
                   .read(aliasScreenStateNotifier.notifier)
-                  .deleteAlias(alias.id);
+                  .deleteAlias(alias);
 
           /// Dismisses [AliasScreen] if [alias] is deleted
-          if (!isDeleted) Navigator.pop(context);
+          if (!isDeleted && mounted) Navigator.pop(context);
         },
       ),
     );
@@ -317,7 +319,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         await ref
             .read(aliasScreenStateNotifier.notifier)
             .sendFromAlias(alias.email, destinationEmail);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
@@ -405,13 +407,13 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     Future<void> updateDescription() async {
       if (descriptionFormKey.currentState!.validate()) {
         await aliasScreenNotifier.editDescription(alias, newDescription);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
     Future<void> removeDescription() async {
       await aliasScreenNotifier.editDescription(alias, '');
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
 
     return showModalBottomSheet(
@@ -448,10 +450,10 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             ref.read(aliasTabStateNotifier.notifier).refreshAliases();
 
             /// Dismisses [platformDialog]
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
 
             /// Dismisses [AliasScreen] after forgetting [alias]
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
           },
         ),
       );

@@ -47,7 +47,7 @@ class _SearchHistoryState extends ConsumerState<SearchHistory> {
                 itemCount: aliases.length,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return AliasListTile(aliasData: aliases[index]);
+                  return AliasListTile(alias: aliases[index]);
                 },
               ),
             ),

@@ -9,13 +9,21 @@ extension Shortcuts on RecipientTabStatus {
 class RecipientTabState {
   const RecipientTabState({
     required this.status,
-    this.recipients,
-    this.errorMessage,
+    required this.recipients,
+    required this.errorMessage,
   });
 
   final RecipientTabStatus status;
-  final List<Recipient>? recipients;
-  final String? errorMessage;
+  final List<Recipient> recipients;
+  final String errorMessage;
+
+  static RecipientTabState initialState() {
+    return const RecipientTabState(
+      status: RecipientTabStatus.loading,
+      recipients: <Recipient>[],
+      errorMessage: '',
+    );
+  }
 
   RecipientTabState copyWith({
     RecipientTabStatus? status,

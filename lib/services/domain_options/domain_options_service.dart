@@ -19,7 +19,7 @@ class DomainOptionsService {
     try {
       const path = '$kUnEncodedBaseURL/$kDomainsOptionsURL';
       final response = await dio.get(path);
-      log('getDomainOptions: ' + response.statusCode.toString());
+      log('getDomainOptions: ${response.statusCode}');
       return DomainOptions.fromJson(response.data);
     } catch (e) {
       rethrow;

@@ -71,7 +71,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               return buildListView(context, recipientScreenState);
 
             case RecipientScreenStatus.failed:
-              final error = recipientScreenState.errorMessage!;
+              final error = recipientScreenState.errorMessage;
               return LottieWidget(
                 lottie: LottieImages.errorCone,
                 label: error,
@@ -84,7 +84,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
 
   Widget buildListView(
       BuildContext context, RecipientScreenState recipientScreenState) {
-    final recipient = recipientScreenState.recipient!;
+    final recipient = recipientScreenState.recipient;
 
     final recipientProvider = ref.read(recipientScreenStateNotifier.notifier);
     final size = MediaQuery.of(context).size;
@@ -94,8 +94,8 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     final List<int> repliedList = [];
     final List<int> sentList = [];
 
-    if (recipient.aliases != null) {
-      for (Alias alias in recipient.aliases!) {
+    if (recipient.aliases.isNotEmpty) {
+      for (Alias alias in recipient.aliases) {
         forwardedList.add(alias.emailsForwarded);
         blockedList.add(alias.emailsBlocked);
         repliedList.add(alias.emailsReplied);
@@ -112,8 +112,8 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     return ListView(
       physics: const ClampingScrollPhysics(),
       children: [
-        if (recipientScreenState.isOffline!) const OfflineBanner(),
-        if (recipient.aliases == null || recipient.emailVerifiedAt == null)
+        if (recipientScreenState.isOffline) const OfflineBanner(),
+        if (recipient.aliases.isEmpty || recipient.emailVerifiedAt.isEmpty)
           Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: 40),
@@ -143,11 +143,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
         ),
         AliasDetailListTile(
           leadingIconData: Icons.fingerprint_outlined,
-          title: recipient.fingerprint == null
+          title: recipient.fingerprint.isEmpty
               ? 'No fingerprint found'
-              : '${recipient.fingerprint}',
+              : recipient.fingerprint,
           subtitle: 'GPG Key Fingerprint',
-          trailing: recipient.fingerprint == null
+          trailing: recipient.fingerprint.isEmpty
               ? IconButton(
                   icon: const Icon(Icons.add_circle_outline_outlined),
                   onPressed: () {})
@@ -155,7 +155,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   icon: const Icon(Icons.delete_outline_outlined,
                       color: Colors.red),
                   onPressed: () {}),
-          trailingIconOnPress: recipient.fingerprint == null
+          trailingIconOnPress: recipient.fingerprint.isEmpty
               ? () => buildAddPGPKeyDialog(context, recipient)
               : () => buildRemovePGPKeyDialog(context, recipient),
         ),
@@ -165,16 +165,16 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           leadingIconColor: recipient.shouldEncrypt ? Colors.green : null,
           title: recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted',
           subtitle: 'Encryption',
-          trailing: recipient.fingerprint == null
+          trailing: recipient.fingerprint.isEmpty
               ? Container()
               : buildSwitch(recipientScreenState),
           trailingIconOnPress:
-              recipient.fingerprint == null ? null : () => toggleEncryption(),
+              recipient.fingerprint.isEmpty ? null : () => toggleEncryption(),
         ),
-        recipient.emailVerifiedAt == null
+        recipient.emailVerifiedAt.isEmpty
             ? AliasDetailListTile(
                 leadingIconData: Icons.verified_outlined,
-                title: recipient.emailVerifiedAt == null ? 'No' : 'Yes',
+                title: recipient.emailVerifiedAt.isEmpty ? 'No' : 'Yes',
                 subtitle: 'Is Email Verified?',
                 trailing: TextButton(
                   child: const Text('Verify now!'),
@@ -184,9 +184,9 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     recipientProvider.resendVerificationEmail(recipient),
               )
             : Container(),
-        if (recipient.aliases == null)
+        if (recipient.aliases.isEmpty)
           Container()
-        else if (recipient.emailVerifiedAt == null)
+        else if (recipient.emailVerifiedAt.isEmpty)
           buildUnverifiedEmailWarning(size)
         else
           Column(
@@ -199,7 +199,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     style: Theme.of(context).textTheme.headline6),
               ),
               SizedBox(height: size.height * 0.01),
-              if (recipient.aliases!.isEmpty)
+              if (recipient.aliases.isEmpty)
                 Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -208,10 +208,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: recipient.aliases!.length,
+                  itemCount: recipient.aliases.length,
                   itemBuilder: (context, index) {
                     return AliasListTile(
-                      aliasData: recipient.aliases![index],
+                      alias: recipient.aliases[index],
                     );
                   },
                 ),
@@ -223,11 +223,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           children: [
             AliasCreatedAtWidget(
               label: 'Created:',
-              dateTime: recipient.createdAt,
+              dateTime: recipient.createdAt.toString(),
             ),
             AliasCreatedAtWidget(
               label: 'Updated:',
-              dateTime: recipient.updatedAt,
+              dateTime: recipient.updatedAt.toString(),
             ),
           ],
         ),
@@ -239,11 +239,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
   Row buildSwitch(RecipientScreenState recipientScreenState) {
     return Row(
       children: [
-        recipientScreenState.isEncryptionToggleLoading!
+        recipientScreenState.isEncryptionToggleLoading
             ? const PlatformLoadingIndicator(size: 20)
             : Container(),
         PlatformSwitch(
-          value: recipientScreenState.recipient!.shouldEncrypt,
+          value: recipientScreenState.recipient.shouldEncrypt,
           onChanged: (toggle) {},
         ),
       ],
@@ -284,7 +284,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               .removePublicGPGKey(recipient);
 
           /// Dismisses this dialog
-          Navigator.pop(context);
+          if (mounted) Navigator.pop(context);
         },
       ),
     );
@@ -300,7 +300,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
         await ref
             .read(recipientScreenStateNotifier.notifier)
             .addPublicGPGKey(recipient, keyData);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
@@ -374,10 +374,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 .removeRecipient(widget.recipient);
 
             /// Dismisses this dialog
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
 
             /// Dismisses [RecipientScreen] after recipient deletion
-            Navigator.pop(context);
+            if (mounted) Navigator.pop(context);
           },
         ),
       );

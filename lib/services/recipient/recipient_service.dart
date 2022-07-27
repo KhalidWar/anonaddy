@@ -19,7 +19,7 @@ class RecipientService {
     try {
       const path = '$kUnEncodedBaseURL/$kRecipientsURL';
       final response = await dio.get(path);
-      log('getRecipients: ' + response.statusCode.toString());
+      log('getRecipients: ${response.statusCode}');
       final recipients = response.data['data'] as List;
       return recipients
           .map((recipient) => Recipient.fromJson(recipient))
@@ -33,7 +33,7 @@ class RecipientService {
     try {
       final path = '$kUnEncodedBaseURL/$kRecipientsURL/$recipientId';
       final response = await dio.get(path);
-      log('getSpecificRecipient: ' + response.statusCode.toString());
+      log('getSpecificRecipient: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
     } catch (e) {
@@ -46,7 +46,7 @@ class RecipientService {
       const path = '$kUnEncodedBaseURL/$kEncryptedRecipient';
       final data = json.encode({"id": recipientID});
       final response = await dio.post(path, data: data);
-      log('enableEncryption: ' + response.statusCode.toString());
+      log('enableEncryption: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
     } catch (e) {
@@ -58,7 +58,7 @@ class RecipientService {
     try {
       final path = '$kUnEncodedBaseURL/$kEncryptedRecipient/$recipientID';
       final response = await dio.delete(path);
-      log('disableEncryption: ' + response.statusCode.toString());
+      log('disableEncryption: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }
@@ -69,7 +69,7 @@ class RecipientService {
       final path = '$kUnEncodedBaseURL/$kRecipientKeys/$recipientID';
       final data = jsonEncode({"key_data": keyData});
       final response = await dio.patch(path, data: data);
-      log('addPublicGPGKey: ' + response.statusCode.toString());
+      log('addPublicGPGKey: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
     } catch (e) {
@@ -81,7 +81,7 @@ class RecipientService {
     try {
       final path = '$kUnEncodedBaseURL/$kRecipientKeys/$recipientID';
       final response = await dio.delete(path);
-      log('removePublicGPGKey: ' + response.statusCode.toString());
+      log('removePublicGPGKey: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }
@@ -92,7 +92,7 @@ class RecipientService {
       const path = '$kUnEncodedBaseURL/$kRecipientsURL';
       final data = jsonEncode({"email": email});
       final response = await dio.post(path, data: data);
-      log('addRecipient: ' + response.statusCode.toString());
+      log('addRecipient: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
     } catch (e) {
@@ -104,7 +104,7 @@ class RecipientService {
     try {
       final path = '$kUnEncodedBaseURL/$kRecipientsURL/$recipientID';
       final response = await dio.delete(path);
-      log('removeRecipient: ' + response.statusCode.toString());
+      log('removeRecipient: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }
@@ -115,7 +115,7 @@ class RecipientService {
       const path = '$kUnEncodedBaseURL/$kRecipientsURL/email/resend';
       final data = json.encode({"recipient_id": recipientID});
       final response = await dio.post(path, data: data);
-      log('resendVerificationEmail: ' + response.statusCode.toString());
+      log('resendVerificationEmail: ${response.statusCode}');
     } catch (e) {
       rethrow;
     }

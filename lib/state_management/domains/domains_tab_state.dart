@@ -6,7 +6,7 @@ class DomainsTabState {
   const DomainsTabState({
     required this.status,
     required this.domains,
-    this.errorMessage,
+    required this.errorMessage,
   });
 
   final DomainsTabStatus status;
@@ -16,7 +16,8 @@ class DomainsTabState {
   static DomainsTabState initialState() {
     return const DomainsTabState(
       status: DomainsTabStatus.loading,
-      domains: [],
+      domains: <Domain>[],
+      errorMessage: '',
     );
   }
 

@@ -56,9 +56,8 @@ class _UsernameDefaultRecipientState
   void _setVerifiedRecipients() {
     final recipientTabState = ref.read(recipientTabStateNotifier);
     if (recipientTabState.status == RecipientTabStatus.loaded) {
-      final allRecipients = recipientTabState.recipients!;
-      for (Recipient recipient in allRecipients) {
-        if (recipient.emailVerifiedAt != null) {
+      for (Recipient recipient in recipientTabState.recipients) {
+        if (recipient.emailVerifiedAt.isNotEmpty) {
           _verifiedRecipients.add(recipient);
         }
       }
@@ -194,7 +193,7 @@ class _UsernameDefaultRecipientState
                   builder: (_, watch, __) {
                     final isLoading = ref
                         .watch(usernamesScreenStateNotifier)
-                        .updateRecipientLoading!;
+                        .updateRecipientLoading;
                     return isLoading
                         ? const PlatformLoadingIndicator()
                         : const Text('Update Default Recipients');
@@ -207,7 +206,7 @@ class _UsernameDefaultRecipientState
                         widget.username,
                         selectedRecipient == null ? '' : selectedRecipient!.id,
                       );
-                  Navigator.pop(context);
+                  if (mounted) Navigator.pop(context);
                 },
               ),
             ),

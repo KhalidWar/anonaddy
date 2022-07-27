@@ -5,6 +5,8 @@
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
 	<key>com.apple.security.network.client</key>
-    <true/>
+	<true/>
+	<key>keychain-access-groups</key>
+	<array/>
 </dict>
 </plist>

@@ -76,7 +76,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       await secureStorage.deleteAll();
       await searchHistory.clearSearchHistory();
-      Phoenix.rebirth(context);
+      if (mounted) Phoenix.rebirth(context);
     } catch (error) {
       NicheMethod.showToast(error.toString());
     }

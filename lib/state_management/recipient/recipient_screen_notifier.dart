@@ -1,5 +1,6 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
@@ -35,9 +36,9 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   }
 
   Future<void> fetchRecipient(Recipient recipient) async {
-    /// Initially set RecipientScreen to loading
-    _updateState(state.copyWith(status: RecipientScreenStatus.loading));
     try {
+      /// Initially set RecipientScreen to loading
+      _updateState(state.copyWith(status: RecipientScreenStatus.loading));
       final newRecipient =
           await recipientService.getSpecificRecipient(recipient.id);
 
@@ -45,64 +46,79 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       final newState = state.copyWith(
           status: RecipientScreenStatus.loaded, recipient: newRecipient);
       _updateState(newState);
-    } catch (error) {
-      final dioError = error as DioError;
+    } on DioError catch (dioError) {
+      final offlineState = state.copyWith(
+        status: RecipientScreenStatus.loaded,
+        isOffline: true,
+        recipient: recipient,
+      );
+      final errorState = state.copyWith(
+        status: RecipientScreenStatus.failed,
+        errorMessage: dioError.message,
+      );
 
-      if (dioError.type == DioErrorType.other) {
-        final newState = state.copyWith(
-          status: RecipientScreenStatus.loaded,
-          isOffline: true,
-          recipient: recipient,
-        );
-        _updateState(newState);
-      } else {
-        final newState = state.copyWith(
-          status: RecipientScreenStatus.failed,
-          errorMessage: dioError.message,
-        );
-        _updateState(newState);
-      }
+      _updateState(
+        dioError.type == DioErrorType.other ? offlineState : errorState,
+      );
+    } catch (error) {
+      _updateState(state.copyWith(
+        status: RecipientScreenStatus.failed,
+        errorMessage: AppStrings.somethingWentWrong,
+      ));
     }
   }
 
   Future enableEncryption(Recipient recipient) async {
-    _updateState(state.copyWith(isEncryptionToggleLoading: true));
     try {
-      final updatedRecipient =
+      _updateState(state.copyWith(isEncryptionToggleLoading: true));
+      final newRecipient =
           await recipientService.enableEncryption(recipient.id);
-      recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
+      final updateRecipient =
+          recipient.copyWith(shouldEncrypt: newRecipient.shouldEncrypt);
+      _updateState(state.copyWith(
+        recipient: updateRecipient,
+        isEncryptionToggleLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
       _updateState(state.copyWith(isEncryptionToggleLoading: false));
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(isEncryptionToggleLoading: false));
     }
   }
 
   Future disableEncryption(Recipient recipient) async {
-    _updateState(state.copyWith(isEncryptionToggleLoading: true));
     try {
+      _updateState(state.copyWith(isEncryptionToggleLoading: true));
       await recipientService.disableEncryption(recipient.id);
-      recipient.shouldEncrypt = false;
+      final updatedRecipient = recipient.copyWith(shouldEncrypt: false);
+      _updateState(state.copyWith(
+        recipient: updatedRecipient,
+        isEncryptionToggleLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
       _updateState(state.copyWith(isEncryptionToggleLoading: false));
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(isEncryptionToggleLoading: false));
     }
   }
 
   Future<void> addPublicGPGKey(Recipient recipient, String keyData) async {
     try {
-      final updatedRecipient =
+      final newRecipient =
           await recipientService.addPublicGPGKey(recipient.id, keyData);
-      recipient.fingerprint = updatedRecipient.fingerprint;
-      recipient.shouldEncrypt = updatedRecipient.shouldEncrypt;
+      final updatedRecipient = recipient.copyWith(
+          fingerprint: newRecipient.fingerprint,
+          shouldEncrypt: newRecipient.shouldEncrypt);
       showToast(ToastMessage.addGPGKeySuccess);
-      _updateState(state.copyWith(recipient: recipient));
-    } catch (error) {
-      final dioError = error as DioError;
+      _updateState(state.copyWith(recipient: updatedRecipient));
+    } on DioError catch (dioError) {
       showToast(dioError.message);
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
     }
   }
 
@@ -110,12 +126,13 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     try {
       await recipientService.removePublicGPGKey(recipient.id);
       showToast(ToastMessage.deleteGPGKeySuccess);
-      recipient.fingerprint = null;
-      recipient.shouldEncrypt = false;
-      _updateState(state.copyWith(recipient: recipient));
-    } catch (error) {
-      final dioError = error as DioError;
+      final updatedRecipient =
+          recipient.copyWith(fingerprint: '', shouldEncrypt: false);
+      _updateState(state.copyWith(recipient: updatedRecipient));
+    } on DioError catch (dioError) {
       showToast(dioError.message);
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
     }
   }
 

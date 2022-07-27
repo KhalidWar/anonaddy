@@ -114,16 +114,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       leading: IconButton(
         key: const Key('homeScreenAppBarLeading'),
         tooltip: AppStrings.alertCenter,
-        icon: const Icon(Icons.error_outline),
+        icon: const Icon(
+          Icons.error_outline,
+          color: Colors.white,
+        ),
         onPressed: () {
           Navigator.pushNamed(context, AlertCenterScreen.routeName);
         },
       ),
       actions: [
+        // IconButton(
+        //   key: const Key('homeScreenQuickSearchTrailing'),
+        //   tooltip: AppStrings.settings,
+        //   icon: const Icon(
+        //     Icons.search,
+        //     color: Colors.white,
+        //   ),
+        //   onPressed: () {
+        //     Navigator.pushNamed(context, QuickSearchScreen.routeName);
+        //   },
+        // ),
         IconButton(
           key: const Key('homeScreenAppBarTrailing'),
           tooltip: AppStrings.settings,
-          icon: const Icon(Icons.settings),
+          icon: const Icon(
+            Icons.settings,
+            color: Colors.white,
+          ),
           onPressed: () {
             Navigator.pushNamed(context, SettingsScreen.routeName);
           },

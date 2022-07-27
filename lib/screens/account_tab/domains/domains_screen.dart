@@ -68,7 +68,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
       BuildContext context, DomainsScreenState domainProvider) {
     final size = MediaQuery.of(context).size;
 
-    final domain = domainProvider.domain!;
+    final domain = domainProvider.domain;
     final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
 
     return ListView(
@@ -95,7 +95,9 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: domain.description ?? AppStrings.noDescription,
+          title: domain.description.isEmpty
+              ? AppStrings.noDescription
+              : domain.description,
           titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Domain description',
           leadingIconData: Icons.comment_outlined,
@@ -112,7 +114,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           subtitle: 'Activity',
           leadingIconData: Icons.toggle_off_outlined,
           trailing:
-              buildSwitch(domainProvider.activeSwitchLoading!, domain.active),
+              buildSwitch(domainProvider.activeSwitchLoading, domain.active),
           trailingIconOnPress: () {
             domain.active
                 ? domainNotifier.deactivateDomain(domain.id)
@@ -125,17 +127,17 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           subtitle: 'Catch All',
           leadingIconData: Icons.repeat,
           trailing: buildSwitch(
-              domainProvider.catchAllSwitchLoading!, domain.catchAll),
+              domainProvider.catchAllSwitchLoading, domain.catchAll),
           trailingIconOnPress: () {
             domain.catchAll
                 ? domainNotifier.deactivateCatchAll(domain.id)
                 : domainNotifier.activateCatchAll(domain.id);
           },
         ),
-        if (domain.domainVerifiedAt == null)
+        if (domain.domainVerifiedAt.isEmpty)
           buildUnverifiedEmailWarning(size, AppStrings.unverifiedDomainWarning),
         // Divider(height: size.height * 0.02),
-        if (domain.domainMxValidatedAt == null)
+        if (domain.domainMxValidatedAt.isEmpty)
           buildUnverifiedEmailWarning(size, AppStrings.invalidDomainMXWarning),
         Divider(height: size.height * 0.02),
         // if (domain.domainSendingVerifiedAt == null)
@@ -188,7 +190,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
                 ],
               ),
             ),
-            if (domain.aliases!.isEmpty)
+            if (domain.aliases.isEmpty)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: const Text('No aliases found'),
@@ -197,10 +199,10 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: domain.aliases!.length,
+                itemCount: domain.aliases.length,
                 itemBuilder: (context, index) {
                   return AliasListTile(
-                    aliasData: domain.aliases![index],
+                    alias: domain.aliases[index],
                   );
                 },
               ),
@@ -212,11 +214,11 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           children: [
             AliasCreatedAtWidget(
               label: 'Created:',
-              dateTime: domain.createdAt,
+              dateTime: domain.createdAt.toString(),
             ),
             AliasCreatedAtWidget(
               label: 'Updated:',
-              dateTime: domain.updatedAt,
+              dateTime: domain.updatedAt.toString(),
             ),
           ],
         ),
@@ -245,13 +247,13 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
     Future<void> updateDescription() async {
       if (formKey.currentState!.validate()) {
         await domainNotifier.editDescription(domain.id, newDescription);
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
 
     Future<void> removeDescription() async {
       await domainNotifier.editDescription(domain.id, '');
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     }
 
     return showModalBottomSheet(
@@ -299,8 +301,10 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
             await ref
                 .read(domainsScreenStateNotifier.notifier)
                 .deleteDomain(widget.domain.id);
-            Navigator.pop(context);
-            Navigator.pop(context);
+            if (mounted) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
           },
         ),
       );

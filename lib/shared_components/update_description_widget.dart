@@ -55,22 +55,22 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     Expanded(
                       child: PlatformButton(
                         color: Colors.redAccent,
+                        onPress: removeDescription,
                         child: const Text(
                           AppStrings.removeDescriptionTitle,
                           style: TextStyle(color: Colors.black),
                         ),
-                        onPress: removeDescription,
                       ),
                     ),
                     SizedBox(width: size.width * 0.03),
                     Expanded(
                       child: PlatformButton(
+                        onPress: updateDescription,
                         color: AppColors.accentColor,
                         child: const Text(
                           AppStrings.updateDescriptionTitle,
                           style: TextStyle(color: Colors.black),
                         ),
-                        onPress: updateDescription,
                       ),
                     ),
                   ],

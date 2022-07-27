@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/username/username_service.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/usernames/usernames_tab_state.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,27 +40,28 @@ class UsernamesNotifier extends StateNotifier<UsernamesTabState> {
         usernames: domains,
       );
       _updateState(newState);
-    } catch (error) {
-      if (error == DioError) {
-        final dioError = error as DioError;
-
-        /// If offline, load offline data.
-        if (dioError.type == DioErrorType.other) {
-          await loadOfflineState();
-        } else {
-          final newState = state.copyWith(
-            status: UsernamesStatus.failed,
-            errorMessage: dioError.message,
-          );
-          _updateState(newState);
-          await _retryOnError();
-        }
+    } on DioError catch (dioError) {
+      /// If offline, load offline data.
+      if (dioError.type == DioErrorType.other) {
+        await loadOfflineState();
+      } else {
+        _updateState(state.copyWith(
+          status: UsernamesStatus.failed,
+          errorMessage: dioError.message,
+        ));
+        await _retryOnError();
       }
+    } catch (error) {
+      _updateState(state.copyWith(
+        status: UsernamesStatus.failed,
+        errorMessage: AppStrings.somethingWentWrong,
+      ));
+      await _retryOnError();
     }
   }
 
   Future<void> _retryOnError() async {
-    if (state.status.isFailed()) {
+    if (state.status.isFailed) {
       await Future.delayed(const Duration(seconds: 5));
       await fetchUsernames();
     }
@@ -72,7 +73,7 @@ class UsernamesNotifier extends StateNotifier<UsernamesTabState> {
   Future<void> loadOfflineState() async {
     /// Only load offline data when state is NOT failed.
     /// Otherwise, it would always show offline data even if there's error.
-    if (!state.status.isFailed()) {
+    if (!state.status.isFailed) {
       List<dynamic> savedUsernames = [];
       final securedData = await offlineData.readUsernameOfflineData();
       if (securedData.isNotEmpty) savedUsernames = jsonDecode(securedData);

@@ -6,24 +6,25 @@ enum RecipientScreenStatus { loading, loaded, failed }
 class RecipientScreenState {
   const RecipientScreenState({
     required this.status,
-    this.recipient,
-    this.errorMessage,
-    this.isEncryptionToggleLoading,
-    this.isAddRecipientLoading,
-    this.isOffline,
+    required this.recipient,
+    required this.errorMessage,
+    required this.isEncryptionToggleLoading,
+    required this.isAddRecipientLoading,
+    required this.isOffline,
   });
 
   final RecipientScreenStatus status;
-  final Recipient? recipient;
-  final String? errorMessage;
+  final Recipient recipient;
+  final String errorMessage;
 
-  final bool? isEncryptionToggleLoading;
-  final bool? isAddRecipientLoading;
-  final bool? isOffline;
+  final bool isEncryptionToggleLoading;
+  final bool isAddRecipientLoading;
+  final bool isOffline;
 
   static RecipientScreenState initialState() {
-    return const RecipientScreenState(
+    return RecipientScreenState(
       status: RecipientScreenStatus.loading,
+      recipient: Recipient(),
       errorMessage: AppStrings.somethingWentWrong,
       isEncryptionToggleLoading: false,
       isAddRecipientLoading: false,

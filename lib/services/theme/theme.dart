@@ -1,5 +1,7 @@
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:macos_ui/macos_ui.dart';
 
 class AppTheme {
   static ThemeData light = ThemeData.light().copyWith(
@@ -9,12 +11,13 @@ class AppTheme {
     primaryColorDark: const Color(0xFFF5F7FA),
     appBarTheme: _appBarTheme,
     toggleableActiveColor: AppColors.accentColor,
-    accentColor: AppColors.accentColor,
     buttonTheme: _buttonThemeData,
     floatingActionButtonTheme: _fabThemeData,
     cardTheme: _cardTheme,
     dialogTheme: _dialogTheme,
     elevatedButtonTheme: _elevatedButtonThemeData,
+    colorScheme:
+        ColorScheme.fromSwatch().copyWith(secondary: AppColors.accentColor),
   );
 
   static ThemeData dark = ThemeData.dark().copyWith(
@@ -25,7 +28,6 @@ class AppTheme {
     primaryColorDark: Colors.black,
     appBarTheme: _appBarTheme,
     toggleableActiveColor: AppColors.accentColor,
-    accentColor: AppColors.accentColor,
     dividerColor: Colors.grey[600],
     buttonTheme: _buttonThemeData,
     floatingActionButtonTheme: _fabThemeData,
@@ -34,7 +36,13 @@ class AppTheme {
     bottomNavigationBarTheme:
         const BottomNavigationBarThemeData(backgroundColor: Colors.black),
     elevatedButtonTheme: _elevatedButtonThemeData,
+    colorScheme:
+        ColorScheme.fromSwatch().copyWith(secondary: AppColors.accentColor),
   );
+
+  static final macOSThemeLight = MacosThemeData.light();
+
+  static final macOSThemeDark = MacosThemeData.dark();
 
   static final _elevatedButtonThemeData = ElevatedButtonThemeData(
     style: ButtonStyle(
@@ -66,7 +74,7 @@ class AppTheme {
 
   static final _appBarTheme = const AppBarTheme().copyWith(
     color: AppColors.primaryColor,
-    brightness: Brightness.dark,
+    systemOverlayStyle: SystemUiOverlayStyle.light,
   );
 
   static final _fabThemeData = const FloatingActionButtonThemeData().copyWith(

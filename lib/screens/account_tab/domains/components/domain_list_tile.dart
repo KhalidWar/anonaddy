@@ -23,7 +23,9 @@ class DomainListTile extends StatelessWidget {
                 Text(domain.domain),
                 const SizedBox(height: 2),
                 Text(
-                  domain.description ?? AppStrings.noDescription,
+                  domain.description.isEmpty
+                      ? AppStrings.noDescription
+                      : domain.description,
                   style: const TextStyle(color: Colors.grey),
                 ),
               ],

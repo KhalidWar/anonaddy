@@ -5,27 +5,32 @@ enum UsernamesScreenStatus { loading, loaded, failed }
 class UsernamesScreenState {
   const UsernamesScreenState({
     required this.status,
-    this.username,
-    this.errorMessage,
-    this.activeSwitchLoading,
-    this.catchAllSwitchLoading,
-    this.updateRecipientLoading,
+    required this.username,
+    required this.errorMessage,
+    required this.activeSwitchLoading,
+    required this.catchAllSwitchLoading,
+    required this.updateRecipientLoading,
+    required this.isOffline,
   });
 
   final UsernamesScreenStatus status;
-  final Username? username;
-  final String? errorMessage;
+  final Username username;
+  final String errorMessage;
 
-  final bool? activeSwitchLoading;
-  final bool? catchAllSwitchLoading;
-  final bool? updateRecipientLoading;
+  final bool activeSwitchLoading;
+  final bool catchAllSwitchLoading;
+  final bool updateRecipientLoading;
+  final bool isOffline;
 
   static UsernamesScreenState initialState() {
-    return const UsernamesScreenState(
+    return UsernamesScreenState(
       status: UsernamesScreenStatus.loading,
+      username: Username(),
       activeSwitchLoading: false,
       catchAllSwitchLoading: false,
       updateRecipientLoading: false,
+      errorMessage: '',
+      isOffline: false,
     );
   }
 
@@ -36,6 +41,7 @@ class UsernamesScreenState {
     bool? activeSwitchLoading,
     bool? catchAllSwitchLoading,
     bool? updateRecipientLoading,
+    bool? isOffline,
   }) {
     return UsernamesScreenState(
       status: status ?? this.status,
@@ -46,11 +52,12 @@ class UsernamesScreenState {
           catchAllSwitchLoading ?? this.catchAllSwitchLoading,
       updateRecipientLoading:
           updateRecipientLoading ?? this.updateRecipientLoading,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 
   @override
   String toString() {
-    return 'UsernamesScreenState{status: $status, username: $username, errorMessage: $errorMessage, activeSwitchLoading: $activeSwitchLoading, catchAllSwitchLoading: $catchAllSwitchLoading, updateRecipientLoading: $updateRecipientLoading}';
+    return 'UsernamesScreenState{status: $status, username: $username, errorMessage: $errorMessage, activeSwitchLoading: $activeSwitchLoading, catchAllSwitchLoading: $catchAllSwitchLoading, updateRecipientLoading: $updateRecipientLoading, isOffline: $isOffline}';
   }
 }

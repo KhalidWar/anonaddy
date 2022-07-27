@@ -70,7 +70,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
         return const RecipientsShimmerLoading();
 
       case RecipientTabStatus.loaded:
-        final recipients = recipientTabState.recipients!;
+        final recipients = recipientTabState.recipients;
 
         return ListView(
           shrinkWrap: true,

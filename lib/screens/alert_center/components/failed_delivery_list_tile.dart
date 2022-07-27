@@ -59,8 +59,8 @@ class FailedDeliveryListTile extends StatelessWidget {
         ),
         const Divider(height: 0),
         TextButton(
-          child: const Text('Delete failed delivery'),
           onPressed: onPress,
+          child: const Text('Delete failed delivery'),
         ),
       ],
     );

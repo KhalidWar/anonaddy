@@ -19,7 +19,7 @@ class AccountService {
       const urlPath = '$kUnEncodedBaseURL/$kAccountDetailsURL';
       final response = await dio.get(path ?? urlPath);
       final account = Account.fromJson(response.data['data']);
-      log('getAccounts: ' + response.statusCode.toString());
+      log('getAccounts: ${response.statusCode}');
       return account;
     } catch (error) {
       rethrow;

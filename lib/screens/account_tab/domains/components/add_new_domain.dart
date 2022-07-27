@@ -65,7 +65,7 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
                           const Size(200, 50),
                         ),
                       ),
-                      child: recipientState.isAddRecipientLoading!
+                      child: recipientState.isAddRecipientLoading
                           ? const PlatformLoadingIndicator()
                           : const Text('Add Recipient'),
                       onPressed: () async {
@@ -73,7 +73,7 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
                           await ref
                               .read(recipientScreenStateNotifier.notifier)
                               .addRecipient(_textEditController.text.trim());
-                          Navigator.pop(context);
+                          if (mounted) Navigator.pop(context);
                         }
                       },
                     );

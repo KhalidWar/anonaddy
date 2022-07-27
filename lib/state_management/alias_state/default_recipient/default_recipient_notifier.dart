@@ -68,15 +68,14 @@ class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
 
   /// Extracts verified recipients from all recipients.
   void _setVerifiedRecipients() {
-    final recipients = recipientState.recipients ?? [];
     final verifiedRecipients = <Recipient>[];
 
     /// Set verified recipients
-    recipients.forEach((recipient) {
-      if (recipient.emailVerifiedAt != null) {
+    for (var recipient in recipientState.recipients) {
+      if (recipient.emailVerifiedAt.isNotEmpty) {
         verifiedRecipients.add(recipient);
       }
-    });
+    }
 
     final newState = state.copyWith(verifiedRecipients: verifiedRecipients);
     _updateState(newState);
@@ -86,8 +85,7 @@ class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
   void _setDefaultRecipients() {
     final defaultRecipients = <Recipient>[];
     for (Recipient verifiedRecipient in state.verifiedRecipients!) {
-      final aliasDefaultRecipients = aliasState.alias!.recipients ?? [];
-      for (Recipient aliasRecipient in aliasDefaultRecipients) {
+      for (Recipient aliasRecipient in aliasState.alias.recipients) {
         if (verifiedRecipient.id == aliasRecipient.id) {
           defaultRecipients.add(verifiedRecipient);
         }

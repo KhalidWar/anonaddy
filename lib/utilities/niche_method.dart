@@ -21,6 +21,14 @@ class NicheMethod {
     }
   }
 
+  static String convertStringToDateTime(String input) {
+    if (input.isEmpty) return '';
+
+    final dateTime = DateTime.tryParse(input);
+    if (dateTime == null) return '';
+    return fixDateTime(dateTime);
+  }
+
   static copyOnTap(String input) async {
     try {
       await Clipboard.setData(ClipboardData(text: input));

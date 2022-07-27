@@ -4,25 +4,26 @@ enum DomainsScreenStatus { loading, loaded, failed }
 
 class DomainsScreenState {
   const DomainsScreenState({
-    this.status,
-    this.domain,
-    this.errorMessage,
-    this.activeSwitchLoading,
-    this.catchAllSwitchLoading,
-    this.updateRecipientLoading,
+    required this.status,
+    required this.domain,
+    required this.errorMessage,
+    required this.activeSwitchLoading,
+    required this.catchAllSwitchLoading,
+    required this.updateRecipientLoading,
   });
 
   final DomainsScreenStatus? status;
-  final Domain? domain;
-  final String? errorMessage;
+  final Domain domain;
+  final String errorMessage;
+  final bool activeSwitchLoading;
+  final bool catchAllSwitchLoading;
+  final bool updateRecipientLoading;
 
-  final bool? activeSwitchLoading;
-  final bool? catchAllSwitchLoading;
-  final bool? updateRecipientLoading;
-
-  static DomainsScreenState initial() {
-    return const DomainsScreenState(
+  static DomainsScreenState initialState() {
+    return DomainsScreenState(
       status: DomainsScreenStatus.loading,
+      domain: Domain(),
+      errorMessage: '',
       activeSwitchLoading: false,
       catchAllSwitchLoading: false,
       updateRecipientLoading: false,

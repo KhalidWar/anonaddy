@@ -35,7 +35,7 @@ class _MockAccountNotifier extends Mock implements AccountNotifier {
 class _MockAccountService extends Mock implements AccountService {
   @override
   Future<Account> getAccounts([String? path]) async {
-    return Account.dummy();
+    return Account();
   }
 }
 

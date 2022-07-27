@@ -21,12 +21,11 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   AliasScreenNotifier({
     required this.aliasService,
     required this.aliasTabNotifier,
-  }) : super(AliasScreenState.initialState());
+    AliasScreenState? initialState,
+  }) : super(initialState ?? AliasScreenState.initialState());
 
   final AliasService aliasService;
   final AliasTabNotifier aliasTabNotifier;
-
-  final showToast = NicheMethod.showToast;
 
   /// Update AliasScreen state
   void _updateState(AliasScreenState newState) {
@@ -35,31 +34,34 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   Future<void> fetchSpecificAlias(Alias alias) async {
     /// Initially set AliasScreen to loading
-    final newState = state.copyWith(status: AliasScreenStatus.loading);
-    _updateState(newState);
     try {
+      _updateState(state.copyWith(status: AliasScreenStatus.loading));
+
       final updatedAlias = await aliasService.getSpecificAlias(alias.id);
 
       /// Assign newly fetched alias data to AliasScreen state
       final newState =
           state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
       _updateState(newState);
+    } on DioError catch (dioError) {
+      final offlineState = state.copyWith(
+        status: AliasScreenStatus.loaded,
+        isOffline: true,
+        alias: alias,
+      );
+      final errorState = state.copyWith(
+        status: AliasScreenStatus.failed,
+        errorMessage: dioError.message,
+      );
+      _updateState(
+        dioError.type == DioErrorType.other ? offlineState : errorState,
+      );
     } catch (error) {
-      final dioError = error as DioError;
-      if (dioError.type == DioErrorType.other) {
-        final newState = state.copyWith(
-          status: AliasScreenStatus.loaded,
-          isOffline: true,
-          alias: alias,
-        );
-        _updateState(newState);
-      } else {
-        final newState = state.copyWith(
-          status: AliasScreenStatus.failed,
-          errorMessage: dioError.message,
-        );
-        _updateState(newState);
-      }
+      final newState = state.copyWith(
+        status: AliasScreenStatus.failed,
+        errorMessage: AppStrings.somethingWentWrong,
+      );
+      _updateState(newState);
     }
   }
 
@@ -67,73 +69,79 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       final updatedAlias =
           await aliasService.updateAliasDescription(alias.id, newDesc);
-      showToast(ToastMessage.editDescriptionSuccess);
+      NicheMethod.showToast(ToastMessage.editDescriptionSuccess);
       _updateState(state.copyWith(alias: updatedAlias));
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
     }
   }
 
   Future<void> deactivateAlias(String aliasId) async {
-    _updateState(state.copyWith(isToggleLoading: true));
     try {
+      _updateState(state.copyWith(isToggleLoading: true));
       await aliasService.deactivateAlias(aliasId);
-      final oldAlias = state.alias!;
-      oldAlias.active = false;
-      _updateState(state.copyWith(isToggleLoading: false, alias: oldAlias));
+      final updatedAlias = state.alias.copyWith(active: false);
+      _updateState(state.copyWith(isToggleLoading: false, alias: updatedAlias));
+    } on DioError catch (dioError) {
+      NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(isToggleLoading: false));
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(error.toString());
       _updateState(state.copyWith(isToggleLoading: false));
     }
   }
 
   Future<void> activateAlias(String aliasId) async {
-    state = state.copyWith(isToggleLoading: true);
     try {
+      _updateState(state.copyWith(isToggleLoading: true));
       final newAlias = await aliasService.activateAlias(aliasId);
-      final oldAlias = state.alias!;
-      oldAlias.active = newAlias.active;
-      _updateState(state.copyWith(isToggleLoading: false, alias: oldAlias));
+      final updateAlias = state.alias.copyWith(active: newAlias.active);
+      _updateState(state.copyWith(isToggleLoading: false, alias: updateAlias));
+    } on DioError catch (dioError) {
+      NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(isToggleLoading: false));
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(error.toString());
       _updateState(state.copyWith(isToggleLoading: false));
     }
   }
 
-  Future<void> deleteAlias(String aliasId) async {
-    _updateState(state.copyWith(deleteAliasLoading: true));
+  Future<void> deleteAlias(Alias alias) async {
     try {
-      await aliasService.deleteAlias(aliasId);
-      showToast(ToastMessage.deleteAliasSuccess);
-      final oldAlias = state.alias!;
-      oldAlias.deletedAt = null;
-      aliasTabNotifier.refreshAliases();
+      _updateState(state.copyWith(deleteAliasLoading: true));
+      await aliasService.deleteAlias(alias.id);
+      NicheMethod.showToast(ToastMessage.deleteAliasSuccess);
+      final updatedAlias = state.alias.copyWith(deletedAt: '');
+      aliasTabNotifier.deleteAlias(alias);
 
       final newState =
-          state.copyWith(deleteAliasLoading: false, alias: oldAlias);
+          state.copyWith(deleteAliasLoading: false, alias: updatedAlias);
       _updateState(newState);
+    } on DioError catch (dioError) {
+      NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(deleteAliasLoading: false));
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(error.toString());
       _updateState(state.copyWith(deleteAliasLoading: false));
     }
   }
 
-  Future<void> restoreAlias(String aliasId) async {
-    _updateState(state.copyWith(deleteAliasLoading: true));
+  Future<void> restoreAlias(Alias alias) async {
     try {
-      final newAlias = await aliasService.restoreAlias(aliasId);
-      showToast(ToastMessage.restoreAliasSuccess);
-      aliasTabNotifier.refreshAliases();
+      _updateState(state.copyWith(deleteAliasLoading: true));
+      final newAlias = await aliasService.restoreAlias(alias.id);
+      NicheMethod.showToast(ToastMessage.restoreAliasSuccess);
+      aliasTabNotifier.restoreAlias(alias);
+
       final newState =
           state.copyWith(deleteAliasLoading: false, alias: newAlias);
       _updateState(newState);
+    } on DioError catch (dioError) {
+      NicheMethod.showToast(dioError.message);
+      _updateState(state.copyWith(deleteAliasLoading: false));
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(error.toString());
       _updateState(state.copyWith(deleteAliasLoading: false));
     }
   }
@@ -149,7 +157,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
     }
     _updateState(state.copyWith(updateRecipientLoading: false));
   }
@@ -157,10 +165,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   Future<void> forgetAlias(String aliasID) async {
     try {
       await aliasService.forgetAlias(aliasID);
-      showToast(ToastMessage.forgetAliasSuccess);
+      NicheMethod.showToast(ToastMessage.forgetAliasSuccess);
     } catch (error) {
       final dioError = error as DioError;
-      showToast(dioError.message);
+      NicheMethod.showToast(dioError.message);
     }
   }
 
@@ -174,9 +182,9 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
     try {
       await NicheMethod.copyOnTap(generatedAddress);
-      showToast(ToastMessage.sendFromAliasSuccess);
+      NicheMethod.showToast(ToastMessage.sendFromAliasSuccess);
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      NicheMethod.showToast(AppStrings.somethingWentWrong);
     }
   }
 }

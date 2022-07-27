@@ -29,11 +29,11 @@ class SearchListHeader extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextButton(
+                onPressed: onPress,
                 child: Text(
                   buttonLabel,
                   style: TextStyle(color: buttonTextColor),
                 ),
-                onPressed: onPress,
               ),
             ],
           ),

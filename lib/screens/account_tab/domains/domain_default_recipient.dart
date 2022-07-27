@@ -55,9 +55,8 @@ class _DomainDefaultRecipientState
   void _setVerifiedRecipients() {
     final recipientTabState = ref.read(recipientTabStateNotifier);
     if (recipientTabState.status == RecipientTabStatus.loaded) {
-      final allRecipients = recipientTabState.recipients!;
-      for (Recipient recipient in allRecipients) {
-        if (recipient.emailVerifiedAt != null) {
+      for (Recipient recipient in recipientTabState.recipients) {
+        if (recipient.emailVerifiedAt.isNotEmpty) {
           _verifiedRecipients.add(recipient);
         }
       }
@@ -100,7 +99,7 @@ class _DomainDefaultRecipientState
           widget.domain.id,
           selectedRecipient == null ? '' : selectedRecipient!.id,
         );
-    Navigator.pop(context);
+    if (mounted) Navigator.pop(context);
   }
 
   @override
@@ -143,7 +142,7 @@ class _DomainDefaultRecipientState
                             builder: (_, watch, __) {
                               final isLoading = ref
                                   .watch(domainsScreenStateNotifier)
-                                  .updateRecipientLoading!;
+                                  .updateRecipientLoading;
                               return isLoading
                                   ? const LinearProgressIndicator(
                                       color: AppColors.accentColor)

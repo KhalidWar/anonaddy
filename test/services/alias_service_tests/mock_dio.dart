@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mockito/mockito.dart';
 
-import '../../test_data/test_alias_data.dart';
+import '../../test_data/alias_test_data.dart';
 
 class MockDio extends Mock implements Dio {
   @override
@@ -18,7 +18,7 @@ class MockDio extends Mock implements Dio {
         error: 'Something went wrong',
         type: DioErrorType.response,
         response: Response<T>(
-          data: testAliasData as T?,
+          data: AliasTestData.validAliasJson as T?,
           statusCode: 404,
           requestOptions: RequestOptions(path: path),
         ),
@@ -26,7 +26,7 @@ class MockDio extends Mock implements Dio {
     }
 
     return Response<T>(
-      data: testAliasData as T?,
+      data: AliasTestData.validAliasJson as T?,
       statusCode: 200,
       requestOptions: RequestOptions(path: path),
     );
@@ -46,7 +46,7 @@ class MockDio extends Mock implements Dio {
         error: 'Something went wrong',
         type: DioErrorType.response,
         response: Response<T>(
-          data: testAliasData as T?,
+          data: AliasTestData.validAliasJson as T?,
           statusCode: 404,
           requestOptions: RequestOptions(path: path),
         ),
@@ -54,7 +54,7 @@ class MockDio extends Mock implements Dio {
     }
 
     return Response<T>(
-      data: testAliasData as T?,
+      data: AliasTestData.validAliasJson as T?,
       statusCode: 200,
       requestOptions: RequestOptions(path: path),
     );
@@ -72,7 +72,7 @@ class MockDio extends Mock implements Dio {
         error: 'Something went wrong',
         type: DioErrorType.response,
         response: Response<T>(
-          data: testAliasData as T?,
+          data: AliasTestData.validAliasJson as T?,
           statusCode: 404,
           requestOptions: RequestOptions(path: path),
         ),

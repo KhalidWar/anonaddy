@@ -1,4 +1,3 @@
-import 'package:anonaddy/screens/alias_tab/components/alias_animated_list.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_emails_stats.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
@@ -27,10 +26,11 @@ class _AlisTabState extends ConsumerState<AliasTab> {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       /// Initially, get data from disk (secure device storage) and assign it
-      ref.read(aliasTabStateNotifier.notifier).loadOfflineState();
+      ref.read(aliasTabStateNotifier.notifier).loadState();
 
       /// Fetch the latest Aliases data from server
-      ref.read(aliasTabStateNotifier.notifier).fetchAliases();
+      ref.read(aliasTabStateNotifier.notifier).fetchAvailableAliases();
+      ref.read(aliasTabStateNotifier.notifier).fetchDeletedAliases();
     });
   }
 
@@ -121,14 +121,13 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                         child: availableAliasList.isEmpty
                             ? const EmptyListAliasTabWidget()
                             : PlatformScrollbar(
-                                child: AliasAnimatedList(
-                                  listKey: aliasTabState.availableListKey,
+                                child: ListView.builder(
                                   itemCount: availableAliasList.length,
                                   itemBuilder: (context, index) {
                                     return AliasListTile(
                                       key: AliasTabWidgetKeys
                                           .aliasTabAvailableAliasListTile,
-                                      aliasData: availableAliasList[index],
+                                      alias: availableAliasList[index],
                                     );
                                   },
                                 ),
@@ -151,7 +150,7 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                                     return AliasListTile(
                                       key: AliasTabWidgetKeys
                                           .aliasTabDeletedAliasListTile,
-                                      aliasData: deletedAliasList[index],
+                                      alias: deletedAliasList[index],
                                     );
                                   },
                                 ),

@@ -1,4 +1,3 @@
-import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
@@ -26,15 +25,16 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
   /// If unlimited, it's "0". If not, it's an int.
   ///
   /// Self hosted instances do NOT have any [bandwidthLimit] value.
-  /// So, it returns a [null] value.
-  String calculateBandWidth(Account account) {
+  /// So, it returns a [null] value which defaults to "0".
+  String calculateBandWidth(AccountState accountState) {
+    final account = accountState.account;
     final bandwidth = (account.bandwidth / 1048576).toStringAsFixed(2);
 
-    if (account.bandwidthLimit == null || account.bandwidthLimit == 0) {
+    if (accountState.isSelfHosted) {
       return '$bandwidth MB out of ${AppStrings.unlimited}';
     } else {
       final bandwidthLimit =
-          ((account.bandwidthLimit ?? 0) / 1048576).toStringAsFixed(2);
+          ((account.bandwidthLimit) / 1048576).toStringAsFixed(2);
       return '$bandwidth out of $bandwidthLimit MB';
     }
   }
@@ -44,8 +44,9 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
   ///
   /// Self hosted instances' [recipientLimit] are unlimited.
   /// It returns [null] which means there's no value.
-  String calculateRecipientsCount(Account account) {
-    return account.recipientLimit == null
+  String calculateRecipientsCount(AccountState accountState) {
+    final account = accountState.account;
+    return accountState.isSelfHosted
         ? '${account.recipientCount} out of ${AppStrings.unlimited}'
         : '${account.recipientCount} out of ${account.recipientLimit}';
   }
@@ -58,8 +59,9 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
   ///
   /// Self hosted instances' [usernameLimit] are unlimited.
   /// It returns [null] which means there's no value.
-  String calculateUsernamesCount(Account account) {
-    return account.usernameLimit == null
+  String calculateUsernamesCount(AccountState accountState) {
+    final account = accountState.account;
+    return accountState.isSelfHosted
         ? '${account.usernameCount} out of ${AppStrings.unlimited}'
         : '${account.usernameCount} out of ${account.usernameLimit}';
   }
@@ -108,17 +110,17 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
               },
             ),
             AccountListTile(
-              title: calculateBandWidth(account),
+              title: calculateBandWidth(accountState),
               subtitle: AppStrings.monthlyBandwidth,
               leadingIconData: Icons.speed_outlined,
             ),
             AccountListTile(
-              title: calculateRecipientsCount(account),
+              title: calculateRecipientsCount(accountState),
               subtitle: AppStrings.recipients,
               leadingIconData: Icons.email_outlined,
             ),
             AccountListTile(
-              title: calculateUsernamesCount(account),
+              title: calculateUsernamesCount(accountState),
               subtitle: AppStrings.usernames,
               leadingIconData: Icons.account_circle_outlined,
             ),

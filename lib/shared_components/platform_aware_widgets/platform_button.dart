@@ -19,8 +19,8 @@ class PlatformButton extends PlatformAware {
     return CupertinoButton(
       color: color ?? AppColors.accentColor,
       padding: const EdgeInsets.all(0),
-      child: child,
       onPressed: onPress,
+      child: child,
     );
   }
 
@@ -31,8 +31,8 @@ class PlatformButton extends PlatformAware {
         padding: const EdgeInsets.all(0),
         primary: color ?? AppColors.accentColor,
       ),
-      child: child,
       onPressed: onPress,
+      child: child,
     );
   }
 }

@@ -26,7 +26,7 @@ class RecipientListTile extends StatelessWidget {
               children: [
                 Text(recipient.email),
                 const SizedBox(height: 2),
-                recipient.emailVerifiedAt == null
+                recipient.emailVerifiedAt.isEmpty
                     ? const Text(
                         AppStrings.unverified,
                         style: TextStyle(color: Colors.red),

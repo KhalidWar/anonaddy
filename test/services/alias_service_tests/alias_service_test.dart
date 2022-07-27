@@ -33,7 +33,7 @@ void main() async {
     expect(alias.id, aliasId);
     expect(alias.domain, 'laylow.io');
     expect(alias.recipients, isA<List>());
-    expect(alias.recipients![0].shouldEncrypt, false);
+    expect(alias.recipients[0].shouldEncrypt, false);
   });
 
   test(

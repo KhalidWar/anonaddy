@@ -1,15 +1,22 @@
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/constants/offline_data_key.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final offlineDataProvider = Provider<OfflineData>((ref) {
+  final secureStorage = ref.read(flutterSecureStorage);
+  return OfflineData(secureStorage);
+});
 
 class OfflineData {
   OfflineData(this.secureStorage);
   final FlutterSecureStorage secureStorage;
 
-  Future<void> writeAliasOfflineData(String data) async {
+  Future<void> saveAliasTabState(String data) async {
     await secureStorage.write(key: OfflineDataKey.aliases, value: data);
   }
 
-  Future<String> readAliasOfflineData() async {
+  Future<String> loadAliasTabState() async {
     final aliasData =
         await secureStorage.read(key: OfflineDataKey.aliases) ?? '';
     return aliasData;

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
@@ -21,7 +20,7 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
   RecipientTabNotifier({
     required this.recipientService,
     required this.offlineData,
-  }) : super(const RecipientTabState(status: RecipientTabStatus.loading));
+  }) : super(RecipientTabState.initialState());
 
   final RecipientService recipientService;
   final OfflineData offlineData;
