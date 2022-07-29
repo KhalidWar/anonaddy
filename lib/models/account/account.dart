@@ -106,10 +106,6 @@ class Account {
   @JsonKey(name: 'updated_at')
   final String lastUpdated;
 
-  static Account dummy() {
-    return Account.fromJson({});
-  }
-
   factory Account.fromJson(Map<String, dynamic> json) =>
       _$AccountFromJson(json);
 
