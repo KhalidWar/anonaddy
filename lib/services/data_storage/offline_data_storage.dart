@@ -22,14 +22,22 @@ class OfflineData {
     return aliasData;
   }
 
-  Future<void> writeAccountOfflineData(String data) async {
-    await secureStorage.write(key: OfflineDataKey.account, value: data);
+  Future<void> saveAccountsState(String data) async {
+    try {
+      await secureStorage.write(key: OfflineDataKey.account, value: data);
+    } catch (error) {
+      rethrow;
+    }
   }
 
-  Future<String> readAccountOfflineData() async {
-    final accountData =
-        await secureStorage.read(key: OfflineDataKey.account) ?? '';
-    return accountData;
+  Future<String> loadAccountsState() async {
+    try {
+      final aliasData =
+          await secureStorage.read(key: OfflineDataKey.account) ?? '';
+      return aliasData;
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<void> writeUsernameOfflineData(String data) async {
