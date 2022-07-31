@@ -104,7 +104,6 @@ class AccountNotifier extends StateNotifier<AccountState> {
       final encodedState = json.encode(mappedState);
       await offlineData.saveAccountsState(encodedState);
     } catch (_) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
       return;
     }
   }
@@ -118,8 +117,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
         final savedState = AccountState.fromMap(decodedData);
         _updateState(savedState);
       }
-    } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+    } catch (_) {
       return;
     }
   }
