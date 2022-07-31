@@ -132,8 +132,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
           _updateState(storedState);
         }
       }
-    } catch (error) {
-      rethrow;
+    } catch (_) {
+      return;
     }
   }
 
@@ -142,8 +142,8 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       final mappedState = state.toMap();
       final encodedData = json.encode(mappedState);
       await offlineData.saveAliasTabState(encodedData);
-    } catch (error) {
-      rethrow;
+    } catch (_) {
+      return;
     }
   }
 

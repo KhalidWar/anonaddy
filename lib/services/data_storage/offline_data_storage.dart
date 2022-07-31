@@ -13,13 +13,21 @@ class OfflineData {
   final FlutterSecureStorage secureStorage;
 
   Future<void> saveAliasTabState(String data) async {
-    await secureStorage.write(key: OfflineDataKey.aliases, value: data);
+    try {
+      await secureStorage.write(key: OfflineDataKey.aliases, value: data);
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<String> loadAliasTabState() async {
-    final aliasData =
-        await secureStorage.read(key: OfflineDataKey.aliases) ?? '';
-    return aliasData;
+    try {
+      final aliasData =
+          await secureStorage.read(key: OfflineDataKey.aliases) ?? '';
+      return aliasData;
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<void> saveAccountsState(String data) async {
