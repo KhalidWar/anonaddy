@@ -11,9 +11,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final aliasScreenStateNotifier =
     StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
         (ref) {
+  final aliasTab = ref.read(aliasTabStateNotifier.notifier);
+  ref.onDispose(() => aliasTab.refreshAliases());
+
   return AliasScreenNotifier(
     aliasService: ref.read(aliasServiceProvider),
-    aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
+    aliasTabNotifier: aliasTab,
   );
 });
 

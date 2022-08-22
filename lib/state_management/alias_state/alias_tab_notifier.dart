@@ -166,7 +166,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       ..removeWhere((listAlias) => listAlias.id == updatedAlias.id);
 
     _updateState(state.copyWith(availableAliasList: availableAliases));
-    refreshAliases();
   }
 
   /// This function's main use is to improve user experience by
@@ -180,7 +179,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       ..removeWhere((listAlias) => listAlias.id == updatedAlias.id);
 
     _updateState(state.copyWith(deletedAliasList: deletedAliases));
-    refreshAliases();
   }
 
   /// Adds specific alias to aliases, mainly used to add newly
