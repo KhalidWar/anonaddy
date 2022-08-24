@@ -1,10 +1,10 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/screens/account_tab/recipients/components/recipient_add_pgp_key.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_actions_list_tile.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_trailing_loading_switch.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
@@ -18,7 +18,6 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -162,7 +161,19 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           trailing: recipient.fingerprint.isEmpty
               ? IconButton(
                   icon: const Icon(Icons.add_circle_outline_outlined),
-                  onPressed: () => buildAddPGPKeyDialog(context, recipient),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(
+                                AppTheme.kBottomSheetBorderRadius)),
+                      ),
+                      builder: (context) =>
+                          RecipientAddPgpKey(recipient: recipient),
+                    );
+                  },
                 )
               : IconButton(
                   icon: const Icon(
@@ -290,77 +301,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           if (mounted) Navigator.pop(context);
         },
       ),
-    );
-  }
-
-  Future buildAddPGPKeyDialog(BuildContext context, Recipient recipient) {
-    final formKey = GlobalKey<FormState>();
-
-    String keyData = '';
-
-    Future<void> addPublicKey() async {
-      if (formKey.currentState!.validate()) {
-        await ref
-            .read(recipientScreenStateNotifier.notifier)
-            .addPublicGPGKey(recipient, keyData);
-        if (mounted) Navigator.pop(context);
-      }
-    }
-
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
-      ),
-      builder: (context) {
-        final size = MediaQuery.of(context).size;
-
-        return Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const BottomSheetHeader(headerLabel: 'Add GPG Key'),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  children: [
-                    const Text(AppStrings.addPublicKeyNote),
-                    SizedBox(height: size.height * 0.015),
-                    Form(
-                      key: formKey,
-                      child: TextFormField(
-                        autofocus: true,
-                        validator: (input) =>
-                            FormValidator.validatePGPKeyField(input!),
-                        minLines: 4,
-                        maxLines: 5,
-                        textInputAction: TextInputAction.done,
-                        onChanged: (input) => keyData = input,
-                        onFieldSubmitted: (submit) => addPublicKey(),
-                        decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                          contentPadding: const EdgeInsets.all(5),
-                          hintText: AppStrings.publicKeyFieldHint,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(),
-                      child: const Text('Add Key'),
-                      onPressed: () => addPublicKey(),
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
