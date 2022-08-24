@@ -34,6 +34,7 @@ class RecipientsScreen extends ConsumerStatefulWidget {
 }
 
 class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
+  /// This is a temp solution. Count logic should be moved to [RecipientScreenNotifier].
   List<int> calculateEmailsForwarded(Recipient recipient) {
     final list = <int>[];
     if (recipient.aliases.isEmpty) return <int>[];
