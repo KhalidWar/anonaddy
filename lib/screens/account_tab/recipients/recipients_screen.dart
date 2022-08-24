@@ -34,6 +34,42 @@ class RecipientsScreen extends ConsumerStatefulWidget {
 }
 
 class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
+  List<int> calculateEmailsForwarded(Recipient recipient) {
+    final list = <int>[];
+    if (recipient.aliases.isEmpty) return <int>[];
+    for (Alias alias in recipient.aliases) {
+      list.add(alias.emailsForwarded);
+    }
+    return list;
+  }
+
+  List<int> calculateEmailsBlocked(Recipient recipient) {
+    final list = <int>[];
+    if (recipient.aliases.isEmpty) return <int>[];
+    for (Alias alias in recipient.aliases) {
+      list.add(alias.emailsBlocked);
+    }
+    return list;
+  }
+
+  List<int> calculateEmailsReplied(Recipient recipient) {
+    final list = <int>[];
+    if (recipient.aliases.isEmpty) return <int>[];
+    for (Alias alias in recipient.aliases) {
+      list.add(alias.emailsReplied);
+    }
+    return list;
+  }
+
+  List<int> calculateEmailsSent(Recipient recipient) {
+    final list = <int>[];
+    if (recipient.aliases.isEmpty) return <int>[];
+    for (Alias alias in recipient.aliases) {
+      list.add(alias.emailsSent);
+    }
+    return list;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +82,8 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
@@ -83,7 +121,160 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               return const Center(child: PlatformLoadingIndicator());
 
             case RecipientScreenStatus.loaded:
-              return buildListView(context, recipientScreenState);
+              final recipient = recipientScreenState.recipient;
+
+              return ListView(
+                physics: const ClampingScrollPhysics(),
+                children: [
+                  if (recipientScreenState.isOffline) const OfflineBanner(),
+                  if (recipient.emailVerifiedAt.isEmpty)
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: SvgPicture.asset(
+                        'assets/images/envelope.svg',
+                        height: size.height * 0.22,
+                      ),
+                    )
+                  else
+                    AliasScreenPieChart(
+                      emailsForwarded: NicheMethod.reduceListElements(
+                        calculateEmailsForwarded(recipient),
+                      ),
+                      emailsBlocked: NicheMethod.reduceListElements(
+                        calculateEmailsBlocked(recipient),
+                      ),
+                      emailsReplied: NicheMethod.reduceListElements(
+                        calculateEmailsReplied(recipient),
+                      ),
+                      emailsSent: NicheMethod.reduceListElements(
+                        calculateEmailsSent(recipient),
+                      ),
+                    ),
+                  Divider(height: size.height * 0.03),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                    child: Text('Actions',
+                        style: Theme.of(context).textTheme.headline6),
+                  ),
+                  RecipientScreenActionsListTile(
+                    leadingIconData: Icons.email_outlined,
+                    title: recipient.email,
+                    subtitle: 'Recipient Email',
+                    trailing: IconButton(
+                      icon: const Icon(Icons.copy),
+                      onPressed: () => NicheMethod.copyOnTap(recipient.email),
+                    ),
+                  ),
+                  RecipientScreenActionsListTile(
+                    leadingIconData: Icons.fingerprint_outlined,
+                    title: recipient.fingerprint.isEmpty
+                        ? 'No fingerprint found'
+                        : recipient.fingerprint,
+                    subtitle: 'GPG Key Fingerprint',
+                    trailing: recipient.fingerprint.isEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.add_circle_outline_outlined),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(
+                                          AppTheme.kBottomSheetBorderRadius)),
+                                ),
+                                builder: (context) =>
+                                    RecipientAddPgpKey(recipient: recipient),
+                              );
+                            },
+                          )
+                        : IconButton(
+                            icon: const Icon(
+                              Icons.delete_outline_outlined,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              PlatformAware.platformDialog(
+                                context: context,
+                                child: PlatformAlertDialog(
+                                  title: 'Remove Public Key',
+                                  content: AnonAddyString
+                                      .removeRecipientPublicKeyConfirmation,
+                                  method: () async {
+                                    await ref
+                                        .read(recipientScreenStateNotifier
+                                            .notifier)
+                                        .removePublicGPGKey(recipient);
+
+                                    /// Dismisses this dialog
+                                    if (mounted) Navigator.pop(context);
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                  RecipientScreenActionsListTile(
+                    leadingIconData:
+                        recipient.shouldEncrypt ? Icons.lock : Icons.lock_open,
+                    leadingIconColor:
+                        recipient.shouldEncrypt ? Colors.green : null,
+                    title:
+                        recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted',
+                    subtitle: 'Encryption',
+                    trailing: recipient.fingerprint.isEmpty
+                        ? Container()
+                        : RecipientScreenTrailingLoadingSwitch(
+                            isLoading:
+                                recipientScreenState.isEncryptionToggleLoading,
+                            switchValue:
+                                recipientScreenState.recipient.shouldEncrypt,
+                            onPress: (toggle) async {
+                              recipient.shouldEncrypt
+                                  ? await ref
+                                      .read(
+                                          recipientScreenStateNotifier.notifier)
+                                      .disableEncryption(recipient)
+                                  : await ref
+                                      .read(
+                                          recipientScreenStateNotifier.notifier)
+                                      .enableEncryption(recipient);
+                            },
+                          ),
+                  ),
+                  if (recipient.emailVerifiedAt.isEmpty)
+                    RecipientScreenActionsListTile(
+                      leadingIconData: Icons.verified_outlined,
+                      title: recipient.emailVerifiedAt.isEmpty ? 'No' : 'Yes',
+                      subtitle: 'Is Email Verified?',
+                      trailing: TextButton(
+                        child: const Text('Verify!'),
+                        onPressed: () => ref
+                            .read(recipientScreenStateNotifier.notifier)
+                            .resendVerificationEmail(recipient.id),
+                      ),
+                    ),
+                  const RecipientScreenUnverifiedWarning(),
+                  const RecipientScreenAliases(),
+                  Divider(height: size.height * 0.03),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      AliasCreatedAtWidget(
+                        label: 'Created:',
+                        dateTime: recipient.createdAt.toString(),
+                      ),
+                      AliasCreatedAtWidget(
+                        label: 'Updated:',
+                        dateTime: recipient.updatedAt.toString(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                ],
+              );
 
             case RecipientScreenStatus.failed:
               final error = recipientScreenState.errorMessage;
@@ -94,160 +285,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           }
         },
       ),
-    );
-  }
-
-  Widget buildListView(
-      BuildContext context, RecipientScreenState recipientScreenState) {
-    final recipient = recipientScreenState.recipient;
-
-    final recipientProvider = ref.read(recipientScreenStateNotifier.notifier);
-    final size = MediaQuery.of(context).size;
-
-    final List<int> forwardedList = [];
-    final List<int> blockedList = [];
-    final List<int> repliedList = [];
-    final List<int> sentList = [];
-
-    if (recipient.aliases.isNotEmpty) {
-      for (Alias alias in recipient.aliases) {
-        forwardedList.add(alias.emailsForwarded);
-        blockedList.add(alias.emailsBlocked);
-        repliedList.add(alias.emailsReplied);
-        sentList.add(alias.emailsSent);
-      }
-    }
-
-    return ListView(
-      physics: const ClampingScrollPhysics(),
-      children: [
-        if (recipientScreenState.isOffline) const OfflineBanner(),
-        if (recipient.aliases.isEmpty || recipient.emailVerifiedAt.isEmpty)
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(vertical: 40),
-            child: SvgPicture.asset(
-              'assets/images/envelope.svg',
-              height: size.height * 0.22,
-            ),
-          )
-        else
-          AliasScreenPieChart(
-            emailsForwarded: NicheMethod.reduceListElements(forwardedList),
-            emailsBlocked: NicheMethod.reduceListElements(blockedList),
-            emailsReplied: NicheMethod.reduceListElements(repliedList),
-            emailsSent: NicheMethod.reduceListElements(sentList),
-          ),
-        Divider(height: size.height * 0.03),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-          child: Text('Actions', style: Theme.of(context).textTheme.headline6),
-        ),
-        RecipientScreenActionsListTile(
-          leadingIconData: Icons.email_outlined,
-          title: recipient.email,
-          subtitle: 'Recipient Email',
-          trailing: IconButton(
-            icon: const Icon(Icons.copy),
-            onPressed: () => NicheMethod.copyOnTap(recipient.email),
-          ),
-        ),
-        RecipientScreenActionsListTile(
-          leadingIconData: Icons.fingerprint_outlined,
-          title: recipient.fingerprint.isEmpty
-              ? 'No fingerprint found'
-              : recipient.fingerprint,
-          subtitle: 'GPG Key Fingerprint',
-          trailing: recipient.fingerprint.isEmpty
-              ? IconButton(
-                  icon: const Icon(Icons.add_circle_outline_outlined),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(
-                                AppTheme.kBottomSheetBorderRadius)),
-                      ),
-                      builder: (context) =>
-                          RecipientAddPgpKey(recipient: recipient),
-                    );
-                  },
-                )
-              : IconButton(
-                  icon: const Icon(
-                    Icons.delete_outline_outlined,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    PlatformAware.platformDialog(
-                      context: context,
-                      child: PlatformAlertDialog(
-                        title: 'Remove Public Key',
-                        content:
-                            AnonAddyString.removeRecipientPublicKeyConfirmation,
-                        method: () async {
-                          await ref
-                              .read(recipientScreenStateNotifier.notifier)
-                              .removePublicGPGKey(recipient);
-
-                          /// Dismisses this dialog
-                          if (mounted) Navigator.pop(context);
-                        },
-                      ),
-                    );
-                  },
-                ),
-        ),
-        RecipientScreenActionsListTile(
-          leadingIconData:
-              recipient.shouldEncrypt ? Icons.lock : Icons.lock_open,
-          leadingIconColor: recipient.shouldEncrypt ? Colors.green : null,
-          title: recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted',
-          subtitle: 'Encryption',
-          trailing: recipient.fingerprint.isEmpty
-              ? Container()
-              : RecipientScreenTrailingLoadingSwitch(
-                  isLoading: recipientScreenState.isEncryptionToggleLoading,
-                  switchValue: recipientScreenState.recipient.shouldEncrypt,
-                  onPress: (toggle) async {
-                    recipient.shouldEncrypt
-                        ? await recipientProvider.disableEncryption(recipient)
-                        : await recipientProvider.enableEncryption(recipient);
-                  },
-                ),
-        ),
-        if (recipient.emailVerifiedAt.isEmpty)
-          RecipientScreenActionsListTile(
-            leadingIconData: Icons.verified_outlined,
-            title: recipient.emailVerifiedAt.isEmpty ? 'No' : 'Yes',
-            subtitle: 'Is Email Verified?',
-            trailing: TextButton(
-              child: const Text('Verify!'),
-              onPressed: () => ref
-                  .read(recipientScreenStateNotifier.notifier)
-                  .resendVerificationEmail(recipient.id),
-            ),
-          ),
-        const RecipientScreenUnverifiedWarning(),
-        const RecipientScreenAliases(),
-        Divider(height: size.height * 0.03),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            AliasCreatedAtWidget(
-              label: 'Created:',
-              dateTime: recipient.createdAt.toString(),
-            ),
-            AliasCreatedAtWidget(
-              label: 'Updated:',
-              dateTime: recipient.updatedAt.toString(),
-            ),
-          ],
-        ),
-        SizedBox(height: size.height * 0.03),
-      ],
     );
   }
 }
