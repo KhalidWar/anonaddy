@@ -1,5 +1,7 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_actions_list_tile.dart';
+import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_trailing_loading_switch.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
@@ -7,7 +9,6 @@ import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/offline_banner.dart';
@@ -15,7 +16,6 @@ import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -49,7 +49,32 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context),
+      appBar: CustomAppBar(
+        title: 'Recipient',
+        leadingOnPress: () => Navigator.pop(context),
+        showTrailing: true,
+        trailingLabel: 'Delete Recipient',
+        trailingOnPress: (choice) {
+          PlatformAware.platformDialog(
+            context: context,
+            child: PlatformAlertDialog(
+              title: 'Delete Recipient',
+              content: AnonAddyString.deleteRecipientConfirmation,
+              method: () async {
+                await ref
+                    .read(recipientScreenStateNotifier.notifier)
+                    .removeRecipient(widget.recipient);
+
+                /// Dismisses this dialog
+                if (mounted) Navigator.pop(context);
+
+                /// Dismisses [RecipientScreen] after recipient deletion
+                if (mounted) Navigator.pop(context);
+              },
+            ),
+          );
+        },
+      ),
       body: Consumer(
         builder: (context, watch, _) {
           final recipientScreenState = ref.watch(recipientScreenStateNotifier);
@@ -94,12 +119,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
       }
     }
 
-    Future<void> toggleEncryption() async {
-      return recipient.shouldEncrypt
-          ? await recipientProvider.disableEncryption(recipient)
-          : await recipientProvider.enableEncryption(recipient);
-    }
-
     return ListView(
       physics: const ClampingScrollPhysics(),
       children: [
@@ -125,14 +144,16 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
           child: Text('Actions', style: Theme.of(context).textTheme.headline6),
         ),
-        AliasDetailListTile(
+        RecipientScreenActionsListTile(
           leadingIconData: Icons.email_outlined,
           title: recipient.email,
           subtitle: 'Recipient Email',
-          trailing: IconButton(icon: const Icon(Icons.copy), onPressed: () {}),
-          trailingIconOnPress: () => NicheMethod.copyOnTap(recipient.email),
+          trailing: IconButton(
+            icon: const Icon(Icons.copy),
+            onPressed: () => NicheMethod.copyOnTap(recipient.email),
+          ),
         ),
-        AliasDetailListTile(
+        RecipientScreenActionsListTile(
           leadingIconData: Icons.fingerprint_outlined,
           title: recipient.fingerprint.isEmpty
               ? 'No fingerprint found'
@@ -141,16 +162,17 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           trailing: recipient.fingerprint.isEmpty
               ? IconButton(
                   icon: const Icon(Icons.add_circle_outline_outlined),
-                  onPressed: () {})
+                  onPressed: () => buildAddPGPKeyDialog(context, recipient),
+                )
               : IconButton(
-                  icon: const Icon(Icons.delete_outline_outlined,
-                      color: Colors.red),
-                  onPressed: () {}),
-          trailingIconOnPress: recipient.fingerprint.isEmpty
-              ? () => buildAddPGPKeyDialog(context, recipient)
-              : () => buildRemovePGPKeyDialog(context, recipient),
+                  icon: const Icon(
+                    Icons.delete_outline_outlined,
+                    color: Colors.red,
+                  ),
+                  onPressed: () => buildRemovePGPKeyDialog(context, recipient),
+                ),
         ),
-        AliasDetailListTile(
+        RecipientScreenActionsListTile(
           leadingIconData:
               recipient.shouldEncrypt ? Icons.lock : Icons.lock_open,
           leadingIconColor: recipient.shouldEncrypt ? Colors.green : null,
@@ -158,12 +180,18 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           subtitle: 'Encryption',
           trailing: recipient.fingerprint.isEmpty
               ? Container()
-              : buildSwitch(recipientScreenState),
-          trailingIconOnPress:
-              recipient.fingerprint.isEmpty ? null : () => toggleEncryption(),
+              : RecipientScreenTrailingLoadingSwitch(
+                  isLoading: recipientScreenState.isEncryptionToggleLoading,
+                  switchValue: recipientScreenState.recipient.shouldEncrypt,
+                  onPress: (toggle) async {
+                    recipient.shouldEncrypt
+                        ? await recipientProvider.disableEncryption(recipient)
+                        : await recipientProvider.enableEncryption(recipient);
+                  },
+                ),
         ),
         recipient.emailVerifiedAt.isEmpty
-            ? AliasDetailListTile(
+            ? RecipientScreenActionsListTile(
                 leadingIconData: Icons.verified_outlined,
                 title: recipient.emailVerifiedAt.isEmpty ? 'No' : 'Yes',
                 subtitle: 'Is Email Verified?',
@@ -171,8 +199,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   child: const Text('Verify now!'),
                   onPressed: () {},
                 ),
-                trailingIconOnPress: () =>
-                    recipientProvider.resendVerificationEmail(recipient),
               )
             : Container(),
         if (recipient.aliases.isEmpty)
@@ -223,20 +249,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           ],
         ),
         SizedBox(height: size.height * 0.03),
-      ],
-    );
-  }
-
-  Row buildSwitch(RecipientScreenState recipientScreenState) {
-    return Row(
-      children: [
-        recipientScreenState.isEncryptionToggleLoading
-            ? const PlatformLoadingIndicator(size: 20)
-            : Container(),
-        PlatformSwitch(
-          value: recipientScreenState.recipient.shouldEncrypt,
-          onChanged: (toggle) {},
-        ),
       ],
     );
   }
@@ -349,37 +361,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           ),
         );
       },
-    );
-  }
-
-  AppBar buildAppBar(BuildContext context) {
-    void deleteRecipient() {
-      PlatformAware.platformDialog(
-        context: context,
-        child: PlatformAlertDialog(
-          title: 'Delete Recipient',
-          content: AnonAddyString.deleteRecipientConfirmation,
-          method: () async {
-            await ref
-                .read(recipientScreenStateNotifier.notifier)
-                .removeRecipient(widget.recipient);
-
-            /// Dismisses this dialog
-            if (mounted) Navigator.pop(context);
-
-            /// Dismisses [RecipientScreen] after recipient deletion
-            if (mounted) Navigator.pop(context);
-          },
-        ),
-      );
-    }
-
-    return CustomAppBar(
-      title: 'Recipient',
-      leadingOnPress: () => Navigator.pop(context),
-      showTrailing: true,
-      trailingLabel: 'Delete Recipient',
-      trailingOnPress: (choice) => deleteRecipient(),
     );
   }
 }
