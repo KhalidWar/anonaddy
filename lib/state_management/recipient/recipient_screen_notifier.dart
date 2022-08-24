@@ -147,9 +147,9 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> resendVerificationEmail(Recipient recipient) async {
+  Future<void> resendVerificationEmail(String recipientId) async {
     try {
-      await recipientService.resendVerificationEmail(recipient.id);
+      await recipientService.resendVerificationEmail(recipientId);
       showToast('Verification email is sent');
     } catch (error) {
       final dioError = error as DioError;
