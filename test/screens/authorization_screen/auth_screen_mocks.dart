@@ -1,13 +1,11 @@
 import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
-import 'package:anonaddy/services/changelog_service/changelog_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/state_management/authorization/auth_state.dart';
-import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_state.dart';
 import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
@@ -34,12 +32,6 @@ final testSuccessAuthStateNotifier =
     biometricService: _MockBiometricService(),
     tokenService: _MockSuccessAccessTokenService(),
     searchHistory: _MockSearchHistoryNotifier(),
-  );
-});
-
-final testChangelogNotifier = StateNotifierProvider((ref) {
-  return ChangelogNotifier(
-    changelogService: _MockChangelogService(),
   );
 });
 
@@ -105,14 +97,6 @@ class _MockSuccessAccessTokenService extends Mock
 class _MockSearchHistoryNotifier extends Mock implements SearchHistoryNotifier {
   @override
   Future<void> clearSearchHistory() async {}
-}
-
-class _MockChangelogService extends Mock implements ChangelogService {
-  @override
-  Future<String?> getChangelogStatus() async => 'false';
-
-  @override
-  Future<void> markChangelogRead() async {}
 }
 
 class _MockOfflineData extends Mock implements OfflineData {

@@ -2,7 +2,6 @@ import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart'
 import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/state_management/authorization/auth_notifier.dart';
 import 'package:anonaddy/state_management/authorization/auth_state.dart';
-import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +14,6 @@ void main() {
     return ProviderScope(
       overrides: [
         authStateNotifier.overrideWithProvider(provider),
-        changelogStateNotifier.overrideWithProvider(testChangelogNotifier),
         domainOptionsStateNotifier
             .overrideWithProvider(testDomainOptionsNotifier),
       ],
