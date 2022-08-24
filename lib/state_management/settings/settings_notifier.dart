@@ -5,6 +5,7 @@ import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/settings/settings_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 final settingsStateNotifier =
     StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
@@ -54,6 +55,37 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     }
   }
 
+  Future<void> showChangelogIfAppUpdated() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      final currentAppVersion = packageInfo.version;
+      final oldAppVersion = state.appVersion;
+      final isUpdated = oldAppVersion != currentAppVersion;
+
+      if (isUpdated) {
+        _updateState(state.copyWith(showChangelog: true));
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
+  Future<void> dismissChangelog() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      final currentAppVersion = packageInfo.version;
+      final newState = state.copyWith(
+        appVersion: currentAppVersion,
+        showChangelog: false,
+      );
+      _updateState(newState);
+
+      offlineData.saveCurrentAppVersion(currentAppVersion);
+    } catch (error) {
+      return;
+    }
+  }
+
   Future<void> _saveSettingsState() async {
     try {
       final mappedState = state.toMap();
@@ -69,6 +101,10 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       final securedData = await offlineData.loadSettingsState();
       if (securedData.isNotEmpty) {
         final mappedState = json.decode(securedData);
+
+        /// Always set [showChangelog] to false so it'd be decided by [showChangelogIfAppUpdated]
+        mappedState['showChangelog'] = false;
+        if (mappedState['appVersion'] == null) mappedState['appVersion'] = '';
         final storedState = SettingsState.fromMap(mappedState);
         _updateState(storedState);
       }
