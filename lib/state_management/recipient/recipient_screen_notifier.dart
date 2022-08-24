@@ -171,6 +171,42 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
+  Future<void> enableReplyAndSend(Recipient recipient) async {
+    try {
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: true));
+      await recipientService.enableReplyAndSend(recipient.id);
+      final updatedRecipient = recipient.copyWith(canReplySend: true);
+      _updateState(state.copyWith(
+        recipient: updatedRecipient,
+        isReplySendAndSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
+    }
+  }
+
+  Future disableReplyAndSend(Recipient recipient) async {
+    try {
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: true));
+      await recipientService.disableEncryption(recipient.id);
+      final updatedRecipient = recipient.copyWith(canReplySend: false);
+      _updateState(state.copyWith(
+        recipient: updatedRecipient,
+        isReplySendAndSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
+    }
+  }
+
   void _refreshRecipientAndAccountData() {
     /// Refresh RecipientState after adding/removing a recipient.
     recipientTabNotifier.refreshRecipients();

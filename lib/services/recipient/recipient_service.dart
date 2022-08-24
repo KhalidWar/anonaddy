@@ -120,4 +120,25 @@ class RecipientService {
       rethrow;
     }
   }
+
+  Future<void> enableReplyAndSend(String recipientId) async {
+    try {
+      const path = '$kUnEncodedBaseURL/allowed-recipients';
+      final data = json.encode({"id": recipientId});
+      final response = await dio.post(path, data: data);
+      log('enableReplyAndSend: ${response.statusCode}');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> disableReplyAndSend(String recipientId) async {
+    try {
+      final path = '$kUnEncodedBaseURL/allowed-recipients/$recipientId';
+      final response = await dio.delete(path);
+      log('disableReplyAndSend: ${response.statusCode}');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

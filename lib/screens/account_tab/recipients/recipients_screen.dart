@@ -244,6 +244,27 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                             },
                           ),
                   ),
+                  RecipientScreenActionsListTile(
+                    leadingIconData: Icons.reply,
+                    leadingIconColor:
+                        recipient.canReplySend ? Colors.green : null,
+                    title: recipient.canReplySend ? 'Enabled' : 'Disabled',
+                    subtitle: 'Can reply/send',
+                    trailing: RecipientScreenTrailingLoadingSwitch(
+                      isLoading:
+                          recipientScreenState.isReplySendAndSwitchLoading,
+                      switchValue: recipientScreenState.recipient.canReplySend,
+                      onPress: (toggle) async {
+                        recipient.canReplySend
+                            ? await ref
+                                .read(recipientScreenStateNotifier.notifier)
+                                .disableReplyAndSend(recipient)
+                            : await ref
+                                .read(recipientScreenStateNotifier.notifier)
+                                .enableReplyAndSend(recipient);
+                      },
+                    ),
+                  ),
                   if (recipient.emailVerifiedAt.isEmpty)
                     RecipientScreenActionsListTile(
                       leadingIconData: Icons.verified_outlined,
