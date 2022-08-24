@@ -116,7 +116,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       await aliasService.deleteAlias(alias.id);
       NicheMethod.showToast(ToastMessage.deleteAliasSuccess);
       final updatedAlias = state.alias.copyWith(deletedAt: '');
-      aliasTabNotifier.deleteAlias(alias);
+      aliasTabNotifier.removeDeletedAlias(alias);
 
       final newState =
           state.copyWith(deleteAliasLoading: false, alias: updatedAlias);
@@ -135,7 +135,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       _updateState(state.copyWith(deleteAliasLoading: true));
       final newAlias = await aliasService.restoreAlias(alias.id);
       NicheMethod.showToast(ToastMessage.restoreAliasSuccess);
-      aliasTabNotifier.restoreAlias(alias);
+      aliasTabNotifier.removeRestoredAlias(alias);
 
       final newState =
           state.copyWith(deleteAliasLoading: false, alias: newAlias);

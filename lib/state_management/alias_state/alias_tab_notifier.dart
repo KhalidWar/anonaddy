@@ -154,29 +154,21 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     return <Alias>[];
   }
 
-  /// This function's main use is to improve user experience by
-  /// quickly deleting alias from state to emulate responsiveness.
+  /// This function's main use is to improve user experience by quickly deleting
+  /// a deleted alias from [availableAliasList] to emulate responsiveness.
   /// Then, it calls for aliases refresh.
-  void deleteAlias(Alias alias) {
-    /// Emulates deleted alias by setting its [deletedAt] to non-empty value.
-    final updatedAlias = alias.copyWith(deletedAt: '00');
-
-    /// Remove alias from [availableAliasList]
-    final availableAliases = state.availableAliasList
-      ..removeWhere((listAlias) => listAlias.id == updatedAlias.id);
+  void removeDeletedAlias(Alias alias) {
+    final availableAliases = [...state.availableAliasList]
+      ..removeWhere((listAlias) => listAlias.id == alias.id);
 
     _updateState(state.copyWith(availableAliasList: availableAliases));
   }
 
-  /// This function's main use is to improve user experience by
-  /// quickly restoring alias to emulate responsiveness.
-  /// Then, it calls for aliases refresh.
-  void restoreAlias(Alias alias) {
-    /// Emulates deleted alias by setting its [deletedAt] to non-empty value.
-    final updatedAlias = alias.copyWith(deletedAt: '');
-
-    final deletedAliases = state.deletedAliasList
-      ..removeWhere((listAlias) => listAlias.id == updatedAlias.id);
+  /// This function's main use is to improve user experience by quickly removing
+  /// a restored alias from [deletedAliasList] to emulate responsiveness.
+  void removeRestoredAlias(Alias alias) {
+    final deletedAliases = [...state.deletedAliasList]
+      ..removeWhere((listAlias) => listAlias.id == alias.id);
 
     _updateState(state.copyWith(deletedAliasList: deletedAliases));
   }
@@ -185,11 +177,10 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// created alias to list of available aliases without making an API
   /// request and forcing the user to wait before interacting with the new alias.
   void addAlias(Alias alias) async {
-    /// Injects [alias] into the first slot in the list
-    final availableAliases = state.availableAliasList..insert(0, alias);
+    /// Populates new list from existing state's availableAliasList.
+    /// Then, injects [alias] into the first slot in the list.
+    final availableAliases = [...state.availableAliasList]..insert(0, alias);
 
-    _updateState(state.copyWith(
-      availableAliasList: availableAliases,
-    ));
+    _updateState(state.copyWith(availableAliasList: availableAliases));
   }
 }
