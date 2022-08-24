@@ -2,14 +2,14 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_add_pgp_key.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_actions_list_tile.dart';
+import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_aliases.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_trailing_loading_switch.dart';
+import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/offline_banner.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
@@ -180,7 +180,24 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     Icons.delete_outline_outlined,
                     color: Colors.red,
                   ),
-                  onPressed: () => buildRemovePGPKeyDialog(context, recipient),
+                  onPressed: () {
+                    PlatformAware.platformDialog(
+                      context: context,
+                      child: PlatformAlertDialog(
+                        title: 'Remove Public Key',
+                        content:
+                            AnonAddyString.removeRecipientPublicKeyConfirmation,
+                        method: () async {
+                          await ref
+                              .read(recipientScreenStateNotifier.notifier)
+                              .removePublicGPGKey(recipient);
+
+                          /// Dismisses this dialog
+                          if (mounted) Navigator.pop(context);
+                        },
+                      ),
+                    );
+                  },
                 ),
         ),
         RecipientScreenActionsListTile(
@@ -201,50 +218,20 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   },
                 ),
         ),
-        recipient.emailVerifiedAt.isEmpty
-            ? RecipientScreenActionsListTile(
-                leadingIconData: Icons.verified_outlined,
-                title: recipient.emailVerifiedAt.isEmpty ? 'No' : 'Yes',
-                subtitle: 'Is Email Verified?',
-                trailing: TextButton(
-                  child: const Text('Verify now!'),
-                  onPressed: () {},
-                ),
-              )
-            : Container(),
-        if (recipient.aliases.isEmpty)
-          Container()
-        else if (recipient.emailVerifiedAt.isEmpty)
-          buildUnverifiedEmailWarning(size)
-        else
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Divider(height: size.height * 0.03),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                child: Text('Aliases',
-                    style: Theme.of(context).textTheme.headline6),
-              ),
-              SizedBox(height: size.height * 0.01),
-              if (recipient.aliases.isEmpty)
-                Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: const Text('No aliases found'))
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: recipient.aliases.length,
-                  itemBuilder: (context, index) {
-                    return AliasListTile(
-                      alias: recipient.aliases[index],
-                    );
-                  },
-                ),
-            ],
+        if (recipient.emailVerifiedAt.isEmpty)
+          RecipientScreenActionsListTile(
+            leadingIconData: Icons.verified_outlined,
+            title: recipient.emailVerifiedAt.isEmpty ? 'No' : 'Yes',
+            subtitle: 'Is Email Verified?',
+            trailing: TextButton(
+              child: const Text('Verify!'),
+              onPressed: () => ref
+                  .read(recipientScreenStateNotifier.notifier)
+                  .resendVerificationEmail(recipient.id),
+            ),
           ),
+        const RecipientScreenUnverifiedWarning(),
+        const RecipientScreenAliases(),
         Divider(height: size.height * 0.03),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -261,46 +248,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
         ),
         SizedBox(height: size.height * 0.03),
       ],
-    );
-  }
-
-  Container buildUnverifiedEmailWarning(Size size) {
-    return Container(
-      height: size.height * 0.05,
-      width: double.infinity,
-      color: Colors.amber,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      child: Row(
-        children: [
-          const Icon(Icons.warning_amber_outlined, color: Colors.black),
-          const SizedBox(width: 16),
-          const Expanded(
-            child: Text(
-              AppStrings.unverifiedRecipientNote,
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-          Container(),
-        ],
-      ),
-    );
-  }
-
-  void buildRemovePGPKeyDialog(BuildContext context, Recipient recipient) {
-    PlatformAware.platformDialog(
-      context: context,
-      child: PlatformAlertDialog(
-        title: 'Remove Public Key',
-        content: AnonAddyString.removeRecipientPublicKeyConfirmation,
-        method: () async {
-          await ref
-              .read(recipientScreenStateNotifier.notifier)
-              .removePublicGPGKey(recipient);
-
-          /// Dismisses this dialog
-          if (mounted) Navigator.pop(context);
-        },
-      ),
     );
   }
 }
