@@ -35,15 +35,6 @@ class RecipientsScreen extends ConsumerStatefulWidget {
 }
 
 class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
-  int calculateTotal(List<int> list) {
-    if (list.isEmpty) {
-      return 0;
-    } else {
-      final total = list.reduce((value, element) => value + element);
-      return total;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -124,10 +115,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
           )
         else
           AliasScreenPieChart(
-            emailsForwarded: calculateTotal(forwardedList),
-            emailsBlocked: calculateTotal(blockedList),
-            emailsReplied: calculateTotal(repliedList),
-            emailsSent: calculateTotal(sentList),
+            emailsForwarded: NicheMethod.reduceListElements(forwardedList),
+            emailsBlocked: NicheMethod.reduceListElements(blockedList),
+            emailsReplied: NicheMethod.reduceListElements(repliedList),
+            emailsSent: NicheMethod.reduceListElements(sentList),
           ),
         Divider(height: size.height * 0.03),
         Padding(

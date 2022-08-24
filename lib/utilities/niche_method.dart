@@ -100,4 +100,14 @@ class NicheMethod {
     final firstLetter = input[0];
     return input.replaceFirst(firstLetter, firstLetter.toUpperCase());
   }
+
+  /// Adds list elements together and returns the total.
+  static int reduceListElements(List<int> list) {
+    if (list.isEmpty) {
+      return 0;
+    } else {
+      final total = list.reduce((value, element) => value + element);
+      return total;
+    }
+  }
 }
