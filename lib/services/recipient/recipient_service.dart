@@ -121,12 +121,14 @@ class RecipientService {
     }
   }
 
-  Future<void> enableReplyAndSend(String recipientId) async {
+  Future<Recipient> enableReplyAndSend(String recipientId) async {
     try {
       const path = '$kUnEncodedBaseURL/allowed-recipients';
       final data = json.encode({"id": recipientId});
       final response = await dio.post(path, data: data);
       log('enableReplyAndSend: ${response.statusCode}');
+      final recipient = response.data['data'];
+      return Recipient.fromJson(recipient);
     } catch (e) {
       rethrow;
     }

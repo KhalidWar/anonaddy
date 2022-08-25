@@ -259,10 +259,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                         recipient.canReplySend
                             ? await ref
                                 .read(recipientScreenStateNotifier.notifier)
-                                .disableReplyAndSend(recipient)
+                                .disableReplyAndSend()
                             : await ref
                                 .read(recipientScreenStateNotifier.notifier)
-                                .enableReplyAndSend(recipient);
+                                .enableReplyAndSend();
                       },
                     ),
                   ),

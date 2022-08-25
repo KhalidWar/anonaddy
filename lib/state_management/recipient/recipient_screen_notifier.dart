@@ -171,13 +171,13 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> enableReplyAndSend(Recipient recipient) async {
+  Future<void> enableReplyAndSend() async {
     try {
       _updateState(state.copyWith(isReplySendAndSwitchLoading: true));
-      await recipientService.enableReplyAndSend(recipient.id);
-      final updatedRecipient = recipient.copyWith(canReplySend: true);
+      final recipient =
+          await recipientService.enableReplyAndSend(state.recipient.id);
       _updateState(state.copyWith(
-        recipient: updatedRecipient,
+        recipient: recipient,
         isReplySendAndSwitchLoading: false,
       ));
     } on DioError catch (dioError) {
@@ -189,11 +189,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future disableReplyAndSend(Recipient recipient) async {
+  Future disableReplyAndSend() async {
     try {
       _updateState(state.copyWith(isReplySendAndSwitchLoading: true));
-      await recipientService.disableEncryption(recipient.id);
-      final updatedRecipient = recipient.copyWith(canReplySend: false);
+      await recipientService.disableReplyAndSend(state.recipient.id);
+      final updatedRecipient = state.recipient.copyWith(canReplySend: false);
       _updateState(state.copyWith(
         recipient: updatedRecipient,
         isReplySendAndSwitchLoading: false,
