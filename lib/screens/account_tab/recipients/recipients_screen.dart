@@ -21,7 +21,6 @@ import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart'
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 
 class RecipientsScreen extends ConsumerStatefulWidget {
   const RecipientsScreen({Key? key, required this.recipient}) : super(key: key);
@@ -128,30 +127,21 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 physics: const ClampingScrollPhysics(),
                 children: [
                   if (recipientScreenState.isOffline) const OfflineBanner(),
-                  if (recipient.emailVerifiedAt.isEmpty)
-                    Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(vertical: 40),
-                      child: SvgPicture.asset(
-                        'assets/images/envelope.svg',
-                        height: size.height * 0.22,
-                      ),
-                    )
-                  else
-                    AliasScreenPieChart(
-                      emailsForwarded: NicheMethod.reduceListElements(
-                        calculateEmailsForwarded(recipient),
-                      ),
-                      emailsBlocked: NicheMethod.reduceListElements(
-                        calculateEmailsBlocked(recipient),
-                      ),
-                      emailsReplied: NicheMethod.reduceListElements(
-                        calculateEmailsReplied(recipient),
-                      ),
-                      emailsSent: NicheMethod.reduceListElements(
-                        calculateEmailsSent(recipient),
-                      ),
+                  const RecipientScreenUnverifiedWarning(),
+                  AliasScreenPieChart(
+                    emailsForwarded: NicheMethod.reduceListElements(
+                      calculateEmailsForwarded(recipient),
                     ),
+                    emailsBlocked: NicheMethod.reduceListElements(
+                      calculateEmailsBlocked(recipient),
+                    ),
+                    emailsReplied: NicheMethod.reduceListElements(
+                      calculateEmailsReplied(recipient),
+                    ),
+                    emailsSent: NicheMethod.reduceListElements(
+                      calculateEmailsSent(recipient),
+                    ),
+                  ),
                   Divider(height: size.height * 0.03),
                   Padding(
                     padding:
