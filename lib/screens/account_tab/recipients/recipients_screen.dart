@@ -266,6 +266,30 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       },
                     ),
                   ),
+                  RecipientScreenActionsListTile(
+                    leadingIconData: recipient.inlineEncryption
+                        ? Icons.enhanced_encryption
+                        : Icons.enhanced_encryption_outlined,
+                    leadingIconColor:
+                        recipient.inlineEncryption ? Colors.green : null,
+                    title: recipient.inlineEncryption ? 'Enabled' : 'Disabled',
+                    subtitle: 'PGP/Inline',
+                    trailing: RecipientScreenTrailingLoadingSwitch(
+                      isLoading:
+                          recipientScreenState.isInlineEncryptionSwitchLoading,
+                      switchValue:
+                          recipientScreenState.recipient.inlineEncryption,
+                      onPress: (toggle) async {
+                        recipient.inlineEncryption
+                            ? await ref
+                                .read(recipientScreenStateNotifier.notifier)
+                                .disableInlineEncryption()
+                            : await ref
+                                .read(recipientScreenStateNotifier.notifier)
+                                .enableInlineEncryption();
+                      },
+                    ),
+                  ),
                   if (recipient.emailVerifiedAt.isEmpty)
                     RecipientScreenActionsListTile(
                       leadingIconData: Icons.verified_outlined,

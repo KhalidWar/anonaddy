@@ -10,6 +10,7 @@ class RecipientScreenState {
     required this.errorMessage,
     required this.isEncryptionToggleLoading,
     required this.isReplySendAndSwitchLoading,
+    required this.isInlineEncryptionSwitchLoading,
     required this.isAddRecipientLoading,
     required this.isOffline,
   });
@@ -20,6 +21,7 @@ class RecipientScreenState {
 
   final bool isEncryptionToggleLoading;
   final bool isReplySendAndSwitchLoading;
+  final bool isInlineEncryptionSwitchLoading;
   final bool isAddRecipientLoading;
   final bool isOffline;
 
@@ -30,6 +32,7 @@ class RecipientScreenState {
       errorMessage: AppStrings.somethingWentWrong,
       isEncryptionToggleLoading: false,
       isReplySendAndSwitchLoading: false,
+      isInlineEncryptionSwitchLoading: false,
       isAddRecipientLoading: false,
       isOffline: false,
     );
@@ -41,6 +44,7 @@ class RecipientScreenState {
     String? errorMessage,
     bool? isEncryptionToggleLoading,
     bool? isReplySendAndSwitchLoading,
+    bool? isInlineEncryptionSwitchLoading,
     bool? isAddRecipientLoading,
     bool? isOffline,
   }) {
@@ -52,6 +56,8 @@ class RecipientScreenState {
           isEncryptionToggleLoading ?? this.isEncryptionToggleLoading,
       isReplySendAndSwitchLoading:
           isReplySendAndSwitchLoading ?? this.isReplySendAndSwitchLoading,
+      isInlineEncryptionSwitchLoading: isInlineEncryptionSwitchLoading ??
+          this.isInlineEncryptionSwitchLoading,
       isAddRecipientLoading:
           isAddRecipientLoading ?? this.isAddRecipientLoading,
       isOffline: isOffline ?? this.isOffline,
@@ -60,6 +66,6 @@ class RecipientScreenState {
 
   @override
   String toString() {
-    return 'RecipientScreenState{status: $status, recipient: $recipient, errorMessage: $errorMessage, isEncryptionToggleLoading: $isEncryptionToggleLoading, isReplySendAndSwitchLoading: $isReplySendAndSwitchLoading, isAddRecipientLoading: $isAddRecipientLoading, isOffline: $isOffline}';
+    return 'RecipientScreenState{status: $status, recipient: $recipient, errorMessage: $errorMessage, isEncryptionToggleLoading: $isEncryptionToggleLoading, isReplySendAndSwitchLoading: $isReplySendAndSwitchLoading, isInlineEncryptionSwitchLoading: $isInlineEncryptionSwitchLoading, isAddRecipientLoading: $isAddRecipientLoading, isOffline: $isOffline}';
   }
 }

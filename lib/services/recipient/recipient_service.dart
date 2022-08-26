@@ -143,4 +143,28 @@ class RecipientService {
       rethrow;
     }
   }
+
+  Future<Recipient> enableInlineEncryption(String recipientId) async {
+    try {
+      const path = '$kUnEncodedBaseURL/inline-encrypted-recipients';
+      final data = json.encode({"id": recipientId});
+      final response = await dio.post(path, data: data);
+      log('enableInlineEncryption: ${response.statusCode}');
+      final recipient = response.data['data'];
+      return Recipient.fromJson(recipient);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> disableInlineEncryption(String recipientId) async {
+    try {
+      final path =
+          '$kUnEncodedBaseURL/inline-encrypted-recipients/$recipientId';
+      final response = await dio.delete(path);
+      log('disableInlineEncryption: ${response.statusCode}');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

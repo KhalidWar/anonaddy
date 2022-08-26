@@ -207,6 +207,43 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
+  Future<void> enableInlineEncryption() async {
+    try {
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: true));
+      final recipient =
+          await recipientService.enableInlineEncryption(state.recipient.id);
+      _updateState(state.copyWith(
+        recipient: recipient,
+        isInlineEncryptionSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
+    }
+  }
+
+  Future disableInlineEncryption() async {
+    try {
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: true));
+      await recipientService.disableInlineEncryption(state.recipient.id);
+      final updatedRecipient =
+          state.recipient.copyWith(inlineEncryption: false);
+      _updateState(state.copyWith(
+        recipient: updatedRecipient,
+        isInlineEncryptionSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
+    }
+  }
+
   void _refreshRecipientAndAccountData() {
     /// Refresh RecipientState after adding/removing a recipient.
     recipientTabNotifier.refreshRecipients();
