@@ -264,64 +264,60 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                             },
                     ),
                   ),
-                  if (recipient.emailVerifiedAt.isNotEmpty)
-                    RecipientScreenActionsListTile(
-                      leadingIconData: recipient.inlineEncryption
-                          ? Icons.enhanced_encryption
-                          : Icons.enhanced_encryption_outlined,
-                      leadingIconColor:
-                          recipient.inlineEncryption ? Colors.green : null,
-                      title:
-                          recipient.inlineEncryption ? 'Enabled' : 'Disabled',
-                      subtitle: 'PGP/Inline',
-                      trailing: RecipientScreenTrailingLoadingSwitch(
-                        isLoading: recipientScreenState
-                            .isInlineEncryptionSwitchLoading,
-                        switchValue:
-                            recipientScreenState.recipient.inlineEncryption,
-                        onPress: recipient.fingerprint.isEmpty
-                            ? null
-                            : (toggle) async {
-                                recipient.inlineEncryption
-                                    ? await ref
-                                        .read(recipientScreenStateNotifier
-                                            .notifier)
-                                        .disableInlineEncryption()
-                                    : await ref
-                                        .read(recipientScreenStateNotifier
-                                            .notifier)
-                                        .enableInlineEncryption();
-                              },
-                      ),
+                  RecipientScreenActionsListTile(
+                    leadingIconData: recipient.inlineEncryption
+                        ? Icons.enhanced_encryption
+                        : Icons.enhanced_encryption_outlined,
+                    leadingIconColor:
+                        recipient.inlineEncryption ? Colors.green : null,
+                    title: recipient.inlineEncryption ? 'Enabled' : 'Disabled',
+                    subtitle: 'PGP/Inline',
+                    trailing: RecipientScreenTrailingLoadingSwitch(
+                      isLoading:
+                          recipientScreenState.isInlineEncryptionSwitchLoading,
+                      switchValue:
+                          recipientScreenState.recipient.inlineEncryption,
+                      onPress: recipient.fingerprint.isEmpty
+                          ? null
+                          : (toggle) async {
+                              recipient.inlineEncryption
+                                  ? await ref
+                                      .read(
+                                          recipientScreenStateNotifier.notifier)
+                                      .disableInlineEncryption()
+                                  : await ref
+                                      .read(
+                                          recipientScreenStateNotifier.notifier)
+                                      .enableInlineEncryption();
+                            },
                     ),
-                  if (recipient.emailVerifiedAt.isNotEmpty)
-                    RecipientScreenActionsListTile(
-                      leadingIconData: Icons.subject_outlined,
-                      leadingIconColor:
-                          recipient.protectedHeaders ? Colors.green : null,
-                      title:
-                          recipient.protectedHeaders ? 'Enabled' : 'Disabled',
-                      subtitle: 'Hide Subject',
-                      trailing: RecipientScreenTrailingLoadingSwitch(
-                        isLoading:
-                            recipientScreenState.isProtectedHeaderSwitchLoading,
-                        switchValue:
-                            recipientScreenState.recipient.protectedHeaders,
-                        onPress: recipient.fingerprint.isEmpty
-                            ? null
-                            : (toggle) async {
-                                recipient.protectedHeaders
-                                    ? await ref
-                                        .read(recipientScreenStateNotifier
-                                            .notifier)
-                                        .disableProtectedHeader()
-                                    : await ref
-                                        .read(recipientScreenStateNotifier
-                                            .notifier)
-                                        .enableProtectedHeader();
-                              },
-                      ),
+                  ),
+                  RecipientScreenActionsListTile(
+                    leadingIconData: Icons.subject_outlined,
+                    leadingIconColor:
+                        recipient.protectedHeaders ? Colors.green : null,
+                    title: recipient.protectedHeaders ? 'Enabled' : 'Disabled',
+                    subtitle: 'Hide Subject',
+                    trailing: RecipientScreenTrailingLoadingSwitch(
+                      isLoading:
+                          recipientScreenState.isProtectedHeaderSwitchLoading,
+                      switchValue:
+                          recipientScreenState.recipient.protectedHeaders,
+                      onPress: recipient.fingerprint.isEmpty
+                          ? null
+                          : (toggle) async {
+                              recipient.protectedHeaders
+                                  ? await ref
+                                      .read(
+                                          recipientScreenStateNotifier.notifier)
+                                      .disableProtectedHeader()
+                                  : await ref
+                                      .read(
+                                          recipientScreenStateNotifier.notifier)
+                                      .enableProtectedHeader();
+                            },
                     ),
+                  ),
                   if (recipient.emailVerifiedAt.isEmpty)
                     RecipientScreenActionsListTile(
                       leadingIconData: Icons.verified_outlined,
