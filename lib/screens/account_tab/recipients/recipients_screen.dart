@@ -328,18 +328,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                             },
                     ),
                   ),
-                  if (recipient.emailVerifiedAt.isEmpty)
-                    RecipientScreenActionsListTile(
-                      leadingIconData: Icons.verified_outlined,
-                      title: recipient.emailVerifiedAt.isEmpty ? 'No' : 'Yes',
-                      subtitle: 'Is Email Verified?',
-                      trailing: TextButton(
-                        child: const Text('Verify!'),
-                        onPressed: () => ref
-                            .read(recipientScreenStateNotifier.notifier)
-                            .resendVerificationEmail(recipient.id),
-                      ),
-                    ),
                   const RecipientScreenAliases(),
                   Divider(height: size.height * 0.03),
                   Row(

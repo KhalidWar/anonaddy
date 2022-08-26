@@ -10,27 +10,31 @@ class RecipientScreenUnverifiedWarning extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
+    final recipient = ref.watch(recipientScreenStateNotifier).recipient;
 
-    final recipientScreenState = ref.watch(recipientScreenStateNotifier);
-
-    if (recipientScreenState.recipient.emailVerifiedAt.isEmpty) {
+    if (recipient.emailVerifiedAt.isEmpty) {
       return Container(
-        height: size.height * 0.05,
-        width: double.infinity,
         color: Colors.amber,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
+        padding: const EdgeInsets.all(10),
         child: Row(
           children: [
             const Icon(Icons.warning_amber_outlined, color: Colors.black),
-            const SizedBox(width: 16),
-            const Expanded(
+            const SizedBox(width: 8),
+            Expanded(
               child: Text(
                 AppStrings.unverifiedRecipientNote,
-                style: TextStyle(color: Colors.black),
+                style: Theme.of(context)
+                    .textTheme
+                    .caption
+                    ?.copyWith(color: Colors.black),
               ),
             ),
-            Container(),
+            TextButton(
+              child: const Text('Verify!'),
+              onPressed: () => ref
+                  .read(recipientScreenStateNotifier.notifier)
+                  .resendVerificationEmail(recipient.id),
+            ),
           ],
         ),
       );
