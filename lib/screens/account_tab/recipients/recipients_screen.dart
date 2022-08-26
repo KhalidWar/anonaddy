@@ -172,8 +172,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   ),
                   RecipientScreenActionsListTile(
                     leadingIconData: Icons.reply,
-                    leadingIconColor:
-                        recipient.canReplySend ? Colors.green : null,
                     title: recipient.canReplySend ? 'Enabled' : 'Disabled',
                     subtitle: 'Can reply/send',
                     trailing: RecipientScreenTrailingLoadingSwitch(

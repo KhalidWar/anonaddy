@@ -1,22 +1,20 @@
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 
 class RecipientScreenActionsListTile extends StatelessWidget {
   const RecipientScreenActionsListTile({
     Key? key,
-    this.subtitle,
+    required this.title,
+    required this.subtitle,
     this.leadingIconData,
-    this.title,
     this.trailing,
-    this.titleTextStyle,
     this.leadingIconColor,
   }) : super(key: key);
 
+  final String title;
+  final String subtitle;
   final IconData? leadingIconData;
   final Color? leadingIconColor;
-  final dynamic title, subtitle;
   final Widget? trailing;
-  final TextStyle? titleTextStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +29,12 @@ class RecipientScreenActionsListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  NicheMethod.fixDateTime(title),
-                  style: titleTextStyle,
+                  title,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  '$subtitle',
+                  subtitle,
                   style: Theme.of(context).textTheme.caption,
                 ),
               ],
