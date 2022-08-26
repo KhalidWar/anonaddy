@@ -340,7 +340,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                             .resendVerificationEmail(recipient.id),
                       ),
                     ),
-                  const RecipientScreenUnverifiedWarning(),
                   const RecipientScreenAliases(),
                   Divider(height: size.height * 0.03),
                   Row(
