@@ -291,9 +291,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     ),
                   ),
                   RecipientScreenActionsListTile(
-                    leadingIconData: recipient.protectedHeaders
-                        ? Icons.enhanced_encryption
-                        : Icons.enhanced_encryption_outlined,
+                    leadingIconData: Icons.subject_outlined,
                     leadingIconColor:
                         recipient.protectedHeaders ? Colors.green : null,
                     title: recipient.protectedHeaders ? 'Enabled' : 'Disabled',
