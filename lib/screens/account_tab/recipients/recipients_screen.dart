@@ -118,7 +118,19 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
 
           switch (recipientScreenState.status) {
             case RecipientScreenStatus.loading:
-              return const Center(child: PlatformLoadingIndicator());
+              return ListView(
+                physics: const ClampingScrollPhysics(),
+                children: [
+                  const AliasScreenPieChart(
+                    emailsForwarded: 0,
+                    emailsBlocked: 0,
+                    emailsReplied: 0,
+                    emailsSent: 0,
+                  ),
+                  Divider(height: size.height * 0.03),
+                  const Center(child: PlatformLoadingIndicator())
+                ],
+              );
 
             case RecipientScreenStatus.loaded:
               final recipient = recipientScreenState.recipient;
