@@ -209,6 +209,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
 
   Future<void> enableInlineEncryption() async {
     try {
+      if (state.recipient.protectedHeaders) {
+        showToast(AppStrings.disableProtectedHeadersFirst);
+        return;
+      }
+
       _updateState(state.copyWith(isInlineEncryptionSwitchLoading: true));
       final recipient =
           await recipientService.enableInlineEncryption(state.recipient.id);
@@ -246,6 +251,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
 
   Future<void> enableProtectedHeader() async {
     try {
+      if (state.recipient.inlineEncryption) {
+        showToast(AppStrings.disableInlineEncryptionFirst);
+        return;
+      }
+
       _updateState(state.copyWith(isProtectedHeaderSwitchLoading: true));
       final recipient =
           await recipientService.enableProtectedHeader(state.recipient.id);
