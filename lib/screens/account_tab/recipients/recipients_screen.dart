@@ -290,6 +290,30 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       },
                     ),
                   ),
+                  RecipientScreenActionsListTile(
+                    leadingIconData: recipient.protectedHeaders
+                        ? Icons.enhanced_encryption
+                        : Icons.enhanced_encryption_outlined,
+                    leadingIconColor:
+                        recipient.protectedHeaders ? Colors.green : null,
+                    title: recipient.protectedHeaders ? 'Enabled' : 'Disabled',
+                    subtitle: 'Hide Subject',
+                    trailing: RecipientScreenTrailingLoadingSwitch(
+                      isLoading:
+                          recipientScreenState.isProtectedHeaderSwitchLoading,
+                      switchValue:
+                          recipientScreenState.recipient.protectedHeaders,
+                      onPress: (toggle) async {
+                        recipient.protectedHeaders
+                            ? await ref
+                                .read(recipientScreenStateNotifier.notifier)
+                                .disableProtectedHeader()
+                            : await ref
+                                .read(recipientScreenStateNotifier.notifier)
+                                .enableProtectedHeader();
+                      },
+                    ),
+                  ),
                   if (recipient.emailVerifiedAt.isEmpty)
                     RecipientScreenActionsListTile(
                       leadingIconData: Icons.verified_outlined,

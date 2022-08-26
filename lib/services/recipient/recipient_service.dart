@@ -167,4 +167,28 @@ class RecipientService {
       rethrow;
     }
   }
+
+  Future<Recipient> enableProtectedHeader(String recipientId) async {
+    try {
+      const path = '$kUnEncodedBaseURL/protected-headers-recipients';
+      final data = json.encode({"id": recipientId});
+      final response = await dio.post(path, data: data);
+      log('enableProtectedHeader: ${response.statusCode}');
+      final recipient = response.data['data'];
+      return Recipient.fromJson(recipient);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> disableProtectedHeader(String recipientId) async {
+    try {
+      final path =
+          '$kUnEncodedBaseURL/protected-headers-recipients/$recipientId';
+      final response = await dio.delete(path);
+      log('disableProtectedHeader: ${response.statusCode}');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

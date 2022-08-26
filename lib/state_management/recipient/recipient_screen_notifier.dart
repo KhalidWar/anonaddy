@@ -244,6 +244,43 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
+  Future<void> enableProtectedHeader() async {
+    try {
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: true));
+      final recipient =
+          await recipientService.enableProtectedHeader(state.recipient.id);
+      _updateState(state.copyWith(
+        recipient: recipient,
+        isProtectedHeaderSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
+    }
+  }
+
+  Future disableProtectedHeader() async {
+    try {
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: true));
+      await recipientService.disableProtectedHeader(state.recipient.id);
+      final updatedRecipient =
+          state.recipient.copyWith(protectedHeaders: false);
+      _updateState(state.copyWith(
+        recipient: updatedRecipient,
+        isProtectedHeaderSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
+    }
+  }
+
   void _refreshRecipientAndAccountData() {
     /// Refresh RecipientState after adding/removing a recipient.
     recipientTabNotifier.refreshRecipients();
