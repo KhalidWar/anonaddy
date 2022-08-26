@@ -20,35 +20,30 @@ class RecipientScreenActionsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return title == null
-        ? Container()
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-            child: Row(
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        children: [
+          Icon(leadingIconData, color: leadingIconColor),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(leadingIconData, color: leadingIconColor),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        NicheMethod.fixDateTime(title),
-                        style: titleTextStyle,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: Text(
-                          '$subtitle',
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ],
-                  ),
+                Text(
+                  NicheMethod.fixDateTime(title),
+                  style: titleTextStyle,
                 ),
-                trailing ?? Container()
+                Text(
+                  '$subtitle',
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ],
             ),
-          );
+          ),
+          trailing ?? Container()
+        ],
+      ),
+    );
   }
 }

@@ -17,7 +17,7 @@ class RecipientScreenTrailingLoadingSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        isLoading ? const PlatformLoadingIndicator(size: 20) : Container(),
+        isLoading ? const PlatformLoadingIndicator(size: 15) : Container(),
         PlatformSwitch(
           value: switchValue,
           onChanged: onPress,
