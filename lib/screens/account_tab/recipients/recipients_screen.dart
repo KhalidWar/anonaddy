@@ -189,6 +189,16 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       },
                     ),
                   ),
+                  Divider(height: size.height * 0.03),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: size.height * 0.01,
+                    ),
+                    child: Text(
+                      'Encryption',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
                   RecipientScreenActionsListTile(
                     leadingIconData: Icons.fingerprint_outlined,
                     title: recipient.fingerprint.isEmpty
