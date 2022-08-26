@@ -126,8 +126,12 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     try {
       await recipientService.removePublicGPGKey(recipient.id);
       showToast(ToastMessage.deleteGPGKeySuccess);
-      final updatedRecipient =
-          recipient.copyWith(fingerprint: '', shouldEncrypt: false);
+      final updatedRecipient = recipient.copyWith(
+        fingerprint: '',
+        shouldEncrypt: false,
+        inlineEncryption: false,
+        protectedHeaders: false,
+      );
       _updateState(state.copyWith(recipient: updatedRecipient));
     } on DioError catch (dioError) {
       showToast(dioError.message);
