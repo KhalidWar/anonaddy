@@ -169,6 +169,27 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     ),
                   ),
                   RecipientScreenActionsListTile(
+                    leadingIconData: Icons.reply,
+                    leadingIconColor:
+                        recipient.canReplySend ? Colors.green : null,
+                    title: recipient.canReplySend ? 'Enabled' : 'Disabled',
+                    subtitle: 'Can reply/send',
+                    trailing: RecipientScreenTrailingLoadingSwitch(
+                      isLoading:
+                          recipientScreenState.isReplySendAndSwitchLoading,
+                      switchValue: recipientScreenState.recipient.canReplySend,
+                      onPress: (toggle) async {
+                        recipient.canReplySend
+                            ? await ref
+                                .read(recipientScreenStateNotifier.notifier)
+                                .disableReplyAndSend()
+                            : await ref
+                                .read(recipientScreenStateNotifier.notifier)
+                                .enableReplyAndSend();
+                      },
+                    ),
+                  ),
+                  RecipientScreenActionsListTile(
                     leadingIconData: Icons.fingerprint_outlined,
                     title: recipient.fingerprint.isEmpty
                         ? 'No fingerprint found'
@@ -244,27 +265,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                                       .enableEncryption(recipient);
                             },
                           ),
-                  ),
-                  RecipientScreenActionsListTile(
-                    leadingIconData: Icons.reply,
-                    leadingIconColor:
-                        recipient.canReplySend ? Colors.green : null,
-                    title: recipient.canReplySend ? 'Enabled' : 'Disabled',
-                    subtitle: 'Can reply/send',
-                    trailing: RecipientScreenTrailingLoadingSwitch(
-                      isLoading:
-                          recipientScreenState.isReplySendAndSwitchLoading,
-                      switchValue: recipientScreenState.recipient.canReplySend,
-                      onPress: (toggle) async {
-                        recipient.canReplySend
-                            ? await ref
-                                .read(recipientScreenStateNotifier.notifier)
-                                .disableReplyAndSend()
-                            : await ref
-                                .read(recipientScreenStateNotifier.notifier)
-                                .enableReplyAndSend();
-                      },
-                    ),
                   ),
                   if (recipient.emailVerifiedAt.isNotEmpty)
                     RecipientScreenActionsListTile(
