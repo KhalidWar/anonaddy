@@ -246,14 +246,12 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     title:
                         recipient.shouldEncrypt ? 'Encrypted' : 'Not Encrypted',
                     subtitle: 'Encryption',
-                    trailing: recipient.fingerprint.isEmpty
-                        ? Container()
-                        : RecipientScreenTrailingLoadingSwitch(
-                            isLoading:
-                                recipientScreenState.isEncryptionToggleLoading,
-                            switchValue:
-                                recipientScreenState.recipient.shouldEncrypt,
-                            onPress: (toggle) async {
+                    trailing: RecipientScreenTrailingLoadingSwitch(
+                      isLoading: recipientScreenState.isEncryptionToggleLoading,
+                      switchValue: recipientScreenState.recipient.shouldEncrypt,
+                      onPress: recipient.fingerprint.isEmpty
+                          ? null
+                          : (toggle) async {
                               recipient.shouldEncrypt
                                   ? await ref
                                       .read(
@@ -264,7 +262,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                                           recipientScreenStateNotifier.notifier)
                                       .enableEncryption(recipient);
                             },
-                          ),
+                    ),
                   ),
                   if (recipient.emailVerifiedAt.isNotEmpty)
                     RecipientScreenActionsListTile(
@@ -281,15 +279,19 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                             .isInlineEncryptionSwitchLoading,
                         switchValue:
                             recipientScreenState.recipient.inlineEncryption,
-                        onPress: (toggle) async {
-                          recipient.inlineEncryption
-                              ? await ref
-                                  .read(recipientScreenStateNotifier.notifier)
-                                  .disableInlineEncryption()
-                              : await ref
-                                  .read(recipientScreenStateNotifier.notifier)
-                                  .enableInlineEncryption();
-                        },
+                        onPress: recipient.fingerprint.isEmpty
+                            ? null
+                            : (toggle) async {
+                                recipient.inlineEncryption
+                                    ? await ref
+                                        .read(recipientScreenStateNotifier
+                                            .notifier)
+                                        .disableInlineEncryption()
+                                    : await ref
+                                        .read(recipientScreenStateNotifier
+                                            .notifier)
+                                        .enableInlineEncryption();
+                              },
                       ),
                     ),
                   if (recipient.emailVerifiedAt.isNotEmpty)
@@ -305,15 +307,19 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                             recipientScreenState.isProtectedHeaderSwitchLoading,
                         switchValue:
                             recipientScreenState.recipient.protectedHeaders,
-                        onPress: (toggle) async {
-                          recipient.protectedHeaders
-                              ? await ref
-                                  .read(recipientScreenStateNotifier.notifier)
-                                  .disableProtectedHeader()
-                              : await ref
-                                  .read(recipientScreenStateNotifier.notifier)
-                                  .enableProtectedHeader();
-                        },
+                        onPress: recipient.fingerprint.isEmpty
+                            ? null
+                            : (toggle) async {
+                                recipient.protectedHeaders
+                                    ? await ref
+                                        .read(recipientScreenStateNotifier
+                                            .notifier)
+                                        .disableProtectedHeader()
+                                    : await ref
+                                        .read(recipientScreenStateNotifier
+                                            .notifier)
+                                        .enableProtectedHeader();
+                              },
                       ),
                     ),
                   if (recipient.emailVerifiedAt.isEmpty)
