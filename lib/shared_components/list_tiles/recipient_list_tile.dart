@@ -20,20 +20,25 @@ class RecipientListTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(Icons.email_outlined),
-            const SizedBox(width: 15),
+            const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(recipient.email),
-                const SizedBox(height: 2),
                 recipient.emailVerifiedAt.isEmpty
-                    ? const Text(
+                    ? Text(
                         AppStrings.unverified,
-                        style: TextStyle(color: Colors.red),
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption
+                            ?.copyWith(color: Colors.red),
                       )
-                    : const Text(
+                    : Text(
                         AppStrings.verified,
-                        style: TextStyle(color: Colors.green),
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption
+                            ?.copyWith(color: Colors.green),
                       ),
               ],
             ),

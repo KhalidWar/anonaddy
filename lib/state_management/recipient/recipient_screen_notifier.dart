@@ -68,13 +68,13 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future enableEncryption(Recipient recipient) async {
+  Future enableEncryption() async {
     try {
       _updateState(state.copyWith(isEncryptionToggleLoading: true));
       final newRecipient =
-          await recipientService.enableEncryption(recipient.id);
+          await recipientService.enableEncryption(state.recipient.id);
       final updateRecipient =
-          recipient.copyWith(shouldEncrypt: newRecipient.shouldEncrypt);
+          state.recipient.copyWith(shouldEncrypt: newRecipient.shouldEncrypt);
       _updateState(state.copyWith(
         recipient: updateRecipient,
         isEncryptionToggleLoading: false,
@@ -88,11 +88,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future disableEncryption(Recipient recipient) async {
+  Future disableEncryption() async {
     try {
       _updateState(state.copyWith(isEncryptionToggleLoading: true));
-      await recipientService.disableEncryption(recipient.id);
-      final updatedRecipient = recipient.copyWith(shouldEncrypt: false);
+      await recipientService.disableEncryption(state.recipient.id);
+      final updatedRecipient = state.recipient.copyWith(shouldEncrypt: false);
       _updateState(state.copyWith(
         recipient: updatedRecipient,
         isEncryptionToggleLoading: false,
@@ -106,11 +106,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> addPublicGPGKey(Recipient recipient, String keyData) async {
+  Future<void> addPublicGPGKey(String keyData) async {
     try {
       final newRecipient =
-          await recipientService.addPublicGPGKey(recipient.id, keyData);
-      final updatedRecipient = recipient.copyWith(
+          await recipientService.addPublicGPGKey(state.recipient.id, keyData);
+      final updatedRecipient = state.recipient.copyWith(
           fingerprint: newRecipient.fingerprint,
           shouldEncrypt: newRecipient.shouldEncrypt);
       showToast(ToastMessage.addGPGKeySuccess);
@@ -122,12 +122,16 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> removePublicGPGKey(Recipient recipient) async {
+  Future<void> removePublicGPGKey() async {
     try {
-      await recipientService.removePublicGPGKey(recipient.id);
+      await recipientService.removePublicGPGKey(state.recipient.id);
       showToast(ToastMessage.deleteGPGKeySuccess);
-      final updatedRecipient =
-          recipient.copyWith(fingerprint: '', shouldEncrypt: false);
+      final updatedRecipient = state.recipient.copyWith(
+        fingerprint: '',
+        shouldEncrypt: false,
+        inlineEncryption: false,
+        protectedHeaders: false,
+      );
       _updateState(state.copyWith(recipient: updatedRecipient));
     } on DioError catch (dioError) {
       showToast(dioError.message);
@@ -136,9 +140,9 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> removeRecipient(Recipient recipient) async {
+  Future<void> removeRecipient() async {
     try {
-      await recipientService.removeRecipient(recipient.id);
+      await recipientService.removeRecipient(state.recipient.id);
       showToast('Recipient deleted successfully!');
       _refreshRecipientAndAccountData();
     } catch (error) {
@@ -147,9 +151,9 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> resendVerificationEmail(Recipient recipient) async {
+  Future<void> resendVerificationEmail() async {
     try {
-      await recipientService.resendVerificationEmail(recipient.id);
+      await recipientService.resendVerificationEmail(state.recipient.id);
       showToast('Verification email is sent');
     } catch (error) {
       final dioError = error as DioError;
@@ -168,6 +172,126 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       final dioError = error as DioError;
       showToast(dioError.message);
       _updateState(state.copyWith(isAddRecipientLoading: false));
+    }
+  }
+
+  Future<void> enableReplyAndSend() async {
+    try {
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: true));
+      final recipient =
+          await recipientService.enableReplyAndSend(state.recipient.id);
+      _updateState(state.copyWith(
+        recipient: recipient,
+        isReplySendAndSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
+    }
+  }
+
+  Future disableReplyAndSend() async {
+    try {
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: true));
+      await recipientService.disableReplyAndSend(state.recipient.id);
+      final updatedRecipient = state.recipient.copyWith(canReplySend: false);
+      _updateState(state.copyWith(
+        recipient: updatedRecipient,
+        isReplySendAndSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
+    }
+  }
+
+  Future<void> enableInlineEncryption() async {
+    try {
+      if (state.recipient.protectedHeaders) {
+        showToast(AppStrings.disableProtectedHeadersFirst);
+        return;
+      }
+
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: true));
+      final recipient =
+          await recipientService.enableInlineEncryption(state.recipient.id);
+      _updateState(state.copyWith(
+        recipient: recipient,
+        isInlineEncryptionSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
+    }
+  }
+
+  Future disableInlineEncryption() async {
+    try {
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: true));
+      await recipientService.disableInlineEncryption(state.recipient.id);
+      final updatedRecipient =
+          state.recipient.copyWith(inlineEncryption: false);
+      _updateState(state.copyWith(
+        recipient: updatedRecipient,
+        isInlineEncryptionSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
+    }
+  }
+
+  Future<void> enableProtectedHeader() async {
+    try {
+      if (state.recipient.inlineEncryption) {
+        showToast(AppStrings.disableInlineEncryptionFirst);
+        return;
+      }
+
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: true));
+      final recipient =
+          await recipientService.enableProtectedHeader(state.recipient.id);
+      _updateState(state.copyWith(
+        recipient: recipient,
+        isProtectedHeaderSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
+    }
+  }
+
+  Future disableProtectedHeader() async {
+    try {
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: true));
+      await recipientService.disableProtectedHeader(state.recipient.id);
+      final updatedRecipient =
+          state.recipient.copyWith(protectedHeaders: false);
+      _updateState(state.copyWith(
+        recipient: updatedRecipient,
+        isProtectedHeaderSwitchLoading: false,
+      ));
+    } on DioError catch (dioError) {
+      showToast(dioError.message);
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
+    } catch (error) {
+      showToast(AppStrings.somethingWentWrong);
+      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
     }
   }
 

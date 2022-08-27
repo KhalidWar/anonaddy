@@ -10,7 +10,6 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_screen_state.dart';
-import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/utilities/utilities_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -447,8 +446,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 .read(aliasScreenStateNotifier.notifier)
                 .forgetAlias(widget.alias.id);
 
-            ref.read(aliasTabStateNotifier.notifier).refreshAliases();
-
             /// Dismisses [platformDialog]
             if (mounted) Navigator.pop(context);
 
@@ -462,10 +459,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     return CustomAppBar(
       key: AliasTabWidgetKeys.aliasScreenAppBar,
       title: 'Alias',
-      leadingOnPress: () {
-        ref.read(aliasTabStateNotifier.notifier).refreshAliases();
-        Navigator.pop(context);
-      },
+      leadingOnPress: () => Navigator.pop(context),
       showTrailing: true,
       trailingLabel: 'Forget Alias',
       trailingOnPress: (choice) => forgetOnPress(),

@@ -18,15 +18,21 @@ final accountStateNotifier =
 });
 
 class AccountNotifier extends StateNotifier<AccountState> {
-  AccountNotifier({required this.accountService, required this.offlineData})
-      : super(AccountState.initialState());
+  AccountNotifier({
+    required this.accountService,
+    required this.offlineData,
+    AccountState? initialState,
+  }) : super(initialState ?? AccountState.initialState());
 
   final AccountService accountService;
   final OfflineData offlineData;
 
   /// Updates UI to the newState
   void _updateState(AccountState newState) {
-    if (mounted) state = newState;
+    if (mounted) {
+      state = newState;
+      if (state.status == AccountStatus.loaded) _saveState();
+    }
   }
 
   Future<void> fetchAccount() async {
@@ -34,7 +40,6 @@ class AccountNotifier extends StateNotifier<AccountState> {
       _updateState(state.copyWith(status: AccountStatus.loading));
 
       final account = await accountService.getAccounts();
-      await _saveOfflineData(account);
 
       /// Construct new state
       final newState =
@@ -46,7 +51,7 @@ class AccountNotifier extends StateNotifier<AccountState> {
       /// on SockException load offline data
       if (dioError.type == DioErrorType.other) {
         /// Loads offline data when there's no internet connection
-        await loadOfflineData();
+        await loadState();
       } else {
         _updateState(state.copyWith(
           status: AccountStatus.failed,
@@ -72,7 +77,6 @@ class AccountNotifier extends StateNotifier<AccountState> {
     try {
       /// Only trigger fetch API when app is Foreground to avoid API spamming
       final account = await accountService.getAccounts();
-      await _saveOfflineData(account);
 
       /// Update UI with the latest state
       _updateState(state.copyWith(
@@ -94,24 +98,27 @@ class AccountNotifier extends StateNotifier<AccountState> {
     }
   }
 
-  /// Loads [Account] data from disk
-  Future<void> loadOfflineData() async {
-    /// Load data from disk if state is NOT showing an error
-    if (state.isFailed) {
-      final securedData = await offlineData.readAccountOfflineData();
-      if (securedData.isNotEmpty) {
-        final account = Account.fromJson(jsonDecode(securedData));
-        final newState =
-            state.copyWith(status: AccountStatus.loaded, account: account);
-        _updateState(newState);
-      }
+  Future<void> _saveState() async {
+    try {
+      final mappedState = state.toMap();
+      final encodedState = json.encode(mappedState);
+      await offlineData.saveAccountsState(encodedState);
+    } catch (_) {
+      return;
     }
   }
 
-  /// Saves [Account] data to disk
-  Future<void> _saveOfflineData(Account account) async {
-    /// Convert [Account] data to a String to save
-    final encodedData = jsonEncode(account);
-    await offlineData.writeAccountOfflineData(encodedData);
+  /// Loads [Account] data from disk
+  Future<void> loadState() async {
+    try {
+      final securedData = await offlineData.loadAccountsState();
+      if (securedData.isNotEmpty) {
+        final decodedData = json.decode(securedData);
+        final savedState = AccountState.fromMap(decodedData);
+        _updateState(savedState);
+      }
+    } catch (_) {
+      return;
+    }
   }
 }

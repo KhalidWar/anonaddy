@@ -72,7 +72,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       /// Initially load data from disk (secured device storage)
-      ref.read(accountStateNotifier.notifier).loadOfflineData();
+      ref.read(accountStateNotifier.notifier).loadState();
 
       /// Fetch latest data from server
       ref.read(accountStateNotifier.notifier).fetchAccount();

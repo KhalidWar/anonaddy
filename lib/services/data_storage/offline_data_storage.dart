@@ -1,4 +1,5 @@
 import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/shared_components/constants/changelog_storage_key.dart';
 import 'package:anonaddy/shared_components/constants/offline_data_key.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,23 +14,39 @@ class OfflineData {
   final FlutterSecureStorage secureStorage;
 
   Future<void> saveAliasTabState(String data) async {
-    await secureStorage.write(key: OfflineDataKey.aliases, value: data);
+    try {
+      await secureStorage.write(key: OfflineDataKey.aliases, value: data);
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<String> loadAliasTabState() async {
-    final aliasData =
-        await secureStorage.read(key: OfflineDataKey.aliases) ?? '';
-    return aliasData;
+    try {
+      final aliasData =
+          await secureStorage.read(key: OfflineDataKey.aliases) ?? '';
+      return aliasData;
+    } catch (error) {
+      rethrow;
+    }
   }
 
-  Future<void> writeAccountOfflineData(String data) async {
-    await secureStorage.write(key: OfflineDataKey.account, value: data);
+  Future<void> saveAccountsState(String data) async {
+    try {
+      await secureStorage.write(key: OfflineDataKey.account, value: data);
+    } catch (error) {
+      rethrow;
+    }
   }
 
-  Future<String> readAccountOfflineData() async {
-    final accountData =
-        await secureStorage.read(key: OfflineDataKey.account) ?? '';
-    return accountData;
+  Future<String> loadAccountsState() async {
+    try {
+      final aliasData =
+          await secureStorage.read(key: OfflineDataKey.account) ?? '';
+      return aliasData;
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<void> writeUsernameOfflineData(String data) async {
@@ -80,5 +97,34 @@ class OfflineData {
     final domainData =
         await secureStorage.read(key: OfflineDataKey.rules) ?? '';
     return domainData;
+  }
+
+  Future<void> saveSettingsState(String data) async {
+    try {
+      await secureStorage.write(key: OfflineDataKey.settings, value: data);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<String> loadSettingsState() async {
+    try {
+      final aliasData =
+          await secureStorage.read(key: OfflineDataKey.settings) ?? '';
+      return aliasData;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<void> saveCurrentAppVersion(String currentAppVersion) async {
+    try {
+      await secureStorage.write(
+        key: ChangelogStorageKey.appVersionKey,
+        value: currentAppVersion,
+      );
+    } catch (error) {
+      return;
+    }
   }
 }

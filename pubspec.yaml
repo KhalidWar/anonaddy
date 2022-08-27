@@ -20,7 +20,7 @@ dependencies:
   animations: ^2.0.0
   shimmer: ^2.0.0
   fluttertoast: ^8.0.8
-  fl_chart: ^0.51.0
+  fl_chart: ^0.55.1
   modal_bottom_sheet: ^2.0.0
 
   # Internet Connectivity
@@ -28,7 +28,7 @@ dependencies:
   url_launcher: ^6.0.3
 
   # Storage
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^6.0.0
   hive: ^2.0.4
   hive_flutter: ^1.0.0
 

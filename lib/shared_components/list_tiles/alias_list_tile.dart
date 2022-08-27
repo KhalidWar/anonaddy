@@ -22,7 +22,7 @@ class AliasListTile extends StatelessWidget {
 
     return InkWell(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
         child: Row(
           children: [
             AliasListTileLeading(
@@ -36,17 +36,21 @@ class AliasListTile extends StatelessWidget {
                 children: [
                   Text(
                     alias.email,
-                    style: TextStyle(
-                      color: isAliasDeleted()
-                          ? Colors.grey
-                          : isDark
-                              ? Colors.white
-                              : Colors.black,
-                    ),
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          color: isAliasDeleted()
+                              ? Colors.grey
+                              : isDark
+                                  ? Colors.white
+                                  : Colors.black,
+                        ),
                   ),
                   Text(
                     getDescription(),
-                    style: const TextStyle(color: Colors.grey),
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.caption,
                   ),
                 ],
               ),

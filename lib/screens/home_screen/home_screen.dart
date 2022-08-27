@@ -1,16 +1,18 @@
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
-import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
+import 'package:anonaddy/screens/home_screen/components/alert_center_icon.dart';
+import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';
 import 'package:anonaddy/screens/home_screen/components/create_alias_fab.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
+import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
-import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
+import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,7 +48,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
 
     /// Show [ChangelogWidget] in [HomeScreen] if app has updated
-    ref.read(changelogStateNotifier.notifier).showChangelogWidget(context);
+    ref.read(settingsStateNotifier.notifier).showChangelogIfAppUpdated();
 
     /// Pre-loads [DomainOptions] data for [CreateAlias]
     ref.read(domainOptionsStateNotifier.notifier).fetchDomainOption();
@@ -55,6 +57,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    /// Show [ChangelogWidget] if app has been updated
+    ref.listen<bool>(
+        settingsStateNotifier.select(
+            (settingState) => settingState.showChangelog), (_, showChangelog) {
+      if (showChangelog) {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
+            ),
+          ),
+          builder: (context) => const ChangelogWidget(),
+        );
+      }
+    });
+
     return Scaffold(
       key: const Key('homeScreenScaffold'),
       appBar: buildAppBar(context),
@@ -111,17 +132,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         style: TextStyle(color: Colors.white),
       ),
       centerTitle: true,
-      leading: IconButton(
-        key: const Key('homeScreenAppBarLeading'),
-        tooltip: AppStrings.alertCenter,
-        icon: const Icon(
-          Icons.error_outline,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          Navigator.pushNamed(context, AlertCenterScreen.routeName);
-        },
-      ),
+      leading: const AlertCenterIcon(),
       actions: [
         // IconButton(
         //   key: const Key('homeScreenQuickSearchTrailing'),

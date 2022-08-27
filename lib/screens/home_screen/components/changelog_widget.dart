@@ -1,6 +1,6 @@
 import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
-import 'package:anonaddy/state_management/changelog/changelog_notifier.dart';
+import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,7 +57,7 @@ class ChangelogWidget extends ConsumerWidget {
                 style: ElevatedButton.styleFrom(),
                 child: const Text('Continue to AddyManager'),
                 onPressed: () {
-                  ref.read(changelogStateNotifier.notifier).markChangelogRead();
+                  ref.read(settingsStateNotifier.notifier).dismissChangelog();
                   Navigator.pop(context);
                 },
               ),
@@ -101,9 +101,13 @@ class ChangelogWidget extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
+            header('Added', Colors.green),
+            label('1. Can reply and send to recipient.'),
+            label('2. PGP/inline encryption to recipient.'),
+            label('3. Hide Subject to recipient.'),
+
             header('Fixed', Colors.blue),
-            label('1. Duplicate aliases.'),
-            label('2. Minor bug fixes.'),
+            label('1. Minor bug fixes.'),
 
             header('Improved', Colors.orange),
             label('1. Several under the hood improvements.'),

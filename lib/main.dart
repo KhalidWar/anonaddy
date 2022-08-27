@@ -1,10 +1,12 @@
 import 'package:anonaddy/app.dart';
+import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/utilities/utilities_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -12,8 +14,9 @@ void main() async {
   /// Keeps SplashScreen on until following methods are completed.
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  const secureStorage = FlutterSecureStorage();
   await StartupMethods.initHiveAdapters();
-  await StartupMethods.handleAppUpdate();
+  await StartupMethods.handleAppUpdate(secureStorage);
 
   /// Removes SplashScreen
   FlutterNativeSplash.remove();
@@ -23,8 +26,11 @@ void main() async {
     /// Phoenix restarts app upon logout
     Phoenix(
       /// Riverpod base widget to store provider state
-      child: const ProviderScope(
-        child: App(),
+      child: ProviderScope(
+        overrides: [
+          flutterSecureStorage.overrideWithValue(secureStorage),
+        ],
+        child: const App(),
       ),
     ),
   );

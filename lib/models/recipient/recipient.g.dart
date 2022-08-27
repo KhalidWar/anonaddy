@@ -20,7 +20,10 @@ class RecipientAdapter extends TypeAdapter<Recipient> {
       id: fields[0] as String,
       userId: fields[1] as String,
       email: fields[2] as String,
+      canReplySend: fields[9] as bool,
       shouldEncrypt: fields[3] as bool,
+      inlineEncryption: fields[10] as bool,
+      protectedHeaders: fields[11] as bool,
       fingerprint: fields[4] as String,
       emailVerifiedAt: fields[5] as String,
       aliases: (fields[6] as List).cast<Alias>(),
@@ -32,7 +35,7 @@ class RecipientAdapter extends TypeAdapter<Recipient> {
   @override
   void write(BinaryWriter writer, Recipient obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -50,7 +53,13 @@ class RecipientAdapter extends TypeAdapter<Recipient> {
       ..writeByte(7)
       ..write(obj.createdAt)
       ..writeByte(8)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(9)
+      ..write(obj.canReplySend)
+      ..writeByte(10)
+      ..write(obj.inlineEncryption)
+      ..writeByte(11)
+      ..write(obj.protectedHeaders);
   }
 
   @override
@@ -72,7 +81,10 @@ Recipient _$RecipientFromJson(Map<String, dynamic> json) => Recipient(
       id: json['id'] as String? ?? '',
       userId: json['user_id'] as String? ?? '',
       email: json['email'] as String? ?? '',
+      canReplySend: json['can_reply_send'] as bool? ?? false,
       shouldEncrypt: json['should_encrypt'] as bool? ?? false,
+      inlineEncryption: json['inline_encryption'] as bool? ?? false,
+      protectedHeaders: json['protected_headers'] as bool? ?? false,
       fingerprint: json['fingerprint'] as String? ?? '',
       emailVerifiedAt: json['email_verified_at'] as String? ?? '',
       aliases: (json['aliases'] as List<dynamic>?)
@@ -93,4 +105,7 @@ Map<String, dynamic> _$RecipientToJson(Recipient instance) => <String, dynamic>{
       'aliases': instance.aliases.map((e) => e.toJson()).toList(),
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
+      'can_reply_send': instance.canReplySend,
+      'inline_encryption': instance.inlineEncryption,
+      'protected_headers': instance.protectedHeaders,
     };

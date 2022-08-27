@@ -31,7 +31,7 @@ final createAliasStateNotifier =
     domainOptions: ref.read(domainOptionsStateNotifier),
     accountState: ref.read(accountStateNotifier),
     recipientState: ref.read(recipientTabStateNotifier),
-    isAutoCopy: ref.read(settingsStateNotifier).isAutoCopy ?? false,
+    isAutoCopy: ref.read(settingsStateNotifier).isAutoCopyEnabled,
   );
 });
 

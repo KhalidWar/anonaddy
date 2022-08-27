@@ -12,7 +12,10 @@ class Recipient extends HiveObject {
     this.id = '',
     this.userId = '',
     this.email = '',
+    this.canReplySend = false,
     this.shouldEncrypt = false,
+    this.inlineEncryption = false,
+    this.protectedHeaders = false,
     this.fingerprint = '',
     this.emailVerifiedAt = '',
     this.aliases = const <Alias>[],
@@ -52,6 +55,18 @@ class Recipient extends HiveObject {
   @HiveField(8)
   final String updatedAt;
 
+  @JsonKey(name: 'can_reply_send')
+  @HiveField(9)
+  final bool canReplySend;
+
+  @JsonKey(name: 'inline_encryption')
+  @HiveField(10)
+  final bool inlineEncryption;
+
+  @JsonKey(name: 'protected_headers')
+  @HiveField(11)
+  final bool protectedHeaders;
+
   factory Recipient.fromJson(Map<String, dynamic> json) =>
       _$RecipientFromJson(json);
 
@@ -67,6 +82,9 @@ class Recipient extends HiveObject {
     List<Alias>? aliases,
     String? createdAt,
     String? updatedAt,
+    bool? canReplySend,
+    bool? inlineEncryption,
+    bool? protectedHeaders,
   }) {
     return Recipient(
       id: id ?? this.id,
@@ -78,11 +96,14 @@ class Recipient extends HiveObject {
       aliases: aliases ?? this.aliases,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      canReplySend: canReplySend ?? this.canReplySend,
+      inlineEncryption: inlineEncryption ?? this.inlineEncryption,
+      protectedHeaders: protectedHeaders ?? this.protectedHeaders,
     );
   }
 
   @override
   String toString() {
-    return 'Recipient{id: $id, userId: $userId, email: $email, shouldEncrypt: $shouldEncrypt, fingerprint: $fingerprint, emailVerifiedAt: $emailVerifiedAt, aliases: $aliases, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'Recipient{id: $id, userId: $userId, email: $email, shouldEncrypt: $shouldEncrypt, fingerprint: $fingerprint, emailVerifiedAt: $emailVerifiedAt, aliases: $aliases, createdAt: $createdAt, updatedAt: $updatedAt, canReplySend: $canReplySend, inlineEncryption: $inlineEncryption, protectedHeaders: $protectedHeaders}';
   }
 }

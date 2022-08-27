@@ -21,9 +21,8 @@ class StartupMethods {
   }
 
   /// Does housekeeping after app is updated. Does nothing otherwise.
-  static Future<void> handleAppUpdate() async {
-    const secureStorage = FlutterSecureStorage();
-
+  static Future<void> handleAppUpdate(
+      FlutterSecureStorage secureStorage) async {
     /// Fetch stored old app version from device storage.
     final oldAppVersion = await _getOldAppVersion(secureStorage);
 

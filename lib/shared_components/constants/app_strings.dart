@@ -64,6 +64,10 @@ class AppStrings {
   static const noRecipientsFound = 'No recipients found';
   static const verified = 'Verified';
   static const unverified = 'Unverified';
+  static const disableInlineEncryptionFirst =
+      'You need to disable inline encryption before you can enable protected headers (hide subject)';
+  static const disableProtectedHeadersFirst =
+      'You need to disable protected headers (hide subject) before you can enable inline encryption';
 
   /// Usernames
   static const addNewDomain = 'Add New Domain';
