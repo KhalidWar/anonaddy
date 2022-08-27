@@ -19,7 +19,7 @@ class RecipientScreenAliases extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(height: size.height * 0.03),
+          const Divider(height: 20),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
             child:

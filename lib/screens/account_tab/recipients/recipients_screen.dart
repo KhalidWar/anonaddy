@@ -125,7 +125,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     emailsReplied: 0,
                     emailsSent: 0,
                   ),
-                  Divider(height: 25),
+                  Divider(height: 20),
                   Center(child: PlatformLoadingIndicator())
                 ],
               );
@@ -152,7 +152,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       calculateEmailsSent(recipient),
                     ),
                   ),
-                  const Divider(height: 25),
+                  const Divider(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: Text('Actions',
@@ -186,7 +186,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       },
                     ),
                   ),
-                  const Divider(height: 25),
+                  const Divider(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: Text(
