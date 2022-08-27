@@ -324,7 +324,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     ),
                   ),
                   const RecipientScreenAliases(),
-                  const Divider(height: 25),
+                  const Divider(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
