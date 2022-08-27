@@ -82,8 +82,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
@@ -120,15 +118,15 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
             case RecipientScreenStatus.loading:
               return ListView(
                 physics: const ClampingScrollPhysics(),
-                children: [
-                  const AliasScreenPieChart(
+                children: const [
+                  AliasScreenPieChart(
                     emailsForwarded: 0,
                     emailsBlocked: 0,
                     emailsReplied: 0,
                     emailsSent: 0,
                   ),
-                  Divider(height: size.height * 0.03),
-                  const Center(child: PlatformLoadingIndicator())
+                  Divider(height: 25),
+                  Center(child: PlatformLoadingIndicator())
                 ],
               );
 
@@ -154,10 +152,9 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       calculateEmailsSent(recipient),
                     ),
                   ),
-                  Divider(height: size.height * 0.03),
+                  const Divider(height: 25),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: Text('Actions',
                         style: Theme.of(context).textTheme.headline6),
                   ),
@@ -189,11 +186,9 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       },
                     ),
                   ),
-                  Divider(height: size.height * 0.03),
+                  const Divider(height: 25),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: size.height * 0.01,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: Text(
                       'Encryption',
                       style: Theme.of(context).textTheme.headline6,
@@ -329,7 +324,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     ),
                   ),
                   const RecipientScreenAliases(),
-                  Divider(height: size.height * 0.03),
+                  const Divider(height: 25),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -343,7 +338,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: size.height * 0.03),
+                  const SizedBox(height: 30),
                 ],
               );
 
