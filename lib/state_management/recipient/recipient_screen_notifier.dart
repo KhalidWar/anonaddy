@@ -68,13 +68,13 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future enableEncryption(Recipient recipient) async {
+  Future enableEncryption() async {
     try {
       _updateState(state.copyWith(isEncryptionToggleLoading: true));
       final newRecipient =
-          await recipientService.enableEncryption(recipient.id);
+          await recipientService.enableEncryption(state.recipient.id);
       final updateRecipient =
-          recipient.copyWith(shouldEncrypt: newRecipient.shouldEncrypt);
+          state.recipient.copyWith(shouldEncrypt: newRecipient.shouldEncrypt);
       _updateState(state.copyWith(
         recipient: updateRecipient,
         isEncryptionToggleLoading: false,
@@ -88,11 +88,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future disableEncryption(Recipient recipient) async {
+  Future disableEncryption() async {
     try {
       _updateState(state.copyWith(isEncryptionToggleLoading: true));
-      await recipientService.disableEncryption(recipient.id);
-      final updatedRecipient = recipient.copyWith(shouldEncrypt: false);
+      await recipientService.disableEncryption(state.recipient.id);
+      final updatedRecipient = state.recipient.copyWith(shouldEncrypt: false);
       _updateState(state.copyWith(
         recipient: updatedRecipient,
         isEncryptionToggleLoading: false,
@@ -106,11 +106,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> addPublicGPGKey(Recipient recipient, String keyData) async {
+  Future<void> addPublicGPGKey(String keyData) async {
     try {
       final newRecipient =
-          await recipientService.addPublicGPGKey(recipient.id, keyData);
-      final updatedRecipient = recipient.copyWith(
+          await recipientService.addPublicGPGKey(state.recipient.id, keyData);
+      final updatedRecipient = state.recipient.copyWith(
           fingerprint: newRecipient.fingerprint,
           shouldEncrypt: newRecipient.shouldEncrypt);
       showToast(ToastMessage.addGPGKeySuccess);
@@ -122,11 +122,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> removePublicGPGKey(Recipient recipient) async {
+  Future<void> removePublicGPGKey() async {
     try {
-      await recipientService.removePublicGPGKey(recipient.id);
+      await recipientService.removePublicGPGKey(state.recipient.id);
       showToast(ToastMessage.deleteGPGKeySuccess);
-      final updatedRecipient = recipient.copyWith(
+      final updatedRecipient = state.recipient.copyWith(
         fingerprint: '',
         shouldEncrypt: false,
         inlineEncryption: false,
@@ -140,9 +140,9 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> removeRecipient(Recipient recipient) async {
+  Future<void> removeRecipient() async {
     try {
-      await recipientService.removeRecipient(recipient.id);
+      await recipientService.removeRecipient(state.recipient.id);
       showToast('Recipient deleted successfully!');
       _refreshRecipientAndAccountData();
     } catch (error) {
@@ -151,9 +151,9 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     }
   }
 
-  Future<void> resendVerificationEmail(String recipientId) async {
+  Future<void> resendVerificationEmail() async {
     try {
-      await recipientService.resendVerificationEmail(recipientId);
+      await recipientService.resendVerificationEmail(state.recipient.id);
       showToast('Verification email is sent');
     } catch (error) {
       final dioError = error as DioError;

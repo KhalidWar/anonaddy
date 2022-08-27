@@ -33,7 +33,7 @@ class RecipientScreenUnverifiedWarning extends ConsumerWidget {
               child: const Text('Verify!'),
               onPressed: () => ref
                   .read(recipientScreenStateNotifier.notifier)
-                  .resendVerificationEmail(recipient.id),
+                  .resendVerificationEmail(),
             ),
           ],
         ),

@@ -98,7 +98,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               method: () async {
                 await ref
                     .read(recipientScreenStateNotifier.notifier)
-                    .removeRecipient(widget.recipient);
+                    .removeRecipient();
 
                 /// Dismisses this dialog
                 if (mounted) Navigator.pop(context);
@@ -233,7 +233,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                                     await ref
                                         .read(recipientScreenStateNotifier
                                             .notifier)
-                                        .removePublicGPGKey(recipient);
+                                        .removePublicGPGKey();
 
                                     /// Dismisses this dialog
                                     if (mounted) Navigator.pop(context);
@@ -261,11 +261,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                                   ? await ref
                                       .read(
                                           recipientScreenStateNotifier.notifier)
-                                      .disableEncryption(recipient)
+                                      .disableEncryption()
                                   : await ref
                                       .read(
                                           recipientScreenStateNotifier.notifier)
-                                      .enableEncryption(recipient);
+                                      .enableEncryption();
                             },
                     ),
                   ),
