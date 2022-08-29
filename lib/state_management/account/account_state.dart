@@ -18,7 +18,7 @@ class AccountState {
     return AccountState(
       status: AccountStatus.loading,
       account: Account(),
-      errorMessage: AppStrings.somethingWentWrong,
+      errorMessage: '',
     );
   }
 
