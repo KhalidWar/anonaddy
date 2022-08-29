@@ -1,6 +1,5 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 enum AccountStatus { loading, loaded, failed }
 
@@ -37,16 +36,20 @@ class AccountState {
 
   Map<String, dynamic> toMap() {
     return {
-      'status': status,
+      'status': status.index,
       'account': account,
       'errorMessage': errorMessage,
     };
   }
 
   factory AccountState.fromMap(Map<String, dynamic> map) {
+    Account convertAccount(Map<String, dynamic> accountData) {
+      return Account.fromJson(accountData);
+    }
+
     return AccountState(
-      status: map['status'] as AccountStatus,
-      account: map['account'] as Account,
+      status: AccountStatus.values[map['status']],
+      account: convertAccount(map['account']),
       errorMessage: map['errorMessage'] as String,
     );
   }

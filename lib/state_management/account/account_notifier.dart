@@ -111,11 +111,13 @@ class AccountNotifier extends StateNotifier<AccountState> {
   /// Loads [Account] data from disk
   Future<void> loadState() async {
     try {
-      final securedData = await offlineData.loadAccountsState();
-      if (securedData.isNotEmpty) {
-        final decodedData = json.decode(securedData);
-        final savedState = AccountState.fromMap(decodedData);
-        _updateState(savedState);
+      if (state.status != AccountStatus.failed) {
+        final securedData = await offlineData.loadAccountsState();
+        if (securedData.isNotEmpty) {
+          final decodedData = json.decode(securedData);
+          final savedState = AccountState.fromMap(decodedData);
+          _updateState(savedState);
+        }
       }
     } catch (_) {
       return;
