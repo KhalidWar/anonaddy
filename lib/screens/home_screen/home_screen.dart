@@ -11,6 +11,7 @@ import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
+import 'package:anonaddy/state_management/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     /// Pre-loads [DomainOptions] data for [CreateAlias]
     ref.read(domainOptionsStateNotifier.notifier).fetchDomainOption();
+
+    /// Pre-loads [DomainOptions] data for [CreateAlias]
+    ref.read(failedDeliveryStateNotifier.notifier).getFailedDeliveries();
   }
 
   @override
