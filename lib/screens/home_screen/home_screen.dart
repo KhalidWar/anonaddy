@@ -78,7 +78,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       key: const Key('homeScreenScaffold'),
-      appBar: buildAppBar(context),
+      appBar: AppBar(
+        key: const Key('homeScreenAppBar'),
+        elevation: 0,
+        title: const Text(
+          AppStrings.appName,
+          key: Key('homeScreenAppBarTitle'),
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        leading: const AlertCenterIcon(),
+        actions: [
+          // IconButton(
+          //   key: const Key('homeScreenQuickSearchTrailing'),
+          //   tooltip: AppStrings.settings,
+          //   icon: const Icon(
+          //     Icons.search,
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, QuickSearchScreen.routeName);
+          //   },
+          // ),
+          IconButton(
+            key: const Key('homeScreenAppBarTrailing'),
+            tooltip: AppStrings.settings,
+            icon: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, SettingsScreen.routeName);
+            },
+          ),
+        ],
+      ),
       floatingActionButton: const CreateAliasFAB(),
       body: IndexedStack(
         key: const Key('homeScreenBody'),
@@ -119,44 +153,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      key: const Key('homeScreenAppBar'),
-      elevation: 0,
-      title: const Text(
-        AppStrings.appName,
-        key: Key('homeScreenAppBarTitle'),
-        style: TextStyle(color: Colors.white),
-      ),
-      centerTitle: true,
-      leading: const AlertCenterIcon(),
-      actions: [
-        // IconButton(
-        //   key: const Key('homeScreenQuickSearchTrailing'),
-        //   tooltip: AppStrings.settings,
-        //   icon: const Icon(
-        //     Icons.search,
-        //     color: Colors.white,
-        //   ),
-        //   onPressed: () {
-        //     Navigator.pushNamed(context, QuickSearchScreen.routeName);
-        //   },
-        // ),
-        IconButton(
-          key: const Key('homeScreenAppBarTrailing'),
-          tooltip: AppStrings.settings,
-          icon: const Icon(
-            Icons.settings,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, SettingsScreen.routeName);
-          },
-        ),
-      ],
     );
   }
 }
