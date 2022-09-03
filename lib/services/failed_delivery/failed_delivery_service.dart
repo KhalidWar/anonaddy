@@ -25,8 +25,10 @@ class FailedDeliveryService {
       return (deliveries as List).map((delivery) {
         return FailedDelivery.fromJson(delivery);
       }).toList();
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
-      rethrow;
+      throw 'Failed to fetch failed deliveries';
     }
   }
 
@@ -35,8 +37,10 @@ class FailedDeliveryService {
       final path = '$kUnEncodedBaseURL/$kFailedDeliveriesURL/$failedDeliveryId';
       final response = await dio.delete(path);
       log('deleteFailedDelivery: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
-      rethrow;
+      throw throw 'Failed to delete a failed deliveries';
     }
   }
 }
