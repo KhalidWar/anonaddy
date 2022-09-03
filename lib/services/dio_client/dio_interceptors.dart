@@ -2,6 +2,13 @@ import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final dioProvider = Provider<Dio>((ref) {
+  final dio = Dio();
+  final interceptors = ref.read(dioInterceptorProvider);
+  dio.interceptors.add(interceptors);
+  return dio;
+});
+
 final dioInterceptorProvider = Provider<DioInterceptors>((ref) {
   final accessTokenService = ref.read(accessTokenServiceProvider);
   return DioInterceptors(accessTokenService: accessTokenService);

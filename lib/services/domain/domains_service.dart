@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
+import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
