@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
