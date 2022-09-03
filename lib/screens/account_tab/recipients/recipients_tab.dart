@@ -1,3 +1,7 @@
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/notifiers/account/account_state.dart';
+import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
+import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/screens/account_tab/components/add_new_recipient.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
@@ -6,10 +10,6 @@ import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/account/account_state.dart';
-import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

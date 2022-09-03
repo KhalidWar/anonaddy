@@ -1,6 +1,6 @@
 import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/state_management/failed_delivery/failed_delivery_notifier.dart';
+import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

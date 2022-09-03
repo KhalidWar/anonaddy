@@ -2,7 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:mockito/mockito.dart';
 

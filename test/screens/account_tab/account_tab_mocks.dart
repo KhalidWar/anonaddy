@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/account/account_state.dart';
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
 

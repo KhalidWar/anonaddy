@@ -1,4 +1,6 @@
 import 'package:anonaddy/models/username/username.dart';
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -8,8 +10,6 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
