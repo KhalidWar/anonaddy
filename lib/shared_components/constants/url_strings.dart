@@ -17,7 +17,6 @@ const kCatchAllDomainURL = 'catch-all-domains';
 const kDefaultRecipientURL = 'default-recipient';
 const kDomainsOptionsURL = 'domain-options';
 const kForgetURL = 'forget';
-const kAppVersionURL = 'app-version';
 const kFailedDeliveriesURL = 'failed-deliveries';
 const kRulesURL = 'rules';
 

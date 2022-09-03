@@ -6,10 +6,6 @@ import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final appVersionProvider = FutureProvider.autoDispose<AppVersion>((ref) async {
-  return await ref.read(appVersionService).getAppVersionData();
-});
-
 final appVersionService = Provider<AppVersionService>((ref) {
   return AppVersionService(dio: ref.read(dioProvider));
 });
@@ -20,12 +16,14 @@ class AppVersionService {
 
   Future<AppVersion> getAppVersionData([String? path]) async {
     try {
-      const urlPath = '$kUnEncodedBaseURL/$kAppVersionURL';
+      const urlPath = '$kUnEncodedBaseURL/app-version';
       final response = await dio.get(path ?? urlPath);
       final appVersion = AppVersion.fromJson(response.data);
       log('getAppVersionData: ${response.statusCode}');
 
       return appVersion;
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
