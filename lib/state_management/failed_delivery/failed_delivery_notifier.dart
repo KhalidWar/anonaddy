@@ -1,42 +1,27 @@
+import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:anonaddy/services/failed_delivery/failed_delivery_service.dart';
-import 'package:anonaddy/state_management/failed_delivery/failed_delivery_state.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final failedDeliveryStateNotifier =
-    StateNotifierProvider<FailedDeliveryNotifier, FailedDeliveryState>((ref) {
+final failedDeliveryStateNotifier = StateNotifierProvider.autoDispose<
+    FailedDeliveryNotifier, AsyncValue<List<FailedDelivery>>>((ref) {
   final deliveriesService = ref.read(failedDeliveryService);
   return FailedDeliveryNotifier(deliveriesService: deliveriesService);
 });
 
-class FailedDeliveryNotifier extends StateNotifier<FailedDeliveryState> {
+class FailedDeliveryNotifier
+    extends StateNotifier<AsyncValue<List<FailedDelivery>>> {
   FailedDeliveryNotifier({
     required this.deliveriesService,
-  }) : super(FailedDeliveryState.initialState());
+  }) : super(const AsyncData(<FailedDelivery>[]));
 
   final FailedDeliveryService deliveriesService;
 
-  /// Updates state to the latest state
-  void _updateState(FailedDeliveryState newState) {
-    if (mounted) state = newState;
-  }
-
   Future<void> getFailedDeliveries() async {
-    _updateState(state.copyWith(status: FailedDeliveryStatus.loading));
     try {
       final deliveries = await deliveriesService.getFailedDeliveries();
-      final newState = state.copyWith(
-        status: FailedDeliveryStatus.loaded,
-        failedDeliveries: deliveries,
-      );
-      _updateState(newState);
+      state = AsyncData(deliveries);
     } catch (error) {
-      final dioError = error as DioError;
-      final newState = state.copyWith(
-        status: FailedDeliveryStatus.failed,
-        errorMessage: dioError.message.toString(),
-      );
-      _updateState(newState);
+      state = AsyncError(error.toString());
     }
   }
 
@@ -45,12 +30,7 @@ class FailedDeliveryNotifier extends StateNotifier<FailedDeliveryState> {
       await deliveriesService.deleteFailedDelivery(id);
       await getFailedDeliveries();
     } catch (error) {
-      final dioError = error as DioError;
-      final newState = state.copyWith(
-        status: FailedDeliveryStatus.failed,
-        errorMessage: dioError.message.toString(),
-      );
-      _updateState(newState);
+      state = AsyncError(error.toString());
     }
   }
 }
