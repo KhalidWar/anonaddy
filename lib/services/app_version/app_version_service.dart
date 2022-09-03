@@ -6,6 +6,10 @@ import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final appVersionProvider = FutureProvider.autoDispose<AppVersion>((ref) async {
+  return await ref.read(appVersionService).getAppVersionData();
+});
+
 final appVersionService = Provider<AppVersionService>((ref) {
   return AppVersionService(dio: ref.read(dioProvider));
 });

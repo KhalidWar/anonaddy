@@ -1,4 +1,4 @@
-import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:anonaddy/state_management/account/account_state.dart';
