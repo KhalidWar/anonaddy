@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio();
-  final interceptors = ref.read(dioInterceptorProvider);
+  final interceptors = ref.read(_dioInterceptorProvider);
   dio.interceptors.add(interceptors);
   return dio;
 });
 
-final dioInterceptorProvider = Provider<DioInterceptors>((ref) {
+final _dioInterceptorProvider = Provider<DioInterceptors>((ref) {
   final accessTokenService = ref.read(accessTokenServiceProvider);
   return DioInterceptors(accessTokenService: accessTokenService);
 });
