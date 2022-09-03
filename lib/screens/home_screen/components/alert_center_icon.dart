@@ -4,14 +4,11 @@ import 'package:anonaddy/state_management/failed_delivery/failed_delivery_notifi
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AlertCenterIcon extends ConsumerWidget {
+class AlertCenterIcon extends StatelessWidget {
   const AlertCenterIcon({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final failedDeliveries =
-        ref.watch(failedDeliveryStateNotifier).failedDeliveries;
-
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         IconButton(
@@ -25,19 +22,34 @@ class AlertCenterIcon extends ConsumerWidget {
             Navigator.pushNamed(context, AlertCenterScreen.routeName);
           },
         ),
-        if (failedDeliveries.isNotEmpty)
-          Positioned(
-            top: 12,
-            left: 12,
-            child: Container(
-              height: 8,
-              width: 8,
-              decoration: BoxDecoration(
-                color: Colors.redAccent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
+        Consumer(
+          builder: (_, ref, __) {
+            final failedDeliveries = ref.watch(failedDeliveryStateNotifier);
+
+            return failedDeliveries.when(
+              data: (failedDeliveries) {
+                if (failedDeliveries.isNotEmpty) {
+                  return Positioned(
+                    top: 12,
+                    left: 12,
+                    child: Container(
+                      height: 8,
+                      width: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  );
+                }
+
+                return Container();
+              },
+              error: (_, __) => Container(),
+              loading: () => Container(),
+            );
+          },
+        )
       ],
     );
   }
