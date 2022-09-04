@@ -22,7 +22,7 @@ class CreatedAtWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            NicheMethod.convertStringToDateTime(dateTime, locale),
+            NicheMethod.formatDateTime(dateTime, locale),
             style: Theme.of(context)
                 .textTheme
                 .caption

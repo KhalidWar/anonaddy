@@ -3,6 +3,7 @@ import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NicheMethod {
@@ -21,12 +22,16 @@ class NicheMethod {
     }
   }
 
-  static String convertStringToDateTime(String input) {
+  static String formatDateTime(String input, Locale locale) {
     if (input.isEmpty) return '';
 
+    final dateFormat = DateFormat.yMMMd(locale.toLanguageTag())..add_jm();
     final dateTime = DateTime.tryParse(input);
+
     if (dateTime == null) return '';
-    return fixDateTime(dateTime);
+
+    final formattedDate = dateFormat.format(dateTime);
+    return formattedDate;
   }
 
   static copyOnTap(String input) async {
