@@ -3,10 +3,10 @@ import 'package:anonaddy/notifiers/domains/domains_screen_notifier.dart';
 import 'package:anonaddy/notifiers/domains/domains_screen_state.dart';
 import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
+import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
@@ -212,11 +212,11 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AliasCreatedAtWidget(
+            CreatedAtWidget(
               label: 'Created at',
               dateTime: domain.createdAt.toString(),
             ),
-            AliasCreatedAtWidget(
+            CreatedAtWidget(
               label: 'Updated at',
               dateTime: domain.updatedAt.toString(),
             ),

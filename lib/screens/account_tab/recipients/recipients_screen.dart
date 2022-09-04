@@ -8,9 +8,9 @@ import 'package:anonaddy/screens/account_tab/recipients/components/recipient_scr
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_trailing_loading_switch.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
+import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/offline_banner.dart';
@@ -328,11 +328,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AliasCreatedAtWidget(
+                      CreatedAtWidget(
                         label: 'Created at',
                         dateTime: recipient.createdAt.toString(),
                       ),
-                      AliasCreatedAtWidget(
+                      CreatedAtWidget(
                         label: 'Updated at',
                         dateTime: recipient.updatedAt.toString(),
                       ),
