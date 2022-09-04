@@ -185,7 +185,31 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               : alias.description,
           subtitle: AppStrings.description,
           trailingIconData: Icons.edit_outlined,
-          trailingIconOnPress: () => updateDescriptionDialog(context, alias),
+          trailingIconOnPress: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
+              ),
+              builder: (context) {
+                return UpdateDescriptionWidget(
+                  description: alias.description,
+                  updateDescription: (description) async {
+                    await ref
+                        .read(aliasScreenStateNotifier.notifier)
+                        .editDescription(alias, description);
+                  },
+                  removeDescription: () async {
+                    await ref
+                        .read(aliasScreenStateNotifier.notifier)
+                        .editDescription(alias, '');
+                  },
+                );
+              },
+            );
+          },
         ),
         if (alias.extension.isNotEmpty)
           AliasDetailListTile(
@@ -336,32 +360,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         ),
         SizedBox(height: size.height * 0.05),
       ],
-    );
-  }
-
-  Future updateDescriptionDialog(BuildContext context, Alias alias) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
-      ),
-      builder: (context) {
-        return UpdateDescriptionWidget(
-          description: alias.description,
-          updateDescription: (description) async {
-            await ref
-                .read(aliasScreenStateNotifier.notifier)
-                .editDescription(alias, description);
-          },
-          removeDescription: () async {
-            await ref
-                .read(aliasScreenStateNotifier.notifier)
-                .editDescription(alias, '');
-          },
-        );
-      },
     );
   }
 }
