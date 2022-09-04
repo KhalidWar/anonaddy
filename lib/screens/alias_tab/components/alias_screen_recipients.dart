@@ -20,7 +20,7 @@ class AliasScreenRecipients extends ConsumerWidget {
       children: [
         const Divider(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 6),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
