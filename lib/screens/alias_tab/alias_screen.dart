@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
-import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_screen_recipients.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/screens/alias_tab/components/send_from_widget.dart';
 import 'package:anonaddy/services/theme/theme.dart';
@@ -266,79 +266,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             );
           },
         ),
-        Column(
-          children: [
-            Divider(height: size.height * 0.01),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Default Recipient${alias.recipients.length >= 2 ? 's' : ''}',
-                    key: AliasTabWidgetKeys.aliasScreenDefaultRecipient,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(
-                                AppTheme.kBottomSheetBorderRadius),
-                          ),
-                        ),
-                        builder: (context) {
-                          return AliasDefaultRecipientScreen(alias: alias);
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            if (alias.recipients.isNotEmpty)
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                child: Column(
-                  children: [
-                    Text(
-                      'To manage recipients, go to Recipients under Account tab.',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                    SizedBox(height: size.height * 0.01),
-                  ],
-                ),
-              ),
-            if (alias.recipients.isEmpty)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                child: Row(
-                  children: const [
-                    Text(AppStrings.noDefaultRecipientSet),
-                  ],
-                ),
-              )
-            else
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: alias.recipients.length,
-                itemBuilder: (context, index) {
-                  final recipients = alias.recipients;
-                  return IgnorePointer(
-                    child: RecipientListTile(
-                      recipient: recipients[index],
-                    ),
-                  );
-                },
-              ),
-          ],
-        ),
+        const AliasScreenRecipients(),
         Divider(height: size.height * 0.03),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
