@@ -13,7 +13,6 @@ class CreatedAtWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -22,7 +21,7 @@ class CreatedAtWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            NicheMethod.formatDateTime(dateTime, locale),
+            NicheMethod.formatDateTime(context, dateTime),
             style: Theme.of(context)
                 .textTheme
                 .caption

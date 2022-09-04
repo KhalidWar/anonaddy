@@ -22,14 +22,14 @@ class NicheMethod {
     }
   }
 
-  static String formatDateTime(String input, Locale locale) {
+  static String formatDateTime(BuildContext context, String input) {
     if (input.isEmpty) return '';
 
-    final dateFormat = DateFormat.yMMMd(locale.toLanguageTag())..add_jm();
     final dateTime = DateTime.tryParse(input);
-
     if (dateTime == null) return '';
 
+    final locale = Localizations.localeOf(context);
+    final dateFormat = DateFormat.yMMMd(locale.toLanguageTag())..add_jm();
     final formattedDate = dateFormat.format(dateTime);
     return formattedDate;
   }
