@@ -326,14 +326,14 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   const RecipientScreenAliases(),
                   const Divider(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AliasCreatedAtWidget(
-                        label: 'Created:',
+                        label: 'Created at',
                         dateTime: recipient.createdAt.toString(),
                       ),
                       AliasCreatedAtWidget(
-                        label: 'Updated:',
+                        label: 'Updated at',
                         dateTime: recipient.updatedAt.toString(),
                       ),
                     ],

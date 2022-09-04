@@ -264,19 +264,19 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   const AliasScreenRecipients(),
                   const Divider(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AliasCreatedAtWidget(
-                        label: 'Created:',
+                        label: 'Created at',
                         dateTime: aliasState.alias.createdAt,
                       ),
                       aliasState.alias.deletedAt.isEmpty
                           ? AliasCreatedAtWidget(
-                              label: 'Updated:',
+                              label: 'Updated at',
                               dateTime: aliasState.alias.updatedAt,
                             )
                           : AliasCreatedAtWidget(
-                              label: 'Deleted:',
+                              label: 'Deleted at',
                               dateTime: aliasState.alias.deletedAt,
                             ),
                     ],

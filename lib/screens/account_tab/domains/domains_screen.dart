@@ -210,14 +210,14 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         ),
         Divider(height: size.height * 0.03),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AliasCreatedAtWidget(
-              label: 'Created:',
+              label: 'Created at',
               dateTime: domain.createdAt.toString(),
             ),
             AliasCreatedAtWidget(
-              label: 'Updated:',
+              label: 'Updated at',
               dateTime: domain.updatedAt.toString(),
             ),
           ],

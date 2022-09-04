@@ -211,14 +211,14 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
         ),
         Divider(height: size.height * 0.03),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AliasCreatedAtWidget(
-              label: 'Created:',
+              label: 'Created at',
               dateTime: username.createdAt.toString(),
             ),
             AliasCreatedAtWidget(
-              label: 'Updated:',
+              label: 'Updated at',
               dateTime: username.updatedAt.toString(),
             ),
           ],
