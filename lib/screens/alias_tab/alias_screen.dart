@@ -1,13 +1,13 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_screen_list_tile.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_screen_recipients.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/screens/alias_tab/components/send_from_widget.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/shared_components/list_tiles/list_tiles_exports.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_exports.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
@@ -104,33 +104,39 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  AliasDetailListTile(
+                  AliasScreenListTile(
                     leadingIconData: Icons.alternate_email,
                     title: aliasState.alias.email,
                     subtitle: 'Email',
-                    trailingIconData: Icons.copy,
-                    trailingIconOnPress: () =>
-                        NicheMethod.copyOnTap(aliasState.alias.email),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.copy),
+                      onPressed: () =>
+                          NicheMethod.copyOnTap(aliasState.alias.email),
+                    ),
                   ),
-                  AliasDetailListTile(
+                  AliasScreenListTile(
                     leadingIconData: Icons.mail_outline,
                     title: 'Send email from this alias',
                     subtitle: 'Send from',
-                    trailingIconData: Icons.send_outlined,
-                    trailingIconOnPress: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
+                    trailing: IconButton(
+                      icon: const Icon(Icons.send_outlined),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
                               top: Radius.circular(
-                                  AppTheme.kBottomSheetBorderRadius)),
-                        ),
-                        builder: (context) => const SendFromWidget(),
-                      );
-                    },
+                                AppTheme.kBottomSheetBorderRadius,
+                              ),
+                            ),
+                          ),
+                          builder: (context) => const SendFromWidget(),
+                        );
+                      },
+                    ),
                   ),
-                  AliasDetailListTile(
+                  AliasScreenListTile(
                     leadingIconData: Icons.toggle_on_outlined,
                     title:
                         'Alias is ${aliasState.alias.active ? 'active' : 'inactive'}',
@@ -141,67 +147,69 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                           const PlatformLoadingIndicator(size: 20),
                         PlatformSwitch(
                           value: aliasState.alias.active,
-                          onChanged: isAliasDeleted ? null : (toggle) {},
+                          onChanged: (toggle) async {
+                            isAliasDeleted
+                                ? NicheMethod.showToast(
+                                    AnonAddyString.restoreBeforeActivate)
+                                : aliasState.alias.active
+                                    ? await ref
+                                        .read(aliasScreenStateNotifier.notifier)
+                                        .deactivateAlias(aliasState.alias.id)
+                                    : await ref
+                                        .read(aliasScreenStateNotifier.notifier)
+                                        .activateAlias(aliasState.alias.id);
+                          },
                         ),
                       ],
                     ),
-                    trailingIconOnPress: () async {
-                      isAliasDeleted
-                          ? NicheMethod.showToast(
-                              AnonAddyString.restoreBeforeActivate)
-                          : aliasState.alias.active
-                              ? await ref
-                                  .read(aliasScreenStateNotifier.notifier)
-                                  .deactivateAlias(aliasState.alias.id)
-                              : await ref
-                                  .read(aliasScreenStateNotifier.notifier)
-                                  .activateAlias(aliasState.alias.id);
-                    },
                   ),
-                  AliasDetailListTile(
+                  AliasScreenListTile(
                     leadingIconData: Icons.comment_outlined,
                     title: aliasState.alias.description.isEmpty
                         ? AppStrings.noDescription
                         : aliasState.alias.description,
                     subtitle: AppStrings.description,
-                    trailingIconData: Icons.edit_outlined,
-                    trailingIconOnPress: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
                               top: Radius.circular(
-                                  AppTheme.kBottomSheetBorderRadius)),
-                        ),
-                        builder: (context) {
-                          return UpdateDescriptionWidget(
-                            description: aliasState.alias.description,
-                            updateDescription: (description) async {
-                              await ref
-                                  .read(aliasScreenStateNotifier.notifier)
-                                  .editDescription(
-                                      aliasState.alias, description);
-                            },
-                            removeDescription: () async {
-                              await ref
-                                  .read(aliasScreenStateNotifier.notifier)
-                                  .editDescription(aliasState.alias, '');
-                            },
-                          );
-                        },
-                      );
-                    },
+                                AppTheme.kBottomSheetBorderRadius,
+                              ),
+                            ),
+                          ),
+                          builder: (context) {
+                            return UpdateDescriptionWidget(
+                              description: aliasState.alias.description,
+                              updateDescription: (description) async {
+                                await ref
+                                    .read(aliasScreenStateNotifier.notifier)
+                                    .editDescription(
+                                        aliasState.alias, description);
+                              },
+                              removeDescription: () async {
+                                await ref
+                                    .read(aliasScreenStateNotifier.notifier)
+                                    .editDescription(aliasState.alias, '');
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                   if (aliasState.alias.extension.isNotEmpty)
-                    AliasDetailListTile(
+                    AliasScreenListTile(
                       leadingIconData: Icons.check_circle_outline,
                       title: aliasState.alias.extension,
                       subtitle: 'extension',
-                      trailingIconData: Icons.edit_outlined,
-                      trailingIconOnPress: () {},
+                      trailing: Container(),
                     ),
-                  AliasDetailListTile(
+                  AliasScreenListTile(
                     leadingIconData: isAliasDeleted
                         ? Icons.restore_outlined
                         : Icons.delete_outline,
@@ -219,40 +227,42 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                                   color: Colors.green)
                               : const Icon(Icons.delete_outline,
                                   color: Colors.red),
-                          onPressed: null,
+                          onPressed: () {
+                            /// Display platform appropriate dialog
+                            PlatformAware.platformDialog(
+                              context: context,
+                              child: PlatformAlertDialog(
+                                title:
+                                    '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
+                                content: isAliasDeleted
+                                    ? AnonAddyString.restoreAliasConfirmation
+                                    : AnonAddyString.deleteAliasConfirmation,
+                                method: () async {
+                                  /// Dismisses [platformDialog]
+                                  Navigator.pop(context);
+
+                                  /// Delete [alias] if it's available or restore it if it's deleted
+                                  isAliasDeleted
+                                      ? await ref
+                                          .read(
+                                              aliasScreenStateNotifier.notifier)
+                                          .restoreAlias(aliasState.alias)
+                                      : await ref
+                                          .read(
+                                              aliasScreenStateNotifier.notifier)
+                                          .deleteAlias(aliasState.alias);
+
+                                  /// Dismisses [AliasScreen] if [alias] is deleted
+                                  if (!isAliasDeleted && mounted) {
+                                    Navigator.pop(context);
+                                  }
+                                },
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
-                    trailingIconOnPress: () {
-                      /// Display platform appropriate dialog
-                      PlatformAware.platformDialog(
-                        context: context,
-                        child: PlatformAlertDialog(
-                          title:
-                              '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
-                          content: isAliasDeleted
-                              ? AnonAddyString.restoreAliasConfirmation
-                              : AnonAddyString.deleteAliasConfirmation,
-                          method: () async {
-                            /// Dismisses [platformDialog]
-                            Navigator.pop(context);
-
-                            /// Delete [alias] if it's available or restore it if it's deleted
-                            isAliasDeleted
-                                ? await ref
-                                    .read(aliasScreenStateNotifier.notifier)
-                                    .restoreAlias(aliasState.alias)
-                                : await ref
-                                    .read(aliasScreenStateNotifier.notifier)
-                                    .deleteAlias(aliasState.alias);
-
-                            /// Dismisses [AliasScreen] if [alias] is deleted
-                            if (!isAliasDeleted && mounted)
-                              Navigator.pop(context);
-                          },
-                        ),
-                      );
-                    },
                   ),
                   const AliasScreenRecipients(),
                   const Divider(height: 20),
