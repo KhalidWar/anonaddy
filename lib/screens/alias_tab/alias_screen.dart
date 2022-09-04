@@ -1,6 +1,9 @@
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
 import 'package:anonaddy/screens/alias_tab/alias_default_recipient.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
+import 'package:anonaddy/screens/alias_tab/components/send_from_widget.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
@@ -8,8 +11,6 @@ import 'package:anonaddy/shared_components/list_tiles/list_tiles_exports.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_exports.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
 import 'package:anonaddy/utilities/utilities_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,7 +45,33 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     return Scaffold(
       key: AliasTabWidgetKeys.aliasScreenScaffold,
       resizeToAvoidBottomInset: false,
-      appBar: buildAppBar(context),
+      appBar: CustomAppBar(
+        key: AliasTabWidgetKeys.aliasScreenAppBar,
+        title: 'Alias',
+        leadingOnPress: () => Navigator.pop(context),
+        showTrailing: true,
+        trailingLabel: 'Forget Alias',
+        trailingOnPress: (choice) {
+          PlatformAware.platformDialog(
+            context: context,
+            child: PlatformAlertDialog(
+              title: AppStrings.forgetAlias,
+              content: AnonAddyString.forgetAliasConfirmation,
+              method: () async {
+                await ref
+                    .read(aliasScreenStateNotifier.notifier)
+                    .forgetAlias(widget.alias.id);
+
+                /// Dismisses [platformDialog]
+                if (mounted) Navigator.pop(context);
+
+                /// Dismisses [AliasScreen] after forgetting [alias]
+                if (mounted) Navigator.pop(context);
+              },
+            ),
+          );
+        },
+      ),
       body: Consumer(
         builder: (context, watch, _) {
           final aliasState = ref.watch(aliasScreenStateNotifier);
@@ -114,7 +141,17 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           title: 'Send email from this alias',
           subtitle: 'Send from',
           trailingIconData: Icons.send_outlined,
-          trailingIconOnPress: () => buildSendFromDialog(context, alias),
+          trailingIconOnPress: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
+              ),
+              builder: (context) => const SendFromWidget(),
+            );
+          },
         ),
         AliasDetailListTile(
           leadingIconData: Icons.toggle_on_outlined,
@@ -176,8 +213,34 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               ),
             ],
           ),
-          trailingIconOnPress: () =>
-              buildDeleteOrRestoreAliasDialog(context, alias),
+          trailingIconOnPress: () {
+            /// Display platform appropriate dialog
+            PlatformAware.platformDialog(
+              context: context,
+              child: PlatformAlertDialog(
+                title: '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
+                content: isAliasDeleted
+                    ? AnonAddyString.restoreAliasConfirmation
+                    : AnonAddyString.deleteAliasConfirmation,
+                method: () async {
+                  /// Dismisses [platformDialog]
+                  Navigator.pop(context);
+
+                  /// Delete [alias] if it's available or restore it if it's deleted
+                  isAliasDeleted
+                      ? await ref
+                          .read(aliasScreenStateNotifier.notifier)
+                          .restoreAlias(alias)
+                      : await ref
+                          .read(aliasScreenStateNotifier.notifier)
+                          .deleteAlias(alias);
+
+                  /// Dismisses [AliasScreen] if [alias] is deleted
+                  if (!isAliasDeleted && mounted) Navigator.pop(context);
+                },
+              ),
+            );
+          },
         ),
         Column(
           children: [
@@ -194,8 +257,21 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   ),
                   IconButton(
                     icon: const Icon(Icons.edit_outlined),
-                    onPressed: () =>
-                        buildUpdateDefaultRecipient(context, alias),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(
+                                AppTheme.kBottomSheetBorderRadius),
+                          ),
+                        ),
+                        builder: (context) {
+                          return AliasDefaultRecipientScreen(alias: alias);
+                        },
+                      );
+                    },
                   ),
                 ],
               ),
@@ -263,141 +339,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     );
   }
 
-  Future buildUpdateDefaultRecipient(BuildContext context, Alias alias) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
-        ),
-      ),
-      builder: (context) {
-        return AliasDefaultRecipientScreen(alias: alias);
-      },
-    );
-  }
-
-  void buildDeleteOrRestoreAliasDialog(BuildContext context, Alias alias) {
-    final isDeleted = alias.deletedAt.isNotEmpty;
-
-    /// Display platform appropriate dialog
-    PlatformAware.platformDialog(
-      context: context,
-      child: PlatformAlertDialog(
-        title: '${isDeleted ? 'Restore' : 'Delete'} Alias',
-        content: isDeleted
-            ? AnonAddyString.restoreAliasConfirmation
-            : AnonAddyString.deleteAliasConfirmation,
-        method: () async {
-          /// Dismisses [platformDialog]
-          Navigator.pop(context);
-
-          /// Delete [alias] if it's available or restore it if it's deleted
-          isDeleted
-              ? await ref
-                  .read(aliasScreenStateNotifier.notifier)
-                  .restoreAlias(alias)
-              : await ref
-                  .read(aliasScreenStateNotifier.notifier)
-                  .deleteAlias(alias);
-
-          /// Dismisses [AliasScreen] if [alias] is deleted
-          if (!isDeleted && mounted) Navigator.pop(context);
-        },
-      ),
-    );
-  }
-
-  Future buildSendFromDialog(BuildContext context, Alias alias) {
-    final sendFromFormKey = GlobalKey<FormState>();
-    String destinationEmail = '';
-
-    Future<void> generateAddress() async {
-      if (sendFromFormKey.currentState!.validate()) {
-        await ref
-            .read(aliasScreenStateNotifier.notifier)
-            .sendFromAlias(alias.email, destinationEmail);
-        if (mounted) Navigator.pop(context);
-      }
-    }
-
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
-      ),
-      builder: (context) {
-        final size = MediaQuery.of(context).size;
-
-        return Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const BottomSheetHeader(
-                headerLabel: AppStrings.sendFromAlias,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(AppStrings.sendFromAliasString),
-                    SizedBox(height: size.height * 0.01),
-                    TextFormField(
-                      enabled: false,
-                      decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                        hintText: alias.email,
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.02),
-                    Text(
-                      'Email destination',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    SizedBox(height: size.height * 0.01),
-                    Form(
-                      key: sendFromFormKey,
-                      child: TextFormField(
-                        autofocus: true,
-                        validator: (input) =>
-                            FormValidator.validateEmailField(input!),
-                        onChanged: (input) => destinationEmail = input,
-                        onFieldSubmitted: (toggle) => generateAddress(),
-                        decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                          hintText: 'Enter email...',
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.01),
-                    Text(
-                      AppStrings.sendFromAliasNote,
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                    SizedBox(height: size.height * 0.01),
-                    Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(),
-                        child: const Text('Generate address'),
-                        onPressed: () => generateAddress(),
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.015),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   Future updateDescriptionDialog(BuildContext context, Alias alias) {
     final aliasScreenNotifier = ref.read(aliasScreenStateNotifier.notifier);
     final descriptionFormKey = GlobalKey<FormState>();
@@ -431,38 +372,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           removeDescription: removeDescription,
         );
       },
-    );
-  }
-
-  AppBar buildAppBar(BuildContext context) {
-    Future forgetOnPress() async {
-      PlatformAware.platformDialog(
-        context: context,
-        child: PlatformAlertDialog(
-          title: AppStrings.forgetAlias,
-          content: AnonAddyString.forgetAliasConfirmation,
-          method: () async {
-            await ref
-                .read(aliasScreenStateNotifier.notifier)
-                .forgetAlias(widget.alias.id);
-
-            /// Dismisses [platformDialog]
-            if (mounted) Navigator.pop(context);
-
-            /// Dismisses [AliasScreen] after forgetting [alias]
-            if (mounted) Navigator.pop(context);
-          },
-        ),
-      );
-    }
-
-    return CustomAppBar(
-      key: AliasTabWidgetKeys.aliasScreenAppBar,
-      title: 'Alias',
-      leadingOnPress: () => Navigator.pop(context),
-      showTrailing: true,
-      trailingLabel: 'Forget Alias',
-      trailingOnPress: (choice) => forgetOnPress(),
     );
   }
 }
