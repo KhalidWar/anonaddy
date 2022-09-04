@@ -56,9 +56,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               title: AppStrings.forgetAlias,
               content: AnonAddyString.forgetAliasConfirmation,
               method: () async {
-                await ref
-                    .read(aliasScreenStateNotifier.notifier)
-                    .forgetAlias(widget.alias.id);
+                await ref.read(aliasScreenStateNotifier.notifier).forgetAlias();
 
                 /// Dismisses [platformDialog]
                 if (mounted) Navigator.pop(context);
@@ -154,10 +152,10 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                                 : aliasState.alias.active
                                     ? await ref
                                         .read(aliasScreenStateNotifier.notifier)
-                                        .deactivateAlias(aliasState.alias.id)
+                                        .deactivateAlias()
                                     : await ref
                                         .read(aliasScreenStateNotifier.notifier)
-                                        .activateAlias(aliasState.alias.id);
+                                        .activateAlias();
                           },
                         ),
                       ],
@@ -188,13 +186,12 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                               updateDescription: (description) async {
                                 await ref
                                     .read(aliasScreenStateNotifier.notifier)
-                                    .editDescription(
-                                        aliasState.alias, description);
+                                    .editDescription(description);
                               },
                               removeDescription: () async {
                                 await ref
                                     .read(aliasScreenStateNotifier.notifier)
-                                    .editDescription(aliasState.alias, '');
+                                    .editDescription('');
                               },
                             );
                           },

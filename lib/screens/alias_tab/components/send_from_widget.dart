@@ -19,11 +19,11 @@ class _SendFromWidgetState extends ConsumerState<SendFromWidget> {
   final sendFromFormKey = GlobalKey<FormState>();
   String destinationEmail = '';
 
-  Future<void> generateAddress(String email) async {
+  Future<void> generateAddress() async {
     if (sendFromFormKey.currentState!.validate()) {
       await ref
           .read(aliasScreenStateNotifier.notifier)
-          .sendFromAlias(email, destinationEmail);
+          .sendFromAlias(destinationEmail);
       if (mounted) Navigator.pop(context);
     }
   }
@@ -69,7 +69,7 @@ class _SendFromWidgetState extends ConsumerState<SendFromWidget> {
                     validator: (input) =>
                         FormValidator.validateEmailField(input!),
                     onChanged: (input) => destinationEmail = input,
-                    onFieldSubmitted: (toggle) => generateAddress(alias.email),
+                    onFieldSubmitted: (toggle) => generateAddress(),
                     decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                       hintText: 'Enter email...',
                     ),
@@ -85,7 +85,7 @@ class _SendFromWidgetState extends ConsumerState<SendFromWidget> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(),
                     child: const Text('Generate address'),
-                    onPressed: () => generateAddress(alias.email),
+                    onPressed: () => generateAddress(),
                   ),
                 ),
                 SizedBox(height: size.height * 0.015),

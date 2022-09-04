@@ -68,10 +68,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     }
   }
 
-  Future<void> editDescription(Alias alias, String newDesc) async {
+  Future<void> editDescription(String newDesc) async {
     try {
       final updatedAlias =
-          await aliasService.updateAliasDescription(alias.id, newDesc);
+          await aliasService.updateAliasDescription(state.alias.id, newDesc);
       NicheMethod.showToast(ToastMessage.editDescriptionSuccess);
       _updateState(state.copyWith(alias: updatedAlias));
     } catch (error) {
@@ -80,10 +80,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     }
   }
 
-  Future<void> deactivateAlias(String aliasId) async {
+  Future<void> deactivateAlias() async {
     try {
       _updateState(state.copyWith(isToggleLoading: true));
-      await aliasService.deactivateAlias(aliasId);
+      await aliasService.deactivateAlias(state.alias.id);
       final updatedAlias = state.alias.copyWith(active: false);
       _updateState(state.copyWith(isToggleLoading: false, alias: updatedAlias));
     } on DioError catch (dioError) {
@@ -95,10 +95,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     }
   }
 
-  Future<void> activateAlias(String aliasId) async {
+  Future<void> activateAlias() async {
     try {
       _updateState(state.copyWith(isToggleLoading: true));
-      final newAlias = await aliasService.activateAlias(aliasId);
+      final newAlias = await aliasService.activateAlias(state.alias.id);
       final updateAlias = state.alias.copyWith(active: newAlias.active);
       _updateState(state.copyWith(isToggleLoading: false, alias: updateAlias));
     } on DioError catch (dioError) {
@@ -149,12 +149,11 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     }
   }
 
-  Future<void> updateAliasDefaultRecipient(
-      Alias alias, List<String> recipients) async {
+  Future<void> updateAliasDefaultRecipient(List<String> recipients) async {
     _updateState(state.copyWith(updateRecipientLoading: true));
     try {
-      final updatedAlias =
-          await aliasService.updateAliasDefaultRecipient(alias.id, recipients);
+      final updatedAlias = await aliasService.updateAliasDefaultRecipient(
+          state.alias.id, recipients);
       final newState =
           state.copyWith(updateRecipientLoading: false, alias: updatedAlias);
       _updateState(newState);
@@ -165,9 +164,9 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     _updateState(state.copyWith(updateRecipientLoading: false));
   }
 
-  Future<void> forgetAlias(String aliasID) async {
+  Future<void> forgetAlias() async {
     try {
-      await aliasService.forgetAlias(aliasID);
+      await aliasService.forgetAlias(state.alias.id);
       NicheMethod.showToast(ToastMessage.forgetAliasSuccess);
     } catch (error) {
       final dioError = error as DioError;
@@ -175,10 +174,10 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     }
   }
 
-  Future<void> sendFromAlias(String aliasEmail, String destinationEmail) async {
+  Future<void> sendFromAlias(String destinationEmail) async {
     /// https://anonaddy.com/help/sending-email-from-an-alias/
-    final leftPartOfAlias = aliasEmail.split('@')[0];
-    final rightPartOfAlias = aliasEmail.split('@')[1];
+    final leftPartOfAlias = state.alias.email.split('@')[0];
+    final rightPartOfAlias = state.alias.email.split('@')[1];
     final recipientEmail = destinationEmail.replaceAll('@', '=');
     final generatedAddress =
         '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';

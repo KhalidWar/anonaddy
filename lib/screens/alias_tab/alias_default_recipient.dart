@@ -1,4 +1,8 @@
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/default_recipient/default_recipient_notifier.dart';
+import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
+import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
@@ -6,10 +10,6 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/default_recipient/default_recipient_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -161,8 +161,7 @@ class _AliasDefaultRecipientScreenState
                           /// Update default recipients for [widget.alias]
                           ref
                               .read(aliasScreenStateNotifier.notifier)
-                              .updateAliasDefaultRecipient(
-                                  widget.alias, recipientIds)
+                              .updateAliasDefaultRecipient(recipientIds)
                               .whenComplete(() => Navigator.pop(context));
                         },
                       ),
