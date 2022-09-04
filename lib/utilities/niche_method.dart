@@ -7,21 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NicheMethod {
-  static String fixDateTime(dynamic input) {
-    // if (input == null) return '';
-    if (input.runtimeType == DateTime) {
-      final year = input.year.toString().substring(2);
-      final month = input.month;
-      final day = input.day;
-      final hour = input.hour;
-      final min = input.minute;
-      return '$month/$day/$year $hour:$min';
-      // return '${input.month}/${input.day}/${input.year.toString().substring(2)} ${input.hour}:${input.minute}';
-    } else {
-      return '$input';
-    }
-  }
-
   static String formatDateTime(BuildContext context, String input) {
     if (input.isEmpty) return '';
 

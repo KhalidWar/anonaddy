@@ -12,7 +12,7 @@ class AccountPopupInfo extends ConsumerWidget {
   }) : super(key: key);
   final AccountState accountState;
 
-  String getSubscriptionExpirationDate() {
+  String getSubscriptionExpirationDate(BuildContext context) {
     /// Self hosted instances do NOT have a subscription and do not expire.
     if (accountState.isSelfHosted) {
       return AppStrings.subscriptionEndDateDoesNotExpire;
@@ -24,11 +24,9 @@ class AccountPopupInfo extends ConsumerWidget {
     }
 
     /// AnonAddy Lite and Pro subscriptions do expire.
-    return NicheMethod.fixDateTime(
-      accountState.account.subscriptionEndAt.isEmpty
-          ? AppStrings.subscriptionEndDateNotAvailable
-          : accountState.account.subscriptionEndAt,
-    );
+    return accountState.account.subscriptionEndAt.isEmpty
+        ? AppStrings.subscriptionEndDateNotAvailable
+        : NicheMethod.formatDateTime(context, accountState.account.createdAt);
   }
 
   Future<void> updateDefaultAliasFormatDomain(WidgetRef ref) async {
@@ -70,7 +68,7 @@ class AccountPopupInfo extends ConsumerWidget {
         ),
         ListTile(
           dense: true,
-          title: Text(getSubscriptionExpirationDate()),
+          title: Text(getSubscriptionExpirationDate(context)),
           subtitle: const Text(AppStrings.subscriptionEndDate),
         ),
       ],
