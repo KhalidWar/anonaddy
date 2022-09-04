@@ -340,22 +340,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
   }
 
   Future updateDescriptionDialog(BuildContext context, Alias alias) {
-    final aliasScreenNotifier = ref.read(aliasScreenStateNotifier.notifier);
-    final descriptionFormKey = GlobalKey<FormState>();
-    String newDescription = '';
-
-    Future<void> updateDescription() async {
-      if (descriptionFormKey.currentState!.validate()) {
-        await aliasScreenNotifier.editDescription(alias, newDescription);
-        if (mounted) Navigator.pop(context);
-      }
-    }
-
-    Future<void> removeDescription() async {
-      await aliasScreenNotifier.editDescription(alias, '');
-      if (mounted) Navigator.pop(context);
-    }
-
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -366,10 +350,16 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       builder: (context) {
         return UpdateDescriptionWidget(
           description: alias.description,
-          descriptionFormKey: descriptionFormKey,
-          updateDescription: updateDescription,
-          inputOnChanged: (input) => newDescription = input,
-          removeDescription: removeDescription,
+          updateDescription: (description) async {
+            await ref
+                .read(aliasScreenStateNotifier.notifier)
+                .editDescription(alias, description);
+          },
+          removeDescription: () async {
+            await ref
+                .read(aliasScreenStateNotifier.notifier)
+                .editDescription(alias, '');
+          },
         );
       },
     );

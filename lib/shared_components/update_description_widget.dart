@@ -5,21 +5,25 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_butto
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_input_field.dart';
 import 'package:flutter/material.dart';
 
-class UpdateDescriptionWidget extends StatelessWidget {
+class UpdateDescriptionWidget extends StatefulWidget {
   const UpdateDescriptionWidget({
     Key? key,
     required this.description,
-    required this.descriptionFormKey,
-    required this.inputOnChanged,
     required this.updateDescription,
     required this.removeDescription,
   }) : super(key: key);
 
   final String? description;
-  final GlobalKey descriptionFormKey;
-  final Function(String)? inputOnChanged;
-  final Function() updateDescription;
-  final Function() removeDescription;
+  final Function(String) updateDescription;
+  final Function removeDescription;
+
+  @override
+  State createState() => _UpdateDescriptionWidgetState();
+}
+
+class _UpdateDescriptionWidgetState extends State<UpdateDescriptionWidget> {
+  final formKey = GlobalKey<FormState>();
+  String newDescription = '';
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +45,16 @@ class UpdateDescriptionWidget extends StatelessWidget {
                 const Text(AppStrings.updateDescriptionString),
                 SizedBox(height: size.height * 0.02),
                 Form(
-                  key: descriptionFormKey,
+                  key: formKey,
                   child: PlatformInputField(
-                    placeholder: description ?? 'No description',
-                    onChanged: inputOnChanged,
-                    onFieldSubmitted: (toggle) => updateDescription(),
+                    placeholder: widget.description ?? 'No description',
+                    onChanged: (input) => newDescription = input,
+                    onFieldSubmitted: (input) {
+                      if (formKey.currentState!.validate()) {
+                        widget.updateDescription(newDescription);
+                        if (mounted) Navigator.pop(context);
+                      }
+                    },
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
@@ -55,7 +64,10 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     Expanded(
                       child: PlatformButton(
                         color: Colors.redAccent,
-                        onPress: removeDescription,
+                        onPress: () {
+                          widget.removeDescription();
+                          if (mounted) Navigator.pop(context);
+                        },
                         child: const Text(
                           AppStrings.removeDescriptionTitle,
                           style: TextStyle(color: Colors.black),
@@ -65,7 +77,12 @@ class UpdateDescriptionWidget extends StatelessWidget {
                     SizedBox(width: size.width * 0.03),
                     Expanded(
                       child: PlatformButton(
-                        onPress: updateDescription,
+                        onPress: () {
+                          if (formKey.currentState!.validate()) {
+                            widget.updateDescription(newDescription);
+                            if (mounted) Navigator.pop(context);
+                          }
+                        },
                         color: AppColors.accentColor,
                         child: const Text(
                           AppStrings.updateDescriptionTitle,

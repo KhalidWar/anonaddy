@@ -1,4 +1,6 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
+import 'package:anonaddy/notifiers/domains/domains_screen_notifier.dart';
+import 'package:anonaddy/notifiers/domains/domains_screen_state.dart';
 import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
@@ -15,8 +17,6 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/shared_components/update_description_widget.dart';
-import 'package:anonaddy/notifiers/domains/domains_screen_notifier.dart';
-import 'package:anonaddy/notifiers/domains/domains_screen_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -240,22 +240,6 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
   }
 
   Future buildEditDescriptionDialog(BuildContext context, Domain domain) {
-    final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
-    final formKey = GlobalKey<FormState>();
-    String newDescription = '';
-
-    Future<void> updateDescription() async {
-      if (formKey.currentState!.validate()) {
-        await domainNotifier.editDescription(domain.id, newDescription);
-        if (mounted) Navigator.pop(context);
-      }
-    }
-
-    Future<void> removeDescription() async {
-      await domainNotifier.editDescription(domain.id, '');
-      if (mounted) Navigator.pop(context);
-    }
-
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -266,10 +250,16 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
       builder: (context) {
         return UpdateDescriptionWidget(
           description: domain.description,
-          descriptionFormKey: formKey,
-          inputOnChanged: (input) => newDescription = input,
-          updateDescription: updateDescription,
-          removeDescription: removeDescription,
+          updateDescription: (description) async {
+            await ref
+                .read(domainsScreenStateNotifier.notifier)
+                .editDescription(domain.id, description);
+          },
+          removeDescription: () async {
+            await ref
+                .read(domainsScreenStateNotifier.notifier)
+                .editDescription(domain.id, '');
+          },
         );
       },
     );

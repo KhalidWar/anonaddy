@@ -1,4 +1,6 @@
 import 'package:anonaddy/models/username/username.dart';
+import 'package:anonaddy/notifiers/usernames/usernames_screen_notifier.dart';
+import 'package:anonaddy/notifiers/usernames/usernames_screen_state.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_default_recipient.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
@@ -16,8 +18,6 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/shared_components/update_description_widget.dart';
-import 'package:anonaddy/notifiers/usernames/usernames_screen_notifier.dart';
-import 'package:anonaddy/notifiers/usernames/usernames_screen_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -241,23 +241,6 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
   }
 
   Future updateDescriptionDialog(BuildContext context, Username username) {
-    final usernameNotifier = ref.read(usernamesScreenStateNotifier.notifier);
-    final formKey = GlobalKey<FormState>();
-    String newDescription = '';
-
-    Future<void> updateDescription() async {
-      if (formKey.currentState!.validate()) {
-        await usernameNotifier.updateUsernameDescription(
-            username, newDescription);
-        if (mounted) Navigator.pop(context);
-      }
-    }
-
-    Future<void> removeDescription() async {
-      await usernameNotifier.updateUsernameDescription(username, '');
-      if (mounted) Navigator.pop(context);
-    }
-
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -268,10 +251,16 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
       builder: (context) {
         return UpdateDescriptionWidget(
           description: username.description,
-          descriptionFormKey: formKey,
-          inputOnChanged: (input) => newDescription = input,
-          updateDescription: updateDescription,
-          removeDescription: removeDescription,
+          updateDescription: (description) {
+            ref
+                .read(usernamesScreenStateNotifier.notifier)
+                .updateUsernameDescription(username, description);
+          },
+          removeDescription: () {
+            ref
+                .read(usernamesScreenStateNotifier.notifier)
+                .updateUsernameDescription(username, '');
+          },
         );
       },
     );
