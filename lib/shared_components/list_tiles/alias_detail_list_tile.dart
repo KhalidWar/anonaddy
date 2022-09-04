@@ -1,4 +1,3 @@
-import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';
 
 class AliasDetailListTile extends StatelessWidget {
@@ -38,7 +37,7 @@ class AliasDetailListTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          NicheMethod.fixDateTime(title),
+                          title,
                           style: titleTextStyle,
                         ),
                         Padding(
