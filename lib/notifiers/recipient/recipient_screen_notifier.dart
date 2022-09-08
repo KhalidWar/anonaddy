@@ -5,7 +5,7 @@ import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,7 +29,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   final RecipientTabNotifier recipientTabNotifier;
   final AccountNotifier accountNotifier;
 
-  final showToast = NicheMethod.showToast;
+  final showToast = Utilities.showToast;
 
   void _updateState(RecipientScreenState newState) {
     if (mounted) state = newState;

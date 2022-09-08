@@ -5,7 +5,7 @@ import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -84,9 +84,9 @@ class AccountNotifier extends StateNotifier<AccountState> {
         account: account,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 

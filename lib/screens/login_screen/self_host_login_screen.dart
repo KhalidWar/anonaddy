@@ -1,3 +1,4 @@
+import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/screens/login_screen/components/label_input_field_separator.dart';
 import 'package:anonaddy/screens/login_screen/components/login_card.dart';
 import 'package:anonaddy/screens/login_screen/components/login_footer.dart';
@@ -6,9 +7,8 @@ import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/app_url.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -146,7 +146,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                             'selfHostedLoginScreenSelfHostInfoButton'),
                         child: const Text('How to self-host AnonAddy?'),
                         onPressed: () =>
-                            NicheMethod.launchURL(kAnonAddySelfHostingURL),
+                            Utilities.launchURL(kAnonAddySelfHostingURL),
                       ),
                       TextButton(
                         key: const Key(

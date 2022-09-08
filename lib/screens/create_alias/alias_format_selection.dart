@@ -1,8 +1,8 @@
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,7 +50,7 @@ class AliasFormatSelection extends ConsumerWidget {
                           selectedTileColor: AppColors.accentColor,
                           horizontalTitleGap: 0,
                           title: Text(
-                            NicheMethod.correctAliasString(format),
+                            Utilities.correctAliasString(format),
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.subtitle1,
                           ),

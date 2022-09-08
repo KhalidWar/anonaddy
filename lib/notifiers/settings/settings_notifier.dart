@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:anonaddy/notifiers/settings/settings_state.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/notifiers/settings/settings_state.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -33,7 +33,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     try {
       _updateState(state.copyWith(isDarkTheme: !state.isDarkTheme));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 
@@ -41,7 +41,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     try {
       _updateState(state.copyWith(isAutoCopyEnabled: !state.isAutoCopyEnabled));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 
@@ -51,7 +51,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
         state.copyWith(isBiometricEnabled: !state.isBiometricEnabled),
       );
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 
@@ -92,7 +92,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       final encodedState = json.encode(mappedState);
       await offlineData.saveSettingsState(encodedState);
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 
@@ -109,7 +109,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
         _updateState(storedState);
       }
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 }

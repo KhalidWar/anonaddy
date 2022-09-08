@@ -1,4 +1,4 @@
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 
 class CreatedAtWidget extends StatelessWidget {
@@ -21,7 +21,7 @@ class CreatedAtWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            NicheMethod.formatDateTime(context, dateTime),
+            Utilities.formatDateTime(context, dateTime),
             style: Theme.of(context)
                 .textTheme
                 .caption

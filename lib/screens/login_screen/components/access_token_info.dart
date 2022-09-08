@@ -1,7 +1,7 @@
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 
 class AccessTokenInfo extends StatelessWidget {
@@ -61,7 +61,7 @@ class AccessTokenInfo extends StatelessWidget {
               Icon(Icons.open_in_new_outlined),
             ],
           ),
-          onPressed: () => NicheMethod.launchURL(kAnonAddySettingsURL),
+          onPressed: () => Utilities.launchURL(kAnonAddySettingsURL),
         ),
         const SizedBox(height: 20),
       ],

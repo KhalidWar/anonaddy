@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/domain/domain_model.dart';
+import 'package:anonaddy/notifiers/domains/domains_screen_state.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/notifiers/domains/domains_screen_state.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -58,12 +58,12 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     try {
       final updatedDomain =
           await domainService.updateDomainDescription(domainId, newDescription);
-      NicheMethod.showToast(ToastMessage.editDescriptionSuccess);
+      Utilities.showToast(ToastMessage.editDescriptionSuccess);
       _updateState(state.copyWith(domain: updatedDomain));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 
@@ -78,10 +78,10 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         domain: updatedDomain,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -98,10 +98,10 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         domain: updatedDomain,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -118,10 +118,10 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         domain: updatedDomain,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -138,10 +138,10 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         domain: updatedDomain,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -153,7 +153,7 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
       final newDomain = await domainService.updateDomainDefaultRecipient(
           domainId, recipientId);
 
-      NicheMethod.showToast('Default recipient updated successfully!');
+      Utilities.showToast('Default recipient updated successfully!');
 
       final updatedDomain =
           state.domain.copyWith(defaultRecipient: newDomain.defaultRecipient);
@@ -163,10 +163,10 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         domain: updatedDomain,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(updateRecipientLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(updateRecipientLoading: false));
     }
   }
@@ -174,11 +174,11 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
   Future<void> deleteDomain(String domainId) async {
     try {
       await domainService.deleteDomain(domainId);
-      NicheMethod.showToast('Domain deleted successfully!');
+      Utilities.showToast('Domain deleted successfully!');
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:anonaddy/notifiers/biometric_auth/biometric_notifier.dart';
+import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
 import 'package:anonaddy/screens/settings_screen/about_app_screen.dart';
 import 'package:anonaddy/screens/settings_screen/components/app_version.dart';
@@ -6,9 +8,7 @@ import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
-import 'package:anonaddy/notifiers/biometric_auth/biometric_notifier.dart';
-import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -85,7 +85,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             subtitle: const Text(AppStrings.settingsAnonAddyHelpCenterSubtitle),
             trailing: const Icon(Icons.open_in_new_outlined),
-            onTap: () => NicheMethod.launchURL(kAnonAddyHelpCenterURL),
+            onTap: () => Utilities.launchURL(kAnonAddyHelpCenterURL),
           ),
           ListTile(
             dense: true,
@@ -95,7 +95,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             subtitle: const Text(AppStrings.settingsAnonAddyFAQSubtitle),
             trailing: const Icon(Icons.open_in_new_outlined),
-            onTap: () => NicheMethod.launchURL(kAnonAddyFAQURL),
+            onTap: () => Utilities.launchURL(kAnonAddyFAQURL),
           ),
           const Divider(height: 0),
           const AppVersion(),
@@ -120,7 +120,7 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: const Text(AppStrings.settingsEnjoyingAppSubtitle),
             trailing: const Icon(Icons.help_outline),
             onTap: () {
-              NicheMethod.launchURL(
+              Utilities.launchURL(
                 PlatformAware.isIOS()
                     ? kAddyManagerAppStoreURL
                     : kAddyManagerPlayStoreURL,

@@ -4,7 +4,7 @@ import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -68,7 +68,7 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
       _updateState(newState);
     } catch (error) {
       final dioError = error as DioError;
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     }
   }
 

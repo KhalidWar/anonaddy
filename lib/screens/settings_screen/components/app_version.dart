@@ -1,8 +1,8 @@
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/notifiers/app_version/app_version_notifier.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,7 +34,7 @@ class AppVersion extends ConsumerWidget {
                     subtitle: const Text(AppStrings.appVersion),
                     trailing: const Icon(Icons.info_outlined),
                     onTap: () {
-                      NicheMethod.showToast(ToastMessage.appVersionMessage);
+                      Utilities.showToast(ToastMessage.appVersionMessage);
                     },
                   );
                 },

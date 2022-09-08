@@ -10,7 +10,7 @@ import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,7 +43,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
       buildAddNewRecipient(context);
     } else {
       accountState.hasRecipientsReachedLimit
-          ? NicheMethod.showToast(AnonAddyString.reachedRecipientLimit)
+          ? Utilities.showToast(AnonAddyString.reachedRecipientLimit)
           : buildAddNewRecipient(context);
     }
   }

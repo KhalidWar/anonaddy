@@ -3,7 +3,7 @@ import 'package:anonaddy/notifiers/usernames/usernames_screen_state.dart';
 import 'package:anonaddy/notifiers/usernames/usernames_tab_notifier.dart';
 import 'package:anonaddy/services/username/username_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -61,24 +61,24 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
   Future<void> addNewUsername(String username) async {
     try {
       await usernameService.addNewUsername(username);
-      NicheMethod.showToast('Username added successfully!');
+      Utilities.showToast('Username added successfully!');
       usernamesNotifier.fetchUsernames();
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 
   Future<void> deleteUsername(Username username) async {
     try {
       await usernameService.deleteUsername(username.id);
-      NicheMethod.showToast('Username deleted successfully!');
+      Utilities.showToast('Username deleted successfully!');
       usernamesNotifier.fetchUsernames();
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 
@@ -89,12 +89,12 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
           username.id, description);
       final updatedUsername =
           username.copyWith(description: newUsername.description);
-      NicheMethod.showToast('Description updated successfully!');
+      Utilities.showToast('Description updated successfully!');
       _updateState(state.copyWith(username: updatedUsername));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 
@@ -105,16 +105,16 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
           username.id, recipientID);
       final updatedUsername =
           username.copyWith(defaultRecipient: newUsername.defaultRecipient);
-      NicheMethod.showToast('Default recipient updated successfully!');
+      Utilities.showToast('Default recipient updated successfully!');
       _updateState(state.copyWith(
         username: updatedUsername,
         updateRecipientLoading: false,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(updateRecipientLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(updateRecipientLoading: false));
     }
   }
@@ -129,10 +129,10 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         activeSwitchLoading: false,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -147,10 +147,10 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         activeSwitchLoading: false,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -165,10 +165,10 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         catchAllSwitchLoading: false,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -183,10 +183,10 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         catchAllSwitchLoading: false,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }

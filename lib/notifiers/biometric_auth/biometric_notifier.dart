@@ -1,6 +1,6 @@
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -35,11 +35,11 @@ class BiometricNotifier extends ChangeNotifier {
         isEnabled = input;
         await _saveBiometricState(input);
       } else {
-        NicheMethod.showToast('Failed to authenticate');
+        Utilities.showToast('Failed to authenticate');
       }
       notifyListeners();
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -53,7 +53,7 @@ class BiometricNotifier extends ChangeNotifier {
       }
       notifyListeners();
     } catch (error) {
-      NicheMethod.showToast('Failed to load biometric authentication state');
+      Utilities.showToast('Failed to load biometric authentication state');
       return;
     }
   }
@@ -62,7 +62,7 @@ class BiometricNotifier extends ChangeNotifier {
     try {
       await secureStorage.write(key: biometricAuthKey, value: input.toString());
     } catch (error) {
-      NicheMethod.showToast('Failed to save biometric authentication state');
+      Utilities.showToast('Failed to save biometric authentication state');
 
       return;
     }

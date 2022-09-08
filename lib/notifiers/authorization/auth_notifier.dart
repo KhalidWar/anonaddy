@@ -5,7 +5,7 @@ import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,7 +68,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     } catch (error) {
       final newState = state.copyWith(loginLoading: false);
-      NicheMethod.showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(newState);
     }
   }
@@ -79,7 +79,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await searchHistory.clearSearchHistory();
       if (mounted) Phoenix.rebirth(context);
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -96,7 +96,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         final newState =
             state.copyWith(errorMessage: AppStrings.failedToAuthenticate);
         _updateState(newState);
-        NicheMethod.showToast(AppStrings.failedToAuthenticate);
+        Utilities.showToast(AppStrings.failedToAuthenticate);
       }
     } catch (error) {
       final newState =
@@ -132,7 +132,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         _updateState(newState);
       }
     } catch (error) {
-      NicheMethod.showToast(error.toString());
+      Utilities.showToast(error.toString());
 
       /// Authenticate user regardless of error.
       /// This is a temp solution until I'm able to handle different errors.

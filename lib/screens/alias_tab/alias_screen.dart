@@ -109,7 +109,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     trailing: IconButton(
                       icon: const Icon(Icons.copy),
                       onPressed: () =>
-                          NicheMethod.copyOnTap(aliasState.alias.email),
+                          Utilities.copyOnTap(aliasState.alias.email),
                     ),
                   ),
                   AliasScreenListTile(
@@ -147,7 +147,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                           value: aliasState.alias.active,
                           onChanged: (toggle) async {
                             isAliasDeleted
-                                ? NicheMethod.showToast(
+                                ? Utilities.showToast(
                                     AnonAddyString.restoreBeforeActivate)
                                 : aliasState.alias.active
                                     ? await ref

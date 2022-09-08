@@ -11,7 +11,7 @@ import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -87,7 +87,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
     /// Handles if "Custom" aliasFormat is selected and local part is empty
     if (state.aliasFormat == AnonAddyString.aliasFormatCustom &&
         state.localPart!.isEmpty) {
-      throw NicheMethod.showToast('Provide a valid local part');
+      throw Utilities.showToast('Provide a valid local part');
     }
 
     /// Show loading indicator
@@ -103,16 +103,16 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
       );
 
       if (isAutoCopy) {
-        await NicheMethod.copyOnTap(createdAlias.email);
-        NicheMethod.showToast(ToastMessage.createAliasAndCopyEmail);
+        await Utilities.copyOnTap(createdAlias.email);
+        Utilities.showToast(ToastMessage.createAliasAndCopyEmail);
       } else {
-        NicheMethod.showToast(ToastMessage.createAliasSuccess);
+        Utilities.showToast(ToastMessage.createAliasSuccess);
       }
 
       aliasTabNotifier.addAlias(createdAlias);
     } catch (error) {
       final dioError = error as DioError;
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     }
     _updateState(state.copyWith(isLoading: false));
   }

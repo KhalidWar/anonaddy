@@ -2,7 +2,7 @@ import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
 import 'package:anonaddy/services/package_info_service/package_info_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,7 +33,7 @@ class AboutAppScreen extends StatelessWidget {
             title: const Text('Khalid Warsame'),
             subtitle: const Text('AddyManager developer'),
             trailing: const Icon(Icons.account_circle_outlined),
-            onTap: () => NicheMethod.launchURL(kKhalidWarGithubURL),
+            onTap: () => Utilities.launchURL(kKhalidWarGithubURL),
           ),
           const Divider(height: 0),
           ListTile(
@@ -41,7 +41,7 @@ class AboutAppScreen extends StatelessWidget {
             title: const Text('Will Browning (AnonAddy team)'),
             subtitle: const Text('Contributor'),
             trailing: const Icon(Icons.account_circle_outlined),
-            onTap: () => NicheMethod.launchURL(kWillBrowningGithubURL),
+            onTap: () => Utilities.launchURL(kWillBrowningGithubURL),
           ),
           const Divider(height: 0),
           ListTile(
@@ -49,7 +49,7 @@ class AboutAppScreen extends StatelessWidget {
             title: const Text('Exodus Privacy Report'),
             subtitle: const Text('Exodus\'s privacy report of AddyManager'),
             trailing: const Icon(Icons.shield_outlined),
-            onTap: () => NicheMethod.launchURL(kExodusPrivacyURL),
+            onTap: () => Utilities.launchURL(kExodusPrivacyURL),
           ),
           const Divider(height: 0),
           ListTile(
@@ -57,7 +57,7 @@ class AboutAppScreen extends StatelessWidget {
             title: const Text('Found a bug?'),
             subtitle: const Text('Report bugs and request features'),
             trailing: const Icon(Icons.bug_report_outlined),
-            onTap: () => NicheMethod.launchURL(kAddyManagerIssuesURL),
+            onTap: () => Utilities.launchURL(kAddyManagerIssuesURL),
           ),
           const Divider(height: 0),
           ListTile(
@@ -65,7 +65,7 @@ class AboutAppScreen extends StatelessWidget {
             title: const Text('Source Code'),
             subtitle: const Text('AddyManager\'s open source code'),
             trailing: const Icon(Icons.code_outlined),
-            onTap: () => NicheMethod.launchURL(kAddyManagerRepoURL),
+            onTap: () => Utilities.launchURL(kAddyManagerRepoURL),
           ),
           const Divider(height: 0),
           ListTile(
@@ -73,7 +73,7 @@ class AboutAppScreen extends StatelessWidget {
             title: const Text('AddyManager License'),
             subtitle: const Text('MIT License'),
             trailing: const Icon(Icons.description_outlined),
-            onTap: () => NicheMethod.launchURL(kAddyManagerLicenseURL),
+            onTap: () => Utilities.launchURL(kAddyManagerLicenseURL),
           ),
           const Divider(height: 0),
           ListTile(

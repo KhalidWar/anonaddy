@@ -18,7 +18,7 @@ import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -139,16 +139,16 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   if (recipientScreenState.isOffline) const OfflineBanner(),
                   const RecipientScreenUnverifiedWarning(),
                   AliasScreenPieChart(
-                    emailsForwarded: NicheMethod.reduceListElements(
+                    emailsForwarded: Utilities.reduceListElements(
                       calculateEmailsForwarded(recipient),
                     ),
-                    emailsBlocked: NicheMethod.reduceListElements(
+                    emailsBlocked: Utilities.reduceListElements(
                       calculateEmailsBlocked(recipient),
                     ),
-                    emailsReplied: NicheMethod.reduceListElements(
+                    emailsReplied: Utilities.reduceListElements(
                       calculateEmailsReplied(recipient),
                     ),
-                    emailsSent: NicheMethod.reduceListElements(
+                    emailsSent: Utilities.reduceListElements(
                       calculateEmailsSent(recipient),
                     ),
                   ),
@@ -164,7 +164,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     subtitle: 'Recipient Email',
                     trailing: IconButton(
                       icon: const Icon(Icons.copy),
-                      onPressed: () => NicheMethod.copyOnTap(recipient.email),
+                      onPressed: () => Utilities.copyOnTap(recipient.email),
                     ),
                   ),
                   RecipientScreenActionsListTile(

@@ -6,7 +6,7 @@ import 'package:anonaddy/notifiers/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -105,9 +105,9 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
         deletedAliasList: deletedAliases,
       ));
     } on DioError catch (dioError) {
-      NicheMethod.showToast(dioError.message);
+      Utilities.showToast(dioError.message);
     } catch (error) {
-      NicheMethod.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(AppStrings.somethingWentWrong);
     }
   }
 

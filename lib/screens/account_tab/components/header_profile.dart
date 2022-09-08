@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 
 class HeaderProfile extends StatelessWidget {
@@ -21,14 +21,14 @@ class HeaderProfile extends StatelessWidget {
         child: avatarChild(context),
       ),
       title: Text(
-        NicheMethod.capitalizeFirstLetter(account.username),
+        Utilities.capitalizeFirstLetter(account.username),
         style: Theme.of(context)
             .textTheme
             .headline6!
             .copyWith(color: Colors.white),
       ),
       subtitle: Text(
-        NicheMethod.capitalizeFirstLetter(
+        Utilities.capitalizeFirstLetter(
           account.subscription.isEmpty
               ? AppStrings.selfHosted
               : account.subscription,

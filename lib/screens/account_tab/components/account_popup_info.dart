@@ -1,7 +1,7 @@
 import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,13 +26,13 @@ class AccountPopupInfo extends ConsumerWidget {
     /// AnonAddy Lite and Pro subscriptions do expire.
     return accountState.account.subscriptionEndAt.isEmpty
         ? AppStrings.subscriptionEndDateNotAvailable
-        : NicheMethod.formatDateTime(context, accountState.account.createdAt);
+        : Utilities.formatDateTime(context, accountState.account.createdAt);
   }
 
   Future<void> updateDefaultAliasFormatDomain(WidgetRef ref) async {
     final instanceURL =
         await ref.read(accessTokenServiceProvider).getInstanceURL();
-    await NicheMethod.launchURL('https://$instanceURL/settings');
+    await Utilities.launchURL('https://$instanceURL/settings');
   }
 
   @override
@@ -49,7 +49,7 @@ class AccountPopupInfo extends ConsumerWidget {
           title: Text(
             account.defaultAliasFormat.isEmpty
                 ? AppStrings.noDefaultSelected
-                : NicheMethod.correctAliasString(account.defaultAliasFormat),
+                : Utilities.correctAliasString(account.defaultAliasFormat),
           ),
           subtitle: const Text(AppStrings.defaultAliasFormat),
           trailing: const Icon(Icons.open_in_new_outlined),
