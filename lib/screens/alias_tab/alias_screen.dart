@@ -75,10 +75,21 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
 
           switch (aliasState.status) {
             case AliasScreenStatus.loading:
-              return const Center(
-                child: PlatformLoadingIndicator(
-                  key: AliasTabWidgetKeys.aliasScreenLoadingIndicator,
-                ),
+              return ListView(
+                children: const [
+                  AliasScreenPieChart(
+                    emailsForwarded: 0,
+                    emailsBlocked: 0,
+                    emailsReplied: 0,
+                    emailsSent: 0,
+                  ),
+                  Divider(height: 20),
+                  Center(
+                    child: PlatformLoadingIndicator(
+                      key: AliasTabWidgetKeys.aliasScreenLoadingIndicator,
+                    ),
+                  ),
+                ],
               );
 
             case AliasScreenStatus.loaded:
