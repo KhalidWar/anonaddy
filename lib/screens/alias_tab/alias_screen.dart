@@ -8,7 +8,7 @@ import 'package:anonaddy/screens/alias_tab/components/send_from_widget.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/shared_components/pie_chart/pie_chart_exports.dart';
+import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
 import 'package:anonaddy/utilities/utilities_export.dart';
