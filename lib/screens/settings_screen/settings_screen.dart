@@ -21,8 +21,6 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
-
     final settingsState = ref.watch(settingsStateNotifier);
     final biometric = ref.watch(biometricNotifier);
 
@@ -127,39 +125,31 @@ class SettingsScreen extends ConsumerWidget {
               );
             },
           ),
-          const Divider(height: 0),
-          SizedBox(height: size.height * 0.01),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 6),
-            decoration: BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.circular(10),
+          const Divider(height: 20),
+          TextButton(
+            child: Text(
+              AppStrings.settingsLogout,
+              style: Theme.of(context)
+                  .textTheme
+                  .button
+                  ?.copyWith(color: Colors.red),
+              textAlign: TextAlign.left,
             ),
-            child: ListTile(
-              dense: true,
-              title: Text(
-                AppStrings.settingsLogout,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              subtitle: const Text(AppStrings.settingsLogoutSubtitle),
-              trailing: const Icon(Icons.logout),
-              onTap: () => buildLogoutDialog(context),
-            ),
+            onPressed: () {
+              PlatformAware.platformDialog(
+                context: context,
+                child: PlatformAlertDialog(
+                  title: AppStrings.settingsLogout,
+                  content: AppStrings.logOutAlertDialog,
+                  method: () {
+                    Navigator.pushReplacementNamed(
+                        context, LogoutScreen.routeName);
+                  },
+                ),
+              );
+            },
           ),
         ],
-      ),
-    );
-  }
-
-  void buildLogoutDialog(BuildContext context) {
-    PlatformAware.platformDialog(
-      context: context,
-      child: PlatformAlertDialog(
-        title: AppStrings.settingsLogout,
-        content: AppStrings.logOutAlertDialog,
-        method: () {
-          Navigator.pushReplacementNamed(context, LogoutScreen.routeName);
-        },
       ),
     );
   }
