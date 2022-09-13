@@ -18,7 +18,7 @@ class UsernameService {
 
   Future<List<Username>> getUsernames() async {
     try {
-      const path = '$kUnEncodedBaseURL/$kUsernamesURL';
+      const path = '$kUnEncodedBaseURL/usernames';
       final response = await dio.get(path);
       log('getUsernames: ${response.statusCode}');
       final usernames = response.data['data'] as List;
@@ -30,7 +30,7 @@ class UsernameService {
 
   Future<Username> getSpecificUsername(String usernameId) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kUsernamesURL/$usernameId';
+      final path = '$kUnEncodedBaseURL/usernames/$usernameId';
       final response = await dio.get(path);
       log('getSpecificUsername: ${response.statusCode}');
       final username = response.data['data'];
@@ -42,7 +42,7 @@ class UsernameService {
 
   Future<Username> addNewUsername(String newUsername) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kUsernamesURL';
+      const path = '$kUnEncodedBaseURL/usernames';
       final data = json.encode({"username": newUsername});
       final response = await dio.post(path, data: data);
       log('addNewUsername: ${response.statusCode}');
@@ -56,7 +56,7 @@ class UsernameService {
   Future<Username> updateUsernameDescription(
       String usernameID, String description) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID';
+      final path = '$kUnEncodedBaseURL/usernames/$usernameID';
       final data = jsonEncode({"description": description});
       final response = await dio.patch(path, data: data);
       log('updateUsernameDescription: ${response.statusCode}');
@@ -69,7 +69,7 @@ class UsernameService {
 
   Future<void> deleteUsername(String usernameID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID';
+      final path = '$kUnEncodedBaseURL/usernames/$usernameID';
       final response = await dio.delete(path);
       log('deleteUsername: ${response.statusCode}');
     } catch (e) {
@@ -80,8 +80,7 @@ class UsernameService {
   Future<Username> updateDefaultRecipient(
       String usernameID, String recipientID) async {
     try {
-      final path =
-          '$kUnEncodedBaseURL/$kUsernamesURL/$usernameID/$kDefaultRecipientURL';
+      final path = '$kUnEncodedBaseURL/usernames/$usernameID/default-recipient';
       final data = jsonEncode({"default_recipient": recipientID});
       final response = await dio.patch(path, data: data);
       log('updateDefaultRecipient: ${response.statusCode}');
@@ -94,7 +93,7 @@ class UsernameService {
 
   Future<Username> activateUsername(String usernameID) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kActiveUsernamesURL';
+      const path = '$kUnEncodedBaseURL/active-usernames';
       final data = json.encode({"id": usernameID});
       final response = await dio.post(path, data: data);
       log('activateUsername: ${response.statusCode}');
@@ -107,7 +106,7 @@ class UsernameService {
 
   Future<void> deactivateUsername(String usernameID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kActiveUsernamesURL/$usernameID';
+      final path = '$kUnEncodedBaseURL/active-usernames/$usernameID';
       final response = await dio.delete(path);
       log('deactivateUsername: ${response.statusCode}');
     } catch (e) {
@@ -117,7 +116,7 @@ class UsernameService {
 
   Future<Username> activateCatchAll(String usernameID) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kCatchAllUsernameURL';
+      const path = '$kUnEncodedBaseURL/catch-all-usernames';
       final data = json.encode({"id": usernameID});
       final response = await dio.post(path, data: data);
       log('activateCatchAll: ${response.statusCode}');
@@ -130,7 +129,7 @@ class UsernameService {
 
   Future<void> deactivateCatchAll(String usernameID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kCatchAllUsernameURL/$usernameID';
+      final path = '$kUnEncodedBaseURL/catch-all-usernames/$usernameID';
       final response = await dio.delete(path);
       log('deactivateCatchAll: ${response.statusCode}');
     } catch (e) {

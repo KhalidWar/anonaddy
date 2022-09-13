@@ -18,7 +18,7 @@ class SearchService {
   Future<List<Alias>> searchAliases(
       String searchKeyword, bool includeDeleted) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      const path = '$kUnEncodedBaseURL/aliases';
       final params = {
         'deleted': includeDeleted ? 'with' : null,
         "filter[search]": searchKeyword,

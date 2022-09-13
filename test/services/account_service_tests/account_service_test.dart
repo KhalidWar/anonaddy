@@ -20,7 +20,7 @@ void main() async {
       'When accountService.getAccountData() is called, '
       'Then obtain an account object.', () async {
     // Arrange
-    const urlPath = '$kUnEncodedBaseURL/$kAccountDetailsURL';
+    const urlPath = '$kUnEncodedBaseURL/account-details';
 
     // Act
     final dioGet = mockDio.get(urlPath);

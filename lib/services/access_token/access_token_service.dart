@@ -25,7 +25,7 @@ class AccessTokenService {
 
   Future<bool> validateAccessToken(String url, String token) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAccountDetailsURL';
+      const path = '$kUnEncodedBaseURL/account-details';
       final uri = Uri.https(url, path);
       final options = Options(
         sendTimeout: 5000,

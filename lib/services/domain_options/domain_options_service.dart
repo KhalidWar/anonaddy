@@ -17,7 +17,7 @@ class DomainOptionsService {
 
   Future<DomainOptions> getDomainOptions() async {
     try {
-      const path = '$kUnEncodedBaseURL/$kDomainsOptionsURL';
+      const path = '$kUnEncodedBaseURL/domain-options';
       final response = await dio.get(path);
       log('getDomainOptions: ${response.statusCode}');
       return DomainOptions.fromJson(response.data);

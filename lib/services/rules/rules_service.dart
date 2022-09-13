@@ -16,7 +16,7 @@ class RulesService {
 
   Future<List<Rules>> getAllRules() async {
     try {
-      const path = '$kUnEncodedBaseURL/$kRulesURL';
+      const path = '$kUnEncodedBaseURL/rules';
       final response = await dio.get(path);
       log('getAllRules: ${response.statusCode}');
 

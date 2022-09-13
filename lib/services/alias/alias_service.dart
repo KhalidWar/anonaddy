@@ -18,7 +18,7 @@ class AliasService {
 
   Future<List<Alias>> getAliases(String? deleted) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      const path = '$kUnEncodedBaseURL/aliases';
       final params = {'deleted': deleted};
       final response = await dio.get(path, queryParameters: params);
       log('getAllAliases: ${response.statusCode}');
@@ -31,7 +31,7 @@ class AliasService {
 
   Future<List<Alias>> getAvailableAliases() async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      const path = '$kUnEncodedBaseURL/aliases';
       final response = await dio.get(path);
       log('getAvailableAliases: ${response.statusCode}');
       final aliases = response.data['data'] as List;
@@ -43,7 +43,7 @@ class AliasService {
 
   Future<List<Alias>> getDeletedAliases() async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      const path = '$kUnEncodedBaseURL/aliases';
       final params = {'deleted': 'only'};
       final response = await dio.get(path, queryParameters: params);
       log('getDeletedAliases: ${response.statusCode}');
@@ -56,7 +56,7 @@ class AliasService {
 
   Future<Alias> getSpecificAlias(String aliasID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kAliasesURL/$aliasID';
+      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
       final response = await dio.get(path);
       log('getSpecificAlias: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
@@ -73,7 +73,7 @@ class AliasService {
     required List<String> recipients,
   }) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      const path = '$kUnEncodedBaseURL/aliases';
       final data = json.encode({
         "domain": domain,
         "format": format,
@@ -91,7 +91,7 @@ class AliasService {
 
   Future<Alias> activateAlias(String aliasId) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kActiveAliasURL';
+      const path = '$kUnEncodedBaseURL/active-aliases';
       final data = json.encode({"id": aliasId});
       final response = await dio.post(path, data: data);
       final alias = Alias.fromJson(response.data['data']);
@@ -104,7 +104,7 @@ class AliasService {
 
   Future<void> deactivateAlias(String aliasId) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kActiveAliasURL/$aliasId';
+      final path = '$kUnEncodedBaseURL/active-aliases/$aliasId';
       final response = await dio.delete(path);
       log('deactivateAlias: ${response.statusCode}');
     } catch (e) {
@@ -114,7 +114,7 @@ class AliasService {
 
   Future<Alias> updateAliasDescription(String aliasID, String newDesc) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kAliasesURL/$aliasID';
+      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
       final data = jsonEncode({"description": newDesc});
       final response = await dio.patch(path, data: data);
       log('updateAliasDescription: ${response.statusCode}');
@@ -126,7 +126,7 @@ class AliasService {
 
   Future<void> deleteAlias(String aliasID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kAliasesURL/$aliasID';
+      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
       final response = await dio.delete(path);
       log('deleteAlias: ${response.statusCode}');
     } catch (e) {
@@ -136,7 +136,7 @@ class AliasService {
 
   Future<Alias> restoreAlias(String aliasID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kAliasesURL/$aliasID/restore';
+      final path = '$kUnEncodedBaseURL/aliases/$aliasID/restore';
       final response = await dio.patch(path);
       log('restoreAlias: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
@@ -148,7 +148,7 @@ class AliasService {
   Future<Alias> updateAliasDefaultRecipient(
       String aliasID, List<String> recipientId) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAliasURL-$kRecipientsURL';
+      const path = '$kUnEncodedBaseURL/alias-recipients';
       final data =
           jsonEncode({"alias_id": aliasID, "recipient_ids": recipientId});
       final response = await dio.post(path, data: data);
@@ -161,7 +161,7 @@ class AliasService {
 
   Future<void> forgetAlias(String aliasID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kAliasesURL/$aliasID/$kForgetURL';
+      final path = '$kUnEncodedBaseURL/aliases/$aliasID/forget';
       final response = await dio.delete(path);
       log('forgetAlias: ${response.statusCode}');
     } catch (e) {

@@ -18,7 +18,7 @@ class DomainsService {
 
   Future<List<Domain>> getDomains() async {
     try {
-      const path = '$kUnEncodedBaseURL/$kDomainsURL';
+      const path = '$kUnEncodedBaseURL/domains';
       final response = await dio.get(path);
       log('getDomains: ${response.statusCode}');
       final domains = response.data['data'] as List;
@@ -30,7 +30,7 @@ class DomainsService {
 
   Future<Domain> getSpecificDomain(String domainId) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainId';
+      final path = '$kUnEncodedBaseURL/domains/$domainId';
       final response = await dio.get(path);
       log('getSpecificDomain: ${response.statusCode}');
       final domain = response.data['data'];
@@ -42,7 +42,7 @@ class DomainsService {
 
   Future<Domain> addNewDomain(String domain) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kDomainsURL';
+      const path = '$kUnEncodedBaseURL/domains';
       final data = json.encode({"domain": domain});
       final response = await dio.post(path, data: data);
       log('addNewDomain: ${response.statusCode}');
@@ -56,7 +56,7 @@ class DomainsService {
   Future<Domain> updateDomainDescription(
       String domainID, String description) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainID';
+      final path = '$kUnEncodedBaseURL/domains/$domainID';
       final data = jsonEncode({"description": description});
       final response = await dio.patch(path, data: data);
       log('updateDomainDescription: ${response.statusCode}');
@@ -69,7 +69,7 @@ class DomainsService {
 
   Future<void> deleteDomain(String domainID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kDomainsURL/$domainID';
+      final path = '$kUnEncodedBaseURL/domains/$domainID';
       final response = await dio.delete(path);
       log('deleteDomain: ${response.statusCode}');
     } catch (e) {
@@ -80,8 +80,7 @@ class DomainsService {
   Future<Domain> updateDomainDefaultRecipient(
       String domainID, String recipientID) async {
     try {
-      final path =
-          '$kUnEncodedBaseURL/$kDomainsURL/$domainID/$kDefaultRecipientURL';
+      final path = '$kUnEncodedBaseURL/domains/$domainID/default-recipient';
       final data = jsonEncode({"default_recipient": recipientID});
       final response = await dio.patch(path, data: data);
       log('updateDomainDefaultRecipient: ${response.statusCode}');
@@ -94,7 +93,7 @@ class DomainsService {
 
   Future<Domain> activateDomain(String domainID) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kActiveDomainURL';
+      const path = '$kUnEncodedBaseURL/active-domains';
       final data = json.encode({"id": domainID});
       final response = await dio.post(path, data: data);
       log('activateDomain: ${response.statusCode}');
@@ -107,7 +106,7 @@ class DomainsService {
 
   Future<void> deactivateDomain(String domainID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kActiveDomainURL/$domainID';
+      final path = '$kUnEncodedBaseURL/active-domains/$domainID';
       final response = await dio.delete(path);
       log('deactivateDomain: ${response.statusCode}');
     } catch (e) {
@@ -117,7 +116,7 @@ class DomainsService {
 
   Future<Domain> activateCatchAll(String domainID) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kCatchAllDomainURL';
+      const path = '$kUnEncodedBaseURL/catch-all-domains';
       final data = json.encode({"id": domainID});
       final response = await dio.post(path, data: data);
       log('activateCatchAll: ${response.statusCode}');
@@ -130,7 +129,7 @@ class DomainsService {
 
   Future deactivateCatchAll(String domainID) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kCatchAllDomainURL/$domainID';
+      final path = '$kUnEncodedBaseURL/catch-all-domains/$domainID';
       final response = await dio.delete(path);
       log('deactivateCatchAll: ${response.statusCode}');
     } catch (e) {

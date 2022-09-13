@@ -16,7 +16,7 @@ class AccountService {
 
   Future<Account> getAccounts([String? path]) async {
     try {
-      const urlPath = '$kUnEncodedBaseURL/$kAccountDetailsURL';
+      const urlPath = '$kUnEncodedBaseURL/account-details';
       final response = await dio.get(path ?? urlPath);
       final account = Account.fromJson(response.data['data']);
       log('getAccounts: ${response.statusCode}');

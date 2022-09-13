@@ -17,7 +17,7 @@ class FailedDeliveryService {
 
   Future<List<FailedDelivery>> getFailedDeliveries([String? path]) async {
     try {
-      const urlPath = '$kUnEncodedBaseURL/$kFailedDeliveriesURL';
+      const urlPath = '$kUnEncodedBaseURL/failed-deliveries';
       final response = await dio.get(path ?? urlPath);
       final deliveries = response.data['data'];
       log('getFailedDeliveries: ${response.statusCode}');
@@ -34,7 +34,7 @@ class FailedDeliveryService {
 
   Future<void> deleteFailedDelivery(String failedDeliveryId) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kFailedDeliveriesURL/$failedDeliveryId';
+      final path = '$kUnEncodedBaseURL/failed-deliveries/$failedDeliveryId';
       final response = await dio.delete(path);
       log('deleteFailedDelivery: ${response.statusCode}');
     } on DioError catch (dioError) {
