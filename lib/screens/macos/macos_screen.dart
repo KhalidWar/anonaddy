@@ -1,3 +1,5 @@
+import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/notifiers/search/search_result/search_result_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
 import 'package:anonaddy/screens/macos/account/macos_account_tab.dart';
 import 'package:anonaddy/screens/macos/macos_aliases_tab/macos_aliases_tab.dart';
@@ -5,8 +7,6 @@ import 'package:anonaddy/screens/macos/macos_home_screen/macos_home_screen.dart'
 import 'package:anonaddy/screens/macos/macos_search_tab/macos_search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
-import 'package:anonaddy/notifiers/search/search_result/search_result_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +32,7 @@ class _MacHomeScreenState extends ConsumerState<MacosScreen> {
   initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(aliasTabStateNotifier.notifier).loadState();
+      ref.read(aliasTabStateNotifier.notifier).loadDataFromStorage();
       ref.read(aliasTabStateNotifier.notifier).fetchAvailableAliases();
       ref.read(aliasTabStateNotifier.notifier).fetchDeletedAliases();
     });

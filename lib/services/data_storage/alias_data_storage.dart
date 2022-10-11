@@ -1,0 +1,62 @@
+import 'dart:convert';
+
+import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final aliasDataStorageProvider = Provider<AliasDataStorage>((ref) {
+  return AliasDataStorage(secureStorage: ref.read(flutterSecureStorage));
+});
+
+/// It's responsible for saving and loading [Alias] data to and from device storage.
+class AliasDataStorage {
+  const AliasDataStorage({required this.secureStorage});
+  final FlutterSecureStorage secureStorage;
+
+  static const _availableAliasesKey = 'availableAliasesKey';
+  static const _deletedAliasesKey = 'deletedAliasesKey';
+
+  Future<void> saveAliases({
+    required List aliases,
+    required bool isAvailableAliases,
+  }) async {
+    try {
+      final encodedAliases = jsonEncode(aliases);
+      await secureStorage.write(
+        key: isAvailableAliases ? _availableAliasesKey : _deletedAliasesKey,
+        value: encodedAliases,
+      );
+    } catch (_) {
+      return;
+    }
+  }
+
+  Future<List<Alias>> loadAliases({required bool isAvailableAliases}) async {
+    try {
+      final data = await secureStorage.read(
+        key: isAvailableAliases ? _availableAliasesKey : _deletedAliasesKey,
+      );
+      final decodedAliases = jsonDecode(data ?? '');
+      final aliases = (decodedAliases as List)
+          .map((alias) => Alias.fromJson(alias))
+          .toList();
+      return aliases;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<Alias> loadSpecificAlias(String id) async {
+    try {
+      final aliases = [
+        ...await loadAliases(isAvailableAliases: true),
+        ...await loadAliases(isAvailableAliases: false),
+      ];
+      final alias = aliases.firstWhere((element) => element.id == id);
+      return alias;
+    } catch (error) {
+      rethrow;
+    }
+  }
+}

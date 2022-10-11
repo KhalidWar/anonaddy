@@ -1,66 +1,43 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/utilities.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final aliasTabStateNotifier =
     StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {
-  return AliasTabNotifier(
-    aliasService: ref.read(aliasServiceProvider),
-    offlineData: ref.read(offlineDataProvider),
-  );
+  return AliasTabNotifier(aliasService: ref.read(aliasServiceProvider));
 });
 
 class AliasTabNotifier extends StateNotifier<AliasTabState> {
   AliasTabNotifier({
     required this.aliasService,
-    required this.offlineData,
     AliasTabState? initialState,
   }) : super(initialState ?? AliasTabState.initialState());
 
   final AliasService aliasService;
-  final OfflineData offlineData;
 
   /// Updates UI to the newest state
   void _updateState(AliasTabState newState) {
-    if (mounted) {
-      state = newState;
-      if (state.status == AliasTabStatus.loaded) _saveState();
-    }
+    if (mounted) state = newState;
   }
 
   Future<void> fetchAvailableAliases() async {
     try {
       _updateState(state.copyWith(status: AliasTabStatus.loading));
 
-      final aliases = await aliasService.getAvailableAliases();
+      final aliases = await aliasService.fetchAvailableAliases();
 
       _updateState(state.copyWith(
         status: AliasTabStatus.loaded,
         availableAliasList: aliases,
       ));
-    } on DioError catch (dioError) {
-      /// If offline, load offline data and exit.
-      if (dioError.type == DioErrorType.other) {
-        await loadState();
-      } else {
-        _updateState(state.copyWith(
-          status: AliasTabStatus.failed,
-          errorMessage: dioError.message,
-        ));
-      }
-      await _retryOnError();
     } catch (error) {
       _updateState(state.copyWith(
         status: AliasTabStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
+        errorMessage: error.toString(),
       ));
       await _retryOnError();
     }
@@ -70,26 +47,16 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
     try {
       _updateState(state.copyWith(status: AliasTabStatus.loading));
 
-      final aliases = await aliasService.getDeletedAliases();
+      final aliases = await aliasService.fetchDeletedAliases();
 
       _updateState(state.copyWith(
         status: AliasTabStatus.loaded,
         deletedAliasList: aliases,
       ));
-    } on DioError catch (dioError) {
-      /// If offline, load offline data and exit.
-      if (dioError.type == DioErrorType.other) {
-        await loadState();
-      } else {
-        _updateState(state.copyWith(
-          status: AliasTabStatus.failed,
-          errorMessage: dioError.message,
-        ));
-      }
     } catch (error) {
       _updateState(state.copyWith(
         status: AliasTabStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
+        errorMessage: error.toString(),
       ));
     }
   }
@@ -97,17 +64,32 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
   /// Silently fetches the latest aliases data and displays them
   Future<void> refreshAliases() async {
     try {
-      final availableAliases = await aliasService.getAvailableAliases();
-      final deletedAliases = await aliasService.getDeletedAliases();
+      final availableAliases = await aliasService.fetchAvailableAliases();
+      final deletedAliases = await aliasService.fetchDeletedAliases();
 
       _updateState(state.copyWith(
         availableAliasList: availableAliases,
         deletedAliasList: deletedAliases,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
+    }
+  }
+
+  /// Initially, get data from disk (secure device storage) and assign it
+  Future<void> loadDataFromStorage() async {
+    try {
+      final availableAliases =
+          await aliasService.loadAvailableAliasesFromDisk();
+      final deletedAliases = await aliasService.loadDeletedAliasesFromDisk();
+
+      _updateState(state.copyWith(
+        status: AliasTabStatus.loaded,
+        availableAliasList: availableAliases,
+        deletedAliasList: deletedAliases,
+      ));
+    } catch (_) {
+      return;
     }
   }
 
@@ -116,34 +98,6 @@ class AliasTabNotifier extends StateNotifier<AliasTabState> {
       await Future.delayed(const Duration(seconds: 5));
       await fetchAvailableAliases();
       await fetchDeletedAliases();
-    }
-  }
-
-  /// Fetches aliases from disk and displays them, used at initial app
-  /// startup since fetching from disk is a lot faster than fetching from API.
-  /// It's also used to when there's no internet connection.
-  Future<void> loadState() async {
-    try {
-      if (state.status != AliasTabStatus.failed) {
-        final securedData = await offlineData.loadAliasTabState();
-        if (securedData.isNotEmpty) {
-          final mappedState = json.decode(securedData);
-          final storedState = AliasTabState.fromMap(mappedState);
-          _updateState(storedState);
-        }
-      }
-    } catch (_) {
-      return;
-    }
-  }
-
-  Future<void> _saveState() async {
-    try {
-      final mappedState = state.toMap();
-      final encodedData = json.encode(mappedState);
-      await offlineData.saveAliasTabState(encodedData);
-    } catch (_) {
-      return;
     }
   }
 

@@ -3,52 +3,82 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/services/data_storage/alias_data_storage.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final aliasServiceProvider = Provider<AliasService>((ref) {
-  return AliasService(dio: ref.read(dioProvider));
+  return AliasService(
+    dio: ref.read(dioProvider),
+    dataStorage: ref.read(aliasDataStorageProvider),
+  );
 });
 
 class AliasService {
-  const AliasService({required this.dio});
+  const AliasService({
+    required this.dio,
+    required this.dataStorage,
+  });
   final Dio dio;
+  final AliasDataStorage dataStorage;
 
-  Future<List<Alias>> getAliases(String? deleted) async {
-    try {
-      const path = '$kUnEncodedBaseURL/aliases';
-      final params = {'deleted': deleted};
-      final response = await dio.get(path, queryParameters: params);
-      log('getAllAliases: ${response.statusCode}');
-      final aliases = response.data['data'] as List;
-      return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<List<Alias>> getAvailableAliases() async {
+  Future<List<Alias>> fetchAvailableAliases() async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
       final response = await dio.get(path);
-      log('getAvailableAliases: ${response.statusCode}');
+      log('fetchAvailableAliases: ${response.statusCode}');
       final aliases = response.data['data'] as List;
+      dataStorage.saveAliases(aliases: aliases, isAvailableAliases: true);
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
+    } on DioError catch (dioError) {
+      if (dioError.type == DioErrorType.other) {
+        final aliases = await dataStorage.loadAliases(isAvailableAliases: true);
+        return aliases;
+      }
+      throw dioError.message;
     } catch (e) {
-      rethrow;
+      throw 'Failed to fetch available aliases';
     }
   }
 
-  Future<List<Alias>> getDeletedAliases() async {
+  Future<List<Alias>> fetchDeletedAliases() async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
       final params = {'deleted': 'only'};
       final response = await dio.get(path, queryParameters: params);
-      log('getDeletedAliases: ${response.statusCode}');
+      log('fetchDeletedAliases: ${response.statusCode}');
       final aliases = response.data['data'] as List;
+      dataStorage.saveAliases(aliases: aliases, isAvailableAliases: false);
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
+    } on DioError catch (dioError) {
+      if (dioError.type == DioErrorType.other) {
+        final aliases =
+            await dataStorage.loadAliases(isAvailableAliases: false);
+        return aliases;
+      }
+      throw dioError.message;
+    } catch (e) {
+      throw 'Failed to fetch deleted aliases';
+    }
+  }
+
+  Future<List<Alias>> loadAvailableAliasesFromDisk() async {
+    try {
+      final availableAliases =
+          await dataStorage.loadAliases(isAvailableAliases: true);
+      return availableAliases;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Alias>> loadDeletedAliasesFromDisk() async {
+    try {
+      final deletedAliases =
+          await dataStorage.loadAliases(isAvailableAliases: false);
+      return deletedAliases;
     } catch (e) {
       rethrow;
     }
@@ -60,8 +90,14 @@ class AliasService {
       final response = await dio.get(path);
       log('getSpecificAlias: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
+    } on DioError catch (dioError) {
+      if (dioError.type == DioErrorType.other) {
+        final alias = await dataStorage.loadSpecificAlias(aliasID);
+        return alias;
+      }
+      throw dioError.message;
     } catch (e) {
-      rethrow;
+      throw 'Failed to fetch alias';
     }
   }
 

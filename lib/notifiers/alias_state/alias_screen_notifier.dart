@@ -46,19 +46,6 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       final newState =
           state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
       _updateState(newState);
-    } on DioError catch (dioError) {
-      final offlineState = state.copyWith(
-        status: AliasScreenStatus.loaded,
-        isOffline: true,
-        alias: alias,
-      );
-      final errorState = state.copyWith(
-        status: AliasScreenStatus.failed,
-        errorMessage: dioError.message,
-      );
-      _updateState(
-        dioError.type == DioErrorType.other ? offlineState : errorState,
-      );
     } catch (error) {
       final newState = state.copyWith(
         status: AliasScreenStatus.failed,
