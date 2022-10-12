@@ -28,8 +28,6 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   final RecipientTabNotifier recipientTabNotifier;
   final AccountNotifier accountNotifier;
 
-  final showToast = Utilities.showToast;
-
   void _updateState(RecipientScreenState newState) {
     if (mounted) state = newState;
   }
@@ -65,7 +63,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         isEncryptionToggleLoading: false,
       ));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isEncryptionToggleLoading: false));
     }
   }
@@ -80,7 +78,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         isEncryptionToggleLoading: false,
       ));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isEncryptionToggleLoading: false));
     }
   }
@@ -92,17 +90,17 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       final updatedRecipient = state.recipient.copyWith(
           fingerprint: newRecipient.fingerprint,
           shouldEncrypt: newRecipient.shouldEncrypt);
-      showToast(ToastMessage.addGPGKeySuccess);
+      Utilities.showToast(ToastMessage.addGPGKeySuccess);
       _updateState(state.copyWith(recipient: updatedRecipient));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
     }
   }
 
   Future<void> removePublicGPGKey() async {
     try {
       await recipientService.removePublicGPGKey(state.recipient.id);
-      showToast(ToastMessage.deleteGPGKeySuccess);
+      Utilities.showToast(ToastMessage.deleteGPGKeySuccess);
       final updatedRecipient = state.recipient.copyWith(
         fingerprint: '',
         shouldEncrypt: false,
@@ -111,26 +109,26 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       );
       _updateState(state.copyWith(recipient: updatedRecipient));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
     }
   }
 
   Future<void> removeRecipient() async {
     try {
       await recipientService.removeRecipient(state.recipient.id);
-      showToast('Recipient deleted successfully!');
+      Utilities.showToast('Recipient deleted successfully!');
       _refreshRecipientAndAccountData();
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
     }
   }
 
   Future<void> resendVerificationEmail() async {
     try {
       await recipientService.resendVerificationEmail(state.recipient.id);
-      showToast('Verification email is sent');
+      Utilities.showToast('Verification email is sent');
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -138,11 +136,11 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     _updateState(state.copyWith(isAddRecipientLoading: true));
     try {
       await recipientService.addRecipient(email);
-      showToast('Recipient added successfully!');
+      Utilities.showToast('Recipient added successfully!');
       _updateState(state.copyWith(isAddRecipientLoading: false));
       _refreshRecipientAndAccountData();
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isAddRecipientLoading: false));
     }
   }
@@ -157,7 +155,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         isReplySendAndSwitchLoading: false,
       ));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
     }
   }
@@ -172,7 +170,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         isReplySendAndSwitchLoading: false,
       ));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
     }
   }
@@ -180,7 +178,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   Future<void> enableInlineEncryption() async {
     try {
       if (state.recipient.protectedHeaders) {
-        showToast(AppStrings.disableProtectedHeadersFirst);
+        Utilities.showToast(AppStrings.disableProtectedHeadersFirst);
         return;
       }
 
@@ -192,7 +190,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         isInlineEncryptionSwitchLoading: false,
       ));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
     }
   }
@@ -208,7 +206,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         isInlineEncryptionSwitchLoading: false,
       ));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
     }
   }
@@ -216,7 +214,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   Future<void> enableProtectedHeader() async {
     try {
       if (state.recipient.inlineEncryption) {
-        showToast(AppStrings.disableInlineEncryptionFirst);
+        Utilities.showToast(AppStrings.disableInlineEncryptionFirst);
         return;
       }
 
@@ -228,7 +226,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         isProtectedHeaderSwitchLoading: false,
       ));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
     }
   }
@@ -244,7 +242,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         isProtectedHeaderSwitchLoading: false,
       ));
     } catch (error) {
-      showToast(error.toString());
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
     }
   }
