@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:dio/dio.dart';
@@ -10,20 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientTabStateNotifier =
     StateNotifierProvider<RecipientTabNotifier, RecipientTabState>((ref) {
-  return RecipientTabNotifier(
-    recipientService: ref.read(recipientService),
-    offlineData: ref.read(offlineDataProvider),
-  );
+  return RecipientTabNotifier(recipientService: ref.read(recipientService));
 });
 
 class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
   RecipientTabNotifier({
     required this.recipientService,
-    required this.offlineData,
   }) : super(RecipientTabState.initialState());
 
   final RecipientService recipientService;
-  final OfflineData offlineData;
 
   void _updateState(RecipientTabState newState) {
     if (mounted) state = newState;
@@ -34,7 +25,6 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
 
     try {
       final recipients = await recipientService.getRecipients();
-      await _saveOfflineData(recipients);
       final newState = state.copyWith(
           status: RecipientTabStatus.loaded, recipients: recipients);
       _updateState(newState);
@@ -61,7 +51,6 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
   Future<void> refreshRecipients() async {
     try {
       final recipients = await recipientService.getRecipients();
-      await _saveOfflineData(recipients);
 
       final newState = state.copyWith(
           status: RecipientTabStatus.loaded, recipients: recipients);
@@ -83,28 +72,15 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
   /// startup since fetching from disk is a lot faster than fetching from API.
   /// It's also used to when there's no internet connection.
   Future<void> loadOfflineState() async {
-    /// Only load offline data when state is NOT failed.
-    /// Otherwise, it would always show offline data even if there's error.
-    if (!state.status.isFailed()) {
-      List<dynamic> encodedRecipients = [];
-      final securedData = await offlineData.readRecipientsOfflineData();
-      if (securedData.isNotEmpty) encodedRecipients = jsonDecode(securedData);
-      final recipients = encodedRecipients
-          .map((recipient) => Recipient.fromJson(recipient))
-          .toList();
-
-      if (recipients.isNotEmpty) {
-        final newState = state.copyWith(
-          status: RecipientTabStatus.loaded,
-          recipients: recipients,
-        );
-        _updateState(newState);
-      }
+    try {
+      final recipients = await recipientService.loadRecipientsFromDisk();
+      final newState = state.copyWith(
+        status: RecipientTabStatus.loaded,
+        recipients: recipients,
+      );
+      _updateState(newState);
+    } catch (error) {
+      return;
     }
-  }
-
-  Future<void> _saveOfflineData(List<Recipient> recipient) async {
-    final encodedData = jsonEncode(recipient);
-    await offlineData.writeRecipientsOfflineData(encodedData);
   }
 }

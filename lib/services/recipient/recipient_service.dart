@@ -2,29 +2,47 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/services/data_storage/recipient_data_storage.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientService = Provider<RecipientService>((ref) {
-  return RecipientService(dio: ref.read(dioProvider));
+  return RecipientService(
+    dio: ref.read(dioProvider),
+    recipientDataStorage: ref.read(recipientDataStorageProvider),
+  );
 });
 
 class RecipientService {
-  const RecipientService({required this.dio});
+  const RecipientService({
+    required this.dio,
+    required this.recipientDataStorage,
+  });
   final Dio dio;
+  final RecipientDataStorage recipientDataStorage;
 
   Future<List<Recipient>> getRecipients() async {
     try {
       const path = '$kUnEncodedBaseURL/recipients';
       final response = await dio.get(path);
       log('getRecipients: ${response.statusCode}');
-      final recipients = response.data['data'] as List;
-      return recipients
+      final recipients = response.data['data'];
+      recipientDataStorage.saveData(recipients);
+      return (recipients as List)
           .map((recipient) => Recipient.fromJson(recipient))
           .toList();
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Recipient>> loadRecipientsFromDisk() async {
+    try {
+      final recipients = await recipientDataStorage.loadData();
+      return recipients;
+    } catch (error) {
       rethrow;
     }
   }
