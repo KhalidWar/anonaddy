@@ -41,28 +41,6 @@ class AliasTabState {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'status': status.index,
-      'errorMessage': errorMessage,
-      'availableAliasList': availableAliasList,
-      'deletedAliasList': deletedAliasList,
-    };
-  }
-
-  factory AliasTabState.fromMap(Map<String, dynamic> map) {
-    List<Alias> convertMaps(List<dynamic> list) {
-      return list.map((alias) => Alias.fromJson(alias)).toList();
-    }
-
-    return AliasTabState(
-      status: AliasTabStatus.values[map['status']],
-      errorMessage: map['errorMessage'] as String,
-      availableAliasList: convertMaps(map['availableAliasList']),
-      deletedAliasList: convertMaps(map['deletedAliasList']),
-    );
-  }
-
   @override
   String toString() {
     return 'AliasTabState{status: $status, errorMessage: $errorMessage, availableAliasList: $availableAliasList, deletedAliasList: $deletedAliasList}';
