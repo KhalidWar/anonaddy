@@ -6,7 +6,6 @@ import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/utilities/utilities.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientScreenStateNotifier = StateNotifierProvider.autoDispose<
@@ -65,11 +64,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         recipient: updateRecipient,
         isEncryptionToggleLoading: false,
       ));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
-      _updateState(state.copyWith(isEncryptionToggleLoading: false));
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
       _updateState(state.copyWith(isEncryptionToggleLoading: false));
     }
   }
@@ -83,11 +79,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         recipient: updatedRecipient,
         isEncryptionToggleLoading: false,
       ));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
-      _updateState(state.copyWith(isEncryptionToggleLoading: false));
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
       _updateState(state.copyWith(isEncryptionToggleLoading: false));
     }
   }
@@ -101,10 +94,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
           shouldEncrypt: newRecipient.shouldEncrypt);
       showToast(ToastMessage.addGPGKeySuccess);
       _updateState(state.copyWith(recipient: updatedRecipient));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
     }
   }
 
@@ -119,10 +110,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         protectedHeaders: false,
       );
       _updateState(state.copyWith(recipient: updatedRecipient));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
     }
   }
 
@@ -132,8 +121,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       showToast('Recipient deleted successfully!');
       _refreshRecipientAndAccountData();
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      showToast(error.toString());
     }
   }
 
@@ -142,8 +130,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       await recipientService.resendVerificationEmail(state.recipient.id);
       showToast('Verification email is sent');
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      showToast(error.toString());
     }
   }
 
@@ -155,8 +142,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
       _updateState(state.copyWith(isAddRecipientLoading: false));
       _refreshRecipientAndAccountData();
     } catch (error) {
-      final dioError = error as DioError;
-      showToast(dioError.message);
+      showToast(error.toString());
       _updateState(state.copyWith(isAddRecipientLoading: false));
     }
   }
@@ -170,11 +156,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         recipient: recipient,
         isReplySendAndSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
-      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
       _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
     }
   }
@@ -188,11 +171,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         recipient: updatedRecipient,
         isReplySendAndSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
-      _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
       _updateState(state.copyWith(isReplySendAndSwitchLoading: false));
     }
   }
@@ -211,11 +191,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         recipient: recipient,
         isInlineEncryptionSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
-      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
       _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
     }
   }
@@ -230,11 +207,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         recipient: updatedRecipient,
         isInlineEncryptionSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
-      _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
       _updateState(state.copyWith(isInlineEncryptionSwitchLoading: false));
     }
   }
@@ -253,11 +227,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         recipient: recipient,
         isProtectedHeaderSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
-      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
       _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
     }
   }
@@ -272,11 +243,8 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
         recipient: updatedRecipient,
         isProtectedHeaderSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      showToast(dioError.message);
-      _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
     } catch (error) {
-      showToast(AppStrings.somethingWentWrong);
+      showToast(error.toString());
       _updateState(state.copyWith(isProtectedHeaderSwitchLoading: false));
     }
   }

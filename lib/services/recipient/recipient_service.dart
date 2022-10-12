@@ -81,6 +81,8 @@ class RecipientService {
       log('enableEncryption: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -91,6 +93,8 @@ class RecipientService {
       final path = '$kUnEncodedBaseURL/encrypted-recipients/$recipientID';
       final response = await dio.delete(path);
       log('disableEncryption: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -104,6 +108,8 @@ class RecipientService {
       log('addPublicGPGKey: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -114,6 +120,8 @@ class RecipientService {
       final path = '$kUnEncodedBaseURL/recipient-keys/$recipientID';
       final response = await dio.delete(path);
       log('removePublicGPGKey: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -127,6 +135,8 @@ class RecipientService {
       log('addRecipient: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -137,6 +147,8 @@ class RecipientService {
       final path = '$kUnEncodedBaseURL/recipients/$recipientID';
       final response = await dio.delete(path);
       log('removeRecipient: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -148,6 +160,8 @@ class RecipientService {
       final data = json.encode({"recipient_id": recipientID});
       final response = await dio.post(path, data: data);
       log('resendVerificationEmail: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -161,6 +175,8 @@ class RecipientService {
       log('enableReplyAndSend: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -171,6 +187,8 @@ class RecipientService {
       final path = '$kUnEncodedBaseURL/allowed-recipients/$recipientId';
       final response = await dio.delete(path);
       log('disableReplyAndSend: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -184,6 +202,8 @@ class RecipientService {
       log('enableInlineEncryption: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -195,6 +215,8 @@ class RecipientService {
           '$kUnEncodedBaseURL/inline-encrypted-recipients/$recipientId';
       final response = await dio.delete(path);
       log('disableInlineEncryption: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -208,6 +230,8 @@ class RecipientService {
       log('enableProtectedHeader: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -219,6 +243,8 @@ class RecipientService {
           '$kUnEncodedBaseURL/protected-headers-recipients/$recipientId';
       final response = await dio.delete(path);
       log('disableProtectedHeader: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
