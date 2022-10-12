@@ -35,31 +35,17 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     if (mounted) state = newState;
   }
 
-  Future<void> fetchRecipient(Recipient recipient) async {
+  Future<void> fetchSpecificRecipient(Recipient recipient) async {
     try {
       /// Initially set RecipientScreen to loading
       _updateState(state.copyWith(status: RecipientScreenStatus.loading));
       final newRecipient =
-          await recipientService.getSpecificRecipient(recipient.id);
+          await recipientService.fetchSpecificRecipient(recipient.id);
 
       /// Assign newly fetched recipient data to RecipientScreen state
       final newState = state.copyWith(
           status: RecipientScreenStatus.loaded, recipient: newRecipient);
       _updateState(newState);
-    } on DioError catch (dioError) {
-      final offlineState = state.copyWith(
-        status: RecipientScreenStatus.loaded,
-        isOffline: true,
-        recipient: recipient,
-      );
-      final errorState = state.copyWith(
-        status: RecipientScreenStatus.failed,
-        errorMessage: dioError.message,
-      );
-
-      _updateState(
-        dioError.type == DioErrorType.other ? offlineState : errorState,
-      );
     } catch (error) {
       _updateState(state.copyWith(
         status: RecipientScreenStatus.failed,

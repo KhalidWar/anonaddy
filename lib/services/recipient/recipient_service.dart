@@ -54,13 +54,20 @@ class RecipientService {
     }
   }
 
-  Future<Recipient> getSpecificRecipient(String recipientId) async {
+  Future<Recipient> fetchSpecificRecipient(String recipientId) async {
     try {
       final path = '$kUnEncodedBaseURL/recipients/$recipientId';
       final response = await dio.get(path);
       log('getSpecificRecipient: ${response.statusCode}');
       final recipient = response.data['data'];
       return Recipient.fromJson(recipient);
+    } on DioError catch (dioError) {
+      if (dioError.type == DioErrorType.other) {
+        final recipient =
+            await recipientDataStorage.loadSpecificRecipient(recipientId);
+        return recipient;
+      }
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }

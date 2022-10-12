@@ -76,7 +76,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(recipientScreenStateNotifier.notifier)
-          .fetchRecipient(widget.recipient);
+          .fetchSpecificRecipient(widget.recipient);
     });
   }
 

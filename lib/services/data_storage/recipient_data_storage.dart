@@ -42,4 +42,14 @@ class RecipientDataStorage extends DataStorage {
       rethrow;
     }
   }
+
+  Future<Recipient> loadSpecificRecipient(String id) async {
+    try {
+      final aliases = await loadData();
+      final alias = aliases.firstWhere((recipient) => recipient.id == id);
+      return alias;
+    } catch (error) {
+      rethrow;
+    }
+  }
 }
