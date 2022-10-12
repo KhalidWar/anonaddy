@@ -1,45 +1,31 @@
-import 'dart:convert';
-
-import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/services/account/account_service.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/utilities.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final accountStateNotifier =
     StateNotifierProvider<AccountNotifier, AccountState>((ref) {
-  return AccountNotifier(
-    accountService: ref.read(accountServiceProvider),
-    offlineData: ref.read(offlineDataProvider),
-  );
+  return AccountNotifier(accountService: ref.read(accountServiceProvider));
 });
 
 class AccountNotifier extends StateNotifier<AccountState> {
   AccountNotifier({
     required this.accountService,
-    required this.offlineData,
     AccountState? initialState,
   }) : super(initialState ?? AccountState.initialState());
 
   final AccountService accountService;
-  final OfflineData offlineData;
 
   /// Updates UI to the newState
   void _updateState(AccountState newState) {
-    if (mounted) {
-      state = newState;
-      if (state.status == AccountStatus.loaded) _saveState();
-    }
+    if (mounted) state = newState;
   }
 
   Future<void> fetchAccount() async {
     try {
       _updateState(state.copyWith(status: AccountStatus.loading));
 
-      final account = await accountService.getAccounts();
+      final account = await accountService.fetchAccount();
 
       /// Construct new state
       final newState =
@@ -47,24 +33,10 @@ class AccountNotifier extends StateNotifier<AccountState> {
 
       /// Update UI with the latest state
       _updateState(newState);
-    } on DioError catch (dioError) {
-      /// on SockException load offline data
-      if (dioError.type == DioErrorType.other) {
-        /// Loads offline data when there's no internet connection
-        await loadState();
-      } else {
-        _updateState(state.copyWith(
-          status: AccountStatus.failed,
-          errorMessage: dioError.message,
-        ));
-      }
-
-      /// Retry after an error
-      _retryOnError();
     } catch (error) {
       _updateState(state.copyWith(
         status: AccountStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
+        errorMessage: error.toString(),
       ));
 
       /// Retry after an error
@@ -76,17 +48,15 @@ class AccountNotifier extends StateNotifier<AccountState> {
   Future<void> refreshAccount() async {
     try {
       /// Only trigger fetch API when app is Foreground to avoid API spamming
-      final account = await accountService.getAccounts();
+      final account = await accountService.fetchAccount();
 
       /// Update UI with the latest state
       _updateState(state.copyWith(
         status: AccountStatus.loaded,
         account: account,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -98,27 +68,14 @@ class AccountNotifier extends StateNotifier<AccountState> {
     }
   }
 
-  Future<void> _saveState() async {
-    try {
-      final mappedState = state.toMap();
-      final encodedState = json.encode(mappedState);
-      await offlineData.saveAccountsState(encodedState);
-    } catch (_) {
-      return;
-    }
-  }
-
   /// Loads [Account] data from disk
-  Future<void> loadState() async {
+  Future<void> loadAccountFromDisk() async {
     try {
-      if (state.status != AccountStatus.failed) {
-        final securedData = await offlineData.loadAccountsState();
-        if (securedData.isNotEmpty) {
-          final decodedData = json.decode(securedData);
-          final savedState = AccountState.fromMap(decodedData);
-          _updateState(savedState);
-        }
-      }
+      final account = await accountService.loadAccountFromDisk();
+      _updateState(state.copyWith(
+        status: AccountStatus.loaded,
+        account: account,
+      ));
     } catch (_) {
       return;
     }
