@@ -34,7 +34,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(aliasScreenStateNotifier.notifier)
-          .fetchSpecificAlias(widget.alias);
+          .fetchSpecificAlias(widget.alias.id);
     });
   }
 

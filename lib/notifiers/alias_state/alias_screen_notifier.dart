@@ -34,12 +34,12 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     if (mounted) state = newState;
   }
 
-  Future<void> fetchSpecificAlias(Alias alias) async {
-    /// Initially set AliasScreen to loading
+  Future<void> fetchSpecificAlias(String aliasId) async {
     try {
+      /// Initially set AliasScreen to loading
       _updateState(state.copyWith(status: AliasScreenStatus.loading));
 
-      final updatedAlias = await aliasService.fetchSpecificAlias(alias.id);
+      final updatedAlias = await aliasService.fetchSpecificAlias(aliasId);
 
       /// Assign newly fetched alias data to AliasScreen state
       final newState =
