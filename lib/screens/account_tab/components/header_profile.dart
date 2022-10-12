@@ -18,7 +18,13 @@ class HeaderProfile extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: AppColors.accentColor,
-        child: avatarChild(context),
+        child: Text(
+          account.username[0].toUpperCase(),
+          style: Theme.of(context).textTheme.headline5!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor,
+              ),
+        ),
       ),
       title: Text(
         Utilities.capitalizeFirstLetter(account.username),
@@ -40,17 +46,6 @@ class HeaderProfile extends StatelessWidget {
       ),
       trailing: const Icon(Icons.error_outline, color: Colors.white),
       onTap: onPress,
-    );
-  }
-
-  Widget avatarChild(BuildContext context) {
-    final firstLetter = account.username[0];
-    return Text(
-      firstLetter.toUpperCase(),
-      style: Theme.of(context)
-          .textTheme
-          .headline5!
-          .copyWith(fontWeight: FontWeight.bold, color: AppColors.primaryColor),
     );
   }
 }
