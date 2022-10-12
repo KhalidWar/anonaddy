@@ -34,7 +34,7 @@ void main() async {
       final testAccount =
           Account.fromJson(AccountTestData.validAccountJson['data']);
 
-      when(() => mockAccountDataStorage.saveAccount(any()))
+      when(() => mockAccountDataStorage.saveData(any()))
           .thenAnswer((_) async {});
 
       when(() => mockDio.get(any())).thenAnswer(
@@ -60,10 +60,10 @@ void main() async {
         'And is set up to throw an 429 DioError, '
         'Then throw an error.', () async {
       // Arrange
-      when(() => mockAccountDataStorage.saveAccount(any()))
+      when(() => mockAccountDataStorage.saveData(any()))
           .thenAnswer((_) async {});
 
-      when(() => mockAccountDataStorage.loadAccount()).thenAnswer(
+      when(() => mockAccountDataStorage.loadData()).thenAnswer(
         (_) async => AccountTestData.validAccount(),
       );
 
