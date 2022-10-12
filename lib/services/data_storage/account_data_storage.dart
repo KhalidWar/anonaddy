@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/services/data_storage/data_storage.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,14 +11,15 @@ final accountDataStorageProvider = Provider<AccountDataStorage>((ref) {
   return AccountDataStorage(secureStorage: ref.read(flutterSecureStorage));
 });
 
-class AccountDataStorage {
+class AccountDataStorage extends DataStorage {
   const AccountDataStorage({required this.secureStorage});
 
   final FlutterSecureStorage secureStorage;
 
-  Future<void> saveAccount(Map<String, dynamic> accountData) async {
+  @override
+  Future<void> saveData(Map<String, dynamic> data) async {
     try {
-      final encodedData = jsonEncode(accountData);
+      final encodedData = jsonEncode(data);
       await secureStorage.write(
         value: encodedData,
         key: DataStorageKeys.accountKey,
@@ -27,7 +29,8 @@ class AccountDataStorage {
     }
   }
 
-  Future<Account> loadAccount() async {
+  @override
+  Future<Account> loadData() async {
     try {
       final data = await secureStorage.read(key: DataStorageKeys.accountKey);
       final decodedAccount = jsonDecode(data ?? '');

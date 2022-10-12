@@ -29,13 +29,13 @@ class AccountService {
       const urlPath = '$kUnEncodedBaseURL/account-details';
       final response = await dio.get(urlPath);
       final accountData = response.data['data'];
-      accountDataStorage.saveAccount(accountData);
+      accountDataStorage.saveData(accountData);
       final account = Account.fromJson(accountData);
       log('getAccounts: ${response.statusCode}');
       return account;
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.other) {
-        final account = await accountDataStorage.loadAccount();
+        final account = await accountDataStorage.loadData();
         return account;
       }
       throw dioError.message;
@@ -46,7 +46,7 @@ class AccountService {
 
   Future<Account> loadAccountFromDisk() async {
     try {
-      final account = await accountDataStorage.loadAccount();
+      final account = await accountDataStorage.loadData();
       return account;
     } catch (error) {
       rethrow;
