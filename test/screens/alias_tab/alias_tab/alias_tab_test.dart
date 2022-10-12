@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_state.dart';
+import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
+import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,7 +17,6 @@ void main() {
           aliasTabStateNotifier.overrideWithValue(
             AliasTabNotifier(
               aliasService: MockAliasService(),
-              offlineData: MockOfflineData(),
               initialState: aliasTabState,
             ),
           ),
