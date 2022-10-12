@@ -2,6 +2,7 @@ import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
+import 'package:anonaddy/screens/account_tab/components/account_tab_widget_keys.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
@@ -87,16 +88,18 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
     switch (accountState.status) {
       case AccountStatus.loading:
         return const Center(
-          child: PlatformLoadingIndicator(),
+          child: PlatformLoadingIndicator(
+            key: AccountTabWidgetKeys.accountTabHeaderLoading,
+          ),
         );
 
       case AccountStatus.loaded:
         final account = accountState.account;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        return ListView(
           children: [
             HeaderProfile(
+              key: AccountTabWidgetKeys.accountTabHeaderHeaderProfile,
               account: account,
               onPress: () {
                 PlatformAware.platformDialog(
@@ -129,6 +132,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
 
       case AccountStatus.failed:
         return LottieWidget(
+          key: AccountTabWidgetKeys.accountTabHeaderError,
           showLoading: true,
           lottie: LottieImages.errorCone,
           lottieHeight: size.height * 0.2,
