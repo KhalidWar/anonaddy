@@ -2,6 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/profile/profile.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -100,6 +101,9 @@ class StartupMethods {
       await secureStorage.delete(key: OfflineDataKey.domainOptions);
       await secureStorage.delete(key: OfflineDataKey.domain);
       await secureStorage.delete(key: OfflineDataKey.rules);
+
+      await secureStorage.delete(key: DataStorageKeys.availableAliasesKey);
+      await secureStorage.delete(key: DataStorageKeys.deletedAliasesKey);
     } catch (error) {
       return;
     }
