@@ -20,7 +20,7 @@ class AccountDataStorage {
       final encodedData = jsonEncode(accountData);
       await secureStorage.write(
         value: encodedData,
-        key: DataStorageKeys.accountTabKey,
+        key: DataStorageKeys.accountKey,
       );
     } catch (_) {
       return;
@@ -29,7 +29,7 @@ class AccountDataStorage {
 
   Future<Account> loadAccount() async {
     try {
-      final data = await secureStorage.read(key: DataStorageKeys.accountTabKey);
+      final data = await secureStorage.read(key: DataStorageKeys.accountKey);
       final decodedAccount = jsonDecode(data ?? '');
       final account = Account.fromJson(decodedAccount);
       return account;

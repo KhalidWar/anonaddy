@@ -103,6 +103,7 @@ class StartupMethods {
 
       await secureStorage.delete(key: DataStorageKeys.availableAliasesKey);
       await secureStorage.delete(key: DataStorageKeys.deletedAliasesKey);
+      await secureStorage.delete(key: DataStorageKeys.accountKey);
     } catch (error) {
       return;
     }
