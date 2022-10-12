@@ -34,7 +34,7 @@ class RecipientDataStorage extends DataStorage {
     try {
       final data = await secureStorage.read(key: DataStorageKeys.recipientKey);
       final decodedData = jsonDecode(data ?? '');
-      final recipients = (decodedData as List)
+      final recipients = (decodedData['data'] as List)
           .map((recipient) => Recipient.fromJson(recipient))
           .toList();
       return recipients;

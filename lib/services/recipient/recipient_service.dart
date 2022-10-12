@@ -23,16 +23,24 @@ class RecipientService {
   final Dio dio;
   final RecipientDataStorage recipientDataStorage;
 
-  Future<List<Recipient>> getRecipients() async {
+  Future<List<Recipient>> fetchRecipients() async {
     try {
+      await Future.delayed(const Duration(seconds: 5));
       const path = '$kUnEncodedBaseURL/recipients';
       final response = await dio.get(path);
-      log('getRecipients: ${response.statusCode}');
-      final recipients = response.data['data'];
-      recipientDataStorage.saveData(recipients);
-      return (recipients as List)
+      log('fetchRecipients: ${response.statusCode}');
+      recipientDataStorage.saveData(response.data);
+      final recipientData = response.data['data'];
+      final recipients = (recipientData as List)
           .map((recipient) => Recipient.fromJson(recipient))
           .toList();
+      return recipients;
+    } on DioError catch (dioError) {
+      if (dioError.type == DioErrorType.other) {
+        final recipients = await recipientDataStorage.loadData();
+        return recipients;
+      }
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }

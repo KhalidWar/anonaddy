@@ -1,7 +1,6 @@
 import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/utilities/utilities.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientTabStateNotifier =
@@ -24,40 +23,30 @@ class RecipientTabNotifier extends StateNotifier<RecipientTabState> {
     _updateState(state.copyWith(status: RecipientTabStatus.loading));
 
     try {
-      final recipients = await recipientService.getRecipients();
+      final recipients = await recipientService.fetchRecipients();
       final newState = state.copyWith(
           status: RecipientTabStatus.loaded, recipients: recipients);
       _updateState(newState);
     } catch (error) {
-      if (error == DioError) {
-        final dioError = error as DioError;
-
-        /// If offline, load offline data.
-        if (dioError.type == DioErrorType.other) {
-          await loadOfflineState();
-        } else {
-          final newState = state.copyWith(
-            status: RecipientTabStatus.failed,
-            errorMessage: dioError.message,
-          );
-          _updateState(newState);
-          await _retryOnError();
-        }
-      }
+      final newState = state.copyWith(
+        status: RecipientTabStatus.failed,
+        errorMessage: error.toString(),
+      );
+      _updateState(newState);
+      await _retryOnError();
     }
   }
 
   /// Silently fetches the latest recipient data and displays them
   Future<void> refreshRecipients() async {
     try {
-      final recipients = await recipientService.getRecipients();
+      final recipients = await recipientService.fetchRecipients();
 
       final newState = state.copyWith(
           status: RecipientTabStatus.loaded, recipients: recipients);
       _updateState(newState);
     } catch (error) {
-      final dioError = error as DioError;
-      Utilities.showToast(dioError.message);
+      Utilities.showToast(error.toString());
     }
   }
 
