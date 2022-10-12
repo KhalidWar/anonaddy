@@ -1,5 +1,4 @@
 class OfflineDataKey {
-  static const account = 'accountDataKey';
   static const username = 'usernameDataKey';
   static const recipients = 'recipientsDataKey';
   static const domainOptions = 'domainOptionsDataKey';
