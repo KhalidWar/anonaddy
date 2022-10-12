@@ -258,12 +258,11 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                                       : await ref
                                           .read(
                                               aliasScreenStateNotifier.notifier)
-                                          .deleteAlias(aliasState.alias);
-
-                                  /// Dismisses [AliasScreen] if [alias] is deleted
-                                  if (!isAliasDeleted && mounted) {
-                                    Navigator.pop(context);
-                                  }
+                                          .deleteAlias(aliasState.alias)
+                                          .then((value) {
+                                          /// Dismisses [AliasScreen] if [alias] is deleted
+                                          if (mounted) Navigator.pop(context);
+                                        }).catchError((_) {});
                                 },
                               ),
                             );

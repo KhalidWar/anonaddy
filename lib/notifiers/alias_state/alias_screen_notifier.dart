@@ -103,6 +103,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     } catch (error) {
       Utilities.showToast(error.toString());
       _updateState(state.copyWith(deleteAliasLoading: false));
+      rethrow;
     }
   }
 
