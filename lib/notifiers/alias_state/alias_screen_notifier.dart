@@ -48,7 +48,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     } catch (error) {
       final newState = state.copyWith(
         status: AliasScreenStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
+        errorMessage: error.toString(),
       );
       _updateState(newState);
     }
