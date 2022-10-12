@@ -25,7 +25,6 @@ class RecipientService {
 
   Future<List<Recipient>> fetchRecipients() async {
     try {
-      await Future.delayed(const Duration(seconds: 5));
       const path = '$kUnEncodedBaseURL/recipients';
       final response = await dio.get(path);
       log('fetchRecipients: ${response.statusCode}');

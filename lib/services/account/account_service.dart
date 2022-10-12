@@ -25,7 +25,6 @@ class AccountService {
 
   Future<Account> fetchAccount() async {
     try {
-      await Future.delayed(const Duration(seconds: 5));
       const urlPath = '$kUnEncodedBaseURL/account-details';
       final response = await dio.get(urlPath);
       final accountData = response.data['data'];
