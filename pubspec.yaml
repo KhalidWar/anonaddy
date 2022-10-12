@@ -48,6 +48,7 @@ dependencies:
 
   # Testing
   mockito: ^5.1.0
+  mocktail: ^0.3.0
 
   # App Package
   package_info_plus: ^1.4.2
