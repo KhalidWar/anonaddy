@@ -5,7 +5,6 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/utilities/utilities.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final aliasScreenStateNotifier =
@@ -40,7 +39,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
     try {
       _updateState(state.copyWith(status: AliasScreenStatus.loading));
 
-      final updatedAlias = await aliasService.getSpecificAlias(alias.id);
+      final updatedAlias = await aliasService.fetchSpecificAlias(alias.id);
 
       /// Assign newly fetched alias data to AliasScreen state
       final newState =
@@ -62,8 +61,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       Utilities.showToast(ToastMessage.editDescriptionSuccess);
       _updateState(state.copyWith(alias: updatedAlias));
     } catch (error) {
-      final dioError = error as DioError;
-      Utilities.showToast(dioError.message);
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -73,9 +71,6 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       await aliasService.deactivateAlias(state.alias.id);
       final updatedAlias = state.alias.copyWith(active: false);
       _updateState(state.copyWith(isToggleLoading: false, alias: updatedAlias));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(isToggleLoading: false));
     } catch (error) {
       Utilities.showToast(error.toString());
       _updateState(state.copyWith(isToggleLoading: false));
@@ -88,9 +83,6 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       final newAlias = await aliasService.activateAlias(state.alias.id);
       final updateAlias = state.alias.copyWith(active: newAlias.active);
       _updateState(state.copyWith(isToggleLoading: false, alias: updateAlias));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(isToggleLoading: false));
     } catch (error) {
       Utilities.showToast(error.toString());
       _updateState(state.copyWith(isToggleLoading: false));
@@ -108,9 +100,6 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       final newState =
           state.copyWith(deleteAliasLoading: false, alias: updatedAlias);
       _updateState(newState);
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(deleteAliasLoading: false));
     } catch (error) {
       Utilities.showToast(error.toString());
       _updateState(state.copyWith(deleteAliasLoading: false));
@@ -127,9 +116,6 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       final newState =
           state.copyWith(deleteAliasLoading: false, alias: newAlias);
       _updateState(newState);
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(deleteAliasLoading: false));
     } catch (error) {
       Utilities.showToast(error.toString());
       _updateState(state.copyWith(deleteAliasLoading: false));
@@ -137,18 +123,17 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
   }
 
   Future<void> updateAliasDefaultRecipient(List<String> recipients) async {
-    _updateState(state.copyWith(updateRecipientLoading: true));
     try {
+      _updateState(state.copyWith(updateRecipientLoading: true));
       final updatedAlias = await aliasService.updateAliasDefaultRecipient(
           state.alias.id, recipients);
       final newState =
           state.copyWith(updateRecipientLoading: false, alias: updatedAlias);
       _updateState(newState);
     } catch (error) {
-      final dioError = error as DioError;
-      Utilities.showToast(dioError.message);
+      Utilities.showToast(error.toString());
+      _updateState(state.copyWith(updateRecipientLoading: false));
     }
-    _updateState(state.copyWith(updateRecipientLoading: false));
   }
 
   Future<void> forgetAlias() async {
@@ -156,20 +141,18 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
       await aliasService.forgetAlias(state.alias.id);
       Utilities.showToast(ToastMessage.forgetAliasSuccess);
     } catch (error) {
-      final dioError = error as DioError;
-      Utilities.showToast(dioError.message);
+      Utilities.showToast(error.toString());
     }
   }
 
   Future<void> sendFromAlias(String destinationEmail) async {
-    /// https://anonaddy.com/help/sending-email-from-an-alias/
-    final leftPartOfAlias = state.alias.email.split('@')[0];
-    final rightPartOfAlias = state.alias.email.split('@')[1];
-    final recipientEmail = destinationEmail.replaceAll('@', '=');
-    final generatedAddress =
-        '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
-
     try {
+      /// https://anonaddy.com/help/sending-email-from-an-alias/
+      final leftPartOfAlias = state.alias.email.split('@')[0];
+      final rightPartOfAlias = state.alias.email.split('@')[1];
+      final recipientEmail = destinationEmail.replaceAll('@', '=');
+      final generatedAddress =
+          '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
       await Utilities.copyOnTap(generatedAddress);
       Utilities.showToast(ToastMessage.sendFromAliasSuccess);
     } catch (error) {

@@ -12,7 +12,6 @@ import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/utilities/utilities.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// This is the most complex part of this whole project.
@@ -111,8 +110,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
       aliasTabNotifier.addAlias(createdAlias);
     } catch (error) {
-      final dioError = error as DioError;
-      Utilities.showToast(dioError.message);
+      Utilities.showToast(error.toString());
     }
     _updateState(state.copyWith(isLoading: false));
   }

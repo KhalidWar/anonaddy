@@ -84,7 +84,7 @@ class AliasService {
     }
   }
 
-  Future<Alias> getSpecificAlias(String aliasID) async {
+  Future<Alias> fetchSpecificAlias(String aliasID) async {
     try {
       final path = '$kUnEncodedBaseURL/aliases/$aliasID';
       final response = await dio.get(path);
@@ -103,9 +103,9 @@ class AliasService {
 
   Future<Alias> createNewAlias({
     required String desc,
-    localPart,
-    domain,
-    format,
+    required String localPart,
+    required String domain,
+    required String format,
     required List<String> recipients,
   }) async {
     try {
@@ -120,6 +120,8 @@ class AliasService {
       final response = await dio.post(path, data: data);
       log('createNewAlias: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -133,6 +135,8 @@ class AliasService {
       final alias = Alias.fromJson(response.data['data']);
       log('activateAlias: ${response.statusCode}');
       return alias;
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -143,6 +147,8 @@ class AliasService {
       final path = '$kUnEncodedBaseURL/active-aliases/$aliasId';
       final response = await dio.delete(path);
       log('deactivateAlias: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -155,6 +161,8 @@ class AliasService {
       final response = await dio.patch(path, data: data);
       log('updateAliasDescription: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -165,6 +173,8 @@ class AliasService {
       final path = '$kUnEncodedBaseURL/aliases/$aliasID';
       final response = await dio.delete(path);
       log('deleteAlias: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -176,6 +186,8 @@ class AliasService {
       final response = await dio.patch(path);
       log('restoreAlias: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -190,6 +202,8 @@ class AliasService {
       final response = await dio.post(path, data: data);
       log('updateAliasDefaultRecipient: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -200,6 +214,8 @@ class AliasService {
       final path = '$kUnEncodedBaseURL/aliases/$aliasID/forget';
       final response = await dio.delete(path);
       log('forgetAlias: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
