@@ -34,26 +34,6 @@ class AccountState {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'status': status.index,
-      'account': account,
-      'errorMessage': errorMessage,
-    };
-  }
-
-  factory AccountState.fromMap(Map<String, dynamic> map) {
-    Account convertAccount(Map<String, dynamic> accountData) {
-      return Account.fromJson(accountData);
-    }
-
-    return AccountState(
-      status: AccountStatus.values[map['status']],
-      account: convertAccount(map['account']),
-      errorMessage: map['errorMessage'] as String,
-    );
-  }
-
   @override
   String toString() {
     return 'AccountState{status: $status, account: $account, errorMessage: $errorMessage}';
