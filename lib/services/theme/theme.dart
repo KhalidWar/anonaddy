@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 class AppTheme {
-  static ThemeData light = ThemeData.light().copyWith(
+  static final ThemeData light = ThemeData.light().copyWith(
     brightness: Brightness.light,
     primaryColor: Colors.white,
     primaryColorLight: Colors.white,
@@ -20,7 +20,7 @@ class AppTheme {
         ColorScheme.fromSwatch().copyWith(secondary: AppColors.accentColor),
   );
 
-  static ThemeData dark = ThemeData.dark().copyWith(
+  static final ThemeData dark = ThemeData.dark().copyWith(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Colors.black,
     primaryColor: Colors.black,
