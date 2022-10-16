@@ -46,7 +46,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     } catch (error) {
       _updateState(state.copyWith(
         status: RecipientScreenStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
+        errorMessage: error.toString(),
       ));
     }
   }
