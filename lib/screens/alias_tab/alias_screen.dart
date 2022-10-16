@@ -277,16 +277,16 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CreatedAtWidget(
-                        label: 'Created at',
+                        label: 'Created',
                         dateTime: aliasState.alias.createdAt,
                       ),
                       aliasState.alias.deletedAt.isEmpty
                           ? CreatedAtWidget(
-                              label: 'Updated at',
+                              label: 'Updated',
                               dateTime: aliasState.alias.updatedAt,
                             )
                           : CreatedAtWidget(
-                              label: 'Deleted at',
+                              label: 'Deleted',
                               dateTime: aliasState.alias.deletedAt,
                             ),
                     ],

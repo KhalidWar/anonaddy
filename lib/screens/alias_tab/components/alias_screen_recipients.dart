@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasScreenRecipients extends ConsumerWidget {
-  const AliasScreenRecipients({
-    Key? key,
-  }) : super(key: key);
+  const AliasScreenRecipients({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,8 +27,8 @@ class AliasScreenRecipients extends ConsumerWidget {
                 key: AliasTabWidgetKeys.aliasScreenDefaultRecipient,
                 style: Theme.of(context).textTheme.headline6,
               ),
-              IconButton(
-                icon: const Icon(Icons.edit_outlined),
+              TextButton(
+                child: const Text('Update'),
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
@@ -59,31 +57,13 @@ class AliasScreenRecipients extends ConsumerWidget {
             ),
           ),
         if (alias.recipients.isNotEmpty)
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                Text(
-                  'To manage recipients, go to Recipients under Account tab.',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                const SizedBox(height: 10),
-              ],
-            ),
-          ),
-        if (alias.recipients.isNotEmpty)
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: alias.recipients.length,
             itemBuilder: (context, index) {
               final recipients = alias.recipients;
-              return IgnorePointer(
-                child: RecipientListTile(
-                  recipient: recipients[index],
-                ),
-              );
+              return RecipientListTile(recipient: recipients[index]);
             },
           ),
       ],
