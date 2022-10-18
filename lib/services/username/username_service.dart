@@ -3,26 +3,41 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:anonaddy/models/username/username.dart';
+import 'package:anonaddy/services/data_storage/usernames_data_storage.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernameServiceProvider = Provider<UsernameService>((ref) {
-  return UsernameService(dio: ref.read(dioProvider));
+  return UsernameService(
+    dio: ref.read(dioProvider),
+    dataStorage: ref.read(usernameDataStorageProvider),
+  );
 });
 
 class UsernameService {
-  const UsernameService({required this.dio});
+  const UsernameService({
+    required this.dio,
+    required this.dataStorage,
+  });
   final Dio dio;
+  final UsernamesDataStorage dataStorage;
 
-  Future<List<Username>> getUsernames() async {
+  Future<List<Username>> fetchUsernames() async {
     try {
       const path = '$kUnEncodedBaseURL/usernames';
       final response = await dio.get(path);
       log('getUsernames: ${response.statusCode}');
+      dataStorage.saveData(response.data);
       final usernames = response.data['data'] as List;
       return usernames.map((username) => Username.fromJson(username)).toList();
+    } on DioError catch (dioError) {
+      /// If offline, load offline data.
+      if (dioError.type == DioErrorType.other) {
+        await loadUsernameFromDisk();
+      }
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -36,6 +51,14 @@ class UsernameService {
       final username = response.data['data'];
       return Username.fromJson(username);
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Username>> loadUsernameFromDisk() async {
+    try {
+      return await dataStorage.loadData();
+    } catch (error) {
       rethrow;
     }
   }
