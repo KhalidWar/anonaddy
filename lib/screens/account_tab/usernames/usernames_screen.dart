@@ -37,7 +37,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
     super.initState();
     ref
         .read(usernamesScreenStateNotifier.notifier)
-        .fetchUsername(widget.username);
+        .fetchSpecificUsername(widget.username.id);
   }
 
   @override
