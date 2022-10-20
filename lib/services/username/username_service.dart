@@ -43,13 +43,19 @@ class UsernameService {
     }
   }
 
-  Future<Username> getSpecificUsername(String usernameId) async {
+  Future<Username> fetchSpecificUsername(String usernameId) async {
     try {
       final path = '$kUnEncodedBaseURL/usernames/$usernameId';
       final response = await dio.get(path);
       log('getSpecificUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
+    } on DioError catch (dioError) {
+      if (dioError.type == DioErrorType.other) {
+        final username = await dataStorage.loadSpecificUsername(usernameId);
+        return username;
+      }
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -71,6 +77,8 @@ class UsernameService {
       log('addNewUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -85,6 +93,8 @@ class UsernameService {
       log('updateUsernameDescription: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -95,6 +105,8 @@ class UsernameService {
       final path = '$kUnEncodedBaseURL/usernames/$usernameID';
       final response = await dio.delete(path);
       log('deleteUsername: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -109,6 +121,8 @@ class UsernameService {
       log('updateDefaultRecipient: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -122,6 +136,8 @@ class UsernameService {
       log('activateUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -132,6 +148,8 @@ class UsernameService {
       final path = '$kUnEncodedBaseURL/active-usernames/$usernameID';
       final response = await dio.delete(path);
       log('deactivateUsername: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -145,6 +163,8 @@ class UsernameService {
       log('activateCatchAll: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
@@ -155,6 +175,8 @@ class UsernameService {
       final path = '$kUnEncodedBaseURL/catch-all-usernames/$usernameID';
       final response = await dio.delete(path);
       log('deactivateCatchAll: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }

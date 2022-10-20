@@ -2,9 +2,7 @@ import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/notifiers/usernames/usernames_screen_state.dart';
 import 'package:anonaddy/notifiers/usernames/usernames_tab_notifier.dart';
 import 'package:anonaddy/services/username/username_service.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/utilities.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernamesScreenStateNotifier = StateNotifierProvider.autoDispose<
@@ -28,32 +26,17 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
     if (mounted) state = newState;
   }
 
-  Future<void> fetchUsername(Username username) async {
+  Future<void> fetchSpecificUsername(String id) async {
     try {
       _updateState(state.copyWith(status: UsernamesScreenStatus.loading));
-      final updatedUsername =
-          await usernameService.getSpecificUsername(username.id);
+      final updatedUsername = await usernameService.fetchSpecificUsername(id);
       final newState = state.copyWith(
           status: UsernamesScreenStatus.loaded, username: updatedUsername);
       _updateState(newState);
-    } on DioError catch (dioError) {
-      /// Return old username data if offline
-      if (dioError.type == DioErrorType.other) {
-        _updateState(state.copyWith(
-          status: UsernamesScreenStatus.loaded,
-          username: username,
-          isOffline: true,
-        ));
-      } else {
-        _updateState(state.copyWith(
-          status: UsernamesScreenStatus.failed,
-          errorMessage: dioError.message,
-        ));
-      }
     } catch (error) {
       _updateState(state.copyWith(
         status: UsernamesScreenStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
+        errorMessage: error.toString(),
       ));
     }
   }
@@ -63,10 +46,8 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
       await usernameService.addNewUsername(username);
       Utilities.showToast('Username added successfully!');
       usernamesNotifier.fetchUsernames();
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -75,10 +56,8 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
       await usernameService.deleteUsername(username.id);
       Utilities.showToast('Username deleted successfully!');
       usernamesNotifier.fetchUsernames();
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -91,10 +70,8 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
           username.copyWith(description: newUsername.description);
       Utilities.showToast('Description updated successfully!');
       _updateState(state.copyWith(username: updatedUsername));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -110,11 +87,8 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         username: updatedUsername,
         updateRecipientLoading: false,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(updateRecipientLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(updateRecipientLoading: false));
     }
   }
@@ -128,11 +102,8 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         username: updatedUsername,
         activeSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -146,11 +117,8 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         username: updatedUsername,
         activeSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -164,11 +132,8 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         username: updatedUsername,
         catchAllSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -182,11 +147,8 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
         username: updatedUsername,
         catchAllSwitchLoading: false,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
