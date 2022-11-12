@@ -95,7 +95,6 @@ class StartupMethods {
       FlutterSecureStorage secureStorage) async {
     try {
       await secureStorage.delete(key: OfflineDataKey.domainOptions);
-      await secureStorage.delete(key: OfflineDataKey.domain);
       await secureStorage.delete(key: OfflineDataKey.rules);
 
       await secureStorage.delete(key: DataStorageKeys.availableAliasesKey);
@@ -103,6 +102,7 @@ class StartupMethods {
       await secureStorage.delete(key: DataStorageKeys.accountKey);
       await secureStorage.delete(key: DataStorageKeys.recipientKey);
       await secureStorage.delete(key: DataStorageKeys.usernameKey);
+      await secureStorage.delete(key: DataStorageKeys.domainsKey);
     } catch (error) {
       return;
     }

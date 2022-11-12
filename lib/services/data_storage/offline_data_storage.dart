@@ -24,16 +24,6 @@ class OfflineData {
     return domainOptionsData;
   }
 
-  Future<void> writeDomainOfflineData(String data) async {
-    await secureStorage.write(key: OfflineDataKey.domain, value: data);
-  }
-
-  Future<String> readDomainOfflineData() async {
-    final domainData =
-        await secureStorage.read(key: OfflineDataKey.domain) ?? '';
-    return domainData;
-  }
-
   Future<void> writeRulesOfflineData(String data) async {
     await secureStorage.write(key: OfflineDataKey.rules, value: data);
   }
