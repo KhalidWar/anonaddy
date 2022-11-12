@@ -94,7 +94,6 @@ class StartupMethods {
   static Future<void> _deleteOfflineData(
       FlutterSecureStorage secureStorage) async {
     try {
-      await secureStorage.delete(key: OfflineDataKey.username);
       await secureStorage.delete(key: OfflineDataKey.domainOptions);
       await secureStorage.delete(key: OfflineDataKey.domain);
       await secureStorage.delete(key: OfflineDataKey.rules);
@@ -103,6 +102,7 @@ class StartupMethods {
       await secureStorage.delete(key: DataStorageKeys.deletedAliasesKey);
       await secureStorage.delete(key: DataStorageKeys.accountKey);
       await secureStorage.delete(key: DataStorageKeys.recipientKey);
+      await secureStorage.delete(key: DataStorageKeys.usernameKey);
     } catch (error) {
       return;
     }
