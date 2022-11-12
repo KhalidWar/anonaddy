@@ -35,7 +35,8 @@ class UsernameService {
     } on DioError catch (dioError) {
       /// If offline, load offline data.
       if (dioError.type == DioErrorType.other) {
-        await loadUsernameFromDisk();
+        final usernames = await loadUsernameFromDisk();
+        return usernames;
       }
       throw dioError.message;
     } catch (e) {
