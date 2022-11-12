@@ -14,16 +14,6 @@ class OfflineData {
   OfflineData(this.secureStorage);
   final FlutterSecureStorage secureStorage;
 
-  Future<void> writeDomainOptionsOfflineData(String data) async {
-    await secureStorage.write(key: OfflineDataKey.domainOptions, value: data);
-  }
-
-  Future<String> readDomainOptionsOfflineData() async {
-    final domainOptionsData =
-        await secureStorage.read(key: OfflineDataKey.domainOptions) ?? '';
-    return domainOptionsData;
-  }
-
   Future<void> saveSettingsState(String data) async {
     try {
       await secureStorage.write(key: OfflineDataKey.settings, value: data);
