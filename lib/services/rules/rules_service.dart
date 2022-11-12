@@ -27,6 +27,7 @@ class RulesService {
       const path = '$kUnEncodedBaseURL/rules';
       final response = await dio.get(path);
       log('fetchAllRules: ${response.statusCode}');
+      dataStorage.saveData(response.data);
 
       final rules = response.data['data'] as List;
       return rules.map((rule) => Rules.fromJson(rule)).toList();
