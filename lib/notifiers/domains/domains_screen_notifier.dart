@@ -27,7 +27,7 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
   Future<void> fetchDomain(Domain domain) async {
     try {
       _updateState(state.copyWith(status: DomainsScreenStatus.loading));
-      final updatedDomain = await domainService.getSpecificDomain(domain.id);
+      final updatedDomain = await domainService.fetchSpecificDomain(domain.id);
 
       _updateState(state.copyWith(
         status: DomainsScreenStatus.loaded,
