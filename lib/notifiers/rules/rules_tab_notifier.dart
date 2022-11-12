@@ -1,25 +1,18 @@
 import 'package:anonaddy/models/rules/rules.dart';
 import 'package:anonaddy/notifiers/rules/rules_tab_state.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/services/rules/rules_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final rulesTabStateNotifier =
     StateNotifierProvider.autoDispose<RulesTabNotifier, RulesTabState>((ref) {
-  return RulesTabNotifier(
-    rulesService: ref.read(rulesService),
-    offlineData: ref.read(offlineDataProvider),
-  );
+  return RulesTabNotifier(rulesService: ref.read(rulesService));
 });
 
 class RulesTabNotifier extends StateNotifier<RulesTabState> {
-  RulesTabNotifier({
-    required this.rulesService,
-    required this.offlineData,
-  }) : super(RulesTabState.initialState());
+  RulesTabNotifier({required this.rulesService})
+      : super(RulesTabState.initialState());
 
   final RulesService rulesService;
-  final OfflineData offlineData;
 
   /// Updates UI state
   void _updateState(RulesTabState newState) {
