@@ -3,7 +3,6 @@ import 'package:anonaddy/notifiers/domains/domains_screen_state.dart';
 import 'package:anonaddy/services/domain/domains_service.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/utilities.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsScreenStateNotifier = StateNotifierProvider.autoDispose<
@@ -33,23 +32,10 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         status: DomainsScreenStatus.loaded,
         domain: updatedDomain,
       ));
-    } on DioError catch (dioError) {
-      /// Return old domain data if there's no internet connection
-      if (dioError.type == DioErrorType.other) {
-        _updateState(state.copyWith(
-          status: DomainsScreenStatus.loaded,
-          domain: domain,
-        ));
-      } else {
-        _updateState(state.copyWith(
-          status: DomainsScreenStatus.failed,
-          errorMessage: dioError.message,
-        ));
-      }
     } catch (error) {
       _updateState(state.copyWith(
         status: DomainsScreenStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
+        errorMessage: error.toString(),
       ));
     }
   }
@@ -60,10 +46,8 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
           await domainService.updateDomainDescription(domainId, newDescription);
       Utilities.showToast(ToastMessage.editDescriptionSuccess);
       _updateState(state.copyWith(domain: updatedDomain));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -77,11 +61,8 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         activeSwitchLoading: false,
         domain: updatedDomain,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -97,11 +78,8 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         activeSwitchLoading: false,
         domain: updatedDomain,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(activeSwitchLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(activeSwitchLoading: false));
     }
   }
@@ -117,11 +95,8 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         catchAllSwitchLoading: false,
         domain: updatedDomain,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -137,11 +112,8 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         catchAllSwitchLoading: false,
         domain: updatedDomain,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(catchAllSwitchLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(catchAllSwitchLoading: false));
     }
   }
@@ -162,11 +134,8 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
         updateRecipientLoading: false,
         domain: updatedDomain,
       ));
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
-      _updateState(state.copyWith(updateRecipientLoading: false));
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
       _updateState(state.copyWith(updateRecipientLoading: false));
     }
   }
@@ -175,10 +144,8 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
     try {
       await domainService.deleteDomain(domainId);
       Utilities.showToast('Domain deleted successfully!');
-    } on DioError catch (dioError) {
-      Utilities.showToast(dioError.message);
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      Utilities.showToast(error.toString());
     }
   }
 }
