@@ -102,6 +102,8 @@ class StartupMethods {
       await secureStorage.delete(key: DataStorageKeys.recipientKey);
       await secureStorage.delete(key: DataStorageKeys.usernameKey);
       await secureStorage.delete(key: DataStorageKeys.domainsKey);
+      await secureStorage.delete(key: DataStorageKeys.rulesKey);
+      await secureStorage.delete(key: DataStorageKeys.domainOptionsKey);
     } catch (error) {
       return;
     }

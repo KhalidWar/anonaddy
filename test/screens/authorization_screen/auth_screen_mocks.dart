@@ -109,7 +109,7 @@ class _MockOfflineData extends Mock implements OfflineData {
 
 class _MockDomainOptionsService extends Mock implements DomainOptionsService {
   @override
-  Future<DomainOptions> getDomainOptions() async {
+  Future<DomainOptions> fetchDomainOptions() async {
     return const DomainOptions(domains: []);
   }
 }
