@@ -1,14 +1,13 @@
 import 'package:anonaddy/models/domain_options/domain_options.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
-import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
-import 'package:anonaddy/services/domain_options/domain_options_service.dart';
-import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/notifiers/authorization/auth_state.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_state.dart';
 import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
+import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
+import 'package:anonaddy/services/domain_options/domain_options_service.dart';
+import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mockito/mockito.dart';
@@ -38,7 +37,6 @@ final testSuccessAuthStateNotifier =
 final testDomainOptionsNotifier =
     StateNotifierProvider<DomainOptionsNotifier, DomainOptionsState>((ref) {
   return DomainOptionsNotifier(
-    offlineData: _MockOfflineData(),
     domainOptionsService: _MockDomainOptionsService(),
   );
 });
@@ -97,14 +95,6 @@ class _MockSuccessAccessTokenService extends Mock
 class _MockSearchHistoryNotifier extends Mock implements SearchHistoryNotifier {
   @override
   Future<void> clearSearchHistory() async {}
-}
-
-class _MockOfflineData extends Mock implements OfflineData {
-  @override
-  Future<String> readDomainOptionsOfflineData() async => '';
-
-  @override
-  Future<void> writeDomainOptionsOfflineData(String data) async {}
 }
 
 class _MockDomainOptionsService extends Mock implements DomainOptionsService {
