@@ -52,7 +52,7 @@ dependencies:
 
   # App Package
   package_info_plus: ^1.4.2
-  flutter_native_splash: ^2.1.6
+  flutter_native_splash: ^2.2.14
 
   # Platform UI
   macos_ui: ^1.4.1+1
