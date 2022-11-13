@@ -19,7 +19,7 @@ dependencies:
 
   # UI Components
   flutter_svg: ^1.0.3
-  lottie: ^1.0.1
+  lottie: ^2.0.0
   animations: ^2.0.0
   shimmer: ^2.0.0
   fluttertoast: ^8.0.8
