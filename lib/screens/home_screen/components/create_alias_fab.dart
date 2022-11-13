@@ -1,11 +1,11 @@
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/notifiers/account/account_state.dart';
+import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/account/account_state.dart';
-import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -29,7 +29,7 @@ class CreateAliasFAB extends StatelessWidget {
 
               switch (accountState.status) {
                 case AccountStatus.loading:
-                  NicheMethod.showToast(AppStrings.loadingText);
+                  Utilities.showToast(AppStrings.loadingText);
                   break;
 
                 case AccountStatus.loaded:
@@ -45,7 +45,7 @@ class CreateAliasFAB extends StatelessWidget {
                   break;
 
                 case AccountStatus.failed:
-                  NicheMethod.showToast(AppStrings.loadAccountDataFailed);
+                  Utilities.showToast(AppStrings.loadAccountDataFailed);
                   break;
               }
             },

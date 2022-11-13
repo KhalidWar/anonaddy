@@ -1,3 +1,7 @@
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/notifiers/account/account_state.dart';
+import 'package:anonaddy/notifiers/usernames/usernames_tab_notifier.dart';
+import 'package:anonaddy/notifiers/usernames/usernames_tab_state.dart';
 import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
 import 'package:anonaddy/screens/account_tab/usernames/username_list_tile.dart';
 import 'package:anonaddy/services/theme/theme.dart';
@@ -7,11 +11,7 @@ import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/account/account_state.dart';
-import 'package:anonaddy/state_management/usernames/usernames_tab_notifier.dart';
-import 'package:anonaddy/state_management/usernames/usernames_tab_state.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,10 +44,10 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
       buildAddNewUsername(context);
     } else {
       if (accountState.isSubscriptionFree) {
-        NicheMethod.showToast(ToastMessage.onlyAvailableToPaid);
+        Utilities.showToast(ToastMessage.onlyAvailableToPaid);
       } else {
         accountState.hasUsernamesReachedLimit
-            ? NicheMethod.showToast(AnonAddyString.reachedUsernameLimit)
+            ? Utilities.showToast(AnonAddyString.reachedUsernameLimit)
             : buildAddNewUsername(context);
       }
     }

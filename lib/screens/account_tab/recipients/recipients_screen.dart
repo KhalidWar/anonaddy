@@ -1,14 +1,16 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/notifiers/recipient/recipient_screen_notifier.dart';
+import 'package:anonaddy/notifiers/recipient/recipient_screen_state.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_add_pgp_key.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_actions_list_tile.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_aliases.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_trailing_loading_switch.dart';
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/alias_created_at_widget.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
+import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/offline_banner.dart';
@@ -16,9 +18,7 @@ import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/state_management/recipient/recipient_screen_notifier.dart';
-import 'package:anonaddy/state_management/recipient/recipient_screen_state.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -76,7 +76,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(recipientScreenStateNotifier.notifier)
-          .fetchRecipient(widget.recipient);
+          .fetchSpecificRecipient(widget.recipient);
     });
   }
 
@@ -139,16 +139,16 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   if (recipientScreenState.isOffline) const OfflineBanner(),
                   const RecipientScreenUnverifiedWarning(),
                   AliasScreenPieChart(
-                    emailsForwarded: NicheMethod.reduceListElements(
+                    emailsForwarded: Utilities.reduceListElements(
                       calculateEmailsForwarded(recipient),
                     ),
-                    emailsBlocked: NicheMethod.reduceListElements(
+                    emailsBlocked: Utilities.reduceListElements(
                       calculateEmailsBlocked(recipient),
                     ),
-                    emailsReplied: NicheMethod.reduceListElements(
+                    emailsReplied: Utilities.reduceListElements(
                       calculateEmailsReplied(recipient),
                     ),
-                    emailsSent: NicheMethod.reduceListElements(
+                    emailsSent: Utilities.reduceListElements(
                       calculateEmailsSent(recipient),
                     ),
                   ),
@@ -164,7 +164,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     subtitle: 'Recipient Email',
                     trailing: IconButton(
                       icon: const Icon(Icons.copy),
-                      onPressed: () => NicheMethod.copyOnTap(recipient.email),
+                      onPressed: () => Utilities.copyOnTap(recipient.email),
                     ),
                   ),
                   RecipientScreenActionsListTile(
@@ -326,14 +326,14 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   const RecipientScreenAliases(),
                   const Divider(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AliasCreatedAtWidget(
-                        label: 'Created:',
+                      CreatedAtWidget(
+                        label: 'Created at',
                         dateTime: recipient.createdAt.toString(),
                       ),
-                      AliasCreatedAtWidget(
-                        label: 'Updated:',
+                      CreatedAtWidget(
+                        label: 'Updated at',
                         dateTime: recipient.updatedAt.toString(),
                       ),
                     ],

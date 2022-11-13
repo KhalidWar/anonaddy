@@ -7,12 +7,13 @@ import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/alias_state/alias_tab_notifier.dart';
-import 'package:anonaddy/state_management/alias_state/fab_visibility_state.dart';
-import 'package:anonaddy/state_management/domain_options/domain_options_notifier.dart';
-import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/state_management/settings/settings_notifier.dart';
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
+import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
+import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
+import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
+import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,6 +53,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     /// Pre-loads [DomainOptions] data for [CreateAlias]
     ref.read(domainOptionsStateNotifier.notifier).fetchDomainOption();
+
+    /// Pre-loads [DomainOptions] data for [CreateAlias]
+    ref.read(failedDeliveryStateNotifier.notifier).getFailedDeliveries();
   }
 
   @override
@@ -78,7 +82,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       key: const Key('homeScreenScaffold'),
-      appBar: buildAppBar(context),
+      appBar: AppBar(
+        key: const Key('homeScreenAppBar'),
+        elevation: 0,
+        title: const Text(
+          AppStrings.appName,
+          key: Key('homeScreenAppBarTitle'),
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        leading: const AlertCenterIcon(),
+        actions: [
+          // IconButton(
+          //   key: const Key('homeScreenQuickSearchTrailing'),
+          //   tooltip: AppStrings.settings,
+          //   icon: const Icon(
+          //     Icons.search,
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, QuickSearchScreen.routeName);
+          //   },
+          // ),
+          IconButton(
+            key: const Key('homeScreenAppBarTrailing'),
+            tooltip: AppStrings.settings,
+            icon: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, SettingsScreen.routeName);
+            },
+          ),
+        ],
+      ),
       floatingActionButton: const CreateAliasFAB(),
       body: IndexedStack(
         key: const Key('homeScreenBody'),
@@ -119,44 +157,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  AppBar buildAppBar(BuildContext context) {
-    return AppBar(
-      key: const Key('homeScreenAppBar'),
-      elevation: 0,
-      title: const Text(
-        AppStrings.appName,
-        key: Key('homeScreenAppBarTitle'),
-        style: TextStyle(color: Colors.white),
-      ),
-      centerTitle: true,
-      leading: const AlertCenterIcon(),
-      actions: [
-        // IconButton(
-        //   key: const Key('homeScreenQuickSearchTrailing'),
-        //   tooltip: AppStrings.settings,
-        //   icon: const Icon(
-        //     Icons.search,
-        //     color: Colors.white,
-        //   ),
-        //   onPressed: () {
-        //     Navigator.pushNamed(context, QuickSearchScreen.routeName);
-        //   },
-        // ),
-        IconButton(
-          key: const Key('homeScreenAppBarTrailing'),
-          tooltip: AppStrings.settings,
-          icon: const Icon(
-            Icons.settings,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, SettingsScreen.routeName);
-          },
-        ),
-      ],
     );
   }
 }

@@ -1,11 +1,11 @@
+import 'package:anonaddy/notifiers/rules/rules_tab_notifier.dart';
+import 'package:anonaddy/notifiers/rules/rules_tab_state.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/state_management/rules/rules_tab_notifier.dart';
-import 'package:anonaddy/state_management/rules/rules_tab_state.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -51,7 +51,7 @@ class _RulesTabState extends ConsumerState<RulesTab> {
                 itemBuilder: (context, index) {
                   return RulesListTile(
                     rule: rules[index],
-                    onTap: () => NicheMethod.showToast(AppStrings.comingSoon),
+                    onTap: () => Utilities.showToast(AppStrings.comingSoon),
                   );
                 },
               );

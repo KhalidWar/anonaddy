@@ -1,7 +1,7 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 
 class HeaderProfile extends StatelessWidget {
@@ -18,17 +18,23 @@ class HeaderProfile extends StatelessWidget {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: AppColors.accentColor,
-        child: avatarChild(context),
+        child: Text(
+          account.username[0].toUpperCase(),
+          style: Theme.of(context).textTheme.headline5!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor,
+              ),
+        ),
       ),
       title: Text(
-        NicheMethod.capitalizeFirstLetter(account.username),
+        Utilities.capitalizeFirstLetter(account.username),
         style: Theme.of(context)
             .textTheme
             .headline6!
             .copyWith(color: Colors.white),
       ),
       subtitle: Text(
-        NicheMethod.capitalizeFirstLetter(
+        Utilities.capitalizeFirstLetter(
           account.subscription.isEmpty
               ? AppStrings.selfHosted
               : account.subscription,
@@ -40,17 +46,6 @@ class HeaderProfile extends StatelessWidget {
       ),
       trailing: const Icon(Icons.error_outline, color: Colors.white),
       onTap: onPress,
-    );
-  }
-
-  Widget avatarChild(BuildContext context) {
-    final firstLetter = account.username[0];
-    return Text(
-      firstLetter.toUpperCase(),
-      style: Theme.of(context)
-          .textTheme
-          .headline5!
-          .copyWith(fontWeight: FontWeight.bold, color: AppColors.primaryColor),
     );
   }
 }

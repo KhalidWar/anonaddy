@@ -7,7 +7,7 @@ class AnonAddyString {
   static const deleteAliasConfirmation =
       'Are you sure you want to delete this alias?\n\nYou can restore this alias if you later change your mind.\n\nOnce deleted, this alias will reject any emails sent to it.';
   static const restoreBeforeActivate =
-      'You need to restore this alias before you can activate it';
+      'Restore this alias before you can activate it';
   static const createNewAliasString =
       'Other aliases e.g. alias@khalidwar.anonaddy.com or .me can also be created automatically when they receive their first email.';
   static const restoreAliasConfirmation =

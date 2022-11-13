@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
+import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +17,7 @@ class FailedDeliveryService {
 
   Future<List<FailedDelivery>> getFailedDeliveries([String? path]) async {
     try {
-      const urlPath = '$kUnEncodedBaseURL/$kFailedDeliveriesURL';
+      const urlPath = '$kUnEncodedBaseURL/failed-deliveries';
       final response = await dio.get(path ?? urlPath);
       final deliveries = response.data['data'];
       log('getFailedDeliveries: ${response.statusCode}');
@@ -25,18 +25,22 @@ class FailedDeliveryService {
       return (deliveries as List).map((delivery) {
         return FailedDelivery.fromJson(delivery);
       }).toList();
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
-      rethrow;
+      throw 'Failed to fetch failed deliveries';
     }
   }
 
   Future<void> deleteFailedDelivery(String failedDeliveryId) async {
     try {
-      final path = '$kUnEncodedBaseURL/$kFailedDeliveriesURL/$failedDeliveryId';
+      final path = '$kUnEncodedBaseURL/failed-deliveries/$failedDeliveryId';
       final response = await dio.delete(path);
       log('deleteFailedDelivery: ${response.statusCode}');
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
-      rethrow;
+      throw throw 'Failed to delete a failed deliveries';
     }
   }
 }

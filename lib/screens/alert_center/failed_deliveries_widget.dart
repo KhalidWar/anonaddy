@@ -1,9 +1,10 @@
 import 'package:anonaddy/screens/alert_center/components/failed_delivery_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/state_management/failed_delivery/failed_delivery_notifier.dart';
-import 'package:anonaddy/state_management/failed_delivery/failed_delivery_state.dart';
+import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,13 +28,9 @@ class _FailedDeliveriesWidgetState
   @override
   Widget build(BuildContext context) {
     final failedDeliveryState = ref.watch(failedDeliveryStateNotifier);
-    switch (failedDeliveryState.status) {
-      case FailedDeliveryStatus.loading:
-        return const Center(child: PlatformLoadingIndicator());
 
-      case FailedDeliveryStatus.loaded:
-        final deliveries = failedDeliveryState.failedDeliveries;
-
+    return failedDeliveryState.when(
+      data: (deliveries) {
         return deliveries.isEmpty
             ? const Text('No failed deliveries found')
             : ListView.builder(
@@ -44,18 +41,35 @@ class _FailedDeliveriesWidgetState
                   final failedDelivery = deliveries[index];
                   return FailedDeliveryListTile(
                     delivery: failedDelivery,
-                    onPress: () => ref
-                        .read(failedDeliveryStateNotifier.notifier)
-                        .deleteFailedDelivery(failedDelivery.id),
+                    onPress: () {
+                      PlatformAware.platformDialog(
+                        context: context,
+                        child: PlatformAlertDialog(
+                          title: 'Delete Failed Delivery',
+                          content:
+                              'Are you sure you want to delete failed delivery?',
+                          method: () async {
+                            await ref
+                                .read(failedDeliveryStateNotifier.notifier)
+                                .deleteFailedDelivery(failedDelivery.id);
+
+                            /// Dismisses this dialog
+                            if (mounted) Navigator.pop(context);
+                          },
+                        ),
+                      );
+                    },
                   );
                 },
               );
-
-      case FailedDeliveryStatus.failed:
+      },
+      error: (error, _) {
         return LottieWidget(
           lottie: LottieImages.errorCone,
-          label: failedDeliveryState.errorMessage,
+          label: error.toString(),
         );
-    }
+      },
+      loading: () => const Center(child: PlatformLoadingIndicator()),
+    );
   }
 }

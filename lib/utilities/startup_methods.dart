@@ -2,6 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/profile/profile.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -93,13 +94,14 @@ class StartupMethods {
   static Future<void> _deleteOfflineData(
       FlutterSecureStorage secureStorage) async {
     try {
-      await secureStorage.delete(key: OfflineDataKey.aliases);
-      await secureStorage.delete(key: OfflineDataKey.account);
-      await secureStorage.delete(key: OfflineDataKey.username);
-      await secureStorage.delete(key: OfflineDataKey.recipients);
-      await secureStorage.delete(key: OfflineDataKey.domainOptions);
-      await secureStorage.delete(key: OfflineDataKey.domain);
-      await secureStorage.delete(key: OfflineDataKey.rules);
+      await secureStorage.delete(key: DataStorageKeys.availableAliasesKey);
+      await secureStorage.delete(key: DataStorageKeys.deletedAliasesKey);
+      await secureStorage.delete(key: DataStorageKeys.accountKey);
+      await secureStorage.delete(key: DataStorageKeys.recipientKey);
+      await secureStorage.delete(key: DataStorageKeys.usernameKey);
+      await secureStorage.delete(key: DataStorageKeys.domainsKey);
+      await secureStorage.delete(key: DataStorageKeys.rulesKey);
+      await secureStorage.delete(key: DataStorageKeys.domainOptionsKey);
     } catch (error) {
       return;
     }

@@ -2,7 +2,7 @@ name: anonaddy
 description: A new Flutter application.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 2.8.5+43
+version: 2.8.6+44
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # Formatting
+  intl: ^0.17.0
 
   # Icons
   cupertino_icons: ^1.0.1
@@ -45,6 +48,7 @@ dependencies:
 
   # Testing
   mockito: ^5.1.0
+  mocktail: ^0.3.0
 
   # App Package
   package_info_plus: ^1.4.2

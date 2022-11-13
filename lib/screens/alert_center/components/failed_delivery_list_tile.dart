@@ -15,52 +15,51 @@ class FailedDeliveryListTile extends StatelessWidget {
     return ExpansionTile(
       expandedAlignment: Alignment.centerLeft,
       tilePadding: const EdgeInsets.all(0),
-      childrenPadding: const EdgeInsets.symmetric(horizontal: 5),
+      iconColor: Colors.red,
       title: Text(
-        delivery.aliasEmail,
-        style: Theme.of(context).textTheme.bodyText1,
+        delivery.aliasEmail ?? 'Unknown alias',
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       subtitle: Text(
-        delivery.code,
+        'Tap to expand',
         style: Theme.of(context).textTheme.caption,
+      ),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete_outline),
+        onPressed: onPress,
       ),
       children: [
         ListTile(
           dense: true,
-          title: const Text('Alias'),
-          subtitle: Text(delivery.aliasEmail),
+          title: Text(delivery.aliasEmail ?? 'Unknown alias'),
+          subtitle: const Text('Alias'),
         ),
         ListTile(
           dense: true,
-          title: const Text('Recipient'),
-          subtitle: Text(delivery.recipientEmail ?? 'Not available'),
+          title: Text(delivery.recipientEmail ?? 'Unknown recipient'),
+          subtitle: const Text('Recipient'),
         ),
         ListTile(
           dense: true,
-          title: const Text('Type'),
-          subtitle: Text(delivery.bounceType),
+          title: Text(delivery.bounceType),
+          subtitle: const Text('Type'),
         ),
         ListTile(
           dense: true,
-          title: const Text('Code'),
-          subtitle: Text(delivery.code),
+          title: Text(delivery.code),
+          subtitle: const Text('Code'),
         ),
         ListTile(
           dense: true,
-          title: const Text('Remote MTA'),
-          subtitle: Text(
+          title: Text(
             delivery.remoteMta.isEmpty ? 'Not available' : delivery.remoteMta,
           ),
+          subtitle: const Text('Remote MTA'),
         ),
         ListTile(
           dense: true,
-          title: const Text('Created'),
-          subtitle: Text(delivery.createdAt.toString()),
-        ),
-        const Divider(height: 0),
-        TextButton(
-          onPressed: onPress,
-          child: const Text('Delete failed delivery'),
+          title: Text(delivery.createdAt.toString()),
+          subtitle: const Text('Created'),
         ),
       ],
     );

@@ -1,5 +1,8 @@
 import 'package:anonaddy/models/username/username.dart';
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
+import 'package:anonaddy/screens/account_tab/components/account_tab_widget_keys.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
@@ -8,8 +11,6 @@ import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
-import 'package:anonaddy/state_management/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -72,7 +73,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       /// Initially load data from disk (secured device storage)
-      ref.read(accountStateNotifier.notifier).loadState();
+      ref.read(accountStateNotifier.notifier).loadAccountFromDisk();
 
       /// Fetch latest data from server
       ref.read(accountStateNotifier.notifier).fetchAccount();
@@ -87,16 +88,18 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
     switch (accountState.status) {
       case AccountStatus.loading:
         return const Center(
-          child: PlatformLoadingIndicator(),
+          child: PlatformLoadingIndicator(
+            key: AccountTabWidgetKeys.accountTabHeaderLoading,
+          ),
         );
 
       case AccountStatus.loaded:
         final account = accountState.account;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        return ListView(
           children: [
             HeaderProfile(
+              key: AccountTabWidgetKeys.accountTabHeaderHeaderProfile,
               account: account,
               onPress: () {
                 PlatformAware.platformDialog(
@@ -129,6 +132,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
 
       case AccountStatus.failed:
         return LottieWidget(
+          key: AccountTabWidgetKeys.accountTabHeaderError,
           showLoading: true,
           lottie: LottieImages.errorCone,
           lottieHeight: size.height * 0.2,

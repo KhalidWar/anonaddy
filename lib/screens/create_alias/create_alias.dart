@@ -1,3 +1,4 @@
+import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/screens/create_alias/alias_domain_selection.dart';
 import 'package:anonaddy/screens/create_alias/alias_format_selection.dart';
 import 'package:anonaddy/screens/create_alias/alias_recipient_selection.dart';
@@ -9,8 +10,7 @@ import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -178,7 +178,7 @@ class _CreateAliasState extends ConsumerState<CreateAlias> {
                 header: 'Alias Format',
                 subHeader: 'Alias format',
                 child: Text(
-                  NicheMethod.correctAliasString(createAliasState.aliasFormat!),
+                  Utilities.correctAliasString(createAliasState.aliasFormat!),
                   style: Theme.of(consumerContext)
                       .textTheme
                       .subtitle1!

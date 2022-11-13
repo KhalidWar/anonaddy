@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
@@ -25,7 +25,7 @@ class AccessTokenService {
 
   Future<bool> validateAccessToken(String url, String token) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAccountDetailsURL';
+      const path = '$kUnEncodedBaseURL/account-details';
       final uri = Uri.https(url, path);
       final options = Options(
         sendTimeout: 5000,

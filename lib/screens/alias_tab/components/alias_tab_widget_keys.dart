@@ -11,6 +11,7 @@ class AliasTabWidgetKeys {
   static const aliasTabDeletedAliasesTab = Key('aliasTabDeletedAliasesTab');
   static const aliasTabLoadingTabBarView = Key('aliasTabLoadingTabBarView');
   static const aliasTabLoadedTabBarView = Key('aliasTabLoadedTabBarView');
+  static const aliasTabFailedTabBarView = Key('aliasTabFailedTabBarView');
   static const aliasTabAvailableAliasesLoading =
       Key('aliasTabAvailableAliasesLoading');
   static const aliasTabDeletedAliasesLoading =

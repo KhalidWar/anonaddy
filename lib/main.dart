@@ -1,6 +1,6 @@
 import 'package:anonaddy/app.dart';
-import 'package:anonaddy/global_providers.dart';
-import 'package:anonaddy/utilities/utilities_export.dart';
+import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/utilities/startup_methods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';

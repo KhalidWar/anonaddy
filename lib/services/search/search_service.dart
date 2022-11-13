@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:anonaddy/global_providers.dart';
 import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +18,7 @@ class SearchService {
   Future<List<Alias>> searchAliases(
       String searchKeyword, bool includeDeleted) async {
     try {
-      const path = '$kUnEncodedBaseURL/$kAliasesURL';
+      const path = '$kUnEncodedBaseURL/aliases';
       final params = {
         'deleted': includeDeleted ? 'with' : null,
         "filter[search]": searchKeyword,

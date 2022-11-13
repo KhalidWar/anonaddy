@@ -1,6 +1,6 @@
-import 'package:anonaddy/global_providers.dart';
+import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
+import 'package:anonaddy/services/package_info_service/package_info_service.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
-import 'package:anonaddy/state_management/settings/settings_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -101,17 +101,16 @@ class ChangelogWidget extends ConsumerWidget {
           physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
-            header('Added', Colors.green),
-            label('1. Can reply and send to recipient.'),
-            label('2. PGP/inline encryption to recipient.'),
-            label('3. Hide Subject to recipient.'),
-
             header('Fixed', Colors.blue),
-            label('1. Minor bug fixes.'),
+            label('1. Fixed offline data caching.'),
+            label('1. Fixed several UI bug.'),
 
             header('Improved', Colors.orange),
-            label('1. Several under the hood improvements.'),
-            label('2. Minor UI tweaks.'),
+            label('1. Overhauled Offline data caching mechanism.'),
+            label('2. Improved date and time format.'),
+            label('3. Improved error messages.'),
+            label('4. Several under the hood improvements.'),
+            label('5. Too many improvements to list.'),
             // label('2. Fixed self-hosted recipient/username count errors.'),
             // SizedBox(height: size.height * 0.008),
             // header('Added', Colors.green),

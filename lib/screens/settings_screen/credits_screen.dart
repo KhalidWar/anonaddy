@@ -1,5 +1,5 @@
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/utilities/niche_method.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -102,7 +102,7 @@ class CreditsScreen extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => NicheMethod.launchURL(lottieURL),
+      onTap: () => Utilities.launchURL(lottieURL),
     );
   }
 }
