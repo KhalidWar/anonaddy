@@ -6,8 +6,8 @@ import 'package:anonaddy/screens/alias_tab/components/alias_tab_emails_stats.dar
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -165,16 +165,8 @@ class _AlisTabState extends ConsumerState<AliasTab> {
                   return TabBarView(
                     key: AliasTabWidgetKeys.aliasTabFailedTabBarView,
                     children: [
-                      LottieWidget(
-                        lottie: LottieImages.errorCone,
-                        label: error.toString(),
-                        lottieHeight: size.height * 0.2,
-                      ),
-                      LottieWidget(
-                        lottie: LottieImages.errorCone,
-                        label: error.toString(),
-                        lottieHeight: size.height * 0.2,
-                      ),
+                      ErrorMessageWidget(message: error),
+                      ErrorMessageWidget(message: error),
                     ],
                   );
               }

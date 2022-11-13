@@ -9,10 +9,9 @@ import 'package:anonaddy/screens/account_tab/recipients/components/recipient_scr
 import 'package:anonaddy/screens/account_tab/recipients/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/offline_banner.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
@@ -343,10 +342,8 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               );
 
             case RecipientScreenStatus.failed:
-              final error = recipientScreenState.errorMessage;
-              return LottieWidget(
-                lottie: LottieImages.errorCone,
-                label: error,
+              return ErrorMessageWidget(
+                message: recipientScreenState.errorMessage,
               );
           }
         },

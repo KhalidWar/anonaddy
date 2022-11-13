@@ -5,9 +5,8 @@ import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart'
 import 'package:anonaddy/screens/account_tab/components/account_tab_widget_keys.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -82,8 +81,6 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     final accountState = ref.watch(accountStateNotifier);
     switch (accountState.status) {
       case AccountStatus.loading:
@@ -131,12 +128,10 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
         );
 
       case AccountStatus.failed:
-        return LottieWidget(
+        return ErrorMessageWidget(
           key: AccountTabWidgetKeys.accountTabHeaderError,
-          showLoading: true,
-          lottie: LottieImages.errorCone,
-          lottieHeight: size.height * 0.2,
-          label: accountState.errorMessage,
+          message: accountState.errorMessage,
+          messageColor: Colors.white,
         );
     }
   }

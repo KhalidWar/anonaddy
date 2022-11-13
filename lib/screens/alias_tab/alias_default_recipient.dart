@@ -7,8 +7,7 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -171,13 +170,7 @@ class _AliasDefaultRecipientScreenState
               });
 
             case RecipientTabStatus.failed:
-              final error = recipientState.errorMessage;
-              return LottieWidget(
-                showLoading: true,
-                lottie: LottieImages.errorCone,
-                lottieHeight: size.height * 0.1,
-                label: error.toString(),
-              );
+              return ErrorMessageWidget(message: recipientState.errorMessage);
           }
         });
       },

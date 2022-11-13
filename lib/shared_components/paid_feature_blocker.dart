@@ -1,14 +1,13 @@
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
 import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -53,10 +52,8 @@ class PaidFeatureBlocker extends ConsumerWidget {
             : child;
 
       case AccountStatus.failed:
-        return LottieWidget(
-          lottie: LottieImages.errorCone,
-          lottieHeight: MediaQuery.of(context).size.height * 0.2,
-          label: AppStrings.loadAccountDataFailed,
+        return const ErrorMessageWidget(
+          message: AppStrings.loadAccountDataFailed,
         );
     }
   }
