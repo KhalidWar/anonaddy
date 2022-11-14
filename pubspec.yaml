@@ -51,7 +51,7 @@ dependencies:
   mocktail: ^0.3.0
 
   # App Package
-  package_info_plus: ^1.4.2
+  package_info_plus: ^3.0.1
   flutter_native_splash: ^2.2.14
 
   # Platform UI
