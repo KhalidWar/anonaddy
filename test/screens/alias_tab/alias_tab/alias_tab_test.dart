@@ -5,7 +5,7 @@ import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -207,7 +207,7 @@ void main() {
         find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasesLoading),
         findsNothing,
       );
-      expect(find.byType(LottieWidget), findsOneWidget);
+      expect(find.byType(ErrorMessageWidget), findsOneWidget);
     },
   );
 }
