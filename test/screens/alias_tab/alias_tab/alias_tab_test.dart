@@ -26,12 +26,12 @@ void main() {
     return MaterialApp(
       home: ProviderScope(
         overrides: [
-          aliasTabStateNotifier.overrideWithValue(
-            AliasTabNotifier(
+          aliasTabStateNotifier.overrideWith((_) {
+            return AliasTabNotifier(
               aliasService: mockAliasService,
               initialState: aliasTabState,
-            ),
-          ),
+            );
+          }),
         ],
         child: const AliasTab(),
       ),

@@ -40,7 +40,7 @@ dependencies:
   local_auth: ^2.1.2
 
   # State Management
-  flutter_riverpod: ^1.0.3
+  flutter_riverpod: ^2.1.1
   flutter_phoenix: ^1.0.0
 
   # Data Modeling

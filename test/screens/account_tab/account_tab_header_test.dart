@@ -25,12 +25,12 @@ void main() {
     return MaterialApp(
       home: ProviderScope(
         overrides: [
-          accountStateNotifier.overrideWithValue(
-            AccountNotifier(
+          accountStateNotifier.overrideWith((_) {
+            return AccountNotifier(
               accountService: accountService,
               initialState: initialState,
-            ),
-          ),
+            );
+          }),
         ],
         child: const AccountTabHeader(),
       ),
