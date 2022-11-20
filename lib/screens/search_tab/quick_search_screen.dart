@@ -115,7 +115,7 @@ class _QuickSearchScreenState extends ConsumerState<QuickSearchScreen> {
             },
             error: (error, stackTrace) {
               return Container(
-                alignment: Alignment.center,
+                alignment: Alignment.topCenter,
                 padding: const EdgeInsets.all(20),
                 child: Text(error.toString()),
               );
