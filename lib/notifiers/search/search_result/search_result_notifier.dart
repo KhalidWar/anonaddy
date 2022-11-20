@@ -42,8 +42,8 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
       final searchKeyword = state.searchController!.text.trim();
 
       /// Fetches matching aliases from AnonAddy servers
-      final matchingAliases = await searchService.searchAliases(
-          searchKeyword, state.includeDeleted!);
+      final matchingAliases =
+          await searchService.searchAliases(searchKeyword, null);
 
       /// Structure new state
       final newState = state.copyWith(

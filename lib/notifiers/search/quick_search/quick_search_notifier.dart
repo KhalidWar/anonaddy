@@ -7,6 +7,9 @@ final quickSearchStateNotifier = StateNotifierProvider.autoDispose<
     QuickSearchNotifier, AsyncValue<List<Alias>?>>((ref) {
   final cancelToken = CancelToken();
   final searchService = ref.read(searchServiceProvider);
+
+  ref.onDispose(() => cancelToken.cancel());
+
   return QuickSearchNotifier(
     searchService: searchService,
     cancelToken: cancelToken,
@@ -20,15 +23,19 @@ class QuickSearchNotifier extends StateNotifier<AsyncValue<List<Alias>?>> {
   }) : super(const AsyncData(null));
 
   final SearchService searchService;
-  final CancelToken cancelToken;
+  CancelToken cancelToken;
 
   Future<void> search(String keyword) async {
+    if (!mounted) return;
     if (keyword.length >= 3) {
-      if (!mounted) return;
+      if (cancelToken.isCancelled) {
+        cancelToken = CancelToken();
+      }
+
       state = const AsyncValue.loading();
-      state = await AsyncValue.guard(
-        () => searchService.searchAliases(keyword.trim(), true),
-      );
+      state = await AsyncValue.guard(() {
+        return searchService.searchAliases(keyword.trim(), cancelToken);
+      });
     }
   }
 
@@ -38,6 +45,7 @@ class QuickSearchNotifier extends StateNotifier<AsyncValue<List<Alias>?>> {
 
   void resetSearch() {
     if (!mounted) return;
+    cancelToken.cancel('Search cancelled');
     state = const AsyncData(null);
   }
 }

@@ -16,15 +16,17 @@ class SearchService {
 
   /// Fetches matching aliases from API
   Future<List<Alias>> searchAliases(
-      String searchKeyword, bool includeDeleted) async {
+      String searchKeyword, CancelToken? cancelToken) async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
-      final params = {
-        'deleted': includeDeleted ? 'with' : null,
-        "filter[search]": searchKeyword,
-      };
+      final params = {"filter[search]": searchKeyword};
 
-      final response = await dio.get(path, queryParameters: params);
+      final response = await dio.get(
+        path,
+        queryParameters: params,
+        cancelToken: cancelToken,
+      );
+
       log('searchAliases: ${response.statusCode}');
 
       final aliasesList = response.data['data'] as List;
