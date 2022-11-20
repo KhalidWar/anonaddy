@@ -29,6 +29,8 @@ class SearchService {
 
       final aliasesList = response.data['data'] as List;
       return aliasesList.map((alias) => Alias.fromJson(alias)).toList();
+    } on DioError catch (dioError) {
+      throw dioError.message;
     } catch (e) {
       rethrow;
     }
