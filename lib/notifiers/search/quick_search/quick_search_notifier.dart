@@ -23,7 +23,7 @@ class QuickSearchNotifier extends StateNotifier<AsyncValue<List<Alias>?>> {
   final CancelToken cancelToken;
 
   Future<void> search(String keyword) async {
-    if (keyword.length >= 2) {
+    if (keyword.length >= 3) {
       if (!mounted) return;
       state = const AsyncValue.loading();
       state = await AsyncValue.guard(
