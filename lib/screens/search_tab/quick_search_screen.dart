@@ -1,11 +1,9 @@
+import 'package:anonaddy/notifiers/search/quick_search/quick_search_notifier.dart';
+import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
-import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
-import 'package:anonaddy/notifiers/search/search_result/search_result_notifier.dart';
-import 'package:anonaddy/notifiers/search/search_result/search_result_state.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,128 +20,130 @@ class QuickSearchScreen extends ConsumerStatefulWidget {
 }
 
 class _QuickSearchScreenState extends ConsumerState<QuickSearchScreen> {
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final searchState = ref.watch(searchResultStateNotifier);
-
     return Scaffold(
-      appBar: SearchAppBar(
-        leadingOnPress: () {
-          ref.read(searchResultStateNotifier.notifier).closeSearch();
-          Navigator.pop(context);
-        },
-        title: TextFormField(
-          controller: searchState.searchController,
+      appBar: _SearchAppBar(
+        leadingOnPress: () => Navigator.pop(context),
+        inputField: TextFormField(
+          controller: controller,
           autofocus: true,
-          validator: (input) => FormValidator.validateSearchField(input!),
+          autocorrect: false,
           textInputAction: TextInputAction.search,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: AppStrings.searchFieldHint,
-            hintStyle: const TextStyle(color: Colors.white),
-            // enabledBorder: const OutlineInputBorder(
-            //   borderSide: BorderSide(color: Colors.white),
-            // ),
-            suffixIcon: closeIcon(context, ref, searchState.showCloseIcon!),
+            hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+            focusedBorder: InputBorder.none,
           ),
           onChanged: (input) {
-            ref.read(searchResultStateNotifier.notifier).toggleCloseIcon();
-            // ref.read(searchResultStateNotifier.notifier).searchAliasesLocally();
-            ref.read(searchResultStateNotifier.notifier).searchAliases();
-          },
-          onFieldSubmitted: (keyword) {
-            ref.read(searchResultStateNotifier.notifier).searchAliases();
+            ref.read(quickSearchStateNotifier.notifier).search(input);
+            setState(() {});
           },
         ),
+        trailing: controller.text.isNotEmpty
+            ? IconButton(
+                icon: const Icon(Icons.close, color: Colors.white),
+                onPressed: () {
+                  setState(() {
+                    controller.clear();
+                    ref.read(quickSearchStateNotifier.notifier).resetSearch();
+                  });
+                },
+              )
+            : const SizedBox(),
       ),
       body: Consumer(
         builder: (context, ref, child) {
-          final searchState = ref.watch(searchResultStateNotifier);
-          final resultsList = searchState.aliases!;
+          final searchState = ref.watch(quickSearchStateNotifier);
 
-          switch (searchState.status) {
-            case SearchResultStatus.initial:
-              return Container();
-            // return const SearchHistory();
+          return searchState.when(
+            data: (aliases) {
+              if (aliases == null) {
+                return Container(
+                  alignment: Alignment.topCenter,
+                  padding: const EdgeInsets.all(20),
+                  child: const Text('Start searching'),
+                );
+              }
 
-            case SearchResultStatus.loading:
-              return const Center(child: PlatformLoadingIndicator());
+              if (aliases.isEmpty) {
+                return Container(
+                  alignment: Alignment.topCenter,
+                  padding: const EdgeInsets.all(20),
+                  child: const Text('No aliases found'),
+                );
+              }
 
-            case SearchResultStatus.failed:
+              return PlatformScrollbar(
+                child: ListView.builder(
+                  itemCount: aliases.length,
+                  itemBuilder: (context, index) {
+                    final alias = aliases[index];
+                    return InkWell(
+                      child: IgnorePointer(
+                        child: AliasListTile(alias: alias),
+                      ),
+                      onTap: () {
+                        /// Dismisses keyboard
+                        FocusScope.of(context).requestFocus(FocusNode());
+
+                        /// Add selected Alias to Search History
+                        ref
+                            .read(searchHistoryStateNotifier.notifier)
+                            .addAliasToSearchHistory(alias);
+
+                        /// Navigate to Alias Screen
+                        Navigator.pushNamed(
+                          context,
+                          AliasScreen.routeName,
+                          arguments: alias,
+                        );
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+            error: (error, stackTrace) {
               return Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(20),
-                child: const Text('It is empty out here!'),
+                child: Text(error.toString()),
               );
-
-            default:
-              if (resultsList.isEmpty) {
-                return Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(20),
-                  child: const Text('Tap Search for a full search'),
-                );
-              } else {
-                return PlatformScrollbar(
-                  child: ListView.builder(
-                    itemCount: resultsList.length,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final alias = resultsList[index];
-                      return InkWell(
-                        child: IgnorePointer(
-                          child: AliasListTile(alias: alias),
-                        ),
-                        onTap: () {
-                          /// Dismisses keyboard
-                          FocusScope.of(context).requestFocus(FocusNode());
-
-                          /// Add selected Alias to Search History
-                          ref
-                              .read(searchHistoryStateNotifier.notifier)
-                              .addAliasToSearchHistory(alias);
-
-                          /// Navigate to Alias Screen
-                          Navigator.pushNamed(
-                            context,
-                            AliasScreen.routeName,
-                            arguments: alias,
-                          );
-                        },
-                      );
-                    },
-                  ),
-                );
-              }
-          }
+            },
+            loading: () {
+              return Container(
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.all(20),
+                child: const PlatformLoadingIndicator(),
+              );
+            },
+          );
         },
       ),
     );
   }
-
-  static Widget? closeIcon(
-      BuildContext context, WidgetRef ref, bool showCloseIcon) {
-    if (showCloseIcon) {
-      return IconButton(
-        icon: const Icon(Icons.close, color: Colors.white),
-        onPressed: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-          ref.read(searchResultStateNotifier.notifier).closeSearch();
-        },
-      );
-    }
-    return null;
-  }
 }
 
-class SearchAppBar extends AppBar {
-  SearchAppBar({
+class _SearchAppBar extends AppBar {
+  _SearchAppBar({
     Key? key,
-    required this.title,
+    required this.inputField,
     required Function() leadingOnPress,
+    required Widget trailing,
   }) : super(
           key: key,
-          title: title,
+          title: inputField,
+          elevation: 0,
           leading: IconButton(
             icon: Icon(
               PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,
@@ -151,7 +151,8 @@ class SearchAppBar extends AppBar {
             color: Colors.white,
             onPressed: leadingOnPress,
           ),
+          actions: [trailing],
         );
 
-  final Widget title;
+  final Widget inputField;
 }
