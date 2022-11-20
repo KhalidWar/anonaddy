@@ -4,7 +4,7 @@ class AppStrings {
   static const appName = 'AddyManager';
   static const accountBotNavLabel = 'Account';
   static const aliasesBotNavLabel = 'Aliases';
-  static const searchBotNavLabel = 'Search';
+  static const searchBotNavLabel = 'History';
 
   /// Account Tab
   static const monthlyBandwidth = 'Monthly Bandwidth';
