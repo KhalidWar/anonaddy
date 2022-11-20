@@ -86,6 +86,7 @@ class AppStrings {
   static const enrollRulesBetaTesting = 'Enroll in Rules BETA testing';
 
   /// Search Tab
+  static const quickSearch = 'Quick Search';
   static const searchAliasByEmailOrDesc =
       'Search for aliases by email or description';
   static const searchFieldHint = 'Search';
