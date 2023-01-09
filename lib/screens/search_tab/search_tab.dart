@@ -6,11 +6,24 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scrol
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SearchTab extends ConsumerWidget {
-  const SearchTab({Key? key}) : super(key: key);
+class SearchTab extends ConsumerStatefulWidget {
+  const SearchTab({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _SearchTabState();
+}
+
+class _SearchTabState extends ConsumerState<SearchTab> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(searchHistoryStateNotifier.notifier).initSearchHistory();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
