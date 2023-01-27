@@ -22,7 +22,7 @@ class AliasListTile extends StatelessWidget {
 
     return InkWell(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+        padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
         child: Row(
           children: [
             AliasListTileLeading(
