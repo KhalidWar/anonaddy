@@ -27,7 +27,8 @@ class AliasService {
   Future<List<Alias>> fetchAvailableAliases() async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
-      final response = await dio.get(path);
+      final params = {'with': 'recipients'};
+      final response = await dio.get(path, queryParameters: params);
       log('fetchAvailableAliases: ${response.statusCode}');
       final aliases = response.data['data'] as List;
       dataStorage.saveAliases(aliases: aliases, isAvailableAliases: true);
@@ -46,7 +47,7 @@ class AliasService {
   Future<List<Alias>> fetchDeletedAliases() async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
-      final params = {'deleted': 'only'};
+      final params = {'deleted': 'only', 'with': 'recipients'};
       final response = await dio.get(path, queryParameters: params);
       log('fetchDeletedAliases: ${response.statusCode}');
       final aliases = response.data['data'] as List;
