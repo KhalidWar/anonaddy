@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:dio/dio.dart';
@@ -24,28 +27,40 @@ class QuickSearchNotifier extends StateNotifier<AsyncValue<List<Alias>?>> {
 
   final SearchService searchService;
   CancelToken cancelToken;
+  Timer? timer;
 
   Future<void> search(String keyword) async {
     if (!mounted) return;
     if (keyword.length >= 3) {
-      if (cancelToken.isCancelled) {
-        cancelToken = CancelToken();
-      }
+      await _debounceSearch(() async {
+        log('keyword: $keyword');
+        if (cancelToken.isCancelled) {
+          cancelToken = CancelToken();
+          return;
+        }
 
-      state = const AsyncValue.loading();
-      state = await AsyncValue.guard(() {
-        return searchService.searchAliases(keyword.trim(), cancelToken);
+        state = const AsyncValue.loading();
+        state = await AsyncValue.guard(() {
+          return searchService.searchAliases(keyword.trim(), cancelToken);
+        });
       });
     }
   }
 
   void cancelSearch() {
-    cancelToken.cancel();
+    if (cancelToken.isCancelled) cancelToken = CancelToken();
+    cancelToken.cancel('Search cancelled');
   }
 
   void resetSearch() {
     if (!mounted) return;
-    cancelToken.cancel('Search cancelled');
+    cancelSearch();
     state = const AsyncData(null);
+  }
+
+  Future<void> _debounceSearch(Function() callBack) async {
+    const duration = Duration(milliseconds: 500);
+    timer?.cancel();
+    timer = Timer(duration, callBack);
   }
 }
