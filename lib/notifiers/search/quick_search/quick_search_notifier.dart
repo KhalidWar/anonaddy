@@ -32,12 +32,12 @@ class QuickSearchNotifier extends StateNotifier<AsyncValue<List<Alias>?>> {
   Future<void> search(String keyword) async {
     if (!mounted) return;
     if (keyword.length >= 3) {
+      if (cancelToken.isCancelled) {
+        cancelToken = CancelToken();
+      }
+
       await _debounceSearch(() async {
         log('keyword: $keyword');
-        if (cancelToken.isCancelled) {
-          cancelToken = CancelToken();
-          return;
-        }
 
         state = const AsyncValue.loading();
         state = await AsyncValue.guard(() {
