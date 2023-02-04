@@ -104,15 +104,11 @@ class ChangelogWidget extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
             header('Fixed', Colors.blue),
-            label('1. Fixed offline data caching.'),
-            label('1. Fixed several UI bug.'),
+            label('1. Fixed minor functionality bugs.'),
+            label('1. Fixed several UI bugs.'),
 
             header('Improved', Colors.orange),
-            label('1. Overhauled Offline data caching mechanism.'),
-            label('2. Improved date and time format.'),
-            label('3. Improved error messages.'),
-            label('4. Several under the hood improvements.'),
-            label('5. Too many improvements to list.'),
+            label('1. Overhauled Search functionality.'),
             // label('2. Fixed self-hosted recipient/username count errors.'),
             // SizedBox(height: size.height * 0.008),
             // header('Added', Colors.green),
