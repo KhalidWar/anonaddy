@@ -7,9 +7,8 @@ import 'package:anonaddy/screens/account_tab/usernames/username_list_tile.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
@@ -102,11 +101,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
         );
 
       case UsernamesStatus.failed:
-        return LottieWidget(
-          lottie: LottieImages.errorCone,
-          lottieHeight: MediaQuery.of(context).size.height * 0.1,
-          label: usernameState.errorMessage,
-        );
+        return ErrorMessageWidget(message: usernameState.errorMessage);
     }
   }
 }

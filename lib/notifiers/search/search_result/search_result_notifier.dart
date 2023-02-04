@@ -2,7 +2,6 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/search/search_result/search_result_state.dart';
 import 'package:anonaddy/services/search/search_service.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,8 +42,8 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
       final searchKeyword = state.searchController!.text.trim();
 
       /// Fetches matching aliases from AnonAddy servers
-      final matchingAliases = await searchService.searchAliases(
-          searchKeyword, state.includeDeleted!);
+      final matchingAliases =
+          await searchService.searchAliases(searchKeyword, null);
 
       /// Structure new state
       final newState = state.copyWith(
@@ -53,10 +52,9 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
       /// Trigger a UI update with the new state
       _updateState(newState);
     } catch (error) {
-      final dioError = error as DioError;
       final newState = state.copyWith(
         status: SearchResultStatus.failed,
-        errorMessage: dioError.message,
+        errorMessage: error.toString(),
       );
       _updateState(newState);
     }

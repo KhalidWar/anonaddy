@@ -1,6 +1,5 @@
 import 'package:anonaddy/notifiers/usernames/usernames_tab_state.dart';
 import 'package:anonaddy/services/username/username_service.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernameStateNotifier =
@@ -34,7 +33,7 @@ class UsernamesNotifier extends StateNotifier<UsernamesTabState> {
     } catch (error) {
       _updateState(state.copyWith(
         status: UsernamesStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
+        errorMessage: error.toString(),
       ));
       await _retryOnError();
     }

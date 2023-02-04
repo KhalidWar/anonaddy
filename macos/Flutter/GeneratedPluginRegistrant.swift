@@ -7,7 +7,7 @@ import Foundation
 
 import flutter_secure_storage_macos
 import macos_ui
-import package_info_plus_macos
+import package_info_plus
 import path_provider_macos
 import url_launcher_macos
 

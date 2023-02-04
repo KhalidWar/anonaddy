@@ -1,10 +1,9 @@
+import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/screens/alert_center/components/failed_delivery_list_tile.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,10 +63,7 @@ class _FailedDeliveriesWidgetState
               );
       },
       error: (error, _) {
-        return LottieWidget(
-          lottie: LottieImages.errorCone,
-          label: error.toString(),
-        );
+        return ErrorMessageWidget(message: error.toString());
       },
       loading: () => const Center(child: PlatformLoadingIndicator()),
     );

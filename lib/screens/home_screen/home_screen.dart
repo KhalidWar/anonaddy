@@ -1,12 +1,3 @@
-import 'package:anonaddy/screens/account_tab/account_tab.dart';
-import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
-import 'package:anonaddy/screens/home_screen/components/alert_center_icon.dart';
-import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';
-import 'package:anonaddy/screens/home_screen/components/create_alias_fab.dart';
-import 'package:anonaddy/screens/search_tab/search_tab.dart';
-import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
-import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
@@ -14,6 +5,16 @@ import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
+import 'package:anonaddy/screens/account_tab/account_tab.dart';
+import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
+import 'package:anonaddy/screens/home_screen/components/alert_center_icon.dart';
+import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';
+import 'package:anonaddy/screens/home_screen/components/create_alias_fab.dart';
+import 'package:anonaddy/screens/search_tab/quick_search_screen.dart';
+import 'package:anonaddy/screens/search_tab/search_tab.dart';
+import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
+import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -93,17 +94,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         centerTitle: true,
         leading: const AlertCenterIcon(),
         actions: [
-          // IconButton(
-          //   key: const Key('homeScreenQuickSearchTrailing'),
-          //   tooltip: AppStrings.settings,
-          //   icon: const Icon(
-          //     Icons.search,
-          //     color: Colors.white,
-          //   ),
-          //   onPressed: () {
-          //     Navigator.pushNamed(context, QuickSearchScreen.routeName);
-          //   },
-          // ),
+          IconButton(
+            key: const Key('homeScreenQuickSearchTrailing'),
+            tooltip: AppStrings.quickSearch,
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, QuickSearchScreen.routeName);
+            },
+          ),
           IconButton(
             key: const Key('homeScreenAppBarTrailing'),
             tooltip: AppStrings.settings,

@@ -1,9 +1,8 @@
+import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,8 +11,6 @@ class NavigationErrorScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Navigation Error')),
       body: Container(
@@ -21,15 +18,13 @@ class NavigationErrorScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Expanded(
-              child: LottieWidget(
-                lottie: LottieImages.errorCone,
-                lottieHeight: size.height * 0.25,
-                label: AppStrings.navigationErrorMessage,
+            const Expanded(
+              child: ErrorMessageWidget(
+                message: AppStrings.navigationErrorMessage,
               ),
             ),
             Text(
-              'If problem persists, please log out, close app, and log back in',
+              'If problem persists, please log out, and log back in',
               style: Theme.of(context).textTheme.caption,
               textAlign: TextAlign.center,
             ),
@@ -39,25 +34,24 @@ class NavigationErrorScreen extends ConsumerWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.red),
                 child: const Text('logout'),
-                onPressed: () => logout(context, ref),
+                onPressed: () {
+                  PlatformAware.platformDialog(
+                    context: context,
+                    child: PlatformAlertDialog(
+                      title: 'Logout',
+                      content: AppStrings.logOutAlertDialog,
+                      method: () async {
+                        await ref
+                            .read(authStateNotifier.notifier)
+                            .logout(context);
+                      },
+                    ),
+                  );
+                },
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Future logout(BuildContext context, WidgetRef ref) async {
-    /// Show platform dialog
-    PlatformAware.platformDialog(
-      context: context,
-      child: PlatformAlertDialog(
-        title: 'Logout',
-        content: AppStrings.logOutAlertDialog,
-        method: () async {
-          await ref.read(authStateNotifier.notifier).logout(context);
-        },
       ),
     );
   }

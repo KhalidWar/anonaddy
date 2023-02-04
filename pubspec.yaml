@@ -19,7 +19,7 @@ dependencies:
 
   # UI Components
   flutter_svg: ^1.0.3
-  lottie: ^1.0.1
+  lottie: ^2.0.0
   animations: ^2.0.0
   shimmer: ^2.0.0
   fluttertoast: ^8.0.8
@@ -37,10 +37,10 @@ dependencies:
 
   # Security
   secure_application: ^3.8.0
-  local_auth: ^1.1.4
+  local_auth: ^2.1.2
 
   # State Management
-  flutter_riverpod: ^1.0.3
+  flutter_riverpod: ^2.1.1
   flutter_phoenix: ^1.0.0
 
   # Data Modeling
@@ -51,8 +51,8 @@ dependencies:
   mocktail: ^0.3.0
 
   # App Package
-  package_info_plus: ^1.4.2
-  flutter_native_splash: ^2.1.6
+  package_info_plus: ^3.0.1
+  flutter_native_splash: ^2.2.14
 
   # Platform UI
   macos_ui: ^1.4.1+1

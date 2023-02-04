@@ -7,8 +7,7 @@ import 'package:anonaddy/screens/account_tab/domains/components/domain_list_tile
 import 'package:anonaddy/screens/account_tab/domains/components/empty_domain_tile.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
@@ -94,11 +93,8 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
         );
 
       case DomainsTabStatus.failed:
-        final error = domainsState.errorMessage;
-        return LottieWidget(
-          lottie: LottieImages.errorCone,
-          lottieHeight: MediaQuery.of(context).size.height * 0.1,
-          label: error.toString(),
+        return ErrorMessageWidget(
+          message: domainsState.errorMessage,
         );
     }
   }

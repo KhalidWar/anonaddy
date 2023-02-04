@@ -8,6 +8,7 @@ import 'package:anonaddy/screens/alias_tab/components/send_from_widget.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
@@ -296,11 +297,9 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               );
 
             case AliasScreenStatus.failed:
-              final error = aliasState.errorMessage;
-              return LottieWidget(
+              return ErrorMessageWidget(
                 key: AliasTabWidgetKeys.aliasScreenLottieWidget,
-                lottie: LottieImages.errorCone,
-                label: error,
+                message: aliasState.errorMessage,
               );
           }
         },

@@ -32,13 +32,13 @@ void main() async {
     Widget aliasScreen(AliasScreenState initialState) {
       return ProviderScope(
         overrides: [
-          aliasScreenStateNotifier.overrideWithValue(
-            AliasScreenNotifier(
+          aliasScreenStateNotifier.overrideWith((_) {
+            return AliasScreenNotifier(
               aliasService: mockAliasService,
               aliasTabNotifier: mockAliasTabNotifier,
               initialState: initialState,
-            ),
-          ),
+            );
+          }),
         ],
         child: MaterialApp(
           home: AliasScreen(

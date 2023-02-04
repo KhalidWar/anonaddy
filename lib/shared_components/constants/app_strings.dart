@@ -4,7 +4,7 @@ class AppStrings {
   static const appName = 'AddyManager';
   static const accountBotNavLabel = 'Account';
   static const aliasesBotNavLabel = 'Aliases';
-  static const searchBotNavLabel = 'Search';
+  static const searchBotNavLabel = 'History';
 
   /// Account Tab
   static const monthlyBandwidth = 'Monthly Bandwidth';
@@ -86,6 +86,7 @@ class AppStrings {
   static const enrollRulesBetaTesting = 'Enroll in Rules BETA testing';
 
   /// Search Tab
+  static const quickSearch = 'Quick Search';
   static const searchAliasByEmailOrDesc =
       'Search for aliases by email or description';
   static const searchFieldHint = 'Search';

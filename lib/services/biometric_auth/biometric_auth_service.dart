@@ -39,8 +39,6 @@ class BiometricAuthService {
     try {
       return await localAuth.authenticate(
         localizedReason: ToastMessage.authToProceed,
-        useErrorDialogs: true,
-        stickyAuth: true,
       );
     } on PlatformException catch (e) {
       log('BiometricAuthService _authenticate: ${e.toString()}');

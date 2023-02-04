@@ -5,13 +5,12 @@ import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.da
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
+import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
-import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -53,10 +52,8 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
               return buildListView(context, domainProvider);
 
             case DomainsScreenStatus.failed:
-              final error = domainProvider.errorMessage;
-              return LottieWidget(
-                lottie: LottieImages.errorCone,
-                label: error,
+              return ErrorMessageWidget(
+                message: domainProvider.errorMessage,
               );
           }
         },

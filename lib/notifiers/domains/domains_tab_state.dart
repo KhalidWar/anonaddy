@@ -11,7 +11,7 @@ class DomainsTabState {
 
   final DomainsTabStatus status;
   final List<Domain> domains;
-  final String? errorMessage;
+  final String errorMessage;
 
   static DomainsTabState initialState() {
     return const DomainsTabState(

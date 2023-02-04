@@ -21,7 +21,7 @@ class FailedDeliveryNotifier
       final deliveries = await deliveriesService.getFailedDeliveries();
       state = AsyncData(deliveries);
     } catch (error) {
-      state = AsyncError(error.toString());
+      state = AsyncError(error.toString(), StackTrace.current);
     }
   }
 
@@ -30,7 +30,7 @@ class FailedDeliveryNotifier
       await deliveriesService.deleteFailedDelivery(id);
       await getFailedDeliveries();
     } catch (error) {
-      state = AsyncError(error.toString());
+      state = AsyncError(error.toString(), StackTrace.current);
     }
   }
 }

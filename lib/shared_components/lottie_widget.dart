@@ -42,7 +42,7 @@ class LottieWidget extends StatelessWidget {
                 child: Lottie.asset(
                   lottie!,
                   height: lottieHeight,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.contain,
                   repeat: repeat ?? false,
                 ),
               ),
