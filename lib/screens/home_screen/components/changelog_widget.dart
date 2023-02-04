@@ -50,16 +50,18 @@ class ChangelogWidget extends ConsumerWidget {
             const SizedBox(height: 10),
             const Divider(height: 0),
             buildBody(context, controller),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(),
-                child: const Text('Continue to AddyManager'),
-                onPressed: () {
-                  ref.read(settingsStateNotifier.notifier).dismissChangelog();
-                  Navigator.pop(context);
-                },
+            SafeArea(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(),
+                  child: const Text('Continue to AddyManager'),
+                  onPressed: () {
+                    ref.read(settingsStateNotifier.notifier).dismissChangelog();
+                    Navigator.pop(context);
+                  },
+                ),
               ),
             ),
           ],
