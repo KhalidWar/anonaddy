@@ -24,7 +24,7 @@ dependencies:
   shimmer: ^2.0.0
   fluttertoast: ^8.0.8
   fl_chart: ^0.55.1
-  modal_bottom_sheet: ^2.0.0
+  modal_bottom_sheet: ^3.0.0-pre
 
   # Internet Connectivity
   dio: ^4.0.4
@@ -55,7 +55,7 @@ dependencies:
   flutter_native_splash: ^2.2.14
 
   # Platform UI
-  macos_ui: ^1.4.1+1
+  macos_ui: ^1.12.2
 
 dev_dependencies:
   flutter_test:

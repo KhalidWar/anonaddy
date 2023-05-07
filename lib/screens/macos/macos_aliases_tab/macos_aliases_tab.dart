@@ -47,8 +47,8 @@ class _MacosAliasesTabState extends State<MacosAliasesTab> {
           ),
           children: [
             ResizablePane(
-              minWidth: 150,
-              startWidth: 200,
+              minSize: 150,
+              startSize: 200,
               resizableSide: ResizableSide.right,
               builder: (context, controller) {
                 return Column(

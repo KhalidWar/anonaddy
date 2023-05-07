@@ -49,6 +49,9 @@ class _MacosAccountTabState extends State<MacosAccountTab> {
           ),
           children: [
             ResizablePane(
+              minSize: 150,
+              startSize: 200,
+              resizableSide: ResizableSide.right,
               builder: (context, controller) {
                 return Column(
                   children: [
@@ -83,9 +86,6 @@ class _MacosAccountTabState extends State<MacosAccountTab> {
                   ],
                 );
               },
-              minWidth: 150,
-              resizableSide: ResizableSide.right,
-              startWidth: 200,
             ),
             ContentArea(
               builder: (context, scrollController) {
