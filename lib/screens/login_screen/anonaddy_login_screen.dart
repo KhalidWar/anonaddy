@@ -1,3 +1,4 @@
+import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/screens/login_screen/components/access_token_info.dart';
 import 'package:anonaddy/screens/login_screen/components/label_input_field_separator.dart';
 import 'package:anonaddy/screens/login_screen/components/login_card.dart';
@@ -7,9 +8,9 @@ import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AnonAddyLoginScreen extends ConsumerStatefulWidget {
@@ -38,7 +39,10 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
         key: const Key('loginScreenScaffold'),
-        appBar: AppBar(elevation: 0, brightness: Brightness.dark),
+        appBar: AppBar(
+          elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
         backgroundColor: AppColors.primaryColor,
         body: Center(
           child: SingleChildScrollView(
@@ -100,13 +104,8 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
               keyboardType: TextInputType.multiline,
               minLines: 6,
               maxLines: 7,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-                border: const OutlineInputBorder(),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: AppStrings.enterAccessToken,
               ),
             ),
