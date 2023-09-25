@@ -21,7 +21,7 @@ class AccountTabHeader extends ConsumerStatefulWidget {
 }
 
 class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
-  /// AnonAddy instances always have a [bandwidthLimit] value.
+  /// addy.io instances always have a [bandwidthLimit] value.
   /// If unlimited, it's "0". If not, it's an int.
   ///
   /// Self hosted instances do NOT have any [bandwidthLimit] value.
@@ -39,7 +39,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
     }
   }
 
-  /// AnonAddy instances' [recipientLimit] is not unlimited.
+  /// addy.io instances' [recipientLimit] is not unlimited.
   /// It always returns an int value representing the max [recipientLimit].
   ///
   /// Self hosted instances' [recipientLimit] are unlimited.
@@ -51,7 +51,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
         : '${account.recipientCount} out of ${account.recipientLimit}';
   }
 
-  /// AnonAddy instances' [usernameLimit] is not unlimited.
+  /// addy.io instances' [usernameLimit] is not unlimited.
   /// It always returns an int value representing the max [usernameLimit].
   /// [Username] is a paid feature NOT available for "free" users.
   /// Free users have a [usernameLimit] of "0".

@@ -148,7 +148,7 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   Future<void> sendFromAlias(String destinationEmail) async {
     try {
-      /// https://anonaddy.com/help/sending-email-from-an-alias/
+      /// https://addy.io/help/sending-email-from-an-alias/
       final leftPartOfAlias = state.alias.email.split('@')[0];
       final rightPartOfAlias = state.alias.email.split('@')[1];
       final recipientEmail = destinationEmail.replaceAll('@', '=');

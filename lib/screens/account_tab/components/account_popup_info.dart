@@ -18,12 +18,12 @@ class AccountPopupInfo extends ConsumerWidget {
       return AppStrings.subscriptionEndDateDoesNotExpire;
     }
 
-    /// AnonAddy free subscriptions do NOT expire.
+    /// addy.io free subscriptions do NOT expire.
     if (accountState.isSubscriptionFree) {
       return AppStrings.subscriptionEndDateDoesNotExpire;
     }
 
-    /// AnonAddy Lite and Pro subscriptions do expire.
+    /// addy.io Lite and Pro subscriptions do expire.
     return accountState.account.subscriptionEndAt.isEmpty
         ? AppStrings.subscriptionEndDateNotAvailable
         : Utilities.formatDateTime(context, accountState.account.createdAt);

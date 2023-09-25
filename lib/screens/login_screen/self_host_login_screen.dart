@@ -61,7 +61,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'AnonAddy Instance',
+                          'addy.io Instance',
                           key: const Key('selfHostedLoginScreenUrlInputLabel'),
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
@@ -144,14 +144,14 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                       TextButton(
                         key: const Key(
                             'selfHostedLoginScreenSelfHostInfoButton'),
-                        child: const Text('How to self-host AnonAddy?'),
+                        child: const Text('How to self-host addy.io?'),
                         onPressed: () =>
                             Utilities.launchURL(kAnonAddySelfHostingURL),
                       ),
                       TextButton(
                         key: const Key(
                             'selfHostedLoginScreenAnonAddyLoginButton'),
-                        child: const Text('Login with AnonAddy instead!'),
+                        child: const Text('Login with addy.io instead!'),
                         onPressed: () => ref
                             .read(authStateNotifier.notifier)
                             .goToAnonAddyLogin(),

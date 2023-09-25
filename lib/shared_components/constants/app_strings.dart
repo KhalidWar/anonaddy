@@ -108,11 +108,11 @@ class AppStrings {
   static const settingsBiometricAuth = 'Biometric Authentication';
   static const settingsBiometricAuthSubtitle =
       'Require biometric authentication';
-  static const settingsAnonAddyHelpCenter = 'AnonAddy Help Center';
+  static const settingsAnonAddyHelpCenter = 'addy.io Help Center';
   static const settingsAnonAddyHelpCenterSubtitle =
-      'AnonAddy\'s terminologies...etc.';
-  static const settingsAnonAddyFAQ = 'AnonAddy FAQ';
-  static const settingsAnonAddyFAQSubtitle = 'Learn more about AnonAddy';
+      'addy.io\'s terminologies...etc.';
+  static const settingsAnonAddyFAQ = 'addy.io FAQ';
+  static const settingsAnonAddyFAQSubtitle = 'Learn more about addy.io';
   static const settingsAboutApp = 'About App';
   static const settingsAboutAppSubtitle = 'View AddyManager details';
   static const settingsEnjoyingApp = 'Enjoying AddyManager?';
@@ -128,7 +128,7 @@ class AppStrings {
       'One central location for your account alerts and notifications.';
   static const failedDeliveries = 'Failed deliveries';
   static const failedDeliveriesNote =
-      'Sometimes when AnonAddy attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
+      'Sometimes when addy.io attempts to send an email, the delivery is not successful. This is often referred to as a "bounced email".';
 
   /// Login Screen
   static const enterAccessToken = 'Enter Access Token';
@@ -136,9 +136,9 @@ class AppStrings {
   static const accessTokenDefinition =
       'Access Token is a long string of alphanumeric characters used to access an account without giving away the account\'s username and password.';
   static const accessTokenRequired =
-      'To access your AnonAddy account, you\'ll have to provide your own Access Token.';
+      'To access your addy.io account, you\'ll have to provide your own Access Token.';
   static const howToGetAccessToken = 'How to get Access Token?';
-  static const howToGetAccessToken1 = '1. Login to your AnonAddy account';
+  static const howToGetAccessToken1 = '1. Login to your addy.io account';
   static const howToGetAccessToken2 = '2. Go to Settings';
   static const howToGetAccessToken3 = '3. Scroll down to API section';
   static const howToGetAccessToken4 = '4. Click on Generate New Token';

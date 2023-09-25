@@ -8,7 +8,7 @@ part 'profile.g.dart';
 /// For more info: https://docs.hivedb.dev/#/custom-objects/generate_adapter
 @HiveType(typeId: HiveTypeId.profile)
 
-/// This Object represents accounts on AnonAddy or self hosted instances.
+/// This Object represents accounts on addy.io or self hosted instances.
 class Profile extends HiveObject {
   Profile({required this.instanceUrl, required this.accessToken});
 
