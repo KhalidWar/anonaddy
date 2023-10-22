@@ -1,6 +1,6 @@
+import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +11,7 @@ void main() {
   Widget loadingScreen() {
     return ProviderScope(
       overrides: [
-        authStateNotifier.overrideWithProvider(testFailedAuthStateNotifier),
+        authStateNotifier.overrideWithProvider(testAuthStateNotifier),
       ],
       child: const MaterialApp(
         home: LoadingScreen(),

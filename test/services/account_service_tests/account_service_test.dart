@@ -1,24 +1,18 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/account/account_service.dart';
-import 'package:anonaddy/services/data_storage/account_data_storage.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
+import '../../mocks.dart';
 import '../../test_data/account_test_data.dart';
 
-class _MockDio extends Mock implements Dio {}
-
-class _MockAccountDataStorage extends Mock implements AccountDataStorage {}
-
 void main() async {
-  late _MockDio mockDio;
-  late _MockAccountDataStorage mockAccountDataStorage;
+  late MockDio mockDio;
+  late MockAccountDataStorage mockAccountDataStorage;
   late AccountService accountService;
 
   setUp(() {
-    mockDio = _MockDio();
-    mockAccountDataStorage = _MockAccountDataStorage();
+    mockDio = MockDio();
+    mockAccountDataStorage = MockAccountDataStorage();
     accountService = AccountService(
       dio: mockDio,
       accountDataStorage: mockAccountDataStorage,
@@ -34,15 +28,15 @@ void main() async {
       final testAccount =
           Account.fromJson(AccountTestData.validAccountJson['data']);
 
-      when(() => mockAccountDataStorage.saveData(any()))
-          .thenAnswer((_) async {});
-
-      when(() => mockDio.get(any())).thenAnswer(
-        (_) async => Response(
-          data: AccountTestData.validAccountJson,
-          requestOptions: RequestOptions(path: ''),
-        ),
-      );
+      // when(() => mockAccountDataStorage.saveData(any()))
+      //     .thenAnswer((_) async {});
+      //
+      // when(() => mockDio.get(any())).thenAnswer(
+      //   (_) async => Response(
+      //     data: AccountTestData.validAccountJson,
+      //     requestOptions: RequestOptions(path: ''),
+      //   ),
+      // );
 
       // Act
       final account = await accountService.fetchAccount();
@@ -60,20 +54,20 @@ void main() async {
         'And is set up to throw an 429 DioError, '
         'Then throw an error.', () async {
       // Arrange
-      when(() => mockAccountDataStorage.saveData(any()))
-          .thenAnswer((_) async {});
+      // when(() => mockAccountDataStorage.saveData(any()))
+      //     .thenAnswer((_) async {});
+      //
+      // when(() => mockAccountDataStorage.loadData()).thenAnswer(
+      //   (_) async => AccountTestData.validAccount(),
+      // );
 
-      when(() => mockAccountDataStorage.loadData()).thenAnswer(
-        (_) async => AccountTestData.validAccount(),
-      );
-
-      when(() => mockDio.get(any())).thenThrow(
-        DioError(
-          type: DioErrorType.response,
-          error: 'Error',
-          requestOptions: RequestOptions(path: ''),
-        ),
-      );
+      // when(() => mockDio.get(any())).thenThrow(
+      //   DioError(
+      //     type: DioErrorType.response,
+      //     error: 'Error',
+      //     requestOptions: RequestOptions(path: ''),
+      //   ),
+      // );
 
       // final test = await accountService.fetchAccount();
 

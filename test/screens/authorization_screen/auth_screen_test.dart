@@ -1,8 +1,8 @@
-import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
-import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/notifiers/authorization/auth_state.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
+import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
+import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -29,7 +29,7 @@ void main() {
     'Then display LoadingScreen.',
     (WidgetTester tester) async {
       // Arrange
-      await tester.pumpWidget(authScreen(testFailedAuthStateNotifier));
+      await tester.pumpWidget(authScreen(testAuthStateNotifier));
 
       // Act
       final loadingScreen =
@@ -46,7 +46,7 @@ void main() {
     'Then display AnonAddyLoginScreen.',
     (WidgetTester tester) async {
       // Arrange
-      await tester.pumpWidget(authScreen(testFailedAuthStateNotifier));
+      await tester.pumpWidget(authScreen(testAuthStateNotifier));
       await tester.pumpAndSettle();
 
       // Act
@@ -68,7 +68,7 @@ void main() {
     'Then display HomeScreen.',
     (WidgetTester tester) async {
       // Arrange
-      await tester.pumpWidget(authScreen(testSuccessAuthStateNotifier));
+      await tester.pumpWidget(authScreen(testAuthStateNotifier));
       // await tester.pumpAndSettle();
 
       // Act

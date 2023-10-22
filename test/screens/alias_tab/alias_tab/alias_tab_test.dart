@@ -3,7 +3,6 @@ import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_state.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
-import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mocks.dart';
 import '../../../test_data/alias_test_data.dart';
 
-class _MockAliasService extends Mock implements AliasService {}
-
 void main() {
-  late _MockAliasService mockAliasService;
+  late MockAliasService mockAliasService;
 
   setUp(() {
-    mockAliasService = _MockAliasService();
+    mockAliasService = MockAliasService();
   });
 
   Widget aliasTab(AliasTabState aliasTabState) {
@@ -53,13 +51,13 @@ void main() {
       final availableAlias = AliasTestData.validAliasWithRecipients();
 
       when(() => mockAliasService.fetchAvailableAliases()).thenAnswer(
-        (_) async => Future.value([availableAlias, availableAlias]),
-      );
+          (_) async => Future.value([availableAlias, availableAlias]));
+
       when(() => mockAliasService.fetchDeletedAliases()).thenAnswer(
-        (_) async {
+        (_) {
           final deletedAlias =
               availableAlias.copyWith(deletedAt: '2022-02-22 18:08:15');
-          return [deletedAlias, deletedAlias];
+          return Future.value([deletedAlias, deletedAlias]);
         },
       );
 

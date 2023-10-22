@@ -3,22 +3,18 @@ import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/screens/account_tab/components/account_tab_header.dart';
 import 'package:anonaddy/screens/account_tab/components/account_tab_widget_keys.dart';
-import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../test_data/account_test_data.dart';
-
-class _MockAccountService extends Mock implements AccountService {}
+import '../../mocks.dart';
 
 void main() {
-  late _MockAccountService accountService;
+  late MockAccountService accountService;
 
   setUp(() {
-    accountService = _MockAccountService();
+    accountService = MockAccountService();
   });
 
   Widget accountTab(AccountState initialState) {
@@ -48,10 +44,10 @@ void main() {
       errorMessage: '',
     );
 
-    when(() => accountService.loadAccountFromDisk())
-        .thenAnswer((_) async => AccountTestData.validAccount());
-    when(() => accountService.fetchAccount())
-        .thenAnswer((_) async => AccountTestData.validAccount());
+    // when(() => accountService.loadAccountFromDisk())
+    //     .thenAnswer((_) async => AccountTestData.validAccount());
+    // when(() => accountService.fetchAccount())
+    //     .thenAnswer((_) async => AccountTestData.validAccount());
 
     await tester.pumpWidget(accountTab(initialState));
 
@@ -86,10 +82,10 @@ void main() {
     //   errorMessage: '',
     // );
 
-    when(() => accountService.loadAccountFromDisk())
-        .thenAnswer((_) async => AccountTestData.validAccount());
-    when(() => accountService.fetchAccount())
-        .thenAnswer((_) async => AccountTestData.validAccount());
+    // when(() => accountService.loadAccountFromDisk())
+    //     .thenAnswer((_) async => AccountTestData.validAccount());
+    // when(() => accountService.fetchAccount())
+    //     .thenAnswer((_) async => AccountTestData.validAccount());
 
     // await tester.pumpWidget(accountTab(initialState));
 
@@ -124,10 +120,10 @@ void main() {
       errorMessage: '',
     );
 
-    when(() => accountService.loadAccountFromDisk())
-        .thenAnswer((_) async => AccountTestData.validAccount());
-    when(() => accountService.fetchAccount())
-        .thenAnswer((_) async => AccountTestData.validAccount());
+    // when(() => accountService.loadAccountFromDisk())
+    //     .thenAnswer((_) async => AccountTestData.validAccount());
+    // when(() => accountService.fetchAccount())
+    //     .thenAnswer((_) async => AccountTestData.validAccount());
 
     await tester.pumpWidget(accountTab(initialState));
 

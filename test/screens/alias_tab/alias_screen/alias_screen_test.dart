@@ -1,31 +1,25 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
-import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
+import '../../../mocks.dart';
 import '../../../test_data/alias_test_data.dart';
-
-class _MockAliasService extends Mock implements AliasService {}
-
-class _MockAliasTabNotifier extends Mock implements AliasTabNotifier {}
 
 /// Widget test for [AliasScreen]
 void main() async {
-  late _MockAliasService mockAliasService;
-  late _MockAliasTabNotifier mockAliasTabNotifier;
+  late MockAliasService mockAliasService;
+  late MockAliasTabNotifier mockAliasTabNotifier;
 
   setUp(() {
-    mockAliasService = _MockAliasService();
-    mockAliasTabNotifier = _MockAliasTabNotifier();
+    mockAliasService = MockAliasService();
+    mockAliasTabNotifier = MockAliasTabNotifier();
   });
 
   group('AliasScreen loading, loaded, and failed states tests', () {

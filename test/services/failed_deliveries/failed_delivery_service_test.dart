@@ -2,8 +2,10 @@ import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
 import 'package:anonaddy/services/failed_delivery/failed_delivery_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'mock_dio.dart';
+import '../../mocks.dart';
+import 'dummy_failed_deliveries_data.dart';
 
 void main() async {
   late MockDio mockDio;
@@ -18,16 +20,19 @@ void main() async {
       'Given deliveriesService and dio are up and running, '
       'When deliveriesService.getFailedDeliveries() is called, '
       'Then future completes and returns obtain a deliveries list.', () async {
-    // Arrange
-    const path = 'path';
+    when(() => mockDio.get(any())).thenAnswer((_) => Future.value(
+          Response(
+            statusCode: 200,
+            data: dummyFailedDeliveriesData,
+            // (dummyFailedDeliveriesData['data'] as List).map((delivery) {
+            //   return FailedDelivery.fromJson(delivery);
+            // }).toList(),
+            requestOptions: RequestOptions(path: any(named: 'path')),
+          ),
+        ));
 
     // Act
-    final dioGet = mockDio.get(path);
     final deliveries = await deliveriesService.getFailedDeliveries();
-
-    // Assert
-    expectLater(dioGet, completes);
-    expect(await dioGet, isA<Response>());
 
     expect(deliveries, isA<List<FailedDelivery>>());
     expect(deliveries.length, 2);

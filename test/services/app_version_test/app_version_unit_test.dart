@@ -3,7 +3,7 @@ import 'package:anonaddy/services/app_version/app_version_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'mock_dio.dart';
+import '../../mocks.dart';
 
 void main() async {
   late MockDio mockDio;

@@ -1,105 +1,25 @@
-import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:anonaddy/notifiers/authorization/auth_state.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_state.dart';
-import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
-import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
-import 'package:anonaddy/services/domain_options/domain_options_service.dart';
-import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mockito/mockito.dart';
+
+import '../../mocks.dart';
 
 /// Mocks a successful login [AuthorizationStatus.unknown]
-final testFailedAuthStateNotifier =
+final testAuthStateNotifier =
     StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
-    secureStorage: _MockSecureStorage(),
-    biometricService: _MockBiometricService(),
-    tokenService: _MockFailedAccessTokenService(),
-    searchHistory: _MockSearchHistoryNotifier(),
-  );
-});
-
-/// Mocks a successful login [AuthorizationStatus.authorized]
-final testSuccessAuthStateNotifier =
-    StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier(
-    secureStorage: _MockSecureStorage(),
-    biometricService: _MockBiometricService(),
-    tokenService: _MockSuccessAccessTokenService(),
-    searchHistory: _MockSearchHistoryNotifier(),
+    secureStorage: MockFlutterSecureStorage(),
+    biometricService: MockBiometricService(),
+    tokenService: MockAccessTokenService(),
+    searchHistory: MockSearchHistoryNotifier(),
   );
 });
 
 final testDomainOptionsNotifier =
     StateNotifierProvider<DomainOptionsNotifier, DomainOptionsState>((ref) {
   return DomainOptionsNotifier(
-    domainOptionsService: _MockDomainOptionsService(),
+    domainOptionsService: MockDomainOptionsService(),
   );
 });
-
-class _MockSecureStorage extends Mock implements FlutterSecureStorage {
-  @override
-  Future<String?> read({
-    required String key,
-    IOSOptions? iOptions,
-    AndroidOptions? aOptions,
-    LinuxOptions? lOptions,
-    WebOptions? webOptions,
-    MacOsOptions? mOptions,
-    WindowsOptions? wOptions,
-  }) async {
-    return null;
-  }
-}
-
-class _MockBiometricService extends Mock implements BiometricAuthService {
-  @override
-  Future<bool> _doesDeviceSupportBioAuth() async => false;
-}
-
-class _MockFailedAccessTokenService extends Mock implements AccessTokenService {
-  @override
-  Future<String> getAccessToken(
-      {String key = SecureStorageKeys.accessTokenKey}) async {
-    /// Mocks no accessToken is available
-    return '';
-  }
-
-  @override
-  Future<String> getInstanceURL() async {
-    /// Mocks no instanceUrl is available
-    return '';
-  }
-}
-
-class _MockSuccessAccessTokenService extends Mock
-    implements AccessTokenService {
-  @override
-  Future<String> getAccessToken(
-      {String key = SecureStorageKeys.accessTokenKey}) async {
-    /// Mocks accessToken is available
-    return '123';
-  }
-
-  @override
-  Future<String> getInstanceURL() async {
-    /// Mocks instanceUrl is available
-    return '123';
-  }
-}
-
-class _MockSearchHistoryNotifier extends Mock implements SearchHistoryNotifier {
-  @override
-  Future<void> clearSearchHistory() async {}
-}
-
-class _MockDomainOptionsService extends Mock implements DomainOptionsService {
-  @override
-  Future<DomainOptions> fetchDomainOptions() async {
-    return const DomainOptions(domains: []);
-  }
-}

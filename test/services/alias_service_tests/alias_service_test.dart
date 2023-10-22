@@ -1,24 +1,20 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
-import 'package:anonaddy/services/data_storage/alias_data_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../mocks.dart';
 import '../../test_data/alias_test_data.dart';
 
-class _MockDio extends Mock implements Dio {}
-
-class _MockDataStorage extends Mock implements AliasDataStorage {}
-
 void main() async {
-  late _MockDio mockDio;
-  late _MockDataStorage mockDataStorage;
+  late MockDio mockDio;
+  late MockDataStorage mockDataStorage;
   late AliasService aliasService;
 
   setUp(() {
-    mockDio = _MockDio();
-    mockDataStorage = _MockDataStorage();
+    mockDio = MockDio();
+    mockDataStorage = MockDataStorage();
     aliasService = AliasService(dio: mockDio, dataStorage: mockDataStorage);
   });
 
@@ -101,17 +97,20 @@ void main() async {
     //     'Given aliasService and dio are up and running, '
     //     'When aliasService.activateAlias(error) is called, '
     //     'Then throw an error.', () async {
+    //   when(() => mockDio.post(any(), data: any(named: 'data')))
+    //       .thenThrow(Exception('error'));
+    //
     //   // Arrange
     //   const aliasId = 'error';
     //
     //   // Act
-    //   final dioGet = mockDio.post(aliasId);
-    //   final dioError = isA<DioError>();
-    //   final throwsDioError = throwsA(dioError);
+    //   final alias = await aliasService.activateAlias(aliasId);
     //
     //   // Assert
-    //   expectLater(dioGet, throwsException);
-    //   expect(dioGet, throwsDioError);
+    //   // expectLater(alias, throwsException);
+    //   expect(alias, isA<Exception>());
+    //
+    //   verify(() => mockDio.post(any(), data: any(named: 'data'))).called(1);
     // });
   });
 
@@ -128,17 +127,17 @@ void main() async {
       expect(aliasService.deactivateAlias(''), completes);
     });
 
-    test(
-        'Given aliasService and dio are up and running, '
-        'When aliasService.deactivateAlias(error) is called, '
-        'Then throw an error.', () async {
-      when(() => mockDio.delete(any())).thenThrow(DioError);
-
-      // Assert
-      // expect(
-      //   () async => await aliasService.deactivateAlias(''),
-      //   throwsA(isA<DioError>()),
-      // );
-    });
+    // test(
+    //     'Given aliasService and dio are up and running, '
+    //     'When aliasService.deactivateAlias(error) is called, '
+    //     'Then throw an error.', () async {
+    //   when(() => mockDio.delete(any())).thenThrow(DioError);
+    //
+    //   // Assert
+    //   expect(
+    //     () async => await aliasService.deactivateAlias(''),
+    //     throwsA(isA<DioError>()),
+    //   );
+    // });
   });
 }

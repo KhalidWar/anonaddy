@@ -5,7 +5,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 2.8.7+46
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -47,7 +47,7 @@ dependencies:
   json_annotation: ^4.4.0
 
   # Testing
-  mockito: ^5.1.0
+  mocktail: ^1.0.1
 
   # App Package
   package_info_plus: ^3.0.1

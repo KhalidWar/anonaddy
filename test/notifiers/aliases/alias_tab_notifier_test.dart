@@ -1,11 +1,9 @@
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_state.dart';
-import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 
-class MockAliasService extends Mock implements AliasService {}
+import '../../mocks.dart';
 
 void main() {
   late MockAliasService aliasService;
