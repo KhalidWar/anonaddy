@@ -41,7 +41,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
       /// Extract [searchKeyword] from text controller
       final searchKeyword = state.searchController!.text.trim();
 
-      /// Fetches matching aliases from AnonAddy servers
+      /// Fetches matching aliases from addy.io servers
       final matchingAliases =
           await searchService.searchAliases(searchKeyword, null);
 
@@ -61,7 +61,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
   }
 
   /// Searches through locally available aliases which is 100 aliases after
-  /// AnonAddy implemented pagination
+  /// addy.io implemented pagination
   void searchAliasesLocally() {
     final matchingAliases = <Alias>[];
 

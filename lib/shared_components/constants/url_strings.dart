@@ -1,12 +1,12 @@
 /// HTTP URLs
-const kAuthorityURL = 'app.anonaddy.com';
+const kAuthorityURL = 'app.addy.io';
 const kUnEncodedBaseURL = '/api/v1';
 
-/// AnonAddy URLs
-const kAnonAddySettingsURL = 'https://app.anonaddy.com/settings';
-const kAnonAddyFAQURL = 'https://anonaddy.com/faq/';
-const kAnonAddyHelpCenterURL = 'https://anonaddy.com/help/';
-const kAnonAddySelfHostingURL = 'https://anonaddy.com/self-hosting/';
+/// addy.io URLs
+const kAnonAddySettingsURL = 'https://app.addy.io/settings';
+const kAnonAddyFAQURL = 'https://addy.io/faq/';
+const kAnonAddyHelpCenterURL = 'https://addy.io/help/';
+const kAnonAddySelfHostingURL = 'https://addy.io/self-hosting/';
 const kAddyManagerPlayStoreURL =
     'https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy';
 const kAddyManagerAppStoreURL =

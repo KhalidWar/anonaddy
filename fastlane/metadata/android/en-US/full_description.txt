@@ -1,0 +1,19 @@
+AddyManager is a program which utilises AnonAddy's API to interact with user account.
+
+★ Features:
+ - Get detailed view of all aliases (available or deleted).
+ - Copy alias email with a single tap.
+ - Search aliases by email address, domain, alias, or description.
+ - Activate and deactivate aliases on the fly.
+ - Create new alias with custom description, domain, and format (UUID and random words).
+ - Delete and restore aliases.
+ - Add or remove PGP key.
+ - Enable or disable PGP Email encryption.
+ - Adaptive and persistent Light and Dark themes.
+ - Offline support: access your data even if you're in an airplane.
+
+Security
+AddyManager uses secure storage, Android's KeyStore, to safely and securely store your access token. Your access token is NOT sent to us or any third party server. However, access token is required to interact with your AnonAddy account and is used to fetch aliases, recipients, domains...etc.
+
+Disclaimer
+AddyManager is independently created by Khalid Warsame (khalidwar.com) as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com project or team.
