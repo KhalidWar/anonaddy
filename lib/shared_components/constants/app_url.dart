@@ -1,7 +1,7 @@
 /// Collection of all URLs used in project
 class AppUrl {
   /// HTTP URLs
-  static const anonAddyAuthority = 'app.anonaddy.com';
+  static const anonAddyAuthority = 'app.addy.io';
   static const unEncodedBaseURL = '/api/v1';
   static const accountDetailsURL = 'account-details';
   static const activeAliasURL = 'active-aliases';
@@ -23,11 +23,11 @@ class AppUrl {
   static const failedDeliveriesURL = 'failed-deliveries';
   static const rulesURL = 'rules';
 
-  /// AnonAddy URLs
-  static const anonAddySettings = 'https://app.anonaddy.com/settings';
-  static const anonAddyFAQ = 'https://anonaddy.com/faq/';
-  static const anonAddyHelpCenter = 'https://anonaddy.com/help/';
-  static const anonAddySelfHosting = 'https://anonaddy.com/self-hosting/';
+  /// addy.io URLs
+  static const anonAddySettings = 'https://app.addy.io/settings';
+  static const anonAddyFAQ = 'https://addy.io/faq/';
+  static const anonAddyHelpCenter = 'https://addy.io/help/';
+  static const anonAddySelfHosting = 'https://addy.io/self-hosting/';
   static const addyManagerPlayStore =
       'https://play.google.com/store/apps/details?id=com.khalidwar.anonaddy';
   static const addyManagerAppStore =

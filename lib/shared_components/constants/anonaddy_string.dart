@@ -1,5 +1,5 @@
 ///
-/// Collection of official AnonAddy UI strings extracted from anonaddy.com
+/// Collection of official addy.io UI strings extracted from addy.io
 class AnonAddyString {
   /// Alias
   static const deleteAliasString =
@@ -56,7 +56,7 @@ class AnonAddyString {
   static const sharedDomains4WRD = '4wrd.cc';
   static const sharedDomainsMailerMe = 'mailer.me';
 
-  /// AnonAddy Subscription Levels
+  /// addy.io Subscription Levels
   static const subscriptionFree = 'free';
   static const subscriptionLite = 'lite';
   static const subscriptionPro = 'pro';

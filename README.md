@@ -1,5 +1,5 @@
-# AddyManager - AnonAddy for Android and iPhone.
-Mobile app for [AnonAddy](https://anonaddy.com/). This app utilises [AnonAddy's API](https://app.anonaddy.com/docs/) to interact with user account.
+# AddyManager - addy.io for Android and iPhone.
+Mobile app for [addy.io (AnonAddy)](https://addy.io/). This app utilises [addy.io's API](https://app.addy.io/docs/) to interact with user account.
 
 [![Codemagic build status](https://api.codemagic.io/apps/5fe2a9a115bfd177d368e1b3/5fe2a9a115bfd177d368e1b2/status_badge.svg)](https://codemagic.io/apps/5fe2a9a115bfd177d368e1b3/5fe2a9a115bfd177d368e1b2/latest_build)
 
@@ -33,9 +33,9 @@ Your support will help the continuous development of this project. Click on QR c
 
 
 ## Security
-AddyManager requires [Access Token](https://app.anonaddy.com/settings) to access and manage your AnonAddy account. It utilizes secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token. 
+AddyManager requires [Access Token](https://app.addy.io/settings/api) to access and manage your addy.io account. It utilizes secure storage, [Keychain](https://developer.apple.com/documentation/security/keychain_services#//apple_ref/doc/uid/TP30000897-CH203-TP1) for iOS and [KeyStore](https://developer.android.com/training/articles/keystore) for Android, to safely and securely store provided access token. 
 
-Your access token is NOT sent to us or any third party server. However, access token is required to interact with your AnonAddy account and is used to fetch aliases, recipients, domains...etc.
+Your access token is NOT sent to us or any third party server. However, access token is required to interact with your addy.io account and is used to fetch aliases, recipients, domains...etc.
 
 
 ## Privacy
@@ -89,7 +89,7 @@ Check out [Flutter's official guide](https://flutter.dev/docs/get-started/instal
 - Clone this repo to your local machine: `git clone https://github.com/KhalidWar/anonaddy.git`
 - Run `flutter run pub get` in terminal inside project root directory.
 - Run `main.dart` on emulator or physical device.
-- Create AnonAddy account and generate your own [API Access Token](https://app.anonaddy.com/settings), found under API section.
+- Create addy.io account and generate your own [API Access Token](https://app.addy.io/settings/api), found under API section.
 - Sign in with your API Access Token.
 - All set!
 
@@ -99,7 +99,7 @@ Check out [Flutter's official guide](https://flutter.dev/docs/get-started/instal
 This project is licensed under [MIT License](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). It means you're free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell this project.
 
 #### Acknowledgement
-Special thanks to AnonAddy's team for providing us with their free and well documented [API](https://app.anonaddy.com/docs/).
+Special thanks to addy.io's team for providing us with their free and well documented [API](https://app.addy.io/docs/).
 
 #### Disclaimer
-AddyManager is independently created by [Khalid War](https://github.com/khalidwar) as a tool to help you manage your AnonAddy account and is not associated with the official AnonAddy.com project or team.
+AddyManager is independently created by [Khalid War](https://github.com/khalidwar) as a tool to help you manage your addy.io account and is not associated with the official addy.io project or team.
