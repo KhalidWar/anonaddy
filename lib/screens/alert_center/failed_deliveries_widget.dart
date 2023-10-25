@@ -20,13 +20,13 @@ class _FailedDeliveriesWidgetState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(failedDeliveryStateNotifier.notifier).getFailedDeliveries();
+      ref.read(failedDeliveriesNotifier.notifier).getFailedDeliveries();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final failedDeliveryState = ref.watch(failedDeliveryStateNotifier);
+    final failedDeliveryState = ref.watch(failedDeliveriesNotifier);
 
     return failedDeliveryState.when(
       data: (deliveries) {
@@ -49,7 +49,7 @@ class _FailedDeliveriesWidgetState
                               'Are you sure you want to delete failed delivery?',
                           method: () async {
                             await ref
-                                .read(failedDeliveryStateNotifier.notifier)
+                                .read(failedDeliveriesNotifier.notifier)
                                 .deleteFailedDelivery(failedDelivery.id);
 
                             /// Dismisses this dialog

@@ -55,7 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ref.read(domainOptionsStateNotifier.notifier).fetchDomainOption();
 
     /// Pre-loads [DomainOptions] data for [CreateAlias]
-    ref.read(failedDeliveryStateNotifier.notifier).getFailedDeliveries();
+    ref.read(failedDeliveriesNotifier.notifier).getFailedDeliveries();
   }
 
   @override
