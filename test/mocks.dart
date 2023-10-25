@@ -1,3 +1,4 @@
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
@@ -13,15 +14,17 @@ import 'package:mocktail/mocktail.dart';
 
 class MockDio extends Mock implements Dio {}
 
+class MockAccountNotifier extends Mock implements AccountNotifier {}
+
 class MockAccountService extends Mock implements AccountService {}
+
+class MockAccountDataStorage extends Mock implements AccountDataStorage {}
 
 class MockDataStorage extends Mock implements AliasDataStorage {}
 
 class MockAliasService extends Mock implements AliasService {}
 
 class MockAliasTabNotifier extends Mock implements AliasTabNotifier {}
-
-class MockAccountDataStorage extends Mock implements AccountDataStorage {}
 
 class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
