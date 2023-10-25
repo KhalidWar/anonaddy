@@ -1,5 +1,5 @@
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/notifiers/usernames/usernames_tab_notifier.dart';
 import 'package:anonaddy/notifiers/usernames/usernames_tab_state.dart';
 import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
@@ -23,7 +23,7 @@ class UsernamesTab extends ConsumerStatefulWidget {
 
 class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   void addNewUsername(BuildContext context) {
-    final accountState = ref.read(accountStateNotifier);
+    final accountState = ref.read(accountNotifierProvider).value!;
 
     /// Draws UI for adding new username
     Future buildAddNewUsername(BuildContext context) {

@@ -1,6 +1,6 @@
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
@@ -28,7 +28,7 @@ final createAliasStateNotifier =
     aliasService: ref.read(aliasServiceProvider),
     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
     domainOptions: ref.read(domainOptionsStateNotifier),
-    accountState: ref.read(accountStateNotifier),
+    accountState: ref.read(accountNotifierProvider),
     recipientState: ref.read(recipientTabStateNotifier),
     isAutoCopy: ref.read(settingsStateNotifier).isAutoCopyEnabled,
   );
@@ -42,7 +42,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
     required this.recipientState,
     required this.isAutoCopy,
     required this.aliasTabNotifier,
-  }) : super(CreateAliasState.initial(accountState.account)) {
+  }) : super(CreateAliasState.initial(accountState.value)) {
     /// Initially, set [aliasDomain] and [aliasFormat] to default values obtained from
     /// the user's account setting through [domainOptions]. Those values are NULL if
     /// user has NOT set default aliasDomain and/or aliasFormat.
@@ -71,7 +71,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
   final AliasService aliasService;
   final DomainOptionsState domainOptions;
-  final AccountState accountState;
+  final AsyncValue<Account> accountState;
   final RecipientTabState recipientState;
   final bool isAutoCopy;
   final AliasTabNotifier aliasTabNotifier;
@@ -188,7 +188,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
   /// [AliasFormat] list can NOT contain "Custom" and user can NOT use "Custom" (Local Part).
   /// Another example is that [aliasFormatRandomWords] is NOT available for [subscriptionFree] users.
   void _setAliasFormatList(String aliasDomain) {
-    final subscription = accountState.account.subscription;
+    final subscription = accountState.value!.subscription;
     if (CreateAliasState.sharedDomains.contains(aliasDomain)) {
       if (subscription == AnonAddyString.subscriptionFree) {
         state.aliasFormatList = CreateAliasState.freeTierWithSharedDomain;
@@ -222,7 +222,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
   }
 
   void _setHeaderText() {
-    final username = accountState.account.username;
+    final username = accountState.value!.username;
     final text =
         'Other aliases e.g. alias@$username.anonaddy.com or .me can also be created automatically when they receive their first email.';
     final newState = state.copyWith(headerText: text);

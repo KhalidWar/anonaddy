@@ -30,10 +30,12 @@ class AccountDataStorage extends DataStorage {
   }
 
   @override
-  Future<Account> loadData() async {
+  Future<Account?> loadData() async {
     try {
       final data = await secureStorage.read(key: DataStorageKeys.accountKey);
-      final decodedAccount = jsonDecode(data ?? '');
+      if (data == null) return null;
+
+      final decodedAccount = jsonDecode(data);
       final account = Account.fromJson(decodedAccount);
       return account;
     } catch (_) {

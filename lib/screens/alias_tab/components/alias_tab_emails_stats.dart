@@ -1,7 +1,6 @@
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,34 +10,34 @@ class AliasTabEmailsStats extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountState = ref.watch(accountStateNotifier);
+    final accountState = ref.watch(accountNotifierProvider);
 
-    switch (accountState.status) {
-      case AccountStatus.loading:
-        return const AliasTabEmailsPieChart(
-          emailsForwarded: 0,
-          emailsBlocked: 0,
-          emailsReplied: 0,
-          emailsSent: 0,
-        );
-
-      case AccountStatus.loaded:
-        final account = accountState.account;
+    return accountState.when(
+      data: (account) {
         return AliasTabEmailsPieChart(
           emailsForwarded: account.totalEmailsForwarded,
           emailsBlocked: account.totalEmailsBlocked,
           emailsReplied: account.totalEmailsReplied,
           emailsSent: account.totalEmailsSent,
         );
-
-      case AccountStatus.failed:
+      },
+      error: (_, __) {
         return const AliasTabEmailsPieChart(
           emailsForwarded: 0,
           emailsBlocked: 0,
           emailsReplied: 0,
           emailsSent: 0,
         );
-    }
+      },
+      loading: () {
+        return const AliasTabEmailsPieChart(
+          emailsForwarded: 0,
+          emailsBlocked: 0,
+          emailsReplied: 0,
+          emailsSent: 0,
+        );
+      },
+    );
   }
 }
 

@@ -1,5 +1,5 @@
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/notifiers/domains/domains_tab_notifier.dart';
 import 'package:anonaddy/notifiers/domains/domains_tab_state.dart';
 import 'package:anonaddy/screens/account_tab/domains/components/add_new_domain.dart';
@@ -22,7 +22,7 @@ class DomainsTab extends ConsumerStatefulWidget {
 
 class _DomainsTabState extends ConsumerState<DomainsTab> {
   void addNewDomain(BuildContext context) {
-    final accountState = ref.read(accountStateNotifier);
+    final accountState = ref.read(accountNotifierProvider).value!;
 
     /// Draws UI for adding new recipient
     Future buildAddNewDomain(BuildContext context) {

@@ -13,7 +13,7 @@ final recipientScreenStateNotifier = StateNotifierProvider.autoDispose<
   return RecipientScreenNotifier(
     recipientService: ref.read(recipientService),
     recipientTabNotifier: ref.read(recipientTabStateNotifier.notifier),
-    accountNotifier: ref.read(accountStateNotifier.notifier),
+    accountNotifier: ref.read(accountNotifierProvider.notifier),
   );
 });
 
@@ -252,6 +252,6 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
     recipientTabNotifier.refreshRecipients();
 
     /// Refresh AccountState data after adding a recipient.
-    accountNotifier.refreshAccount();
+    // accountNotifierrefreshAccount();
   }
 }

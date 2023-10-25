@@ -1,5 +1,5 @@
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
@@ -28,19 +28,17 @@ class PaidFeatureBlocker extends ConsumerWidget {
     this.loadingWidget,
     required this.child,
   }) : super(key: key);
+
   final Widget? loadingWidget;
   final Widget child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountState = ref.watch(accountStateNotifier);
+    final accountState = ref.watch(accountNotifierProvider);
 
-    switch (accountState.status) {
-      case AccountStatus.loading:
-        return loadingWidget ?? const RecipientsShimmerLoading();
-
-      case AccountStatus.loaded:
-        return accountState.isSubscriptionFree
+    return accountState.when(
+      data: (account) {
+        return account.isSubscriptionFree
             ? Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
@@ -50,11 +48,11 @@ class PaidFeatureBlocker extends ConsumerWidget {
                 ),
               )
             : child;
-
-      case AccountStatus.failed:
-        return const ErrorMessageWidget(
-          message: AppStrings.loadAccountDataFailed,
-        );
-    }
+      },
+      error: (_, __) => const ErrorMessageWidget(
+        message: AppStrings.loadAccountDataFailed,
+      ),
+      loading: () => loadingWidget ?? const RecipientsShimmerLoading(),
+    );
   }
 }

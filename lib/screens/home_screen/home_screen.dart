@@ -1,4 +1,3 @@
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
@@ -36,7 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       _selectedIndex = index;
     });
     if (index == 0) {
-      ref.read(accountStateNotifier.notifier).refreshAccount();
+      // ref.read(accountNotifierProvider).refreshAccount();
       ref.read(recipientTabStateNotifier.notifier).refreshRecipients();
     }
 

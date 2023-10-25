@@ -1,5 +1,4 @@
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
@@ -25,29 +24,22 @@ class CreateAliasFAB extends StatelessWidget {
             key: const Key('homeScreenFAB'),
             child: const Icon(Icons.add),
             onPressed: () {
-              final accountState = ref.read(accountStateNotifier);
+              final accountState = ref.read(accountNotifierProvider);
 
-              switch (accountState.status) {
-                case AccountStatus.loading:
-                  Utilities.showToast(AppStrings.loadingText);
-                  break;
-
-                case AccountStatus.loaded:
-                  showCupertinoModalBottomSheet(
-                    context: context,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
-                      ),
+              accountState.when(
+                data: (data) => showCupertinoModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
                     ),
-                    builder: (context) => const CreateAlias(),
-                  );
-                  break;
-
-                case AccountStatus.failed:
-                  Utilities.showToast(AppStrings.loadAccountDataFailed);
-                  break;
-              }
+                  ),
+                  builder: (context) => const CreateAlias(),
+                ),
+                error: (err, stack) =>
+                    Utilities.showToast(AppStrings.loadAccountDataFailed),
+                loading: () => Utilities.showToast(AppStrings.loadingText),
+              );
             },
           ),
         );

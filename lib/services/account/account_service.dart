@@ -35,7 +35,7 @@ class AccountService {
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.other) {
         final account = await accountDataStorage.loadData();
-        return account;
+        if (account != null) return account;
       }
       throw dioError.message;
     } catch (error) {
@@ -43,12 +43,12 @@ class AccountService {
     }
   }
 
-  Future<Account> loadAccountFromDisk() async {
+  Future<Account?> loadAccountFromDisk() async {
     try {
       final account = await accountDataStorage.loadData();
       return account;
     } catch (error) {
-      rethrow;
+      return null;
     }
   }
 }

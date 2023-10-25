@@ -1,4 +1,4 @@
-import 'package:anonaddy/notifiers/account/account_state.dart';
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/access_token/access_token_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/utilities.dart';
@@ -8,25 +8,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AccountPopupInfo extends ConsumerWidget {
   const AccountPopupInfo({
     Key? key,
-    required this.accountState,
+    required this.account,
   }) : super(key: key);
-  final AccountState accountState;
+  final Account account;
 
   String getSubscriptionExpirationDate(BuildContext context) {
     /// Self hosted instances do NOT have a subscription and do not expire.
-    if (accountState.isSelfHosted) {
+    if (account.isSelfHosted) {
       return AppStrings.subscriptionEndDateDoesNotExpire;
     }
 
     /// addy.io free subscriptions do NOT expire.
-    if (accountState.isSubscriptionFree) {
+    if (account.isSubscriptionFree) {
       return AppStrings.subscriptionEndDateDoesNotExpire;
     }
 
     /// addy.io Lite and Pro subscriptions do expire.
-    return accountState.account.subscriptionEndAt.isEmpty
+    return account.subscriptionEndAt.isEmpty
         ? AppStrings.subscriptionEndDateNotAvailable
-        : Utilities.formatDateTime(context, accountState.account.createdAt);
+        : Utilities.formatDateTime(context, account.createdAt);
   }
 
   Future<void> updateDefaultAliasFormatDomain(WidgetRef ref) async {
@@ -37,8 +37,6 @@ class AccountPopupInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final account = accountState.account;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,5 +1,5 @@
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/notifiers/app_version/app_version_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/utilities.dart';
@@ -11,14 +11,11 @@ class AppVersion extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountState = ref.watch(accountStateNotifier);
+    final accountState = ref.watch(accountNotifierProvider);
 
-    switch (accountState.status) {
-      case AccountStatus.loading:
-        return Container();
-
-      case AccountStatus.loaded:
-        if (accountState.isSelfHosted) {
+    return accountState.when(
+      data: (account) {
+        if (account.isSelfHosted) {
           return Consumer(
             builder: (_, ref, __) {
               final appVersionData = ref.watch(appVersionProvider);
@@ -45,9 +42,9 @@ class AppVersion extends ConsumerWidget {
         }
 
         return Container();
-
-      case AccountStatus.failed:
-        return Container();
-    }
+      },
+      error: (err, stack) => Container(),
+      loading: () => Container(),
+    );
   }
 }

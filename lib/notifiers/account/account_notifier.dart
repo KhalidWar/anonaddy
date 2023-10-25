@@ -1,83 +1,28 @@
-import 'package:anonaddy/notifiers/account/account_state.dart';
+import 'dart:async';
+
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/services/account/account_service.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final accountStateNotifier =
-    StateNotifierProvider<AccountNotifier, AccountState>((ref) {
-  return AccountNotifier(accountService: ref.read(accountServiceProvider));
-});
+final accountNotifierProvider =
+    AsyncNotifierProvider<AccountNotifier, Account>(AccountNotifier.new);
 
-class AccountNotifier extends StateNotifier<AccountState> {
-  AccountNotifier({
-    required this.accountService,
-    AccountState? initialState,
-  }) : super(initialState ?? AccountState.initialState());
-
-  final AccountService accountService;
-
-  /// Updates UI to the newState
-  void _updateState(AccountState newState) {
-    if (mounted) state = newState;
-  }
-
+class AccountNotifier extends AsyncNotifier<Account> {
   Future<void> fetchAccount() async {
     try {
-      _updateState(state.copyWith(status: AccountStatus.loading));
-
-      final account = await accountService.fetchAccount();
-
-      /// Construct new state
-      final newState =
-          state.copyWith(status: AccountStatus.loaded, account: account);
-
-      /// Update UI with the latest state
-      _updateState(newState);
+      final accountService = ref.read(accountServiceProvider);
+      state = await AsyncValue.guard(() => accountService.fetchAccount());
     } catch (error) {
-      _updateState(state.copyWith(
-        status: AccountStatus.failed,
-        errorMessage: error.toString(),
-      ));
-
-      /// Retry after an error
-      _retryOnError();
+      rethrow;
     }
   }
 
-  /// Silently fetches the latest account data and displays them
-  Future<void> refreshAccount() async {
-    try {
-      /// Only trigger fetch API when app is Foreground to avoid API spamming
-      final account = await accountService.fetchAccount();
+  @override
+  Future<Account> build() async {
+    final accountService = ref.read(accountServiceProvider);
 
-      /// Update UI with the latest state
-      _updateState(state.copyWith(
-        status: AccountStatus.loaded,
-        account: account,
-      ));
-    } catch (error) {
-      Utilities.showToast(error.toString());
-    }
-  }
-
-  /// Triggers [fetchAccount] when it fails after a certain amount of time
-  Future _retryOnError() async {
-    if (state.isFailed) {
-      await Future.delayed(const Duration(seconds: 5));
-      await fetchAccount();
-    }
-  }
-
-  /// Loads [Account] data from disk
-  Future<void> loadAccountFromDisk() async {
-    try {
-      final account = await accountService.loadAccountFromDisk();
-      _updateState(state.copyWith(
-        status: AccountStatus.loaded,
-        account: account,
-      ));
-    } catch (_) {
-      return;
-    }
+    final account = await accountService.loadAccountFromDisk();
+    if (account == null) return await accountService.fetchAccount();
+    return account;
   }
 }

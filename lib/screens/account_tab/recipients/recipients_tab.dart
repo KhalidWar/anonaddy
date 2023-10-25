@@ -1,5 +1,5 @@
+import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/screens/account_tab/components/add_new_recipient.dart';
@@ -22,7 +22,7 @@ class RecipientsTab extends ConsumerStatefulWidget {
 
 class _RecipientTabState extends ConsumerState<RecipientsTab> {
   void addNewRecipient(BuildContext context) {
-    final accountState = ref.read(accountStateNotifier);
+    final accountState = ref.read(accountNotifierProvider).value!;
 
     /// Draws UI for adding new recipient
     Future buildAddNewRecipient(BuildContext context) {
