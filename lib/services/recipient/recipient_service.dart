@@ -37,7 +37,7 @@ class RecipientService {
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.other) {
         final recipients = await recipientDataStorage.loadData();
-        return recipients;
+        if (recipients != null) return recipients;
       }
       throw dioError.message;
     } catch (e) {
@@ -45,7 +45,7 @@ class RecipientService {
     }
   }
 
-  Future<List<Recipient>> loadRecipientsFromDisk() async {
+  Future<List<Recipient>?> loadRecipientsFromDisk() async {
     try {
       final recipients = await recipientDataStorage.loadData();
       return recipients;

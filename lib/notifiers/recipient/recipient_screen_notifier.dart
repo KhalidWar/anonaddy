@@ -1,7 +1,6 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_screen_state.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
@@ -12,7 +11,6 @@ final recipientScreenStateNotifier = StateNotifierProvider.autoDispose<
     RecipientScreenNotifier, RecipientScreenState>((ref) {
   return RecipientScreenNotifier(
     recipientService: ref.read(recipientService),
-    recipientTabNotifier: ref.read(recipientTabStateNotifier.notifier),
     accountNotifier: ref.read(accountNotifierProvider.notifier),
   );
 });
@@ -20,12 +18,10 @@ final recipientScreenStateNotifier = StateNotifierProvider.autoDispose<
 class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
   RecipientScreenNotifier({
     required this.recipientService,
-    required this.recipientTabNotifier,
     required this.accountNotifier,
   }) : super(RecipientScreenState.initialState());
 
   final RecipientService recipientService;
-  final RecipientTabNotifier recipientTabNotifier;
   final AccountNotifier accountNotifier;
 
   void _updateState(RecipientScreenState newState) {
@@ -249,7 +245,7 @@ class RecipientScreenNotifier extends StateNotifier<RecipientScreenState> {
 
   void _refreshRecipientAndAccountData() {
     /// Refresh RecipientState after adding/removing a recipient.
-    recipientTabNotifier.refreshRecipients();
+    // recipientTabNotifier.refreshRecipients();
 
     /// Refresh AccountState data after adding a recipient.
     // accountNotifierrefreshAccount();

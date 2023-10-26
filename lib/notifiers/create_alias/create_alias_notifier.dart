@@ -5,8 +5,7 @@ import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
+import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
@@ -29,7 +28,7 @@ final createAliasStateNotifier =
     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
     domainOptions: ref.read(domainOptionsNotifier),
     accountState: ref.read(accountNotifierProvider),
-    recipientState: ref.read(recipientTabStateNotifier),
+    recipients: ref.read(recipientsNotifier).value!,
     isAutoCopy: ref.read(settingsStateNotifier).isAutoCopyEnabled,
   );
 });
@@ -39,7 +38,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
     required this.aliasService,
     required this.domainOptions,
     required this.accountState,
-    required this.recipientState,
+    required this.recipients,
     required this.isAutoCopy,
     required this.aliasTabNotifier,
   }) : super(CreateAliasState.initial(accountState.value)) {
@@ -72,7 +71,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
   final AliasService aliasService;
   final AsyncValue<DomainOptions>? domainOptions;
   final AsyncValue<Account> accountState;
-  final RecipientTabState recipientState;
+  final List<Recipient> recipients;
   final bool isAutoCopy;
   final AliasTabNotifier aliasTabNotifier;
 
@@ -210,7 +209,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
 
     /// Get all recipients related to user's account
     /// Extract verified recipients
-    for (Recipient recipient in recipientState.recipients) {
+    for (Recipient recipient in recipients) {
       /// Verified recipients have confirmed emails meaning
       /// [emailVerifiedAt] has a value, a timestamp of when email was confirmed.
       if (recipient.emailVerifiedAt.isNotEmpty) {

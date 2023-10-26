@@ -1,13 +1,12 @@
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username.dart';
+import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
+import 'package:anonaddy/notifiers/usernames/usernames_screen_notifier.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
-import 'package:anonaddy/notifiers/usernames/usernames_screen_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -54,12 +53,10 @@ class _UsernameDefaultRecipientState
   }
 
   void _setVerifiedRecipients() {
-    final recipientTabState = ref.read(recipientTabStateNotifier);
-    if (recipientTabState.status == RecipientTabStatus.loaded) {
-      for (Recipient recipient in recipientTabState.recipients) {
-        if (recipient.emailVerifiedAt.isNotEmpty) {
-          _verifiedRecipients.add(recipient);
-        }
+    final recipients = ref.read(recipientsNotifier).value!;
+    for (Recipient recipient in recipients) {
+      if (recipient.emailVerifiedAt.isNotEmpty) {
+        _verifiedRecipients.add(recipient);
       }
     }
   }

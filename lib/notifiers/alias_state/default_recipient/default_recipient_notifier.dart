@@ -2,21 +2,20 @@ import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
 import 'package:anonaddy/notifiers/alias_state/default_recipient/default_recipient_state.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
+import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final defaultRecipientStateNotifier = StateNotifierProvider.autoDispose<
     DefaultRecipientNotifier, DefaultRecipientState>((ref) {
   return DefaultRecipientNotifier(
-    recipientState: ref.read(recipientTabStateNotifier),
+    recipients: ref.read(recipientsNotifier).value!,
     aliasState: ref.read(aliasScreenStateNotifier),
   );
 });
 
 class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
   DefaultRecipientNotifier({
-    required this.recipientState,
+    required this.recipients,
     required this.aliasState,
   }) : super(DefaultRecipientState.initial()) {
     /// Extracts verified recipients.
@@ -26,7 +25,7 @@ class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
     _setDefaultRecipients();
   }
 
-  final RecipientTabState recipientState;
+  final List<Recipient> recipients;
   final AliasScreenState aliasState;
 
   /// Updates UI to the latest state
@@ -71,7 +70,7 @@ class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
     final verifiedRecipients = <Recipient>[];
 
     /// Set verified recipients
-    for (var recipient in recipientState.recipients) {
+    for (var recipient in recipients) {
       if (recipient.emailVerifiedAt.isNotEmpty) {
         verifiedRecipients.add(recipient);
       }

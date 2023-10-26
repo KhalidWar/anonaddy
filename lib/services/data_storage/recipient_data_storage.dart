@@ -30,10 +30,11 @@ class RecipientDataStorage extends DataStorage {
   }
 
   @override
-  Future<List<Recipient>> loadData() async {
+  Future<List<Recipient>?> loadData() async {
     try {
       final data = await secureStorage.read(key: DataStorageKeys.recipientKey);
-      final decodedData = jsonDecode(data ?? '');
+      if (data == null) return null;
+      final decodedData = jsonDecode(data);
       final recipients = (decodedData['data'] as List)
           .map((recipient) => Recipient.fromJson(recipient))
           .toList();
@@ -46,7 +47,7 @@ class RecipientDataStorage extends DataStorage {
   Future<Recipient> loadSpecificRecipient(String id) async {
     try {
       final aliases = await loadData();
-      final alias = aliases.firstWhere((recipient) => recipient.id == id);
+      final alias = aliases!.firstWhere((recipient) => recipient.id == id);
       return alias;
     } catch (error) {
       rethrow;

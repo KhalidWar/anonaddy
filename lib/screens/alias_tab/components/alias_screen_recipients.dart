@@ -48,10 +48,10 @@ class AliasScreenRecipients extends ConsumerWidget {
           ),
         ),
         if (alias.recipients.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: Row(
-              children: const [
+              children: [
                 Text(AppStrings.noDefaultRecipientSet),
               ],
             ),

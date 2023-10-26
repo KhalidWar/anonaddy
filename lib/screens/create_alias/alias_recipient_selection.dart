@@ -1,6 +1,5 @@
 import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
+import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_note.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
@@ -23,7 +22,7 @@ class _AliasRecipientSelectionState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
+      ref.read(recipientsNotifier.notifier).fetchRecipients();
     });
   }
 
@@ -39,104 +38,96 @@ class _AliasRecipientSelectionState
       builder: (context, controller) {
         return Consumer(
           builder: (context, ref, _) {
-            final recipientState = ref.watch(recipientTabStateNotifier);
+            final recipientState = ref.watch(recipientsNotifier);
 
-            switch (recipientState.status) {
-              case RecipientTabStatus.loading:
-                return const Center(child: PlatformLoadingIndicator());
+            return recipientState.when(
+              data: (data) => Consumer(
+                builder: (context, ref, _) {
+                  final createAliasState = ref.watch(createAliasStateNotifier);
+                  final verifiedRecipients =
+                      createAliasState.verifiedRecipients!;
 
-              case RecipientTabStatus.loaded:
-                return Consumer(
-                  builder: (context, ref, _) {
-                    final createAliasState =
-                        ref.watch(createAliasStateNotifier);
-                    final verifiedRecipients =
-                        createAliasState.verifiedRecipients!;
+                  final createAliasNotifier =
+                      ref.read(createAliasStateNotifier.notifier);
 
-                    final createAliasNotifier =
-                        ref.read(createAliasStateNotifier.notifier);
-
-                    return Column(
-                      children: [
-                        const BottomSheetHeader(
-                            headerLabel: 'Select Default Recipients'),
-                        Expanded(
-                          child: ListView(
-                            shrinkWrap: true,
-                            controller: controller,
-                            physics: const BouncingScrollPhysics(),
-                            children: [
-                              if (verifiedRecipients.isEmpty)
-                                Center(
-                                  child: Text(
-                                    'No recipients found',
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                )
-                              else
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: verifiedRecipients.length,
-                                  itemBuilder: (context, index) {
-                                    final verifiedRecipient =
-                                        verifiedRecipients[index];
-                                    return RecipientsTile(
-                                      email: verifiedRecipient.email,
-                                      isSelected: createAliasNotifier
-                                          .isRecipientSelected(
-                                              verifiedRecipient),
-                                      onPress: () => createAliasNotifier
-                                          .toggleRecipient(verifiedRecipient),
-                                    );
-                                  },
-                                ),
-                              const RecipientsNote(),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  return Column(
+                    children: [
+                      const BottomSheetHeader(
+                          headerLabel: 'Select Default Recipients'),
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          controller: controller,
+                          physics: const BouncingScrollPhysics(),
                           children: [
-                            ElevatedButton(
-                              style:
-                                  ElevatedButton.styleFrom(primary: Colors.red),
-                              child: Text(
-                                createAliasState.selectedRecipients!.isNotEmpty
-                                    ? 'Clear'
-                                    : 'Cancel',
+                            if (verifiedRecipients.isEmpty)
+                              Center(
+                                child: Text(
+                                  'No recipients found',
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                              )
+                            else
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: verifiedRecipients.length,
+                                itemBuilder: (context, index) {
+                                  final verifiedRecipient =
+                                      verifiedRecipients[index];
+                                  return RecipientsTile(
+                                    email: verifiedRecipient.email,
+                                    isSelected: createAliasNotifier
+                                        .isRecipientSelected(verifiedRecipient),
+                                    onPress: () => createAliasNotifier
+                                        .toggleRecipient(verifiedRecipient),
+                                  );
+                                },
                               ),
-                              onPressed: () {
-                                ref
-                                    .read(createAliasStateNotifier.notifier)
-                                    .clearSelectedRecipients();
-                                Navigator.pop(context);
-                              },
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(),
-                              child: const Text('Done'),
-                              onPressed: () {
-                                ref
-                                    .read(createAliasStateNotifier.notifier)
-                                    .setSelectedRecipients();
-                                Navigator.pop(context);
-                              },
-                            ),
+                            const RecipientsNote(),
                           ],
                         ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.red),
+                            child: Text(
+                              createAliasState.selectedRecipients!.isNotEmpty
+                                  ? 'Clear'
+                                  : 'Cancel',
+                            ),
+                            onPressed: () {
+                              ref
+                                  .read(createAliasStateNotifier.notifier)
+                                  .clearSelectedRecipients();
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(),
+                            child: const Text('Done'),
+                            onPressed: () {
+                              ref
+                                  .read(createAliasStateNotifier.notifier)
+                                  .setSelectedRecipients();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: size.height * 0.03),
+                      if (PlatformAware.isIOS())
                         SizedBox(height: size.height * 0.03),
-                        if (PlatformAware.isIOS())
-                          SizedBox(height: size.height * 0.03),
-                      ],
-                    );
-                  },
-                );
-
-              case RecipientTabStatus.failed:
-                return ErrorMessageWidget(message: recipientState.errorMessage);
-            }
+                    ],
+                  );
+                },
+              ),
+              error: (err, _) => ErrorMessageWidget(message: err.toString()),
+              loading: () => const Center(child: PlatformLoadingIndicator()),
+            );
           },
         );
       },

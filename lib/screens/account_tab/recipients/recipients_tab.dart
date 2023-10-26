@@ -1,7 +1,6 @@
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
+import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/screens/account_tab/components/add_new_recipient.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
@@ -52,25 +51,20 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       /// Initially, load offline data.
-      ref.read(recipientTabStateNotifier.notifier).loadOfflineState();
+      // ref.read(recipientTabStateNotifier.notifier).loadOfflineState();
 
       /// Then, load API data.
-      ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
+      ref.read(recipientsNotifier.notifier).fetchRecipients();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final recipientTabState = ref.watch(recipientTabStateNotifier);
+    final recipientsState = ref.watch(recipientsNotifier);
     final size = MediaQuery.of(context).size;
 
-    switch (recipientTabState.status) {
-      case RecipientTabStatus.loading:
-        return const RecipientsShimmerLoading();
-
-      case RecipientTabStatus.loaded:
-        final recipients = recipientTabState.recipients;
-
+    return recipientsState.when(
+      data: (recipients) {
         return ListView(
           shrinkWrap: true,
           physics: const ClampingScrollPhysics(),
@@ -101,11 +95,9 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
             ),
           ],
         );
-
-      case RecipientTabStatus.failed:
-        return ErrorMessageWidget(
-          message: recipientTabState.errorMessage,
-        );
-    }
+      },
+      error: (err, _) => ErrorMessageWidget(message: err.toString()),
+      loading: () => const RecipientsShimmerLoading(),
+    );
   }
 }

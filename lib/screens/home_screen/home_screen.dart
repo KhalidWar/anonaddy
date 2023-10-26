@@ -1,7 +1,6 @@
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
@@ -35,7 +34,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
     if (index == 0) {
       // ref.read(accountNotifierProvider).refreshAccount();
-      ref.read(recipientTabStateNotifier.notifier).refreshRecipients();
+      // ref.read(recipientTabStateNotifier.notifier).refreshRecipients();
     }
 
     if (index == 1) {
