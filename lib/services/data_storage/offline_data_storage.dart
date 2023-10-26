@@ -22,10 +22,10 @@ class OfflineData {
     }
   }
 
-  Future<String> loadSettingsState() async {
+  Future<String?> loadSettingsState() async {
     try {
-      final aliasData =
-          await secureStorage.read(key: OfflineDataKey.settings) ?? '';
+      final aliasData = await secureStorage.read(key: OfflineDataKey.settings);
+      if (aliasData == null) return null;
       return aliasData;
     } catch (error) {
       rethrow;

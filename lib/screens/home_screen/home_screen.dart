@@ -47,7 +47,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
 
     /// Show [ChangelogWidget] in [HomeScreen] if app has updated
-    ref.read(settingsStateNotifier.notifier).showChangelogIfAppUpdated();
+    ref.read(settingsNotifier.notifier).showChangelogIfAppUpdated();
 
     /// Pre-loads [DomainOptions] data for [CreateAlias]
     ref.read(failedDeliveriesNotifier.notifier).getFailedDeliveries();
@@ -59,21 +59,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     /// Show [ChangelogWidget] if app has been updated
     ref.listen<bool>(
-        settingsStateNotifier.select(
-            (settingState) => settingState.showChangelog), (_, showChangelog) {
-      if (showChangelog) {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
+      settingsNotifier
+          .select((settingState) => settingState.value?.showChangelog ?? false),
+      (_, showChangelog) {
+        if (showChangelog) {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
+              ),
             ),
-          ),
-          builder: (context) => const ChangelogWidget(),
-        );
-      }
-    });
+            builder: (context) => const ChangelogWidget(),
+          );
+        }
+      },
+    );
 
     return Scaffold(
       key: const Key('homeScreenScaffold'),

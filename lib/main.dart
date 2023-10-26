@@ -29,6 +29,9 @@ void main() async {
       child: ProviderScope(
         overrides: [
           flutterSecureStorage.overrideWithValue(secureStorage),
+          // settingsNotifier.overrideWith(
+          //   await SettingsNotifier.loadSettingsState(secureStorage),
+          // ),
         ],
         child: const App(),
       ),

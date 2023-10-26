@@ -58,7 +58,7 @@ class ChangelogWidget extends ConsumerWidget {
                   style: ElevatedButton.styleFrom(),
                   child: const Text('Continue to AddyManager'),
                   onPressed: () {
-                    ref.read(settingsStateNotifier.notifier).dismissChangelog();
+                    ref.read(settingsNotifier.notifier).dismissChangelog();
                     Navigator.pop(context);
                   },
                 ),

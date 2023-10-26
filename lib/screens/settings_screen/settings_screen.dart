@@ -21,7 +21,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settingsState = ref.watch(settingsStateNotifier);
+    final settingsState = ref.watch(settingsNotifier);
     final biometric = ref.watch(biometricNotifier);
 
     return Scaffold(
@@ -30,126 +30,136 @@ class SettingsScreen extends ConsumerWidget {
         leadingOnPress: () => Navigator.pop(context),
         showTrailing: false,
       ),
-      body: ListView(
-        physics: const ClampingScrollPhysics(),
-        children: [
-          ListTile(
-            dense: true,
-            title: Text(
-              AppStrings.settingsDarkTheme,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            subtitle: const Text(AppStrings.settingsDarkThemeSubtitle),
-            trailing: PlatformSwitch(
-              value: settingsState.isDarkTheme,
-              onChanged: (toggle) {
-                ref.read(settingsStateNotifier.notifier).toggleTheme();
-              },
-            ),
-          ),
-          ListTile(
-            dense: true,
-            title: Text(
-              AppStrings.settingsAutoCopyEmail,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            subtitle: const Text(AppStrings.settingsAutoCopyEmailSubtitle),
-            trailing: PlatformSwitch(
-              value: settingsState.isAutoCopyEnabled,
-              onChanged: (toggle) {
-                ref.read(settingsStateNotifier.notifier).toggleAutoCopy();
-              },
-            ),
-          ),
-          ListTile(
-            dense: true,
-            title: Text(
-              AppStrings.settingsBiometricAuth,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            subtitle: const Text(AppStrings.settingsBiometricAuthSubtitle),
-            trailing: PlatformSwitch(
-              value: biometric.isEnabled,
-              onChanged: (toggle) =>
-                  ref.read(biometricNotifier.notifier).toggleBiometric(toggle),
-            ),
-          ),
-          const Divider(height: 0),
-          ListTile(
-            dense: true,
-            title: Text(
-              AppStrings.settingsAnonAddyHelpCenter,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            subtitle: const Text(AppStrings.settingsAnonAddyHelpCenterSubtitle),
-            trailing: const Icon(Icons.open_in_new_outlined),
-            onTap: () => Utilities.launchURL(kAnonAddyHelpCenterURL),
-          ),
-          ListTile(
-            dense: true,
-            title: Text(
-              AppStrings.settingsAnonAddyFAQ,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            subtitle: const Text(AppStrings.settingsAnonAddyFAQSubtitle),
-            trailing: const Icon(Icons.open_in_new_outlined),
-            onTap: () => Utilities.launchURL(kAnonAddyFAQURL),
-          ),
-          const Divider(height: 0),
-          const AppVersion(),
-          ListTile(
-            dense: true,
-            title: Text(
-              AppStrings.settingsAboutApp,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            subtitle: const Text(AppStrings.settingsAboutAppSubtitle),
-            trailing: const Icon(Icons.help_outline),
-            onTap: () {
-              Navigator.pushNamed(context, AboutAppScreen.routeName);
-            },
-          ),
-          ListTile(
-            dense: true,
-            title: Text(
-              AppStrings.settingsEnjoyingApp,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            subtitle: const Text(AppStrings.settingsEnjoyingAppSubtitle),
-            trailing: const Icon(Icons.help_outline),
-            onTap: () {
-              Utilities.launchURL(
-                PlatformAware.isIOS()
-                    ? kAddyManagerAppStoreURL
-                    : kAddyManagerPlayStoreURL,
-              );
-            },
-          ),
-          const Divider(height: 20),
-          TextButton(
-            child: Text(
-              AppStrings.settingsLogout,
-              style: Theme.of(context)
-                  .textTheme
-                  .button
-                  ?.copyWith(color: Colors.red),
-              textAlign: TextAlign.left,
-            ),
-            onPressed: () {
-              PlatformAware.platformDialog(
-                context: context,
-                child: PlatformAlertDialog(
-                  title: AppStrings.settingsLogout,
-                  content: AppStrings.logOutAlertDialog,
-                  method: () {
-                    Navigator.pushReplacementNamed(
-                        context, LogoutScreen.routeName);
+      body: settingsState.when(
+        data: (settings) {
+          return ListView(
+            physics: const ClampingScrollPhysics(),
+            children: [
+              ListTile(
+                dense: true,
+                title: Text(
+                  AppStrings.settingsDarkTheme,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: const Text(AppStrings.settingsDarkThemeSubtitle),
+                trailing: PlatformSwitch(
+                  value: settings.isDarkTheme,
+                  onChanged: (toggle) {
+                    ref.read(settingsNotifier.notifier).toggleTheme();
                   },
                 ),
-              );
-            },
-          ),
-        ],
+              ),
+              ListTile(
+                dense: true,
+                title: Text(
+                  AppStrings.settingsAutoCopyEmail,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: const Text(AppStrings.settingsAutoCopyEmailSubtitle),
+                trailing: PlatformSwitch(
+                  value: settings.isAutoCopyEnabled,
+                  onChanged: (toggle) {
+                    ref.read(settingsNotifier.notifier).toggleAutoCopy();
+                  },
+                ),
+              ),
+              ListTile(
+                dense: true,
+                title: Text(
+                  AppStrings.settingsBiometricAuth,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: const Text(AppStrings.settingsBiometricAuthSubtitle),
+                trailing: PlatformSwitch(
+                  value: biometric.isEnabled,
+                  onChanged: (toggle) => ref
+                      .read(biometricNotifier.notifier)
+                      .toggleBiometric(toggle),
+                ),
+              ),
+              const Divider(height: 0),
+              ListTile(
+                dense: true,
+                title: Text(
+                  AppStrings.settingsAnonAddyHelpCenter,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle:
+                    const Text(AppStrings.settingsAnonAddyHelpCenterSubtitle),
+                trailing: const Icon(Icons.open_in_new_outlined),
+                onTap: () => Utilities.launchURL(kAnonAddyHelpCenterURL),
+              ),
+              ListTile(
+                dense: true,
+                title: Text(
+                  AppStrings.settingsAnonAddyFAQ,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: const Text(AppStrings.settingsAnonAddyFAQSubtitle),
+                trailing: const Icon(Icons.open_in_new_outlined),
+                onTap: () => Utilities.launchURL(kAnonAddyFAQURL),
+              ),
+              const Divider(height: 0),
+              const AppVersion(),
+              ListTile(
+                dense: true,
+                title: Text(
+                  AppStrings.settingsAboutApp,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: const Text(AppStrings.settingsAboutAppSubtitle),
+                trailing: const Icon(Icons.help_outline),
+                onTap: () {
+                  Navigator.pushNamed(context, AboutAppScreen.routeName);
+                },
+              ),
+              ListTile(
+                dense: true,
+                title: Text(
+                  AppStrings.settingsEnjoyingApp,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                subtitle: const Text(AppStrings.settingsEnjoyingAppSubtitle),
+                trailing: const Icon(Icons.help_outline),
+                onTap: () {
+                  Utilities.launchURL(
+                    PlatformAware.isIOS()
+                        ? kAddyManagerAppStoreURL
+                        : kAddyManagerPlayStoreURL,
+                  );
+                },
+              ),
+              const Divider(height: 20),
+              TextButton(
+                child: Text(
+                  AppStrings.settingsLogout,
+                  style: Theme.of(context)
+                      .textTheme
+                      .button
+                      ?.copyWith(color: Colors.red),
+                  textAlign: TextAlign.left,
+                ),
+                onPressed: () {
+                  PlatformAware.platformDialog(
+                    context: context,
+                    child: PlatformAlertDialog(
+                      title: AppStrings.settingsLogout,
+                      content: AppStrings.logOutAlertDialog,
+                      method: () {
+                        Navigator.pushReplacementNamed(
+                            context, LogoutScreen.routeName);
+                      },
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+        error: (err, _) => Center(child: Text(err.toString())),
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

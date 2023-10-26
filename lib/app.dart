@@ -1,10 +1,10 @@
 import 'dart:io';
 
+import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
 import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,26 +12,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
-class App extends ConsumerStatefulWidget {
-  const App({
-    Key? key,
-  }) : super(key: key);
+class App extends ConsumerWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
-  ConsumerState createState() => _AppState();
-}
-
-class _AppState extends ConsumerState<App> {
-  @override
-  void initState() {
-    super.initState();
-    ref.read(settingsStateNotifier.notifier).loadSettingsState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     /// Use [watch] method to access different providers
-    final settingsState = ref.watch(settingsStateNotifier);
+    final settingsState = ref.watch(settingsNotifier).value;
 
     /// Sets StatusBarColor for the whole app
     SystemChrome.setSystemUIOverlayStyle(
@@ -42,7 +29,7 @@ class _AppState extends ConsumerState<App> {
       return MacosApp(
         title: AppStrings.appName,
         debugShowCheckedModeBanner: false,
-        theme: settingsState.isDarkTheme
+        theme: settingsState?.isDarkTheme ?? false
             ? AppTheme.macOSThemeDark
             : AppTheme.macOSThemeLight,
         darkTheme: AppTheme.macOSThemeDark,
@@ -61,7 +48,8 @@ class _AppState extends ConsumerState<App> {
     return MaterialApp(
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
-      theme: settingsState.isDarkTheme ? AppTheme.dark : AppTheme.light,
+      theme:
+          settingsState?.isDarkTheme ?? false ? AppTheme.dark : AppTheme.light,
       darkTheme: AppTheme.dark,
       onGenerateRoute: RouteGenerator.generateRoute,
       initialRoute: AuthorizationScreen.routeName,
