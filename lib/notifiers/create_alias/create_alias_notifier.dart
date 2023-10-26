@@ -1,10 +1,10 @@
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
 import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
-import 'package:anonaddy/notifiers/domain_options/domain_options_state.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
@@ -27,7 +27,7 @@ final createAliasStateNotifier =
   return CreateAliasNotifier(
     aliasService: ref.read(aliasServiceProvider),
     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
-    domainOptions: ref.read(domainOptionsStateNotifier),
+    domainOptions: ref.read(domainOptionsNotifier),
     accountState: ref.read(accountNotifierProvider),
     recipientState: ref.read(recipientTabStateNotifier),
     isAutoCopy: ref.read(settingsStateNotifier).isAutoCopyEnabled,
@@ -47,17 +47,17 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
     /// the user's account setting through [domainOptions]. Those values are NULL if
     /// user has NOT set default aliasDomain and/or aliasFormat.
 
-    if (domainOptions.domainOptions != null) {
+    if (domainOptions != null) {
       /// If null, default to "anonaddy.me".
-      setAliasDomain(domainOptions.domainOptions!.defaultAliasDomain ??
+      setAliasDomain(domainOptions!.value!.defaultAliasDomain ??
           AnonAddyString.sharedDomainsAnonAddyMe);
 
       /// If null, default to "random_characters".
-      setAliasFormat(domainOptions.domainOptions!.defaultAliasFormat ??
+      setAliasFormat(domainOptions!.value!.defaultAliasFormat ??
           AnonAddyString.aliasFormatRandomChars);
 
       ///
-      _setDomains(domainOptions.domainOptions!.domains);
+      _setDomains(domainOptions!.value!.domains);
     } else {
       /// If [domainOptions] fails to load data, set the following parameters to be used.
       setAliasDomain(AnonAddyString.sharedDomainsAnonAddyMe);
@@ -70,7 +70,7 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
   }
 
   final AliasService aliasService;
-  final DomainOptionsState domainOptions;
+  final AsyncValue<DomainOptions>? domainOptions;
   final AsyncValue<Account> accountState;
   final RecipientTabState recipientState;
   final bool isAutoCopy;

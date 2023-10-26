@@ -1,6 +1,5 @@
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
-import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
 import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipient_tab_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
@@ -50,9 +49,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     /// Show [ChangelogWidget] in [HomeScreen] if app has updated
     ref.read(settingsStateNotifier.notifier).showChangelogIfAppUpdated();
-
-    /// Pre-loads [DomainOptions] data for [CreateAlias]
-    ref.read(domainOptionsStateNotifier.notifier).fetchDomainOption();
 
     /// Pre-loads [DomainOptions] data for [CreateAlias]
     ref.read(failedDeliveriesNotifier.notifier).getFailedDeliveries();
