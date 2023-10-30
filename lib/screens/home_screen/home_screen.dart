@@ -4,9 +4,9 @@ import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
+import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/alert_center_icon.dart';
 import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';
-import 'package:anonaddy/screens/home_screen/components/create_alias_fab.dart';
 import 'package:anonaddy/screens/search_tab/quick_search_screen.dart';
 import 'package:anonaddy/screens/search_tab/search_tab.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
@@ -114,7 +114,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton: const CreateAliasFAB(),
+      floatingActionButton: const CreateAlias(),
       body: IndexedStack(
         key: const Key('homeScreenBody'),
         index: _selectedIndex,

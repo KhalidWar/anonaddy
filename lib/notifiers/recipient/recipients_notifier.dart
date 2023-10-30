@@ -10,12 +10,12 @@ final recipientsNotifier =
 
 class RecipientsNotifier extends AsyncNotifier<List<Recipient>> {
   Future<void> fetchRecipients() async {
-    try {
-      state = await AsyncValue.guard(
-          () => ref.read(recipientService).fetchRecipients());
-    } catch (error) {
-      rethrow;
-    }
+    state = await AsyncValue.guard(
+        () => ref.read(recipientService).fetchRecipients());
+  }
+
+  List<Recipient> getVerifiedRecipients() {
+    return state.value!.where((recipient) => recipient.isVerified).toList();
   }
 
   @override

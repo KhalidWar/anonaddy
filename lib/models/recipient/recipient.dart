@@ -107,3 +107,10 @@ class Recipient extends HiveObject {
     return 'Recipient{id: $id, userId: $userId, email: $email, shouldEncrypt: $shouldEncrypt, fingerprint: $fingerprint, emailVerifiedAt: $emailVerifiedAt, aliases: $aliases, createdAt: $createdAt, updatedAt: $updatedAt, canReplySend: $canReplySend, inlineEncryption: $inlineEncryption, protectedHeaders: $protectedHeaders}';
   }
 }
+
+extension RecipientExtension on Recipient {
+  bool get isVerified => emailVerifiedAt.isNotEmpty;
+  bool get hasFingerprint => fingerprint.isNotEmpty;
+  bool get isEncrypted => shouldEncrypt;
+  int get aliasesCount => aliases.length;
+}

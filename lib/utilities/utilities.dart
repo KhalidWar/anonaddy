@@ -72,7 +72,7 @@ class Utilities {
     }
   }
 
-  static String correctAliasString(String input) {
+  static String correctAliasString(String? input) {
     switch (input) {
       case 'random_characters':
         return 'Random Characters';
@@ -80,8 +80,10 @@ class Utilities {
         return 'Random Words';
       case 'custom':
         return 'Custom';
-      default:
+      case 'uuid':
         return 'UUID';
+      default:
+        return 'No default Alias selected';
     }
   }
 
