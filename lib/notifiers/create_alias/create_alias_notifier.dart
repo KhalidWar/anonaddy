@@ -44,9 +44,9 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
     try {
       final createdAlias = await ref.read(aliasServiceProvider).createNewAlias(
             desc: currentState.description,
-            localPart: currentState.localPart ?? '',
+            localPart: currentState.localPart,
             domain: currentState.selectedAliasDomain!,
-            format: currentState.selectedAliasFormat ?? '',
+            format: currentState.selectedAliasFormat!,
             recipients: currentState.selectedRecipients
                 .map((recipient) => recipient.id)
                 .toList(),

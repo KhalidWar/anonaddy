@@ -14,8 +14,7 @@ void main() {
     return ProviderScope(
       overrides: [
         authStateNotifier.overrideWithProvider(provider),
-        domainOptionsStateNotifier
-            .overrideWithProvider(testDomainOptionsNotifier),
+        domainOptionsNotifier.overrideWithProvider(testDomainOptionsNotifier),
       ],
       child: const MaterialApp(
         home: AuthorizationScreen(),

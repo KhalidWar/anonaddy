@@ -13,16 +13,6 @@ class SettingsState {
   final bool showChangelog;
   final String appVersion;
 
-  static SettingsState initial() {
-    return SettingsState(
-      isAutoCopyEnabled: false,
-      isDarkTheme: false,
-      isBiometricEnabled: false,
-      showChangelog: false,
-      appVersion: '',
-    );
-  }
-
   SettingsState copyWith({
     bool? isAutoCopyEnabled,
     bool? isDarkTheme,
