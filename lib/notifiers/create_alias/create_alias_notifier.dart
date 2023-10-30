@@ -1,13 +1,14 @@
+import 'dart:async';
+
 import 'package:anonaddy/models/account/account.dart';
-import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
-import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
+import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
+import 'package:anonaddy/services/domain_options/domain_options_service.dart';
+import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/utilities/utilities.dart';
@@ -20,86 +21,36 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// and subscription status from [AccountTabState]. On top of that, it also some complex
 /// conditional logic when creating an alias, several variables have to be
 /// accounted for. Feel free to reach out to me if you've any questions.
-final createAliasStateNotifier =
-    StateNotifierProvider.autoDispose<CreateAliasNotifier, CreateAliasState>(
-        (ref) {
-  return CreateAliasNotifier(
-    aliasService: ref.read(aliasServiceProvider),
-    aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
-    domainOptions: ref.read(domainOptionsNotifier),
-    accountState: ref.read(accountNotifierProvider),
-    recipients: ref.read(recipientsNotifier).value!,
-    isAutoCopy:
-        ref.read(settingsNotifier).asData?.value.isAutoCopyEnabled ?? false,
-  );
-});
+final createAliasNotifierProvider =
+    AsyncNotifierProvider.autoDispose<CreateAliasNotifier, CreateAliasState>(
+        CreateAliasNotifier.new);
 
-class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
-  CreateAliasNotifier({
-    required this.aliasService,
-    required this.domainOptions,
-    required this.accountState,
-    required this.recipients,
-    required this.isAutoCopy,
-    required this.aliasTabNotifier,
-  }) : super(CreateAliasState.initial(accountState.value)) {
-    /// Initially, set [aliasDomain] and [aliasFormat] to default values obtained from
-    /// the user's account setting through [domainOptions]. Those values are NULL if
-    /// user has NOT set default aliasDomain and/or aliasFormat.
-
-    if (domainOptions != null) {
-      /// If null, default to "anonaddy.me".
-      setAliasDomain(domainOptions!.value!.defaultAliasDomain ??
-          AnonAddyString.sharedDomainsAnonAddyMe);
-
-      /// If null, default to "random_characters".
-      setAliasFormat(domainOptions!.value!.defaultAliasFormat ??
-          AnonAddyString.aliasFormatRandomChars);
-
-      ///
-      _setDomains(domainOptions!.value!.domains);
-    } else {
-      /// If [domainOptions] fails to load data, set the following parameters to be used.
-      setAliasDomain(AnonAddyString.sharedDomainsAnonAddyMe);
-      setAliasFormat(AnonAddyString.aliasFormatRandomChars);
-      _setDomains([]);
-    }
-
-    _setVerifiedRecipients();
-    _setHeaderText();
-  }
-
-  final AliasService aliasService;
-  final AsyncValue<DomainOptions>? domainOptions;
-  final AsyncValue<Account> accountState;
-  final List<Recipient> recipients;
-  final bool isAutoCopy;
-  final AliasTabNotifier aliasTabNotifier;
-
-  /// Updated UI with the latest state
-  void _updateState(CreateAliasState newState) {
-    /// Make sure state is mounted before updating to avoid lifecycle errors
-    if (mounted) state = newState;
-  }
-
+class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
   Future createNewAlias() async {
+    final isAutoCopy = ref.read(settingsNotifier).value!.isAutoCopyEnabled;
+    final aliasTabNotifier = ref.read(aliasTabStateNotifier.notifier);
+
+    final currentState = state.value!;
+
     /// Handles if "Custom" aliasFormat is selected and local part is empty
-    if (state.aliasFormat == AnonAddyString.aliasFormatCustom &&
-        state.localPart!.isEmpty) {
+    if (currentState.selectedAliasFormat == AnonAddyString.aliasFormatCustom &&
+        currentState.localPart.isEmpty) {
       throw Utilities.showToast('Provide a valid local part');
     }
 
     /// Show loading indicator
-    _updateState(state.copyWith(isLoading: true));
+    state = AsyncData(currentState.copyWith(isConfirmButtonLoading: true));
 
     try {
-      final createdAlias = await aliasService.createNewAlias(
-        desc: state.description ?? '',
-        localPart: state.localPart ?? '',
-        domain: state.aliasDomain!,
-        format: state.aliasFormat!,
-        recipients: _selectedRecipientsId(),
-      );
+      final createdAlias = await ref.read(aliasServiceProvider).createNewAlias(
+            desc: currentState.description,
+            localPart: currentState.localPart ?? '',
+            domain: currentState.selectedAliasDomain!,
+            format: currentState.selectedAliasFormat ?? '',
+            recipients: currentState.selectedRecipients
+                .map((recipient) => recipient.id)
+                .toList(),
+          );
 
       if (isAutoCopy) {
         await Utilities.copyOnTap(createdAlias.email);
@@ -112,380 +63,135 @@ class CreateAliasNotifier extends StateNotifier<CreateAliasState> {
     } catch (error) {
       Utilities.showToast(error.toString());
     }
-    _updateState(state.copyWith(isLoading: false));
+    state = AsyncData(currentState.copyWith(isConfirmButtonLoading: false));
   }
 
   void setDescription(String? description) {
-    final newState = state.copyWith(description: description);
-    _updateState(newState);
+    state = AsyncData(state.value!.copyWith(description: description));
   }
 
   void setAliasDomain(String aliasDomain) {
     /// Update list used for [AliasFormat] according to currently selected [aliasDomain]
-    _setAliasFormatList(aliasDomain);
+    // _setAliasFormatList(aliasDomain);
+
+    final currentState = state.value!;
+
+    final aliasFormatList = _getAliasFormatList(
+      isSubscriptionFree: currentState.account.isSubscriptionFree,
+      aliasDomain: aliasDomain,
+    );
 
     /// Set [AliasFormat] field to [kUUID] if the current [AliasFormatList] does NOT
     /// contain "Custom".
     final isCustomIncluded =
-        state.aliasFormatList!.contains(AnonAddyString.aliasFormatCustom);
+        aliasFormatList.contains(AnonAddyString.aliasFormatCustom);
 
     /// Update UI according to the latest AliasFormat and AliasDomain
-    final newState = state.copyWith(
-      aliasDomain: aliasDomain,
-      aliasFormat: isCustomIncluded
-          ? state.aliasFormat
+    final newState = currentState.copyWith(
+      selectedAliasDomain: aliasDomain,
+      selectedAliasFormat: isCustomIncluded
+          ? currentState.selectedAliasFormat
           : AnonAddyString.aliasFormatRandomChars,
+      aliasFormatList: aliasFormatList,
     );
-    _updateState(newState);
+
+    state = AsyncData(newState);
   }
 
   void setAliasFormat(String aliasFormat) {
-    final newState = state.copyWith(aliasFormat: aliasFormat);
-    _updateState(newState);
+    state = AsyncData(state.value!.copyWith(selectedAliasFormat: aliasFormat));
   }
 
   void setLocalPart(String? localPart) {
-    final newState = state.copyWith(localPart: localPart);
-    _updateState(newState);
-  }
-
-  void setSelectedRecipients() {
-    // final newState = state.copyWith(selectedRecipients: recipients);
-    _updateState(state.copyWith());
-  }
-
-  void clearSelectedRecipients() {
-    state.selectedRecipients!.clear();
-    _updateState(state.copyWith());
+    state = AsyncData(state.value!.copyWith(localPart: localPart));
   }
 
   bool isRecipientSelected(Recipient recipient) {
-    if (state.selectedRecipients!.contains(recipient)) {
-      return true;
-    } else {
-      return false;
-    }
+    return state.value!.selectedRecipients.contains(recipient);
   }
 
   void toggleRecipient(Recipient recipient) {
-    if (state.selectedRecipients!.contains(recipient)) {
-      state.selectedRecipients!
+    final currentState = state.value!;
+    if (currentState.selectedRecipients.contains(recipient)) {
+      currentState.selectedRecipients
           .removeWhere((element) => element.email == recipient.email);
     } else {
-      state.selectedRecipients!.add(recipient);
+      currentState.selectedRecipients.add(recipient);
     }
 
-    _updateState(state.copyWith());
-  }
-
-  void _setDomains(List<String> domains) {
-    final newState = state.copyWith(domains: domains);
-    _updateState(newState);
+    state = AsyncData(currentState.copyWith());
   }
 
   /// Sets which list to be used for [AliasFormat] selection. For example, if selected
   /// [AliasDomain] is a shared domain, e.g. from [CreateAliasState.sharedDomains],
   /// [AliasFormat] list can NOT contain "Custom" and user can NOT use "Custom" (Local Part).
   /// Another example is that [aliasFormatRandomWords] is NOT available for [subscriptionFree] users.
-  void _setAliasFormatList(String aliasDomain) {
-    final subscription = accountState.value!.subscription;
+  List<String> _getAliasFormatList({
+    required bool isSubscriptionFree,
+    required String? aliasDomain,
+  }) {
     if (CreateAliasState.sharedDomains.contains(aliasDomain)) {
-      if (subscription == AnonAddyString.subscriptionFree) {
-        state.aliasFormatList = CreateAliasState.freeTierWithSharedDomain;
-      } else {
-        state.aliasFormatList = CreateAliasState.paidTierWithSharedDomain;
-      }
-    } else {
-      if (subscription == AnonAddyString.subscriptionFree) {
-        state.aliasFormatList = CreateAliasState.freeTierNoSharedDomain;
-      } else {
-        state.aliasFormatList = CreateAliasState.paidTierNoSharedDomain;
-      }
+      return isSubscriptionFree
+          ? CreateAliasState.freeTierWithSharedDomain
+          : CreateAliasState.paidTierWithSharedDomain;
     }
+
+    return isSubscriptionFree
+        ? CreateAliasState.freeTierNoSharedDomain
+        : CreateAliasState.paidTierNoSharedDomain;
   }
 
   /// Sets verified recipients as available recipients that can be selected
-  void _setVerifiedRecipients() {
-    final verifiedRecipients = <Recipient>[];
-
-    /// Get all recipients related to user's account
-    /// Extract verified recipients
-    for (Recipient recipient in recipients) {
-      /// Verified recipients have confirmed emails meaning
-      /// [emailVerifiedAt] has a value, a timestamp of when email was confirmed.
-      if (recipient.emailVerifiedAt.isNotEmpty) {
-        verifiedRecipients.add(recipient);
-      }
-    }
-    final newState = state.copyWith(verifiedRecipients: verifiedRecipients);
-    _updateState(newState);
+  /// Verified recipients have confirmed emails meaning
+  /// [Recipient.emailVerifiedAt] has a value, a timestamp of when email was confirmed.
+  List<Recipient> _getVerifiedRecipients(List<Recipient> recipients) {
+    return recipients
+        .where((recipient) => recipient.emailVerifiedAt.isNotEmpty)
+        .toList();
   }
 
-  void _setHeaderText() {
-    final username = accountState.value!.username;
-    final text =
-        'Other aliases e.g. alias@$username.anonaddy.com or .me can also be created automatically when they receive their first email.';
-    final newState = state.copyWith(headerText: text);
-    _updateState(newState);
-  }
+  @override
+  FutureOr<CreateAliasState> build() async {
+    final account = await ref.read(accountServiceProvider).fetchAccount();
+    final domainOptions =
+        await ref.read(domainOptionsService).fetchDomainOptions();
+    final recipientState = await ref.read(recipientService).fetchRecipients();
 
-  /// Extracts selected recipients' IDs
-  List<String> _selectedRecipientsId() {
-    final recipients = <String>[];
-    state.selectedRecipients!.forEach((element) {
-      recipients.add(element.id);
-    });
-    return recipients;
+    /// Initially, set [aliasDomain] and [aliasFormat] to default values obtained from
+    /// the user's account setting through [domainOptions]. Those values are NULL if
+    /// user has NOT set default aliasDomain and/or aliasFormat.
+    // if (domainOptions != null) {
+    //   /// If null, default to "anonaddy.me".
+    //   setAliasDomain(
+    //     domainOptions.defaultAliasDomain ??
+    //         AnonAddyString.sharedDomainsAnonAddyMe,
+    //   );
+    //
+    //   /// If null, default to "random_characters".
+    //   setAliasFormat(domainOptions.defaultAliasFormat ??
+    //       AnonAddyString.aliasFormatRandomChars);
+    // } else {
+    //   /// If [domainOptions] fails to load data, set the following parameters to be used.
+    //   setAliasDomain(AnonAddyString.sharedDomainsAnonAddyMe);
+    //   setAliasFormat(AnonAddyString.aliasFormatRandomChars);
+    // }
+
+    final aliasFormatList = _getAliasFormatList(
+      isSubscriptionFree: account.isSubscriptionFree,
+      aliasDomain: domainOptions.defaultAliasDomain,
+    );
+
+    return CreateAliasState(
+      domains: domainOptions.domains,
+      selectedAliasDomain: domainOptions.defaultAliasDomain,
+      selectedAliasFormat: domainOptions.defaultAliasFormat,
+      description: '',
+      aliasFormatList: aliasFormatList,
+      verifiedRecipients: _getVerifiedRecipients(recipientState),
+      selectedRecipients: [],
+      account: account,
+      localPart: '',
+      isConfirmButtonLoading: false,
+    );
   }
 }
-//import 'dart:async';
-//
-// import 'package:anonaddy/models/account/account.dart';
-// import 'package:anonaddy/models/recipient/recipient.dart';
-// import 'package:anonaddy/notifiers/account/account_notifier.dart';
-// import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
-// import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
-// import 'package:anonaddy/notifiers/domain_options/domain_options_notifier.dart';
-// import 'package:anonaddy/notifiers/domain_options/domain_options_state.dart';
-// import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
-// import 'package:anonaddy/notifiers/recipient/recipient_tab_state.dart';
-// import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
-// import 'package:anonaddy/services/alias/alias_service.dart';
-// import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-// import 'package:anonaddy/shared_components/constants/toast_message.dart';
-// import 'package:anonaddy/utilities/utilities.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-//
-// /// This is the most complex part of this whole project.
-// ///
-// /// It requires data from several endpoints such as list of verified recipients
-// /// from [RecipientTabState], domain options for user's default alias domain and format,
-// /// and subscription status from [AccountTabState]. On top of that, it also some complex
-// /// conditional logic when creating an alias, several variables have to be
-// /// accounted for. Feel free to reach out to me if you've any questions.
-// final createAliasStateNotifier =
-//     AsyncNotifierProvider.autoDispose<CreateAliasNotifier, CreateAliasState>(
-//         CreateAliasNotifier.new);
-// // (ref) {
-// //   return CreateAliasNotifier(
-// //     aliasService: ref.read(aliasServiceProvider),
-// //     aliasTabNotifier: ref.read(aliasTabStateNotifier.notifier),
-// //     domainOptions: ref.read(domainOptionsStateNotifier),
-// //     accountState: ref.read(accountNotifierProvider),
-// //     recipientState: ref.read(recipientTabStateNotifier),
-// //     isAutoCopy: ref.read(settingsStateNotifier).isAutoCopyEnabled,
-// //   );
-// // });
-//
-// class CreateAliasNotifier extends AsyncNotifier<CreateAliasState> {
-//
-//   /// Updated UI with the latest state
-//   void _updateState(CreateAliasState newState) {
-//     /// Make sure state is mounted before updating to avoid lifecycle errors
-//     if (mounted) state = newState;
-//   }
-//
-//   Future createNewAlias() async {
-//     /// Handles if "Custom" aliasFormat is selected and local part is empty
-//     if (state.aliasFormat == AnonAddyString.aliasFormatCustom &&
-//         state.localPart!.isEmpty) {
-//       throw Utilities.showToast('Provide a valid local part');
-//     }
-//
-//     /// Show loading indicator
-//     _updateState(state.copyWith(isLoading: true));
-//
-//     try {
-//       final createdAlias = await aliasService.createNewAlias(
-//         desc: state.description ?? '',
-//         localPart: state.localPart ?? '',
-//         domain: state.aliasDomain!,
-//         format: state.aliasFormat!,
-//         recipients: _selectedRecipientsId(),
-//       );
-//
-//       if (isAutoCopy) {
-//         await Utilities.copyOnTap(createdAlias.email);
-//         Utilities.showToast(ToastMessage.createAliasAndCopyEmail);
-//       } else {
-//         Utilities.showToast(ToastMessage.createAliasSuccess);
-//       }
-//
-//       aliasTabNotifier.addAlias(createdAlias);
-//     } catch (error) {
-//       Utilities.showToast(error.toString());
-//     }
-//     _updateState(state.copyWith(isLoading: false));
-//   }
-//
-//   void setDescription(String? description) {
-//     final newState = state.copyWith(description: description);
-//     _updateState(newState);
-//   }
-//
-//   void setAliasDomain(String aliasDomain) {
-//     /// Update list used for [AliasFormat] according to currently selected [aliasDomain]
-//     _setAliasFormatList(aliasDomain);
-//
-//     /// Set [AliasFormat] field to [kUUID] if the current [AliasFormatList] does NOT
-//     /// contain "Custom".
-//     final isCustomIncluded =
-//         state.aliasFormatList!.contains(AnonAddyString.aliasFormatCustom);
-//
-//     /// Update UI according to the latest AliasFormat and AliasDomain
-//     final newState = state.copyWith(
-//       aliasDomain: aliasDomain,
-//       aliasFormat: isCustomIncluded
-//           ? state.aliasFormat
-//           : AnonAddyString.aliasFormatRandomChars,
-//     );
-//     _updateState(newState);
-//   }
-//
-//   void setAliasFormat(String aliasFormat) {
-//     final newState = state.copyWith(aliasFormat: aliasFormat);
-//     _updateState(newState);
-//   }
-//
-//   void setLocalPart(String? localPart) {
-//     final newState = state.copyWith(localPart: localPart);
-//     _updateState(newState);
-//   }
-//
-//   void setSelectedRecipients() {
-//     // final newState = state.copyWith(selectedRecipients: recipients);
-//     _updateState(state.copyWith());
-//   }
-//
-//   void clearSelectedRecipients() {
-//     state.selectedRecipients!.clear();
-//     _updateState(state.copyWith());
-//   }
-//
-//   bool isRecipientSelected(Recipient recipient) {
-//     if (state.selectedRecipients!.contains(recipient)) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   }
-//
-//   void toggleRecipient(Recipient recipient) {
-//     if (state.selectedRecipients!.contains(recipient)) {
-//       state.selectedRecipients!
-//           .removeWhere((element) => element.email == recipient.email);
-//     } else {
-//       state.selectedRecipients!.add(recipient);
-//     }
-//
-//     _updateState(state.copyWith());
-//   }
-//
-//   void _setDomains(List<String> domains) {
-//     final newState = state.copyWith(domains: domains);
-//     _updateState(newState);
-//   }
-//
-//   /// Sets which list to be used for [AliasFormat] selection. For example, if selected
-//   /// [AliasDomain] is a shared domain, e.g. from [CreateAliasState.sharedDomains],
-//   /// [AliasFormat] list can NOT contain "Custom" and user can NOT use "Custom" (Local Part).
-//   /// Another example is that [aliasFormatRandomWords] is NOT available for [subscriptionFree] users.
-//   void _setAliasFormatList(String aliasDomain) {
-//     final subscription = accountState.value!.subscription;
-//     if (CreateAliasState.sharedDomains.contains(aliasDomain)) {
-//       if (subscription == AnonAddyString.subscriptionFree) {
-//         state.aliasFormatList = CreateAliasState.freeTierWithSharedDomain;
-//       } else {
-//         state.aliasFormatList = CreateAliasState.paidTierWithSharedDomain;
-//       }
-//     } else {
-//       if (subscription == AnonAddyString.subscriptionFree) {
-//         state.aliasFormatList = CreateAliasState.freeTierNoSharedDomain;
-//       } else {
-//         state.aliasFormatList = CreateAliasState.paidTierNoSharedDomain;
-//       }
-//     }
-//   }
-//
-//   /// Sets verified recipients as available recipients that can be selected
-//   void _setVerifiedRecipients() {
-//     final verifiedRecipients = <Recipient>[];
-//
-//     /// Get all recipients related to user's account
-//     /// Extract verified recipients
-//     for (Recipient recipient in recipientState.recipients) {
-//       /// Verified recipients have confirmed emails meaning
-//       /// [emailVerifiedAt] has a value, a timestamp of when email was confirmed.
-//       if (recipient.emailVerifiedAt.isNotEmpty) {
-//         verifiedRecipients.add(recipient);
-//       }
-//     }
-//     final newState = state.copyWith(verifiedRecipients: verifiedRecipients);
-//     _updateState(newState);
-//   }
-//
-//   void _setHeaderText() {
-//     final username = accountState.value!.username;
-//     final text =
-//         'Other aliases e.g. alias@$username.anonaddy.com or .me can also be created automatically when they receive their first email.';
-//     final newState = state.copyWith(headerText: text);
-//     _updateState(newState);
-//   }
-//
-//   /// Extracts selected recipients' IDs
-//   List<String> _selectedRecipientsId() {
-//     final recipients = <String>[];
-//     state.selectedRecipients!.forEach((element) {
-//       recipients.add(element.id);
-//     });
-//     return recipients;
-//   }
-//
-//   @override
-//   FutureOr<CreateAliasState> build() {
-//     final aliasService = ref.read(aliasServiceProvider);
-//     final aliasTabNotifier = ref.read(aliasTabStateNotifier.notifier);
-//     final domainOptions = ref.read(domainOptionsStateNotifier);
-//     final accountState = ref.read(accountNotifierProvider);
-//     final recipientState = ref.read(recipientTabStateNotifier);
-//     final isAutoCopy = ref.read(settingsStateNotifier).isAutoCopyEnabled;
-//
-//     /// Initially, set [aliasDomain] and [aliasFormat] to default values obtained from
-//     /// the user's account setting through [domainOptions]. Those values are NULL if
-//     /// user has NOT set default aliasDomain and/or aliasFormat.
-//     if (domainOptions.domainOptions != null) {
-//       /// If null, default to "anonaddy.me".
-//       setAliasDomain(domainOptions.domainOptions!.defaultAliasDomain ??
-//           AnonAddyString.sharedDomainsAnonAddyMe,);
-//
-//       /// If null, default to "random_characters".
-//       setAliasFormat(domainOptions.domainOptions!.defaultAliasFormat ??
-//           AnonAddyString.aliasFormatRandomChars);
-//
-//       ///
-//       _setDomains(domainOptions.domainOptions!.domains);
-//     } else {
-//       /// If [domainOptions] fails to load data, set the following parameters to be used.
-//       setAliasDomain(AnonAddyString.sharedDomainsAnonAddyMe);
-//       setAliasFormat(AnonAddyString.aliasFormatRandomChars);
-//       _setDomains([]);
-//     }
-//
-//     _setVerifiedRecipients();
-//     _setHeaderText();
-//
-//     return CreateAliasState(
-//       aliasFormat : AnonAddyString.aliasFormatRandomChars,
-//       aliasDomain: ,
-//       description:,
-//       localPart:,
-//       aliasFormatList:,
-//       isLoading:,
-//       verifiedRecipients:,
-//       selectedRecipients:,
-//       account:,
-//       domains:,
-//       headerText:,
-//     );
-//   }
-// }
