@@ -26,14 +26,21 @@ final createAliasNotifierProvider =
         CreateAliasNotifier.new);
 
 class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
-  Future createNewAlias() async {
+  Future<void> createNewAlias() async {
     final isAutoCopy = ref.read(settingsNotifier).value!.isAutoCopyEnabled;
     final aliasTabNotifier = ref.read(aliasTabStateNotifier.notifier);
 
     final currentState = state.value!;
 
+    if (!currentState.isAliasDomainValid) {
+      throw Utilities.showToast('Select an alias domain');
+    }
+    if (!currentState.isAliasFormatValid) {
+      throw Utilities.showToast('Select an alias format');
+    }
+
     /// Handles if "Custom" aliasFormat is selected and local part is empty
-    if (currentState.showLocalPart && currentState.localPart.isEmpty) {
+    if (currentState.showLocalPart && !currentState.isLocalPartValid) {
       throw Utilities.showToast('Provide a valid local part');
     }
 
@@ -42,10 +49,10 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
 
     try {
       final createdAlias = await ref.read(aliasServiceProvider).createNewAlias(
-            desc: currentState.description,
-            localPart: currentState.localPart,
             domain: currentState.selectedAliasDomain!,
             format: currentState.selectedAliasFormat!,
+            desc: currentState.description,
+            localPart: currentState.localPart,
             recipients: currentState.selectedRecipients
                 .map((recipient) => recipient.id)
                 .toList(),
@@ -62,7 +69,6 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
     } catch (error) {
       Utilities.showToast(error.toString());
     }
-    state = AsyncData(currentState.copyWith(isConfirmButtonLoading: false));
   }
 
   void setDescription(String? description) {
@@ -170,8 +176,10 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
       domainOptions: domainOptions,
       domains: domainOptions.domains,
       sharedDomains: domainOptions.sharedDomains,
-      selectedAliasDomain: domainOptions.defaultAliasDomain,
-      selectedAliasFormat: domainOptions.defaultAliasFormat,
+      selectedAliasDomain: null,
+      // selectedAliasDomain: domainOptions.defaultAliasDomain,
+      // selectedAliasFormat: domainOptions.defaultAliasFormat,
+      selectedAliasFormat: null,
       description: '',
       localPart: '',
       aliasFormatList: aliasFormatList,

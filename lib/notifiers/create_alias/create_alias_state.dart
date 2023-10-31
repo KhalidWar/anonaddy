@@ -44,9 +44,6 @@ class CreateAliasState {
   Account account;
   DomainOptions domainOptions;
 
-  bool get showLocalPart =>
-      selectedAliasFormat == AnonAddyString.aliasFormatCustom;
-
   static const freeTierWithSharedDomain = [
     AnonAddyString.aliasFormatUUID,
     AnonAddyString.aliasFormatRandomChars,
@@ -106,6 +103,8 @@ class CreateAliasState {
 }
 
 extension CreateAliasStateExtension on CreateAliasState {
+  bool get isAliasDomainValid => selectedAliasDomain != null;
+  bool get isAliasFormatValid => selectedAliasFormat != null;
   bool get showLocalPart =>
       selectedAliasFormat == AnonAddyString.aliasFormatCustom;
   bool get isLocalPartValid => localPart.isNotEmpty;
