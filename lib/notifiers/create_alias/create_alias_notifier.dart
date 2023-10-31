@@ -33,8 +33,7 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
     final currentState = state.value!;
 
     /// Handles if "Custom" aliasFormat is selected and local part is empty
-    if (currentState.selectedAliasFormat == AnonAddyString.aliasFormatCustom &&
-        currentState.localPart.isEmpty) {
+    if (currentState.showLocalPart && currentState.localPart.isEmpty) {
       throw Utilities.showToast('Provide a valid local part');
     }
 
@@ -71,28 +70,31 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
   }
 
   void setAliasDomain(String aliasDomain) {
-    /// Update list used for [AliasFormat] according to currently selected [aliasDomain]
-    // _setAliasFormatList(aliasDomain);
-
     final currentState = state.value!;
 
+    /// Re-calculate [AliasFormatList] based on currently selected [aliasDomain].
     final aliasFormatList = _getAliasFormatList(
-      isSubscriptionFree: currentState.account.isSubscriptionFree,
       aliasDomain: aliasDomain,
+      isSubscriptionFree: currentState.account.isSubscriptionFree,
+      sharedDomains: currentState.sharedDomains,
     );
 
-    /// Set [AliasFormat] field to [kUUID] if the current [AliasFormatList] does NOT
-    /// contain "Custom".
-    final isCustomIncluded =
-        aliasFormatList.contains(AnonAddyString.aliasFormatCustom);
+    /// This is to prevent user from selecting "Custom" (Local Part) when the selected
+    /// [AliasDomain] is a shared domain, e.g. "anonaddy.me".
+    final isSelectedAliasDomainSharedDomain =
+        currentState.sharedDomains.contains(aliasDomain);
+    final isSelectedAliasFormatCustom =
+        currentState.selectedAliasFormat == AnonAddyString.aliasFormatCustom;
+    final shouldUpdatedAliasFormat =
+        isSelectedAliasDomainSharedDomain && isSelectedAliasFormatCustom;
 
     /// Update UI according to the latest AliasFormat and AliasDomain
     final newState = currentState.copyWith(
-      selectedAliasDomain: aliasDomain,
-      selectedAliasFormat: isCustomIncluded
-          ? currentState.selectedAliasFormat
-          : AnonAddyString.aliasFormatRandomChars,
       aliasFormatList: aliasFormatList,
+      selectedAliasDomain: aliasDomain,
+      selectedAliasFormat: shouldUpdatedAliasFormat
+          ? AnonAddyString.aliasFormatRandomChars
+          : currentState.selectedAliasFormat,
     );
 
     state = AsyncData(newState);
@@ -122,15 +124,18 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
     state = AsyncData(currentState.copyWith());
   }
 
-  /// Sets which list to be used for [AliasFormat] selection. For example, if selected
-  /// [AliasDomain] is a shared domain, e.g. from [CreateAliasState.sharedDomains],
-  /// [AliasFormat] list can NOT contain "Custom" and user can NOT use "Custom" (Local Part).
-  /// Another example is that [aliasFormatRandomWords] is NOT available for [subscriptionFree] users.
+  /// Sets which list to be used for [AliasFormat] selection.
+  ///
+  /// For example, if selected [CreateAliasState.selectedAliasDomain] is a shared domain,
+  /// [CreateAliasState.aliasFormatList] list can NOT contain [AnonAddyString.aliasFormatCustom].
+  /// Another example is that [AnonAddyString.aliasFormatRandomWords] is NOT
+  /// available for users with free subscription.
   List<String> _getAliasFormatList({
     required bool isSubscriptionFree,
     required String? aliasDomain,
+    required List<String> sharedDomains,
   }) {
-    if (CreateAliasState.sharedDomains.contains(aliasDomain)) {
+    if (sharedDomains.contains(aliasDomain)) {
       return isSubscriptionFree
           ? CreateAliasState.freeTierWithSharedDomain
           : CreateAliasState.paidTierWithSharedDomain;
@@ -141,56 +146,38 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
         : CreateAliasState.paidTierNoSharedDomain;
   }
 
-  /// Sets verified recipients as available recipients that can be selected
-  /// Verified recipients have confirmed emails meaning
-  /// [Recipient.emailVerifiedAt] has a value, a timestamp of when email was confirmed.
-  List<Recipient> _getVerifiedRecipients(List<Recipient> recipients) {
-    return recipients
-        .where((recipient) => recipient.emailVerifiedAt.isNotEmpty)
-        .toList();
-  }
-
   @override
   FutureOr<CreateAliasState> build() async {
     final account = await ref.read(accountServiceProvider).fetchAccount();
     final domainOptions =
         await ref.read(domainOptionsService).fetchDomainOptions();
-    final recipientState = await ref.read(recipientService).fetchRecipients();
-
-    /// Initially, set [aliasDomain] and [aliasFormat] to default values obtained from
-    /// the user's account setting through [domainOptions]. Those values are NULL if
-    /// user has NOT set default aliasDomain and/or aliasFormat.
-    // if (domainOptions != null) {
-    //   /// If null, default to "anonaddy.me".
-    //   setAliasDomain(
-    //     domainOptions.defaultAliasDomain ??
-    //         AnonAddyString.sharedDomainsAnonAddyMe,
-    //   );
-    //
-    //   /// If null, default to "random_characters".
-    //   setAliasFormat(domainOptions.defaultAliasFormat ??
-    //       AnonAddyString.aliasFormatRandomChars);
-    // } else {
-    //   /// If [domainOptions] fails to load data, set the following parameters to be used.
-    //   setAliasDomain(AnonAddyString.sharedDomainsAnonAddyMe);
-    //   setAliasFormat(AnonAddyString.aliasFormatRandomChars);
-    // }
+    final recipients = await ref.read(recipientService).fetchRecipients();
 
     final aliasFormatList = _getAliasFormatList(
       isSubscriptionFree: account.isSubscriptionFree,
+      sharedDomains: domainOptions.sharedDomains,
       aliasDomain: domainOptions.defaultAliasDomain,
     );
 
+    /// Sets verified recipients as available recipients that can be selected
+    /// Verified recipients have confirmed emails meaning
+    /// [Recipient.emailVerifiedAt] has a value, a timestamp of when email was confirmed.
+    final verifiedRecipients = recipients
+        .where((recipient) => recipient.emailVerifiedAt.isNotEmpty)
+        .toList();
+
     return CreateAliasState(
+      domainOptions: domainOptions,
       domains: domainOptions.domains,
+      sharedDomains: domainOptions.sharedDomains,
       selectedAliasDomain: domainOptions.defaultAliasDomain,
       selectedAliasFormat: domainOptions.defaultAliasFormat,
       description: '',
+      localPart: '',
       aliasFormatList: aliasFormatList,
-      verifiedRecipients: _getVerifiedRecipients(recipientState),
+      verifiedRecipients: verifiedRecipients,
       selectedRecipients: [],
       account: account,
-      localPart: '',
       isConfirmButtonLoading: false,
     );
   }
