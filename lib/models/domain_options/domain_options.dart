@@ -6,12 +6,14 @@ part 'domain_options.g.dart';
 class DomainOptions {
   const DomainOptions({
     required this.domains,
+    required this.sharedDomains,
     this.defaultAliasDomain,
     this.defaultAliasFormat,
   });
 
   @JsonKey(name: 'data')
   final List<String> domains;
+  final List<String> sharedDomains;
   final String? defaultAliasDomain;
   final String? defaultAliasFormat;
 

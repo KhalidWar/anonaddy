@@ -9,6 +9,9 @@ part of 'domain_options.dart';
 DomainOptions _$DomainOptionsFromJson(Map<String, dynamic> json) =>
     DomainOptions(
       domains: (json['data'] as List<dynamic>).map((e) => e as String).toList(),
+      sharedDomains: (json['sharedDomains'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       defaultAliasDomain: json['defaultAliasDomain'] as String?,
       defaultAliasFormat: json['defaultAliasFormat'] as String?,
     );
@@ -16,6 +19,7 @@ DomainOptions _$DomainOptionsFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$DomainOptionsToJson(DomainOptions instance) =>
     <String, dynamic>{
       'data': instance.domains,
+      'sharedDomains': instance.sharedDomains,
       'defaultAliasDomain': instance.defaultAliasDomain,
       'defaultAliasFormat': instance.defaultAliasFormat,
     };
