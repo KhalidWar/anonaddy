@@ -1,13 +1,13 @@
 import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
+import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
+import 'package:anonaddy/screens/create_alias/components/create_alias_error_widget.dart';
 import 'package:anonaddy/screens/create_alias/components/create_alias_tile.dart';
 import 'package:anonaddy/screens/create_alias/components/select_recipient_tile.dart';
 import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
@@ -48,7 +48,6 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final showFab = ref.watch(fabVisibilityStateNotifier);
 
     return AnimatedFab(
@@ -59,7 +58,6 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         onPressed: () {
           WoltModalSheet.show(
             context: context,
-            maxPageHeight: size.height * 0.5,
             pageIndexNotifier: pageIndexNotifier,
             pageListBuilder: (modalSheetContext) {
               return [
@@ -92,123 +90,120 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
       enableDrag: true,
       stickyActionBar: Container(
         padding: const EdgeInsets.all(16),
-        child: SizedBox(
-          width: double.infinity,
-          child: Consumer(
-            builder: (context, ref, _) {
-              final isConfirmButtonLoading = ref.watch(
-                createAliasNotifierProvider.select((createAliasState) =>
-                    createAliasState.value?.isConfirmButtonLoading ?? false),
-              );
-
-              return PlatformButton(
-                onPress: isConfirmButtonLoading ? () {} : createAlias,
-                child: isConfirmButtonLoading
-                    ? const PlatformLoadingIndicator()
-                    : const Text(
-                        AppStrings.createAliasTitle,
-                        style: TextStyle(color: Colors.black),
-                      ),
-              );
-            },
-          ),
-        ),
-      ),
-      child: SizedBox(
-        height: MediaQuery.of(modalSheetContext).size.height * 0.5,
+        width: double.infinity,
         child: Consumer(
           builder: (context, ref, _) {
-            final createAliasState = ref.watch(createAliasNotifierProvider);
+            final createAliasNotifier = ref.watch(createAliasNotifierProvider);
 
-            return createAliasState.when(
+            return createAliasNotifier.when(
               data: (createAliasState) {
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        'Other aliases e.g. alias@${createAliasState.account.username}.anonaddy.com or .me can also be created automatically when they receive their first email.',
-                        style: Theme.of(modalSheetContext).textTheme.bodySmall,
-                      ),
-                    ),
-                    const Divider(),
-                    CreateAliasTile(
-                      title: createAliasState.selectedAliasDomain!,
-                      iconData: Icons.dns_outlined,
-                      subtitle: 'Alias Domain',
-                      onPress: () =>
-                          pageIndexNotifier.value = pageIndexNotifier.value + 1,
-                    ),
-                    CreateAliasTile(
-                      title: Utilities.correctAliasString(
-                          createAliasState.selectedAliasFormat),
-                      iconData: Icons.alternate_email_outlined,
-                      subtitle: 'Alias Format',
-                      onPress: () =>
-                          pageIndexNotifier.value = pageIndexNotifier.value + 2,
-                    ),
-                    if (createAliasState.showLocalPart)
-                      CreateAliasTile(
-                        title: createAliasState.localPart.isEmpty
-                            ? 'Enter local part...'
-                            : createAliasState.localPart,
-                        iconData: Icons.alternate_email_outlined,
-                        subtitle: 'Alias Local Part',
-                        onPress: () => pageIndexNotifier.value =
-                            pageIndexNotifier.value + 3,
-                      ),
-                    CreateAliasTile(
-                      title: createAliasState.selectedRecipients.map((e) {
-                            return e.email;
-                          }).join(', ') +
-                          (createAliasState.selectedRecipients.isNotEmpty
-                              ? ' (${createAliasState.selectedRecipients.length})'
-                              : 'Select recipient(s) (optional)...'),
-                      iconData: Icons.email_outlined,
-                      subtitle: 'Recipients',
-                      onPress: () =>
-                          pageIndexNotifier.value = pageIndexNotifier.value + 4,
-                    ),
-                    CreateAliasTile(
-                      title: createAliasState.description.isEmpty
-                          ? 'Enter description (optional)...'
-                          : createAliasState.description,
-                      iconData: Icons.comment_outlined,
-                      subtitle: 'Description',
-                      onPress: () =>
-                          pageIndexNotifier.value = pageIndexNotifier.value + 5,
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * .1),
-                    // height: MediaQuery.of(modalSheetContext).size.height,
-                  ],
+                final isConfirmButtonLoading =
+                    createAliasState.isConfirmButtonLoading;
+
+                return PlatformButton(
+                  onPress: isConfirmButtonLoading ? () {} : createAlias,
+                  child: isConfirmButtonLoading
+                      ? const PlatformLoadingIndicator()
+                      : const Text(
+                          AppStrings.createAliasTitle,
+                          style: TextStyle(color: Colors.black),
+                        ),
                 );
               },
-              error: (err, _) => Center(child: Text(err.toString())),
-              loading: () => SizedBox(
-                height: MediaQuery.of(modalSheetContext).size.height * .4,
-                width: double.infinity,
-                child: const Center(
-                  child: PlatformLoadingIndicator(),
-                ),
-              ),
+              error: (_, __) => const SizedBox.shrink(),
+              loading: () => const SizedBox.shrink(),
             );
           },
         ),
+      ),
+      child: Consumer(
+        builder: (context, ref, _) {
+          final createAliasState = ref.watch(createAliasNotifierProvider);
+
+          return createAliasState.when(
+            data: (createAliasState) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      'Other aliases e.g. alias@${createAliasState.account.username}.anonaddy.com or .me can also be created automatically when they receive their first email.',
+                      style: Theme.of(modalSheetContext).textTheme.bodySmall,
+                    ),
+                  ),
+                  CreateAliasTile(
+                    title: createAliasState.selectedAliasDomain ??
+                        'No default selected',
+                    iconData: Icons.dns_outlined,
+                    subtitle: 'Alias Domain',
+                    onPress: () =>
+                        pageIndexNotifier.value = pageIndexNotifier.value + 1,
+                  ),
+                  CreateAliasTile(
+                    title: createAliasState.selectedAliasFormat == null
+                        ? 'No default selected'
+                        : Utilities.correctAliasString(
+                            createAliasState.selectedAliasFormat),
+                    iconData: Icons.alternate_email_outlined,
+                    subtitle: 'Alias Format',
+                    onPress: () =>
+                        pageIndexNotifier.value = pageIndexNotifier.value + 2,
+                  ),
+                  if (createAliasState.showLocalPart)
+                    CreateAliasTile(
+                      title: createAliasState.localPart.isEmpty
+                          ? 'Enter local part...'
+                          : createAliasState.localPart,
+                      iconData: Icons.alternate_email_outlined,
+                      subtitle: 'Alias Local Part',
+                      onPress: () =>
+                          pageIndexNotifier.value = pageIndexNotifier.value + 3,
+                    ),
+                  CreateAliasTile(
+                    title: createAliasState.selectedRecipients.map((e) {
+                          return e.email;
+                        }).join(', ') +
+                        (createAliasState.selectedRecipients.isNotEmpty
+                            ? ' (${createAliasState.selectedRecipients.length})'
+                            : 'Select recipient(s) (optional)...'),
+                    iconData: Icons.email_outlined,
+                    subtitle: 'Recipients',
+                    onPress: () =>
+                        pageIndexNotifier.value = pageIndexNotifier.value + 4,
+                  ),
+                  CreateAliasTile(
+                    title: createAliasState.description.isEmpty
+                        ? 'Enter description (optional)...'
+                        : createAliasState.description,
+                    iconData: Icons.comment_outlined,
+                    subtitle: 'Description',
+                    onPress: () =>
+                        pageIndexNotifier.value = pageIndexNotifier.value + 5,
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * .1),
+                ],
+              );
+            },
+            error: (error, _) {
+              return CreateAliasErrorWidget(message: error.toString());
+            },
+            loading: () => SizedBox(
+              height: MediaQuery.of(modalSheetContext).size.height * .4,
+              width: double.infinity,
+              child: const Center(
+                child: PlatformLoadingIndicator(),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
   WoltModalSheetPage buildSelectAliasDomain(BuildContext modalSheetContext) {
-    return WoltModalSheetPage.withSingleChild(
-      topBarTitle: Text(
-        'Select Alias Domain',
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      isTopBarLayerAlwaysVisible: true,
-      leadingNavBarWidget: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_rounded),
-        onPressed: resetPageIndex,
-      ),
+    return _buildModalSheet(
+      title: 'Select Alias Domain',
+      onLeadingNavBarPressed: resetPageIndex,
       child: Consumer(
         builder: (context, ref, child) {
           final createAliasNotifier = ref.watch(createAliasNotifierProvider);
@@ -217,36 +212,31 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
             data: (createAliasState) {
               return PlatformScrollbar(
                 child: createAliasState.domains.isEmpty
-                    ? Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: const Text('No alias domain found'),
+                    ? const CreateAliasErrorWidget(
+                        message: 'No alias domain found',
                       )
-                    : SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: ListView.builder(
-                          itemCount: createAliasState.domains.length,
-                          itemBuilder: (context, index) {
-                            final domain = createAliasState.domains[index];
-                            return ListTile(
-                              title: Text(
-                                domain,
-                                textAlign: TextAlign.center,
-                              ),
-                              onTap: () {
-                                ref
-                                    .read(createAliasNotifierProvider.notifier)
-                                    .setAliasDomain(domain);
-                                resetPageIndex();
-                              },
-                            );
-                          },
-                        ),
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: createAliasState.domains.length,
+                        itemBuilder: (context, index) {
+                          final domain = createAliasState.domains[index];
+                          return ListTile(
+                            title: Text(domain, textAlign: TextAlign.center),
+                            onTap: () {
+                              ref
+                                  .read(createAliasNotifierProvider.notifier)
+                                  .setAliasDomain(domain);
+                              resetPageIndex();
+                            },
+                          );
+                        },
                       ),
               );
             },
-            error: (err, _) => Center(child: Text(err.toString())),
+            error: (error, _) {
+              return CreateAliasErrorWidget(message: error.toString());
+            },
             loading: () => const Center(child: CircularProgressIndicator()),
           );
         },
@@ -255,62 +245,48 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasFormat(BuildContext modalSheetContext) {
-    return WoltModalSheetPage.withSingleChild(
-      topBarTitle: Text(
-        'Select Alias Format',
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      isTopBarLayerAlwaysVisible: true,
-      leadingNavBarWidget: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_rounded),
-        onPressed: resetPageIndex,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Consumer(
-          builder: (context, ref, _) {
-            final createAliasNotifier = ref.watch(createAliasNotifierProvider);
+    return _buildModalSheet(
+      title: 'Select Alias Format',
+      onLeadingNavBarPressed: resetPageIndex,
+      child: Consumer(
+        builder: (context, ref, _) {
+          final createAliasNotifier = ref.watch(createAliasNotifierProvider);
 
-            return createAliasNotifier.when(
-              data: (createAliasState) {
-                return createAliasState.aliasFormatList.isEmpty
-                    ? Center(
-                        child: Text(
-                          'No alias format found',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: createAliasState.aliasFormatList.length,
-                        itemBuilder: (context, index) {
-                          final format =
-                              createAliasState.aliasFormatList[index];
-                          return ListTile(
-                            dense: true,
-                            selectedTileColor: AppColors.accentColor,
-                            horizontalTitleGap: 0,
-                            title: Text(
-                              Utilities.correctAliasString(format),
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            onTap: () {
-                              ref
-                                  .read(createAliasNotifierProvider.notifier)
-                                  .setAliasFormat(format);
-                              resetPageIndex();
-                            },
-                          );
-                        },
-                      );
-              },
-              error: (err, _) => Center(child: Text(err.toString())),
-              loading: () => const Center(child: CircularProgressIndicator()),
-            );
-          },
-        ),
+          return createAliasNotifier.when(
+            data: (createAliasState) {
+              return createAliasState.aliasFormatList.isEmpty
+                  ? const CreateAliasErrorWidget(
+                      message: 'No alias format found',
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: createAliasState.aliasFormatList.length,
+                      itemBuilder: (context, index) {
+                        final aliasFormat =
+                            createAliasState.aliasFormatList[index];
+                        return ListTile(
+                          selectedTileColor: AppColors.accentColor,
+                          title: Text(
+                            Utilities.correctAliasString(aliasFormat),
+                            textAlign: TextAlign.center,
+                          ),
+                          onTap: () {
+                            ref
+                                .read(createAliasNotifierProvider.notifier)
+                                .setAliasFormat(aliasFormat);
+                            resetPageIndex();
+                          },
+                        );
+                      },
+                    );
+            },
+            error: (error, _) {
+              return CreateAliasErrorWidget(message: error.toString());
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+          );
+        },
       ),
     );
   }
@@ -323,27 +299,31 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         builder: (context, ref, _) {
           ref.watch(createAliasNotifierProvider);
 
-          return Column(
-            children: [
-              Text(
-                AppStrings.createAliasCustomFieldNote,
-                style: Theme.of(modalSheetContext).textTheme.bodySmall,
-              ),
-              TextFormField(
-                autofocus: true,
-                textInputAction: TextInputAction.done,
-                onFieldSubmitted: (input) {
-                  ref
-                      .read(createAliasNotifierProvider.notifier)
-                      .setLocalPart(input);
-                  resetPageIndex();
-                },
-                decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                  hintText: AppStrings.localPartFieldHint,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Text(
+                  AppStrings.createAliasCustomFieldNote,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                TextFormField(
+                  autofocus: true,
+                  textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (input) {
+                    ref
+                        .read(createAliasNotifierProvider.notifier)
+                        .setLocalPart(input);
+                    resetPageIndex();
+                  },
+                  decoration: AppTheme.kTextFormFieldDecoration.copyWith(
+                    hintText: AppStrings.localPartFieldHint,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -351,45 +331,29 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasRecipient(BuildContext modalSheetContext) {
-    return WoltModalSheetPage.withSingleChild(
-      topBarTitle: Text(
-        'Select Default Recipients',
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      pageTitle: const Padding(
-        padding: EdgeInsets.all(16),
-        child: Text(AppStrings.updateAliasRecipientNote),
-      ),
-      isTopBarLayerAlwaysVisible: true,
-      leadingNavBarWidget: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_rounded),
-        onPressed: resetPageIndex,
-      ),
+    return _buildModalSheet(
+      title: 'Select Default Recipients',
+      pageTitle: AppStrings.updateAliasRecipientNote,
+      onLeadingNavBarPressed: resetPageIndex,
       child: Consumer(
         builder: (context, ref, _) {
-          final recipientState = ref.watch(recipientsNotifier);
-          ref.watch(createAliasNotifierProvider);
+          final createAliasNotifier = ref.watch(createAliasNotifierProvider);
 
-          return recipientState.when(
+          return createAliasNotifier.when(
             skipLoadingOnRefresh: false,
             skipLoadingOnReload: false,
-            data: (recipients) {
-              final verifiedRecipients =
-                  ref.read(recipientsNotifier.notifier).getVerifiedRecipients();
-
-              return verifiedRecipients.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No recipients found',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
+            data: (createAliasState) {
+              return createAliasState.verifiedRecipients.isEmpty
+                  ? const CreateAliasErrorWidget(
+                      message: 'No recipients found',
                     )
                   : ListView.builder(
                       shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: verifiedRecipients.length,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: createAliasState.verifiedRecipients.length,
                       itemBuilder: (context, index) {
-                        final verifiedRecipient = verifiedRecipients[index];
+                        final verifiedRecipient =
+                            createAliasState.verifiedRecipients[index];
                         final isSelected = ref
                             .read(createAliasNotifierProvider.notifier)
                             .isRecipientSelected(verifiedRecipient);
@@ -404,7 +368,9 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                       },
                     );
             },
-            error: (err, _) => ErrorMessageWidget(message: err.toString()),
+            error: (error, _) {
+              return CreateAliasErrorWidget(message: error.toString());
+            },
             loading: () => const Center(child: PlatformLoadingIndicator()),
           );
         },
@@ -415,32 +381,29 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildAliasDescription(BuildContext modalSheetContext) {
     return _buildModalSheet(
       title: 'Enter Description',
+      pageTitle:
+          'A unique word or two that describe alias. You can also search for aliases by their description.',
       onLeadingNavBarPressed: resetPageIndex,
       child: Consumer(
         builder: (context, ref, _) {
           ref.watch(createAliasNotifierProvider);
 
-          return Column(
-            children: [
-              const Text(
-                'A unique word or two that describe alias. You can also search for aliases by their description.',
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: TextFormField(
+              autofocus: true,
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (input) {
+                ref
+                    .read(createAliasNotifierProvider.notifier)
+                    .setDescription(input);
+                resetPageIndex();
+              },
+              decoration: AppTheme.kTextFormFieldDecoration.copyWith(
+                hintText: AppStrings.descriptionFieldHint,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                autofocus: true,
-                textInputAction: TextInputAction.done,
-                onFieldSubmitted: (input) {
-                  ref
-                      .read(createAliasNotifierProvider.notifier)
-                      .setDescription(input);
-                  resetPageIndex();
-                },
-                decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                  hintText: AppStrings.descriptionFieldHint,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                ),
-              ),
-            ],
+            ),
           );
         },
       ),
@@ -451,6 +414,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
     required String title,
     required Widget child,
     Function()? onLeadingNavBarPressed,
+    String? pageTitle,
   }) {
     return WoltModalSheetPage.withSingleChild(
       topBarTitle: Text(
@@ -458,14 +422,20 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         style: Theme.of(context).textTheme.titleMedium,
       ),
       isTopBarLayerAlwaysVisible: true,
+      pageTitle: pageTitle == null
+          ? null
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                pageTitle,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
       leadingNavBarWidget: IconButton(
         icon: const Icon(Icons.arrow_back_ios_rounded),
         onPressed: onLeadingNavBarPressed,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: child,
-      ),
+      child: child,
     );
   }
 }

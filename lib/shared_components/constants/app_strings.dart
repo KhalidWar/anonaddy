@@ -24,7 +24,7 @@ class AppStrings {
 
   /// Aliases Tab
   static const updateAliasRecipientNote =
-      'Note: only verified recipients can be used as default recipients.';
+      'Only verified recipients can be used as default recipients.';
   static const deleteAliasSubtitle = 'Alias will reject all emails sent to it';
   static const restoreAliasSubtitle = 'Alias will be able to receive emails';
   static const updateDescriptionString =
