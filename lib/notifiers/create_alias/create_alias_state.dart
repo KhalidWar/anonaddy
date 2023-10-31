@@ -1,4 +1,5 @@
 import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/models/domain_options/domain_options.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 
@@ -13,7 +14,9 @@ class CreateAliasState {
     required this.isConfirmButtonLoading,
     required this.verifiedRecipients,
     required this.domains,
+    required this.sharedDomains,
     required this.account,
+    required this.domainOptions,
   });
 
   String description;
@@ -22,6 +25,7 @@ class CreateAliasState {
 
   /// Manages list of domains available to be used as [selectedAliasDomain].
   List<String> domains;
+  List<String> sharedDomains;
 
   /// Manages which list to be used for [selectedAliasFormat] selection.
   List<String> aliasFormatList;
@@ -38,16 +42,11 @@ class CreateAliasState {
 
   /// Informational text at the top of [CreateAlias] sheet
   Account account;
+  DomainOptions domainOptions;
 
   bool get showLocalPart =>
       selectedAliasFormat == AnonAddyString.aliasFormatCustom;
 
-  static const sharedDomains = [
-    AnonAddyString.sharedDomainsAnonAddyMe,
-    AnonAddyString.sharedDomainsAddyMail,
-    AnonAddyString.sharedDomains4WRD,
-    AnonAddyString.sharedDomainsMailerMe,
-  ];
   static const freeTierWithSharedDomain = [
     AnonAddyString.aliasFormatUUID,
     AnonAddyString.aliasFormatRandomChars,
@@ -79,7 +78,9 @@ class CreateAliasState {
     List<Recipient>? verifiedRecipients,
     List<Recipient>? selectedRecipients,
     List<String>? domains,
+    List<String>? sharedDomains,
     Account? account,
+    DomainOptions? domainOptions,
   }) {
     return CreateAliasState(
       description: description ?? this.description,
@@ -92,13 +93,15 @@ class CreateAliasState {
       verifiedRecipients: verifiedRecipients ?? this.verifiedRecipients,
       selectedRecipients: selectedRecipients ?? this.selectedRecipients,
       domains: domains ?? this.domains,
+      sharedDomains: sharedDomains ?? this.sharedDomains,
       account: account ?? this.account,
+      domainOptions: domainOptions ?? this.domainOptions,
     );
   }
 
   @override
   String toString() {
-    return 'CreateAliasState{description: $description, selectedAliasDomain: $selectedAliasDomain, selectedAliasFormat: $selectedAliasFormat, domains: $domains, aliasFormatList: $aliasFormatList, selectedRecipients: $selectedRecipients, localPart: $localPart, isConfirmButtonLoading: $isConfirmButtonLoading, verifiedRecipients: $verifiedRecipients, account: $account}';
+    return 'CreateAliasState{description: $description, selectedAliasDomain: $selectedAliasDomain, selectedAliasFormat: $selectedAliasFormat, domains: $domains, sharedDomains: $sharedDomains, aliasFormatList: $aliasFormatList, selectedRecipients: $selectedRecipients, localPart: $localPart, isConfirmButtonLoading: $isConfirmButtonLoading, verifiedRecipients: $verifiedRecipients, account: $account, domainOptions: $domainOptions}';
   }
 }
 
@@ -107,4 +110,6 @@ extension CreateAliasStateExtension on CreateAliasState {
       selectedAliasFormat == AnonAddyString.aliasFormatCustom;
   bool get isLocalPartValid => localPart.isNotEmpty;
   bool get isDescriptionValid => description.isNotEmpty;
+  bool get isDefaultAliasFormatCustom =>
+      domainOptions.defaultAliasFormat == AnonAddyString.aliasFormatCustom;
 }

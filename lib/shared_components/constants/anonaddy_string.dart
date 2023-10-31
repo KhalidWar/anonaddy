@@ -50,12 +50,6 @@ class AnonAddyString {
   static const aliasFormatCustom = 'custom';
   static const aliasFormatRandomWords = 'random_words';
 
-  /// Shared Domains
-  static const sharedDomainsAnonAddyMe = 'anonaddy.me';
-  static const sharedDomainsAddyMail = 'addymail.com';
-  static const sharedDomains4WRD = '4wrd.cc';
-  static const sharedDomainsMailerMe = 'mailer.me';
-
   /// addy.io Subscription Levels
   static const subscriptionFree = 'free';
   static const subscriptionLite = 'lite';
