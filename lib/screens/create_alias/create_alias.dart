@@ -180,7 +180,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                     onPress: () =>
                         pageIndexNotifier.value = pageIndexNotifier.value + 5,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * .1),
+                  const SizedBox(height: 85),
                 ],
               );
             },
@@ -435,7 +435,10 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         icon: const Icon(Icons.arrow_back_ios_rounded),
         onPressed: onLeadingNavBarPressed,
       ),
-      child: child,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 50),
+        child: child,
+      ),
     );
   }
 }
