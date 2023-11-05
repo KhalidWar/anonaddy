@@ -1,8 +1,8 @@
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_state.dart';
-import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_state.dart';
+import 'package:anonaddy/screens/alias_tab/aliases_tab.dart';
+import 'package:anonaddy/screens/alias_tab/components/aliases_tab_widget_keys.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,18 +20,18 @@ void main() {
     mockAliasService = MockAliasService();
   });
 
-  Widget aliasTab(AliasTabState aliasTabState) {
+  Widget aliasTab(AliasesState aliasTabState) {
     return MaterialApp(
       home: ProviderScope(
         overrides: [
-          aliasTabStateNotifier.overrideWith((_) {
-            return AliasTabNotifier(
+          aliasesNotifierProvider.overrideWith((_) {
+            return AliasesNotifier(
               aliasService: mockAliasService,
               initialState: aliasTabState,
             );
           }),
         ],
-        child: const AliasTab(),
+        child: const AliasesTab(),
       ),
     );
   }
@@ -41,11 +41,11 @@ void main() {
     'When no input and state is loading, '
     'Then AliasTab widgets load along with loading indicators.',
     (WidgetTester tester) async {
-      const loadingState = AliasTabState(
+      const loadingState = AliasesState(
         status: AliasTabStatus.loading,
         errorMessage: '',
-        availableAliasList: <Alias>[],
-        deletedAliasList: <Alias>[],
+        availableAliases: <Alias>[],
+        deletedAliases: <Alias>[],
       );
 
       final availableAlias = AliasTestData.validAliasWithRecipients();
@@ -65,19 +65,19 @@ void main() {
       await tester.pumpWidget(aliasTab(loadingState));
 
       // Act
-      final scaffold = find.byKey(AliasTabWidgetKeys.aliasTabScaffold);
-      final scrollView = find.byKey(AliasTabWidgetKeys.aliasTabScrollView);
-      final appBar = find.byKey(AliasTabWidgetKeys.aliasTabSliverAppBar);
-      final pieChart = find.byKey(AliasTabWidgetKeys.aliasTabEmailsStats);
-      final tapBar = find.byKey(AliasTabWidgetKeys.aliasTabTabBar);
+      final scaffold = find.byKey(AliasesTabWidgetKeys.aliasTabScaffold);
+      final scrollView = find.byKey(AliasesTabWidgetKeys.aliasTabScrollView);
+      final appBar = find.byKey(AliasesTabWidgetKeys.aliasTabSliverAppBar);
+      final pieChart = find.byKey(AliasesTabWidgetKeys.aliasTabEmailsStats);
+      final tapBar = find.byKey(AliasesTabWidgetKeys.aliasTabTabBar);
       final availableAliasesTab =
-          find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasesTab);
+          find.byKey(AliasesTabWidgetKeys.aliasTabAvailableAliasesTab);
       final deletedAliasesTab =
-          find.byKey(AliasTabWidgetKeys.aliasTabDeletedAliasesTab);
+          find.byKey(AliasesTabWidgetKeys.aliasTabDeletedAliasesTab);
       final tabBarView =
-          find.byKey(AliasTabWidgetKeys.aliasTabLoadingTabBarView);
+          find.byKey(AliasesTabWidgetKeys.aliasTabLoadingTabBarView);
       final availableAliasesLoading =
-          find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasesLoading);
+          find.byKey(AliasesTabWidgetKeys.aliasTabAvailableAliasesLoading);
 
       // Assert
       expect(scaffold, findsOneWidget);
@@ -97,11 +97,11 @@ void main() {
     'When no input and state is loaded, '
     'Then AliasTab widgets load and show list of aliases.',
     (WidgetTester tester) async {
-      const loadedState = AliasTabState(
+      const loadedState = AliasesState(
         status: AliasTabStatus.loaded,
         errorMessage: '',
-        availableAliasList: <Alias>[],
-        deletedAliasList: <Alias>[],
+        availableAliases: <Alias>[],
+        deletedAliases: <Alias>[],
       );
 
       final availableAlias = AliasTestData.validAliasWithRecipients();
@@ -123,23 +123,23 @@ void main() {
       await tester.pumpAndSettle();
 
       // Act
-      final scaffold = find.byKey(AliasTabWidgetKeys.aliasTabScaffold);
-      final scrollView = find.byKey(AliasTabWidgetKeys.aliasTabScrollView);
-      final appBar = find.byKey(AliasTabWidgetKeys.aliasTabSliverAppBar);
-      final pieChart = find.byKey(AliasTabWidgetKeys.aliasTabEmailsStats);
-      final tapBar = find.byKey(AliasTabWidgetKeys.aliasTabTabBar);
+      final scaffold = find.byKey(AliasesTabWidgetKeys.aliasTabScaffold);
+      final scrollView = find.byKey(AliasesTabWidgetKeys.aliasTabScrollView);
+      final appBar = find.byKey(AliasesTabWidgetKeys.aliasTabSliverAppBar);
+      final pieChart = find.byKey(AliasesTabWidgetKeys.aliasTabEmailsStats);
+      final tapBar = find.byKey(AliasesTabWidgetKeys.aliasTabTabBar);
       final availableAliasesTab =
-          find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasesTab);
+          find.byKey(AliasesTabWidgetKeys.aliasTabAvailableAliasesTab);
       final deletedAliasesTab =
-          find.byKey(AliasTabWidgetKeys.aliasTabDeletedAliasesTab);
+          find.byKey(AliasesTabWidgetKeys.aliasTabDeletedAliasesTab);
       final tabBarView =
-          find.byKey(AliasTabWidgetKeys.aliasTabLoadedTabBarView);
+          find.byKey(AliasesTabWidgetKeys.aliasTabLoadedTabBarView);
       final availableAliasesLoading =
-          find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasesLoading);
+          find.byKey(AliasesTabWidgetKeys.aliasTabAvailableAliasesLoading);
       final availableAliases =
-          find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasListTile);
+          find.byKey(AliasesTabWidgetKeys.aliasTabAvailableAliasListTile);
       final deletedAliases =
-          find.byKey(AliasTabWidgetKeys.aliasTabDeletedAliasListTile);
+          find.byKey(AliasesTabWidgetKeys.aliasTabDeletedAliasListTile);
 
       // Assert
       expect(scaffold, findsOneWidget);
@@ -161,11 +161,11 @@ void main() {
     'When no input and state is error, '
     'Then AliasTab error widget.',
     (WidgetTester tester) async {
-      const errorState = AliasTabState(
+      const errorState = AliasesState(
         status: AliasTabStatus.failed,
         errorMessage: AppStrings.somethingWentWrong,
-        availableAliasList: <Alias>[],
-        deletedAliasList: <Alias>[],
+        availableAliases: <Alias>[],
+        deletedAliases: <Alias>[],
       );
 
       final availableAlias = AliasTestData.validAliasWithRecipients();
@@ -185,24 +185,25 @@ void main() {
       await tester.pumpWidget(aliasTab(errorState));
 
       // Assert
-      expect(find.byKey(AliasTabWidgetKeys.aliasTabScaffold), findsOneWidget);
-      expect(find.byKey(AliasTabWidgetKeys.aliasTabFailedTabBarView),
+      expect(find.byKey(AliasesTabWidgetKeys.aliasTabScaffold), findsOneWidget);
+      expect(find.byKey(AliasesTabWidgetKeys.aliasTabFailedTabBarView),
           findsOneWidget);
-      expect(find.byKey(AliasTabWidgetKeys.aliasTabScrollView), findsOneWidget);
       expect(
-        find.byKey(AliasTabWidgetKeys.aliasTabSliverAppBar),
+          find.byKey(AliasesTabWidgetKeys.aliasTabScrollView), findsOneWidget);
+      expect(
+        find.byKey(AliasesTabWidgetKeys.aliasTabSliverAppBar),
         findsOneWidget,
       );
       expect(
-        find.byKey(AliasTabWidgetKeys.aliasTabEmailsStats),
+        find.byKey(AliasesTabWidgetKeys.aliasTabEmailsStats),
         findsOneWidget,
       );
       expect(
-        find.byKey(AliasTabWidgetKeys.aliasTabTabBar),
+        find.byKey(AliasesTabWidgetKeys.aliasTabTabBar),
         findsOneWidget,
       );
       expect(
-        find.byKey(AliasTabWidgetKeys.aliasTabAvailableAliasesLoading),
+        find.byKey(AliasesTabWidgetKeys.aliasTabAvailableAliasesLoading),
         findsNothing,
       );
       expect(find.byType(ErrorMessageWidget), findsOneWidget);

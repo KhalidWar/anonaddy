@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AliasTabWidgetKeys {
+class AliasesTabWidgetKeys {
   /// Alias Tab
   static const aliasTabScaffold = Key('aliasScreenScaffold');
   static const aliasTabScrollView = Key('aliasTabScrollView');

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/services/account/account_service.dart';
@@ -28,7 +28,7 @@ final createAliasNotifierProvider =
 class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
   Future<void> createNewAlias() async {
     final isAutoCopy = ref.read(settingsNotifier).value!.isAutoCopyEnabled;
-    final aliasTabNotifier = ref.read(aliasTabStateNotifier.notifier);
+    final aliasTabNotifier = ref.read(aliasesNotifierProvider.notifier);
 
     final currentState = state.value!;
 

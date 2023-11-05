@@ -36,7 +36,7 @@ class AliasService {
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.other) {
         final aliases = await dataStorage.loadAliases(isAvailableAliases: true);
-        return aliases;
+        if (aliases != null) return aliases;
       }
       throw dioError.message;
     } catch (e) {
@@ -57,7 +57,7 @@ class AliasService {
       if (dioError.type == DioErrorType.other) {
         final aliases =
             await dataStorage.loadAliases(isAvailableAliases: false);
-        return aliases;
+        if (aliases != null) return aliases;
       }
       throw dioError.message;
     } catch (e) {
@@ -65,7 +65,7 @@ class AliasService {
     }
   }
 
-  Future<List<Alias>> loadAvailableAliasesFromDisk() async {
+  Future<List<Alias>?> loadAvailableAliasesFromDisk() async {
     try {
       final availableAliases =
           await dataStorage.loadAliases(isAvailableAliases: true);
@@ -75,7 +75,7 @@ class AliasService {
     }
   }
 
-  Future<List<Alias>> loadDeletedAliasesFromDisk() async {
+  Future<List<Alias>?> loadDeletedAliasesFromDisk() async {
     try {
       final deletedAliases =
           await dataStorage.loadAliases(isAvailableAliases: false);
@@ -94,7 +94,7 @@ class AliasService {
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.other) {
         final alias = await dataStorage.loadSpecificAlias(aliasID);
-        return alias;
+        if (alias != null) return alias;
       }
       throw dioError.message;
     } catch (e) {

@@ -1,11 +1,11 @@
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
-import 'package:anonaddy/screens/alias_tab/alias_tab.dart';
+import 'package:anonaddy/screens/alias_tab/aliases_tab.dart';
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/alert_center_icon.dart';
 import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';
@@ -40,7 +40,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     if (index == 1) {
-      ref.read(aliasTabStateNotifier.notifier).refreshAliases();
+      ref.read(aliasesNotifierProvider.notifier).fetchAliases();
     }
   }
 
@@ -122,7 +122,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         index: _selectedIndex,
         children: const [
           AccountTab(),
-          AliasTab(),
+          AliasesTab(),
           SearchTab(),
         ],
       ),

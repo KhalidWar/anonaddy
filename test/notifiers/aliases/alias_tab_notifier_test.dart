@@ -1,17 +1,17 @@
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_state.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks.dart';
 
 void main() {
   late MockAliasService aliasService;
-  late AliasTabNotifier aliasTabNotifier;
+  late AliasesNotifier aliasTabNotifier;
 
   setUp(() {
     aliasService = MockAliasService();
-    aliasTabNotifier = AliasTabNotifier(
+    aliasTabNotifier = AliasesNotifier(
       aliasService: aliasService,
     );
   });
@@ -19,7 +19,7 @@ void main() {
   test('test initialState() method', () async {
     expect(
       aliasTabNotifier.debugState,
-      AliasTabState.initialState(),
+      AliasesState.initialState(),
     );
   });
 
@@ -46,11 +46,11 @@ void main() {
   });
 
   test('test deleteAlias(alias) method', () {
-    final initialState = AliasTabState.initialState();
+    final initialState = AliasesState.initialState();
     final alias = Alias();
     final updatedState = initialState.copyWith(availableAliasList: [alias]);
 
-    final aliasTabNotifier = AliasTabNotifier(
+    final aliasTabNotifier = AliasesNotifier(
       aliasService: aliasService,
       initialState: updatedState,
     );
@@ -64,11 +64,11 @@ void main() {
   });
 
   test('test removeRestoredAlias(alias) method', () {
-    final initialState = AliasTabState.initialState();
+    final initialState = AliasesState.initialState();
     final alias = Alias();
     final updatedState = initialState.copyWith(deletedAliasList: [alias]);
 
-    final aliasTabNotifier = AliasTabNotifier(
+    final aliasTabNotifier = AliasesNotifier(
       aliasService: aliasService,
       initialState: updatedState,
     );

@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/notifiers/search/search_result/search_result_state.dart';
 import 'package:anonaddy/services/search/search_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +9,7 @@ final searchResultStateNotifier =
     StateNotifierProvider<SearchResultNotifier, SearchResultState>((ref) {
   return SearchResultNotifier(
     searchService: ref.read(searchServiceProvider),
-    aliasTabState: ref.read(aliasTabStateNotifier.notifier),
+    aliasTabState: ref.read(aliasesNotifierProvider.notifier),
     controller: TextEditingController(),
   );
 });
@@ -22,7 +22,7 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
   }) : super(SearchResultState.initial(controller, true));
 
   final SearchService searchService;
-  final AliasTabNotifier aliasTabState;
+  final AliasesNotifier aliasTabState;
   final TextEditingController controller;
 
   /// Updates UI state
@@ -66,7 +66,8 @@ class SearchResultNotifier extends StateNotifier<SearchResultState> {
     final matchingAliases = <Alias>[];
 
     final text = state.searchController!.text.trim();
-    final aliases = aliasTabState.getAliases();
+    final aliases = [];
+    // aliasTabState.getAliases();
 
     for (var element in aliases) {
       final filterByEmail =

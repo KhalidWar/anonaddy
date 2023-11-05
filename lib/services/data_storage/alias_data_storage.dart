@@ -32,14 +32,17 @@ class AliasDataStorage {
     }
   }
 
-  Future<List<Alias>> loadAliases({required bool isAvailableAliases}) async {
+  Future<List<Alias>?> loadAliases({required bool isAvailableAliases}) async {
     try {
       final data = await secureStorage.read(
         key: isAvailableAliases
             ? DataStorageKeys.availableAliasesKey
             : DataStorageKeys.deletedAliasesKey,
       );
-      final decodedAliases = jsonDecode(data ?? '');
+
+      if (data == null) return null;
+
+      final decodedAliases = jsonDecode(data);
       final aliases = (decodedAliases as List)
           .map((alias) => Alias.fromJson(alias))
           .toList();
@@ -49,13 +52,13 @@ class AliasDataStorage {
     }
   }
 
-  Future<Alias> loadSpecificAlias(String id) async {
+  Future<Alias?> loadSpecificAlias(String id) async {
     try {
-      final aliases = [
-        ...await loadAliases(isAvailableAliases: true),
-        ...await loadAliases(isAvailableAliases: false),
-      ];
-      final alias = aliases.firstWhere((element) => element.id == id);
+      final availableAliases = await loadAliases(isAvailableAliases: true);
+      final deletedAliases = await loadAliases(isAvailableAliases: false);
+
+      final List<Alias?> aliases = [...?availableAliases, ...?deletedAliases];
+      final alias = aliases.firstWhere((element) => element?.id == id);
       return alias;
     } catch (error) {
       rethrow;

@@ -1,7 +1,6 @@
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_state.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
+import 'package:anonaddy/screens/alias_tab/components/aliases_tab_widget_keys.dart';
 import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/screens/macos/components/macos_sidebar_toggle.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
@@ -69,16 +68,12 @@ class _MacosAliasesTabState extends State<MacosAliasesTab> {
               builder: (context, scrollController) {
                 return Consumer(
                   builder: (context, ref, child) {
-                    final aliasTabState = ref.watch(aliasTabStateNotifier);
+                    final aliasTabState = ref.watch(aliasesNotifierProvider);
 
-                    switch (aliasTabState.status) {
-                      case AliasTabStatus.loading:
-                        return const ProgressCircle();
-
-                      case AliasTabStatus.loaded:
-                        final availableAliasList =
-                            aliasTabState.availableAliasList;
-                        final deletedAliasList = aliasTabState.deletedAliasList;
+                    return aliasTabState.when(
+                      data: (aliases) {
+                        final availableAliasList = aliases.availableAliases;
+                        final deletedAliasList = aliases.deletedAliases;
 
                         if (showAvailableAliases) {
                           return availableAliasList.isEmpty
@@ -87,7 +82,7 @@ class _MacosAliasesTabState extends State<MacosAliasesTab> {
                                   itemCount: availableAliasList.length,
                                   itemBuilder: (context, index) {
                                     return AliasListTile(
-                                      key: AliasTabWidgetKeys
+                                      key: AliasesTabWidgetKeys
                                           .aliasTabAvailableAliasListTile,
                                       alias: availableAliasList[index],
                                     );
@@ -101,18 +96,22 @@ class _MacosAliasesTabState extends State<MacosAliasesTab> {
                                 itemCount: deletedAliasList.length,
                                 itemBuilder: (context, index) {
                                   return AliasListTile(
-                                    key: AliasTabWidgetKeys
+                                    key: AliasesTabWidgetKeys
                                         .aliasTabAvailableAliasListTile,
                                     alias: deletedAliasList[index],
                                   );
                                 },
                               );
-
-                      case AliasTabStatus.failed:
+                      },
+                      error: (error, _) {
                         return ErrorMessageWidget(
-                          message: aliasTabState.errorMessage,
+                          message: error.toString(),
                         );
-                    }
+                      },
+                      loading: () {
+                        return const ProgressCircle();
+                      },
+                    );
                   },
                 );
               },

@@ -1,4 +1,3 @@
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
 import 'package:anonaddy/notifiers/search/search_result/search_result_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
 import 'package:anonaddy/screens/macos/account/macos_account_tab.dart';
@@ -32,9 +31,9 @@ class _MacHomeScreenState extends ConsumerState<MacosScreen> {
   initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(aliasTabStateNotifier.notifier).loadDataFromStorage();
-      ref.read(aliasTabStateNotifier.notifier).fetchAvailableAliases();
-      ref.read(aliasTabStateNotifier.notifier).fetchDeletedAliases();
+      // ref.read(aliasesNotifierProvider.notifier).loadDataFromStorage();
+      // ref.read(aliasesNotifierProvider.notifier).fetchAvailableAliases();
+      // ref.read(aliasesNotifierProvider.notifier).fetchDeletedAliases();
     });
   }
 
