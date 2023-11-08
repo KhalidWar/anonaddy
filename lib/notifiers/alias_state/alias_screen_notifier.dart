@@ -1,65 +1,28 @@
-import 'package:anonaddy/models/alias/alias.dart';
+import 'dart:async';
+
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_tab_notifier.dart';
+import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final aliasScreenStateNotifier =
-    StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
-        (ref) {
-  final aliasTab = ref.read(aliasTabStateNotifier.notifier);
-  ref.onDispose(() => aliasTab.refreshAliases());
+final aliasScreenNotifierProvider = AsyncNotifierProvider.family
+    .autoDispose<AliasScreenNotifier, AliasScreenState, String>(
+        AliasScreenNotifier.new);
 
-  return AliasScreenNotifier(
-    aliasService: ref.read(aliasServiceProvider),
-    aliasTabNotifier: aliasTab,
-  );
-});
-
-class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
-  AliasScreenNotifier({
-    required this.aliasService,
-    required this.aliasTabNotifier,
-    AliasScreenState? initialState,
-  }) : super(initialState ?? AliasScreenState.initialState());
-
-  final AliasService aliasService;
-  final AliasTabNotifier aliasTabNotifier;
-
-  /// Update AliasScreen state
-  void _updateState(AliasScreenState newState) {
-    if (mounted) state = newState;
-  }
-
-  Future<void> fetchSpecificAlias(String aliasId) async {
-    try {
-      /// Initially set AliasScreen to loading
-      _updateState(state.copyWith(status: AliasScreenStatus.loading));
-
-      final updatedAlias = await aliasService.fetchSpecificAlias(aliasId);
-
-      /// Assign newly fetched alias data to AliasScreen state
-      final newState =
-          state.copyWith(status: AliasScreenStatus.loaded, alias: updatedAlias);
-      _updateState(newState);
-    } catch (error) {
-      final newState = state.copyWith(
-        status: AliasScreenStatus.failed,
-        errorMessage: error.toString(),
-      );
-      _updateState(newState);
-    }
-  }
-
+class AliasScreenNotifier
+    extends AutoDisposeFamilyAsyncNotifier<AliasScreenState, String> {
   Future<void> editDescription(String newDesc) async {
     try {
-      final updatedAlias =
-          await aliasService.updateAliasDescription(state.alias.id, newDesc);
+      final currentState = state.value!;
+      final updatedAlias = await ref
+          .read(aliasServiceProvider)
+          .updateAliasDescription(currentState.alias.id, newDesc);
       Utilities.showToast(ToastMessage.editDescriptionSuccess);
-      _updateState(state.copyWith(alias: updatedAlias));
+      state = AsyncData(currentState.copyWith(alias: updatedAlias));
     } catch (error) {
       Utilities.showToast(error.toString());
     }
@@ -67,79 +30,117 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   Future<void> deactivateAlias() async {
     try {
-      _updateState(state.copyWith(isToggleLoading: true));
-      await aliasService.deactivateAlias(state.alias.id);
-      final updatedAlias = state.alias.copyWith(active: false);
-      _updateState(state.copyWith(isToggleLoading: false, alias: updatedAlias));
+      final currentState = state.value!;
+      state = AsyncData(currentState.copyWith(isToggleLoading: true));
+
+      await ref
+          .read(aliasServiceProvider)
+          .deactivateAlias(currentState.alias.id);
+
+      final updatedAlias = currentState.alias.copyWith(active: false);
+      state = AsyncData(currentState.copyWith(
+        isToggleLoading: false,
+        alias: updatedAlias,
+      ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(isToggleLoading: false));
+      state = AsyncData(state.value!.copyWith(isToggleLoading: false));
     }
   }
 
   Future<void> activateAlias() async {
     try {
-      _updateState(state.copyWith(isToggleLoading: true));
-      final newAlias = await aliasService.activateAlias(state.alias.id);
-      final updateAlias = state.alias.copyWith(active: newAlias.active);
-      _updateState(state.copyWith(isToggleLoading: false, alias: updateAlias));
+      final currentState = state.value!;
+      state = AsyncData(currentState.copyWith(isToggleLoading: true));
+
+      final newAlias = await ref
+          .read(aliasServiceProvider)
+          .activateAlias(currentState.alias.id);
+
+      final updateAlias = currentState.alias.copyWith(active: newAlias.active);
+      state = AsyncData(currentState.copyWith(
+        isToggleLoading: false,
+        alias: updateAlias,
+      ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(isToggleLoading: false));
+      state = AsyncData(state.value!.copyWith(isToggleLoading: false));
     }
   }
 
-  Future<void> deleteAlias(Alias alias) async {
+  Future<void> deleteAlias() async {
     try {
-      _updateState(state.copyWith(deleteAliasLoading: true));
-      await aliasService.deleteAlias(alias.id);
-      Utilities.showToast(ToastMessage.deleteAliasSuccess);
-      final updatedAlias = state.alias.copyWith(deletedAt: '');
-      aliasTabNotifier.removeDeletedAlias(alias);
+      final currentState = state.value!;
+      state = AsyncData(currentState.copyWith(deleteAliasLoading: true));
 
-      final newState =
-          state.copyWith(deleteAliasLoading: false, alias: updatedAlias);
-      _updateState(newState);
+      await ref.read(aliasServiceProvider).deleteAlias(currentState.alias.id);
+
+      Utilities.showToast(ToastMessage.deleteAliasSuccess);
+      final updatedAlias = currentState.alias.copyWith(deletedAt: '');
+      ref
+          .read(aliasesNotifierProvider.notifier)
+          .removeDeletedAlias(currentState.alias.id);
+
+      state = AsyncData(currentState.copyWith(
+        deleteAliasLoading: false,
+        alias: updatedAlias,
+      ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(deleteAliasLoading: false));
+      state = AsyncData(state.value!.copyWith(deleteAliasLoading: false));
       rethrow;
     }
   }
 
-  Future<void> restoreAlias(Alias alias) async {
+  Future<void> restoreAlias() async {
     try {
-      _updateState(state.copyWith(deleteAliasLoading: true));
-      final newAlias = await aliasService.restoreAlias(alias.id);
-      Utilities.showToast(ToastMessage.restoreAliasSuccess);
-      aliasTabNotifier.removeRestoredAlias(alias);
+      final currentState = state.value!;
+      state = AsyncData(currentState.copyWith(deleteAliasLoading: true));
 
-      final newState =
-          state.copyWith(deleteAliasLoading: false, alias: newAlias);
-      _updateState(newState);
+      final newAlias = await ref
+          .read(aliasServiceProvider)
+          .restoreAlias(currentState.alias.id);
+      Utilities.showToast(ToastMessage.restoreAliasSuccess);
+      ref
+          .read(aliasesNotifierProvider.notifier)
+          .removeRestoredAlias(currentState.alias.id);
+
+      state = AsyncData(currentState.copyWith(
+        deleteAliasLoading: false,
+        alias: newAlias,
+      ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(deleteAliasLoading: false));
+      state = AsyncData(state.value!.copyWith(deleteAliasLoading: false));
     }
   }
 
   Future<void> updateAliasDefaultRecipient(List<String> recipients) async {
     try {
-      _updateState(state.copyWith(updateRecipientLoading: true));
-      final updatedAlias = await aliasService.updateAliasDefaultRecipient(
-          state.alias.id, recipients);
-      final newState =
-          state.copyWith(updateRecipientLoading: false, alias: updatedAlias);
-      _updateState(newState);
+      final currentState = state.value!;
+      state = AsyncData(currentState.copyWith(updateRecipientLoading: true));
+
+      final updatedAlias = await ref
+          .read(aliasServiceProvider)
+          .updateAliasDefaultRecipient(currentState.alias.id, recipients);
+
+      state = AsyncData(currentState.copyWith(
+        updateRecipientLoading: false,
+        alias: updatedAlias,
+      ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(updateRecipientLoading: false));
+      state = AsyncData(state.value!.copyWith(updateRecipientLoading: false));
     }
+  }
+
+  bool isRecipientDefault(Recipient recipient) {
+    return state.value!.alias.recipients.contains(recipient);
   }
 
   Future<void> forgetAlias() async {
     try {
-      await aliasService.forgetAlias(state.alias.id);
+      await ref.read(aliasServiceProvider).forgetAlias(state.value!.alias.id);
       Utilities.showToast(ToastMessage.forgetAliasSuccess);
     } catch (error) {
       Utilities.showToast(error.toString());
@@ -148,16 +149,28 @@ class AliasScreenNotifier extends StateNotifier<AliasScreenState> {
 
   Future<void> sendFromAlias(String destinationEmail) async {
     try {
-      /// https://addy.io/help/sending-email-from-an-alias/
-      final leftPartOfAlias = state.alias.email.split('@')[0];
-      final rightPartOfAlias = state.alias.email.split('@')[1];
-      final recipientEmail = destinationEmail.replaceAll('@', '=');
-      final generatedAddress =
-          '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
+      final generatedAddress = ref
+          .read(aliasServiceProvider)
+          .generateSendFromAlias(state.value!.alias.email, destinationEmail);
       await Utilities.copyOnTap(generatedAddress);
       Utilities.showToast(ToastMessage.sendFromAliasSuccess);
     } catch (error) {
       Utilities.showToast(AppStrings.somethingWentWrong);
     }
+  }
+
+  @override
+  FutureOr<AliasScreenState> build(String arg) async {
+    final aliasService = ref.read(aliasServiceProvider);
+
+    final alias = await aliasService.fetchSpecificAlias(arg);
+
+    return AliasScreenState(
+      alias: alias,
+      isToggleLoading: false,
+      deleteAliasLoading: false,
+      updateRecipientLoading: false,
+      isOffline: false,
+    );
   }
 }
