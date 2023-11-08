@@ -221,4 +221,15 @@ class AliasService {
       rethrow;
     }
   }
+
+  String generateSendFromAlias(String aliasEmail, String destinationEmail) {
+    /// https://addy.io/help/sending-email-from-an-alias/
+    final leftPartOfAlias = aliasEmail.split('@')[0];
+    final rightPartOfAlias = aliasEmail.split('@')[1];
+    final recipientEmail = destinationEmail.replaceAll('@', '=');
+    final generatedAddress =
+        '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
+
+    return generatedAddress;
+  }
 }

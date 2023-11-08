@@ -68,7 +68,7 @@ class AliasListTile extends StatelessWidget {
         Navigator.pushNamed(
           context,
           AliasScreen.routeName,
-          arguments: alias,
+          arguments: alias.id,
         );
       },
     );

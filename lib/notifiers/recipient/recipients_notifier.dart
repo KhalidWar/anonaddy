@@ -9,7 +9,8 @@ final recipientsNotifier =
         RecipientsNotifier.new);
 
 class RecipientsNotifier extends AsyncNotifier<List<Recipient>> {
-  Future<void> fetchRecipients() async {
+  Future<void> fetchRecipients({bool showLoading = false}) async {
+    if (showLoading) state = const AsyncLoading();
     state = await AsyncValue.guard(
         () => ref.read(recipientService).fetchRecipients());
   }

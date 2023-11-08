@@ -25,9 +25,9 @@ class AliasesNotifier extends AsyncNotifier<AliasesState> {
   /// This function's main use is to improve user experience by quickly deleting
   /// a deleted alias from [availableAliasList] to emulate responsiveness.
   /// Then, it calls for aliases refresh.
-  void removeDeletedAlias(Alias alias) {
+  void removeDeletedAlias(String aliasId) {
     final availableAliases = [...state.value!.availableAliases]
-      ..removeWhere((listAlias) => listAlias.id == alias.id);
+      ..removeWhere((listAlias) => listAlias.id == aliasId);
 
     state = AsyncData(
       state.value!.copyWith(availableAliases: availableAliases),
@@ -36,9 +36,9 @@ class AliasesNotifier extends AsyncNotifier<AliasesState> {
 
   /// This function's main use is to improve user experience by quickly removing
   /// a restored alias from [deletedAliasList] to emulate responsiveness.
-  void removeRestoredAlias(Alias alias) {
+  void removeRestoredAlias(String aliasId) {
     final deletedAliases = [...state.value!.deletedAliases]
-      ..removeWhere((listAlias) => listAlias.id == alias.id);
+      ..removeWhere((listAlias) => listAlias.id == aliasId);
 
     state = AsyncData(
       state.value!.copyWith(deletedAliases: deletedAliases),

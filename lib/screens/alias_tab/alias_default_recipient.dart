@@ -1,9 +1,6 @@
-import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
+import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/alias_state/default_recipient/default_recipient_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
@@ -14,9 +11,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AliasDefaultRecipientScreen extends ConsumerStatefulWidget {
   const AliasDefaultRecipientScreen({
     Key? key,
-    required this.alias,
+    required this.defaultRecipients,
+    required this.selectedRecipients,
   }) : super(key: key);
-  final Alias alias;
+
+  final List<String> defaultRecipients;
+  final List<String> selectedRecipients;
 
   @override
   ConsumerState createState() => _AliasDefaultRecipientScreenState();
@@ -29,151 +29,93 @@ class _AliasDefaultRecipientScreenState
     super.initState();
 
     /// After widgets are built, fetch recipients and display verified ones.
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(recipientsNotifier.notifier).fetchRecipients();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(recipientsNotifier.notifier).fetchRecipients(showLoading: true);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final recipientState = ref.watch(recipientsNotifier);
 
-    return DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.5,
-      minChildSize: 0.3,
-      maxChildSize: 0.7,
-      builder: (context, controller) {
-        return Consumer(builder: (context, watch, _) {
-          final recipientState = ref.watch(recipientsNotifier);
+    return recipientState.when(
+      data: (recipients) {
+        final verifiedRecipients =
+            recipients.where((recipient) => recipient.isVerified).toList();
 
-          return recipientState.when(
-            data: (recipients) {
-              return Consumer(
-                builder: (context, watch, _) {
-                  final aliasScreenState =
-                      ref.watch(defaultRecipientStateNotifier);
-                  final verifiedRecipients =
-                      aliasScreenState.verifiedRecipients!;
+        return ListView(
+          shrinkWrap: true,
+          children: [
+            if (verifiedRecipients.isEmpty)
+              Container(
+                height: MediaQuery.of(context).size.height * 0.4,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(16),
+                child: Center(
+                  child: Text(
+                    'No recipients found',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                itemCount: verifiedRecipients.length,
+                itemBuilder: (context, index) {
+                  final verifiedRecipient = verifiedRecipients[index];
+                  final isDefault =
+                      widget.defaultRecipients.contains(verifiedRecipient.id);
+                  // widget.defaultRecipients.contains(verifiedRecipient);
+                  // ref
+                  //     .read(aliasScreenNotifierProvider('').notifier)
+                  //     .isRecipientDefault(verifiedRecipient);
 
-                  return Column(
-                    children: [
-                      const BottomSheetHeader(
-                          headerLabel: 'Update Alias Recipients'),
-                      Expanded(
-                        child: ListView(
-                          shrinkWrap: true,
-                          controller: controller,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              child: Text(AnonAddyString.updateAliasRecipients),
-                            ),
-                            SizedBox(height: size.height * 0.02),
-                            const Divider(height: 0),
-                            if (verifiedRecipients.isEmpty)
-                              Center(
-                                child: Text(
-                                  'No recipients found',
-                                  style: Theme.of(context).textTheme.headline6,
-                                ),
-                              )
-                            else
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: verifiedRecipients.length,
-                                itemBuilder: (context, index) {
-                                  final verifiedRecipient =
-                                      verifiedRecipients[index];
-                                  final isDefault = ref
-                                      .read(defaultRecipientStateNotifier
-                                          .notifier)
-                                      .isRecipientDefault(verifiedRecipient);
-
-                                  return ListTile(
-                                    selected: isDefault,
-                                    selectedTileColor: AppColors.accentColor,
-                                    horizontalTitleGap: 0,
-                                    title: Text(
-                                      verifiedRecipient.email,
-                                      style: TextStyle(
-                                        color: isDefault
-                                            ? Colors.black
-                                            : Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      ref
-                                          .read(defaultRecipientStateNotifier
-                                              .notifier)
-                                          .toggleRecipient(verifiedRecipient);
-                                    },
-                                  );
-                                },
-                              ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Divider(height: 0),
-                                  SizedBox(height: size.height * 0.01),
-                                  Text(
-                                    AppStrings.updateAliasRecipientNote,
-                                    style: Theme.of(context).textTheme.caption,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                  return ListTile(
+                    selected: isDefault,
+                    selectedTileColor: AppColors.accentColor,
+                    horizontalTitleGap: 0,
+                    title: Text(
+                      verifiedRecipient.email,
+                      style: TextStyle(
+                        color: isDefault
+                            ? Colors.black
+                            : Theme.of(context).textTheme.bodyLarge!.color,
                       ),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(15),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(),
-                          child: Consumer(
-                            builder: (_, watch, __) {
-                              final isLoading = ref
-                                  .watch(aliasScreenStateNotifier)
-                                  .updateRecipientLoading;
-                              return isLoading
-                                  ? const CircularProgressIndicator(
-                                      color: AppColors.primaryColor,
-                                    )
-                                  : const Text('Update Recipients');
-                            },
-                          ),
-                          onPressed: () {
-                            /// Get default recipients Ids.
-                            final recipientIds = ref
-                                .read(defaultRecipientStateNotifier.notifier)
-                                .getRecipientIds();
-
-                            /// Update default recipients for [widget.alias]
-                            ref
-                                .read(aliasScreenStateNotifier.notifier)
-                                .updateAliasDefaultRecipient(recipientIds)
-                                .whenComplete(() => Navigator.pop(context));
-                          },
-                        ),
-                      ),
-                    ],
+                    ),
+                    onTap: () {
+                      ref
+                          .read(defaultRecipientStateNotifier.notifier)
+                          .toggleRecipient(verifiedRecipient);
+                    },
                   );
                 },
-              );
-            },
-            error: (err, _) => ErrorMessageWidget(message: err.toString()),
-            loading: () => const Center(child: PlatformLoadingIndicator()),
-          );
-        });
+              ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Text(
+                AppStrings.updateAliasRecipientNote,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+            const SizedBox(height: 100),
+          ],
+        );
       },
+      error: (err, _) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.4,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(16),
+          child: ErrorMessageWidget(message: err.toString()),
+        );
+      },
+      loading: () => const SizedBox(
+        height: 100,
+        child: PlatformLoadingIndicator(),
+      ),
     );
   }
 }

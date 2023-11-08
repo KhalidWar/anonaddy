@@ -1,97 +1,51 @@
-import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/services/theme/theme.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SendFromWidget extends ConsumerStatefulWidget {
+class SendFromWidget extends StatelessWidget {
   const SendFromWidget({
     Key? key,
+    required this.email,
+    required this.formKey,
+    required this.onFieldSubmitted,
   }) : super(key: key);
 
-  @override
-  ConsumerState createState() => _SendFromWidgetState();
-}
-
-class _SendFromWidgetState extends ConsumerState<SendFromWidget> {
-  final sendFromFormKey = GlobalKey<FormState>();
-  String destinationEmail = '';
-
-  Future<void> generateAddress() async {
-    if (sendFromFormKey.currentState!.validate()) {
-      await ref
-          .read(aliasScreenStateNotifier.notifier)
-          .sendFromAlias(destinationEmail);
-      if (mounted) Navigator.pop(context);
-    }
-  }
+  final String email;
+  final GlobalKey<FormState> formKey;
+  final Function(String) onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final alias = ref.read(aliasScreenStateNotifier).alias;
-
-    return Container(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const BottomSheetHeader(
-            headerLabel: AppStrings.sendFromAlias,
+          Text(
+            email,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(AppStrings.sendFromAliasString),
-                SizedBox(height: size.height * 0.01),
-                TextFormField(
-                  enabled: false,
-                  decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                    hintText: alias.email,
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                Text(
-                  'Email destination',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                SizedBox(height: size.height * 0.01),
-                Form(
-                  key: sendFromFormKey,
-                  child: TextFormField(
-                    autofocus: true,
-                    validator: (input) =>
-                        FormValidator.validateEmailField(input!),
-                    onChanged: (input) => destinationEmail = input,
-                    onFieldSubmitted: (toggle) => generateAddress(),
-                    decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                      hintText: 'Enter email...',
-                    ),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.01),
-                Text(
-                  AppStrings.sendFromAliasNote,
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                SizedBox(height: size.height * 0.01),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(),
-                    child: const Text('Generate address'),
-                    onPressed: () => generateAddress(),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.015),
-              ],
+          const SizedBox(height: 16),
+          const Text('Email destination'),
+          Form(
+            key: formKey,
+            child: TextFormField(
+              autofocus: true,
+              validator: (input) => FormValidator.validateEmailField(input!),
+              onFieldSubmitted: onFieldSubmitted,
+              decoration: AppTheme.kTextFormFieldDecoration.copyWith(
+                hintText: 'Enter email...',
+              ),
             ),
           ),
+          const SizedBox(height: 16),
+          Text(
+            AppStrings.sendFromAliasNote,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 90),
         ],
       ),
     );

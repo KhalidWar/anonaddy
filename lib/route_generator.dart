@@ -1,4 +1,3 @@
-import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username.dart';
@@ -26,7 +25,6 @@ class RouteGenerator {
     final argument = settings.arguments;
 
     switch (settings.name) {
-
       /// Authentication Screen
       case AuthorizationScreen.routeName:
         return PlatformAware.customPageRoute(const AuthorizationScreen());
@@ -50,7 +48,7 @@ class RouteGenerator {
       /// Alias Tab
       case AliasScreen.routeName:
         return PlatformAware.customPageRoute(
-          AliasScreen(alias: argument as Alias),
+          AliasScreen(aliasId: argument as String),
         );
 
       /// Account Tab
