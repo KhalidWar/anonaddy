@@ -9,7 +9,7 @@ final defaultRecipientStateNotifier = StateNotifierProvider.autoDispose<
     DefaultRecipientNotifier, DefaultRecipientState>((ref) {
   return DefaultRecipientNotifier(
     recipients: ref.read(recipientsNotifier).value!,
-    aliasState: ref.read(aliasScreenStateNotifier),
+    aliasState: ref.read(aliasScreenNotifierProvider('')).value!,
   );
 });
 
@@ -45,7 +45,7 @@ class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
     _updateState(state.copyWith());
   }
 
-  /// Checks if recipient is [aliasState.alias]'s default recipients
+  /// Checks if recipient is [aliasState.aliasId]'s default recipients
   bool isRecipientDefault(Recipient recipient) {
     bool isDefault = false;
     state.defaultRecipients!.forEach((aliasRecipient) {
@@ -80,7 +80,7 @@ class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
     _updateState(newState);
   }
 
-  /// Extracts current [aliasState.alias]'s default recipients
+  /// Extracts current [aliasState.aliasId]'s default recipients
   void _setDefaultRecipients() {
     final defaultRecipients = <Recipient>[];
     for (Recipient verifiedRecipient in state.verifiedRecipients!) {
