@@ -1,5 +1,5 @@
 import 'package:anonaddy/models/account/account.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/services/access_token/auth_service.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';

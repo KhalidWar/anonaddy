@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:anonaddy/notifiers/authorization/auth_state.dart';
 import 'package:anonaddy/notifiers/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/services/access_token/auth_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';

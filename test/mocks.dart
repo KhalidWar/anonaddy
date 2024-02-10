@@ -1,7 +1,7 @@
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
-import 'package:anonaddy/services/access_token/access_token_service.dart';
+import 'package:anonaddy/services/access_token/auth_service.dart';
 import 'package:anonaddy/services/account/account_service.dart';
 import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
