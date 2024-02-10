@@ -26,8 +26,8 @@ class RouteGenerator {
 
     switch (settings.name) {
       /// Authentication Screen
-      case AuthorizationScreen.routeName:
-        return PlatformAware.customPageRoute(const AuthorizationScreen());
+      case AuthScreen.routeName:
+        return PlatformAware.customPageRoute(const AuthScreen());
 
       /// Home Screen
       case HomeScreen.routeName:

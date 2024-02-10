@@ -35,7 +35,7 @@ class App extends ConsumerWidget {
         darkTheme: AppTheme.macOSThemeDark,
         themeMode: ThemeMode.light,
         onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: AuthorizationScreen.routeName,
+        initialRoute: AuthScreen.routeName,
         locale: const Locale('en', 'US'),
         localizationsDelegates: const [
           DefaultMaterialLocalizations.delegate,
@@ -52,7 +52,7 @@ class App extends ConsumerWidget {
           settingsState?.isDarkTheme ?? false ? AppTheme.dark : AppTheme.light,
       darkTheme: AppTheme.dark,
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: AuthorizationScreen.routeName,
+      initialRoute: AuthScreen.routeName,
       locale: const Locale('en', 'US'),
       localizationsDelegates: const [
         DefaultMaterialLocalizations.delegate,

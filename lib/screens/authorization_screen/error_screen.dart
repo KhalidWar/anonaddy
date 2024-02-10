@@ -1,17 +1,59 @@
+import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
+import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({Key? key, required this.error}) : super(key: key);
+class ErrorScreen extends ConsumerWidget {
+  const ErrorScreen({
+    Key? key,
+    required this.errorMessage,
+  }) : super(key: key);
 
-  final String error;
+  final String errorMessage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      body: Center(
-        child: Text(error),
+      persistentFooterButtons: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: PlatformButton(
+            key: AuthScreenWidgetKeys.loadingScreenLogoutButton,
+            color: Colors.red,
+            child: const Text('Logout'),
+            onPress: () {
+              /// Show platform dialog
+              PlatformAware.platformDialog(
+                context: context,
+                child: PlatformAlertDialog(
+                  title: 'Logout',
+                  content: AppStrings.logOutAlertDialog,
+                  method: () async {
+                    await ref.read(authStateNotifier.notifier).logout(context);
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+      body: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          errorMessage,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: Colors.white),
+        ),
       ),
     );
   }

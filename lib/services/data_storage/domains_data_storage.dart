@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:anonaddy/models/domain/domain_model.dart';
 import 'package:anonaddy/services/data_storage/data_storage.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/services/secure_storage/secure_storage.dart';
 import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final domainsDataStorageProvider = Provider<DomainsDataStorage>((ref) {
-  return DomainsDataStorage(secureStorage: ref.read(flutterSecureStorage));
+  return DomainsDataStorage(
+      secureStorage: ref.read(flutterSecureStorageProvider));
 });
 
 class DomainsDataStorage extends DataStorage {

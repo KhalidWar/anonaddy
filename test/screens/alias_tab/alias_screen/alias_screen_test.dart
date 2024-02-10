@@ -2,7 +2,7 @@ import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
-import 'package:anonaddy/screens/alias_tab/components/alias_tab_widget_keys.dart';
+import 'package:anonaddy/screens/alias_tab/components/aliases_tab_widget_keys.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ void main() async {
     Widget aliasScreen(AliasScreenState initialState) {
       return ProviderScope(
         overrides: [
-          aliasScreenStateNotifier.overrideWith((_) {
+          aliasScreenNotifierProvider.overrideWith((_) {
             return AliasScreenNotifier(
               aliasService: mockAliasService,
               aliasTabNotifier: mockAliasTabNotifier,
@@ -36,7 +36,7 @@ void main() async {
         ],
         child: MaterialApp(
           home: AliasScreen(
-            alias: AliasTestData.validAliasWithEmptyRecipients(),
+            aliasId: AliasTestData.validAliasWithEmptyRecipients(),
           ),
         ),
       );
@@ -64,15 +64,15 @@ void main() async {
       await tester.pumpWidget(aliasScreen(loadingState));
 
       // Act
-      final scaffold = find.byKey(AliasTabWidgetKeys.aliasScreenScaffold);
-      final appBar = find.byKey(AliasTabWidgetKeys.aliasScreenAppBar);
+      final scaffold = find.byKey(AliasesTabWidgetKeys.aliasScreenScaffold);
+      final appBar = find.byKey(AliasesTabWidgetKeys.aliasScreenAppBar);
       final loadingIndicator =
-          find.byKey(AliasTabWidgetKeys.aliasScreenLoadingIndicator);
+          find.byKey(AliasesTabWidgetKeys.aliasScreenLoadingIndicator);
       final lottieWidget =
-          find.byKey(AliasTabWidgetKeys.aliasScreenLottieWidget);
-      final listView = find.byKey(AliasTabWidgetKeys.aliasScreenBodyListView);
+          find.byKey(AliasesTabWidgetKeys.aliasScreenLottieWidget);
+      final listView = find.byKey(AliasesTabWidgetKeys.aliasScreenBodyListView);
       final loadingWidget =
-          find.byKey(AliasTabWidgetKeys.aliasScreenLoadingIndicator);
+          find.byKey(AliasesTabWidgetKeys.aliasScreenLoadingIndicator);
 
       // Assert
       expect(scaffold, findsOneWidget);
@@ -102,19 +102,19 @@ void main() async {
       await tester.pumpWidget(aliasScreen(loadedState));
 
       // Act
-      final scaffold = find.byKey(AliasTabWidgetKeys.aliasScreenScaffold);
-      final appBar = find.byKey(AliasTabWidgetKeys.aliasScreenAppBar);
+      final scaffold = find.byKey(AliasesTabWidgetKeys.aliasScreenScaffold);
+      final appBar = find.byKey(AliasesTabWidgetKeys.aliasScreenAppBar);
       final loadingIndicator =
-          find.byKey(AliasTabWidgetKeys.aliasScreenLoadingIndicator);
+          find.byKey(AliasesTabWidgetKeys.aliasScreenLoadingIndicator);
       final lottieWidget =
-          find.byKey(AliasTabWidgetKeys.aliasScreenLottieWidget);
-      final listView = find.byKey(AliasTabWidgetKeys.aliasScreenBodyListView);
+          find.byKey(AliasesTabWidgetKeys.aliasScreenLottieWidget);
+      final listView = find.byKey(AliasesTabWidgetKeys.aliasScreenBodyListView);
       final pieChart = find.byType(AliasScreenPieChart);
       final actions = find.text(AppStrings.actions);
       final copyIcon = find.byIcon(Icons.copy);
       final description = find.text(AppStrings.description);
       final defaultRecipients = find.byKey(
-          AliasTabWidgetKeys.aliasScreenDefaultRecipient,
+          AliasesTabWidgetKeys.aliasScreenDefaultRecipient,
           skipOffstage: false);
       final dividers = find.byType(Divider, skipOffstage: false);
 
@@ -150,11 +150,11 @@ void main() async {
       await tester.pumpWidget(aliasScreen(errorState));
 
       // Act
-      final scaffold = find.byKey(AliasTabWidgetKeys.aliasScreenScaffold);
-      final appBar = find.byKey(AliasTabWidgetKeys.aliasScreenAppBar);
-      final listView = find.byKey(AliasTabWidgetKeys.aliasScreenBodyListView);
+      final scaffold = find.byKey(AliasesTabWidgetKeys.aliasScreenScaffold);
+      final appBar = find.byKey(AliasesTabWidgetKeys.aliasScreenAppBar);
+      final listView = find.byKey(AliasesTabWidgetKeys.aliasScreenBodyListView);
       final lottieWidget =
-          find.byKey(AliasTabWidgetKeys.aliasScreenLottieWidget);
+          find.byKey(AliasesTabWidgetKeys.aliasScreenLottieWidget);
       final errorMessage = find.text(AppStrings.somethingWentWrong);
 
       // Assert

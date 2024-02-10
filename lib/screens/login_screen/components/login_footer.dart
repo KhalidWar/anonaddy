@@ -1,4 +1,3 @@
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,19 +29,21 @@ class LoginFooter extends StatelessWidget {
         child: Consumer(
           builder: (context, ref, _) {
             final authState = ref.watch(authStateNotifier);
-            return authState.loginLoading
-                ? const CircularProgressIndicator(
-                    key: Key('loginFooterLoginButtonLoading'),
-                    backgroundColor: AppColors.primaryColor,
-                  )
-                : Text(
-                    'Log in',
-                    key: const Key('loginFooterLoginButtonLabel'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline5!
-                        .copyWith(color: Colors.black),
-                  );
+            return
+                // authState.loginLoading
+                //   ? const CircularProgressIndicator(
+                //       key: Key('loginFooterLoginButtonLoading'),
+                //       backgroundColor: AppColors.primaryColor,
+                //     )
+                //   :
+                Text(
+              'Log in',
+              key: const Key('loginFooterLoginButtonLabel'),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5!
+                  .copyWith(color: Colors.black),
+            );
           },
         ),
       ),

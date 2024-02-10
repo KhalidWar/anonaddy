@@ -17,7 +17,7 @@ void main() {
         domainOptionsNotifier.overrideWithProvider(testDomainOptionsNotifier),
       ],
       child: const MaterialApp(
-        home: AuthorizationScreen(),
+        home: AuthScreen(),
       ),
     );
   }

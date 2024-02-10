@@ -1,5 +1,3 @@
-import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
-
 /// Manages user flow status
 enum AuthorizationStatus {
   /// Default status at app startup when user data hasn't been fetched yet.
@@ -34,41 +32,27 @@ class AuthState {
   const AuthState({
     required this.authorizationStatus,
     required this.authenticationStatus,
-    required this.errorMessage,
     required this.loginLoading,
   });
 
   final AuthorizationStatus authorizationStatus;
   final AuthenticationStatus authenticationStatus;
-  final String errorMessage;
   final bool loginLoading;
 
-  /// Sets initial state for [AuthorizationScreen]
-  static AuthState initialState() {
-    return const AuthState(
-      authorizationStatus: AuthorizationStatus.unknown,
-      authenticationStatus: AuthenticationStatus.unavailable,
-      loginLoading: false,
-      errorMessage: '',
-    );
+  @override
+  String toString() {
+    return 'AuthState{authorizationStatus: $authorizationStatus, authenticationStatus: $authenticationStatus, loginLoading: $loginLoading}';
   }
 
   AuthState copyWith({
     AuthorizationStatus? authorizationStatus,
     AuthenticationStatus? authenticationStatus,
-    String? errorMessage,
     bool? loginLoading,
   }) {
     return AuthState(
       authorizationStatus: authorizationStatus ?? this.authorizationStatus,
       authenticationStatus: authenticationStatus ?? this.authenticationStatus,
-      errorMessage: errorMessage ?? this.errorMessage,
       loginLoading: loginLoading ?? this.loginLoading,
     );
-  }
-
-  @override
-  String toString() {
-    return 'AuthState{authorizationStatus: $authorizationStatus, authenticationStatus: $authenticationStatus, errorMessage: $errorMessage, loginLoading: $loginLoading}';
   }
 }

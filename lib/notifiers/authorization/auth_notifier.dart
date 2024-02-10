@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:anonaddy/notifiers/authorization/auth_state.dart';
 import 'package:anonaddy/notifiers/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
@@ -9,75 +11,49 @@ import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-final authStateNotifier = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier(
-    secureStorage: ref.read(flutterSecureStorage),
-    biometricService: ref.read(biometricAuthServiceProvider),
-    tokenService: ref.read(accessTokenServiceProvider),
-    searchHistory: ref.read(searchHistoryStateNotifier.notifier),
-  );
-});
+final authStateNotifier =
+    AsyncNotifierProvider<AuthNotifier, AuthState>(AuthNotifier.new);
 
-class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier({
-    required this.secureStorage,
-    required this.biometricService,
-    required this.tokenService,
-    required this.searchHistory,
-    AuthState? initialState,
-  }) : super(initialState ?? AuthState.initialState());
-
-  final FlutterSecureStorage secureStorage;
-  final BiometricAuthService biometricService;
-  final AccessTokenService tokenService;
-  final SearchHistoryNotifier searchHistory;
-
-  void _updateState(AuthState newState) {
-    if (mounted) state = newState;
-  }
-
+class AuthNotifier extends AsyncNotifier<AuthState> {
   void goToAnonAddyLogin() {
-    final newState = state.copyWith(
+    state = AsyncData(state.value!.copyWith(
       authorizationStatus: AuthorizationStatus.anonAddyLogin,
-    );
-    _updateState(newState);
+    ));
   }
 
   void goToSelfHostedLogin() {
-    final newState = state.copyWith(
+    state = AsyncData(state.value!.copyWith(
       authorizationStatus: AuthorizationStatus.selfHostedLogin,
-    );
-    _updateState(newState);
+    ));
   }
 
   Future<void> login(String url, String token) async {
-    _updateState(state.copyWith(loginLoading: true));
+    state = AsyncData(state.value!.copyWith(loginLoading: true));
 
     try {
-      final isTokenValid = await tokenService.validateAccessToken(url, token);
+      final apiToken = await ref
+          .read(accessTokenServiceProvider)
+          .fetchApiTokenData(url, token);
 
-      if (isTokenValid) {
-        await tokenService.saveLoginCredentials(url, token);
-        final newState = state.copyWith(
-          authorizationStatus: AuthorizationStatus.authorized,
-          loginLoading: false,
-        );
-        _updateState(newState);
-      }
+      await ref
+          .read(accessTokenServiceProvider)
+          .saveLoginCredentials(url, token);
+      state = AsyncData(state.value!.copyWith(
+        authorizationStatus: AuthorizationStatus.authorized,
+        loginLoading: false,
+      ));
     } catch (error) {
-      final newState = state.copyWith(loginLoading: false);
       Utilities.showToast(error.toString());
-      _updateState(newState);
+      state = AsyncData(state.value!.copyWith(loginLoading: false));
     }
   }
 
   Future<void> logout(BuildContext context) async {
     try {
-      await secureStorage.deleteAll();
-      await searchHistory.clearSearchHistory();
-      if (mounted) Phoenix.rebirth(context);
+      await ref.read(flutterSecureStorage).deleteAll();
+      await ref.read(searchHistoryStateNotifier.notifier).clearSearchHistory();
+      if (context.mounted) Phoenix.rebirth(context);
     } catch (error) {
       Utilities.showToast(error.toString());
     }
@@ -85,23 +61,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> authenticate() async {
     try {
-      final didAuth = await biometricService.authenticate();
+      final didAuth =
+          await ref.read(biometricAuthServiceProvider).authenticate();
       if (didAuth) {
-        final newState = state.copyWith(
-          authorizationStatus: state.authorizationStatus,
+        state = AsyncData(state.value!.copyWith(
+          authorizationStatus: state.value!.authorizationStatus,
           authenticationStatus: AuthenticationStatus.disabled,
-        );
-        _updateState(newState);
+        ));
       } else {
-        final newState =
-            state.copyWith(errorMessage: AppStrings.failedToAuthenticate);
-        _updateState(newState);
+        // state = AsyncData(state.value!
+        //     .copyWith(errorMessage: AppStrings.failedToAuthenticate));
         Utilities.showToast(AppStrings.failedToAuthenticate);
       }
     } catch (error) {
-      final newState =
-          state.copyWith(errorMessage: 'Authorization failed! Log in again!');
-      _updateState(newState);
+      // state = AsyncData(state.value!.copyWith(
+      //   errorMessage: 'Authorization failed! Log in again!',
+      // ));
+
+      state = const AsyncError(
+        'Authorization failed! Log in again!',
+        StackTrace.empty,
+      );
     }
   }
 
@@ -113,34 +93,30 @@ class AuthNotifier extends StateNotifier<AuthState> {
   ///
   /// It also checks if user's device supports biometric authentication.
   /// Then sets [state] accordingly.
-  Future<void> initAuth() async {
+  Future<void> _initAuth() async {
     try {
       final isLoginValid = await _validateLoginCredential();
       final authStatus = await _getBioAuthState();
 
       if (isLoginValid) {
-        final newState = state.copyWith(
+        state = AsyncData(state.value!.copyWith(
           authorizationStatus: AuthorizationStatus.authorized,
           authenticationStatus: authStatus,
-        );
-        _updateState(newState);
+        ));
       } else {
-        final newState = state.copyWith(
+        state = AsyncData(state.value!.copyWith(
           authorizationStatus: AuthorizationStatus.anonAddyLogin,
           authenticationStatus: authStatus,
-        );
-        _updateState(newState);
+        ));
       }
     } catch (error) {
       Utilities.showToast(error.toString());
 
       /// Authenticate user regardless of error.
       /// This is a temp solution until I'm able to handle different errors.
-      _updateState(
-        state.copyWith(
-          authorizationStatus: AuthorizationStatus.anonAddyLogin,
-        ),
-      );
+      state = AsyncData(state.value!.copyWith(
+        authorizationStatus: AuthorizationStatus.anonAddyLogin,
+      ));
     }
   }
 
@@ -148,15 +124,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// and returns bool if valid or not
   Future<bool> _validateLoginCredential() async {
     try {
-      final token = await tokenService.getAccessToken();
-      final url = await tokenService.getInstanceURL();
+      final token = await ref.read(accessTokenServiceProvider).getAccessToken();
+      final url = await ref.read(accessTokenServiceProvider).getInstanceURL();
       if (token.isEmpty || url.isEmpty) return false;
 
       /// Temporarily override token and url validation check until I find
       /// a way of handling different errors.
       return true;
 
-      // final isValid = await tokenService.validateAccessToken(url, token);
+      // final isValid = await ref.read(accessTokenServiceProvider).validateAccessToken(url, token);
       // return isValid;
     } catch (error) {
       rethrow;
@@ -166,7 +142,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<AuthenticationStatus> _getBioAuthState() async {
     try {
       const bioAuthKey = BiometricNotifier.biometricAuthKey;
-      final bioAuthValue = await secureStorage.read(key: bioAuthKey);
+      final bioAuthValue =
+          await ref.read(flutterSecureStorage).read(key: bioAuthKey);
 
       if (bioAuthValue == null) return AuthenticationStatus.disabled;
 
@@ -176,5 +153,30 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (error) {
       return AuthenticationStatus.disabled;
     }
+  }
+
+  @override
+  FutureOr<AuthState> build() async {
+    final secureStorage = ref.read(flutterSecureStorage);
+    final biometricAuth = ref.read(biometricAuthServiceProvider);
+    final tokenService = ref.read(accessTokenServiceProvider);
+    final searchHistory = ref.read(searchHistoryStateNotifier);
+
+    final isLoginValid = await _validateLoginCredential();
+    final authStatus = await _getBioAuthState();
+
+    if (isLoginValid) {
+      return AuthState(
+        authorizationStatus: AuthorizationStatus.authorized,
+        authenticationStatus: authStatus,
+        loginLoading: false,
+      );
+    }
+
+    return AuthState(
+      authorizationStatus: AuthorizationStatus.anonAddyLogin,
+      authenticationStatus: authStatus,
+      loginLoading: false,
+    );
   }
 }
