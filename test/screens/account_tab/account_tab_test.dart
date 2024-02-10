@@ -1,5 +1,5 @@
+import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/screens/account_tab/account_tab.dart';
-import 'package:anonaddy/state_management/account/account_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +11,8 @@ void main() {
     return MaterialApp(
       home: ProviderScope(
         overrides: [
-          accountStateNotifier.overrideWithProvider(testAccountStateNotifier),
+          accountNotifierProvider
+              .overrideWithProvider(testAccountStateNotifier),
         ],
         child: const AccountTab(),
       ),

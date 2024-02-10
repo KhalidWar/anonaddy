@@ -1,7 +1,7 @@
+import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
+import 'package:anonaddy/notifiers/search/search_history/search_history_state.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
-import 'package:anonaddy/state_management/search/search_history/search_history_notifier.dart';
-import 'package:anonaddy/state_management/search/search_history/search_history_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,7 +37,7 @@ class _SearchHistoryState extends ConsumerState<SearchHistory> {
         if (aliases.isEmpty) {
           return Padding(
             padding: EdgeInsets.all(size.height * 0.01),
-            child: Row(children: const [Text('Nothing to see here.')]),
+            child: const Row(children: [Text('Nothing to see here.')]),
           );
         } else {
           return Expanded(
@@ -47,7 +47,7 @@ class _SearchHistoryState extends ConsumerState<SearchHistory> {
                 itemCount: aliases.length,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return AliasListTile(aliasData: aliases[index]);
+                  return AliasListTile(alias: aliases[index]);
                 },
               ),
             ),

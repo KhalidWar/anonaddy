@@ -7,13 +7,13 @@ import '../../mocks.dart';
 void main() {
   late MockFlutterSecureStorage mockSecureStorage;
   late MockDio mockDio;
-  late AccessTokenService accessTokenService;
+  late AuthService accessTokenService;
 
   setUp(() {
     mockSecureStorage = MockFlutterSecureStorage();
     mockDio = MockDio();
     accessTokenService =
-        AccessTokenService(secureStorage: mockSecureStorage, dio: mockDio);
+        AuthService(secureStorage: mockSecureStorage, dio: mockDio);
   });
 
   test(

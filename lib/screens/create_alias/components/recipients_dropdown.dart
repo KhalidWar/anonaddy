@@ -1,5 +1,5 @@
+import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
-import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +12,7 @@ class RecipientsDropdown extends StatelessWidget {
     return Consumer(
       builder: (context, ref, _) {
         final recipients =
-            ref.watch(createAliasStateNotifier).selectedRecipients!;
+            ref.watch(createAliasNotifierProvider).value!.selectedRecipients;
 
         return CreateAliasCard(
           header: 'Recipients',

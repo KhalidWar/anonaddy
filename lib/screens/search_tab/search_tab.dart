@@ -69,10 +69,11 @@ class _SearchTabState extends ConsumerState<SearchTab> {
                   final aliases = searchState.aliases;
 
                   if (aliases.isEmpty) {
-                    return Padding(
-                      padding: const EdgeInsets.all(20),
-                      child:
-                          Row(children: const [Text('Nothing to see here.')]),
+                    return const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        children: [Text('Nothing to see here.')],
+                      ),
                     );
                   } else {
                     return Expanded(

@@ -9,56 +9,24 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-final accessTokenServiceProvider = Provider<AccessTokenService>((ref) {
-  return AccessTokenService(
+final authServiceProvider = Provider<AuthService>((ref) {
+  return AuthService(
     secureStorage: ref.read(flutterSecureStorage),
     dio: Dio(),
   );
 });
 
-class AccessTokenService {
-  AccessTokenService({
+class AuthService {
+  AuthService({
     required this.secureStorage,
     required this.dio,
   });
   final FlutterSecureStorage secureStorage;
   final Dio dio;
 
-  Future<bool> validateAccessToken(String url, String token) async {
-    try {
-      const path = '$kUnEncodedBaseURL/account-details';
-      final uri = Uri.https(url, path);
-      final options = Options(
-        sendTimeout: 5000,
-        receiveTimeout: 5000,
-        headers: {
-          "Content-Type": "application/json",
-          "X-Requested-With": "XMLHttpRequest",
-          "Accept": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      );
-
-      final response = await dio.getUri(uri, options: options);
-      log('validateAccessToken: ${response.statusCode}');
-
-      return response.statusCode == 200 ? true : false;
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.response) {
-        throw dioError.response == null
-            ? dioError.message
-            : ApiErrorMessage.translateStatusCode(
-                dioError.response!.statusCode ?? 0);
-      }
-      throw dioError.error.message;
-    } catch (error) {
-      rethrow;
-    }
-  }
-
   Future<ApiToken> fetchApiTokenData(String url, String token) async {
     try {
-      const path = '$kUnEncodedBaseURL/account-details';
+      const path = '$kUnEncodedBaseURL/api-token-details';
       final uri = Uri.https(url, path);
       final options = Options(
         sendTimeout: 5000,
@@ -74,7 +42,7 @@ class AccessTokenService {
       final response = await dio.getUri(uri, options: options);
       log('fetchApiTokenData: ${response.statusCode}');
 
-      return ApiToken.fromMap(response.data['data']);
+      return ApiToken.fromMap(response.data);
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.response) {
         throw dioError.response == null

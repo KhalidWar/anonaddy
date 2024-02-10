@@ -10,19 +10,19 @@ final dioProvider = Provider<Dio>((ref) {
 });
 
 final _dioInterceptorProvider = Provider<DioInterceptors>((ref) {
-  final accessTokenService = ref.read(accessTokenServiceProvider);
-  return DioInterceptors(accessTokenService: accessTokenService);
+  final accessTokenService = ref.read(authServiceProvider);
+  return DioInterceptors(authService: accessTokenService);
 });
 
 class DioInterceptors extends Interceptor {
-  DioInterceptors({required this.accessTokenService});
-  final AccessTokenService accessTokenService;
+  DioInterceptors({required this.authService});
+  final AuthService authService;
 
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final url = await accessTokenService.getInstanceURL();
-    final accessToken = await accessTokenService.getAccessToken();
+    final url = await authService.getInstanceURL();
+    final accessToken = await authService.getAccessToken();
 
     final headers = {
       "Content-Type": "application/json",

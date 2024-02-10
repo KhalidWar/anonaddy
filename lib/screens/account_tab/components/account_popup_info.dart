@@ -30,8 +30,7 @@ class AccountPopupInfo extends ConsumerWidget {
   }
 
   Future<void> updateDefaultAliasFormatDomain(WidgetRef ref) async {
-    final instanceURL =
-        await ref.read(accessTokenServiceProvider).getInstanceURL();
+    final instanceURL = await ref.read(authServiceProvider).getInstanceURL();
     await Utilities.launchURL('https://$instanceURL/settings');
   }
 

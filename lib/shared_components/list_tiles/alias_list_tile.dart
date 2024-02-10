@@ -5,7 +5,10 @@ import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 
 class AliasListTile extends StatelessWidget {
-  const AliasListTile({Key? key, required this.alias}) : super(key: key);
+  const AliasListTile({
+    Key? key,
+    required this.alias,
+  }) : super(key: key);
   final Alias alias;
 
   bool isAliasDeleted() {

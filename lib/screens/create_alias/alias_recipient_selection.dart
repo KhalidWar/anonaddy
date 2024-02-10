@@ -1,3 +1,5 @@
+import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
+import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_note.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
@@ -5,9 +7,6 @@ import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
-import 'package:anonaddy/state_management/recipient/recipient_tab_notifier.dart';
-import 'package:anonaddy/state_management/recipient/recipient_tab_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,7 +23,7 @@ class _AliasRecipientSelectionState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(recipientTabStateNotifier.notifier).fetchRecipients();
+      ref.read(recipientsNotifier.notifier).fetchRecipients();
     });
   }
 
@@ -40,22 +39,19 @@ class _AliasRecipientSelectionState
       builder: (context, controller) {
         return Consumer(
           builder: (context, ref, _) {
-            final recipientState = ref.watch(recipientTabStateNotifier);
+            final recipientState = ref.watch(recipientsNotifier);
 
-            switch (recipientState.status) {
-              case RecipientTabStatus.loading:
-                return const Center(child: PlatformLoadingIndicator());
-
-              case RecipientTabStatus.loaded:
+            return recipientState.when(
+              data: (data) {
                 return Consumer(
                   builder: (context, ref, _) {
                     final createAliasState =
-                        ref.watch(createAliasStateNotifier);
+                        ref.watch(createAliasNotifierProvider).value!;
                     final verifiedRecipients =
                         createAliasState.verifiedRecipients!;
 
                     final createAliasNotifier =
-                        ref.read(createAliasStateNotifier.notifier);
+                        ref.read(createAliasNotifierProvider.notifier);
 
                     return Column(
                       children: [
@@ -109,9 +105,9 @@ class _AliasRecipientSelectionState
                                     : 'Cancel',
                               ),
                               onPressed: () {
-                                ref
-                                    .read(createAliasStateNotifier.notifier)
-                                    .clearSelectedRecipients();
+                                // ref
+                                //     .read(createAliasNotifierProvider.notifier)
+                                //     .clearSelectedRecipients();
                                 Navigator.pop(context);
                               },
                             ),
@@ -119,9 +115,9 @@ class _AliasRecipientSelectionState
                               style: ElevatedButton.styleFrom(),
                               child: const Text('Done'),
                               onPressed: () {
-                                ref
-                                    .read(createAliasStateNotifier.notifier)
-                                    .setSelectedRecipients();
+                                // ref
+                                //     .read(createAliasNotifierProvider.notifier)
+                                //     .setSelectedRecipients();
                                 Navigator.pop(context);
                               },
                             ),
@@ -134,16 +130,21 @@ class _AliasRecipientSelectionState
                     );
                   },
                 );
-
-              case RecipientTabStatus.failed:
-                final error = recipientState.errorMessage;
+              },
+              error: (err, stack) {
+                // final error = recipientState.errorMessage;
+                final error = err.toString();
                 return LottieWidget(
                   showLoading: true,
                   lottie: LottieImages.errorCone,
                   lottieHeight: size.height * 0.1,
                   label: error.toString(),
                 );
-            }
+              },
+              loading: () {
+                return const Center(child: PlatformLoadingIndicator());
+              },
+            );
           },
         );
       },

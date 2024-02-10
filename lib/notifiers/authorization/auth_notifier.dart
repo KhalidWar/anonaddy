@@ -32,13 +32,10 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     state = AsyncData(state.value!.copyWith(loginLoading: true));
 
     try {
-      final apiToken = await ref
-          .read(accessTokenServiceProvider)
-          .fetchApiTokenData(url, token);
+      final apiToken =
+          await ref.read(authServiceProvider).fetchApiTokenData(url, token);
 
-      await ref
-          .read(accessTokenServiceProvider)
-          .saveLoginCredentials(url, token);
+      await ref.read(authServiceProvider).saveLoginCredentials(url, token);
       state = AsyncData(state.value!.copyWith(
         authorizationStatus: AuthorizationStatus.authorized,
         loginLoading: false,
@@ -124,8 +121,8 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   /// and returns bool if valid or not
   Future<bool> _validateLoginCredential() async {
     try {
-      final token = await ref.read(accessTokenServiceProvider).getAccessToken();
-      final url = await ref.read(accessTokenServiceProvider).getInstanceURL();
+      final token = await ref.read(authServiceProvider).getAccessToken();
+      final url = await ref.read(authServiceProvider).getInstanceURL();
       if (token.isEmpty || url.isEmpty) return false;
 
       /// Temporarily override token and url validation check until I find
@@ -159,7 +156,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   FutureOr<AuthState> build() async {
     final secureStorage = ref.read(flutterSecureStorage);
     final biometricAuth = ref.read(biometricAuthServiceProvider);
-    final tokenService = ref.read(accessTokenServiceProvider);
+    final tokenService = ref.read(authServiceProvider);
     final searchHistory = ref.read(searchHistoryStateNotifier);
 
     final isLoginValid = await _validateLoginCredential();

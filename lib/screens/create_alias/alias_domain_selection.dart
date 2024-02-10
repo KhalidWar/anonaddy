@@ -1,7 +1,7 @@
+import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
-import 'package:anonaddy/state_management/create_alias/create_alias_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,8 +20,9 @@ class AliasDomainSelection extends StatelessWidget {
       builder: (context, controller) {
         return Consumer(
           builder: (context, ref, child) {
-            final createAliasState = ref.watch(createAliasStateNotifier);
-            final domains = createAliasState.domains!;
+            final createAliasState =
+                ref.watch(createAliasNotifierProvider).value!;
+            final domains = createAliasState.domains;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,7 +60,8 @@ class AliasDomainSelection extends StatelessWidget {
                                 ),
                                 onTap: () {
                                   ref
-                                      .read(createAliasStateNotifier.notifier)
+                                      .read(
+                                          createAliasNotifierProvider.notifier)
                                       .setAliasDomain(domain);
                                   Navigator.pop(context);
                                 },

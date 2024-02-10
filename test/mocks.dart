@@ -30,7 +30,7 @@ class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 
 class MockDomainOptionsService extends Mock implements DomainOptionsService {}
 
-class MockAccessTokenService extends Mock implements AccessTokenService {}
+class MockAccessTokenService extends Mock implements AuthService {}
 
 class MockSearchHistoryNotifier extends Mock implements SearchHistoryNotifier {}
 
