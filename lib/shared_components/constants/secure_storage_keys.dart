@@ -1,4 +1,3 @@
 class SecureStorageKeys {
-  static const accessTokenKey = 'accessToken';
-  static const instanceURLKey = 'instanceURLKey';
+  static const user = 'user';
 }

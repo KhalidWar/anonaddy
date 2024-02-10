@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:anonaddy/features/auth/domain/api_token.dart';
+import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/notifiers/authorization/auth_state.dart';
 import 'package:anonaddy/notifiers/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
@@ -34,8 +36,9 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     try {
       final apiToken =
           await ref.read(authServiceProvider).fetchApiTokenData(url, token);
+      final user = User(url: url, token: token, apiToken: apiToken);
 
-      await ref.read(authServiceProvider).saveLoginCredentials(url, token);
+      await ref.read(authServiceProvider).saveLoginCredentials(user);
       state = AsyncData(state.value!.copyWith(
         authorizationStatus: AuthorizationStatus.authorized,
         loginLoading: false,
@@ -121,9 +124,10 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   /// and returns bool if valid or not
   Future<bool> _validateLoginCredential() async {
     try {
-      final token = await ref.read(authServiceProvider).getAccessToken();
-      final url = await ref.read(authServiceProvider).getInstanceURL();
-      if (token.isEmpty || url.isEmpty) return false;
+      final user = await ref.read(authServiceProvider).getUser();
+      if (user == null) return false;
+
+      if (user.apiToken.isExpired) return false;
 
       /// Temporarily override token and url validation check until I find
       /// a way of handling different errors.

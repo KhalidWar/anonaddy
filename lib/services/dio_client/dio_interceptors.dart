@@ -21,17 +21,16 @@ class DioInterceptors extends Interceptor {
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final url = await authService.getInstanceURL();
-    final accessToken = await authService.getAccessToken();
+    final user = await authService.getUser();
 
     final headers = {
       "Content-Type": "application/json",
       "X-Requested-With": "XMLHttpRequest",
       "Accept": "application/json",
-      "Authorization": "Bearer $accessToken",
+      "Authorization": "Bearer ${user!.token}",
     };
 
-    options.baseUrl = 'https://$url';
+    options.baseUrl = 'https://${user.url}';
     options.headers.addAll(headers);
 
     return handler.next(options);

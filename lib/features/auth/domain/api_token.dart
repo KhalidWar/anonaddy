@@ -12,16 +12,16 @@ class ApiToken {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'createdAt': createdAt,
-      'expiresAt': expiresAt,
+      'created_at': createdAt.toString(),
+      'expires_at': expiresAt.toString(),
     };
   }
 
   factory ApiToken.fromMap(Map<String, dynamic> map) {
     return ApiToken(
       name: map['name'] as String,
-      createdAt: map['created_at'] as DateTime,
-      expiresAt: map['expires_at'] as DateTime,
+      createdAt: DateTime.parse(map['created_at']),
+      expiresAt: DateTime.parse(map['expires_at']),
     );
   }
 

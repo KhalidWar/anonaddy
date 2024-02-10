@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 
-import 'package:anonaddy/models/api_token/api_token.dart';
+import 'package:anonaddy/features/auth/domain/api_token.dart';
+import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
@@ -56,22 +58,20 @@ class AuthService {
     }
   }
 
-  Future<void> saveLoginCredentials(String url, String token) async {
-    await secureStorage.write(
-        key: SecureStorageKeys.accessTokenKey, value: token);
-    await secureStorage.write(
-        key: SecureStorageKeys.instanceURLKey, value: url);
+  Future<void> saveLoginCredentials(User user) async {
+    final encodedUser = jsonEncode(user.toMap());
+    await secureStorage.write(key: SecureStorageKeys.user, value: encodedUser);
   }
 
-  Future<String> getAccessToken(
-      {String key = SecureStorageKeys.accessTokenKey}) async {
-    final accessToken = await secureStorage.read(key: key);
-    return accessToken ?? '';
-  }
+  Future<User?> getUser() async {
+    try {
+      final userData = await secureStorage.read(key: SecureStorageKeys.user);
+      if (userData == null) return null;
 
-  Future<String> getInstanceURL() async {
-    final savedURL =
-        await secureStorage.read(key: SecureStorageKeys.instanceURLKey);
-    return savedURL ?? '';
+      final decodedDate = jsonDecode(userData);
+      return User.fromMap(decodedDate);
+    } catch (error) {
+      rethrow;
+    }
   }
 }
