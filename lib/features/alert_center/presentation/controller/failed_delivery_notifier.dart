@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
-import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
-import 'package:anonaddy/services/failed_delivery/failed_delivery_service.dart';
+import 'package:anonaddy/features/alert_center/data/failed_delivery_service.dart';
+import 'package:anonaddy/features/alert_center/domain/failed_delivery.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final failedDeliveriesNotifier = AsyncNotifierProvider.autoDispose<

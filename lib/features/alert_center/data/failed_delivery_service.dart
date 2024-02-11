@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
+import 'package:anonaddy/features/alert_center/domain/failed_delivery.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';

@@ -3,7 +3,6 @@ import 'package:anonaddy/features/account/presentation/controller/account_notifi
 import 'package:anonaddy/features/domains/presentation/domains_tab.dart';
 import 'package:anonaddy/features/rules/presentation/rules_tab.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_tab.dart';
-import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';

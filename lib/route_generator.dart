@@ -1,3 +1,4 @@
+import 'package:anonaddy/features/alert_center/presentation/alert_center_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
@@ -8,7 +9,6 @@ import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart
 import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_screen.dart';
-import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
 import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';

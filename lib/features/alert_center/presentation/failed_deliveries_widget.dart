@@ -1,5 +1,5 @@
-import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
-import 'package:anonaddy/screens/alert_center/components/failed_delivery_list_tile.dart';
+import 'package:anonaddy/features/alert_center/presentation/components/failed_delivery_list_tile.dart';
+import 'package:anonaddy/features/alert_center/presentation/controller/failed_delivery_notifier.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';

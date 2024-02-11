@@ -1,7 +1,7 @@
-import 'package:anonaddy/screens/alert_center/components/alert_header.dart';
-import 'package:anonaddy/screens/alert_center/components/section_separator.dart';
-import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
-import 'package:anonaddy/screens/alert_center/notifications_widget.dart';
+import 'package:anonaddy/features/alert_center/presentation/components/alert_header.dart';
+import 'package:anonaddy/features/alert_center/presentation/components/section_separator.dart';
+import 'package:anonaddy/features/alert_center/presentation/failed_deliveries_widget.dart';
+import 'package:anonaddy/features/alert_center/presentation/notifications_widget.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/paid_feature_blocker.dart';

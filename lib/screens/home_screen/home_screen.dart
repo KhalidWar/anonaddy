@@ -1,15 +1,15 @@
 import 'package:anonaddy/features/account/presentation/account_tab.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
+import 'package:anonaddy/features/alert_center/presentation/components/alert_center_icon.dart';
+import 'package:anonaddy/features/alert_center/presentation/controller/failed_delivery_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
 import 'package:anonaddy/features/search/presentation/search_tab.dart';
-import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
-import 'package:anonaddy/screens/home_screen/components/alert_center_icon.dart';
 import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';
 import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';

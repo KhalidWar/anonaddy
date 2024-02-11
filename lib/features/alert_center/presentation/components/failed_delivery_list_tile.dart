@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/failed_delivery/failed_delivery.dart';
+import 'package:anonaddy/features/alert_center/domain/failed_delivery.dart';
 import 'package:flutter/material.dart';
 
 class FailedDeliveryListTile extends StatelessWidget {
