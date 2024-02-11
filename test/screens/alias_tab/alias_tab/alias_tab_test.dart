@@ -1,7 +1,7 @@
+import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
 import 'package:anonaddy/models/alias/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/aliases_state.dart';
-import 'package:anonaddy/screens/alias_tab/aliases_tab.dart';
 import 'package:anonaddy/screens/alias_tab/components/aliases_tab_widget_keys.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';

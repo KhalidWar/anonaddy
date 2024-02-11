@@ -1,7 +1,7 @@
+import 'package:anonaddy/features/aliases/presentation/components/aliases_tab_widget_keys.dart';
+import 'package:anonaddy/features/aliases/presentation/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/screens/alias_tab/components/aliases_tab_widget_keys.dart';
-import 'package:anonaddy/screens/alias_tab/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/screens/macos/components/macos_sidebar_toggle.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';

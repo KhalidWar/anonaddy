@@ -1,5 +1,5 @@
+import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 
 /// States which [AliasScreen] and its components can be in
 class AliasScreenState {
