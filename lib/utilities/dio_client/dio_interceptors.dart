@@ -1,4 +1,4 @@
-import 'package:anonaddy/services/access_token/auth_service.dart';
+import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

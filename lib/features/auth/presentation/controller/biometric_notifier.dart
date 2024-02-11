@@ -1,4 +1,4 @@
-import 'package:anonaddy/services/biometric_auth/biometric_auth_service.dart';
+import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/foundation.dart';

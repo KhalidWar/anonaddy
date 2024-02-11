@@ -1,4 +1,4 @@
-import 'package:anonaddy/services/access_token/auth_service.dart';
+import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
