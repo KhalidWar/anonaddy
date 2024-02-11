@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

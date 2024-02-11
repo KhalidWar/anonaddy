@@ -1,6 +1,6 @@
 import 'package:anonaddy/features/create_alias/presentation/components/create_alias_card.dart';
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_notifier.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

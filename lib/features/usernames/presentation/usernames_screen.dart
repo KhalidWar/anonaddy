@@ -2,7 +2,7 @@ import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_state.dart';
 import 'package:anonaddy/features/usernames/presentation/username_default_recipient.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/created_at_widget.dart';

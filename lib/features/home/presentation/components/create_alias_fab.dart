@@ -2,7 +2,7 @@ import 'package:anonaddy/features/account/presentation/controller/account_notifi
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
 import 'package:anonaddy/features/create_alias/presentation/create_alias.dart';
 import 'package:anonaddy/features/home/presentation/components/animated_fab.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/niche_method.dart';
 import 'package:flutter/material.dart';

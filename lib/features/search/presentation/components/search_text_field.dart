@@ -1,5 +1,5 @@
 import 'package:anonaddy/features/search/presentation/controller/search_result/search_result_notifier.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/utilities/form_validator.dart';

@@ -1,4 +1,4 @@
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';

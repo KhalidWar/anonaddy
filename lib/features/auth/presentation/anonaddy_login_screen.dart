@@ -4,7 +4,7 @@ import 'package:anonaddy/features/auth/presentation/components/login_card.dart';
 import 'package:anonaddy/features/auth/presentation/components/login_footer.dart';
 import 'package:anonaddy/features/auth/presentation/components/login_header.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';

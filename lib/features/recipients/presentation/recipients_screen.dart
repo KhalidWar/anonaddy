@@ -7,7 +7,7 @@ import 'package:anonaddy/features/recipients/presentation/components/recipient_s
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_state.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';

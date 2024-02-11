@@ -5,7 +5,7 @@ import 'package:anonaddy/features/domains/presentation/components/domain_list_ti
 import 'package:anonaddy/features/domains/presentation/components/empty_domain_tile.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_tab_notifier.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_tab_state.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';

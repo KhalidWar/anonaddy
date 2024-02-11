@@ -1,5 +1,5 @@
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
-import 'package:anonaddy/services/package_info_service/package_info_service.dart';
+import 'package:anonaddy/utilities/package_info_service.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

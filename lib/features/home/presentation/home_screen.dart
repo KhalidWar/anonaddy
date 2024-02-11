@@ -12,7 +12,7 @@ import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
 import 'package:anonaddy/features/search/presentation/search_tab.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
-import 'package:anonaddy/services/theme/theme.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
