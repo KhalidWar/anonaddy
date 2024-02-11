@@ -7,7 +7,6 @@ import 'package:anonaddy/features/recipients/presentation/components/recipient_s
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_state.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
@@ -17,6 +16,7 @@ import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

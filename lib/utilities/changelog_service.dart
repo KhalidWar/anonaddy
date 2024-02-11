@@ -1,5 +1,5 @@
-import 'package:anonaddy/utilities/secure_storage.dart';
 import 'package:anonaddy/shared_components/constants/changelog_storage_key.dart';
+import 'package:anonaddy/utilities/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

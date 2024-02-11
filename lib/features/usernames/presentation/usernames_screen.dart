@@ -2,7 +2,6 @@ import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_state.dart';
 import 'package:anonaddy/features/usernames/presentation/username_default_recipient.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/created_at_widget.dart';
@@ -17,6 +16,7 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/shared_components/update_description_widget.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

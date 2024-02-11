@@ -5,12 +5,12 @@ import 'package:anonaddy/features/create_alias/presentation/components/select_re
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_state.dart';
 import 'package:anonaddy/features/home/presentation/components/animated_fab.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
+import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
