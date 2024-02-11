@@ -45,7 +45,7 @@ class _QuickSearchScreenState extends ConsumerState<QuickSearchScreen> {
             focusedBorder: InputBorder.none,
           ),
           onChanged: (input) {
-            ref.read(quickSearchStateNotifier.notifier).search(input);
+            ref.read(quickSearchNotifierProvider.notifier).search(input);
             setState(() {});
           },
         ),
@@ -55,7 +55,9 @@ class _QuickSearchScreenState extends ConsumerState<QuickSearchScreen> {
                 onPressed: () {
                   setState(() {
                     controller.clear();
-                    ref.read(quickSearchStateNotifier.notifier).resetSearch();
+                    ref
+                        .read(quickSearchNotifierProvider.notifier)
+                        .resetSearch();
                   });
                 },
               )
@@ -63,7 +65,7 @@ class _QuickSearchScreenState extends ConsumerState<QuickSearchScreen> {
       ),
       body: Consumer(
         builder: (context, ref, child) {
-          final searchState = ref.watch(quickSearchStateNotifier);
+          final searchState = ref.watch(quickSearchNotifierProvider);
 
           return searchState.when(
             data: (aliases) {

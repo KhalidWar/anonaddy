@@ -1,47 +1,31 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/search/data/search_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final quickSearchStateNotifier = StateNotifierProvider.autoDispose<
-    QuickSearchNotifier, AsyncValue<List<Alias>?>>((ref) {
-  final cancelToken = CancelToken();
-  final searchService = ref.read(searchServiceProvider);
+final quickSearchNotifierProvider =
+    AsyncNotifierProvider<QuickSearchNotifier, List<Alias>?>(
+        QuickSearchNotifier.new);
 
-  ref.onDispose(() => cancelToken.cancel());
+class QuickSearchNotifier extends AsyncNotifier<List<Alias>?> {
+  CancelToken cancelToken = CancelToken();
 
-  return QuickSearchNotifier(
-    searchService: searchService,
-    cancelToken: cancelToken,
-  );
-});
-
-class QuickSearchNotifier extends StateNotifier<AsyncValue<List<Alias>?>> {
-  QuickSearchNotifier({
-    required this.searchService,
-    required this.cancelToken,
-  }) : super(const AsyncData(null));
-
-  final SearchService searchService;
-  CancelToken cancelToken;
   Timer? timer;
 
-  Future<void> search(String keyword) async {
-    if (!mounted) return;
-    if (keyword.length >= 3) {
+  Future<void> search(String arg) async {
+    if (arg.length >= 3) {
       if (cancelToken.isCancelled) {
         cancelToken = CancelToken();
       }
 
       await _debounceSearch(() async {
-        log('keyword: $keyword');
-
         state = const AsyncValue.loading();
         state = await AsyncValue.guard(() {
-          return searchService.searchAliases(keyword.trim(), cancelToken);
+          return ref
+              .read(searchServiceProvider)
+              .searchAliases(arg.trim(), cancelToken);
         });
       });
     }
@@ -53,7 +37,6 @@ class QuickSearchNotifier extends StateNotifier<AsyncValue<List<Alias>?>> {
   }
 
   void resetSearch() {
-    if (!mounted) return;
     cancelSearch();
     state = const AsyncData(null);
   }
@@ -62,5 +45,10 @@ class QuickSearchNotifier extends StateNotifier<AsyncValue<List<Alias>?>> {
     const duration = Duration(milliseconds: 500);
     timer?.cancel();
     timer = Timer(duration, callBack);
+  }
+
+  @override
+  FutureOr<List<Alias>?> build() async {
+    return null;
   }
 }
