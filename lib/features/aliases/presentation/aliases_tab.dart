@@ -2,8 +2,8 @@ import 'package:anonaddy/features/aliases/presentation/components/alias_shimmer_
 import 'package:anonaddy/features/aliases/presentation/components/alias_tab_emails_stats.dart';
 import 'package:anonaddy/features/aliases/presentation/components/aliases_tab_widget_keys.dart';
 import 'package:anonaddy/features/aliases/presentation/components/empty_list_alias_tab.dart';
-import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';

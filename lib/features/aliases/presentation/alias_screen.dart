@@ -4,7 +4,7 @@ import 'package:anonaddy/features/aliases/presentation/components/alias_screen_l
 import 'package:anonaddy/features/aliases/presentation/components/alias_screen_recipients.dart';
 import 'package:anonaddy/features/aliases/presentation/components/aliases_tab_widget_keys.dart';
 import 'package:anonaddy/features/aliases/presentation/components/send_from_widget.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';

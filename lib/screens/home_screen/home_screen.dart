@@ -1,7 +1,7 @@
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
 import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
 import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';

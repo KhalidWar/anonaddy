@@ -1,4 +1,4 @@
-import 'package:anonaddy/notifiers/alias_state/fab_visibility_state.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
 import 'package:anonaddy/screens/create_alias/components/create_alias_error_widget.dart';

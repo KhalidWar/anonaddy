@@ -1,7 +1,7 @@
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_state.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_state.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
-import 'package:anonaddy/notifiers/alias_state/default_recipient/default_recipient_state.dart';
 import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

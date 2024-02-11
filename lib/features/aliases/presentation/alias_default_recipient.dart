@@ -1,5 +1,5 @@
+import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_notifier.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/notifiers/alias_state/default_recipient/default_recipient_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';

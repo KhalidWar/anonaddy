@@ -1,5 +1,5 @@
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
 import 'package:anonaddy/screens/alias_tab/components/aliases_tab_widget_keys.dart';
