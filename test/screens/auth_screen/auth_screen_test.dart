@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'auth_screen_mocks.dart';
 
 void main() {
-  Widget authScreen(StateNotifierProvider<AuthNotifier, AuthState> provider) {
+  Widget authScreen(AsyncNotifierProvider<AuthNotifier, AuthState> provider) {
     return ProviderScope(
       overrides: [
         authStateNotifier.overrideWithProvider(provider),

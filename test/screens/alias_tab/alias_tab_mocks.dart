@@ -1,6 +1,8 @@
 import 'package:anonaddy/features/aliases/data/alias_service.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_state.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/settings/data/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:dio/dio.dart';
@@ -9,24 +11,18 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../test_data/test_alias_data.dart';
 
-final testAliasTabProvider =
-    StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {
-  return AliasTabNotifier(
-    aliasService: _MockAliasService(),
-    offlineData: _MockOfflineData(),
-    // state: AliasScreenState.initialState(),
-  );
-});
+// final testAliasTabProvider =
+//     StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {
+//   return AliasTabNotifier(
+//     aliasService: _MockAliasService(),
+//     offlineData: _MockOfflineData(),
+//     // state: AliasScreenState.initialState(),
+//   );
+// });
 
-final testAliasScreenProvider =
-    StateNotifierProvider.autoDispose<AliasScreenNotifier, AliasScreenState>(
-        (ref) {
-  return AliasScreenNotifier(
-    aliasService: _MockAliasService(),
-    aliasTabNotifier: _MockAliasTabNotifier(),
-    // state: AliasScreenState.initialState(),
-  );
-});
+final testAliasScreenProvider = AsyncNotifierProvider.family
+    .autoDispose<AliasScreenNotifier, AliasScreenState, String>(
+        AliasScreenNotifier.new);
 
 class _MockAliasService extends Mock implements AliasService {
   @override
@@ -64,7 +60,7 @@ class _MockAliasService extends Mock implements AliasService {
   }
 }
 
-class _MockAliasTabNotifier extends Mock implements AliasTabNotifier {}
+class _MockAliasTabNotifier extends Mock implements AliasesNotifier {}
 
 class _MockOfflineData extends Mock implements OfflineData {
   @override
