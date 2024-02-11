@@ -131,13 +131,6 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   @override
   FutureOr<AuthState> build() async {
-    final secureStorage = ref.read(flutterSecureStorage);
-    final biometricAuth = ref.read(biometricAuthServiceProvider);
-    final tokenService = ref.read(authServiceProvider);
-    final searchHistory = ref.read(searchHistoryStateNotifier);
-
-    await Future.delayed(const Duration(seconds: 3));
-
     final isLoginCredentialValid = await _isLoginCredentialValid();
     final authStatus = await _getBioAuthState();
 
