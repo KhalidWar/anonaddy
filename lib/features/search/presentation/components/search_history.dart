@@ -1,5 +1,5 @@
-import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
-import 'package:anonaddy/notifiers/search/search_history/search_history_state.dart';
+import 'package:anonaddy/features/search/data/search_history/search_history_notifier.dart';
+import 'package:anonaddy/features/search/data/search_history/search_history_state.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:flutter/material.dart';

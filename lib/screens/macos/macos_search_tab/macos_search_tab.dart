@@ -1,5 +1,5 @@
-import 'package:anonaddy/notifiers/search/search_history/search_history_notifier.dart';
-import 'package:anonaddy/notifiers/search/search_history/search_history_state.dart';
+import 'package:anonaddy/features/search/data/search_history/search_history_notifier.dart';
+import 'package:anonaddy/features/search/data/search_history/search_history_state.dart';
 import 'package:anonaddy/route_generator.dart';
 import 'package:anonaddy/screens/macos/components/macos_sidebar_toggle.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';

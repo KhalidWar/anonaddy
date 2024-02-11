@@ -1,4 +1,4 @@
-import 'package:anonaddy/notifiers/search/search_result/search_result_notifier.dart';
+import 'package:anonaddy/features/search/data/search_result/search_result_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
 import 'package:anonaddy/screens/macos/account/macos_account_tab.dart';
 import 'package:anonaddy/screens/macos/macos_aliases_tab/macos_aliases_tab.dart';
