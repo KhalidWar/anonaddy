@@ -13,7 +13,7 @@ class ApiToken {
     return {
       'name': name,
       'created_at': createdAt.toString(),
-      'expires_at': expiresAt.toString(),
+      'expires_at': expiresAt?.toString(),
     };
   }
 
@@ -21,7 +21,8 @@ class ApiToken {
     return ApiToken(
       name: map['name'] as String,
       createdAt: DateTime.parse(map['created_at']),
-      expiresAt: DateTime.parse(map['expires_at']),
+      expiresAt:
+          map['expires_at'] == null ? null : DateTime.parse(map['expires_at']),
     );
   }
 
