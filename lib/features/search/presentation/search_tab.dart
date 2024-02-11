@@ -1,8 +1,6 @@
+import 'package:anonaddy/features/search/presentation/components/search_history.dart';
 import 'package:anonaddy/features/search/presentation/controller/search_history/search_history_notifier.dart';
-import 'package:anonaddy/features/search/presentation/controller/search_history/search_history_state.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,7 +17,7 @@ class _SearchTabState extends ConsumerState<SearchTab> {
   @override
   void initState() {
     super.initState();
-    ref.read(searchHistoryStateNotifier.notifier).initSearchHistory();
+    // ref.read(searchHistoryStateNotifier.notifier).initSearchHistory();
   }
 
   @override
@@ -54,56 +52,7 @@ class _SearchTabState extends ConsumerState<SearchTab> {
               ],
             ),
           ),
-          Consumer(
-            builder: (context, ref, child) {
-              final searchState = ref.watch(searchHistoryStateNotifier);
-
-              switch (searchState.status) {
-                case SearchHistoryStatus.loading:
-                  return const Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-
-                case SearchHistoryStatus.loaded:
-                  final aliases = searchState.aliases;
-
-                  if (aliases.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Row(
-                        children: [Text('Nothing to see here.')],
-                      ),
-                    );
-                  } else {
-                    return Expanded(
-                      child: PlatformScrollbar(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: aliases.length,
-                          // physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return AliasListTile(alias: aliases[index]);
-                          },
-                        ),
-                      ),
-                    );
-                  }
-
-                case SearchHistoryStatus.failed:
-                  final error = searchState.errorMessage;
-                  return Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Text(error ??
-                            'Something went wrong: ${error.toString()}'),
-                      ],
-                    ),
-                  );
-              }
-            },
-          ),
+          const SearchHistory(),
         ],
       ),
     );

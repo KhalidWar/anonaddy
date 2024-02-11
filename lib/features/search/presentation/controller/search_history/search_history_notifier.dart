@@ -1,45 +1,28 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/features/search/presentation/controller/search_history/search_history_state.dart';
-import 'package:anonaddy/utilities/flutter_secure_storage.dart';
+import 'package:anonaddy/utilities/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
 
 final searchHistoryStateNotifier =
-    StateNotifierProvider<SearchHistoryNotifier, SearchHistoryState>((ref) {
-  final secureStorage = ref.read(flutterSecureStorage);
-  return SearchHistoryNotifier(secureStorage: secureStorage);
-});
+    AsyncNotifierProvider<SearchHistoryNotifier, List<Alias>>(
+        SearchHistoryNotifier.new);
 
-class SearchHistoryNotifier extends StateNotifier<SearchHistoryState> {
-  SearchHistoryNotifier({required this.secureStorage})
-      : super(SearchHistoryState.initialState());
-
-  final FlutterSecureStorage secureStorage;
-
+class SearchHistoryNotifier extends AsyncNotifier<List<Alias>> {
   static const _kHiveSecureKey = 'hiveSecureKey';
   static const _kSearchHistoryBox = 'searchHistoryBoxKey';
-
-  /// Updates UI to latest state
-  void _updateState(SearchHistoryState newState) {
-    if (mounted) state = newState;
-  }
 
   Future<void> addAliasToSearchHistory(Alias alias) async {
     try {
       final box = Hive.box<Alias>(_kSearchHistoryBox);
       box.add(alias);
-      final newState =
-          state.copyWith(aliases: box.values.toList().cast<Alias>());
-      _updateState(newState);
+
+      state = AsyncData(box.values.toList().cast<Alias>());
     } catch (error) {
-      final newState = state.copyWith(
-        status: SearchHistoryStatus.failed,
-        errorMessage: error.toString(),
-      );
-      _updateState(newState);
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
@@ -48,45 +31,17 @@ class SearchHistoryNotifier extends StateNotifier<SearchHistoryState> {
       final box = Hive.box<Alias>(_kSearchHistoryBox);
       await box.clear();
 
-      final newState = state.copyWith(
-        status: SearchHistoryStatus.loaded,
-        aliases: [],
-      );
-      _updateState(newState);
+      state = const AsyncData(<Alias>[]);
     } catch (error) {
-      final newState = state.copyWith(
-        status: SearchHistoryStatus.failed,
-        errorMessage: error.toString(),
-      );
-      _updateState(newState);
-    }
-  }
-
-  Future<void> initSearchHistory() async {
-    try {
-      final encryptionKey = await _getEncryptionKey();
-
-      final box = await Hive.openBox<Alias>(
-        _kSearchHistoryBox,
-        encryptionCipher: HiveAesCipher(encryptionKey),
-      );
-
-      final newState = state.copyWith(
-        status: SearchHistoryStatus.loaded,
-        aliases: box.isEmpty ? [] : box.values.toList().cast<Alias>(),
-      );
-      _updateState(newState);
-    } catch (error) {
-      final newState = state.copyWith(
-        status: SearchHistoryStatus.failed,
-        errorMessage: error.toString(),
-      );
-      _updateState(newState);
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future<List<int>> _getEncryptionKey() async {
     try {
+      final FlutterSecureStorage secureStorage =
+          ref.read(flutterSecureStorageProvider);
+
       /// Encryption key is [List<int>] according to the documentation.
       late List<int> encryptionKey;
 
@@ -111,5 +66,17 @@ class SearchHistoryNotifier extends StateNotifier<SearchHistoryState> {
     } catch (error) {
       rethrow;
     }
+  }
+
+  @override
+  FutureOr<List<Alias>> build() async {
+    final encryptionKey = await _getEncryptionKey();
+
+    final box = await Hive.openBox<Alias>(
+      _kSearchHistoryBox,
+      encryptionCipher: HiveAesCipher(encryptionKey),
+    );
+
+    return box.isEmpty ? [] : box.values.toList().cast<Alias>();
   }
 }
