@@ -1,5 +1,5 @@
-import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
-import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
+import 'package:anonaddy/features/create_alias/presentation/components/create_alias_card.dart';
+import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

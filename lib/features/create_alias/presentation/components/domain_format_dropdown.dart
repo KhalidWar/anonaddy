@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/create_alias/components/create_alias_card.dart';
+import 'package:anonaddy/features/create_alias/presentation/components/create_alias_card.dart';
 import 'package:flutter/material.dart';
 
 class DomainFormatDropdown extends StatelessWidget {

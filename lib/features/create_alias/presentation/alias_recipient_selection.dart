@@ -1,7 +1,7 @@
+import 'package:anonaddy/features/create_alias/presentation/components/recipients_note.dart';
+import 'package:anonaddy/features/create_alias/presentation/components/recipients_tile.dart';
+import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
-import 'package:anonaddy/screens/create_alias/components/recipients_note.dart';
-import 'package:anonaddy/screens/create_alias/components/recipients_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
 import 'package:anonaddy/shared_components/lottie_widget.dart';

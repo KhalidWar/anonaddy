@@ -1,9 +1,9 @@
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
-import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
-import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
-import 'package:anonaddy/screens/create_alias/components/create_alias_error_widget.dart';
-import 'package:anonaddy/screens/create_alias/components/create_alias_tile.dart';
-import 'package:anonaddy/screens/create_alias/components/select_recipient_tile.dart';
+import 'package:anonaddy/features/create_alias/presentation/components/create_alias_error_widget.dart';
+import 'package:anonaddy/features/create_alias/presentation/components/create_alias_tile.dart';
+import 'package:anonaddy/features/create_alias/presentation/components/select_recipient_tile.dart';
+import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_notifier.dart';
+import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_state.dart';
 import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';

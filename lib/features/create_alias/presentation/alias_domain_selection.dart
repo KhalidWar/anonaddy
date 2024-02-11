@@ -1,4 +1,4 @@
-import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
+import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_notifier.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
