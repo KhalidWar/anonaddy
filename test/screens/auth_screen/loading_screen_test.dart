@@ -1,4 +1,4 @@
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
+import 'package:anonaddy/features/auth/data/auth_notifier.dart';
 import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
 import 'package:flutter/material.dart';

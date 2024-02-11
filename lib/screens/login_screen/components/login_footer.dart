@@ -1,4 +1,4 @@
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
+import 'package:anonaddy/features/auth/data/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

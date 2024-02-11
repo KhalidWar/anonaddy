@@ -1,4 +1,4 @@
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
+import 'package:anonaddy/features/auth/data/auth_notifier.dart';
 import 'package:anonaddy/screens/login_screen/components/label_input_field_separator.dart';
 import 'package:anonaddy/screens/login_screen/components/login_card.dart';
 import 'package:anonaddy/screens/login_screen/components/login_footer.dart';

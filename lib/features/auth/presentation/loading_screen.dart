@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
+import 'package:anonaddy/features/auth/data/auth_notifier.dart';
+import 'package:anonaddy/features/auth/presentation/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

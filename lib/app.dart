@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/cupertino.dart';

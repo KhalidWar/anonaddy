@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:anonaddy/notifiers/authorization/auth_notifier.dart';
-import 'package:anonaddy/notifiers/authorization/auth_state.dart';
-import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
-import 'package:anonaddy/screens/authorization_screen/error_screen.dart';
-import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
-import 'package:anonaddy/screens/authorization_screen/lock_screen.dart';
+import 'package:anonaddy/features/auth/data/auth_notifier.dart';
+import 'package:anonaddy/features/auth/data/auth_state.dart';
+import 'package:anonaddy/features/auth/presentation/components/auth_screen_widget_keys.dart';
+import 'package:anonaddy/features/auth/presentation/error_screen.dart';
+import 'package:anonaddy/features/auth/presentation/loading_screen.dart';
+import 'package:anonaddy/features/auth/presentation/lock_screen.dart';
 import 'package:anonaddy/screens/home_screen/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
