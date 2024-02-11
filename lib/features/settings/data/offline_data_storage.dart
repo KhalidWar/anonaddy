@@ -1,9 +1,8 @@
 import 'package:anonaddy/shared_components/constants/changelog_storage_key.dart';
 import 'package:anonaddy/shared_components/constants/offline_data_key.dart';
+import 'package:anonaddy/utilities/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-final flutterSecureStorage = Provider((ref) => const FlutterSecureStorage());
 
 final offlineDataProvider = Provider<OfflineData>((ref) {
   final secureStorage = ref.read(flutterSecureStorage);

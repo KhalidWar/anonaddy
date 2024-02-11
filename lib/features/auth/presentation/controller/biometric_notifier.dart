@@ -1,5 +1,5 @@
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
-import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
+import 'package:anonaddy/utilities/flutter_secure_storage.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

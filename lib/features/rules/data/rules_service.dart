@@ -1,7 +1,7 @@
 import 'dart:developer';
 
+import 'package:anonaddy/features/rules/data/rules_data_storage.dart';
 import 'package:anonaddy/features/rules/domain/rules.dart';
-import 'package:anonaddy/services/data_storage/rules_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
