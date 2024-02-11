@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/auth/data/auth_notifier.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';

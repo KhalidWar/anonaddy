@@ -1,8 +1,8 @@
+import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
 import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
 import 'package:anonaddy/features/settings/presentation/about_app_screen.dart';
 import 'package:anonaddy/features/settings/presentation/components/app_version.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
-import 'package:anonaddy/notifiers/biometric_auth/biometric_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';

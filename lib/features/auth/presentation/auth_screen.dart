@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:anonaddy/features/auth/data/auth_notifier.dart';
-import 'package:anonaddy/features/auth/data/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/anonaddy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/components/auth_screen_widget_keys.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/error_screen.dart';
 import 'package:anonaddy/features/auth/presentation/loading_screen.dart';
 import 'package:anonaddy/features/auth/presentation/lock_screen.dart';

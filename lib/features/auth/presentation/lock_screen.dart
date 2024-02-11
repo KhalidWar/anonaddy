@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/auth/data/auth_notifier.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/lottie_images.dart';
