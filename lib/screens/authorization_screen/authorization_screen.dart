@@ -16,26 +16,13 @@ import 'package:secure_application/secure_application.dart';
 
 /// This widget manages user authentication and authorization
 /// flow for the whole app.
-class AuthScreen extends ConsumerStatefulWidget {
+class AuthScreen extends ConsumerWidget {
   const AuthScreen({Key? key}) : super(key: key);
 
   static const routeName = 'authorizationScreen';
 
   @override
-  ConsumerState createState() => _AuthorizationScreenState();
-}
-
-class _AuthorizationScreenState extends ConsumerState<AuthScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // ref.read(authStateNotifier.notifier).initAuth();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     /// Watches for [authStateNotifier] changes and
     /// updates UI accordingly.
     final authNotifier = ref.watch(authStateNotifier);
@@ -43,12 +30,6 @@ class _AuthorizationScreenState extends ConsumerState<AuthScreen> {
     return authNotifier.when(
       data: (authState) {
         switch (authState.authorizationStatus) {
-          /// Manages initial state, app startup.
-          case AuthorizationStatus.unknown:
-            return const LoadingScreen(
-              key: AuthScreenWidgetKeys.authScreenLoadingScreen,
-            );
-
           /// [SecureApplication] package isn't available for MacOS.
           ///
           /// Manages when a logged in user is found

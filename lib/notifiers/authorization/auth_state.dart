@@ -1,17 +1,14 @@
 /// Manages user flow status
 enum AuthorizationStatus {
-  /// Default status at app startup when user data hasn't been fetched yet.
-  unknown,
+  /// When user logs in successfully and/or user account has been fetched from
+  /// device storage.
+  authorized,
 
   /// When user decides to log in with addy.io account.
   anonAddyLogin,
 
   /// When user decides to log in with a self hosted instance.
   selfHostedLogin,
-
-  /// When user logs in successfully and/or user account has been fetched from
-  /// device storage.
-  authorized,
 }
 
 /// Manages app biometric authentication lock status.

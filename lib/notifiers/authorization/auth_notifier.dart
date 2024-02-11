@@ -68,55 +68,12 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
           authorizationStatus: state.value!.authorizationStatus,
           authenticationStatus: AuthenticationStatus.disabled,
         ));
-      } else {
-        // state = AsyncData(state.value!
-        //     .copyWith(errorMessage: AppStrings.failedToAuthenticate));
-        Utilities.showToast(AppStrings.failedToAuthenticate);
+        return;
       }
-    } catch (error) {
-      // state = AsyncData(state.value!.copyWith(
-      //   errorMessage: 'Authorization failed! Log in again!',
-      // ));
 
-      state = const AsyncError(
-        'Authorization failed! Log in again!',
-        StackTrace.empty,
-      );
-    }
-  }
-
-  /// Manages authentication flow at app startup.
-  ///   1. Fetches stored access token and instance url.
-  ///   2. Attempts to login to check if token and url are valid.
-  ///   3. If valid, set [state] to [AuthorizationStatus.authorized].
-  ///   4. If invalid, set [state] to [AuthorizationStatus.unauthorized].
-  ///
-  /// It also checks if user's device supports biometric authentication.
-  /// Then sets [state] accordingly.
-  Future<void> _initAuth() async {
-    try {
-      final isLoginValid = await _isLoginCredentialValid();
-      final authStatus = await _getBioAuthState();
-
-      if (isLoginValid) {
-        state = AsyncData(state.value!.copyWith(
-          authorizationStatus: AuthorizationStatus.authorized,
-          authenticationStatus: authStatus,
-        ));
-      } else {
-        state = AsyncData(state.value!.copyWith(
-          authorizationStatus: AuthorizationStatus.anonAddyLogin,
-          authenticationStatus: authStatus,
-        ));
-      }
+      Utilities.showToast(AppStrings.failedToAuthenticate);
     } catch (error) {
       Utilities.showToast(error.toString());
-
-      /// Authenticate user regardless of error.
-      /// This is a temp solution until I'm able to handle different errors.
-      state = AsyncData(state.value!.copyWith(
-        authorizationStatus: AuthorizationStatus.anonAddyLogin,
-      ));
     }
   }
 
@@ -129,6 +86,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       if (user.apiToken.isExpired) return false;
       return true;
     } catch (error) {
+      Utilities.showToast(error.toString());
       rethrow;
     }
   }
@@ -177,6 +135,8 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     final biometricAuth = ref.read(biometricAuthServiceProvider);
     final tokenService = ref.read(authServiceProvider);
     final searchHistory = ref.read(searchHistoryStateNotifier);
+
+    await Future.delayed(const Duration(seconds: 3));
 
     final isLoginCredentialValid = await _isLoginCredentialValid();
     final authStatus = await _getBioAuthState();
