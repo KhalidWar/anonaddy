@@ -171,6 +171,67 @@ class Account {
   }
 
   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Account &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          username == other.username &&
+          fromName == other.fromName &&
+          emailSubject == other.emailSubject &&
+          bannerLocation == other.bannerLocation &&
+          bandwidth == other.bandwidth &&
+          bandwidthLimit == other.bandwidthLimit &&
+          usernameCount == other.usernameCount &&
+          usernameLimit == other.usernameLimit &&
+          defaultRecipientId == other.defaultRecipientId &&
+          defaultAliasDomain == other.defaultAliasDomain &&
+          defaultAliasFormat == other.defaultAliasFormat &&
+          subscription == other.subscription &&
+          subscriptionEndAt == other.subscriptionEndAt &&
+          recipientCount == other.recipientCount &&
+          recipientLimit == other.recipientLimit &&
+          activeDomainCount == other.activeDomainCount &&
+          activeDomainLimit == other.activeDomainLimit &&
+          aliasCount == other.aliasCount &&
+          aliasLimit == other.aliasLimit &&
+          totalEmailsForwarded == other.totalEmailsForwarded &&
+          totalEmailsBlocked == other.totalEmailsBlocked &&
+          totalEmailsReplied == other.totalEmailsReplied &&
+          totalEmailsSent == other.totalEmailsSent &&
+          createdAt == other.createdAt &&
+          lastUpdated == other.lastUpdated;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      username.hashCode ^
+      fromName.hashCode ^
+      emailSubject.hashCode ^
+      bannerLocation.hashCode ^
+      bandwidth.hashCode ^
+      bandwidthLimit.hashCode ^
+      usernameCount.hashCode ^
+      usernameLimit.hashCode ^
+      defaultRecipientId.hashCode ^
+      defaultAliasDomain.hashCode ^
+      defaultAliasFormat.hashCode ^
+      subscription.hashCode ^
+      subscriptionEndAt.hashCode ^
+      recipientCount.hashCode ^
+      recipientLimit.hashCode ^
+      activeDomainCount.hashCode ^
+      activeDomainLimit.hashCode ^
+      aliasCount.hashCode ^
+      aliasLimit.hashCode ^
+      totalEmailsForwarded.hashCode ^
+      totalEmailsBlocked.hashCode ^
+      totalEmailsReplied.hashCode ^
+      totalEmailsSent.hashCode ^
+      createdAt.hashCode ^
+      lastUpdated.hashCode;
+
+  @override
   String toString() {
     return 'Account{id: $id, username: $username, fromName: $fromName, emailSubject: $emailSubject, bannerLocation: $bannerLocation, bandwidth: $bandwidth, bandwidthLimit: $bandwidthLimit, usernameCount: $usernameCount, usernameLimit: $usernameLimit, defaultRecipientId: $defaultRecipientId, defaultAliasDomain: $defaultAliasDomain, defaultAliasFormat: $defaultAliasFormat, subscription: $subscription, subscriptionEndAt: $subscriptionEndAt, recipientCount: $recipientCount, recipientLimit: $recipientLimit, activeDomainCount: $activeDomainCount, activeDomainLimit: $activeDomainLimit, aliasCount: $aliasCount, aliasLimit: $aliasLimit, totalEmailsForwarded: $totalEmailsForwarded, totalEmailsBlocked: $totalEmailsBlocked, totalEmailsReplied: $totalEmailsReplied, totalEmailsSent: $totalEmailsSent, createdAt: $createdAt, lastUpdated: $lastUpdated}';
   }
