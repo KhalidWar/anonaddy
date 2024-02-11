@@ -1,6 +1,6 @@
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {
   @override

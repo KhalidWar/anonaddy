@@ -1,5 +1,5 @@
 import 'package:anonaddy/features/alert_center/data/failed_delivery_service.dart';
-import 'package:anonaddy/features/failed_delivery/domain/failed_delivery.dart';
+import 'package:anonaddy/features/alert_center/domain/failed_delivery.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 

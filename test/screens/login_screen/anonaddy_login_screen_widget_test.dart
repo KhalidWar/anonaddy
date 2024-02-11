@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
+import 'package:anonaddy/features/auth/presentation/anonaddy_login_screen.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

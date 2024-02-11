@@ -1,6 +1,6 @@
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/aliases_state.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/aliases_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../mocks.dart';
@@ -12,8 +12,8 @@ void main() {
   setUp(() {
     aliasService = MockAliasService();
     aliasTabNotifier = AliasesNotifier(
-      aliasService: aliasService,
-    );
+        // aliasService: aliasService,
+        );
   });
 
   test('test initialState() method', () async {

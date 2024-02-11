@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'dummy_failed_deliveries_data.dart';
 

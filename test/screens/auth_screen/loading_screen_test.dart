@@ -1,6 +1,6 @@
+import 'package:anonaddy/features/auth/presentation/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
-import 'package:anonaddy/screens/authorization_screen/components/auth_screen_widget_keys.dart';
-import 'package:anonaddy/screens/authorization_screen/loading_screen.dart';
+import 'package:anonaddy/features/auth/presentation/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

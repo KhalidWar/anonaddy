@@ -1,11 +1,11 @@
 import 'package:anonaddy/features/aliases/data/alias_service.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/features/settings/data/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/state_management/alias_state/alias_state_export.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../test_data/test_alias_data.dart';
 
