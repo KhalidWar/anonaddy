@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:anonaddy/models/username/username.dart';
+import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/services/data_storage/usernames_data_storage.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';

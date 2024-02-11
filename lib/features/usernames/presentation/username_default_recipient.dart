@@ -1,7 +1,7 @@
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/models/username/username.dart';
-import 'package:anonaddy/notifiers/usernames/usernames_screen_notifier.dart';
+import 'package:anonaddy/features/usernames/domain/username.dart';
+import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_notifier.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';

@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/app_version/app_version_model.dart';
+import 'package:anonaddy/features/app_version/domain/app_version_model.dart';
 
 class AppVersionData {
   static AppVersion validAppVersion() {

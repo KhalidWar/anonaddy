@@ -1,8 +1,8 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
+import 'package:anonaddy/features/usernames/presentation/usernames_tab.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
-import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
 import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';

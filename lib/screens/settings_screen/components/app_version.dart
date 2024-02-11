@@ -1,6 +1,6 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
-import 'package:anonaddy/notifiers/app_version/app_version_notifier.dart';
+import 'package:anonaddy/features/app_version/presentation/controller/app_version_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';

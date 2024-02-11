@@ -1,5 +1,5 @@
-import 'package:anonaddy/notifiers/usernames/usernames_tab_state.dart';
-import 'package:anonaddy/services/username/username_service.dart';
+import 'package:anonaddy/features/usernames/data/username_service.dart';
+import 'package:anonaddy/features/usernames/presentation/controller/usernames_tab_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernameStateNotifier =

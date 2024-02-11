@@ -1,7 +1,7 @@
-import 'package:anonaddy/models/username/username.dart';
-import 'package:anonaddy/notifiers/usernames/usernames_screen_state.dart';
-import 'package:anonaddy/notifiers/usernames/usernames_tab_notifier.dart';
-import 'package:anonaddy/services/username/username_service.dart';
+import 'package:anonaddy/features/usernames/data/username_service.dart';
+import 'package:anonaddy/features/usernames/domain/username.dart';
+import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_state.dart';
+import 'package:anonaddy/features/usernames/presentation/controller/usernames_tab_notifier.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
