@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/utilities.dart';

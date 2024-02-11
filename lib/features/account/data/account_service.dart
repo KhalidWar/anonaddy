@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/services/data_storage/account_data_storage.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';

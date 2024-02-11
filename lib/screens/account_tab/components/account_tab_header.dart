@@ -1,6 +1,6 @@
-import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/models/username/username.dart';
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
 import 'package:anonaddy/screens/account_tab/components/account_tab_widget_keys.dart';
 import 'package:anonaddy/screens/account_tab/components/header_profile.dart';

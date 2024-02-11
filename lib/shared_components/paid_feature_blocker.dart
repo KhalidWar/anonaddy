@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/account/account.dart';
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
 import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';

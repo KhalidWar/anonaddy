@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/account/account.dart';
+import 'package:anonaddy/features/account/domain/account.dart';
 
 class AccountTestData {
   static Account defaultAccount() {

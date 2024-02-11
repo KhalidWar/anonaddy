@@ -1,5 +1,5 @@
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
 import 'package:anonaddy/services/theme/theme.dart';

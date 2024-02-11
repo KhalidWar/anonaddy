@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:anonaddy/models/account/account.dart';
-import 'package:anonaddy/services/account/account_service.dart';
+import 'package:anonaddy/features/account/data/account_service.dart';
+import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final accountNotifierProvider =

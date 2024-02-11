@@ -1,11 +1,11 @@
+import 'package:anonaddy/features/account/presentation/account_tab.dart';
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
 import 'package:anonaddy/notifiers/failed_delivery/failed_delivery_notifier.dart';
 import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
-import 'package:anonaddy/screens/account_tab/account_tab.dart';
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/alert_center_icon.dart';
 import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';

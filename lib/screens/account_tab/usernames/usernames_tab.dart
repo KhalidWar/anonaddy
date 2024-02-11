@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/account/account.dart';
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
+import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/notifiers/usernames/usernames_tab_notifier.dart';
 import 'package:anonaddy/notifiers/usernames/usernames_tab_state.dart';
 import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
