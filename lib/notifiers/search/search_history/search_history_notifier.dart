@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/notifiers/search/search_history/search_history_state.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

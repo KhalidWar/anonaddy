@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/models/profile/profile.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';

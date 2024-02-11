@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 
 enum SearchHistoryStatus { loading, loaded, failed }
 

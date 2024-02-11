@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/data/alias_service.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/aliases_state.dart';
-import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final aliasesNotifierProvider =

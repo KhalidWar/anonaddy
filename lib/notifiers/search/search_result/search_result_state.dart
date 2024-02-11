@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:flutter/cupertino.dart';
 
 enum SearchResultStatus { initial, limited, loading, loaded, failed }

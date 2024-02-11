@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/shared_components/constants/hive_type_id.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';

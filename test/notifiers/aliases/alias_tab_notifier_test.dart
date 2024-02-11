@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/aliases_state.dart';
 import 'package:flutter_test/flutter_test.dart';

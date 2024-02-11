@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:dio/dio.dart';

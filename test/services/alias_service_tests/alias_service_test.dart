@@ -1,5 +1,5 @@
-import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/services/alias/alias_service.dart';
+import 'package:anonaddy/features/aliases/data/alias_service.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

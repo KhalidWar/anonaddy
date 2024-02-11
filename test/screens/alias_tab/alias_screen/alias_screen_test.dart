@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/alias/alias.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_notifier.dart';
 import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
 import 'package:anonaddy/screens/alias_tab/alias_screen.dart';

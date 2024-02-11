@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:anonaddy/features/aliases/data/alias_service.dart';
 import 'package:anonaddy/models/account/account.dart';
 import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/notifiers/alias_state/aliases_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
 import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/services/account/account_service.dart';
-import 'package:anonaddy/services/alias/alias_service.dart';
 import 'package:anonaddy/services/domain_options/domain_options_service.dart';
 import 'package:anonaddy/services/recipient/recipient_service.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
