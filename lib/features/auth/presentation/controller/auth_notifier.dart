@@ -6,7 +6,7 @@ import 'package:anonaddy/features/auth/domain/api_token.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
-import 'package:anonaddy/features/search/presentation/controller/search_history/search_history_notifier.dart';
+import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/flutter_secure_storage.dart';
 import 'package:anonaddy/utilities/utilities.dart';

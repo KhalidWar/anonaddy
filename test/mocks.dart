@@ -7,7 +7,7 @@ import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifi
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:anonaddy/features/domain_options/data/domain_options_service.dart';
-import 'package:anonaddy/features/search/presentation/controller/search_history/search_history_notifier.dart';
+import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mocktail/mocktail.dart';
