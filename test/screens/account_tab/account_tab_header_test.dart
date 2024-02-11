@@ -1,6 +1,6 @@
 import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/components/account_tab_header.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
-import 'package:anonaddy/screens/account_tab/components/account_tab_header.dart';
 import 'package:anonaddy/screens/account_tab/components/account_tab_widget_keys.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
 import 'package:flutter/material.dart';

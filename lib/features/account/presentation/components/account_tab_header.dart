@@ -1,9 +1,9 @@
 import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/components/account_popup_info.dart';
+import 'package:anonaddy/features/account/presentation/components/account_tab_widget_keys.dart';
+import 'package:anonaddy/features/account/presentation/components/header_profile.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
-import 'package:anonaddy/screens/account_tab/components/account_popup_info.dart';
-import 'package:anonaddy/screens/account_tab/components/account_tab_widget_keys.dart';
-import 'package:anonaddy/screens/account_tab/components/header_profile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';

@@ -1,9 +1,9 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
+import 'package:anonaddy/features/usernames/presentation/components/add_new_username.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_tab_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_tab_state.dart';
 import 'package:anonaddy/features/usernames/presentation/username_list_tile.dart';
-import 'package:anonaddy/screens/account_tab/components/add_new_username.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
