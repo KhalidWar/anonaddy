@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/profile/profile.dart';
+import 'package:anonaddy/features/auth/domain/profile.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ProfileService {

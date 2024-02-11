@@ -8,10 +8,10 @@ import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
 import 'package:anonaddy/features/search/presentation/search_tab.dart';
-import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
+import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
+import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
 import 'package:anonaddy/screens/create_alias/create_alias.dart';
 import 'package:anonaddy/screens/home_screen/components/changelog_widget.dart';
-import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter/material.dart';

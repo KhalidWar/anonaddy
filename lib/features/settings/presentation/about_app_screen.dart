@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
+import 'package:anonaddy/features/settings/presentation/credits_screen.dart';
 import 'package:anonaddy/services/package_info_service/package_info_service.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';

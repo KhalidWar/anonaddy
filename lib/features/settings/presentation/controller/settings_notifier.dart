@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:anonaddy/notifiers/settings/settings_state.dart';
+import 'package:anonaddy/features/settings/presentation/controller/settings_state.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/utilities.dart';

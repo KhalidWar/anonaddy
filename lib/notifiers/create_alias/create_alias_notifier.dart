@@ -7,8 +7,8 @@ import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifi
 import 'package:anonaddy/features/domain_options/data/domain_options_service.dart';
 import 'package:anonaddy/features/recipients/data/recipient_service.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
+import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_state.dart';
-import 'package:anonaddy/notifiers/settings/settings_notifier.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/utilities/utilities.dart';
