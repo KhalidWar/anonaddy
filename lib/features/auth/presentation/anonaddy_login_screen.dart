@@ -1,9 +1,9 @@
 import 'package:anonaddy/features/auth/data/auth_notifier.dart';
-import 'package:anonaddy/screens/login_screen/components/access_token_info.dart';
-import 'package:anonaddy/screens/login_screen/components/label_input_field_separator.dart';
-import 'package:anonaddy/screens/login_screen/components/login_card.dart';
-import 'package:anonaddy/screens/login_screen/components/login_footer.dart';
-import 'package:anonaddy/screens/login_screen/components/login_header.dart';
+import 'package:anonaddy/features/auth/presentation/components/access_token_info.dart';
+import 'package:anonaddy/features/auth/presentation/components/label_input_field_separator.dart';
+import 'package:anonaddy/features/auth/presentation/components/login_card.dart';
+import 'package:anonaddy/features/auth/presentation/components/login_footer.dart';
+import 'package:anonaddy/features/auth/presentation/components/login_header.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';

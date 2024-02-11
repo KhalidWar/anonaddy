@@ -1,7 +1,9 @@
 import 'package:anonaddy/features/alert_center/presentation/alert_center_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
+import 'package:anonaddy/features/auth/presentation/anonaddy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
+import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
 import 'package:anonaddy/features/domains/domain/domain_model.dart';
 import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
 import 'package:anonaddy/features/home/presentation/home_screen.dart';
@@ -13,8 +15,6 @@ import 'package:anonaddy/features/settings/presentation/credits_screen.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_screen.dart';
-import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
-import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/screens/navigation_error/navigation_error_screen.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';

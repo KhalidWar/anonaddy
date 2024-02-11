@@ -1,4 +1,4 @@
-import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
+import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/app_url.dart';
 import 'package:flutter/material.dart';
