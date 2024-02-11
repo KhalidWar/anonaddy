@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain_model.dart';
 import 'package:anonaddy/services/data_storage/data_storage.dart';
 import 'package:anonaddy/services/secure_storage/secure_storage.dart';
 import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';

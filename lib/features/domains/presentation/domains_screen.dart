@@ -1,7 +1,7 @@
-import 'package:anonaddy/models/domain/domain_model.dart';
-import 'package:anonaddy/notifiers/domains/domains_screen_notifier.dart';
-import 'package:anonaddy/notifiers/domains/domains_screen_state.dart';
-import 'package:anonaddy/screens/account_tab/domains/domain_default_recipient.dart';
+import 'package:anonaddy/features/domains/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/presentation/controller/domains_screen_notifier.dart';
+import 'package:anonaddy/features/domains/presentation/controller/domains_screen_state.dart';
+import 'package:anonaddy/features/domains/presentation/domain_default_recipient.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';

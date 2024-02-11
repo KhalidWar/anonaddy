@@ -1,5 +1,5 @@
-import 'package:anonaddy/notifiers/domains/domains_tab_state.dart';
-import 'package:anonaddy/services/domain/domains_service.dart';
+import 'package:anonaddy/features/domains/data/domains_service.dart';
+import 'package:anonaddy/features/domains/presentation/controller/domains_tab_state.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

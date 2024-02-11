@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:anonaddy/models/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain_model.dart';
 import 'package:anonaddy/services/data_storage/domains_data_storage.dart';
 import 'package:anonaddy/services/dio_client/dio_interceptors.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';

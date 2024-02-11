@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain_model.dart';
 
 enum DomainsScreenStatus { loading, loaded, failed }
 

@@ -1,10 +1,10 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
-import 'package:anonaddy/notifiers/domains/domains_tab_notifier.dart';
-import 'package:anonaddy/notifiers/domains/domains_tab_state.dart';
-import 'package:anonaddy/screens/account_tab/domains/components/add_new_domain.dart';
-import 'package:anonaddy/screens/account_tab/domains/components/domain_list_tile.dart';
-import 'package:anonaddy/screens/account_tab/domains/components/empty_domain_tile.dart';
+import 'package:anonaddy/features/domains/presentation/components/add_new_domain.dart';
+import 'package:anonaddy/features/domains/presentation/components/domain_list_tile.dart';
+import 'package:anonaddy/features/domains/presentation/components/empty_domain_tile.dart';
+import 'package:anonaddy/features/domains/presentation/controller/domains_tab_notifier.dart';
+import 'package:anonaddy/features/domains/presentation/controller/domains_tab_state.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
