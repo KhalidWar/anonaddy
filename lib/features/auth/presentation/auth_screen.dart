@@ -9,7 +9,7 @@ import 'package:anonaddy/features/auth/presentation/loading_screen.dart';
 import 'package:anonaddy/features/auth/presentation/lock_screen.dart';
 import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
 import 'package:anonaddy/features/home/presentation/home_screen.dart';
-import 'package:anonaddy/screens/macos/macos_screen.dart';
+import 'package:anonaddy/macos/macos_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';

@@ -1,10 +1,10 @@
 import 'package:anonaddy/features/search/presentation/controller/search_result/search_result_notifier.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
+import 'package:anonaddy/macos/account/macos_account_tab.dart';
+import 'package:anonaddy/macos/macos_aliases_tab/macos_aliases_tab.dart';
+import 'package:anonaddy/macos/macos_home_screen/macos_home_screen.dart';
+import 'package:anonaddy/macos/macos_search_tab/macos_search_tab.dart';
 import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/screens/macos/account/macos_account_tab.dart';
-import 'package:anonaddy/screens/macos/macos_aliases_tab/macos_aliases_tab.dart';
-import 'package:anonaddy/screens/macos/macos_home_screen/macos_home_screen.dart';
-import 'package:anonaddy/screens/macos/macos_search_tab/macos_search_tab.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

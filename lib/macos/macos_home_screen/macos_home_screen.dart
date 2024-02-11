@@ -1,6 +1,6 @@
 import 'package:anonaddy/features/account/presentation/account_tab.dart';
+import 'package:anonaddy/macos/components/macos_sidebar_toggle.dart';
 import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/screens/macos/components/macos_sidebar_toggle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
 
