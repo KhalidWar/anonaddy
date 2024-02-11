@@ -1,4 +1,3 @@
-import 'package:anonaddy/features/search/presentation/controller/search_result/search_result_notifier.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
 import 'package:anonaddy/macos/account/macos_account_tab.dart';
 import 'package:anonaddy/macos/macos_aliases_tab/macos_aliases_tab.dart';
@@ -45,11 +44,11 @@ class _MacHomeScreenState extends ConsumerState<MacosScreen> {
           minWidth: 300,
           top: MacosSearchField(
             placeholder: AppStrings.searchAliasByEmailOrDesc,
-            controller: ref.read(searchResultStateNotifier).searchController,
+            // controller: ref.read(searchResultStateNotifier).searchController,
             onChanged: (input) {
-              ref
-                  .read(searchResultStateNotifier.notifier)
-                  .searchAliasesLocally();
+              // ref
+              //     .read(searchResultStateNotifier.notifier)
+              //     .searchAliasesLocally();
             },
             onTap: () => changePage(3),
           ),

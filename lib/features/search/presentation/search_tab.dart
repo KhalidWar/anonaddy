@@ -4,24 +4,11 @@ import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SearchTab extends ConsumerStatefulWidget {
-  const SearchTab({
-    Key? key,
-  }) : super(key: key);
+class SearchTab extends ConsumerWidget {
+  const SearchTab({Key? key}) : super(key: key);
 
   @override
-  ConsumerState createState() => _SearchTabState();
-}
-
-class _SearchTabState extends ConsumerState<SearchTab> {
-  @override
-  void initState() {
-    super.initState();
-    // ref.read(searchHistoryStateNotifier.notifier).initSearchHistory();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Column(
         children: [
