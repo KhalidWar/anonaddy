@@ -4,7 +4,7 @@ import 'package:anonaddy/features/create_alias/presentation/components/create_al
 import 'package:anonaddy/features/create_alias/presentation/components/select_recipient_tile.dart';
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_state.dart';
-import 'package:anonaddy/screens/home_screen/components/animated_fab.dart';
+import 'package:anonaddy/features/home/presentation/components/animated_fab.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';

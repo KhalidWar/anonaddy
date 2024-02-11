@@ -6,7 +6,7 @@ import 'package:anonaddy/features/auth/presentation/components/auth_screen_widge
 import 'package:anonaddy/features/auth/presentation/error_screen.dart';
 import 'package:anonaddy/features/auth/presentation/loading_screen.dart';
 import 'package:anonaddy/features/auth/presentation/lock_screen.dart';
-import 'package:anonaddy/screens/home_screen/home_screen.dart';
+import 'package:anonaddy/features/home/presentation/home_screen.dart';
 import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
 import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
 import 'package:anonaddy/screens/macos/macos_screen.dart';
