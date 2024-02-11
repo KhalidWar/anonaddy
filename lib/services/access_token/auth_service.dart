@@ -58,7 +58,7 @@ class AuthService {
     }
   }
 
-  Future<void> saveLoginCredentials(User user) async {
+  Future<void> saveUser(User user) async {
     final encodedUser = jsonEncode(user.toMap());
     await secureStorage.write(key: SecureStorageKeys.user, value: encodedUser);
   }

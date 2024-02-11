@@ -38,7 +38,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
           await ref.read(authServiceProvider).fetchApiTokenData(url, token);
       final user = User(url: url, token: token, apiToken: apiToken);
 
-      await ref.read(authServiceProvider).saveLoginCredentials(user);
+      await ref.read(authServiceProvider).saveUser(user);
       state = AsyncData(state.value!.copyWith(
         authorizationStatus: AuthorizationStatus.authorized,
         loginLoading: false,
@@ -95,7 +95,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   /// Then sets [state] accordingly.
   Future<void> _initAuth() async {
     try {
-      final isLoginValid = await _validateLoginCredential();
+      final isLoginValid = await _isLoginCredentialValid();
       final authStatus = await _getBioAuthState();
 
       if (isLoginValid) {
@@ -122,19 +122,12 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   /// Fetches and validates stored login credentials
   /// and returns bool if valid or not
-  Future<bool> _validateLoginCredential() async {
+  Future<bool> _isLoginCredentialValid() async {
     try {
       final user = await ref.read(authServiceProvider).getUser();
       if (user == null) return false;
-
       if (user.apiToken.isExpired) return false;
-
-      /// Temporarily override token and url validation check until I find
-      /// a way of handling different errors.
       return true;
-
-      // final isValid = await ref.read(accessTokenServiceProvider).validateAccessToken(url, token);
-      // return isValid;
     } catch (error) {
       rethrow;
     }
@@ -156,6 +149,28 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     }
   }
 
+  Future<bool> _doesOldLoginExist() async {
+    try {
+      final url = await ref
+          .read(flutterSecureStorage)
+          .read(key: SecureStorageKeys.instanceURLKey);
+      final token = await ref
+          .read(flutterSecureStorage)
+          .read(key: SecureStorageKeys.accessTokenKey);
+
+      if (url == null || token == null) return false;
+
+      final apiToken =
+          await ref.read(authServiceProvider).fetchApiTokenData(url, token);
+      final user = User(url: url, token: token, apiToken: apiToken);
+      await ref.read(authServiceProvider).saveUser(user);
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   @override
   FutureOr<AuthState> build() async {
     final secureStorage = ref.read(flutterSecureStorage);
@@ -163,10 +178,19 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     final tokenService = ref.read(authServiceProvider);
     final searchHistory = ref.read(searchHistoryStateNotifier);
 
-    final isLoginValid = await _validateLoginCredential();
+    final isLoginCredentialValid = await _isLoginCredentialValid();
     final authStatus = await _getBioAuthState();
 
-    if (isLoginValid) {
+    if (isLoginCredentialValid) {
+      return AuthState(
+        authorizationStatus: AuthorizationStatus.authorized,
+        authenticationStatus: authStatus,
+        loginLoading: false,
+      );
+    }
+
+    final oldLoginCredentialExists = await _doesOldLoginExist();
+    if (oldLoginCredentialExists) {
       return AuthState(
         authorizationStatus: AuthorizationStatus.authorized,
         authenticationStatus: authStatus,

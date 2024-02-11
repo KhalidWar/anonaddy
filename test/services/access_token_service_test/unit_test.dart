@@ -56,7 +56,7 @@ void main() {
       'When .saveLoginCredentials() is called,'
       'Then return nothing.', () async {
     // Act
-    await accessTokenService.saveLoginCredentials('url', 'token');
+    await accessTokenService.saveUser('url', 'token');
 
     // Assert
     // verify(mockSecureStorage.write(key: any.toString(), value: any)).called(2);
