@@ -1,5 +1,5 @@
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 
 class AliasTestData {
   static Alias defaultAlias() {

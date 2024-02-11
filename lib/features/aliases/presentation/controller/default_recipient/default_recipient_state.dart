@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 
 class DefaultRecipientState {
   const DefaultRecipientState({

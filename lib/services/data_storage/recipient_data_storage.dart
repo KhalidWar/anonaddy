@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/services/data_storage/data_storage.dart';
 import 'package:anonaddy/services/data_storage/offline_data_storage.dart';
 import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';

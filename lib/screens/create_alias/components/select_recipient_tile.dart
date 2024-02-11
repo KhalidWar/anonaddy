@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:flutter/material.dart';
 
 class SelectRecipientTile extends StatelessWidget {

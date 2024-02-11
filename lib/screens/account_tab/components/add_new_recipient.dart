@@ -1,4 +1,4 @@
-import 'package:anonaddy/notifiers/recipient/recipient_screen_notifier.dart';
+import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';

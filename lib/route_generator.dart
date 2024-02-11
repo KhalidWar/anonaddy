@@ -1,9 +1,9 @@
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
 import 'package:anonaddy/models/domain/domain_model.dart';
-import 'package:anonaddy/models/recipient/recipient.dart';
 import 'package:anonaddy/models/username/username.dart';
 import 'package:anonaddy/screens/account_tab/domains/domains_screen.dart';
 import 'package:anonaddy/screens/account_tab/usernames/usernames_screen.dart';

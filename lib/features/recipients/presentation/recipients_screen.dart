@@ -1,12 +1,12 @@
 import 'package:anonaddy/features/aliases/domain/alias.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_add_pgp_key.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_actions_list_tile.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_aliases.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_trailing_loading_switch.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_unverified_warning.dart';
-import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_screen_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_screen_state.dart';
+import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
+import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_state.dart';
 import 'package:anonaddy/services/theme/theme.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/created_at_widget.dart';

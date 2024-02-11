@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/services/recipient/recipient_service.dart';
+import 'package:anonaddy/features/recipients/data/recipient_service.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientsNotifier =

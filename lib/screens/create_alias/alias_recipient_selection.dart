@@ -1,5 +1,5 @@
+import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/notifiers/create_alias/create_alias_notifier.dart';
-import 'package:anonaddy/notifiers/recipient/recipients_notifier.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_note.dart';
 import 'package:anonaddy/screens/create_alias/components/recipients_tile.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';

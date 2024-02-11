@@ -1,5 +1,5 @@
+import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/notifiers/recipient/recipient_screen_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
