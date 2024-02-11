@@ -1,6 +1,6 @@
-import 'package:anonaddy/models/rules/rules.dart';
-import 'package:anonaddy/notifiers/rules/rules_tab_state.dart';
-import 'package:anonaddy/services/rules/rules_service.dart';
+import 'package:anonaddy/features/rules/data/rules_service.dart';
+import 'package:anonaddy/features/rules/domain/rules.dart';
+import 'package:anonaddy/features/rules/presentation/controller/rules_tab_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final rulesTabStateNotifier =

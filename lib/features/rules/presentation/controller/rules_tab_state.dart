@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/rules/rules.dart';
+import 'package:anonaddy/features/rules/domain/rules.dart';
 
 enum RulesTabStatus { loading, loaded, failed }
 

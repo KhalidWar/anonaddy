@@ -1,4 +1,4 @@
-import 'package:anonaddy/models/rules/rules.dart';
+import 'package:anonaddy/features/rules/domain/rules.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile_leading.dart';
 import 'package:flutter/material.dart';
 

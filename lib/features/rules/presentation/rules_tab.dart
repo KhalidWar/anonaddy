@@ -1,6 +1,6 @@
-import 'package:anonaddy/notifiers/rules/rules_tab_notifier.dart';
-import 'package:anonaddy/notifiers/rules/rules_tab_state.dart';
-import 'package:anonaddy/screens/account_tab/rules/rules_list_tile.dart';
+import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
+import 'package:anonaddy/features/rules/presentation/controller/rules_tab_state.dart';
+import 'package:anonaddy/features/rules/presentation/rules_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
