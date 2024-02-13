@@ -2,7 +2,6 @@ import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_default_recipient.dart';
 import 'package:anonaddy/features/aliases/presentation/components/alias_screen_list_tile.dart';
 import 'package:anonaddy/features/aliases/presentation/components/alias_screen_recipients.dart';
-import 'package:anonaddy/features/aliases/presentation/components/aliases_tab_widget_keys.dart';
 import 'package:anonaddy/features/aliases/presentation/components/send_from_widget.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
@@ -25,6 +24,13 @@ class AliasScreen extends ConsumerStatefulWidget {
   final String aliasId;
 
   static const routeName = 'aliasDetailedScreen';
+
+  static const aliasScreenScaffold = Key('aliasScreenScaffold');
+  static const aliasScreenAppBar = Key('aliasScreenAppBar');
+  static const aliasScreenLoadingIndicator = Key('aliasScreenLoadingIndicator');
+  static const aliasScreenLottieWidget = Key('aliasScreenLottieWidget');
+  static const aliasScreenBodyListView = Key('aliasScreenBodyListView');
+  static const aliasScreenDefaultRecipient = Key('aliasScreenDefaultRecipient');
 
   @override
   ConsumerState createState() => _AliasScreenState();
@@ -104,10 +110,10 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         ref.watch(aliasScreenNotifierProvider(widget.aliasId));
 
     return Scaffold(
-      key: AliasesTabWidgetKeys.aliasScreenScaffold,
+      key: AliasScreen.aliasScreenScaffold,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        key: AliasesTabWidgetKeys.aliasScreenAppBar,
+        key: AliasScreen.aliasScreenAppBar,
         title: 'Alias',
         leadingOnPress: () => Navigator.pop(context),
         showTrailing: true,
@@ -133,7 +139,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           final isAliasDeleted = aliasState.alias.deletedAt.isNotEmpty;
 
           return ListView(
-            key: AliasesTabWidgetKeys.aliasScreenBodyListView,
+            key: AliasScreen.aliasScreenBodyListView,
             physics: const ClampingScrollPhysics(),
             children: [
               if (aliasState.isOffline) const OfflineBanner(),
@@ -391,7 +397,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         },
         error: (error, stack) {
           return ErrorMessageWidget(
-            key: AliasesTabWidgetKeys.aliasScreenLottieWidget,
+            key: AliasScreen.aliasScreenLottieWidget,
             message: error.toString(),
           );
         },
@@ -407,7 +413,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               Divider(height: 20),
               Center(
                 child: PlatformLoadingIndicator(
-                  key: AliasesTabWidgetKeys.aliasScreenLoadingIndicator,
+                  key: AliasScreen.aliasScreenLoadingIndicator,
                 ),
               ),
             ],

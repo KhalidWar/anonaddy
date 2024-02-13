@@ -6,6 +6,8 @@ import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/aliases/data/alias_data_storage.dart';
 import 'package:anonaddy/features/aliases/data/alias_service.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_state.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_state.dart';
 import 'package:anonaddy/features/auth/data/auth_service.dart';
@@ -46,6 +48,23 @@ class MockAliasesNotifier extends AliasesNotifier {
     if (throwError) throw 'error';
 
     return aliasesState;
+  }
+}
+
+class MockAliasScreenNotifier extends AliasScreenNotifier {
+  MockAliasScreenNotifier({
+    required this.aliasScreenState,
+    this.throwError = false,
+  });
+
+  final AliasScreenState aliasScreenState;
+  final bool throwError;
+
+  @override
+  FutureOr<AliasScreenState> build(String arg) {
+    if (throwError) throw 'error';
+
+    return aliasScreenState;
   }
 }
 

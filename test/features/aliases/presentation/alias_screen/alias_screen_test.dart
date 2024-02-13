@@ -1,43 +1,34 @@
 import 'package:anonaddy/features/aliases/domain/alias.dart';
+import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
-import 'package:anonaddy/notifiers/alias_state/alias_screen_state.dart';
-import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
-import 'package:anonaddy/screens/alias_tab/components/aliases_tab_widget_keys.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_state.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../mocks.dart';
-import '../../../test_data/alias_test_data.dart';
+import '../../../../mocks.dart';
+import '../../../../test_data/alias_test_data.dart';
 
 /// Widget test for [AliasScreen]
 void main() async {
-  late MockAliasService mockAliasService;
-  late MockAliasTabNotifier mockAliasTabNotifier;
-
-  setUp(() {
-    mockAliasService = MockAliasService();
-    mockAliasTabNotifier = MockAliasTabNotifier();
-  });
-
   group('AliasScreen loading, loaded, and failed states tests', () {
-    Widget aliasScreen(AliasScreenState initialState) {
+    Widget buildAliasScreen(
+      AliasScreenState initialState, {
+      bool throwError = false,
+    }) {
       return ProviderScope(
         overrides: [
-          aliasScreenNotifierProvider.overrideWith((_) {
-            return AliasScreenNotifier(
-              aliasService: mockAliasService,
-              aliasTabNotifier: mockAliasTabNotifier,
-              initialState: initialState,
+          aliasScreenNotifierProvider.overrideWith(() {
+            return MockAliasScreenNotifier(
+              aliasScreenState: initialState,
+              throwError: throwError,
             );
           }),
         ],
         child: MaterialApp(
-          home: AliasScreen(
-            aliasId: AliasTestData.validAliasWithEmptyRecipients(),
-          ),
+          home: AliasScreen(aliasId: initialState.alias.id),
         ),
       );
     }
@@ -48,39 +39,27 @@ void main() async {
         'Then show loading state UI, no listView, and no error widget.',
         (WidgetTester tester) async {
       final loadingState = AliasScreenState(
-        status: AliasScreenStatus.loading,
-        alias: Alias(),
-        errorMessage: '',
+        alias: AliasTestData.validAliasWithRecipients(),
         isToggleLoading: false,
         deleteAliasLoading: false,
         updateRecipientLoading: false,
         isOffline: false,
       );
 
-      // when(() => mockAliasService.fetchSpecificAlias(''))
-      //     .thenAnswer((_) async => AliasTestData.validAliasWithRecipients());
+      await tester.pumpWidget(buildAliasScreen(loadingState));
 
-      // Arrange
-      await tester.pumpWidget(aliasScreen(loadingState));
-
-      // Act
-      final scaffold = find.byKey(AliasesTabWidgetKeys.aliasScreenScaffold);
-      final appBar = find.byKey(AliasesTabWidgetKeys.aliasScreenAppBar);
-      final loadingIndicator =
-          find.byKey(AliasesTabWidgetKeys.aliasScreenLoadingIndicator);
-      final lottieWidget =
-          find.byKey(AliasesTabWidgetKeys.aliasScreenLottieWidget);
-      final listView = find.byKey(AliasesTabWidgetKeys.aliasScreenBodyListView);
-      final loadingWidget =
-          find.byKey(AliasesTabWidgetKeys.aliasScreenLoadingIndicator);
-
-      // Assert
-      expect(scaffold, findsOneWidget);
-      expect(appBar, findsOneWidget);
-      expect(loadingIndicator, findsOneWidget);
-      expect(listView, findsNothing);
-      expect(loadingWidget, findsOneWidget);
-      expect(lottieWidget, findsNothing);
+      expect(find.byKey(AliasScreen.aliasScreenScaffold), findsOneWidget);
+      expect(find.byKey(AliasScreen.aliasScreenAppBar), findsOneWidget);
+      expect(
+        find.byKey(AliasScreen.aliasScreenLoadingIndicator),
+        findsOneWidget,
+      );
+      expect(find.byKey(AliasScreen.aliasScreenBodyListView), findsNothing);
+      expect(
+        find.byKey(AliasScreen.aliasScreenLoadingIndicator),
+        findsOneWidget,
+      );
+      expect(find.byKey(AliasScreen.aliasScreenLottieWidget), findsNothing);
     });
 
     testWidgets(
@@ -89,9 +68,9 @@ void main() async {
         'Then show no loading, no error, and all Alias data in listView.',
         (WidgetTester tester) async {
       final loadedState = AliasScreenState(
-        status: AliasScreenStatus.loaded,
+        // status: AliasScreenStatus.loaded,
         alias: AliasTestData.validAliasWithRecipients(),
-        errorMessage: '',
+        // errorMessage: '',
         isToggleLoading: false,
         deleteAliasLoading: false,
         updateRecipientLoading: false,
@@ -99,23 +78,22 @@ void main() async {
       );
 
       // Arrange
-      await tester.pumpWidget(aliasScreen(loadedState));
+      await tester.pumpWidget(buildAliasScreen(loadedState));
+      await tester.pumpAndSettle();
 
       // Act
-      final scaffold = find.byKey(AliasesTabWidgetKeys.aliasScreenScaffold);
-      final appBar = find.byKey(AliasesTabWidgetKeys.aliasScreenAppBar);
+      final scaffold = find.byKey(AliasScreen.aliasScreenScaffold);
+      final appBar = find.byKey(AliasScreen.aliasScreenAppBar);
       final loadingIndicator =
-          find.byKey(AliasesTabWidgetKeys.aliasScreenLoadingIndicator);
-      final lottieWidget =
-          find.byKey(AliasesTabWidgetKeys.aliasScreenLottieWidget);
-      final listView = find.byKey(AliasesTabWidgetKeys.aliasScreenBodyListView);
+          find.byKey(AliasScreen.aliasScreenLoadingIndicator);
+      final lottieWidget = find.byKey(AliasScreen.aliasScreenLottieWidget);
+      final listView = find.byKey(AliasScreen.aliasScreenBodyListView);
       final pieChart = find.byType(AliasScreenPieChart);
       final actions = find.text(AppStrings.actions);
       final copyIcon = find.byIcon(Icons.copy);
       final description = find.text(AppStrings.description);
-      final defaultRecipients = find.byKey(
-          AliasesTabWidgetKeys.aliasScreenDefaultRecipient,
-          skipOffstage: false);
+      final defaultRecipients = find
+          .byKey(AliasScreen.aliasScreenDefaultRecipient, skipOffstage: false);
       final dividers = find.byType(Divider, skipOffstage: false);
 
       // Assert
@@ -137,9 +115,9 @@ void main() async {
         'When AliasScreenState is in error state, '
         'Then show error widget and message.', (WidgetTester tester) async {
       final errorState = AliasScreenState(
-        status: AliasScreenStatus.failed,
+        // status: AliasScreenStatus.failed,
         alias: Alias(),
-        errorMessage: AppStrings.somethingWentWrong,
+        // errorMessage: AppStrings.somethingWentWrong,
         isToggleLoading: false,
         deleteAliasLoading: false,
         updateRecipientLoading: false,
@@ -147,14 +125,14 @@ void main() async {
       );
 
       // Arrange
-      await tester.pumpWidget(aliasScreen(errorState));
+      await tester.pumpWidget(buildAliasScreen(errorState));
+      await tester.pumpAndSettle();
 
       // Act
-      final scaffold = find.byKey(AliasesTabWidgetKeys.aliasScreenScaffold);
-      final appBar = find.byKey(AliasesTabWidgetKeys.aliasScreenAppBar);
-      final listView = find.byKey(AliasesTabWidgetKeys.aliasScreenBodyListView);
-      final lottieWidget =
-          find.byKey(AliasesTabWidgetKeys.aliasScreenLottieWidget);
+      final scaffold = find.byKey(AliasScreen.aliasScreenScaffold);
+      final appBar = find.byKey(AliasScreen.aliasScreenAppBar);
+      final listView = find.byKey(AliasScreen.aliasScreenBodyListView);
+      final lottieWidget = find.byKey(AliasScreen.aliasScreenLottieWidget);
       final errorMessage = find.text(AppStrings.somethingWentWrong);
 
       // Assert

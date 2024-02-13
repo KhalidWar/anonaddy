@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/aliases/presentation/components/aliases_tab_widget_keys.dart';
+import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
@@ -26,7 +26,7 @@ class AliasScreenRecipients extends StatelessWidget {
             children: [
               Text(
                 'Default Recipient${recipients.length >= 2 ? 's' : ''}',
-                key: AliasesTabWidgetKeys.aliasScreenDefaultRecipient,
+                key: AliasScreen.aliasScreenDefaultRecipient,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               TextButton(
