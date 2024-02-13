@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final defaultRecipientStateNotifier = StateNotifierProvider.autoDispose<
     DefaultRecipientNotifier, DefaultRecipientState>((ref) {
   return DefaultRecipientNotifier(
-    recipients: ref.read(recipientsNotifier).value!,
+    recipients: ref.read(recipientsNotifierProvider).value!,
     aliasState: ref.read(aliasScreenNotifierProvider('')).value!,
   );
 });

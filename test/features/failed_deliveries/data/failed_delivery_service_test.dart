@@ -4,9 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../features/failed_deliveries/data/dummy_failed_deliveries_data.dart';
-import '../../mocks.dart';
-
 void main() async {
   late MockDio mockDio;
   late FailedDeliveryService deliveriesService;

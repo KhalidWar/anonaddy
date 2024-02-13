@@ -1,5 +1,6 @@
 import 'package:anonaddy/features/account/presentation/account_tab.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
+import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,7 +14,9 @@ void main() {
       home: ProviderScope(
         overrides: [
           accountNotifierProvider.overrideWith(() =>
-              MockAccountNotifier(account: AccountTestData.defaultAccount())),
+              MockAccountNotifier(account: AccountTestData.validAccount())),
+          recipientsNotifierProvider
+              .overrideWith(() => MockRecipientsNotifier(recipients: []))
         ],
         child: const AccountTab(),
       ),
@@ -28,11 +31,8 @@ void main() {
       await tester.pumpWidget(accountTab());
       await tester.pumpAndSettle();
 
-      final scaffold = find.byKey(AccountTab.accountTabScaffold);
-      final appBar = find.byKey(AccountTab.accountTabSliverAppBar);
-
-      expect(scaffold, findsOneWidget);
-      expect(appBar, findsOneWidget);
+      expect(find.byKey(AccountTab.accountTabScaffold), findsOneWidget);
+      expect(find.byKey(AccountTab.accountTabSliverAppBar), findsOneWidget);
     },
   );
 }

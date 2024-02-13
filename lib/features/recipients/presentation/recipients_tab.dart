@@ -54,13 +54,13 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
       // ref.read(recipientTabStateNotifier.notifier).loadOfflineState();
 
       /// Then, load API data.
-      ref.read(recipientsNotifier.notifier).fetchRecipients();
+      ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final recipientsState = ref.watch(recipientsNotifier);
+    final recipientsState = ref.watch(recipientsNotifierProvider);
     final size = MediaQuery.of(context).size;
 
     return recipientsState.when(

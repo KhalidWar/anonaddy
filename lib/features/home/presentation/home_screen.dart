@@ -36,7 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
     if (index == 0) {
       ref.read(accountNotifierProvider.notifier).fetchAccount();
-      ref.read(recipientsNotifier.notifier).fetchRecipients();
+      ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
     }
 
     if (index == 1) {

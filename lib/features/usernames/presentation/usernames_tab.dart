@@ -1,8 +1,7 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/components/add_new_username.dart';
-import 'package:anonaddy/features/usernames/presentation/controller/usernames_tab_notifier.dart';
-import 'package:anonaddy/features/usernames/presentation/controller/usernames_tab_state.dart';
+import 'package:anonaddy/features/usernames/presentation/controller/usernames_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/username_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -56,21 +55,16 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(usernameStateNotifier.notifier).loadOfflineState();
-      ref.read(usernameStateNotifier.notifier).fetchUsernames();
+      ref.read(usernamesNotifierProvider.notifier).fetchUsernames();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final usernameState = ref.watch(usernameStateNotifier);
+    final usernamesAsync = ref.watch(usernamesNotifierProvider);
 
-    switch (usernameState.status) {
-      case UsernamesStatus.loading:
-        return const RecipientsShimmerLoading();
-
-      case UsernamesStatus.loaded:
-        final usernames = usernameState.usernames;
+    return usernamesAsync.when(
+      data: (usernames) {
         return ListView(
           shrinkWrap: true,
           physics: const ClampingScrollPhysics(),
@@ -99,9 +93,13 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
             ),
           ],
         );
-
-      case UsernamesStatus.failed:
-        return ErrorMessageWidget(message: usernameState.errorMessage);
-    }
+      },
+      error: (error, stack) {
+        return ErrorMessageWidget(message: error.toString());
+      },
+      loading: () {
+        return const RecipientsShimmerLoading();
+      },
+    );
   }
 }

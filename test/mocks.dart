@@ -13,6 +13,8 @@ import 'package:anonaddy/features/aliases/presentation/controller/aliases_state.
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:anonaddy/features/domain_options/data/domain_options_service.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
+import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -48,6 +50,26 @@ class MockAliasesNotifier extends AliasesNotifier {
     if (throwError) throw 'error';
 
     return aliasesState;
+  }
+}
+
+class MockRecipientsNotifier extends RecipientsNotifier {
+  MockRecipientsNotifier({
+    required this.recipients,
+    this.throwError = false,
+  });
+
+  final List<Recipient> recipients;
+  final bool throwError;
+
+  @override
+  Future<void> fetchAliases() async {}
+
+  @override
+  FutureOr<List<Recipient>> build() async {
+    if (throwError) throw 'error';
+
+    return recipients;
   }
 }
 

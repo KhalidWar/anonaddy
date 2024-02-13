@@ -36,7 +36,7 @@ class UsernameService {
       /// If offline, load offline data.
       if (dioError.type == DioErrorType.other) {
         final usernames = await dataStorage.loadData();
-        return usernames;
+        if (usernames != null) return usernames;
       }
       throw dioError.message;
     } catch (e) {
@@ -62,7 +62,7 @@ class UsernameService {
     }
   }
 
-  Future<List<Username>> loadUsernameFromDisk() async {
+  Future<List<Username>?> loadUsernameFromDisk() async {
     try {
       return await dataStorage.loadData();
     } catch (error) {

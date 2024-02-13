@@ -29,10 +29,11 @@ class UsernamesDataStorage extends DataStorage {
   }
 
   @override
-  Future<List<Username>> loadData() async {
+  Future<List<Username>?> loadData() async {
     try {
       final data = await secureStorage.read(key: DataStorageKeys.usernameKey);
-      final decodedData = jsonDecode(data ?? '');
+      if (data == null) return null;
+      final decodedData = jsonDecode(data);
       final usernames = (decodedData['data'] as List)
           .map((username) => Username.fromJson(username))
           .toList();
@@ -45,7 +46,7 @@ class UsernamesDataStorage extends DataStorage {
   Future<Username> loadSpecificUsername(String id) async {
     try {
       final usernames = await loadData();
-      final username = usernames.firstWhere((element) => element.id == id);
+      final username = usernames!.firstWhere((element) => element.id == id);
       return username;
     } catch (error) {
       rethrow;

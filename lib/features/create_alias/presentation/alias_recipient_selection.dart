@@ -23,7 +23,7 @@ class _AliasRecipientSelectionState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(recipientsNotifier.notifier).fetchRecipients();
+      ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
     });
   }
 
@@ -39,7 +39,7 @@ class _AliasRecipientSelectionState
       builder: (context, controller) {
         return Consumer(
           builder: (context, ref, _) {
-            final recipientState = ref.watch(recipientsNotifier);
+            final recipientState = ref.watch(recipientsNotifierProvider);
 
             return recipientState.when(
               data: (data) {

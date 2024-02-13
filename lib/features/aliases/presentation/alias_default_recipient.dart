@@ -30,13 +30,15 @@ class _AliasDefaultRecipientScreenState
 
     /// After widgets are built, fetch recipients and display verified ones.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(recipientsNotifier.notifier).fetchRecipients(showLoading: true);
+      ref
+          .read(recipientsNotifierProvider.notifier)
+          .fetchRecipients(showLoading: true);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final recipientState = ref.watch(recipientsNotifier);
+    final recipientState = ref.watch(recipientsNotifierProvider);
 
     return recipientState.when(
       data: (recipients) {
