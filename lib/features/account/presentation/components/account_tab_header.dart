@@ -1,6 +1,5 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/components/account_popup_info.dart';
-import 'package:anonaddy/features/account/presentation/components/account_tab_widget_keys.dart';
 import 'package:anonaddy/features/account/presentation/components/header_profile.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
@@ -90,7 +89,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
         return ListView(
           children: [
             HeaderProfile(
-              key: AccountTabWidgetKeys.accountTabHeaderHeaderProfile,
+              key: AccountTabHeader.accountTabHeaderHeaderProfile,
               account: account,
               onPress: () {
                 PlatformAware.platformDialog(
@@ -122,13 +121,13 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
         );
       },
       error: (err, _) => ErrorMessageWidget(
-        key: AccountTabWidgetKeys.accountTabHeaderError,
+        key: AccountTabHeader.accountTabHeaderError,
         message: err.toString(),
         messageColor: Colors.white,
       ),
       loading: () => const Center(
         child: PlatformLoadingIndicator(
-          key: AccountTabWidgetKeys.accountTabHeaderLoading,
+          key: AccountTabHeader.accountTabHeaderLoading,
         ),
       ),
     );

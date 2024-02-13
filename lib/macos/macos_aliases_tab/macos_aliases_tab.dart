@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/aliases/presentation/components/aliases_tab_widget_keys.dart';
+import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/macos/components/macos_sidebar_toggle.dart';
@@ -82,7 +82,7 @@ class _MacosAliasesTabState extends State<MacosAliasesTab> {
                                   itemCount: availableAliasList.length,
                                   itemBuilder: (context, index) {
                                     return AliasListTile(
-                                      key: AliasesTabWidgetKeys
+                                      key: AliasesTab
                                           .aliasTabAvailableAliasListTile,
                                       alias: availableAliasList[index],
                                     );
@@ -96,7 +96,7 @@ class _MacosAliasesTabState extends State<MacosAliasesTab> {
                                 itemCount: deletedAliasList.length,
                                 itemBuilder: (context, index) {
                                   return AliasListTile(
-                                    key: AliasesTabWidgetKeys
+                                    key: AliasesTab
                                         .aliasTabAvailableAliasListTile,
                                     alias: deletedAliasList[index],
                                   );
