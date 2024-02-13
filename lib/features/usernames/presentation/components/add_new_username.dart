@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_notifier.dart';
+import 'package:anonaddy/features/usernames/presentation/controller/usernames_notifier.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -31,7 +31,7 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
     Future<void> createUsername() async {
       if (_formKey.currentState!.validate()) {
         await ref
-            .read(usernamesScreenStateNotifier.notifier)
+            .read(usernamesNotifierProvider.notifier)
             .addNewUsername(_textEditController.text.trim());
         if (mounted) Navigator.pop(context);
       }

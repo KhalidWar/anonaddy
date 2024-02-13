@@ -189,7 +189,9 @@ class _UsernameDefaultRecipientState
                 child: Consumer(
                   builder: (_, watch, __) {
                     final isLoading = ref
-                        .watch(usernamesScreenStateNotifier)
+                        .watch(
+                            usernamesScreenNotifierProvider(widget.username.id))
+                        .value!
                         .updateRecipientLoading;
                     return isLoading
                         ? const PlatformLoadingIndicator()
@@ -198,7 +200,8 @@ class _UsernameDefaultRecipientState
                 ),
                 onPressed: () async {
                   await ref
-                      .read(usernamesScreenStateNotifier.notifier)
+                      .read(usernamesScreenNotifierProvider(widget.username.id)
+                          .notifier)
                       .updateDefaultRecipient(
                         widget.username,
                         selectedRecipient == null ? '' : selectedRecipient!.id,

@@ -1,22 +1,15 @@
 import 'package:anonaddy/features/usernames/domain/username.dart';
 
-enum UsernamesScreenStatus { loading, loaded, failed }
-
 class UsernamesScreenState {
   const UsernamesScreenState({
-    required this.status,
     required this.username,
-    required this.errorMessage,
     required this.activeSwitchLoading,
     required this.catchAllSwitchLoading,
     required this.updateRecipientLoading,
     required this.isOffline,
   });
 
-  final UsernamesScreenStatus status;
   final Username username;
-  final String errorMessage;
-
   final bool activeSwitchLoading;
   final bool catchAllSwitchLoading;
   final bool updateRecipientLoading;
@@ -24,18 +17,15 @@ class UsernamesScreenState {
 
   static UsernamesScreenState initialState() {
     return UsernamesScreenState(
-      status: UsernamesScreenStatus.loading,
       username: Username(),
       activeSwitchLoading: false,
       catchAllSwitchLoading: false,
       updateRecipientLoading: false,
-      errorMessage: '',
       isOffline: false,
     );
   }
 
   UsernamesScreenState copyWith({
-    UsernamesScreenStatus? status,
     Username? username,
     String? errorMessage,
     bool? activeSwitchLoading,
@@ -44,9 +34,7 @@ class UsernamesScreenState {
     bool? isOffline,
   }) {
     return UsernamesScreenState(
-      status: status ?? this.status,
       username: username ?? this.username,
-      errorMessage: errorMessage ?? this.errorMessage,
       activeSwitchLoading: activeSwitchLoading ?? this.activeSwitchLoading,
       catchAllSwitchLoading:
           catchAllSwitchLoading ?? this.catchAllSwitchLoading,
@@ -58,6 +46,6 @@ class UsernamesScreenState {
 
   @override
   String toString() {
-    return 'UsernamesScreenState{status: $status, username: $username, errorMessage: $errorMessage, activeSwitchLoading: $activeSwitchLoading, catchAllSwitchLoading: $catchAllSwitchLoading, updateRecipientLoading: $updateRecipientLoading, isOffline: $isOffline}';
+    return 'UsernamesScreenState{username: $username, activeSwitchLoading: $activeSwitchLoading, catchAllSwitchLoading: $catchAllSwitchLoading, updateRecipientLoading: $updateRecipientLoading, isOffline: $isOffline}';
   }
 }

@@ -13,7 +13,6 @@ import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
 import 'package:anonaddy/features/settings/presentation/about_app_screen.dart';
 import 'package:anonaddy/features/settings/presentation/credits_screen.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
-import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_screen.dart';
 import 'package:anonaddy/shared_components/navigation_error/navigation_error_screen.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -57,7 +56,7 @@ class RouteGenerator {
             RecipientsScreen(recipient: argument as Recipient));
       case UsernamesScreen.routeName:
         return PlatformAware.customPageRoute(
-            UsernamesScreen(username: argument as Username));
+            UsernamesScreen(usernameId: argument as String));
       case DomainsScreen.routeName:
         return PlatformAware.customPageRoute(
             DomainsScreen(domain: argument as Domain));

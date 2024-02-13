@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:anonaddy/features/usernames/data/username_service.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_notifier.dart';
@@ -5,57 +7,30 @@ import 'package:anonaddy/features/usernames/presentation/controller/usernames_sc
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final usernamesScreenStateNotifier = StateNotifierProvider.autoDispose<
-    UsernamesScreenNotifier, UsernamesScreenState>((ref) {
-  return UsernamesScreenNotifier(
-    usernameService: ref.read(usernameServiceProvider),
-    usernamesNotifier: ref.read(usernamesNotifierProvider.notifier),
-  );
-});
+final usernamesScreenNotifierProvider = AsyncNotifierProvider.family<
+    UsernamesScreenNotifier,
+    UsernamesScreenState,
+    String>(UsernamesScreenNotifier.new);
 
-class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
-  UsernamesScreenNotifier({
-    required this.usernameService,
-    required this.usernamesNotifier,
-  }) : super(UsernamesScreenState.initialState());
-
-  final UsernameService usernameService;
-  final UsernamesNotifier usernamesNotifier;
-
-  void _updateState(UsernamesScreenState newState) {
-    if (mounted) state = newState;
-  }
-
+class UsernamesScreenNotifier
+    extends FamilyAsyncNotifier<UsernamesScreenState, String> {
   Future<void> fetchSpecificUsername(String id) async {
     try {
-      _updateState(state.copyWith(status: UsernamesScreenStatus.loading));
-      final updatedUsername = await usernameService.fetchSpecificUsername(id);
-      final newState = state.copyWith(
-          status: UsernamesScreenStatus.loaded, username: updatedUsername);
-      _updateState(newState);
+      final currentState = state.value!;
+      state = const AsyncLoading();
+      final updatedUsername =
+          await ref.read(usernameServiceProvider).fetchSpecificUsername(id);
+      state = AsyncData(currentState.copyWith(username: updatedUsername));
     } catch (error) {
-      _updateState(state.copyWith(
-        status: UsernamesScreenStatus.failed,
-        errorMessage: error.toString(),
-      ));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
-  Future<void> addNewUsername(String username) async {
+  Future<void> deleteUsername(String usernameId) async {
     try {
-      await usernameService.addNewUsername(username);
-      Utilities.showToast('Username added successfully!');
-      usernamesNotifier.fetchUsernames();
-    } catch (error) {
-      Utilities.showToast(error.toString());
-    }
-  }
-
-  Future<void> deleteUsername(Username username) async {
-    try {
-      await usernameService.deleteUsername(username.id);
+      await ref.read(usernameServiceProvider).deleteUsername(usernameId);
       Utilities.showToast('Username deleted successfully!');
-      usernamesNotifier.fetchUsernames();
+      ref.read(usernamesNotifierProvider.notifier).fetchUsernames();
     } catch (error) {
       Utilities.showToast(error.toString());
     }
@@ -64,12 +39,13 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
   Future updateUsernameDescription(
       Username username, String description) async {
     try {
-      final newUsername = await usernameService.updateUsernameDescription(
-          username.id, description);
+      final newUsername = await ref
+          .read(usernameServiceProvider)
+          .updateUsernameDescription(username.id, description);
       final updatedUsername =
           username.copyWith(description: newUsername.description);
       Utilities.showToast('Description updated successfully!');
-      _updateState(state.copyWith(username: updatedUsername));
+      state = AsyncData(state.value!.copyWith(username: updatedUsername));
     } catch (error) {
       Utilities.showToast(error.toString());
     }
@@ -77,79 +53,100 @@ class UsernamesScreenNotifier extends StateNotifier<UsernamesScreenState> {
 
   Future updateDefaultRecipient(Username username, String recipientID) async {
     try {
-      _updateState(state.copyWith(updateRecipientLoading: true));
-      final newUsername = await usernameService.updateDefaultRecipient(
-          username.id, recipientID);
+      final currentState = state.value!;
+
+      state = AsyncData(currentState.copyWith(updateRecipientLoading: true));
+      final newUsername = await ref
+          .read(usernameServiceProvider)
+          .updateDefaultRecipient(username.id, recipientID);
       final updatedUsername =
           username.copyWith(defaultRecipient: newUsername.defaultRecipient);
       Utilities.showToast('Default recipient updated successfully!');
-      _updateState(state.copyWith(
+
+      state = AsyncData(currentState.copyWith(
         username: updatedUsername,
         updateRecipientLoading: false,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(updateRecipientLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future<void> activateUsername(Username username) async {
     try {
-      _updateState(state.copyWith(activeSwitchLoading: true));
-      final newUsername = await usernameService.activateUsername(username.id);
+      state = AsyncData(state.value!.copyWith(activeSwitchLoading: true));
+      final newUsername =
+          await ref.read(usernameServiceProvider).activateUsername(username.id);
       final updatedUsername = username.copyWith(active: newUsername.active);
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         username: updatedUsername,
         activeSwitchLoading: false,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(activeSwitchLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future<void> deactivateUsername(Username username) async {
     try {
-      _updateState(state.copyWith(activeSwitchLoading: true));
-      await usernameService.deactivateUsername(username.id);
+      state = AsyncData(state.value!.copyWith(activeSwitchLoading: true));
+      await ref.read(usernameServiceProvider).deactivateUsername(username.id);
       final updatedUsername = username.copyWith(active: false);
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         username: updatedUsername,
         activeSwitchLoading: false,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(activeSwitchLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future<void> activateCatchAll(Username username) async {
     try {
-      _updateState(state.copyWith(catchAllSwitchLoading: true));
-      final newUsername = await usernameService.activateCatchAll(username.id);
+      state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: true));
+      final newUsername =
+          await ref.read(usernameServiceProvider).activateCatchAll(username.id);
       final updatedUsername = username.copyWith(catchAll: newUsername.catchAll);
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         username: updatedUsername,
         catchAllSwitchLoading: false,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(catchAllSwitchLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future<void> deactivateCatchAll(Username username) async {
     try {
-      _updateState(state.copyWith(catchAllSwitchLoading: true));
-      await usernameService.deactivateCatchAll(username.id);
+      state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: true));
+      await ref.read(usernameServiceProvider).deactivateCatchAll(username.id);
       final updatedUsername = username.copyWith(catchAll: false);
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         username: updatedUsername,
         catchAllSwitchLoading: false,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(catchAllSwitchLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
+  }
+
+  @override
+  FutureOr<UsernamesScreenState> build(String arg) async {
+    final service = ref.read(usernameServiceProvider);
+
+    final username = await service.fetchSpecificUsername(arg);
+
+    return UsernamesScreenState(
+      username: username,
+      activeSwitchLoading: false,
+      catchAllSwitchLoading: false,
+      updateRecipientLoading: false,
+      isOffline: false,
+    );
   }
 }

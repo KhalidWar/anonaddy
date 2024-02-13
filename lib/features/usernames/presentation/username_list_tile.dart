@@ -37,7 +37,7 @@ class UsernameListTile extends StatelessWidget {
         Navigator.pushNamed(
           context,
           UsernamesScreen.routeName,
-          arguments: username,
+          arguments: username.id,
         );
       },
     );

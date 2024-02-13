@@ -21,8 +21,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UsernamesScreen extends ConsumerStatefulWidget {
-  const UsernamesScreen({Key? key, required this.username}) : super(key: key);
-  final Username username;
+  const UsernamesScreen({
+    Key? key,
+    required this.usernameId,
+  }) : super(key: key);
+
+  final String usernameId;
 
   static const routeName = 'usernameDetailedScreen';
 
@@ -34,9 +38,9 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
   @override
   void initState() {
     super.initState();
-    ref
-        .read(usernamesScreenStateNotifier.notifier)
-        .fetchSpecificUsername(widget.username.id);
+    // ref
+    //     .read(usernamesScreenNotifierProvider(widget.usernameId).notifier)
+    //     .fetchSpecificUsername(widget.usernameId);
   }
 
   @override
@@ -45,30 +49,34 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
       appBar: buildAppBar(context),
       body: Consumer(
         builder: (context, ref, _) {
-          final usernameState = ref.watch(usernamesScreenStateNotifier);
+          final usernameAsync =
+              ref.watch(usernamesScreenNotifierProvider(widget.usernameId));
 
-          switch (usernameState.status) {
-            case UsernamesScreenStatus.loading:
-              return const Center(child: PlatformLoadingIndicator());
-
-            case UsernamesScreenStatus.loaded:
+          return usernameAsync.when(
+            data: (usernameState) {
               return buildListView(context, usernameState);
-
-            case UsernamesScreenStatus.failed:
-              return ErrorMessageWidget(message: usernameState.errorMessage);
-          }
+            },
+            error: (error, stack) {
+              return ErrorMessageWidget(message: error.toString());
+            },
+            loading: () {
+              return const Center(child: PlatformLoadingIndicator());
+            },
+          );
         },
       ),
     );
   }
 
   ListView buildListView(
-      BuildContext context, UsernamesScreenState usernameState) {
+    BuildContext context,
+    UsernamesScreenState usernameState,
+  ) {
     final size = MediaQuery.of(context).size;
 
     final username = usernameState.username;
     final usernameStateProvider =
-        ref.read(usernamesScreenStateNotifier.notifier);
+        ref.read(usernamesScreenNotifierProvider(widget.usernameId).notifier);
 
     Future<void> toggleActivity() async {
       username.active
@@ -248,12 +256,14 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
           description: username.description,
           updateDescription: (description) {
             ref
-                .read(usernamesScreenStateNotifier.notifier)
+                .read(
+                    usernamesScreenNotifierProvider(widget.usernameId).notifier)
                 .updateUsernameDescription(username, description);
           },
           removeDescription: () {
             ref
-                .read(usernamesScreenStateNotifier.notifier)
+                .read(
+                    usernamesScreenNotifierProvider(widget.usernameId).notifier)
                 .updateUsernameDescription(username, '');
           },
         );
@@ -284,8 +294,9 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
           content: AnonAddyString.deleteUsernameConfirmation,
           method: () async {
             await ref
-                .read(usernamesScreenStateNotifier.notifier)
-                .deleteUsername(widget.username);
+                .read(
+                    usernamesScreenNotifierProvider(widget.usernameId).notifier)
+                .deleteUsername(widget.usernameId);
 
             /// Dismisses this dialog
             if (mounted) Navigator.pop(context);
