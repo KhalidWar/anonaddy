@@ -1,5 +1,4 @@
 import 'package:anonaddy/features/account/presentation/components/account_tab_header.dart';
-import 'package:anonaddy/features/account/presentation/components/account_tab_widget_keys.dart';
 import 'package:anonaddy/features/domains/presentation/domains_tab.dart';
 import 'package:anonaddy/features/recipients/presentation/recipients_tab.dart';
 import 'package:anonaddy/features/rules/presentation/rules_tab.dart';
@@ -11,12 +10,16 @@ import 'package:flutter/material.dart';
 class AccountTab extends StatelessWidget {
   const AccountTab({Key? key}) : super(key: key);
 
+  static const accountTabScaffold = Key('accountTabScaffold');
+  static const accountTabSliverAppBar = Key('accountTabSliverAppBar');
+  static const accountTabHeader = Key('accountTabHeader');
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      key: AccountTabWidgetKeys.accountTabScaffold,
+      key: accountTabScaffold,
       body: DefaultTabController(
         length: 4,
         child: NestedScrollView(
@@ -24,7 +27,7 @@ class AccountTab extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                key: AccountTabWidgetKeys.accountTabSliverAppBar,
+                key: accountTabSliverAppBar,
                 expandedHeight: size.height * 0.3,
                 elevation: 0,
                 floating: true,
@@ -32,7 +35,7 @@ class AccountTab extends StatelessWidget {
                 flexibleSpace: const FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   background: AccountTabHeader(
-                    key: AccountTabWidgetKeys.accountTabHeader,
+                    key: accountTabHeader,
                   ),
                 ),
                 bottom: const TabBar(

@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../screens/account_tab/account_tab_mocks.dart';
+import '../../../mocks.dart';
+import '../../../test_data/account_test_data.dart';
 
 void main() {
   Widget accountTab() {
     return MaterialApp(
       home: ProviderScope(
         overrides: [
-          accountNotifierProvider
-              .overrideWithProvider(testAccountStateNotifier),
+          accountNotifierProvider.overrideWith(() =>
+              MockAccountNotifier(account: AccountTestData.defaultAccount())),
         ],
         child: const AccountTab(),
       ),
@@ -24,17 +25,14 @@ void main() {
     'When no input is given, '
     'Then load AccountTab',
     (WidgetTester tester) async {
-      // Arrange
-      // await tester.pumpWidget(accountTab());
-      // await tester.pumpAndSettle();
+      await tester.pumpWidget(accountTab());
+      await tester.pumpAndSettle();
 
-      // Act
-      // final scaffold = find.byKey(AccountTabWidgetKeys.accountTabScaffold);
-      // final appBar = find.byKey(AccountTabWidgetKeys.accountTabSliverAppBar);
+      final scaffold = find.byKey(AccountTab.accountTabScaffold);
+      final appBar = find.byKey(AccountTab.accountTabSliverAppBar);
 
-      // Assert
-      // expect(scaffold, findsOneWidget);
-      // expect(appBar, findsOneWidget);
+      expect(scaffold, findsOneWidget);
+      expect(appBar, findsOneWidget);
     },
   );
 }

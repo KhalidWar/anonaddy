@@ -1,6 +1,5 @@
 import 'package:anonaddy/features/aliases/presentation/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/features/aliases/presentation/components/alias_tab_emails_stats.dart';
-import 'package:anonaddy/features/aliases/presentation/components/aliases_tab_widget_keys.dart';
 import 'package:anonaddy/features/aliases/presentation/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
@@ -13,6 +12,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasesTab extends ConsumerStatefulWidget {
   const AliasesTab({Key? key}) : super(key: key);
+
+  static const aliasTabScaffold = Key('aliasScreenScaffold');
+  static const aliasTabScrollView = Key('aliasTabScrollView');
+  static const aliasTabSliverAppBar = Key('aliasTabSliverAppBar');
+  static const aliasTabEmailsStats = Key('aliasTabEmailsStats');
+  static const aliasTabTabBar = Key('aliasTabTabBar');
+  static const aliasTabAvailableAliasesTab = Key('aliasTabAvailableAliasesTab');
+  static const aliasTabDeletedAliasesTab = Key('aliasTabDeletedAliasesTab');
+  static const aliasTabLoadingTabBarView = Key('aliasTabLoadingTabBarView');
+  static const aliasTabLoadedTabBarView = Key('aliasTabLoadedTabBarView');
+  static const aliasTabFailedTabBarView = Key('aliasTabFailedTabBarView');
+  static const aliasTabAvailableAliasesLoading =
+      Key('aliasTabAvailableAliasesLoading');
+  static const aliasTabDeletedAliasesLoading =
+      Key('aliasTabDeletedAliasesLoading');
+  static const aliasTabAvailableAliasListTile =
+      Key('aliasTabAvailableAliasListTile');
+  static const aliasTabDeletedAliasListTile =
+      Key('aliasTabDeletedAliasListTile');
 
   @override
   ConsumerState createState() => _AlisTabState();
@@ -38,20 +56,20 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      key: AliasesTabWidgetKeys.aliasTabScaffold,
+      key: AliasesTab.aliasTabScaffold,
 
       /// [DefaultTabController] is required when using [TabBar]s without
       /// a custom [TabController]
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
-          key: AliasesTabWidgetKeys.aliasTabScrollView,
+          key: AliasesTab.aliasTabScrollView,
           controller:
               ref.read(fabVisibilityStateNotifier.notifier).aliasController,
           headerSliverBuilder: (_, __) {
             return [
               SliverAppBar(
-                key: AliasesTabWidgetKeys.aliasTabSliverAppBar,
+                key: AliasesTab.aliasTabSliverAppBar,
                 expandedHeight: size.height * 0.25,
                 elevation: 0,
                 floating: true,
@@ -59,20 +77,20 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                 flexibleSpace: const FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   background: AliasTabEmailsStats(
-                    key: AliasesTabWidgetKeys.aliasTabEmailsStats,
+                    key: AliasesTab.aliasTabEmailsStats,
                   ),
                 ),
                 bottom: const TabBar(
-                  key: AliasesTabWidgetKeys.aliasTabTabBar,
+                  key: AliasesTab.aliasTabTabBar,
                   indicatorColor: AppColors.accentColor,
                   indicatorWeight: 3,
                   tabs: [
                     Tab(
-                      key: AliasesTabWidgetKeys.aliasTabAvailableAliasesTab,
+                      key: AliasesTab.aliasTabAvailableAliasesTab,
                       child: Text('Available Aliases'),
                     ),
                     Tab(
-                      key: AliasesTabWidgetKeys.aliasTabDeletedAliasesTab,
+                      key: AliasesTab.aliasTabDeletedAliasesTab,
                       child: Text('Deleted Aliases'),
                     ),
                   ],
@@ -90,7 +108,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                   final deletedAliasList = aliases.deletedAliases;
 
                   return TabBarView(
-                    key: AliasesTabWidgetKeys.aliasTabLoadedTabBarView,
+                    key: AliasesTab.aliasTabLoadedTabBarView,
                     children: [
                       /// Available aliases list
                       RefreshIndicator(
@@ -108,7 +126,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                                   itemCount: availableAliasList.length,
                                   itemBuilder: (context, index) {
                                     return AliasListTile(
-                                      key: AliasesTabWidgetKeys
+                                      key: AliasesTab
                                           .aliasTabAvailableAliasListTile,
                                       alias: availableAliasList[index],
                                     );
@@ -131,7 +149,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                                   itemCount: deletedAliasList.length,
                                   itemBuilder: (context, index) {
                                     return AliasListTile(
-                                      key: AliasesTabWidgetKeys
+                                      key: AliasesTab
                                           .aliasTabDeletedAliasListTile,
                                       alias: deletedAliasList[index],
                                     );
@@ -144,7 +162,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                 },
                 error: (error, _) {
                   return TabBarView(
-                    key: AliasesTabWidgetKeys.aliasTabFailedTabBarView,
+                    key: AliasesTab.aliasTabFailedTabBarView,
                     children: [
                       ErrorMessageWidget(message: error.toString()),
                       ErrorMessageWidget(message: error.toString()),
@@ -153,14 +171,13 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                 },
                 loading: () {
                   return const TabBarView(
-                    key: AliasesTabWidgetKeys.aliasTabLoadingTabBarView,
+                    key: AliasesTab.aliasTabLoadingTabBarView,
                     children: [
                       AliasShimmerLoading(
-                        key: AliasesTabWidgetKeys
-                            .aliasTabAvailableAliasesLoading,
+                        key: AliasesTab.aliasTabAvailableAliasesLoading,
                       ),
                       AliasShimmerLoading(
-                        key: AliasesTabWidgetKeys.aliasTabDeletedAliasesLoading,
+                        key: AliasesTab.aliasTabDeletedAliasesLoading,
                       ),
                     ],
                   );

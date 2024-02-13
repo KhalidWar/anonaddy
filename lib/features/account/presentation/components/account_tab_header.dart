@@ -16,6 +16,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AccountTabHeader extends ConsumerStatefulWidget {
   const AccountTabHeader({Key? key}) : super(key: key);
 
+  static const accountTabHeaderLoading = Key('accountTabHeaderLoading');
+  static const accountTabHeaderHeaderProfile =
+      Key('accountTabHeaderHeaderProfile');
+  static const accountTabHeaderError = Key('accountTabHeaderError');
+
   @override
   ConsumerState createState() => _AccountTabHeaderState();
 }

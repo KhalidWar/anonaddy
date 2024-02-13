@@ -1,13 +1,13 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/components/account_tab_header.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
-import 'package:anonaddy/screens/account_tab/components/account_tab_widget_keys.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../mocks.dart';
+import '../../../test_data/account_test_data.dart';
 
 void main() {
   // late MockAccountService accountService;
@@ -15,7 +15,8 @@ void main() {
 
   setUp(() {
     // accountService = MockAccountService();
-    accountNotifier = MockAccountNotifier();
+    accountNotifier =
+        MockAccountNotifier(account: AccountTestData.defaultAccount());
   });
 
   Widget buildAccountTab(Account account) {
@@ -54,7 +55,7 @@ void main() {
     //   findsOneWidget,
     // );
     expect(
-      find.byKey(AccountTabWidgetKeys.accountTabHeaderHeaderProfile),
+      find.byKey(AccountTabHeader.accountTabHeaderHeaderProfile),
       findsNothing,
     );
     expect(
@@ -126,11 +127,11 @@ void main() {
     // Assert
     expect(find.byType(AccountTabHeader), findsOneWidget);
     expect(
-      find.byKey(AccountTabWidgetKeys.accountTabHeaderLoading),
+      find.byKey(AccountTabHeader.accountTabHeaderLoading),
       findsNothing,
     );
     expect(
-      find.byKey(AccountTabWidgetKeys.accountTabHeaderHeaderProfile),
+      find.byKey(AccountTabHeader.accountTabHeaderHeaderProfile),
       findsNothing,
     );
     expect(
@@ -138,7 +139,7 @@ void main() {
       findsNothing,
     );
     expect(
-      find.byKey(AccountTabWidgetKeys.accountTabHeaderError),
+      find.byKey(AccountTabHeader.accountTabHeaderError),
       findsOneWidget,
     );
   });
