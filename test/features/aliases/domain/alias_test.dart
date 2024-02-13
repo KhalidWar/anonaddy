@@ -1,7 +1,7 @@
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../test_data/alias_test_data.dart';
+import '../../../test_data/alias_test_data.dart';
 
 void main() {
   group('Alias testing ', () {

@@ -3,7 +3,7 @@ import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../services/access_token_service_test/mock_flutter_secure_storage.dart';
+import '../../auth/data/mock_flutter_secure_storage.dart';
 
 void main() {
   late FlutterSecureStorage secureStorage;

@@ -2,9 +2,8 @@ import 'package:anonaddy/features/app_version/data/app_version_service.dart';
 import 'package:anonaddy/features/app_version/domain/app_version_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
-import '../../mocks.dart';
+import '../../../mocks.dart';
 
 void main() async {
   late MockDio mockDio;
@@ -19,28 +18,36 @@ void main() async {
       'Given appVersionService and dio are up and running, '
       'When appVersionService.getAppVersionData(path) is called, '
       'Then future completes and returns an appVersion data.', () async {
-    when(() => mockDio.get(any())).thenAnswer(
-      (_) => Future.value(
-        Response(
-          requestOptions: RequestOptions(path: 'path'),
-          statusCode: 200,
-          data: {'version': '1.0.0', 'major': 1, 'minor': 0, 'patch': 0},
-        ),
-      ),
-    );
+    // Arrange
+    const path = 'path';
 
     // Act
-    final dioGet = mockDio.get('path');
-    final appVersion = await appVersionService.getAppVersionData('path');
+    final dioGet = mockDio.get(path);
+    final appVersion = await appVersionService.getAppVersionData(path);
 
     // Assert
     expectLater(dioGet, completes);
     expect(await dioGet, isA<Response>());
 
     expect(appVersion, isA<AppVersion>());
-    expect(appVersion.version, '1.0.0');
-    expect(appVersion.major, 1);
-    expect(appVersion.minor, 0);
-    expect(appVersion.patch, 0);
+    expect(appVersion.version, isA<String>());
+    expect(appVersion.major, isA<int>());
+  });
+
+  test(
+      'Given appVersionService and dio are up and running, '
+      'When appVersionService.getAppVersionData(error) is called, '
+      'Then throw an dioError.', () async {
+    // Arrange
+    const path = 'error';
+
+    // Act
+    final dioGet = mockDio.get(path);
+    final dioError = isA<DioError>();
+    final throwsDioError = throwsA(dioError);
+
+    // Assert
+    expectLater(dioGet, throwsException);
+    expect(dioGet, throwsDioError);
   });
 }

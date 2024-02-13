@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../test_data/test_alias_data.dart';
+import '../../../test_data/test_alias_data.dart';
 
 class MockDio extends Mock implements Dio {
   @override

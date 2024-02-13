@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'account_tab_mocks.dart';
+import '../../../screens/account_tab/account_tab_mocks.dart';
 
 void main() {
   Widget accountTab() {

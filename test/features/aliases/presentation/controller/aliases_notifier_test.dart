@@ -1,7 +1,7 @@
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../mocks.dart';
+import '../../../../mocks.dart';
 
 void main() {
   late MockAliasService aliasService;

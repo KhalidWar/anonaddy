@@ -2,8 +2,8 @@ import 'package:anonaddy/features/account/data/account_service.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../mocks.dart';
-import '../../test_data/account_test_data.dart';
+import '../../../mocks.dart';
+import '../../../test_data/account_test_data.dart';
 
 void main() async {
   late MockDio mockDio;

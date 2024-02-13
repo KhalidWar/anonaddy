@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../test_data/test_alias_data.dart';
+import '../../../test_data/test_alias_data.dart';
 
 // final testAliasTabProvider =
 //     StateNotifierProvider<AliasTabNotifier, AliasTabState>((ref) {

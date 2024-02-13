@@ -1,7 +1,7 @@
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../mocks.dart';
+import '../../../mocks.dart';
 
 void main() {
   late MockFlutterSecureStorage mockSecureStorage;
