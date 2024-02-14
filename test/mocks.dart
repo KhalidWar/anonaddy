@@ -12,7 +12,11 @@ import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifi
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_state.dart';
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/domain_options/data/domain_options_service.dart';
+import 'package:anonaddy/features/domain_options/domain/domain_options.dart';
+import 'package:anonaddy/features/domain_options/presentation/controller/domain_options_notifier.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
@@ -22,6 +26,23 @@ import 'package:mocktail/mocktail.dart';
 
 class MockDio extends Mock implements Dio {}
 
+class MockAuthNotifier extends AuthNotifier {
+  MockAuthNotifier({
+    required this.authState,
+    this.throwError = false,
+  });
+
+  final AuthState authState;
+  final bool throwError;
+
+  @override
+  FutureOr<AuthState> build() async {
+    if (throwError) throw 'error';
+
+    return authState;
+  }
+}
+
 class MockAccountNotifier extends AccountNotifier {
   MockAccountNotifier({required this.account});
 
@@ -30,6 +51,23 @@ class MockAccountNotifier extends AccountNotifier {
   @override
   Future<Account> build() async {
     return account;
+  }
+}
+
+class MockDomainOptionsNotifier extends DomainOptionsNotifier {
+  MockDomainOptionsNotifier({
+    required this.domainOptions,
+    this.throwError = false,
+  });
+
+  final DomainOptions domainOptions;
+  final bool throwError;
+
+  @override
+  FutureOr<DomainOptions> build() {
+    if (throwError) throw 'error';
+
+    return domainOptions;
   }
 }
 
@@ -61,9 +99,6 @@ class MockRecipientsNotifier extends RecipientsNotifier {
 
   final List<Recipient> recipients;
   final bool throwError;
-
-  @override
-  Future<void> fetchAliases() async {}
 
   @override
   FutureOr<List<Recipient>> build() async {

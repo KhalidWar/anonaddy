@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:anonaddy/features/auth/presentation/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -13,6 +12,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoadingScreen extends ConsumerStatefulWidget {
   const LoadingScreen({Key? key}) : super(key: key);
+
+  static const loadingScreenScaffold = Key('loadingScreenScaffold');
+  static const loadingScreenAppLogo = Key('loadingScreenAppLogo');
+  static const loadingScreenLoadingIndicator =
+      Key('loadingScreenLoadingIndicator');
+  static const loadingScreenLogoutButton = Key('loadingScreenLogoutButton');
 
   @override
   ConsumerState createState() => _LoadingScreenState();
@@ -46,7 +51,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      key: AuthScreenWidgetKeys.loadingScreenScaffold,
+      key: LoadingScreen.loadingScreenScaffold,
       backgroundColor: AppColors.primaryColor,
       body: Stack(
         children: [
@@ -54,7 +59,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
             alignment: Alignment.center,
             child: Image.asset(
               'assets/images/play_store.png',
-              key: AuthScreenWidgetKeys.loadingScreenAppLogo,
+              key: LoadingScreen.loadingScreenAppLogo,
               height: size.height * 0.3,
             ),
           ),
@@ -76,7 +81,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                         width: double.infinity,
                         margin: const EdgeInsets.only(top: 10),
                         child: PlatformButton(
-                          key: AuthScreenWidgetKeys.loadingScreenLogoutButton,
+                          key: LoadingScreen.loadingScreenLogoutButton,
                           color: Colors.red,
                           child: const Text('Logout'),
                           onPress: () => logout(),
@@ -85,7 +90,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                     ]
                   : [
                       const PlatformLoadingIndicator(
-                        key: AuthScreenWidgetKeys.loadingScreenLoadingIndicator,
+                        key: LoadingScreen.loadingScreenLoadingIndicator,
                       )
                     ],
             ),
