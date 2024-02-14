@@ -1,4 +1,3 @@
-import 'package:anonaddy/features/auth/presentation/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -16,6 +15,8 @@ class ErrorScreen extends ConsumerWidget {
 
   final String errorMessage;
 
+  static const logoutButton = Key('error_screen_logout_button');
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -25,7 +26,7 @@ class ErrorScreen extends ConsumerWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: PlatformButton(
-            key: AuthScreenWidgetKeys.loadingScreenLogoutButton,
+            key: logoutButton,
             color: Colors.red,
             child: const Text('Logout'),
             onPress: () {
