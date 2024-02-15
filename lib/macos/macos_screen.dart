@@ -38,83 +38,86 @@ class _MacHomeScreenState extends ConsumerState<MacosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: MacosWindow(
-        sidebar: Sidebar(
-          minWidth: 300,
-          top: MacosSearchField(
-            placeholder: AppStrings.searchAliasByEmailOrDesc,
-            // controller: ref.read(searchResultStateNotifier).searchController,
-            onChanged: (input) {
-              // ref
-              //     .read(searchResultStateNotifier.notifier)
-              //     .searchAliasesLocally();
-            },
-            onTap: () => changePage(3),
-          ),
-          builder: (context, scrollController) {
-            return SidebarItems(
-              selectedColor: AppColors.accentColor,
-              scrollController: scrollController,
-              currentIndex: pageIndex,
-              onChanged: changePage,
-              items: const [
-                SidebarItem(
-                  label: Text('Home'),
-                  leading: MacosIcon(CupertinoIcons.home),
-                ),
-                SidebarItem(
-                  label: Text('Account'),
-                  leading: MacosIcon(CupertinoIcons.profile_circled),
-                ),
-                SidebarItem(
-                  label: Text('Aliases'),
-                  leading: MacosIcon(CupertinoIcons.at),
-                ),
-                SidebarItem(
-                  label: Text('Search History'),
-                  leading: MacosIcon(CupertinoIcons.search),
-                ),
-              ],
-            );
-          },
-          bottom: MacosListTile(
-            leading: const MacosIcon(CupertinoIcons.settings),
-            title: Text(
-              'Settings',
-              style: Theme.of(context).textTheme.bodyMedium,
+    return MacosTheme(
+      data: MacosThemeData(),
+      child: Material(
+        child: MacosWindow(
+          sidebar: Sidebar(
+            minWidth: 300,
+            top: MacosSearchField(
+              placeholder: AppStrings.searchAliasByEmailOrDesc,
+              // controller: ref.read(searchResultStateNotifier).searchController,
+              onChanged: (input) {
+                // ref
+                //     .read(searchResultStateNotifier.notifier)
+                //     .searchAliasesLocally();
+              },
+              onTap: () => changePage(3),
             ),
-            // onClick: () => changePage(4),
-            onClick: () {
-              Navigator.pushNamed(
-                context,
-                SettingsScreen.routeName,
+            builder: (context, scrollController) {
+              return SidebarItems(
+                selectedColor: AppColors.accentColor,
+                scrollController: scrollController,
+                currentIndex: pageIndex,
+                onChanged: changePage,
+                items: const [
+                  SidebarItem(
+                    label: Text('Home'),
+                    leading: MacosIcon(CupertinoIcons.home),
+                  ),
+                  SidebarItem(
+                    label: Text('Account'),
+                    leading: MacosIcon(CupertinoIcons.profile_circled),
+                  ),
+                  SidebarItem(
+                    label: Text('Aliases'),
+                    leading: MacosIcon(CupertinoIcons.at),
+                  ),
+                  SidebarItem(
+                    label: Text('Search History'),
+                    leading: MacosIcon(CupertinoIcons.search),
+                  ),
+                ],
+              );
+            },
+            bottom: MacosListTile(
+              leading: const MacosIcon(CupertinoIcons.settings),
+              title: Text(
+                'Settings',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              // onClick: () => changePage(4),
+              onClick: () {
+                Navigator.pushNamed(
+                  context,
+                  SettingsScreen.routeName,
+                );
+              },
+            ),
+          ),
+          child: CupertinoTabView(
+            onGenerateRoute: RouteGenerator.generateRoute,
+            builder: (context) {
+              return IndexedStack(
+                index: pageIndex,
+                children: [
+                  const MacosHomeScreen(),
+                  const MacosAccountTab(),
+                  const MacosAliasesTab(),
+                  const MacosSearchTab(),
+                  MacosScaffold(
+                    children: [
+                      ContentArea(
+                        builder: (context, scrollController) {
+                          return const SettingsScreen();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               );
             },
           ),
-        ),
-        child: CupertinoTabView(
-          onGenerateRoute: RouteGenerator.generateRoute,
-          builder: (context) {
-            return IndexedStack(
-              index: pageIndex,
-              children: [
-                const MacosHomeScreen(),
-                const MacosAccountTab(),
-                const MacosAliasesTab(),
-                const MacosSearchTab(),
-                MacosScaffold(
-                  children: [
-                    ContentArea(
-                      builder: (context, scrollController) {
-                        return const SettingsScreen();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            );
-          },
         ),
       ),
     );

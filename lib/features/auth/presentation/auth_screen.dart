@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:anonaddy/features/auth/presentation/anonaddy_login_screen.dart';
-import 'package:anonaddy/features/auth/presentation/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/error_screen.dart';
@@ -20,6 +19,14 @@ class AuthScreen extends ConsumerWidget {
   const AuthScreen({Key? key}) : super(key: key);
 
   static const routeName = 'authorizationScreen';
+
+  /// Authorization Screen
+  static const authScreenLoadingScreen = Key('authScreenLoadingScreen');
+  static const authScreenHomeScreen = Key('authScreenHomeScreen');
+  static const authScreenAnonAddyLoginScreen =
+      Key('authScreenAnonAddyLoginScreen');
+  static const authScreenSelfHostedLoginScreen =
+      Key('authScreenSelfHostedLoginScreen');
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,31 +96,25 @@ class AuthScreen extends ConsumerWidget {
                 );
 
               case AuthenticationStatus.unavailable:
-                return const HomeScreen(
-                  key: AuthScreenWidgetKeys.authScreenHomeScreen,
-                );
+                return const HomeScreen(key: authScreenHomeScreen);
             }
 
           /// Manages when a user has logged out or no logged in user found.
           case AuthorizationStatus.anonAddyLogin:
             return const AnonAddyLoginScreen(
-              key: AuthScreenWidgetKeys.authScreenAnonAddyLoginScreen,
-            );
+                key: authScreenAnonAddyLoginScreen);
 
           /// Manages when a user has logged out or no logged in user found.
           case AuthorizationStatus.selfHostedLogin:
             return const SelfHostLoginScreen(
-              key: AuthScreenWidgetKeys.authScreenSelfHostedLoginScreen,
-            );
+                key: authScreenSelfHostedLoginScreen);
         }
       },
       error: (error, _) {
         return ErrorScreen(errorMessage: error.toString());
       },
       loading: () {
-        return const LoadingScreen(
-          key: AuthScreenWidgetKeys.authScreenLoadingScreen,
-        );
+        return const LoadingScreen(key: authScreenLoadingScreen);
       },
     );
   }

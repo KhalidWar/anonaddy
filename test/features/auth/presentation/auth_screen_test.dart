@@ -1,20 +1,25 @@
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
-import 'package:anonaddy/features/auth/presentation/components/auth_screen_widget_keys.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
+import 'package:anonaddy/features/domain_options/domain/domain_options.dart';
 import 'package:anonaddy/features/domain_options/presentation/controller/domain_options_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'auth_screen_mocks.dart';
+import '../../../mocks.dart';
 
 void main() {
-  Widget authScreen(AsyncNotifierProvider<AuthNotifier, AuthState> provider) {
+  Widget authScreen({
+    required AuthState authState,
+    required DomainOptions domainOptions,
+  }) {
     return ProviderScope(
       overrides: [
-        authStateNotifier.overrideWithProvider(provider),
-        domainOptionsNotifier.overrideWithProvider(testDomainOptionsNotifier),
+        authStateNotifier
+            .overrideWith(() => MockAuthNotifier(authState: authState)),
+        domainOptionsNotifierProvider.overrideWith(
+            () => MockDomainOptionsNotifier(domainOptions: domainOptions)),
       ],
       child: const MaterialApp(
         home: AuthScreen(),
@@ -24,41 +29,58 @@ void main() {
 
   testWidgets(
     'Given AuthorizationScreen is constructed, '
-    'When auth status is [AuthorizationStatus.unknown], '
+    'When auth status is [AuthorizationStatus.anonAddyLogin], '
     'Then display LoadingScreen.',
-    (WidgetTester tester) async {
-      // Arrange
-      await tester.pumpWidget(authScreen(testAuthStateNotifier));
+    (tester) async {
+      const authState = AuthState(
+        authorizationStatus: AuthorizationStatus.anonAddyLogin,
+        authenticationStatus: AuthenticationStatus.disabled,
+        loginLoading: false,
+      );
+      const domainOptions = DomainOptions(domains: [], sharedDomains: []);
 
-      // Act
-      final loadingScreen =
-          find.byKey(AuthScreenWidgetKeys.authScreenLoadingScreen);
+      await tester.pumpWidget(authScreen(
+        authState: authState,
+        domainOptions: domainOptions,
+      ));
 
-      // Assert
-      expect(loadingScreen, findsOneWidget);
+      expect(
+        find.byKey(AuthScreen.authScreenLoadingScreen),
+        findsOneWidget,
+      );
     },
   );
 
   testWidgets(
     'Given AuthorizationScreen is constructed, '
-    'When auth status is [AuthorizationStatus.anonAddyLogin], '
+    'When auth status is [AuthorizationStatus.selfHostedLogin], '
     'Then display AnonAddyLoginScreen.',
     (WidgetTester tester) async {
-      // Arrange
-      await tester.pumpWidget(authScreen(testAuthStateNotifier));
+      const authState = AuthState(
+        authorizationStatus: AuthorizationStatus.selfHostedLogin,
+        authenticationStatus: AuthenticationStatus.disabled,
+        loginLoading: false,
+      );
+      const domainOptions = DomainOptions(domains: [], sharedDomains: []);
+
+      await tester.pumpWidget(authScreen(
+        authState: authState,
+        domainOptions: domainOptions,
+      ));
       await tester.pumpAndSettle();
 
-      // Act
-      final anonAddyLoginScreen =
-          find.byKey(AuthScreenWidgetKeys.authScreenAnonAddyLoginScreen);
-      final selfHostedLoginScreen =
-          find.byKey(AuthScreenWidgetKeys.authScreenSelfHostedLoginScreen);
-      final homeScreen = find.byKey(AuthScreenWidgetKeys.authScreenHomeScreen);
-
-      // Assert
-      expect(anonAddyLoginScreen, findsOneWidget);
-      expect(selfHostedLoginScreen, findsNothing);
-      expect(homeScreen, findsNothing);
+      expect(
+        find.byKey(AuthScreen.authScreenAnonAddyLoginScreen),
+        findsNothing,
+      );
+      expect(
+        find.byKey(AuthScreen.authScreenSelfHostedLoginScreen),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(AuthScreen.authScreenHomeScreen),
+        findsNothing,
+      );
     },
   );
   testWidgets(
@@ -66,15 +88,20 @@ void main() {
     'When auth status is [AuthorizationStatus.authorized], '
     'Then display HomeScreen.',
     (WidgetTester tester) async {
-      // Arrange
-      await tester.pumpWidget(authScreen(testAuthStateNotifier));
-      // await tester.pumpAndSettle();
+      const authState = AuthState(
+        authorizationStatus: AuthorizationStatus.authorized,
+        authenticationStatus: AuthenticationStatus.disabled,
+        loginLoading: false,
+      );
+      const domainOptions = DomainOptions(domains: [], sharedDomains: []);
 
-      // Act
-      // final homeScreen = find.byKey(AuthScreenWidgetKeys.authScreenHomeScreen);
+      await tester.pumpWidget(authScreen(
+        authState: authState,
+        domainOptions: domainOptions,
+      ));
+      await tester.pumpAndSettle();
 
-      // Assert
-      // expect(homeScreen, findsOneWidget);
+      expect(find.byKey(AuthScreen.authScreenHomeScreen), findsOneWidget);
     },
   );
 }
