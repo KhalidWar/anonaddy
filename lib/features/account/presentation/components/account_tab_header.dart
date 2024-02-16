@@ -12,7 +12,7 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loadi
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccountTabHeader extends ConsumerStatefulWidget {
+class AccountTabHeader extends ConsumerWidget {
   const AccountTabHeader({Key? key}) : super(key: key);
 
   static const accountTabHeaderLoading = Key('accountTabHeaderLoading');
@@ -20,11 +20,6 @@ class AccountTabHeader extends ConsumerStatefulWidget {
       Key('accountTabHeaderHeaderProfile');
   static const accountTabHeaderError = Key('accountTabHeaderError');
 
-  @override
-  ConsumerState createState() => _AccountTabHeaderState();
-}
-
-class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
   /// addy.io instances always have a [bandwidthLimit] value.
   /// If unlimited, it's "0". If not, it's an int.
   ///
@@ -68,20 +63,7 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      /// Initially load data from disk (secured device storage)
-      // ref.read(accountNotifierProvider.notifier).loadAccountFromDisk();
-
-      /// Fetch latest data from server
-      ref.read(accountNotifierProvider.notifier).fetchAccount();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final accountState = ref.watch(accountNotifierProvider);
 
     return accountState.when(

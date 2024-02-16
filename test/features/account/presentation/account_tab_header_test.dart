@@ -10,137 +10,96 @@ import '../../../mocks.dart';
 import '../../../test_data/account_test_data.dart';
 
 void main() {
-  // late MockAccountService accountService;
-  late MockAccountNotifier accountNotifier;
+  group('AccountTabHeader testing ', () {
+    Widget buildAccountTab(
+      Account account, {
+      bool throwError = false,
+    }) {
+      return MaterialApp(
+        home: ProviderScope(
+          overrides: [
+            accountNotifierProvider.overrideWith(
+              () => MockAccountNotifier(
+                account: account,
+                throwError: throwError,
+              ),
+            ),
+          ],
+          child: const Scaffold(body: AccountTabHeader()),
+        ),
+      );
+    }
 
-  setUp(() {
-    // accountService = MockAccountService();
-    accountNotifier =
-        MockAccountNotifier(account: AccountTestData.defaultAccount());
-  });
+    testWidgets(
+        'Given AccountTab is constructed, '
+        'When all data is loaded, '
+        'Then show header widgets.', (tester) async {
+      await tester.pumpWidget(buildAccountTab(AccountTestData.validAccount()));
+      await tester.pumpAndSettle();
 
-  Widget buildAccountTab(Account account) {
-    return MaterialApp(
-      home: ProviderScope(
-        overrides: [
-          accountNotifierProvider.overrideWith(() => accountNotifier),
-        ],
-        child: const AccountTabHeader(),
-      ),
-    );
-  }
+      expect(find.byType(AccountTabHeader), findsOneWidget);
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderLoading),
+        findsNothing,
+      );
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderHeaderProfile),
+        findsOneWidget,
+      );
+      expect(find.byType(AccountListTile), findsNWidgets(3));
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderError),
+        findsNothing,
+      );
+    });
 
-  testWidgets(
-      'Given AccountTab is constructed, '
-      'When no input is given and state is loading, '
-      'Then show loading indicator.', (tester) async {
-    // Arrange
-    // final initialState = AccountState(
-    //   status: AccountStatus.loading,
-    //   account: Account(),
-    //   errorMessage: '',
-    // );
+    testWidgets(
+        'Given AccountTab is constructed, '
+        'When state is still loading, '
+        'Then show loading indicator.', (tester) async {
+      await tester
+          .pumpWidget(buildAccountTab(AccountTestData.defaultAccount()));
 
-    // when(() => accountService.loadAccountFromDisk())
-    //     .thenAnswer((_) async => AccountTestData.validAccount());
-    // when(() => accountService.fetchAccount())
-    //     .thenAnswer((_) async => AccountTestData.validAccount());
+      expect(find.byType(AccountTabHeader), findsOneWidget);
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderLoading),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderHeaderProfile),
+        findsNothing,
+      );
+      expect(find.byType(AccountListTile), findsNothing);
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderError),
+        findsNothing,
+      );
+    });
 
-    await tester.pumpWidget(buildAccountTab(Account()));
+    testWidgets(
+        'Given AccountTab is constructed, '
+        'When an error occurs, '
+        'Then show error widget.', (tester) async {
+      await tester.pumpWidget(buildAccountTab(
+        AccountTestData.defaultAccount(),
+        throwError: true,
+      ));
+      await tester.pumpAndSettle();
 
-    // Assert
-    expect(find.byType(AccountTabHeader), findsOneWidget);
-    // expect(
-    //   find.byKey(AccountTabWidgetKeys.accountTabHeaderLoading),
-    //   findsOneWidget,
-    // );
-    expect(
-      find.byKey(AccountTabHeader.accountTabHeaderHeaderProfile),
-      findsNothing,
-    );
-    expect(
-      find.byType(AccountListTile),
-      findsNothing,
-    );
-    // expect(
-    //   find.byKey(AccountTabWidgetKeys.accountTabHeaderError),
-    //   findsNothing,
-    // );
-  });
-
-  testWidgets(
-      'Given AccountTab is constructed, '
-      'When no input is given and state is loaded, '
-      'Then show loaded widgets.', (tester) async {
-    // Arrange
-    // final initialState = AccountState(
-    //   status: AccountStatus.loaded,
-    //   account: Account(),
-    //   errorMessage: '',
-    // );
-
-    // when(() => accountService.loadAccountFromDisk())
-    //     .thenAnswer((_) async => AccountTestData.validAccount());
-    // when(() => accountService.fetchAccount())
-    //     .thenAnswer((_) async => AccountTestData.validAccount());
-
-    // await tester.pumpWidget(accountTab(initialState));
-
-    // // Assert
-    // expect(find.byType(AccountTabHeader), findsOneWidget);
-    // expect(
-    //   find.byKey(AccountTabWidgetKeys.accountTabHeaderLoading),
-    //   findsNothing,
-    // );
-    // expect(
-    //   find.byKey(AccountTabWidgetKeys.accountTabHeaderHeaderProfile),
-    //   findsOneWidget,
-    // );
-    // expect(
-    //   find.byType(AccountListTile),
-    //   findsNWidgets(3),
-    // );
-    // expect(
-    //   find.byKey(AccountTabWidgetKeys.accountTabHeaderError),
-    //   findsNothing,
-    // );
-  });
-
-  testWidgets(
-      'Given AccountTab is constructed, '
-      'When no input is given and state is failed, '
-      'Then show error widget.', (tester) async {
-    // Arrange
-    // final initialState = AccountState(
-    //   status: AccountStatus.failed,
-    //   account: Account(),
-    //   errorMessage: '',
-    // );
-
-    // when(() => accountService.loadAccountFromDisk())
-    //     .thenAnswer((_) async => AccountTestData.validAccount());
-    // when(() => accountService.fetchAccount())
-    //     .thenAnswer((_) async => AccountTestData.validAccount());
-
-    await tester.pumpWidget(buildAccountTab(Account()));
-
-    // Assert
-    expect(find.byType(AccountTabHeader), findsOneWidget);
-    expect(
-      find.byKey(AccountTabHeader.accountTabHeaderLoading),
-      findsNothing,
-    );
-    expect(
-      find.byKey(AccountTabHeader.accountTabHeaderHeaderProfile),
-      findsNothing,
-    );
-    expect(
-      find.byType(AccountListTile),
-      findsNothing,
-    );
-    expect(
-      find.byKey(AccountTabHeader.accountTabHeaderError),
-      findsOneWidget,
-    );
+      expect(find.byType(AccountTabHeader), findsOneWidget);
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderLoading),
+        findsNothing,
+      );
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderHeaderProfile),
+        findsNothing,
+      );
+      expect(find.byType(AccountListTile), findsNothing);
+      expect(
+        find.byKey(AccountTabHeader.accountTabHeaderError),
+        findsOneWidget,
+      );
+    });
   });
 }
