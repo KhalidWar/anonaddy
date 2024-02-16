@@ -4,6 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../mocks.dart';
+import '../../../test_data/failed_deliveries_test_data.dart';
+
 void main() async {
   late MockDio mockDio;
   late FailedDeliveryService deliveriesService;
@@ -20,15 +23,11 @@ void main() async {
     when(() => mockDio.get(any())).thenAnswer((_) => Future.value(
           Response(
             statusCode: 200,
-            data: dummyFailedDeliveriesData,
-            // (dummyFailedDeliveriesData['data'] as List).map((delivery) {
-            //   return FailedDelivery.fromJson(delivery);
-            // }).toList(),
-            requestOptions: RequestOptions(path: any(named: 'path')),
+            data: FailedDeliveriesTestData.validFailedDeliveriesJson,
+            requestOptions: RequestOptions(path: 'path'),
           ),
         ));
 
-    // Act
     final deliveries = await deliveriesService.getFailedDeliveries();
 
     expect(deliveries, isA<List<FailedDelivery>>());
@@ -36,6 +35,7 @@ void main() async {
     expect(deliveries[0].aliasEmail, 'alias@anonaddy.com');
     expect(deliveries[0].recipientEmail, 'user@recipient.com');
     expect(deliveries[1].bounceType, 'hard');
+    verify(() => mockDio.get(any())).called(1);
   });
 
   test(
@@ -43,46 +43,47 @@ void main() async {
       'When deliveriesService.getFailedDeliveries(error) is called, '
       'And is set up to throw an 429 DioError, '
       'Then throw an error.', () async {
-    // Arrange
+    when(() => mockDio.get(any())).thenThrow(DioError(
+      requestOptions: RequestOptions(path: 'path'),
+      error: 'error',
+    ));
 
-    // Act
-    final dioGet = mockDio.get('error');
-    final throwsError = throwsA(isA<DioError>());
+    final deliveries = deliveriesService.getFailedDeliveries();
 
-    // Assert
-    expect(() => dioGet, throwsError);
+    expect(await deliveries, isA<DioError>());
+    verify(() => mockDio.delete(any())).called(1);
   });
 
   test(
-      'Given aliasService and dio are up and running, '
-      'When deliveriesService.deleteFailedDelivery(path) is called, '
-      'Then delete failedDelivery without errors.', () async {
-    // Arrange
-    const deliveryId = 'id';
+      'Given deliveriesService and dio are up and running, '
+      'When deliveriesService.deleteFailedDelivery() is called, '
+      'Then future completes and returns obtain a deliveries list.', () async {
+    when(() => mockDio.delete(any())).thenAnswer((_) => Future.value(
+          Response(
+            statusCode: 200,
+            requestOptions: RequestOptions(path: 'path'),
+          ),
+        ));
 
-    // Act
-    final dioDelete = mockDio.delete(deliveryId);
-    // final response = await deliveriesService.deleteFailedDelivery(deliveryId);
+    final deleteFailedDelivery = deliveriesService.deleteFailedDelivery;
 
-    // Assert
-    expectLater(dioDelete, completes);
-    expect(await dioDelete, isA<Response>());
+    expect(deleteFailedDelivery('id'), completes);
+    verify(() => mockDio.delete(any())).called(1);
   });
 
   test(
       'Given deliveriesService and dio are up and running, '
       'When deliveriesService.deleteFailedDelivery(error) is called, '
+      'And is set up to throw an 429 DioError, '
       'Then throw an error.', () async {
-    // Arrange
-    const deliveryId = 'error';
+    when(() => mockDio.get(any())).thenThrow(DioError(
+      requestOptions: RequestOptions(path: 'path'),
+      error: 'error',
+    ));
 
-    // Act
-    final dioGet = mockDio.delete(deliveryId);
-    final dioError = isA<DioError>();
-    final throwsDioError = throwsA(dioError);
+    final deliveries = deliveriesService.deleteFailedDelivery('id');
 
-    // Assert
-    expectLater(dioGet, throwsException);
-    expect(dioGet, throwsDioError);
+    expect(deliveries, isA<DioError>());
+    verify(() => mockDio.delete(any())).called(1);
   });
 }
