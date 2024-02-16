@@ -11,8 +11,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainService = Provider<DomainsService>((ref) {
   return DomainsService(
-      dio: ref.read(dioProvider),
-      dataStorage: ref.read(domainsDataStorageProvider));
+    dio: ref.read(dioProvider),
+    dataStorage: ref.read(domainsDataStorageProvider),
+  );
 });
 
 class DomainsService {
@@ -34,7 +35,7 @@ class DomainsService {
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.other) {
         final domains = await dataStorage.loadData();
-        return domains;
+        if (domains != null) return domains;
       }
       throw dioError.message;
     } catch (e) {
@@ -173,7 +174,7 @@ class DomainsService {
     }
   }
 
-  Future<List<Domain>> loadDomainsFromDisk() async {
+  Future<List<Domain>?> loadDomainsFromDisk() async {
     try {
       return await dataStorage.loadData();
     } catch (error) {

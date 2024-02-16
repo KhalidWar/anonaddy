@@ -4,7 +4,6 @@ import 'package:anonaddy/features/domains/presentation/components/add_new_domain
 import 'package:anonaddy/features/domains/presentation/components/domain_list_tile.dart';
 import 'package:anonaddy/features/domains/presentation/components/empty_domain_tile.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_tab_notifier.dart';
-import 'package:anonaddy/features/domains/presentation/controller/domains_tab_state.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
@@ -51,25 +50,17 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      /// Fetch offline state initially
-      ref.watch(domainsStateNotifier.notifier).loadOfflineState();
-
       /// Fetch domains from server
-      ref.watch(domainsStateNotifier.notifier).fetchDomains();
+      ref.watch(domainsNotifierProvider.notifier).fetchDomains();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final domainsState = ref.watch(domainsStateNotifier);
+    final domainsAsync = ref.watch(domainsNotifierProvider);
 
-    switch (domainsState.status) {
-      case DomainsTabStatus.loading:
-        return const RecipientsShimmerLoading();
-
-      case DomainsTabStatus.loaded:
-        final domains = domainsState.domains;
-
+    return domainsAsync.when(
+      data: (domains) {
         return ListView(
           shrinkWrap: true,
           physics: const ClampingScrollPhysics(),
@@ -91,11 +82,13 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
             // ),
           ],
         );
-
-      case DomainsTabStatus.failed:
-        return ErrorMessageWidget(
-          message: domainsState.errorMessage,
-        );
-    }
+      },
+      error: (error, stack) {
+        return ErrorMessageWidget(message: error.toString());
+      },
+      loading: () {
+        return const RecipientsShimmerLoading();
+      },
+    );
   }
 }

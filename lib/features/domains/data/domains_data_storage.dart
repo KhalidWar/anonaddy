@@ -30,10 +30,11 @@ class DomainsDataStorage extends DataStorage {
   }
 
   @override
-  Future<List<Domain>> loadData() async {
+  Future<List<Domain>?> loadData() async {
     try {
       final data = await secureStorage.read(key: DataStorageKeys.domainsKey);
-      final decodedData = jsonDecode(data ?? '');
+      if (data == null) return null;
+      final decodedData = jsonDecode(data);
       final domains = (decodedData['data'] as List)
           .map((domain) => Domain.fromJson(domain))
           .toList();
@@ -46,7 +47,7 @@ class DomainsDataStorage extends DataStorage {
   Future<Domain> loadSpecificDomain(String id) async {
     try {
       final domains = await loadData();
-      final domain = domains.firstWhere((element) => element.id == id);
+      final domain = domains!.firstWhere((element) => element.id == id);
       return domain;
     } catch (error) {
       rethrow;

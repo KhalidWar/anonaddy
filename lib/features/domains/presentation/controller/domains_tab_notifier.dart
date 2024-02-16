@@ -1,59 +1,37 @@
+import 'dart:async';
+
 import 'package:anonaddy/features/domains/data/domains_service.dart';
-import 'package:anonaddy/features/domains/presentation/controller/domains_tab_state.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/features/domains/domain/domain_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final domainsStateNotifier =
-    StateNotifierProvider.autoDispose<DomainsTabNotifier, DomainsTabState>(
-        (ref) {
-  return DomainsTabNotifier(domainsService: ref.read(domainService));
-});
+final domainsNotifierProvider =
+    AsyncNotifierProvider<DomainsTabNotifier, List<Domain>>(
+        DomainsTabNotifier.new);
 
-class DomainsTabNotifier extends StateNotifier<DomainsTabState> {
-  DomainsTabNotifier({required this.domainsService})
-      : super(DomainsTabState.initialState());
-
-  final DomainsService domainsService;
-
-  /// Updates DomainTab state
-  void _updateState(DomainsTabState newState) {
-    if (mounted) state = newState;
-  }
-
+class DomainsTabNotifier extends AsyncNotifier<List<Domain>> {
   Future<void> fetchDomains() async {
     try {
-      final domains = await domainsService.fetchDomains();
-      _updateState(state.copyWith(
-        status: DomainsTabStatus.loaded,
-        domains: domains,
-      ));
+      final domains = await ref.read(domainService).fetchDomains();
+      state = AsyncData(domains);
     } catch (error) {
-      _updateState(state.copyWith(
-        status: DomainsTabStatus.failed,
-        errorMessage: AppStrings.somethingWentWrong,
-      ));
+      state = AsyncError(error.toString(), StackTrace.empty);
       await _retryOnError();
     }
   }
 
   Future _retryOnError() async {
-    if (state.status == DomainsTabStatus.failed) {
+    if (state is AsyncError) {
       await Future.delayed(const Duration(seconds: 5));
       await fetchDomains();
     }
   }
 
-  Future<void> loadOfflineState() async {
-    try {
-      final domains = await domainsService.loadDomainsFromDisk();
-      _updateState(
-        state.copyWith(
-          status: DomainsTabStatus.loaded,
-          domains: domains,
-        ),
-      );
-    } catch (error) {
-      return;
-    }
+  @override
+  FutureOr<List<Domain>> build() async {
+    final service = ref.read(domainService);
+
+    final domains = await service.loadDomainsFromDisk();
+    if (domains == null) return await service.fetchDomains();
+    return domains;
   }
 }
