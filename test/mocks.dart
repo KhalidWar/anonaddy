@@ -44,12 +44,18 @@ class MockAuthNotifier extends AuthNotifier {
 }
 
 class MockAccountNotifier extends AccountNotifier {
-  MockAccountNotifier({required this.account});
+  MockAccountNotifier({
+    required this.account,
+    this.throwError = false,
+  });
 
   final Account account;
+  final bool throwError;
 
   @override
   Future<Account> build() async {
+    if (throwError) throw 'error';
+
     return account;
   }
 }

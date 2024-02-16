@@ -31,7 +31,9 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   }
 
   Future<void> login(String url, String token) async {
-    state = AsyncData(state.value!.copyWith(loginLoading: true));
+    if (state.value != null) {
+      state = AsyncData(state.value!.copyWith(loginLoading: true));
+    }
 
     try {
       final apiToken =
@@ -45,7 +47,9 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncData(state.value!.copyWith(loginLoading: false));
+      if (state.value != null) {
+        state = AsyncData(state.value!.copyWith(loginLoading: false));
+      }
     }
   }
 

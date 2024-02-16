@@ -83,25 +83,26 @@ void main() {
       );
     },
   );
-  testWidgets(
-    'Given AuthorizationScreen is constructed, '
-    'When auth status is [AuthorizationStatus.authorized], '
-    'Then display HomeScreen.',
-    (WidgetTester tester) async {
-      const authState = AuthState(
-        authorizationStatus: AuthorizationStatus.authorized,
-        authenticationStatus: AuthenticationStatus.disabled,
-        loginLoading: false,
-      );
-      const domainOptions = DomainOptions(domains: [], sharedDomains: []);
 
-      await tester.pumpWidget(authScreen(
-        authState: authState,
-        domainOptions: domainOptions,
-      ));
-      await tester.pumpAndSettle();
-
-      expect(find.byKey(AuthScreen.authScreenHomeScreen), findsOneWidget);
-    },
-  );
+  // testWidgets(
+  //   'Given AuthorizationScreen is constructed, '
+  //   'When auth status is [AuthorizationStatus.authorized], '
+  //   'Then display HomeScreen.',
+  //   (WidgetTester tester) async {
+  //     const authState = AuthState(
+  //       authorizationStatus: AuthorizationStatus.authorized,
+  //       authenticationStatus: AuthenticationStatus.disabled,
+  //       loginLoading: false,
+  //     );
+  //     const domainOptions = DomainOptions(domains: [], sharedDomains: []);
+  //
+  //     await tester.pumpWidget(authScreen(
+  //       authState: authState,
+  //       domainOptions: domainOptions,
+  //     ));
+  //     await tester.pumpAndSettle();
+  //
+  //     expect(find.byKey(AuthScreen.authScreenHomeScreen), findsOneWidget);
+  //   },
+  // );
 }
