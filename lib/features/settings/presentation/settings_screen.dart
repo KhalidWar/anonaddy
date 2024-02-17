@@ -84,8 +84,7 @@ class SettingsScreen extends ConsumerWidget {
                   AppStrings.settingsAddyHelpCenter,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle:
-                    const Text(AppStrings.settingsAddyHelpCenterSubtitle),
+                subtitle: const Text(AppStrings.settingsAddyHelpCenterSubtitle),
                 trailing: const Icon(Icons.open_in_new_outlined),
                 onTap: () => Utilities.launchURL(kAnonAddyHelpCenterURL),
               ),

@@ -105,8 +105,7 @@ class CreateAliasState {
 extension CreateAliasStateExtension on CreateAliasState {
   bool get isAliasDomainValid => selectedAliasDomain != null;
   bool get isAliasFormatValid => selectedAliasFormat != null;
-  bool get showLocalPart =>
-      selectedAliasFormat == AddyString.aliasFormatCustom;
+  bool get showLocalPart => selectedAliasFormat == AddyString.aliasFormatCustom;
   bool get isLocalPartValid => localPart.isNotEmpty;
   bool get isDescriptionValid => description.isNotEmpty;
   bool get isDefaultAliasFormatCustom =>

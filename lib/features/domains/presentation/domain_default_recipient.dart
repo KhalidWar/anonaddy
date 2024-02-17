@@ -132,8 +132,7 @@ class _DomainDefaultRecipientState
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          const Text(
-                              AddyString.updateDomainDefaultRecipient),
+                          const Text(AddyString.updateDomainDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
                           Consumer(
                             builder: (_, watch, __) {

@@ -122,8 +122,7 @@ class _UsernameDefaultRecipientState
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          const Text(
-                              AddyString.updateUsernameDefaultRecipient),
+                          const Text(AddyString.updateUsernameDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
                           const Divider(height: 0),
                         ],
