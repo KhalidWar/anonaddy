@@ -100,8 +100,8 @@ class AuthScreen extends ConsumerWidget {
             }
 
           /// Manages when a user has logged out or no logged in user found.
-          case AuthorizationStatus.anonAddyLogin:
-            return const AnonAddyLoginScreen(
+          case AuthorizationStatus.addyLogin:
+            return const AddyLoginScreen(
                 key: authScreenAnonAddyLoginScreen);
 
           /// Manages when a user has logged out or no logged in user found.

@@ -239,7 +239,7 @@ class Account {
 
 extension AccountExtension on Account {
   bool get isSubscriptionFree =>
-      subscription == AnonAddyString.subscriptionFree;
+      subscription == AddyString.subscriptionFree;
 
   bool get isSelfHosted => subscription.isEmpty;
 

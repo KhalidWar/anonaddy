@@ -1,6 +1,6 @@
 ///
 /// Collection of official addy.io UI strings extracted from addy.io
-class AnonAddyString {
+class AddyString {
   /// Alias
   static const deleteAliasString =
       'Deleted aliases reject all emails sent to them. However, they can be restored to start receiving emails again.';
@@ -9,7 +9,7 @@ class AnonAddyString {
   static const restoreBeforeActivate =
       'Restore this alias before you can activate it';
   static const createNewAliasString =
-      'Other aliases e.g. alias@khalidwar.anonaddy.com or .me can also be created automatically when they receive their first email.';
+      'Other aliases e.g. alias@khalidwar.addy.id or .me can also be created automatically when they receive their first email.';
   static const restoreAliasConfirmation =
       'Are you sure you want to restore this alias?\n\nOnce restored, this alias will be able to receive emails again.';
   static const updateAliasRecipients =

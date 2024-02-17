@@ -45,7 +45,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
         Utilities.showToast(ToastMessage.onlyAvailableToPaid);
       } else {
         accountState.hasUsernamesReachedLimit
-            ? Utilities.showToast(AnonAddyString.reachedUsernameLimit)
+            ? Utilities.showToast(AddyString.reachedUsernameLimit)
             : buildAddNewUsername(context);
       }
     }

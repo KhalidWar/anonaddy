@@ -291,7 +291,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
         context: context,
         child: PlatformAlertDialog(
           title: 'Delete Username',
-          content: AnonAddyString.deleteUsernameConfirmation,
+          content: AddyString.deleteUsernameConfirmation,
           method: () async {
             await ref
                 .read(

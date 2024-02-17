@@ -5,7 +5,7 @@ enum AuthorizationStatus {
   authorized,
 
   /// When user decides to log in with addy.io account.
-  anonAddyLogin,
+  addyLogin,
 
   /// When user decides to log in with a self hosted instance.
   selfHostedLogin,

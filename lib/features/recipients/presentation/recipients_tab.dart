@@ -41,7 +41,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
       buildAddNewRecipient(context);
     } else {
       accountState.hasRecipientsReachedLimit
-          ? Utilities.showToast(AnonAddyString.reachedRecipientLimit)
+          ? Utilities.showToast(AddyString.reachedRecipientLimit)
           : buildAddNewRecipient(context);
     }
   }

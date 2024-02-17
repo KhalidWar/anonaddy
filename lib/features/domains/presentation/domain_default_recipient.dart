@@ -133,7 +133,7 @@ class _DomainDefaultRecipientState
                       child: Column(
                         children: [
                           const Text(
-                              AnonAddyString.updateDomainDefaultRecipient),
+                              AddyString.updateDomainDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
                           Consumer(
                             builder: (_, watch, __) {

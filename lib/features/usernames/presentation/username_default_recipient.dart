@@ -123,7 +123,7 @@ class _UsernameDefaultRecipientState
                       child: Column(
                         children: [
                           const Text(
-                              AnonAddyString.updateUsernameDefaultRecipient),
+                              AddyString.updateUsernameDefaultRecipient),
                           SizedBox(height: size.height * 0.01),
                           const Divider(height: 0),
                         ],

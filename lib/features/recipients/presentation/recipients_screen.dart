@@ -93,7 +93,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
             context: context,
             child: PlatformAlertDialog(
               title: 'Delete Recipient',
-              content: AnonAddyString.deleteRecipientConfirmation,
+              content: AddyString.deleteRecipientConfirmation,
               method: () async {
                 await ref
                     .read(recipientScreenStateNotifier.notifier)
@@ -226,7 +226,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                                 context: context,
                                 child: PlatformAlertDialog(
                                   title: 'Remove Public Key',
-                                  content: AnonAddyString
+                                  content: AddyString
                                       .removeRecipientPublicKeyConfirmation,
                                   method: () async {
                                     await ref

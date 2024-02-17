@@ -154,7 +154,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                         child: const Text('Login with addy.io instead!'),
                         onPressed: () => ref
                             .read(authStateNotifier.notifier)
-                            .goToAnonAddyLogin(),
+                            .goToAddyLogin(),
                       ),
                     ],
                   ),

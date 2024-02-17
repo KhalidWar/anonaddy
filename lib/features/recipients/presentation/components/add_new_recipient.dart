@@ -40,7 +40,7 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
                 const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
             child: Column(
               children: [
-                const Text(AnonAddyString.addRecipientString),
+                const Text(AddyString.addRecipientString),
                 SizedBox(height: size.height * 0.02),
                 Form(
                   key: _formKey,

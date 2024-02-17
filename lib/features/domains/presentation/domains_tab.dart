@@ -41,7 +41,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
       buildAddNewDomain(context);
     } else {
       accountState.hasDomainsReachedLimit
-          ? Utilities.showToast(AnonAddyString.reachedDomainLimit)
+          ? Utilities.showToast(AddyString.reachedDomainLimit)
           : buildAddNewDomain(context);
     }
   }

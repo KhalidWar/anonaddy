@@ -13,16 +13,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AnonAddyLoginScreen extends ConsumerStatefulWidget {
-  const AnonAddyLoginScreen({Key? key}) : super(key: key);
+class AddyLoginScreen extends ConsumerStatefulWidget {
+  const AddyLoginScreen({Key? key}) : super(key: key);
 
   static const routeName = 'loginScreen';
 
   @override
-  ConsumerState createState() => _AnonAddyLoginScreenState();
+  ConsumerState createState() => _AddyLoginScreenState();
 }
 
-class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
+class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
   final _tokenFormKey = GlobalKey<FormState>();
 
   String _token = '';
@@ -70,7 +70,7 @@ class _AnonAddyLoginScreenState extends ConsumerState<AnonAddyLoginScreen> {
                     ],
                   ),
                   LoginFooter(
-                    key: const Key('anonAddyLoginScreenLoginFooter'),
+                    key: const Key('addyLoginScreenLoginFooter'),
                     onPress: () => login(),
                   ),
                 ],

@@ -45,24 +45,24 @@ class CreateAliasState {
   DomainOptions domainOptions;
 
   static const freeTierWithSharedDomain = [
-    AnonAddyString.aliasFormatUUID,
-    AnonAddyString.aliasFormatRandomChars,
+    AddyString.aliasFormatUUID,
+    AddyString.aliasFormatRandomChars,
   ];
   static const freeTierNoSharedDomain = [
-    AnonAddyString.aliasFormatUUID,
-    AnonAddyString.aliasFormatRandomChars,
-    AnonAddyString.aliasFormatCustom,
+    AddyString.aliasFormatUUID,
+    AddyString.aliasFormatRandomChars,
+    AddyString.aliasFormatCustom,
   ];
   static const paidTierWithSharedDomain = [
-    AnonAddyString.aliasFormatUUID,
-    AnonAddyString.aliasFormatRandomChars,
-    AnonAddyString.aliasFormatRandomWords,
+    AddyString.aliasFormatUUID,
+    AddyString.aliasFormatRandomChars,
+    AddyString.aliasFormatRandomWords,
   ];
   static const paidTierNoSharedDomain = [
-    AnonAddyString.aliasFormatUUID,
-    AnonAddyString.aliasFormatRandomChars,
-    AnonAddyString.aliasFormatRandomWords,
-    AnonAddyString.aliasFormatCustom,
+    AddyString.aliasFormatUUID,
+    AddyString.aliasFormatRandomChars,
+    AddyString.aliasFormatRandomWords,
+    AddyString.aliasFormatCustom,
   ];
 
   CreateAliasState copyWith({
@@ -106,9 +106,9 @@ extension CreateAliasStateExtension on CreateAliasState {
   bool get isAliasDomainValid => selectedAliasDomain != null;
   bool get isAliasFormatValid => selectedAliasFormat != null;
   bool get showLocalPart =>
-      selectedAliasFormat == AnonAddyString.aliasFormatCustom;
+      selectedAliasFormat == AddyString.aliasFormatCustom;
   bool get isLocalPartValid => localPart.isNotEmpty;
   bool get isDescriptionValid => description.isNotEmpty;
   bool get isDefaultAliasFormatCustom =>
-      domainOptions.defaultAliasFormat == AnonAddyString.aliasFormatCustom;
+      domainOptions.defaultAliasFormat == AddyString.aliasFormatCustom;
 }

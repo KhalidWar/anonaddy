@@ -290,7 +290,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         context: context,
         child: PlatformAlertDialog(
           title: 'Delete Domain',
-          content: AnonAddyString.deleteDomainConfirmation,
+          content: AddyString.deleteDomainConfirmation,
           method: () async {
             await ref
                 .read(domainsScreenStateNotifier(widget.domain.id).notifier)

@@ -9,7 +9,7 @@ void main() {
   Widget buildAnonAddyLoginScreen() {
     return const ProviderScope(
       child: MaterialApp(
-        home: AnonAddyLoginScreen(),
+        home: AddyLoginScreen(),
       ),
     );
   }

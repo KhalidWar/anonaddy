@@ -33,7 +33,7 @@ void main() {
     'Then display LoadingScreen.',
     (tester) async {
       const authState = AuthState(
-        authorizationStatus: AuthorizationStatus.anonAddyLogin,
+        authorizationStatus: AuthorizationStatus.addyLogin,
         authenticationStatus: AuthenticationStatus.disabled,
         loginLoading: false,
       );

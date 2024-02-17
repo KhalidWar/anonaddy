@@ -108,11 +108,11 @@ class AppStrings {
   static const settingsBiometricAuth = 'Biometric Authentication';
   static const settingsBiometricAuthSubtitle =
       'Require biometric authentication';
-  static const settingsAnonAddyHelpCenter = 'Addy.io Help Center';
-  static const settingsAnonAddyHelpCenterSubtitle =
+  static const settingsAddyHelpCenter = 'Addy.io Help Center';
+  static const settingsAddyHelpCenterSubtitle =
       'Addy.io\'s terminologies...etc.';
-  static const settingsAnonAddyFAQ = 'Addy.io FAQ';
-  static const settingsAnonAddyFAQSubtitle = 'Learn more about addy.io';
+  static const settingsAddyFAQ = 'Addy.io FAQ';
+  static const settingsAddyFAQSubtitle = 'Learn more about addy.io';
   static const settingsAboutApp = 'About App';
   static const settingsAboutAppSubtitle = 'View AddyManager details';
   static const settingsEnjoyingApp = 'Enjoying AddyManager?';

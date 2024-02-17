@@ -123,7 +123,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             context: context,
             child: PlatformAlertDialog(
               title: AppStrings.forgetAlias,
-              content: AnonAddyString.forgetAliasConfirmation,
+              content: AddyString.forgetAliasConfirmation,
               method: () async {
                 await ref
                     .read(aliasScreenNotifierProvider(widget.aliasId).notifier)
@@ -190,7 +190,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                       onChanged: (toggle) async {
                         isAliasDeleted
                             ? Utilities.showToast(
-                                AnonAddyString.restoreBeforeActivate)
+                                AddyString.restoreBeforeActivate)
                             : aliasState.alias.active
                                 ? await ref
                                     .read(aliasScreenNotifierProvider(
@@ -281,8 +281,8 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                             title:
                                 '${isAliasDeleted ? 'Restore' : 'Delete'} Alias',
                             content: isAliasDeleted
-                                ? AnonAddyString.restoreAliasConfirmation
-                                : AnonAddyString.deleteAliasConfirmation,
+                                ? AddyString.restoreAliasConfirmation
+                                : AddyString.deleteAliasConfirmation,
                             method: () async {
                               /// Dismisses [platformDialog]
                               Navigator.pop(context);
@@ -330,7 +330,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                           pageTitle: Padding(
                             padding: const EdgeInsets.all(16),
                             child: Text(
-                              AnonAddyString.updateAliasRecipients,
+                              AddyString.updateAliasRecipients,
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ),

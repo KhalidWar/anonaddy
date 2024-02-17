@@ -81,21 +81,21 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 dense: true,
                 title: Text(
-                  AppStrings.settingsAnonAddyHelpCenter,
+                  AppStrings.settingsAddyHelpCenter,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 subtitle:
-                    const Text(AppStrings.settingsAnonAddyHelpCenterSubtitle),
+                    const Text(AppStrings.settingsAddyHelpCenterSubtitle),
                 trailing: const Icon(Icons.open_in_new_outlined),
                 onTap: () => Utilities.launchURL(kAnonAddyHelpCenterURL),
               ),
               ListTile(
                 dense: true,
                 title: Text(
-                  AppStrings.settingsAnonAddyFAQ,
+                  AppStrings.settingsAddyFAQ,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                subtitle: const Text(AppStrings.settingsAnonAddyFAQSubtitle),
+                subtitle: const Text(AppStrings.settingsAddyFAQSubtitle),
                 trailing: const Icon(Icons.open_in_new_outlined),
                 onTap: () => Utilities.launchURL(kAnonAddyFAQURL),
               ),

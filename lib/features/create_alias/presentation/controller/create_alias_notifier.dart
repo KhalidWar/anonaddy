@@ -90,7 +90,7 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
     final isSelectedAliasDomainSharedDomain =
         currentState.sharedDomains.contains(aliasDomain);
     final isSelectedAliasFormatCustom =
-        currentState.selectedAliasFormat == AnonAddyString.aliasFormatCustom;
+        currentState.selectedAliasFormat == AddyString.aliasFormatCustom;
     final shouldUpdatedAliasFormat =
         isSelectedAliasDomainSharedDomain && isSelectedAliasFormatCustom;
 
@@ -99,7 +99,7 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
       aliasFormatList: aliasFormatList,
       selectedAliasDomain: aliasDomain,
       selectedAliasFormat: shouldUpdatedAliasFormat
-          ? AnonAddyString.aliasFormatRandomChars
+          ? AddyString.aliasFormatRandomChars
           : currentState.selectedAliasFormat,
     );
 
@@ -133,8 +133,8 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
   /// Sets which list to be used for [AliasFormat] selection.
   ///
   /// For example, if selected [CreateAliasState.selectedAliasDomain] is a shared domain,
-  /// [CreateAliasState.aliasFormatList] list can NOT contain [AnonAddyString.aliasFormatCustom].
-  /// Another example is that [AnonAddyString.aliasFormatRandomWords] is NOT
+  /// [CreateAliasState.aliasFormatList] list can NOT contain [AddyString.aliasFormatCustom].
+  /// Another example is that [AddyString.aliasFormatRandomWords] is NOT
   /// available for users with free subscription.
   List<String> _getAliasFormatList({
     required bool isSubscriptionFree,

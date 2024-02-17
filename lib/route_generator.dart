@@ -62,8 +62,8 @@ class RouteGenerator {
             DomainsScreen(domain: argument as Domain));
 
       /// Login Screen
-      case AnonAddyLoginScreen.routeName:
-        return PlatformAware.customPageRoute(const AnonAddyLoginScreen());
+      case AddyLoginScreen.routeName:
+        return PlatformAware.customPageRoute(const AddyLoginScreen());
       case SelfHostLoginScreen.routeName:
         return PlatformAware.customPageRoute(const SelfHostLoginScreen());
 

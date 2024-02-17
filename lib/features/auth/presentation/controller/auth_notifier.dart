@@ -18,9 +18,9 @@ final authStateNotifier =
     AsyncNotifierProvider<AuthNotifier, AuthState>(AuthNotifier.new);
 
 class AuthNotifier extends AsyncNotifier<AuthState> {
-  void goToAnonAddyLogin() {
+  void goToAddyLogin() {
     state = AsyncData(state.value!.copyWith(
-      authorizationStatus: AuthorizationStatus.anonAddyLogin,
+      authorizationStatus: AuthorizationStatus.addyLogin,
     ));
   }
 
@@ -156,7 +156,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     }
 
     return AuthState(
-      authorizationStatus: AuthorizationStatus.anonAddyLogin,
+      authorizationStatus: AuthorizationStatus.addyLogin,
       authenticationStatus: authStatus,
       loginLoading: false,
     );
