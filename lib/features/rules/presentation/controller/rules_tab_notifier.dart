@@ -1,59 +1,38 @@
+import 'dart:async';
+
 import 'package:anonaddy/features/rules/data/rules_service.dart';
 import 'package:anonaddy/features/rules/domain/rules.dart';
-import 'package:anonaddy/features/rules/presentation/controller/rules_tab_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final rulesTabStateNotifier =
-    StateNotifierProvider.autoDispose<RulesTabNotifier, RulesTabState>((ref) {
-  return RulesTabNotifier(rulesService: ref.read(rulesService));
-});
+final rulesTabNotifierProvider =
+    AsyncNotifierProvider<RulesTabNotifier, List<Rules>>(RulesTabNotifier.new);
 
-class RulesTabNotifier extends StateNotifier<RulesTabState> {
-  RulesTabNotifier({required this.rulesService})
-      : super(RulesTabState.initialState());
-
-  final RulesService rulesService;
-
-  /// Updates UI state
-  void _updateState(RulesTabState newState) {
-    /// Make sure Widget exists and NOT disposed of.
-    if (mounted) state = newState;
-  }
-
+class RulesTabNotifier extends AsyncNotifier<List<Rules>> {
   /// Fetch all [Rules]s associated with user's account
   Future<void> fetchRules() async {
     try {
-      final rules = await rulesService.fetchAllRules();
+      final rules = await ref.read(rulesService).fetchRules();
 
-      /// Construct new UI state
-      final newState =
-          state.copyWith(status: RulesTabStatus.loaded, rules: rules);
-      _updateState(newState);
+      state = AsyncData(rules);
     } catch (error) {
-      _updateState(state.copyWith(
-        status: RulesTabStatus.failed,
-        errorMessage: error.toString(),
-      ));
+      state = AsyncError(error.toString(), StackTrace.empty);
       await _retryOnError();
     }
   }
 
   Future _retryOnError() async {
-    if (state.status.isFailed()) {
+    if (state is AsyncError) {
       await Future.delayed(const Duration(seconds: 5));
       await fetchRules();
     }
   }
 
-  Future<void> loadOfflineState() async {
-    try {
-      final rules = await rulesService.loadRulesFromDisk();
-      _updateState(state.copyWith(
-        status: RulesTabStatus.loaded,
-        rules: rules,
-      ));
-    } catch (error) {
-      return;
-    }
+  @override
+  FutureOr<List<Rules>> build() async {
+    final service = ref.read(rulesService);
+
+    final rules = await service.loadRulesFromDisk();
+    if (rules == null) return await service.fetchRules();
+    return rules;
   }
 }

@@ -22,7 +22,7 @@ class RulesService {
   final Dio dio;
   final RulesDataStorage dataStorage;
 
-  Future<List<Rules>> fetchAllRules() async {
+  Future<List<Rules>> fetchRules() async {
     try {
       const path = '$kUnEncodedBaseURL/rules';
       final response = await dio.get(path);
@@ -34,7 +34,7 @@ class RulesService {
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.other) {
         final rules = await dataStorage.loadData();
-        return rules;
+        if (rules != null) return rules;
       }
       throw dioError.message;
     } catch (e) {
@@ -42,7 +42,7 @@ class RulesService {
     }
   }
 
-  Future<List<Rules>> loadRulesFromDisk() async {
+  Future<List<Rules>?> loadRulesFromDisk() async {
     try {
       return await dataStorage.loadData();
     } catch (error) {

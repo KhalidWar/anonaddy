@@ -29,10 +29,11 @@ class RulesDataStorage extends DataStorage {
   }
 
   @override
-  Future<List<Rules>> loadData() async {
+  Future<List<Rules>?> loadData() async {
     try {
       final data = await secureStorage.read(key: DataStorageKeys.rulesKey);
-      final decodedData = jsonDecode(data ?? '');
+      if (data == null) return null;
+      final decodedData = jsonDecode(data);
       final rules = (decodedData['data'] as List)
           .map((rule) => Rules.fromJson(rule))
           .toList();
@@ -45,7 +46,7 @@ class RulesDataStorage extends DataStorage {
   Future<Rules> loadSpecificRule(String id) async {
     try {
       final rules = await loadData();
-      final rule = rules.firstWhere((element) => element.id == id);
+      final rule = rules!.firstWhere((element) => element.id == id);
       return rule;
     } catch (error) {
       rethrow;

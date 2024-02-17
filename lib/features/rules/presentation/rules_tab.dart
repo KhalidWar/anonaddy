@@ -1,5 +1,4 @@
 import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
-import 'package:anonaddy/features/rules/presentation/controller/rules_tab_state.dart';
 import 'package:anonaddy/features/rules/presentation/rules_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
@@ -20,22 +19,16 @@ class _RulesTabState extends ConsumerState<RulesTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(rulesTabStateNotifier.notifier).loadOfflineState();
-      ref.read(rulesTabStateNotifier.notifier).fetchRules();
+      ref.read(rulesTabNotifierProvider.notifier).fetchRules();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final rulesState = ref.watch(rulesTabStateNotifier);
+    final rulesState = ref.watch(rulesTabNotifierProvider);
 
-    switch (rulesState.status) {
-      case RulesTabStatus.loading:
-        return const RecipientsShimmerLoading();
-
-      case RulesTabStatus.loaded:
-        final rules = rulesState.rules;
-
+    return rulesState.when(
+      data: (rules) {
         return rules.isEmpty
             ? Center(
                 child: Text(
@@ -54,9 +47,13 @@ class _RulesTabState extends ConsumerState<RulesTab> {
                   );
                 },
               );
-
-      case RulesTabStatus.failed:
-        return ErrorMessageWidget(message: rulesState.errorMessage);
-    }
+      },
+      error: (error, stack) {
+        return ErrorMessageWidget(message: error.toString());
+      },
+      loading: () {
+        return const RecipientsShimmerLoading();
+      },
+    );
   }
 }
