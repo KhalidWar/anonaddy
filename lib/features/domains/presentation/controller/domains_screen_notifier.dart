@@ -10,24 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final domainsScreenStateNotifier = AsyncNotifierProvider.family
     .autoDispose<DomainsScreenNotifier, DomainsScreenState, String>(
         DomainsScreenNotifier.new);
-// (ref) {
-//   return DomainsScreenNotifier(
-//     domainService: ref.read(domainService),
-//   );
-// });
 
 class DomainsScreenNotifier
     extends AutoDisposeFamilyAsyncNotifier<DomainsScreenState, String> {
-  // DomainsScreenNotifier({required this.domainService})
-  //     : super(DomainsScreenState.initialState());
-
-  // final DomainsService domainService;
-
-  /// Updates DomainScreen state
-  // void _updateState(DomainsScreenState newState) {
-  //   if (mounted) state = newState;
-  // }
-
   Future<void> fetchDomain(Domain domain) async {
     try {
       state = const AsyncLoading();
@@ -65,11 +50,7 @@ class DomainsScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncError(
-        error.toString(),
-        StackTrace.empty,
-        // state.value!.copyWith(activeSwitchLoading: false)
-      );
+      state = AsyncData(state.value!.copyWith(activeSwitchLoading: false));
     }
   }
 
@@ -86,8 +67,7 @@ class DomainsScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncError(error.toString(), StackTrace.empty);
-      // state.copyWith(activeSwitchLoading: false)
+      state = AsyncData(state.value!.copyWith(activeSwitchLoading: false));
     }
   }
 
@@ -107,8 +87,7 @@ class DomainsScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      // _updateState(state.copyWith(catchAllSwitchLoading: false));
-      state = AsyncError(error.toString(), StackTrace.empty);
+      state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: false));
     }
   }
 
@@ -126,8 +105,7 @@ class DomainsScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      // _updateState(state.copyWith(catchAllSwitchLoading: false));
-      state = AsyncError(error.toString(), StackTrace.empty);
+      state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: false));
     }
   }
 
@@ -151,8 +129,7 @@ class DomainsScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      // _updateState(state.copyWith(updateRecipientLoading: false));
-      state = AsyncError(error.toString(), StackTrace.empty);
+      state = AsyncData(state.value!.copyWith(updateRecipientLoading: false));
     }
   }
 
