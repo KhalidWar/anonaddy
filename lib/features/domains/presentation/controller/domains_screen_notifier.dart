@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:anonaddy/features/domains/data/domains_service.dart';
 import 'package:anonaddy/features/domains/domain/domain_model.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_state.dart';
@@ -5,47 +7,46 @@ import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final domainsScreenStateNotifier = StateNotifierProvider.autoDispose<
-    DomainsScreenNotifier, DomainsScreenState>((ref) {
-  return DomainsScreenNotifier(
-    domainService: ref.read(domainService),
-  );
-});
+final domainsScreenStateNotifier = AsyncNotifierProvider.family
+    .autoDispose<DomainsScreenNotifier, DomainsScreenState, String>(
+        DomainsScreenNotifier.new);
+// (ref) {
+//   return DomainsScreenNotifier(
+//     domainService: ref.read(domainService),
+//   );
+// });
 
-class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
-  DomainsScreenNotifier({required this.domainService})
-      : super(DomainsScreenState.initialState());
+class DomainsScreenNotifier
+    extends AutoDisposeFamilyAsyncNotifier<DomainsScreenState, String> {
+  // DomainsScreenNotifier({required this.domainService})
+  //     : super(DomainsScreenState.initialState());
 
-  final DomainsService domainService;
+  // final DomainsService domainService;
 
   /// Updates DomainScreen state
-  void _updateState(DomainsScreenState newState) {
-    if (mounted) state = newState;
-  }
+  // void _updateState(DomainsScreenState newState) {
+  //   if (mounted) state = newState;
+  // }
 
   Future<void> fetchDomain(Domain domain) async {
     try {
-      _updateState(state.copyWith(status: DomainsScreenStatus.loading));
-      final updatedDomain = await domainService.fetchSpecificDomain(domain.id);
+      state = const AsyncLoading();
+      final updatedDomain =
+          await ref.read(domainService).fetchSpecificDomain(domain.id);
 
-      _updateState(state.copyWith(
-        status: DomainsScreenStatus.loaded,
-        domain: updatedDomain,
-      ));
+      state = AsyncData(state.value!.copyWith(domain: updatedDomain));
     } catch (error) {
-      _updateState(state.copyWith(
-        status: DomainsScreenStatus.failed,
-        errorMessage: error.toString(),
-      ));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future editDescription(String domainId, newDescription) async {
     try {
-      final updatedDomain =
-          await domainService.updateDomainDescription(domainId, newDescription);
+      final updatedDomain = await ref
+          .read(domainService)
+          .updateDomainDescription(domainId, newDescription);
       Utilities.showToast(ToastMessage.editDescriptionSuccess);
-      _updateState(state.copyWith(domain: updatedDomain));
+      state = AsyncData(state.value!.copyWith(domain: updatedDomain));
     } catch (error) {
       Utilities.showToast(error.toString());
     }
@@ -53,99 +54,128 @@ class DomainsScreenNotifier extends StateNotifier<DomainsScreenState> {
 
   Future<void> activateDomain(String domainId) async {
     try {
-      _updateState(state.copyWith(activeSwitchLoading: true));
-      final newDomain = await domainService.activateDomain(domainId);
-      final updatedDomain = state.domain.copyWith(active: newDomain.active);
+      state = AsyncData(state.value!.copyWith(activeSwitchLoading: true));
+      final newDomain = await ref.read(domainService).activateDomain(domainId);
+      final updatedDomain =
+          state.value!.domain.copyWith(active: newDomain.active);
 
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         activeSwitchLoading: false,
         domain: updatedDomain,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(activeSwitchLoading: false));
+      state = AsyncError(
+        error.toString(),
+        StackTrace.empty,
+        // state.value!.copyWith(activeSwitchLoading: false)
+      );
     }
   }
 
   Future<void> deactivateDomain(String domainId) async {
-    _updateState(state.copyWith(activeSwitchLoading: true));
+    state = AsyncData(state.value!.copyWith(activeSwitchLoading: true));
     try {
-      await domainService.deactivateDomain(domainId);
+      await ref.read(domainService).deactivateDomain(domainId);
 
-      final updatedDomain = state.domain.copyWith(active: false);
+      final updatedDomain = state.value!.domain.copyWith(active: false);
 
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         activeSwitchLoading: false,
         domain: updatedDomain,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(activeSwitchLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
+      // state.copyWith(activeSwitchLoading: false)
     }
   }
 
   Future<void> activateCatchAll(String domainId) async {
-    _updateState(state.copyWith(catchAllSwitchLoading: true));
+    state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: true));
+
     try {
-      final newDomain = await domainService.activateCatchAll(domainId);
+      final newDomain =
+          await ref.read(domainService).activateCatchAll(domainId);
 
-      final updatedDomain = state.domain.copyWith(catchAll: newDomain.catchAll);
+      final updatedDomain =
+          state.value!.domain.copyWith(catchAll: newDomain.catchAll);
 
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         catchAllSwitchLoading: false,
         domain: updatedDomain,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(catchAllSwitchLoading: false));
+      // _updateState(state.copyWith(catchAllSwitchLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future<void> deactivateCatchAll(String domainId) async {
-    _updateState(state.copyWith(catchAllSwitchLoading: true));
+    state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: true));
+
     try {
-      await domainService.deactivateCatchAll(domainId);
+      await ref.read(domainService).deactivateCatchAll(domainId);
 
-      final updatedDomain = state.domain.copyWith(catchAll: false);
+      final updatedDomain = state.value!.domain.copyWith(catchAll: false);
 
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         catchAllSwitchLoading: false,
         domain: updatedDomain,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(catchAllSwitchLoading: false));
+      // _updateState(state.copyWith(catchAllSwitchLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future<void> updateDomainDefaultRecipients(
       String domainId, String recipientId) async {
     try {
-      _updateState(state.copyWith(updateRecipientLoading: true));
-      final newDomain = await domainService.updateDomainDefaultRecipient(
-          domainId, recipientId);
+      state = AsyncData(state.value!.copyWith(updateRecipientLoading: true));
+
+      final newDomain = await ref
+          .read(domainService)
+          .updateDomainDefaultRecipient(domainId, recipientId);
 
       Utilities.showToast('Default recipient updated successfully!');
 
-      final updatedDomain =
-          state.domain.copyWith(defaultRecipient: newDomain.defaultRecipient);
+      final updatedDomain = state.value!.domain
+          .copyWith(defaultRecipient: newDomain.defaultRecipient);
 
-      _updateState(state.copyWith(
+      state = AsyncData(state.value!.copyWith(
         updateRecipientLoading: false,
         domain: updatedDomain,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      _updateState(state.copyWith(updateRecipientLoading: false));
+      // _updateState(state.copyWith(updateRecipientLoading: false));
+      state = AsyncError(error.toString(), StackTrace.empty);
     }
   }
 
   Future<void> deleteDomain(String domainId) async {
     try {
-      await domainService.deleteDomain(domainId);
+      await ref.read(domainService).deleteDomain(domainId);
       Utilities.showToast('Domain deleted successfully!');
     } catch (error) {
       Utilities.showToast(error.toString());
     }
+  }
+
+  @override
+  FutureOr<DomainsScreenState> build(String arg) async {
+    final aliasService = ref.read(domainService);
+
+    final domain = await aliasService.fetchSpecificDomain(arg);
+
+    return DomainsScreenState(
+      domain: domain,
+      activeSwitchLoading: false,
+      catchAllSwitchLoading: false,
+      updateRecipientLoading: false,
+    );
   }
 }

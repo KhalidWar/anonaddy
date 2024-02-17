@@ -91,7 +91,7 @@ class _DomainDefaultRecipientState
 
   Future<void> updateDefaultRecipient() async {
     await ref
-        .read(domainsScreenStateNotifier.notifier)
+        .read(domainsScreenStateNotifier(widget.domain.id).notifier)
         .updateDomainDefaultRecipients(
           widget.domain.id,
           selectedRecipient == null ? '' : selectedRecipient!.id,
@@ -138,7 +138,9 @@ class _DomainDefaultRecipientState
                           Consumer(
                             builder: (_, watch, __) {
                               final isLoading = ref
-                                  .watch(domainsScreenStateNotifier)
+                                  .watch(domainsScreenStateNotifier(
+                                      widget.domain.id))
+                                  .value!
                                   .updateRecipientLoading;
                               return isLoading
                                   ? const LinearProgressIndicator(

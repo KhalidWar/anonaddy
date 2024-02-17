@@ -20,7 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DomainsScreen extends ConsumerStatefulWidget {
-  const DomainsScreen({Key? key, required this.domain}) : super(key: key);
+  const DomainsScreen({
+    Key? key,
+    required this.domain,
+  }) : super(key: key);
+
   final Domain domain;
 
   static const routeName = 'domainDetailedScreen';
@@ -33,40 +37,43 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
   @override
   void initState() {
     super.initState();
-    ref.read(domainsScreenStateNotifier.notifier).fetchDomain(widget.domain);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref
+          .read(domainsScreenStateNotifier(widget.domain.id).notifier)
+          .fetchDomain(widget.domain);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final domainsAsync =
+        ref.watch(domainsScreenStateNotifier(widget.domain.id));
+
     return Scaffold(
       appBar: buildAppBar(context),
-      body: Consumer(
-        builder: (context, watch, _) {
-          final domainProvider = ref.watch(domainsScreenStateNotifier);
-
-          switch (domainProvider.status!) {
-            case DomainsScreenStatus.loading:
-              return const Center(child: PlatformLoadingIndicator());
-
-            case DomainsScreenStatus.loaded:
-              return buildListView(context, domainProvider);
-
-            case DomainsScreenStatus.failed:
-              return ErrorMessageWidget(
-                message: domainProvider.errorMessage,
-              );
-          }
+      body: domainsAsync.when(
+        data: (domainsState) {
+          return buildListView(context, domainsState);
+        },
+        error: (error, stack) {
+          return ErrorMessageWidget(message: error.toString());
+        },
+        loading: () {
+          return const Center(child: PlatformLoadingIndicator());
         },
       ),
     );
   }
 
   ListView buildListView(
-      BuildContext context, DomainsScreenState domainProvider) {
+    BuildContext context,
+    DomainsScreenState domainProvider,
+  ) {
     final size = MediaQuery.of(context).size;
 
     final domain = domainProvider.domain;
-    final domainNotifier = ref.read(domainsScreenStateNotifier.notifier);
+    final domainNotifier =
+        ref.read(domainsScreenStateNotifier(widget.domain.id).notifier);
 
     return ListView(
       physics: const ClampingScrollPhysics(),
@@ -249,12 +256,12 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           description: domain.description,
           updateDescription: (description) async {
             await ref
-                .read(domainsScreenStateNotifier.notifier)
+                .read(domainsScreenStateNotifier(widget.domain.id).notifier)
                 .editDescription(domain.id, description);
           },
           removeDescription: () async {
             await ref
-                .read(domainsScreenStateNotifier.notifier)
+                .read(domainsScreenStateNotifier(widget.domain.id).notifier)
                 .editDescription(domain.id, '');
           },
         );
@@ -286,7 +293,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           content: AnonAddyString.deleteDomainConfirmation,
           method: () async {
             await ref
-                .read(domainsScreenStateNotifier.notifier)
+                .read(domainsScreenStateNotifier(widget.domain.id).notifier)
                 .deleteDomain(widget.domain.id);
             if (mounted) {
               Navigator.pop(context);
