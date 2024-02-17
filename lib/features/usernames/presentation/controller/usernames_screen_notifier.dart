@@ -69,7 +69,7 @@ class UsernamesScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncError(error.toString(), StackTrace.empty);
+      state = AsyncData(state.value!.copyWith(updateRecipientLoading: false));
     }
   }
 
@@ -85,7 +85,7 @@ class UsernamesScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncError(error.toString(), StackTrace.empty);
+      state = AsyncData(state.value!.copyWith(activeSwitchLoading: false));
     }
   }
 
@@ -100,7 +100,7 @@ class UsernamesScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncError(error.toString(), StackTrace.empty);
+      state = AsyncData(state.value!.copyWith(activeSwitchLoading: false));
     }
   }
 
@@ -116,7 +116,7 @@ class UsernamesScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncError(error.toString(), StackTrace.empty);
+      state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: false));
     }
   }
 
@@ -131,7 +131,7 @@ class UsernamesScreenNotifier
       ));
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncError(error.toString(), StackTrace.empty);
+      state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: false));
     }
   }
 
