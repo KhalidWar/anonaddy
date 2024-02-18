@@ -6,7 +6,6 @@ import 'package:anonaddy/features/recipients/presentation/components/recipient_s
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_trailing_loading_switch.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
-import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_state.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
@@ -22,7 +21,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RecipientsScreen extends ConsumerStatefulWidget {
-  const RecipientsScreen({Key? key, required this.recipient}) : super(key: key);
+  const RecipientsScreen({
+    Key? key,
+    required this.recipient,
+  }) : super(key: key);
   final Recipient recipient;
 
   static const routeName = 'recipientDetailedScreen';
@@ -74,7 +76,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
-          .read(recipientScreenStateNotifier.notifier)
+          .read(recipientScreenNotifierProvider(widget.recipient.id).notifier)
           .fetchSpecificRecipient(widget.recipient);
     });
   }
@@ -96,7 +98,8 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               content: AddyString.deleteRecipientConfirmation,
               method: () async {
                 await ref
-                    .read(recipientScreenStateNotifier.notifier)
+                    .read(recipientScreenNotifierProvider(widget.recipient.id)
+                        .notifier)
                     .removeRecipient();
 
                 /// Dismisses this dialog
@@ -110,33 +113,19 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
         },
       ),
       body: Consumer(
-        builder: (context, watch, _) {
-          final recipientScreenState = ref.watch(recipientScreenStateNotifier);
+        builder: (context, ref, _) {
+          final recipientScreenAsync =
+              ref.watch(recipientScreenNotifierProvider(widget.recipient.id));
 
-          switch (recipientScreenState.status) {
-            case RecipientScreenStatus.loading:
-              return ListView(
-                physics: const ClampingScrollPhysics(),
-                children: const [
-                  AliasScreenPieChart(
-                    emailsForwarded: 0,
-                    emailsBlocked: 0,
-                    emailsReplied: 0,
-                    emailsSent: 0,
-                  ),
-                  Divider(height: 20),
-                  Center(child: PlatformLoadingIndicator())
-                ],
-              );
-
-            case RecipientScreenStatus.loaded:
+          return recipientScreenAsync.when(
+            data: (recipientScreenState) {
               final recipient = recipientScreenState.recipient;
 
               return ListView(
                 physics: const ClampingScrollPhysics(),
                 children: [
                   if (recipientScreenState.isOffline) const OfflineBanner(),
-                  const RecipientScreenUnverifiedWarning(),
+                  RecipientScreenUnverifiedWarning(recipientId: recipient.id),
                   AliasScreenPieChart(
                     emailsForwarded: Utilities.reduceListElements(
                       calculateEmailsForwarded(recipient),
@@ -177,10 +166,14 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       onPress: (toggle) async {
                         recipient.canReplySend
                             ? await ref
-                                .read(recipientScreenStateNotifier.notifier)
+                                .read(recipientScreenNotifierProvider(
+                                        widget.recipient.id)
+                                    .notifier)
                                 .disableReplyAndSend()
                             : await ref
-                                .read(recipientScreenStateNotifier.notifier)
+                                .read(recipientScreenNotifierProvider(
+                                        widget.recipient.id)
+                                    .notifier)
                                 .enableReplyAndSend();
                       },
                     ),
@@ -230,7 +223,8 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                                       .removeRecipientPublicKeyConfirmation,
                                   method: () async {
                                     await ref
-                                        .read(recipientScreenStateNotifier
+                                        .read(recipientScreenNotifierProvider(
+                                                widget.recipient.id)
                                             .notifier)
                                         .removePublicGPGKey();
 
@@ -258,12 +252,14 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                           : (toggle) async {
                               recipient.shouldEncrypt
                                   ? await ref
-                                      .read(
-                                          recipientScreenStateNotifier.notifier)
+                                      .read(recipientScreenNotifierProvider(
+                                              widget.recipient.id)
+                                          .notifier)
                                       .disableEncryption()
                                   : await ref
-                                      .read(
-                                          recipientScreenStateNotifier.notifier)
+                                      .read(recipientScreenNotifierProvider(
+                                              widget.recipient.id)
+                                          .notifier)
                                       .enableEncryption();
                             },
                     ),
@@ -286,12 +282,14 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                           : (toggle) async {
                               recipient.inlineEncryption
                                   ? await ref
-                                      .read(
-                                          recipientScreenStateNotifier.notifier)
+                                      .read(recipientScreenNotifierProvider(
+                                              widget.recipient.id)
+                                          .notifier)
                                       .disableInlineEncryption()
                                   : await ref
-                                      .read(
-                                          recipientScreenStateNotifier.notifier)
+                                      .read(recipientScreenNotifierProvider(
+                                              widget.recipient.id)
+                                          .notifier)
                                       .enableInlineEncryption();
                             },
                     ),
@@ -312,17 +310,19 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                           : (toggle) async {
                               recipient.protectedHeaders
                                   ? await ref
-                                      .read(
-                                          recipientScreenStateNotifier.notifier)
+                                      .read(recipientScreenNotifierProvider(
+                                              widget.recipient.id)
+                                          .notifier)
                                       .disableProtectedHeader()
                                   : await ref
-                                      .read(
-                                          recipientScreenStateNotifier.notifier)
+                                      .read(recipientScreenNotifierProvider(
+                                              widget.recipient.id)
+                                          .notifier)
                                       .enableProtectedHeader();
                             },
                     ),
                   ),
-                  const RecipientScreenAliases(),
+                  RecipientScreenAliases(recipientId: widget.recipient.id),
                   const Divider(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -340,12 +340,26 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   const SizedBox(height: 30),
                 ],
               );
-
-            case RecipientScreenStatus.failed:
-              return ErrorMessageWidget(
-                message: recipientScreenState.errorMessage,
+            },
+            error: (error, stack) {
+              return ErrorMessageWidget(message: error.toString());
+            },
+            loading: () {
+              return ListView(
+                physics: const ClampingScrollPhysics(),
+                children: const [
+                  AliasScreenPieChart(
+                    emailsForwarded: 0,
+                    emailsBlocked: 0,
+                    emailsReplied: 0,
+                    emailsSent: 0,
+                  ),
+                  Divider(height: 20),
+                  Center(child: PlatformLoadingIndicator())
+                ],
               );
-          }
+            },
+          );
         },
       ),
     );

@@ -26,7 +26,7 @@ class _RecipientAddPgpKeyState extends ConsumerState<RecipientAddPgpKey> {
   Future<void> addPublicKey() async {
     if (formKey.currentState!.validate()) {
       await ref
-          .read(recipientScreenStateNotifier.notifier)
+          .read(recipientScreenNotifierProvider(widget.recipient.id).notifier)
           .addPublicGPGKey(keyData);
       if (mounted) Navigator.pop(context);
     }

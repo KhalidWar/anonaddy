@@ -24,7 +24,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
     final accountState = ref.read(accountNotifierProvider).value!;
 
     /// Draws UI for adding new recipient
-    Future buildAddNewRecipient(BuildContext context) {
+    Future buildAddNewRecipient() {
       return showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -38,11 +38,11 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
     }
 
     if (accountState.isSelfHosted) {
-      buildAddNewRecipient(context);
+      buildAddNewRecipient();
     } else {
       accountState.hasRecipientsReachedLimit
           ? Utilities.showToast(AddyString.reachedRecipientLimit)
-          : buildAddNewRecipient(context);
+          : buildAddNewRecipient();
     }
   }
 
