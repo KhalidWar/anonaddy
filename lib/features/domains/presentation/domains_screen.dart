@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/domains/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_notifier.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_state.dart';
 import 'package:anonaddy/features/domains/presentation/domain_default_recipient.dart';

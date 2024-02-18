@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:anonaddy/features/domains/data/domains_service.dart';
-import 'package:anonaddy/features/domains/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_state.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/utilities.dart';

@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/domains/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';

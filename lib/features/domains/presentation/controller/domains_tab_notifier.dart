@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:anonaddy/features/domains/data/domains_service.dart';
-import 'package:anonaddy/features/domains/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsNotifierProvider =

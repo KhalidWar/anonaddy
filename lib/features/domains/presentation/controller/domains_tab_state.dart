@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/domains/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain.dart';
 
 enum DomainsTabStatus { loading, loaded, failed }
 

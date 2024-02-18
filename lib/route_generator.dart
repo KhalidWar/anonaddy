@@ -4,7 +4,7 @@ import 'package:anonaddy/features/auth/presentation/anonaddy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
 import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
-import 'package:anonaddy/features/domains/domain/domain_model.dart';
+import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
 import 'package:anonaddy/features/home/presentation/home_screen.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';

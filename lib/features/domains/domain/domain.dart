@@ -2,7 +2,7 @@ import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'domain_model.g.dart';
+part 'domain.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Domain {
