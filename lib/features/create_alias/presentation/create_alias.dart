@@ -59,6 +59,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
           WoltModalSheet.show(
             context: context,
             pageIndexNotifier: pageIndexNotifier,
+            // modalBarrierColor: Colors.red,
             pageListBuilder: (modalSheetContext) {
               return [
                 buildNewCreateAliasModal(modalSheetContext),
@@ -81,7 +82,11 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildNewCreateAliasModal(BuildContext modalSheetContext) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return WoltModalSheetPage.withSingleChild(
+      backgroundColor: isDark ? Colors.black : Colors.white,
+      sabGradientColor: isDark ? Colors.black : Colors.white,
       topBarTitle: Text(
         'Create New Alias',
         style: Theme.of(context).textTheme.titleMedium,
@@ -91,6 +96,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
       stickyActionBar: Container(
         padding: const EdgeInsets.all(16),
         width: double.infinity,
+        // color: isDark ? Colors.black : Colors.white,
         child: Consumer(
           builder: (context, ref, _) {
             final createAliasNotifier = ref.watch(createAliasNotifierProvider);
@@ -416,11 +422,15 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
     Function()? onLeadingNavBarPressed,
     String? pageTitle,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return WoltModalSheetPage.withSingleChild(
       topBarTitle: Text(
         title,
         style: Theme.of(context).textTheme.titleMedium,
       ),
+      backgroundColor: isDark ? Colors.black : Colors.white,
+      sabGradientColor: isDark ? Colors.black : Colors.white,
       isTopBarLayerAlwaysVisible: true,
       pageTitle: pageTitle == null
           ? null
