@@ -6,10 +6,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final quickSearchNotifierProvider =
-    AsyncNotifierProvider<QuickSearchNotifier, List<Alias>?>(
+    AsyncNotifierProvider.autoDispose<QuickSearchNotifier, List<Alias>?>(
         QuickSearchNotifier.new);
 
-class QuickSearchNotifier extends AsyncNotifier<List<Alias>?> {
+class QuickSearchNotifier extends AutoDisposeAsyncNotifier<List<Alias>?> {
   CancelToken cancelToken = CancelToken();
 
   Timer? timer;
