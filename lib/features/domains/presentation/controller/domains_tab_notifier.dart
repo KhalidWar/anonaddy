@@ -9,8 +9,9 @@ final domainsNotifierProvider =
         DomainsTabNotifier.new);
 
 class DomainsTabNotifier extends AsyncNotifier<List<Domain>> {
-  Future<void> fetchDomains() async {
+  Future<void> fetchDomains({bool showLoading = false}) async {
     try {
+      if (showLoading) state = const AsyncLoading();
       final domains = await ref.read(domainService).fetchDomains();
       state = AsyncData(domains);
     } catch (error) {

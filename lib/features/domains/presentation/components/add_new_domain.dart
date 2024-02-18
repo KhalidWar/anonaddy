@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
+import 'package:anonaddy/features/domains/presentation/controller/add_domain_notifier.dart';
 import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
@@ -55,28 +55,33 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
-                Consumer(
-                  builder: (context, watch, _) {
-                    final recipientState =
-                        ref.watch(recipientScreenStateNotifier);
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom().copyWith(
-                        minimumSize: MaterialStateProperty.all(
-                          const Size(200, 50),
-                        ),
-                      ),
-                      child: recipientState.isAddRecipientLoading
-                          ? const PlatformLoadingIndicator()
-                          : const Text('Add Recipient'),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          await ref
-                              .read(recipientScreenStateNotifier.notifier)
-                              .addRecipient(_textEditController.text.trim());
-                          if (mounted) Navigator.pop(context);
-                        }
-                      },
-                    );
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom().copyWith(
+                    minimumSize: MaterialStateProperty.all(
+                      const Size(200, 50),
+                    ),
+                  ),
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final addDomainAsync =
+                          ref.watch(addDomainNotifierProvider);
+
+                      return addDomainAsync.when(
+                        data: (data) {
+                          return const Text('Add Domain');
+                        },
+                        error: (err, stack) => const PlatformLoadingIndicator(),
+                        loading: () => const SizedBox.shrink(),
+                      );
+                    },
+                  ),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      await ref
+                          .read(addDomainNotifierProvider.notifier)
+                          .addDomain(_textEditController.text.trim());
+                      if (mounted) Navigator.pop(context);
+                    }
                   },
                 ),
               ],
