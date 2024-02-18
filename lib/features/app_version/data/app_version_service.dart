@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:anonaddy/features/app_version/domain/app_version_model.dart';
+import 'package:anonaddy/features/app_version/domain/app_version.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';

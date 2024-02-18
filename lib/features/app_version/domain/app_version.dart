@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'app_version_model.g.dart';
+part 'app_version.g.dart';
 
 @JsonSerializable()
 class AppVersion {
