@@ -35,25 +35,5 @@ void main() {
       expect(account.createdAt, isNotEmpty);
       expect(account.totalEmailsSent, isA<int>());
     });
-
-    test('copyWith()', () {
-      final account = AccountTestData.validAccount();
-
-      final updatedAccount = account.copyWith(
-        id: 'newId',
-        username: 'FlutterTest',
-        subscription: 'Pro',
-        totalEmailsSent: 99,
-      );
-
-      expect(account.id, 'id');
-      expect(updatedAccount.id, 'newId');
-      expect(account.username, 'khalidwar');
-      expect(updatedAccount.username, 'FlutterTest');
-      expect(account.subscription, '');
-      expect(updatedAccount.subscription, 'Pro');
-      expect(account.totalEmailsSent, 0);
-      expect(updatedAccount.totalEmailsSent, 99);
-    });
   });
 }

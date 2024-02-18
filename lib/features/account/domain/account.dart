@@ -112,64 +112,6 @@ class Account {
 
   Map<String, dynamic> toJson() => _$AccountToJson(this);
 
-  Account copyWith({
-    String? id,
-    String? username,
-    String? fromName,
-    String? emailSubject,
-    String? bannerLocation,
-    int? bandwidth,
-    int? bandwidthLimit,
-    int? usernameCount,
-    int? usernameLimit,
-    String? defaultRecipientId,
-    String? defaultAliasDomain,
-    String? defaultAliasFormat,
-    String? subscription,
-    String? subscriptionEndAt,
-    int? recipientCount,
-    int? recipientLimit,
-    int? activeDomainCount,
-    int? activeDomainLimit,
-    int? aliasCount,
-    int? aliasLimit,
-    int? totalEmailsForwarded,
-    int? totalEmailsBlocked,
-    int? totalEmailsReplied,
-    int? totalEmailsSent,
-    String? createdAt,
-    String? lastUpdated,
-  }) {
-    return Account(
-      id: id ?? this.id,
-      username: username ?? this.username,
-      fromName: fromName ?? this.fromName,
-      emailSubject: emailSubject ?? this.emailSubject,
-      bannerLocation: bannerLocation ?? this.bannerLocation,
-      bandwidth: bandwidth ?? this.bandwidth,
-      bandwidthLimit: bandwidthLimit ?? this.bandwidthLimit,
-      usernameCount: usernameCount ?? this.usernameCount,
-      usernameLimit: usernameLimit ?? this.usernameLimit,
-      defaultRecipientId: defaultRecipientId ?? this.defaultRecipientId,
-      defaultAliasDomain: defaultAliasDomain ?? this.defaultAliasDomain,
-      defaultAliasFormat: defaultAliasFormat ?? this.defaultAliasFormat,
-      subscription: subscription ?? this.subscription,
-      subscriptionEndAt: subscriptionEndAt ?? this.subscriptionEndAt,
-      recipientCount: recipientCount ?? this.recipientCount,
-      recipientLimit: recipientLimit ?? this.recipientLimit,
-      activeDomainCount: activeDomainCount ?? this.activeDomainCount,
-      activeDomainLimit: activeDomainLimit ?? this.activeDomainLimit,
-      aliasCount: aliasCount ?? this.aliasCount,
-      aliasLimit: aliasLimit ?? this.aliasLimit,
-      totalEmailsForwarded: totalEmailsForwarded ?? this.totalEmailsForwarded,
-      totalEmailsBlocked: totalEmailsBlocked ?? this.totalEmailsBlocked,
-      totalEmailsReplied: totalEmailsReplied ?? this.totalEmailsReplied,
-      totalEmailsSent: totalEmailsSent ?? this.totalEmailsSent,
-      createdAt: createdAt ?? this.createdAt,
-      lastUpdated: lastUpdated ?? this.lastUpdated,
-    );
-  }
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
