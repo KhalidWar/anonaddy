@@ -28,9 +28,9 @@ class AccountService {
       const urlPath = '$kUnEncodedBaseURL/account-details';
       final response = await dio.get(urlPath);
       final accountData = response.data['data'];
-      accountDataStorage.saveData(accountData);
+      await accountDataStorage.saveData(accountData);
       final account = Account.fromJson(accountData);
-      log('getAccounts: ${response.statusCode}');
+      log('fetchAccount: ${response.statusCode}');
       return account;
     } on DioError catch (dioError) {
       if (dioError.type == DioErrorType.other) {
