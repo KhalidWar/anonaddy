@@ -2,6 +2,8 @@ import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../shared_components/constants/app_colors.dart';
+
 class LoginFooter extends StatelessWidget {
   const LoginFooter({Key? key, required this.onPress}) : super(key: key);
   final Function() onPress;
@@ -28,21 +30,25 @@ class LoginFooter extends StatelessWidget {
         onPressed: onPress,
         child: Consumer(
           builder: (context, ref, _) {
-            final authState = ref.watch(authStateNotifier);
-            return
-                // authState.loginLoading
-                //   ? const CircularProgressIndicator(
-                //       key: Key('loginFooterLoginButtonLoading'),
-                //       backgroundColor: AppColors.primaryColor,
-                //     )
-                //   :
-                Text(
-              'Log in',
-              key: const Key('loginFooterLoginButtonLabel'),
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5!
-                  .copyWith(color: Colors.black),
+            final authAsync = ref.watch(authStateNotifier);
+            return authAsync.when(
+              data: (authState) {
+                return authState.loginLoading
+                    ? const CircularProgressIndicator(
+                        key: Key('loginFooterLoginButtonLoading'),
+                        backgroundColor: AppColors.primaryColor,
+                      )
+                    : Text(
+                        'Log in',
+                        key: const Key('loginFooterLoginButtonLabel'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5!
+                            .copyWith(color: Colors.black),
+                      );
+              },
+              error: (err, stack) => const SizedBox.shrink(),
+              loading: () => const SizedBox.shrink(),
             );
           },
         ),
