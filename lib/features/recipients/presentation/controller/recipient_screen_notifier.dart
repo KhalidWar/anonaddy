@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/recipients/data/recipient_service.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_state.dart';
+import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/utilities/utilities.dart';
@@ -270,6 +272,14 @@ class RecipientScreenNotifier
         state.value!.copyWith(isProtectedHeaderSwitchLoading: false),
       );
     }
+  }
+
+  void _refreshRecipientAndAccountData() {
+    /// Refresh RecipientState after adding/removing a recipient.
+    ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
+
+    /// Refresh AccountState data after adding a recipient.
+    ref.read(accountNotifierProvider.notifier).fetchAccount();
   }
 
   @override
