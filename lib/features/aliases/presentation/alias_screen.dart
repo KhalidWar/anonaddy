@@ -128,7 +128,10 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 await ref
                     .read(aliasScreenNotifierProvider(widget.aliasId).notifier)
                     .forgetAlias()
-                    .then((_) => Navigator.pop(context));
+                    .then((_) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                });
               },
             ),
           );

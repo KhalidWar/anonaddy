@@ -142,6 +142,7 @@ class AliasScreenNotifier
     try {
       await ref.read(aliasServiceProvider).forgetAlias(state.value!.alias.id);
       Utilities.showToast(ToastMessage.forgetAliasSuccess);
+      await ref.read(aliasesNotifierProvider.notifier).fetchAliases();
     } catch (error) {
       Utilities.showToast(error.toString());
     }
