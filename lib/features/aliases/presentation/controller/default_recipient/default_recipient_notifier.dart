@@ -1,97 +1,77 @@
+import 'dart:async';
+
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
-import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_state.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_state.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final defaultRecipientStateNotifier = StateNotifierProvider.autoDispose<
-    DefaultRecipientNotifier, DefaultRecipientState>((ref) {
-  return DefaultRecipientNotifier(
-    recipients: ref.read(recipientsNotifierProvider).value!,
-    aliasState: ref.read(aliasScreenNotifierProvider('')).value!,
-  );
-});
+final defaultRecipientStateNotifier =
+    AsyncNotifierProvider<DefaultRecipientNotifier, DefaultRecipientState>(
+        DefaultRecipientNotifier.new);
 
-class DefaultRecipientNotifier extends StateNotifier<DefaultRecipientState> {
-  DefaultRecipientNotifier({
-    required this.recipients,
-    required this.aliasState,
-  }) : super(DefaultRecipientState.initial()) {
-    /// Extracts verified recipients.
-    _setVerifiedRecipients();
-
-    /// Highlights recipients currently set as alias's default recipients.
-    _setDefaultRecipients();
-  }
-
-  final List<Recipient> recipients;
-  final AliasScreenState aliasState;
-
-  /// Updates UI to the latest state
-  void _updateState(DefaultRecipientState newState) {
-    if (mounted) state = newState;
-  }
-
+class DefaultRecipientNotifier extends AsyncNotifier<DefaultRecipientState> {
   /// Toggles selected recipients
   void toggleRecipient(Recipient recipient) {
-    if (state.defaultRecipients!.contains(recipient)) {
-      state.defaultRecipients!
+    if (state.value!.defaultRecipients.contains(recipient)) {
+      state.value!.defaultRecipients
           .removeWhere((element) => element.email == recipient.email);
     } else {
-      state.defaultRecipients!.add(recipient);
+      state.value!.defaultRecipients.add(recipient);
     }
 
-    _updateState(state.copyWith());
-  }
-
-  /// Checks if recipient is [aliasState.aliasId]'s default recipients
-  bool isRecipientDefault(Recipient recipient) {
-    bool isDefault = false;
-    state.defaultRecipients!.forEach((aliasRecipient) {
-      if (aliasRecipient.email == recipient.email) {
-        isDefault = true;
-      }
-    });
-    return isDefault;
-  }
-
-  /// Extracts recipients IDs from [state.defaultRecipients]
-  List<String> getRecipientIds() {
-    final recipientIds = <String>[];
-    state.defaultRecipients!.forEach((recipient) {
-      recipientIds.add(recipient.id);
-    });
-    return recipientIds;
+    state = AsyncData(state.value!.copyWith());
   }
 
   /// Extracts verified recipients from all recipients.
-  void _setVerifiedRecipients() {
-    final verifiedRecipients = <Recipient>[];
+  List<Recipient> _getVerifiedRecipients(List<Recipient> recipients) {
+    if (recipients.isEmpty) return <Recipient>[];
 
-    /// Set verified recipients
-    for (var recipient in recipients) {
-      if (recipient.emailVerifiedAt.isNotEmpty) {
-        verifiedRecipients.add(recipient);
-      }
-    }
-
-    final newState = state.copyWith(verifiedRecipients: verifiedRecipients);
-    _updateState(newState);
+    return recipients.where((recipient) => recipient.isVerified).toList();
   }
 
   /// Extracts current [aliasState.aliasId]'s default recipients
-  void _setDefaultRecipients() {
+  List<Recipient> _getDefaultRecipients({
+    required List<Recipient> verifiedRecipients,
+    required List<Recipient> aliasRecipients,
+  }) {
+    if (verifiedRecipients.isEmpty) return <Recipient>[];
+
     final defaultRecipients = <Recipient>[];
-    for (Recipient verifiedRecipient in state.verifiedRecipients!) {
-      for (Recipient aliasRecipient in aliasState.alias.recipients) {
+
+    verifiedRecipients.map((verifiedRecipient) {
+      final selectedAliasRecipients = aliasRecipients.where((aliasRecipient) {
         if (verifiedRecipient.id == aliasRecipient.id) {
           defaultRecipients.add(verifiedRecipient);
+          return true;
         }
-      }
+        return false;
+      }).toList();
+
+      return selectedAliasRecipients;
+    }).toList();
+
+    return defaultRecipients;
+  }
+
+  @override
+  FutureOr<DefaultRecipientState> build() async {
+    final recipients = ref.read(recipientsNotifierProvider).value;
+    final aliasState = ref.read(aliasScreenNotifierProvider('')).value;
+
+    if (recipients == null || aliasState == null) {
+      throw const AsyncError('Failed to load data', StackTrace.empty);
     }
 
-    final newState = state.copyWith(defaultRecipients: defaultRecipients);
-    _updateState(newState);
+    final verifiedRecipients = _getVerifiedRecipients(recipients);
+    final defaultRecipients = _getDefaultRecipients(
+      verifiedRecipients: verifiedRecipients,
+      aliasRecipients: aliasState.alias.recipients,
+    );
+
+    return DefaultRecipientState(
+      verifiedRecipients: verifiedRecipients,
+      defaultRecipients: defaultRecipients,
+    );
   }
 }
