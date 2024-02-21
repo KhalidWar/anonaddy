@@ -1,5 +1,4 @@
 import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_notifier.dart';
-import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -11,12 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AliasDefaultRecipientScreen extends ConsumerStatefulWidget {
   const AliasDefaultRecipientScreen({
     Key? key,
-    required this.defaultRecipients,
-    required this.selectedRecipients,
+    required this.aliasId,
   }) : super(key: key);
 
-  final List<String> defaultRecipients;
-  final List<String> selectedRecipients;
+  final String aliasId;
 
   @override
   ConsumerState createState() => _AliasDefaultRecipientScreenState();
@@ -38,12 +35,13 @@ class _AliasDefaultRecipientScreenState
 
   @override
   Widget build(BuildContext context) {
-    final recipientState = ref.watch(recipientsNotifierProvider);
+    final defaultRecipientAsync =
+        ref.watch(defaultRecipientStateNotifier(widget.aliasId));
 
-    return recipientState.when(
-      data: (recipients) {
-        final verifiedRecipients =
-            recipients.where((recipient) => recipient.isVerified).toList();
+    return defaultRecipientAsync.when(
+      data: (defaultRecipientState) {
+        final verifiedRecipients = defaultRecipientState.verifiedRecipients;
+        final defaultRecipients = defaultRecipientState.defaultRecipients;
 
         return ListView(
           shrinkWrap: true,
@@ -67,12 +65,9 @@ class _AliasDefaultRecipientScreenState
                 itemCount: verifiedRecipients.length,
                 itemBuilder: (context, index) {
                   final verifiedRecipient = verifiedRecipients[index];
-                  final isDefault =
-                      widget.defaultRecipients.contains(verifiedRecipient.id);
-                  // widget.defaultRecipients.contains(verifiedRecipient);
-                  // ref
-                  //     .read(aliasScreenNotifierProvider('').notifier)
-                  //     .isRecipientDefault(verifiedRecipient);
+                  final bool isDefault = defaultRecipients
+                      .map((recipient) => recipient.id)
+                      .contains(verifiedRecipient.id);
 
                   return ListTile(
                     selected: isDefault,
@@ -88,7 +83,8 @@ class _AliasDefaultRecipientScreenState
                     ),
                     onTap: () {
                       ref
-                          .read(defaultRecipientStateNotifier.notifier)
+                          .read(defaultRecipientStateNotifier(widget.aliasId)
+                              .notifier)
                           .toggleRecipient(verifiedRecipient);
                     },
                   );
