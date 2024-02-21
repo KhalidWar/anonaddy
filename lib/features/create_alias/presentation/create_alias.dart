@@ -207,7 +207,8 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasDomain(BuildContext modalSheetContext) {
-    return _buildModalSheet(
+    return Utilities.buildWoltModalSheetPage(
+      context,
       title: 'Select Alias Domain',
       onLeadingNavBarPressed: resetPageIndex,
       child: Consumer(
@@ -251,7 +252,8 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasFormat(BuildContext modalSheetContext) {
-    return _buildModalSheet(
+    return Utilities.buildWoltModalSheetPage(
+      context,
       title: 'Select Alias Format',
       onLeadingNavBarPressed: resetPageIndex,
       child: Consumer(
@@ -298,7 +300,8 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasLocalPart(BuildContext modalSheetContext) {
-    return _buildModalSheet(
+    return Utilities.buildWoltModalSheetPage(
+      context,
       title: 'Enter Local Part',
       onLeadingNavBarPressed: resetPageIndex,
       child: Consumer(
@@ -337,7 +340,8 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasRecipient(BuildContext modalSheetContext) {
-    return _buildModalSheet(
+    return Utilities.buildWoltModalSheetPage(
+      context,
       title: 'Select Default Recipients',
       pageTitle: AppStrings.updateAliasRecipientNote,
       onLeadingNavBarPressed: resetPageIndex,
@@ -385,7 +389,8 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildAliasDescription(BuildContext modalSheetContext) {
-    return _buildModalSheet(
+    return Utilities.buildWoltModalSheetPage(
+      context,
       title: 'Enter Description',
       pageTitle:
           'A unique word or two that describe alias. You can also search for aliases by their description.',
@@ -412,42 +417,6 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
             ),
           );
         },
-      ),
-    );
-  }
-
-  WoltModalSheetPage _buildModalSheet({
-    required String title,
-    required Widget child,
-    Function()? onLeadingNavBarPressed,
-    String? pageTitle,
-  }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return WoltModalSheetPage.withSingleChild(
-      topBarTitle: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      backgroundColor: isDark ? Colors.black : Colors.white,
-      sabGradientColor: isDark ? Colors.black : Colors.white,
-      isTopBarLayerAlwaysVisible: true,
-      pageTitle: pageTitle == null
-          ? null
-          : Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                pageTitle,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ),
-      leadingNavBarWidget: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_rounded),
-        onPressed: onLeadingNavBarPressed,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 50),
-        child: child,
       ),
     );
   }

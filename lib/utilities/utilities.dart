@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class Utilities {
   static String formatDateTime(BuildContext context, String input) {
@@ -101,5 +102,42 @@ class Utilities {
       final total = list.reduce((value, element) => value + element);
       return total;
     }
+  }
+
+  static WoltModalSheetPage buildWoltModalSheetPage(
+    BuildContext context, {
+    required String title,
+    required Widget child,
+    Function()? onLeadingNavBarPressed,
+    String? pageTitle,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return WoltModalSheetPage.withSingleChild(
+      topBarTitle: Text(
+        title,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      backgroundColor: isDark ? Colors.black : Colors.white,
+      sabGradientColor: isDark ? Colors.black : Colors.white,
+      isTopBarLayerAlwaysVisible: true,
+      pageTitle: pageTitle == null
+          ? null
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                pageTitle,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+      leadingNavBarWidget: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_rounded),
+        onPressed: onLeadingNavBarPressed,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 50),
+        child: child,
+      ),
+    );
   }
 }
