@@ -364,10 +364,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                             ),
                           ),
                           child: AliasDefaultRecipientScreen(
-                            defaultRecipients: aliasState.alias.recipients
-                                .map((e) => e.id)
-                                .toList(),
-                            selectedRecipients: [],
+                            aliasId: aliasState.alias.id,
                           ),
                         ),
                       ];
