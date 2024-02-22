@@ -104,18 +104,21 @@ class Utilities {
     }
   }
 
-  static WoltModalSheetPage buildWoltModalSheetPage(
+  static WoltModalSheetPage buildWoltModalSheetSubPage(
     BuildContext context, {
-    required String title,
+    required String topBarTitle,
     required Widget child,
-    Function()? onLeadingNavBarPressed,
+    bool showLeading = true,
+    Function()? leadingWidgetOnPress,
     String? pageTitle,
   }) {
+    assert(!(showLeading && leadingWidgetOnPress == null));
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return WoltModalSheetPage.withSingleChild(
       topBarTitle: Text(
-        title,
+        topBarTitle,
         style: Theme.of(context).textTheme.titleMedium,
       ),
       backgroundColor: isDark ? Colors.black : Colors.white,
@@ -130,10 +133,12 @@ class Utilities {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
-      leadingNavBarWidget: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_rounded),
-        onPressed: onLeadingNavBarPressed,
-      ),
+      leadingNavBarWidget: showLeading
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back_ios_rounded),
+              onPressed: leadingWidgetOnPress,
+            )
+          : null,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 50),
         child: child,

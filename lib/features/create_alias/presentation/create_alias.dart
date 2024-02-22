@@ -207,10 +207,10 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasDomain(BuildContext modalSheetContext) {
-    return Utilities.buildWoltModalSheetPage(
+    return Utilities.buildWoltModalSheetSubPage(
       context,
-      title: 'Select Alias Domain',
-      onLeadingNavBarPressed: resetPageIndex,
+      topBarTitle: 'Select Alias Domain',
+      leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
         builder: (context, ref, child) {
           final createAliasNotifier = ref.watch(createAliasNotifierProvider);
@@ -252,10 +252,10 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasFormat(BuildContext modalSheetContext) {
-    return Utilities.buildWoltModalSheetPage(
+    return Utilities.buildWoltModalSheetSubPage(
       context,
-      title: 'Select Alias Format',
-      onLeadingNavBarPressed: resetPageIndex,
+      topBarTitle: 'Select Alias Format',
+      leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
         builder: (context, ref, _) {
           final createAliasNotifier = ref.watch(createAliasNotifierProvider);
@@ -300,10 +300,10 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasLocalPart(BuildContext modalSheetContext) {
-    return Utilities.buildWoltModalSheetPage(
+    return Utilities.buildWoltModalSheetSubPage(
       context,
-      title: 'Enter Local Part',
-      onLeadingNavBarPressed: resetPageIndex,
+      topBarTitle: 'Enter Local Part',
+      leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
         builder: (context, ref, _) {
           ref.watch(createAliasNotifierProvider);
@@ -340,11 +340,11 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildSelectAliasRecipient(BuildContext modalSheetContext) {
-    return Utilities.buildWoltModalSheetPage(
+    return Utilities.buildWoltModalSheetSubPage(
       context,
-      title: 'Select Default Recipients',
+      topBarTitle: 'Select Default Recipients',
       pageTitle: AppStrings.updateAliasRecipientNote,
-      onLeadingNavBarPressed: resetPageIndex,
+      leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
         builder: (context, ref, _) {
           final createAliasNotifier = ref.watch(createAliasNotifierProvider);
@@ -389,12 +389,12 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildAliasDescription(BuildContext modalSheetContext) {
-    return Utilities.buildWoltModalSheetPage(
+    return Utilities.buildWoltModalSheetSubPage(
       context,
-      title: 'Enter Description',
+      topBarTitle: 'Enter Description',
       pageTitle:
           'A unique word or two that describe alias. You can also search for aliases by their description.',
-      onLeadingNavBarPressed: resetPageIndex,
+      leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
         builder: (context, ref, _) {
           ref.watch(createAliasNotifierProvider);
