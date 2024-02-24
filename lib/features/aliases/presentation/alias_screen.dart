@@ -106,6 +106,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final aliasNotifier =
         ref.watch(aliasScreenNotifierProvider(widget.aliasId));
 
@@ -273,8 +274,10 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                       const PlatformLoadingIndicator(size: 20),
                     IconButton(
                       icon: isAliasDeleted
-                          ? const Icon(Icons.restore_outlined,
-                              color: Colors.green)
+                          ? const Icon(
+                              Icons.restore_outlined,
+                              color: Colors.green,
+                            )
                           : const Icon(Icons.delete_outline, color: Colors.red),
                       onPressed: () {
                         /// Display platform appropriate dialog
@@ -323,46 +326,15 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     pageListBuilder: (modalSheetContext) {
                       return [
                         WoltModalSheetPage.withSingleChild(
+                          backgroundColor: isDark ? Colors.black : Colors.white,
+                          sabGradientColor:
+                              isDark ? Colors.black : Colors.white,
                           topBarTitle: Text(
-                            'Update Alias Recipients',
-                            // 'Default Recipient${aliasState.alias.recipients.length >= 2 ? 's' : ''}',
-                            // 'title',
+                            'Default Recipient${aliasState.alias.recipients.length >= 2 ? 's' : ''}',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                           isTopBarLayerAlwaysVisible: true,
-                          pageTitle: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Text(
-                              AddyString.updateAliasRecipients,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                          ),
-                          stickyActionBar: Container(
-                            padding: const EdgeInsets.all(16),
-                            width: double.infinity,
-                            child: PlatformButton(
-                              child: aliasState.updateRecipientLoading
-                                  ? const CircularProgressIndicator(
-                                      color: AppColors.primaryColor,
-                                    )
-                                  : const Text(
-                                      'Update Recipients',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                              onPress: () async {
-                                //       /// Get default recipients Ids.
-                                //       final recipientIds = ref
-                                //           .read(defaultRecipientStateNotifier.notifier)
-                                //           .getRecipientIds();
-                                //
-                                //       /// Update default recipients for [widget.alias]
-                                //       // ref
-                                //       //     .read(aliasScreenNotifierProvider.notifier)
-                                //       //     .updateAliasDefaultRecipient(recipientIds)
-                                //       //     .whenComplete(() => Navigator.pop(context));
-                              },
-                            ),
-                          ),
+                          enableDrag: true,
                           child: AliasDefaultRecipientScreen(
                             aliasId: aliasState.alias.id,
                           ),

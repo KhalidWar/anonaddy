@@ -115,25 +115,6 @@ class AliasScreenNotifier
     }
   }
 
-  Future<void> updateAliasDefaultRecipient(List<String> recipients) async {
-    try {
-      final currentState = state.value!;
-      state = AsyncData(currentState.copyWith(updateRecipientLoading: true));
-
-      final updatedAlias = await ref
-          .read(aliasServiceProvider)
-          .updateAliasDefaultRecipient(currentState.alias.id, recipients);
-
-      state = AsyncData(currentState.copyWith(
-        updateRecipientLoading: false,
-        alias: updatedAlias,
-      ));
-    } catch (error) {
-      Utilities.showToast(error.toString());
-      state = AsyncData(state.value!.copyWith(updateRecipientLoading: false));
-    }
-  }
-
   bool isRecipientDefault(Recipient recipient) {
     return state.value!.alias.recipients.contains(recipient);
   }
