@@ -2,6 +2,7 @@ import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/components/add_new_recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
+import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
@@ -82,7 +83,16 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       final recipient = recipients[index];
-                      return RecipientListTile(recipient: recipient);
+                      return RecipientListTile(
+                        recipient: recipient,
+                        onPress: () {
+                          Navigator.pushNamed(
+                            context,
+                            RecipientsScreen.routeName,
+                            arguments: recipient,
+                          );
+                        },
+                      );
                     },
                   ),
             TextButton(

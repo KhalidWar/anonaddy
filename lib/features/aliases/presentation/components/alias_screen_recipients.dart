@@ -1,5 +1,6 @@
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
+import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,17 @@ class AliasScreenRecipients extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: recipients.length,
             itemBuilder: (context, index) {
-              return RecipientListTile(recipient: recipients[index]);
+              final recipient = recipients[index];
+              return RecipientListTile(
+                recipient: recipient,
+                onPress: () {
+                  Navigator.pushNamed(
+                    context,
+                    RecipientsScreen.routeName,
+                    arguments: recipient,
+                  );
+                },
+              );
             },
           ),
       ],

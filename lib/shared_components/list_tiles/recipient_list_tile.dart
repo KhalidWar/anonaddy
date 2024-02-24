@@ -1,5 +1,5 @@
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
-import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
@@ -7,14 +7,20 @@ class RecipientListTile extends StatelessWidget {
   const RecipientListTile({
     Key? key,
     required this.recipient,
+    required this.onPress,
+    this.isSelected = false,
   }) : super(key: key);
 
   final Recipient recipient;
+  final bool isSelected;
+  final Function() onPress;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: Padding(
+      onTap: onPress,
+      child: Container(
+        color: isSelected ? AppColors.accentColor : null,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -45,13 +51,6 @@ class RecipientListTile extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          RecipientsScreen.routeName,
-          arguments: recipient,
-        );
-      },
     );
   }
 }

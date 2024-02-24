@@ -1,3 +1,4 @@
+import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_state.dart';
@@ -175,6 +176,13 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
             else
               RecipientListTile(
                 recipient: username.defaultRecipient!,
+                onPress: () {
+                  Navigator.pushNamed(
+                    context,
+                    RecipientsScreen.routeName,
+                    arguments: username.defaultRecipient!,
+                  );
+                },
               ),
           ],
         ),
