@@ -24,7 +24,7 @@ class RecipientScreenUnverifiedWarning extends ConsumerWidget {
         if (!recipient.isVerified) {
           return Container(
             color: Colors.amber,
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(4),
             child: Row(
               children: [
                 const Icon(Icons.warning_amber_outlined, color: Colors.black),
@@ -41,8 +41,8 @@ class RecipientScreenUnverifiedWarning extends ConsumerWidget {
                 TextButton(
                   child: const Text('Verify!'),
                   onPressed: () => ref
-                      .read(
-                          recipientScreenNotifierProvider(recipientId).notifier)
+                      .read(recipientScreenNotifierProvider(recipient.id)
+                          .notifier)
                       .resendVerificationEmail(),
                 ),
               ],
@@ -52,8 +52,8 @@ class RecipientScreenUnverifiedWarning extends ConsumerWidget {
 
         return const SizedBox.shrink();
       },
-      error: (error, stack) => Container(),
-      loading: () => Container(),
+      error: (error, stack) => const SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
     );
   }
 }

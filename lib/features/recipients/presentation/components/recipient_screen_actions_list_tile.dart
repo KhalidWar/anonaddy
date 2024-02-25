@@ -19,11 +19,11 @@ class RecipientScreenActionsListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           Icon(leadingIconData, color: leadingIconColor),
-          const SizedBox(width: 10),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +40,7 @@ class RecipientScreenActionsListTile extends StatelessWidget {
               ],
             ),
           ),
-          trailing ?? Container()
+          trailing ?? const SizedBox.shrink(),
         ],
       ),
     );

@@ -13,8 +13,6 @@ class RecipientScreenAliases extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
-
     final recipientScreenAsync =
         ref.watch(recipientScreenNotifierProvider(recipientId));
 
@@ -22,24 +20,26 @@ class RecipientScreenAliases extends ConsumerWidget {
       data: (recipientScreenState) {
         final aliases = recipientScreenState.recipient.aliases;
 
-        if (aliases == null || aliases.isEmpty) {
+        if (aliases == null) {
           return const SizedBox.shrink();
         }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Divider(height: 20),
+            const Divider(height: 24),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-              child:
-                  Text('Aliases', style: Theme.of(context).textTheme.headline6),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                'Aliases',
+                style: Theme.of(context).textTheme.headline6,
+              ),
             ),
-            SizedBox(height: size.height * 0.01),
             if (aliases.isEmpty)
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                  child: const Text('No aliases found'))
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('No aliases found'),
+              )
             else
               ListView.builder(
                 shrinkWrap: true,

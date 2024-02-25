@@ -35,40 +35,28 @@ class RecipientsScreen extends ConsumerStatefulWidget {
 
 class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
   List<int> calculateEmailsForwarded(List<Alias>? aliases) {
-    if (aliases == null || aliases.isEmpty) {
-      return <int>[];
-    }
-
+    if (aliases == null || aliases.isEmpty) return <int>[];
     return aliases.map((alias) {
       return alias.emailsForwarded;
     }).toList();
   }
 
   List<int> calculateEmailsBlocked(List<Alias>? aliases) {
-    if (aliases == null || aliases.isEmpty) {
-      return <int>[];
-    }
-
+    if (aliases == null || aliases.isEmpty) return <int>[];
     return aliases.map((alias) {
       return alias.emailsBlocked;
     }).toList();
   }
 
   List<int> calculateEmailsReplied(List<Alias>? aliases) {
-    if (aliases == null || aliases.isEmpty) {
-      return <int>[];
-    }
-
+    if (aliases == null || aliases.isEmpty) return <int>[];
     return aliases.map((alias) {
       return alias.emailsReplied;
     }).toList();
   }
 
   List<int> calculateEmailsSent(List<Alias>? aliases) {
-    if (aliases == null || aliases.isEmpty) {
-      return <int>[];
-    }
-
+    if (aliases == null || aliases.isEmpty) return <int>[];
     return aliases.map((alias) {
       return alias.emailsSent;
     }).toList();
@@ -143,9 +131,9 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       calculateEmailsSent(recipient.aliases),
                     ),
                   ),
-                  const Divider(height: 20),
+                  const Divider(height: 24),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       'Actions',
                       style: Theme.of(context).textTheme.headline6,
@@ -183,9 +171,9 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       },
                     ),
                   ),
-                  const Divider(height: 10),
+                  const Divider(height: 24),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       'Encryption',
                       style: Theme.of(context).textTheme.headline6,
@@ -330,7 +318,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     ),
                   ),
                   RecipientScreenAliases(recipientId: widget.recipient.id),
-                  const Divider(height: 20),
+                  const Divider(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -344,7 +332,6 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
                 ],
               );
             },
@@ -361,7 +348,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     emailsReplied: 0,
                     emailsSent: 0,
                   ),
-                  Divider(height: 20),
+                  Divider(height: 24),
                   Center(child: PlatformLoadingIndicator())
                 ],
               );
