@@ -36,12 +36,7 @@ class AliasScreenNotifier
       await ref
           .read(aliasServiceProvider)
           .deactivateAlias(currentState.alias.id);
-
-      final updatedAlias = currentState.alias.copyWith(active: false);
-      state = AsyncData(currentState.copyWith(
-        isToggleLoading: false,
-        alias: updatedAlias,
-      ));
+      ref.invalidate(aliasScreenNotifierProvider(arg));
     } catch (error) {
       Utilities.showToast(error.toString());
       state = AsyncData(state.value!.copyWith(isToggleLoading: false));
@@ -53,11 +48,10 @@ class AliasScreenNotifier
       final currentState = state.value!;
       state = AsyncData(currentState.copyWith(isToggleLoading: true));
 
-      final newAlias = await ref
+      final updateAlias = await ref
           .read(aliasServiceProvider)
           .activateAlias(currentState.alias.id);
 
-      final updateAlias = currentState.alias.copyWith(active: newAlias.active);
       state = AsyncData(currentState.copyWith(
         isToggleLoading: false,
         alias: updateAlias,
@@ -74,17 +68,9 @@ class AliasScreenNotifier
       state = AsyncData(currentState.copyWith(deleteAliasLoading: true));
 
       await ref.read(aliasServiceProvider).deleteAlias(currentState.alias.id);
-
       Utilities.showToast(ToastMessage.deleteAliasSuccess);
-      final updatedAlias = currentState.alias.copyWith(deletedAt: '');
-      ref
-          .read(aliasesNotifierProvider.notifier)
-          .removeDeletedAlias(currentState.alias.id);
 
-      state = AsyncData(currentState.copyWith(
-        deleteAliasLoading: false,
-        alias: updatedAlias,
-      ));
+      await ref.read(aliasesNotifierProvider.notifier).fetchAliases();
     } catch (error) {
       Utilities.showToast(error.toString());
       state = AsyncData(state.value!.copyWith(deleteAliasLoading: false));
@@ -101,14 +87,12 @@ class AliasScreenNotifier
           .read(aliasServiceProvider)
           .restoreAlias(currentState.alias.id);
       Utilities.showToast(ToastMessage.restoreAliasSuccess);
-      ref
-          .read(aliasesNotifierProvider.notifier)
-          .removeRestoredAlias(currentState.alias.id);
 
       state = AsyncData(currentState.copyWith(
         deleteAliasLoading: false,
         alias: newAlias,
       ));
+      await ref.read(aliasesNotifierProvider.notifier).fetchAliases();
     } catch (error) {
       Utilities.showToast(error.toString());
       state = AsyncData(state.value!.copyWith(deleteAliasLoading: false));
