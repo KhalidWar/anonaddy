@@ -140,7 +140,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       ),
       body: aliasNotifier.when(
         data: (aliasState) {
-          final isAliasDeleted = aliasState.alias.deletedAt.isNotEmpty;
+          final isAliasDeleted = aliasState.alias.isDeleted;
 
           return ListView(
             key: AliasScreen.aliasScreenBodyListView,
@@ -352,14 +352,14 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     label: 'Created',
                     dateTime: aliasState.alias.createdAt,
                   ),
-                  aliasState.alias.deletedAt.isEmpty
+                  aliasState.alias.isDeleted
                       ? CreatedAtWidget(
-                          label: 'Updated',
-                          dateTime: aliasState.alias.updatedAt,
-                        )
-                      : CreatedAtWidget(
                           label: 'Deleted',
                           dateTime: aliasState.alias.deletedAt,
+                        )
+                      : CreatedAtWidget(
+                          label: 'Updated',
+                          dateTime: aliasState.alias.updatedAt,
                         ),
                 ],
               ),

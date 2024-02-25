@@ -15,8 +15,8 @@ class Username {
     this.defaultRecipient,
     this.active = false,
     this.catchAll = false,
-    this.createdAt = '',
-    this.updatedAt = '',
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   String id;
@@ -39,10 +39,10 @@ class Username {
   final bool catchAll;
 
   @JsonKey(name: 'created_at')
-  final String createdAt;
+  final DateTime createdAt;
 
   @JsonKey(name: 'updated_at')
-  final String updatedAt;
+  final DateTime updatedAt;
 
   factory Username.fromJson(Map<String, dynamic> json) =>
       _$UsernameFromJson(json);
@@ -58,8 +58,8 @@ class Username {
     Recipient? defaultRecipient,
     bool? active,
     bool? catchAll,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return Username(
       id: id ?? this.id,

@@ -9,7 +9,7 @@ class CreatedAtWidget extends StatelessWidget {
   }) : super(key: key);
 
   final String label;
-  final String dateTime;
+  final DateTime? dateTime;
 
   @override
   Widget build(BuildContext context) {

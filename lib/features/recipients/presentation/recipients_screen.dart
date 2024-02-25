@@ -336,11 +336,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     children: [
                       CreatedAtWidget(
                         label: 'Created at',
-                        dateTime: recipient.createdAt.toString(),
+                        dateTime: recipient.createdAt,
                       ),
                       CreatedAtWidget(
                         label: 'Updated at',
-                        dateTime: recipient.updatedAt.toString(),
+                        dateTime: recipient.updatedAt,
                       ),
                     ],
                   ),

@@ -25,8 +25,8 @@ Domain _$DomainFromJson(Map<String, dynamic> json) => Domain(
       domainMxValidatedAt: json['domain_mx_validated_at'] as String? ?? '',
       domainSendingVerifiedAt:
           json['domain_sending_verified_at'] as String? ?? '',
-      createdAt: json['created_at'] as String? ?? '',
-      updatedAt: json['updated_at'] as String? ?? '',
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$DomainToJson(Domain instance) => <String, dynamic>{
@@ -41,6 +41,6 @@ Map<String, dynamic> _$DomainToJson(Domain instance) => <String, dynamic>{
       'domain_verified_at': instance.domainVerifiedAt,
       'domain_mx_validated_at': instance.domainMxValidatedAt,
       'domain_sending_verified_at': instance.domainSendingVerifiedAt,
-      'created_at': instance.createdAt,
-      'updated_at': instance.updatedAt,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
     };

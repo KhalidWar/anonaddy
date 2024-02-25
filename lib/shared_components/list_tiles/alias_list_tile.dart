@@ -11,10 +11,6 @@ class AliasListTile extends StatelessWidget {
   }) : super(key: key);
   final Alias alias;
 
-  bool isAliasDeleted() {
-    return alias.deletedAt.isEmpty ? false : true;
-  }
-
   String getDescription() {
     return alias.description.isEmpty ? 'No description' : alias.description;
   }
@@ -29,7 +25,7 @@ class AliasListTile extends StatelessWidget {
         child: Row(
           children: [
             AliasListTileLeading(
-              isDeleted: isAliasDeleted(),
+              isDeleted: alias.isDeleted,
               isActive: alias.active,
             ),
             const SizedBox(width: 10),
@@ -42,7 +38,7 @@ class AliasListTile extends StatelessWidget {
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          color: isAliasDeleted()
+                          color: alias.isDeleted
                               ? Colors.grey
                               : isDark
                                   ? Colors.white
@@ -60,7 +56,7 @@ class AliasListTile extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.copy),
-              onPressed: isAliasDeleted()
+              onPressed: alias.isDeleted
                   ? null
                   : () => Utilities.copyOnTap(alias.email),
             ),

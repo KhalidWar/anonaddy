@@ -13,15 +13,6 @@ class DomainsScreenState {
   final bool catchAllSwitchLoading;
   final bool updateRecipientLoading;
 
-  static DomainsScreenState initialState() {
-    return DomainsScreenState(
-      domain: Domain(),
-      activeSwitchLoading: false,
-      catchAllSwitchLoading: false,
-      updateRecipientLoading: false,
-    );
-  }
-
   DomainsScreenState copyWith({
     Domain? domain,
     bool? activeSwitchLoading,

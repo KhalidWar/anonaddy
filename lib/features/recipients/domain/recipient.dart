@@ -17,9 +17,9 @@ class Recipient extends HiveObject {
     required this.inlineEncryption,
     required this.protectedHeaders,
     required this.createdAt,
+    required this.updatedAt,
     required this.aliasesCount,
     this.emailVerifiedAt,
-    this.updatedAt,
     this.fingerprint,
     this.aliases,
   });
@@ -54,7 +54,7 @@ class Recipient extends HiveObject {
 
   @JsonKey(name: 'updated_at')
   @HiveField(8)
-  final DateTime? updatedAt;
+  final DateTime updatedAt;
 
   @JsonKey(name: 'can_reply_send')
   @HiveField(9)

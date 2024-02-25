@@ -21,8 +21,8 @@ Username _$UsernameFromJson(Map<String, dynamic> json) => Username(
               json['default_recipient'] as Map<String, dynamic>),
       active: json['active'] as bool? ?? false,
       catchAll: json['catch_all'] as bool? ?? false,
-      createdAt: json['created_at'] as String? ?? '',
-      updatedAt: json['updated_at'] as String? ?? '',
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$UsernameToJson(Username instance) => <String, dynamic>{
@@ -34,6 +34,6 @@ Map<String, dynamic> _$UsernameToJson(Username instance) => <String, dynamic>{
       'default_recipient': instance.defaultRecipient?.toJson(),
       'active': instance.active,
       'catch_all': instance.catchAll,
-      'created_at': instance.createdAt,
-      'updated_at': instance.updatedAt,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
     };

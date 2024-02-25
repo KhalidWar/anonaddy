@@ -25,9 +25,9 @@ class RecipientAdapter extends TypeAdapter<Recipient> {
       inlineEncryption: fields[10] as bool,
       protectedHeaders: fields[11] as bool,
       createdAt: fields[7] as DateTime,
+      updatedAt: fields[8] as DateTime,
       aliasesCount: fields[12] as int?,
       emailVerifiedAt: fields[5] as DateTime?,
-      updatedAt: fields[8] as DateTime?,
       fingerprint: fields[4] as String?,
       aliases: (fields[6] as List?)?.cast<Alias>(),
     );
@@ -89,13 +89,11 @@ Recipient _$RecipientFromJson(Map<String, dynamic> json) => Recipient(
       inlineEncryption: json['inline_encryption'] as bool,
       protectedHeaders: json['protected_headers'] as bool,
       createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
       aliasesCount: json['aliases_count'] as int?,
       emailVerifiedAt: json['email_verified_at'] == null
           ? null
           : DateTime.parse(json['email_verified_at'] as String),
-      updatedAt: json['updated_at'] == null
-          ? null
-          : DateTime.parse(json['updated_at'] as String),
       fingerprint: json['fingerprint'] as String?,
       aliases: (json['aliases'] as List<dynamic>?)
           ?.map((e) => Alias.fromJson(e as Map<String, dynamic>))
@@ -111,7 +109,7 @@ Map<String, dynamic> _$RecipientToJson(Recipient instance) => <String, dynamic>{
       'email_verified_at': instance.emailVerifiedAt?.toIso8601String(),
       'aliases': instance.aliases?.map((e) => e.toJson()).toList(),
       'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt?.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
       'can_reply_send': instance.canReplySend,
       'inline_encryption': instance.inlineEncryption,
       'protected_headers': instance.protectedHeaders,

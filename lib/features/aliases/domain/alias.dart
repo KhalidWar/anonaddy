@@ -24,9 +24,9 @@ class Alias extends HiveObject {
     this.emailsReplied = 0,
     this.emailsSent = 0,
     this.recipients = const <Recipient>[],
-    this.createdAt = '',
-    this.updatedAt = '',
-    this.deletedAt = '',
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
   });
 
   @HiveField(0)
@@ -84,64 +84,26 @@ class Alias extends HiveObject {
 
   @JsonKey(name: 'created_at')
   @HiveField(15)
-  final String createdAt;
+  final DateTime createdAt;
 
   @JsonKey(name: 'updated_at')
   @HiveField(16)
-  final String updatedAt;
+  final DateTime updatedAt;
 
   @JsonKey(name: 'deleted_at')
   @HiveField(17)
-  final String deletedAt;
+  final DateTime? deletedAt;
 
   factory Alias.fromJson(Map<String, dynamic> json) => _$AliasFromJson(json);
 
   Map<String, dynamic> toJson() => _$AliasToJson(this);
 
-  Alias copyWith({
-    String? id,
-    String? userId,
-    String? aliasableId,
-    String? aliasableType,
-    String? localPart,
-    String? extension,
-    String? domain,
-    String? email,
-    bool? active,
-    String? description,
-    int? emailsForwarded,
-    int? emailsBlocked,
-    int? emailsReplied,
-    int? emailsSent,
-    List<Recipient>? recipients,
-    String? createdAt,
-    String? updatedAt,
-    String? deletedAt,
-  }) {
-    return Alias(
-      id: id ?? this.id,
-      userId: userId ?? this.userId,
-      aliasableId: aliasableId ?? this.aliasableId,
-      aliasableType: aliasableType ?? this.aliasableType,
-      localPart: localPart ?? this.localPart,
-      extension: extension ?? this.extension,
-      domain: domain ?? this.domain,
-      email: email ?? this.email,
-      active: active ?? this.active,
-      description: description ?? this.description,
-      emailsForwarded: emailsForwarded ?? this.emailsForwarded,
-      emailsBlocked: emailsBlocked ?? this.emailsBlocked,
-      emailsReplied: emailsReplied ?? this.emailsReplied,
-      emailsSent: emailsSent ?? this.emailsSent,
-      recipients: recipients ?? this.recipients,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-      deletedAt: deletedAt ?? this.deletedAt,
-    );
-  }
-
   @override
   String toString() {
     return 'Alias{id: $id, userId: $userId, aliasableId: $aliasableId, aliasableType: $aliasableType, localPart: $localPart, extension: $extension, domain: $domain, email: $email, active: $active, description: $description, emailsForwarded: $emailsForwarded, emailsBlocked: $emailsBlocked, emailsReplied: $emailsReplied, emailsSent: $emailsSent, recipients: $recipients, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt}';
   }
+}
+
+extension AliasExtension on Alias {
+  bool get isDeleted => deletedAt != null;
 }

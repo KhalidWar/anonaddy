@@ -32,9 +32,9 @@ class AliasAdapter extends TypeAdapter<Alias> {
       emailsReplied: fields[12] as int,
       emailsSent: fields[13] as int,
       recipients: (fields[14] as List).cast<Recipient>(),
-      createdAt: fields[15] as String,
-      updatedAt: fields[16] as String,
-      deletedAt: fields[17] as String,
+      createdAt: fields[15] as DateTime,
+      updatedAt: fields[16] as DateTime,
+      deletedAt: fields[17] as DateTime?,
     );
   }
 
@@ -114,9 +114,11 @@ Alias _$AliasFromJson(Map<String, dynamic> json) => Alias(
               ?.map((e) => Recipient.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <Recipient>[],
-      createdAt: json['created_at'] as String? ?? '',
-      updatedAt: json['updated_at'] as String? ?? '',
-      deletedAt: json['deleted_at'] as String? ?? '',
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      deletedAt: json['deleted_at'] == null
+          ? null
+          : DateTime.parse(json['deleted_at'] as String),
     );
 
 Map<String, dynamic> _$AliasToJson(Alias instance) => <String, dynamic>{
@@ -135,7 +137,7 @@ Map<String, dynamic> _$AliasToJson(Alias instance) => <String, dynamic>{
       'emails_replied': instance.emailsReplied,
       'emails_sent': instance.emailsSent,
       'recipients': instance.recipients.map((e) => e.toJson()).toList(),
-      'created_at': instance.createdAt,
-      'updated_at': instance.updatedAt,
-      'deleted_at': instance.deletedAt,
+      'created_at': instance.createdAt.toIso8601String(),
+      'updated_at': instance.updatedAt.toIso8601String(),
+      'deleted_at': instance.deletedAt?.toIso8601String(),
     };

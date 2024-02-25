@@ -8,10 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class Utilities {
-  static String formatDateTime(BuildContext context, String input) {
-    if (input.isEmpty) return '';
-
-    final dateTime = DateTime.tryParse(input);
+  static String formatDateTime(BuildContext context, DateTime? dateTime) {
     if (dateTime == null) return '';
 
     final locale = Localizations.localeOf(context);

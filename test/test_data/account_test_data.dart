@@ -28,7 +28,7 @@ class AccountTestData {
       totalEmailsReplied: 0,
       totalEmailsSent: 0,
       createdAt: '2021-07-28 16:41:44',
-      lastUpdated: '2022-03-01 12:30:47',
+      updatedAt: '2022-03-01 12:30:47',
       aliasCount: 10,
       aliasLimit: 100,
       subscription: '',

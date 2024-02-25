@@ -18,8 +18,8 @@ class Domain {
     this.domainVerifiedAt = '',
     this.domainMxValidatedAt = '',
     this.domainSendingVerifiedAt = '',
-    this.createdAt = '',
-    this.updatedAt = '',
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   String id;
@@ -48,10 +48,10 @@ class Domain {
   final String domainSendingVerifiedAt;
 
   @JsonKey(name: 'created_at')
-  final String createdAt;
+  final DateTime createdAt;
 
   @JsonKey(name: 'updated_at')
-  final String updatedAt;
+  final DateTime updatedAt;
 
   factory Domain.fromJson(Map<String, dynamic> json) => _$DomainFromJson(json);
 
@@ -69,8 +69,8 @@ class Domain {
     String? domainVerifiedAt,
     String? domainMxValidatedAt,
     String? domainSendingVerifiedAt,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return Domain(
       id: id ?? this.id,

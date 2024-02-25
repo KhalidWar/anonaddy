@@ -15,16 +15,6 @@ class UsernamesScreenState {
   final bool updateRecipientLoading;
   final bool isOffline;
 
-  static UsernamesScreenState initialState() {
-    return UsernamesScreenState(
-      username: Username(),
-      activeSwitchLoading: false,
-      catchAllSwitchLoading: false,
-      updateRecipientLoading: false,
-      isOffline: false,
-    );
-  }
-
   UsernamesScreenState copyWith({
     Username? username,
     String? errorMessage,

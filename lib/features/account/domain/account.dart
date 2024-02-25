@@ -30,8 +30,8 @@ class Account {
     this.totalEmailsBlocked = 0,
     this.totalEmailsReplied = 0,
     this.totalEmailsSent = 0,
-    this.createdAt = '',
-    this.lastUpdated = '',
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   final String id;
@@ -102,10 +102,10 @@ class Account {
   final int totalEmailsSent;
 
   @JsonKey(name: 'created_at')
-  final String createdAt;
+  final DateTime createdAt;
 
   @JsonKey(name: 'updated_at')
-  final String lastUpdated;
+  final DateTime updatedAt;
 
   factory Account.fromJson(Map<String, dynamic> json) =>
       _$AccountFromJson(json);
@@ -142,7 +142,7 @@ class Account {
           totalEmailsReplied == other.totalEmailsReplied &&
           totalEmailsSent == other.totalEmailsSent &&
           createdAt == other.createdAt &&
-          lastUpdated == other.lastUpdated;
+          updatedAt == other.updatedAt;
 
   @override
   int get hashCode =>
@@ -171,11 +171,11 @@ class Account {
       totalEmailsReplied.hashCode ^
       totalEmailsSent.hashCode ^
       createdAt.hashCode ^
-      lastUpdated.hashCode;
+      updatedAt.hashCode;
 
   @override
   String toString() {
-    return 'Account{id: $id, username: $username, fromName: $fromName, emailSubject: $emailSubject, bannerLocation: $bannerLocation, bandwidth: $bandwidth, bandwidthLimit: $bandwidthLimit, usernameCount: $usernameCount, usernameLimit: $usernameLimit, defaultRecipientId: $defaultRecipientId, defaultAliasDomain: $defaultAliasDomain, defaultAliasFormat: $defaultAliasFormat, subscription: $subscription, subscriptionEndAt: $subscriptionEndAt, recipientCount: $recipientCount, recipientLimit: $recipientLimit, activeDomainCount: $activeDomainCount, activeDomainLimit: $activeDomainLimit, aliasCount: $aliasCount, aliasLimit: $aliasLimit, totalEmailsForwarded: $totalEmailsForwarded, totalEmailsBlocked: $totalEmailsBlocked, totalEmailsReplied: $totalEmailsReplied, totalEmailsSent: $totalEmailsSent, createdAt: $createdAt, lastUpdated: $lastUpdated}';
+    return 'Account{id: $id, username: $username, fromName: $fromName, emailSubject: $emailSubject, bannerLocation: $bannerLocation, bandwidth: $bandwidth, bandwidthLimit: $bandwidthLimit, usernameCount: $usernameCount, usernameLimit: $usernameLimit, defaultRecipientId: $defaultRecipientId, defaultAliasDomain: $defaultAliasDomain, defaultAliasFormat: $defaultAliasFormat, subscription: $subscription, subscriptionEndAt: $subscriptionEndAt, recipientCount: $recipientCount, recipientLimit: $recipientLimit, activeDomainCount: $activeDomainCount, activeDomainLimit: $activeDomainLimit, aliasCount: $aliasCount, aliasLimit: $aliasLimit, totalEmailsForwarded: $totalEmailsForwarded, totalEmailsBlocked: $totalEmailsBlocked, totalEmailsReplied: $totalEmailsReplied, totalEmailsSent: $totalEmailsSent, createdAt: $createdAt, lastUpdated: $updatedAt}';
   }
 }
 
