@@ -88,14 +88,11 @@ class DefaultRecipientNotifier
 
   @override
   FutureOr<DefaultRecipientState> build(String arg) async {
-    final recipients = ref.watch(recipientsNotifierProvider).value;
-    final alias = ref.watch(aliasScreenNotifierProvider(arg)).value?.alias;
+    final recipients = ref.read(recipientsNotifierProvider).value;
+    final alias = ref.read(aliasScreenNotifierProvider(arg)).value?.alias;
 
     if (recipients == null || alias == null) {
-      throw const AsyncError(
-        'Failed to load data',
-        StackTrace.empty,
-      );
+      throw 'Failed to load data';
     }
 
     final verifiedRecipients = _getVerifiedRecipients(recipients);
