@@ -9,11 +9,8 @@ class AliasListTile extends StatelessWidget {
     Key? key,
     required this.alias,
   }) : super(key: key);
-  final Alias alias;
 
-  String getDescription() {
-    return alias.description.isEmpty ? 'No description' : alias.description;
-  }
+  final Alias alias;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +18,14 @@ class AliasListTile extends StatelessWidget {
 
     return InkWell(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
             AliasListTileLeading(
               isDeleted: alias.isDeleted,
               isActive: alias.active,
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +43,9 @@ class AliasListTile extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    getDescription(),
+                    alias.description.isEmpty
+                        ? 'No description'
+                        : alias.description,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.caption,

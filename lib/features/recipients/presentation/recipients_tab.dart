@@ -58,7 +58,6 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
   @override
   Widget build(BuildContext context) {
     final recipientsState = ref.watch(recipientsNotifierProvider);
-    final size = MediaQuery.of(context).size;
 
     return recipientsState.when(
       data: (recipients) {
@@ -77,8 +76,6 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                   )
                 : ListView.builder(
                     shrinkWrap: true,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.004),
                     itemCount: recipients.length,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {

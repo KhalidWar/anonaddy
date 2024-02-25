@@ -153,15 +153,14 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 emailsReplied: aliasState.alias.emailsReplied,
                 emailsSent: aliasState.alias.emailsSent,
               ),
-              const Divider(height: 20),
+              const Divider(height: 24),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
                   AppStrings.actions,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-              const SizedBox(height: 10),
               AliasScreenListTile(
                 leadingIconData: Icons.alternate_email,
                 title: aliasState.alias.email,
@@ -258,7 +257,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   leadingIconData: Icons.check_circle_outline,
                   title: aliasState.alias.extension,
                   subtitle: 'extension',
-                  trailing: Container(),
+                  trailing: const SizedBox.shrink(),
                 ),
               AliasScreenListTile(
                 leadingIconData: isAliasDeleted
@@ -317,6 +316,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   ],
                 ),
               ),
+              const Divider(height: 24),
               AliasScreenRecipients(
                 recipients: aliasState.alias.recipients,
                 onPressed: () async {
@@ -344,7 +344,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                   );
                 },
               ),
-              const Divider(height: 20),
+              const Divider(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -363,7 +363,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                         ),
                 ],
               ),
-              const SizedBox(height: 20),
             ],
           );
         },
@@ -382,7 +381,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 emailsReplied: 0,
                 emailsSent: 0,
               ),
-              Divider(height: 20),
+              const Divider(height: 24),
               Center(
                 child: PlatformLoadingIndicator(
                   key: AliasScreen.aliasScreenLoadingIndicator,

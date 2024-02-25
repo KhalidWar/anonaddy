@@ -19,9 +19,8 @@ class AliasScreenRecipients extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Divider(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -39,7 +38,7 @@ class AliasScreenRecipients extends StatelessWidget {
         ),
         if (recipients.isEmpty)
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 Text(AppStrings.noDefaultRecipientSet),

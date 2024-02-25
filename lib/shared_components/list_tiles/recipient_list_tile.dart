@@ -21,12 +21,12 @@ class RecipientListTile extends StatelessWidget {
       onTap: onPress,
       child: Container(
         color: isSelected ? AppColors.accentColor : null,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(Icons.email_outlined),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
