@@ -54,7 +54,7 @@ class _DomainDefaultRecipientState
   void _setVerifiedRecipients() {
     final recipients = ref.read(recipientsNotifierProvider).value!;
     for (Recipient recipient in recipients) {
-      if (recipient.emailVerifiedAt.isNotEmpty) {
+      if (recipient.isVerified) {
         _verifiedRecipients.add(recipient);
       }
     }

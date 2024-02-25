@@ -168,9 +168,8 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
     /// Sets verified recipients as available recipients that can be selected
     /// Verified recipients have confirmed emails meaning
     /// [Recipient.emailVerifiedAt] has a value, a timestamp of when email was confirmed.
-    final verifiedRecipients = recipients
-        .where((recipient) => recipient.emailVerifiedAt.isNotEmpty)
-        .toList();
+    final verifiedRecipients =
+        recipients.where((recipient) => recipient.isVerified).toList();
 
     return CreateAliasState(
       domainOptions: domainOptions,

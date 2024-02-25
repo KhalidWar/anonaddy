@@ -1,3 +1,4 @@
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class RecipientScreenUnverifiedWarning extends ConsumerWidget {
       data: (recipientScreenState) {
         final recipient = recipientScreenState.recipient;
 
-        if (recipient.emailVerifiedAt.isEmpty) {
+        if (!recipient.isVerified) {
           return Container(
             color: Colors.amber,
             padding: const EdgeInsets.all(10),
@@ -48,7 +49,8 @@ class RecipientScreenUnverifiedWarning extends ConsumerWidget {
             ),
           );
         }
-        return Container();
+
+        return const SizedBox.shrink();
       },
       error: (error, stack) => Container(),
       loading: () => Container(),

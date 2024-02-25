@@ -27,13 +27,13 @@ class SelectRecipientTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (verifiedRecipient.hasFingerprint)
+          if (verifiedRecipient.fingerprint != null)
             const IconButton(
               icon: Icon(Icons.fingerprint_outlined),
               tooltip: 'Verified',
               onPressed: null,
             ),
-          if (verifiedRecipient.hasFingerprint && verifiedRecipient.isEncrypted)
+          if (verifiedRecipient.isEncrypted)
             const IconButton(
               icon: Icon(Icons.lock),
               tooltip: 'Encrypted',

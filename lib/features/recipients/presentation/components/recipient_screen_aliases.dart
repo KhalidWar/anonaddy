@@ -20,43 +20,42 @@ class RecipientScreenAliases extends ConsumerWidget {
 
     return recipientScreenAsync.when(
       data: (recipientScreenState) {
-        final recipient = recipientScreenState.recipient;
+        final aliases = recipientScreenState.recipient.aliases;
 
-        if (recipient.aliases.isNotEmpty) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Divider(height: 20),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                child: Text('Aliases',
-                    style: Theme.of(context).textTheme.headline6),
-              ),
-              SizedBox(height: size.height * 0.01),
-              if (recipient.aliases.isEmpty)
-                Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.01),
-                    child: const Text('No aliases found'))
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: recipient.aliases.length,
-                  itemBuilder: (context, index) {
-                    return AliasListTile(
-                      alias: recipient.aliases[index],
-                    );
-                  },
-                ),
-            ],
-          );
+        if (aliases == null || aliases.isEmpty) {
+          return const SizedBox.shrink();
         }
 
-        return Container();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Divider(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+              child:
+                  Text('Aliases', style: Theme.of(context).textTheme.headline6),
+            ),
+            SizedBox(height: size.height * 0.01),
+            if (aliases.isEmpty)
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+                  child: const Text('No aliases found'))
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: aliases.length,
+                itemBuilder: (context, index) {
+                  return AliasListTile(
+                    alias: aliases[index],
+                  );
+                },
+              ),
+          ],
+        );
       },
-      error: (error, stack) => Container(),
-      loading: () => Container(),
+      error: (_, __) => const SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
     );
   }
 }

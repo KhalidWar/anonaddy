@@ -9,18 +9,19 @@ part 'recipient.g.dart';
 @HiveType(typeId: HiveTypeId.recipient)
 class Recipient extends HiveObject {
   Recipient({
-    this.id = '',
-    this.userId = '',
-    this.email = '',
-    this.canReplySend = false,
-    this.shouldEncrypt = false,
-    this.inlineEncryption = false,
-    this.protectedHeaders = false,
-    this.fingerprint = '',
-    this.emailVerifiedAt = '',
-    this.aliases = const <Alias>[],
-    this.createdAt = '',
-    this.updatedAt = '',
+    required this.id,
+    required this.userId,
+    required this.email,
+    required this.canReplySend,
+    required this.shouldEncrypt,
+    required this.inlineEncryption,
+    required this.protectedHeaders,
+    required this.createdAt,
+    required this.aliasesCount,
+    this.emailVerifiedAt,
+    this.updatedAt,
+    this.fingerprint,
+    this.aliases,
   });
 
   @HiveField(0)
@@ -38,22 +39,22 @@ class Recipient extends HiveObject {
   final bool shouldEncrypt;
 
   @HiveField(4)
-  final String fingerprint;
+  final String? fingerprint;
 
   @JsonKey(name: 'email_verified_at')
   @HiveField(5)
-  final String emailVerifiedAt;
+  final DateTime? emailVerifiedAt;
 
   @HiveField(6)
-  final List<Alias> aliases;
+  final List<Alias>? aliases;
 
   @JsonKey(name: 'created_at')
   @HiveField(7)
-  final String createdAt;
+  final DateTime createdAt;
 
   @JsonKey(name: 'updated_at')
   @HiveField(8)
-  final String updatedAt;
+  final DateTime? updatedAt;
 
   @JsonKey(name: 'can_reply_send')
   @HiveField(9)
@@ -67,6 +68,10 @@ class Recipient extends HiveObject {
   @HiveField(11)
   final bool protectedHeaders;
 
+  @JsonKey(name: 'aliases_count')
+  @HiveField(12)
+  final int? aliasesCount;
+
   factory Recipient.fromJson(Map<String, dynamic> json) =>
       _$RecipientFromJson(json);
 
@@ -78,13 +83,14 @@ class Recipient extends HiveObject {
     String? email,
     bool? shouldEncrypt,
     String? fingerprint,
-    String? emailVerifiedAt,
+    DateTime? emailVerifiedAt,
     List<Alias>? aliases,
-    String? createdAt,
-    String? updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
     bool? canReplySend,
     bool? inlineEncryption,
     bool? protectedHeaders,
+    int? aliasesCount,
   }) {
     return Recipient(
       id: id ?? this.id,
@@ -99,18 +105,17 @@ class Recipient extends HiveObject {
       canReplySend: canReplySend ?? this.canReplySend,
       inlineEncryption: inlineEncryption ?? this.inlineEncryption,
       protectedHeaders: protectedHeaders ?? this.protectedHeaders,
+      aliasesCount: aliasesCount ?? this.aliasesCount,
     );
   }
 
   @override
   String toString() {
-    return 'Recipient{id: $id, userId: $userId, email: $email, shouldEncrypt: $shouldEncrypt, fingerprint: $fingerprint, emailVerifiedAt: $emailVerifiedAt, aliases: $aliases, createdAt: $createdAt, updatedAt: $updatedAt, canReplySend: $canReplySend, inlineEncryption: $inlineEncryption, protectedHeaders: $protectedHeaders}';
+    return 'Recipient{id: $id, userId: $userId, email: $email, shouldEncrypt: $shouldEncrypt, fingerprint: $fingerprint, emailVerifiedAt: $emailVerifiedAt, aliases: $aliases, createdAt: $createdAt, updatedAt: $updatedAt, canReplySend: $canReplySend, inlineEncryption: $inlineEncryption, protectedHeaders: $protectedHeaders, aliasesCount: $aliasesCount}';
   }
 }
 
 extension RecipientExtension on Recipient {
-  bool get isVerified => emailVerifiedAt.isNotEmpty;
-  bool get hasFingerprint => fingerprint.isNotEmpty;
-  bool get isEncrypted => shouldEncrypt;
-  int get aliasesCount => aliases.length;
+  bool get isVerified => emailVerifiedAt != null;
+  bool get isEncrypted => fingerprint != null && shouldEncrypt;
 }

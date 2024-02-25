@@ -31,20 +31,20 @@ class RecipientListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(recipient.email),
-                recipient.emailVerifiedAt.isEmpty
+                recipient.isVerified
                     ? Text(
-                        AppStrings.unverified,
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(color: Colors.red),
-                      )
-                    : Text(
                         AppStrings.verified,
                         style: Theme.of(context)
                             .textTheme
                             .caption
                             ?.copyWith(color: Colors.green),
+                      )
+                    : Text(
+                        AppStrings.unverified,
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption
+                            ?.copyWith(color: Colors.red),
                       ),
               ],
             ),

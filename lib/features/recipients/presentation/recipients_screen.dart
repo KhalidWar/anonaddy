@@ -34,41 +34,44 @@ class RecipientsScreen extends ConsumerStatefulWidget {
 }
 
 class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
-  /// This is a temp solution. Count logic should be moved to [RecipientScreenNotifier].
-  List<int> calculateEmailsForwarded(Recipient recipient) {
-    final list = <int>[];
-    if (recipient.aliases.isEmpty) return <int>[];
-    for (Alias alias in recipient.aliases) {
-      list.add(alias.emailsForwarded);
+  List<int> calculateEmailsForwarded(List<Alias>? aliases) {
+    if (aliases == null || aliases.isEmpty) {
+      return <int>[];
     }
-    return list;
+
+    return aliases.map((alias) {
+      return alias.emailsForwarded;
+    }).toList();
   }
 
-  List<int> calculateEmailsBlocked(Recipient recipient) {
-    final list = <int>[];
-    if (recipient.aliases.isEmpty) return <int>[];
-    for (Alias alias in recipient.aliases) {
-      list.add(alias.emailsBlocked);
+  List<int> calculateEmailsBlocked(List<Alias>? aliases) {
+    if (aliases == null || aliases.isEmpty) {
+      return <int>[];
     }
-    return list;
+
+    return aliases.map((alias) {
+      return alias.emailsBlocked;
+    }).toList();
   }
 
-  List<int> calculateEmailsReplied(Recipient recipient) {
-    final list = <int>[];
-    if (recipient.aliases.isEmpty) return <int>[];
-    for (Alias alias in recipient.aliases) {
-      list.add(alias.emailsReplied);
+  List<int> calculateEmailsReplied(List<Alias>? aliases) {
+    if (aliases == null || aliases.isEmpty) {
+      return <int>[];
     }
-    return list;
+
+    return aliases.map((alias) {
+      return alias.emailsReplied;
+    }).toList();
   }
 
-  List<int> calculateEmailsSent(Recipient recipient) {
-    final list = <int>[];
-    if (recipient.aliases.isEmpty) return <int>[];
-    for (Alias alias in recipient.aliases) {
-      list.add(alias.emailsSent);
+  List<int> calculateEmailsSent(List<Alias>? aliases) {
+    if (aliases == null || aliases.isEmpty) {
+      return <int>[];
     }
-    return list;
+
+    return aliases.map((alias) {
+      return alias.emailsSent;
+    }).toList();
   }
 
   @override
@@ -128,23 +131,25 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   RecipientScreenUnverifiedWarning(recipientId: recipient.id),
                   AliasScreenPieChart(
                     emailsForwarded: Utilities.reduceListElements(
-                      calculateEmailsForwarded(recipient),
+                      calculateEmailsForwarded(recipient.aliases),
                     ),
                     emailsBlocked: Utilities.reduceListElements(
-                      calculateEmailsBlocked(recipient),
+                      calculateEmailsBlocked(recipient.aliases),
                     ),
                     emailsReplied: Utilities.reduceListElements(
-                      calculateEmailsReplied(recipient),
+                      calculateEmailsReplied(recipient.aliases),
                     ),
                     emailsSent: Utilities.reduceListElements(
-                      calculateEmailsSent(recipient),
+                      calculateEmailsSent(recipient.aliases),
                     ),
                   ),
                   const Divider(height: 20),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Text('Actions',
-                        style: Theme.of(context).textTheme.headline6),
+                    child: Text(
+                      'Actions',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
                   ),
                   RecipientScreenActionsListTile(
                     leadingIconData: Icons.email_outlined,
@@ -188,11 +193,11 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                   ),
                   RecipientScreenActionsListTile(
                     leadingIconData: Icons.fingerprint_outlined,
-                    title: recipient.fingerprint.isEmpty
+                    title: recipient.fingerprint == null
                         ? 'No fingerprint found'
-                        : recipient.fingerprint,
+                        : recipient.fingerprint!,
                     subtitle: 'GPG Key Fingerprint',
-                    trailing: recipient.fingerprint.isEmpty
+                    trailing: recipient.fingerprint == null
                         ? IconButton(
                             icon: const Icon(Icons.add_circle_outline_outlined),
                             onPressed: () {
@@ -201,8 +206,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                                 isScrollControlled: true,
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(
-                                          AppTheme.kBottomSheetBorderRadius)),
+                                    top: Radius.circular(
+                                      AppTheme.kBottomSheetBorderRadius,
+                                    ),
+                                  ),
                                 ),
                                 builder: (context) =>
                                     RecipientAddPgpKey(recipient: recipient),
@@ -247,7 +254,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     trailing: RecipientScreenTrailingLoadingSwitch(
                       isLoading: recipientScreenState.isEncryptionToggleLoading,
                       switchValue: recipientScreenState.recipient.shouldEncrypt,
-                      onPress: recipient.fingerprint.isEmpty
+                      onPress: recipient.fingerprint == null
                           ? null
                           : (toggle) async {
                               recipient.shouldEncrypt
@@ -277,7 +284,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                           recipientScreenState.isInlineEncryptionSwitchLoading,
                       switchValue:
                           recipientScreenState.recipient.inlineEncryption,
-                      onPress: recipient.fingerprint.isEmpty
+                      onPress: recipient.fingerprint == null
                           ? null
                           : (toggle) async {
                               recipient.inlineEncryption
@@ -305,7 +312,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                           recipientScreenState.isProtectedHeaderSwitchLoading,
                       switchValue:
                           recipientScreenState.recipient.protectedHeaders,
-                      onPress: recipient.fingerprint.isEmpty
+                      onPress: recipient.fingerprint == null
                           ? null
                           : (toggle) async {
                               recipient.protectedHeaders
