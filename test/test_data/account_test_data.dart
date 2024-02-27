@@ -1,10 +1,6 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 
 class AccountTestData {
-  static Account defaultAccount() {
-    return Account();
-  }
-
   static Account validAccount() {
     return Account(
       id: 'id',
@@ -27,8 +23,8 @@ class AccountTestData {
       totalEmailsBlocked: 0,
       totalEmailsReplied: 0,
       totalEmailsSent: 0,
-      createdAt: '2021-07-28 16:41:44',
-      updatedAt: '2022-03-01 12:30:47',
+      createdAt: DateTime(2021, 7, 28),
+      updatedAt: DateTime(2022, 3, 1),
       aliasCount: 10,
       aliasLimit: 100,
       subscription: '',

@@ -22,7 +22,7 @@ class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {
     }
 
     if (key == DataStorageKeys.accountKey) {
-      return jsonEncode(AccountTestData.validAccountJson);
+      return jsonEncode(AccountTestData.validAccountJson['data']);
     }
 
     return null;

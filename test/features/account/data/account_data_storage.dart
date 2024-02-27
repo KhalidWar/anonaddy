@@ -3,6 +3,7 @@ import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../test_data/account_test_data.dart';
 import '../../auth/data/mock_flutter_secure_storage.dart';
 
 void main() {
@@ -24,7 +25,10 @@ void main() {
 
       final account = await accountDataStorage.loadData();
       expect(account, isA<Account>());
-      expect(account, Account());
+      expect(
+        account,
+        Account.fromJson(AccountTestData.validAccountJson['data']),
+      );
     });
   });
 }

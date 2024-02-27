@@ -57,8 +57,7 @@ void main() {
         'Given AccountTab is constructed, '
         'When state is still loading, '
         'Then show loading indicator.', (tester) async {
-      await tester
-          .pumpWidget(buildAccountTab(AccountTestData.defaultAccount()));
+      await tester.pumpWidget(buildAccountTab(AccountTestData.validAccount()));
 
       expect(find.byType(AccountTabHeader), findsOneWidget);
       expect(
@@ -81,7 +80,7 @@ void main() {
         'When an error occurs, '
         'Then show error widget.', (tester) async {
       await tester.pumpWidget(buildAccountTab(
-        AccountTestData.defaultAccount(),
+        AccountTestData.validAccount(),
         throwError: true,
       ));
       await tester.pumpAndSettle();
