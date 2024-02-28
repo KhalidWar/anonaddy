@@ -25,8 +25,7 @@ void main() {
     final loginScreenScaffold = find.byKey(const Key('loginScreenScaffold'));
     final textField = find.byKey(const Key('loginScreenTextField'));
     final loginButton = find.byKey(const Key('loginFooterLoginButton'));
-    final loginButtonText =
-        find.byKey(const Key('loginFooterLoginButtonLabel'));
+    final loginButtonText = find.byKey(const Key('addyLoginScreenLoginFooter'));
     final loadingIndicator =
         find.byKey(const Key('loginFooterLoginButtonLoading'));
     final accessTokenInfoButton =
