@@ -37,7 +37,7 @@ void main() {
     (WidgetTester tester) async {
       final availableAlias = AliasTestData.validAliasWithRecipients();
       final deletedAlias =
-          availableAlias.copyWith(deletedAt: '2022-02-22 18:08:15');
+          AliasTestData.validAliasWithRecipients(isDeleted: true);
       final loadingState = AliasesState(
         availableAliases: <Alias>[availableAlias, availableAlias],
         deletedAliases: <Alias>[deletedAlias, deletedAlias],
@@ -80,7 +80,7 @@ void main() {
     (WidgetTester tester) async {
       final availableAlias = AliasTestData.validAliasWithRecipients();
       final deletedAlias =
-          availableAlias.copyWith(deletedAt: '2022-02-22 18:08:15');
+          AliasTestData.validAliasWithRecipients(isDeleted: true);
       final loadedState = AliasesState(
         availableAliases: <Alias>[
           availableAlias,
@@ -135,7 +135,7 @@ void main() {
     (WidgetTester tester) async {
       final availableAlias = AliasTestData.validAliasWithRecipients();
       final deletedAlias =
-          availableAlias.copyWith(deletedAt: '2022-02-22 18:08:15');
+          AliasTestData.validAliasWithRecipients(isDeleted: true);
       final errorState = AliasesState(
         availableAliases: <Alias>[availableAlias, availableAlias],
         deletedAliases: <Alias>[deletedAlias, deletedAlias],

@@ -2,7 +2,7 @@ import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 
 class AliasTestData {
-  static Alias validAliasWithRecipients() {
+  static Alias validAliasWithRecipients({bool isDeleted = false}) {
     return Alias(
       id: "fd2258a0-9a40-4825-96c8-ed0f8c38a429",
       userId: "f68d975c-00c4-4eb0-b9d2-2d2a6306265d",
@@ -20,7 +20,7 @@ class AliasTestData {
       emailsSent: 0,
       createdAt: DateTime(2022, 2, 22),
       updatedAt: DateTime(2022, 3, 5),
-      deletedAt: null,
+      deletedAt: isDeleted ? DateTime(2022, 3, 4) : null,
       recipients: [
         Recipient(
           id: '756c3e48-a15a-4a9b-90c3-dbd97fef5274',
