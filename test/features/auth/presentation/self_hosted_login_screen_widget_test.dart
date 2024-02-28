@@ -38,7 +38,7 @@ void main() async {
     final loginButtonLoading =
         find.byKey(const Key('loginFooterLoginButtonLoading'));
     final loginButtonLabel =
-        find.byKey(const Key('loginFooterLoginButtonLabel'));
+        find.byKey(const Key('selfHostedLoginScreenLoginFooter'));
     final urlInputHintText = find.text(AppUrl.anonAddyAuthority);
     final tokenInputHintText = find.text(AppStrings.enterYourApiToken);
 
