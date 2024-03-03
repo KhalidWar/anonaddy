@@ -9,15 +9,14 @@ class SearchHistory extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final size = MediaQuery.of(context).size;
     final searchState = ref.watch(searchHistoryStateNotifier);
 
     return searchState.when(
       data: (aliases) {
         if (aliases.isEmpty) {
-          return Padding(
-            padding: EdgeInsets.all(size.height * 0.01),
-            child: const Row(children: [Text('Nothing to see here.')]),
+          return const Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(children: [Text('Nothing to see here.')]),
           );
         }
 
@@ -36,7 +35,7 @@ class SearchHistory extends ConsumerWidget {
       },
       error: (error, stack) {
         return Padding(
-          padding: EdgeInsets.all(size.height * 0.01),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Text(error.toString()),
@@ -45,9 +44,9 @@ class SearchHistory extends ConsumerWidget {
         );
       },
       loading: () {
-        return Padding(
-          padding: EdgeInsets.all(size.height * 0.01),
-          child: const Center(child: CircularProgressIndicator()),
+        return const Padding(
+          padding: EdgeInsets.all(16),
+          child: Center(child: CircularProgressIndicator()),
         );
       },
     );
