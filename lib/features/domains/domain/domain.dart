@@ -10,7 +10,6 @@ class Domain {
     required this.id,
     required this.userId,
     required this.domain,
-    required this.aliasCount,
     required this.active,
     required this.catchAll,
     required this.createdAt,
@@ -20,6 +19,7 @@ class Domain {
     this.domainSendingVerifiedAt,
     this.defaultRecipient,
     this.aliases,
+    this.aliasesCount,
     this.description,
     this.fromName,
   });
@@ -37,7 +37,7 @@ class Domain {
   final List<Alias>? aliases;
 
   @JsonKey(name: 'aliases_count')
-  final int? aliasCount;
+  final int? aliasesCount;
 
   @JsonKey(name: 'default_recipient')
   final Recipient? defaultRecipient;
@@ -72,7 +72,7 @@ class Domain {
     String? description,
     String? fromName,
     List<Alias>? aliases,
-    int? aliasCount,
+    int? aliasesCount,
     Recipient? defaultRecipient,
     bool? active,
     bool? catchAll,
@@ -89,7 +89,7 @@ class Domain {
       description: description ?? this.description,
       fromName: fromName ?? this.fromName,
       aliases: aliases ?? this.aliases,
-      aliasCount: aliasCount ?? this.aliasCount,
+      aliasesCount: aliasesCount ?? this.aliasesCount,
       defaultRecipient: defaultRecipient ?? this.defaultRecipient,
       active: active ?? this.active,
       catchAll: catchAll ?? this.catchAll,
@@ -104,7 +104,7 @@ class Domain {
 
   @override
   String toString() {
-    return 'Domain{id: $id, userId: $userId, domain: $domain, description: $description, fromName: $fromName, aliases: $aliases, aliasCount: $aliasCount, defaultRecipient: $defaultRecipient, active: $active, catchAll: $catchAll, domainVerifiedAt: $domainVerifiedAt, domainMxValidatedAt: $domainMxValidatedAt, domainSendingVerifiedAt: $domainSendingVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'Domain{id: $id, userId: $userId, domain: $domain, description: $description, fromName: $fromName, aliases: $aliases, aliasesCount: $aliasesCount, defaultRecipient: $defaultRecipient, active: $active, catchAll: $catchAll, domainVerifiedAt: $domainVerifiedAt, domainMxValidatedAt: $domainMxValidatedAt, domainSendingVerifiedAt: $domainSendingVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }
 

@@ -187,7 +187,10 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
           ],
         ),
         const Divider(height: 24),
-        AssociatedAliases(params: {'domain': domain.id}),
+        AssociatedAliases(
+          aliasesCount: domain.aliasesCount,
+          params: {'domain': domain.id},
+        ),
         const Divider(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

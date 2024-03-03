@@ -8,9 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AssociatedAliases extends ConsumerStatefulWidget {
   const AssociatedAliases({
     super.key,
+    required this.aliasesCount,
     required this.params,
   });
 
+  final int? aliasesCount;
   final Map<String, String> params;
 
   @override
@@ -46,6 +48,8 @@ class _AssociatedAliasesState extends ConsumerState<AssociatedAliases> {
             ],
           ),
         ),
+        // if (widget.aliasesCount == null || widget.aliasesCount == 0)
+        //   const Center(child: Text('No aliases found')),
         if (showAliases)
           Padding(
             padding: const EdgeInsets.only(bottom: 16),

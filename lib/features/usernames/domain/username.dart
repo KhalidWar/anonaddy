@@ -17,6 +17,7 @@ class Username {
     this.description,
     this.fromName,
     this.aliases,
+    this.aliasesCount,
     this.defaultRecipient,
     this.canLogin,
   });
@@ -32,6 +33,9 @@ class Username {
   final String? fromName;
 
   final List<Alias>? aliases;
+
+  @JsonKey(name: 'aliases_count')
+  final int? aliasesCount;
 
   @JsonKey(name: 'default_recipient')
   final Recipient? defaultRecipient;
@@ -62,6 +66,7 @@ class Username {
     String? description,
     String? fromName,
     List<Alias>? aliases,
+    int? aliasesCount,
     Recipient? defaultRecipient,
     bool? active,
     bool? catchAll,
@@ -76,6 +81,7 @@ class Username {
       description: description ?? this.description,
       fromName: fromName ?? this.fromName,
       aliases: aliases ?? this.aliases,
+      aliasesCount: aliasesCount ?? this.aliasesCount,
       defaultRecipient: defaultRecipient ?? this.defaultRecipient,
       active: active ?? this.active,
       catchAll: catchAll ?? this.catchAll,
@@ -87,6 +93,6 @@ class Username {
 
   @override
   String toString() {
-    return 'Username{id: $id, userId: $userId, username: $username, description: $description, fromName: $fromName, aliases: $aliases, defaultRecipient: $defaultRecipient, active: $active, catchAll: $catchAll, canLogin: $canLogin, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'Username{id: $id, userId: $userId, username: $username, description: $description, fromName: $fromName, aliases: $aliases, aliasesCount: $aliasesCount, defaultRecipient: $defaultRecipient, active: $active, catchAll: $catchAll, canLogin: $canLogin, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }

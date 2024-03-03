@@ -19,6 +19,7 @@ Username _$UsernameFromJson(Map<String, dynamic> json) => Username(
       aliases: (json['aliases'] as List<dynamic>?)
           ?.map((e) => Alias.fromJson(e as Map<String, dynamic>))
           .toList(),
+      aliasesCount: json['aliases_count'] as int?,
       defaultRecipient: json['default_recipient'] == null
           ? null
           : Recipient.fromJson(
@@ -33,6 +34,7 @@ Map<String, dynamic> _$UsernameToJson(Username instance) => <String, dynamic>{
       'description': instance.description,
       'from_name': instance.fromName,
       'aliases': instance.aliases?.map((e) => e.toJson()).toList(),
+      'aliases_count': instance.aliasesCount,
       'default_recipient': instance.defaultRecipient?.toJson(),
       'active': instance.active,
       'catch_all': instance.catchAll,

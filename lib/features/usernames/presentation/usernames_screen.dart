@@ -187,7 +187,10 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
           ],
         ),
         const Divider(height: 24),
-        AssociatedAliases(params: {'username': username.id}),
+        AssociatedAliases(
+          aliasesCount: username.aliasesCount,
+          params: {'username': username.id},
+        ),
         const Divider(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -10,7 +10,6 @@ Domain _$DomainFromJson(Map<String, dynamic> json) => Domain(
       id: json['id'] as String,
       userId: json['user_id'] as String,
       domain: json['domain'] as String,
-      aliasCount: json['aliases_count'] as int?,
       active: json['active'] as bool,
       catchAll: json['catch_all'] as bool,
       createdAt: DateTime.parse(json['created_at'] as String),
@@ -31,6 +30,7 @@ Domain _$DomainFromJson(Map<String, dynamic> json) => Domain(
       aliases: (json['aliases'] as List<dynamic>?)
           ?.map((e) => Alias.fromJson(e as Map<String, dynamic>))
           .toList(),
+      aliasesCount: json['aliases_count'] as int?,
       description: json['description'] as String?,
       fromName: json['from_name'] as String?,
     );
@@ -42,7 +42,7 @@ Map<String, dynamic> _$DomainToJson(Domain instance) => <String, dynamic>{
       'description': instance.description,
       'from_name': instance.fromName,
       'aliases': instance.aliases?.map((e) => e.toJson()).toList(),
-      'aliases_count': instance.aliasCount,
+      'aliases_count': instance.aliasesCount,
       'default_recipient': instance.defaultRecipient?.toJson(),
       'active': instance.active,
       'catch_all': instance.catchAll,

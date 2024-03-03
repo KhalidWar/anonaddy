@@ -318,7 +318,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     ),
                   ),
                   const Divider(height: 24),
-                  AssociatedAliases(params: {'recipient': recipient.id}),
+                  AssociatedAliases(
+                    aliasesCount: recipient.aliasesCount,
+                    params: {'recipient': recipient.id},
+                  ),
                   const Divider(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
