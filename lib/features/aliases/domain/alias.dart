@@ -99,6 +99,51 @@ class Alias extends HiveObject {
   Map<String, dynamic> toJson() => _$AliasToJson(this);
 
   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Alias &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          userId == other.userId &&
+          aliasableId == other.aliasableId &&
+          aliasableType == other.aliasableType &&
+          localPart == other.localPart &&
+          extension == other.extension &&
+          domain == other.domain &&
+          email == other.email &&
+          active == other.active &&
+          description == other.description &&
+          emailsForwarded == other.emailsForwarded &&
+          emailsBlocked == other.emailsBlocked &&
+          emailsReplied == other.emailsReplied &&
+          emailsSent == other.emailsSent &&
+          recipients == other.recipients &&
+          createdAt == other.createdAt &&
+          updatedAt == other.updatedAt &&
+          deletedAt == other.deletedAt;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      userId.hashCode ^
+      aliasableId.hashCode ^
+      aliasableType.hashCode ^
+      localPart.hashCode ^
+      extension.hashCode ^
+      domain.hashCode ^
+      email.hashCode ^
+      active.hashCode ^
+      description.hashCode ^
+      emailsForwarded.hashCode ^
+      emailsBlocked.hashCode ^
+      emailsReplied.hashCode ^
+      emailsSent.hashCode ^
+      recipients.hashCode ^
+      createdAt.hashCode ^
+      updatedAt.hashCode ^
+      deletedAt.hashCode;
+
+  @override
   String toString() {
     return 'Alias{id: $id, userId: $userId, aliasableId: $aliasableId, aliasableType: $aliasableType, localPart: $localPart, extension: $extension, domain: $domain, email: $email, active: $active, description: $description, emailsForwarded: $emailsForwarded, emailsBlocked: $emailsBlocked, emailsReplied: $emailsReplied, emailsSent: $emailsSent, recipients: $recipients, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt}';
   }
