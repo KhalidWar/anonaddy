@@ -69,7 +69,13 @@ class AuthService {
       if (userData == null) return null;
 
       final decodedDate = jsonDecode(userData);
-      return User.fromMap(decodedDate);
+      final user = User.fromMap(decodedDate);
+
+      return User(
+        url: user.url == 'app.anonaddy.com' ? 'app.addy.io' : user.url,
+        token: user.token,
+        apiToken: user.apiToken,
+      );
     } catch (error) {
       rethrow;
     }
