@@ -1,3 +1,4 @@
+import 'package:anonaddy/features/associated_aliases/presentation/associated_aliases.dart';
 import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_notifier.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_state.dart';
@@ -9,7 +10,6 @@ import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_detail_list_tile.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
@@ -98,7 +98,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
             ],
           ),
         ),
-        Divider(height: size.height * 0.02),
+        const Divider(height: 24),
         AliasDetailListTile(
           title: domain.hasDescription
               ? domain.description
@@ -144,7 +144,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         // Divider(height: size.height * 0.02),
         if (domain.isMXValidated)
           buildUnverifiedEmailWarning(size, AppStrings.invalidDomainMXWarning),
-        Divider(height: size.height * 0.02),
+        const Divider(height: 24),
         // if (domain.domainSendingVerifiedAt == null)
         //   buildUnverifiedEmailWarning(size, kUnverifiedDomainNote),
         // Divider(height: size.height * 0.02),
@@ -186,41 +186,9 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
               ),
           ],
         ),
-        Divider(height: size.height * 0.02),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
-              child: Row(
-                children: [
-                  Text(
-                    'Associated Aliases',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Container(height: 36),
-                ],
-              ),
-            ),
-            if (domain.aliases.isEmpty)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: const Text('No aliases found'),
-              )
-            else
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: domain.aliases!.length,
-                itemBuilder: (context, index) {
-                  return AliasListTile(
-                    alias: domain.aliases![index],
-                  );
-                },
-              ),
-          ],
-        ),
-        Divider(height: size.height * 0.03),
+        const Divider(height: 24),
+        AssociatedAliases(params: {'domain': domain.id}),
+        const Divider(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

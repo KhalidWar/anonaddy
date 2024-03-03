@@ -1,8 +1,8 @@
 import 'package:anonaddy/features/aliases/domain/alias.dart';
+import 'package:anonaddy/features/associated_aliases/presentation/associated_aliases.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_add_pgp_key.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_actions_list_tile.dart';
-import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_aliases.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_trailing_loading_switch.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
@@ -317,7 +317,8 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                             },
                     ),
                   ),
-                  RecipientScreenAliases(recipientId: widget.recipient.id),
+                  const Divider(height: 24),
+                  AssociatedAliases(params: {'recipient': recipient.id}),
                   const Divider(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
