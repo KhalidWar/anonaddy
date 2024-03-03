@@ -65,6 +65,20 @@ class AliasService {
     }
   }
 
+  Future<List<Alias>> fetchAssociatedAliases(Map<String, String> params) async {
+    try {
+      const path = '$kUnEncodedBaseURL/aliases';
+      final response = await dio.get(path, queryParameters: params);
+      log('fetchAssociatedAliases: ${response.statusCode}');
+      final aliases = response.data['data'] as List;
+      return aliases.map((alias) => Alias.fromJson(alias)).toList();
+    } on DioError catch (dioError) {
+      throw dioError.message;
+    } catch (e) {
+      throw 'Failed to fetch available aliases';
+    }
+  }
+
   Future<List<Alias>?> loadAvailableAliasesFromDisk() async {
     try {
       final availableAliases =
