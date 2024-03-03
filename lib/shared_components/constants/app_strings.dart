@@ -24,7 +24,7 @@ class AppStrings {
 
   /// Aliases Tab
   static const updateAliasRecipientNote =
-      'Note: only verified recipients can be used as default recipients.';
+      'Only verified recipients can be used as default recipients.';
   static const deleteAliasSubtitle = 'Alias will reject all emails sent to it';
   static const restoreAliasSubtitle = 'Alias will be able to receive emails';
   static const updateDescriptionString =
@@ -108,11 +108,11 @@ class AppStrings {
   static const settingsBiometricAuth = 'Biometric Authentication';
   static const settingsBiometricAuthSubtitle =
       'Require biometric authentication';
-  static const settingsAnonAddyHelpCenter = 'addy.io Help Center';
-  static const settingsAnonAddyHelpCenterSubtitle =
-      'addy.io\'s terminologies...etc.';
-  static const settingsAnonAddyFAQ = 'addy.io FAQ';
-  static const settingsAnonAddyFAQSubtitle = 'Learn more about addy.io';
+  static const settingsAddyHelpCenter = 'Addy.io Help Center';
+  static const settingsAddyHelpCenterSubtitle =
+      'Addy.io\'s terminologies...etc.';
+  static const settingsAddyFAQ = 'Addy.io FAQ';
+  static const settingsAddyFAQSubtitle = 'Learn more about addy.io';
   static const settingsAboutApp = 'About App';
   static const settingsAboutAppSubtitle = 'View AddyManager details';
   static const settingsEnjoyingApp = 'Enjoying AddyManager?';

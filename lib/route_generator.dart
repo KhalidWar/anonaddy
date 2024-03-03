@@ -1,22 +1,20 @@
-import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/models/domain/domain_model.dart';
-import 'package:anonaddy/models/recipient/recipient.dart';
-import 'package:anonaddy/models/username/username.dart';
-import 'package:anonaddy/screens/account_tab/domains/domains_screen.dart';
-import 'package:anonaddy/screens/account_tab/recipients/recipients_screen.dart';
-import 'package:anonaddy/screens/account_tab/usernames/usernames_screen.dart';
-import 'package:anonaddy/screens/alert_center/alert_center_screen.dart';
-import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
-import 'package:anonaddy/screens/authorization_screen/authorization_screen.dart';
-import 'package:anonaddy/screens/authorization_screen/logout_screen.dart';
-import 'package:anonaddy/screens/home_screen/home_screen.dart';
-import 'package:anonaddy/screens/login_screen/anonaddy_login_screen.dart';
-import 'package:anonaddy/screens/login_screen/self_host_login_screen.dart';
-import 'package:anonaddy/screens/navigation_error/navigation_error_screen.dart';
-import 'package:anonaddy/screens/search_tab/quick_search_screen.dart';
-import 'package:anonaddy/screens/settings_screen/about_app_screen.dart';
-import 'package:anonaddy/screens/settings_screen/credits_screen.dart';
-import 'package:anonaddy/screens/settings_screen/settings_screen.dart';
+import 'package:anonaddy/features/alert_center/presentation/alert_center_screen.dart';
+import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
+import 'package:anonaddy/features/auth/presentation/anonaddy_login_screen.dart';
+import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
+import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
+import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
+import 'package:anonaddy/features/domains/domain/domain.dart';
+import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
+import 'package:anonaddy/features/home/presentation/home_screen.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
+import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
+import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
+import 'package:anonaddy/features/settings/presentation/about_app_screen.dart';
+import 'package:anonaddy/features/settings/presentation/credits_screen.dart';
+import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
+import 'package:anonaddy/features/usernames/presentation/usernames_screen.dart';
+import 'package:anonaddy/shared_components/navigation_error/navigation_error_screen.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +24,9 @@ class RouteGenerator {
     final argument = settings.arguments;
 
     switch (settings.name) {
-
       /// Authentication Screen
-      case AuthorizationScreen.routeName:
-        return PlatformAware.customPageRoute(const AuthorizationScreen());
+      case AuthScreen.routeName:
+        return PlatformAware.customPageRoute(const AuthScreen());
 
       /// Home Screen
       case HomeScreen.routeName:
@@ -50,7 +47,7 @@ class RouteGenerator {
       /// Alias Tab
       case AliasScreen.routeName:
         return PlatformAware.customPageRoute(
-          AliasScreen(alias: argument as Alias),
+          AliasScreen(aliasId: argument as String),
         );
 
       /// Account Tab
@@ -59,14 +56,14 @@ class RouteGenerator {
             RecipientsScreen(recipient: argument as Recipient));
       case UsernamesScreen.routeName:
         return PlatformAware.customPageRoute(
-            UsernamesScreen(username: argument as Username));
+            UsernamesScreen(usernameId: argument as String));
       case DomainsScreen.routeName:
         return PlatformAware.customPageRoute(
             DomainsScreen(domain: argument as Domain));
 
       /// Login Screen
-      case AnonAddyLoginScreen.routeName:
-        return PlatformAware.customPageRoute(const AnonAddyLoginScreen());
+      case AddyLoginScreen.routeName:
+        return PlatformAware.customPageRoute(const AddyLoginScreen());
       case SelfHostLoginScreen.routeName:
         return PlatformAware.customPageRoute(const SelfHostLoginScreen());
 

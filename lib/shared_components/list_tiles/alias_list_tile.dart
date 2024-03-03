@@ -1,20 +1,16 @@
-import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/screens/alias_tab/alias_screen.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
+import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile_leading.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 
 class AliasListTile extends StatelessWidget {
-  const AliasListTile({Key? key, required this.alias}) : super(key: key);
+  const AliasListTile({
+    Key? key,
+    required this.alias,
+  }) : super(key: key);
+
   final Alias alias;
-
-  bool isAliasDeleted() {
-    return alias.deletedAt.isEmpty ? false : true;
-  }
-
-  String getDescription() {
-    return alias.description.isEmpty ? 'No description' : alias.description;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +18,14 @@ class AliasListTile extends StatelessWidget {
 
     return InkWell(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 5, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           children: [
             AliasListTileLeading(
-              isDeleted: isAliasDeleted(),
+              isDeleted: alias.isDeleted,
               isActive: alias.active,
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +35,7 @@ class AliasListTile extends StatelessWidget {
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          color: isAliasDeleted()
+                          color: alias.isDeleted
                               ? Colors.grey
                               : isDark
                                   ? Colors.white
@@ -47,7 +43,9 @@ class AliasListTile extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    getDescription(),
+                    alias.description.isEmpty
+                        ? 'No description'
+                        : alias.description,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.caption,
@@ -57,7 +55,7 @@ class AliasListTile extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.copy),
-              onPressed: isAliasDeleted()
+              onPressed: alias.isDeleted
                   ? null
                   : () => Utilities.copyOnTap(alias.email),
             ),
@@ -68,7 +66,7 @@ class AliasListTile extends StatelessWidget {
         Navigator.pushNamed(
           context,
           AliasScreen.routeName,
-          arguments: alias,
+          arguments: alias.id,
         );
       },
     );

@@ -6,4 +6,5 @@ class HiveTypeId {
   static const alias = 0;
   static const recipient = 1;
   static const profile = 2;
+  static const apiToken = 3;
 }

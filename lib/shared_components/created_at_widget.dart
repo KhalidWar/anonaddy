@@ -9,14 +9,14 @@ class CreatedAtWidget extends StatelessWidget {
   }) : super(key: key);
 
   final String label;
-  final String dateTime;
+  final DateTime? dateTime;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

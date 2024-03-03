@@ -1,6 +1,6 @@
-import 'package:anonaddy/models/alias/alias.dart';
-import 'package:anonaddy/models/profile/profile.dart';
-import 'package:anonaddy/models/recipient/recipient.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
+import 'package:anonaddy/features/auth/domain/profile.dart';
+import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

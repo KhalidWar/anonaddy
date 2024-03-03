@@ -5,12 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class Utilities {
-  static String formatDateTime(BuildContext context, String input) {
-    if (input.isEmpty) return '';
-
-    final dateTime = DateTime.tryParse(input);
+  static String formatDateTime(BuildContext context, DateTime? dateTime) {
     if (dateTime == null) return '';
 
     final locale = Localizations.localeOf(context);
@@ -72,7 +70,7 @@ class Utilities {
     }
   }
 
-  static String correctAliasString(String input) {
+  static String correctAliasString(String? input) {
     switch (input) {
       case 'random_characters':
         return 'Random Characters';
@@ -80,8 +78,10 @@ class Utilities {
         return 'Random Words';
       case 'custom':
         return 'Custom';
-      default:
+      case 'uuid':
         return 'UUID';
+      default:
+        return 'No default Alias selected';
     }
   }
 
@@ -99,5 +99,47 @@ class Utilities {
       final total = list.reduce((value, element) => value + element);
       return total;
     }
+  }
+
+  static WoltModalSheetPage buildWoltModalSheetSubPage(
+    BuildContext context, {
+    required String topBarTitle,
+    required Widget child,
+    bool showLeading = true,
+    Function()? leadingWidgetOnPress,
+    String? pageTitle,
+  }) {
+    assert(!(showLeading && leadingWidgetOnPress == null));
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return WoltModalSheetPage.withSingleChild(
+      topBarTitle: Text(
+        topBarTitle,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      backgroundColor: isDark ? Colors.black : Colors.white,
+      sabGradientColor: isDark ? Colors.black : Colors.white,
+      isTopBarLayerAlwaysVisible: true,
+      pageTitle: pageTitle == null
+          ? null
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                pageTitle,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+      leadingNavBarWidget: showLeading
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back_ios_rounded),
+              onPressed: leadingWidgetOnPress,
+            )
+          : null,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 50),
+        child: child,
+      ),
+    );
   }
 }

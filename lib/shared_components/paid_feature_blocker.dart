@@ -1,9 +1,8 @@
-import 'package:anonaddy/notifiers/account/account_notifier.dart';
-import 'package:anonaddy/notifiers/account/account_state.dart';
-import 'package:anonaddy/screens/account_tab/domains/domains_tab.dart';
-import 'package:anonaddy/screens/account_tab/rules/rules_tab.dart';
-import 'package:anonaddy/screens/account_tab/usernames/usernames_tab.dart';
-import 'package:anonaddy/screens/alert_center/failed_deliveries_widget.dart';
+import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
+import 'package:anonaddy/features/domains/presentation/domains_tab.dart';
+import 'package:anonaddy/features/rules/presentation/rules_tab.dart';
+import 'package:anonaddy/features/usernames/presentation/usernames_tab.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
@@ -28,19 +27,17 @@ class PaidFeatureBlocker extends ConsumerWidget {
     this.loadingWidget,
     required this.child,
   }) : super(key: key);
+
   final Widget? loadingWidget;
   final Widget child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final accountState = ref.watch(accountStateNotifier);
+    final accountState = ref.watch(accountNotifierProvider);
 
-    switch (accountState.status) {
-      case AccountStatus.loading:
-        return loadingWidget ?? const RecipientsShimmerLoading();
-
-      case AccountStatus.loaded:
-        return accountState.isSubscriptionFree
+    return accountState.when(
+      data: (account) {
+        return account.isSubscriptionFree
             ? Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
@@ -50,11 +47,11 @@ class PaidFeatureBlocker extends ConsumerWidget {
                 ),
               )
             : child;
-
-      case AccountStatus.failed:
-        return const ErrorMessageWidget(
-          message: AppStrings.loadAccountDataFailed,
-        );
-    }
+      },
+      error: (_, __) => const ErrorMessageWidget(
+        message: AppStrings.loadAccountDataFailed,
+      ),
+      loading: () => loadingWidget ?? const RecipientsShimmerLoading(),
+    );
   }
 }

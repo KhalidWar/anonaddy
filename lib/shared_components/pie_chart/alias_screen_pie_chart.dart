@@ -11,6 +11,7 @@ class AliasScreenPieChart extends StatelessWidget {
     required this.emailsSent,
     required this.emailsReplied,
   }) : super(key: key);
+
   final int emailsForwarded;
   final int emailsBlocked;
   final int emailsSent;
@@ -34,9 +35,9 @@ class AliasScreenPieChart extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height * 0.28,
+          height: 250,
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: PieChart(
             PieChartData(
               borderData: FlBorderData(show: false),
