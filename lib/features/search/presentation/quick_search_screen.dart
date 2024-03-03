@@ -100,7 +100,7 @@ class _QuickSearchScreenState extends ConsumerState<QuickSearchScreen> {
 
                         /// Add selected Alias to Search History
                         ref
-                            .read(searchHistoryStateNotifier.notifier)
+                            .read(searchHistoryNotifierProvider.notifier)
                             .addAliasToSearchHistory(alias);
 
                         /// Navigate to Alias Screen

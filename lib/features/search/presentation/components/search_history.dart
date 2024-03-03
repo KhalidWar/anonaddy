@@ -9,7 +9,7 @@ class SearchHistory extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchState = ref.watch(searchHistoryStateNotifier);
+    final searchState = ref.watch(searchHistoryNotifierProvider);
 
     return searchState.when(
       data: (aliases) {
@@ -36,11 +36,7 @@ class SearchHistory extends ConsumerWidget {
       error: (error, stack) {
         return Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Text(error.toString()),
-            ],
-          ),
+          child: Text(error.toString()),
         );
       },
       loading: () {

@@ -56,7 +56,9 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   Future<void> logout(BuildContext context) async {
     try {
       await ref.read(flutterSecureStorage).deleteAll();
-      await ref.read(searchHistoryStateNotifier.notifier).clearSearchHistory();
+      await ref
+          .read(searchHistoryNotifierProvider.notifier)
+          .clearSearchHistory();
       if (context.mounted) Phoenix.rebirth(context);
     } catch (error) {
       Utilities.showToast(error.toString());

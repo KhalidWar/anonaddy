@@ -32,7 +32,7 @@ class SearchTab extends ConsumerWidget {
                   ),
                   onPressed: () {
                     ref
-                        .read(searchHistoryStateNotifier.notifier)
+                        .read(searchHistoryNotifierProvider.notifier)
                         .clearSearchHistory();
                   },
                 ),
