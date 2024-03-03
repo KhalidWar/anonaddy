@@ -116,9 +116,9 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: username.description.isEmpty
+          title: username.description == null
               ? AppStrings.noDescription
-              : username.description,
+              : username.description!,
           titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Username description',
           leadingIconData: Icons.comment_outlined,
@@ -211,10 +211,10 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: username.aliases.length,
+                itemCount: username.aliases!.length,
                 itemBuilder: (context, index) {
                   return AliasListTile(
-                    alias: username.aliases[index],
+                    alias: username.aliases![index],
                   );
                 },
               ),

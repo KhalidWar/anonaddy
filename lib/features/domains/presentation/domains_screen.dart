@@ -100,9 +100,9 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         ),
         Divider(height: size.height * 0.02),
         AliasDetailListTile(
-          title: domain.description.isEmpty
-              ? AppStrings.noDescription
-              : domain.description,
+          title: domain.hasDescription
+              ? domain.description
+              : AppStrings.noDescription,
           titleTextStyle: const TextStyle(fontWeight: FontWeight.bold),
           subtitle: 'Domain description',
           leadingIconData: Icons.comment_outlined,
@@ -139,10 +139,10 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
                 : domainNotifier.activateCatchAll(domain.id);
           },
         ),
-        if (domain.domainVerifiedAt.isEmpty)
+        if (domain.isVerified)
           buildUnverifiedEmailWarning(size, AppStrings.unverifiedDomainWarning),
         // Divider(height: size.height * 0.02),
-        if (domain.domainMxValidatedAt.isEmpty)
+        if (domain.isMXValidated)
           buildUnverifiedEmailWarning(size, AppStrings.invalidDomainMXWarning),
         Divider(height: size.height * 0.02),
         // if (domain.domainSendingVerifiedAt == null)
@@ -211,10 +211,10 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: domain.aliases.length,
+                itemCount: domain.aliases!.length,
                 itemBuilder: (context, index) {
                   return AliasListTile(
-                    alias: domain.aliases[index],
+                    alias: domain.aliases![index],
                   );
                 },
               ),

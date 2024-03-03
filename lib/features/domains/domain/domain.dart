@@ -6,7 +6,7 @@ part 'domain.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Domain {
-  Domain({
+  const Domain({
     required this.id,
     required this.userId,
     required this.domain,
@@ -24,7 +24,7 @@ class Domain {
     this.fromName,
   });
 
-  String id;
+  final String id;
 
   @JsonKey(name: 'user_id')
   final String userId;
@@ -106,4 +106,10 @@ class Domain {
   String toString() {
     return 'Domain{id: $id, userId: $userId, domain: $domain, description: $description, fromName: $fromName, aliases: $aliases, aliasCount: $aliasCount, defaultRecipient: $defaultRecipient, active: $active, catchAll: $catchAll, domainVerifiedAt: $domainVerifiedAt, domainMxValidatedAt: $domainMxValidatedAt, domainSendingVerifiedAt: $domainSendingVerifiedAt, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
+}
+
+extension RecipientExtension on Domain {
+  bool get hasDescription => description != null && description!.isNotEmpty;
+  bool get isVerified => domainVerifiedAt != null;
+  bool get isMXValidated => domainMxValidatedAt != null;
 }
