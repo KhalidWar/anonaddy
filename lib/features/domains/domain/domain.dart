@@ -37,7 +37,7 @@ class Domain {
   final List<Alias>? aliases;
 
   @JsonKey(name: 'aliases_count')
-  final int aliasCount;
+  final int? aliasCount;
 
   @JsonKey(name: 'default_recipient')
   final Recipient? defaultRecipient;

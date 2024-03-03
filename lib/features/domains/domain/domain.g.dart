@@ -10,7 +10,7 @@ Domain _$DomainFromJson(Map<String, dynamic> json) => Domain(
       id: json['id'] as String,
       userId: json['user_id'] as String,
       domain: json['domain'] as String,
-      aliasCount: json['aliases_count'] as int,
+      aliasCount: json['aliases_count'] as int?,
       active: json['active'] as bool,
       catchAll: json['catch_all'] as bool,
       createdAt: DateTime.parse(json['created_at'] as String),
