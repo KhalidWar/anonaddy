@@ -11,16 +11,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 final settingsNotifier = AsyncNotifierProvider<SettingsNotifier, SettingsState>(
     SettingsNotifier.new);
 
-final _packageInfo = FutureProvider<PackageInfo>((ref) async {
-  return await PackageInfo.fromPlatform();
-});
-
 class SettingsNotifier extends AsyncNotifier<SettingsState> {
   Future<void> toggleTheme() async {
     try {
       final currentState = state.value!;
       state = AsyncValue.data(
-        currentState.copyWith(isDarkTheme: !currentState.isDarkTheme),
+        currentState.copyWith(
+          isDarkTheme: !currentState.isDarkTheme,
+        ),
       );
       await _saveNewSettingsState();
     } catch (error) {
@@ -33,7 +31,8 @@ class SettingsNotifier extends AsyncNotifier<SettingsState> {
       final currentState = state.value!;
       state = AsyncValue.data(
         currentState.copyWith(
-            isAutoCopyEnabled: !currentState.isAutoCopyEnabled),
+          isAutoCopyEnabled: !currentState.isAutoCopyEnabled,
+        ),
       );
       await _saveNewSettingsState();
     } catch (error) {
@@ -55,15 +54,16 @@ class SettingsNotifier extends AsyncNotifier<SettingsState> {
 
   Future<void> showChangelogIfAppUpdated() async {
     try {
-      final packageInfo = ref.read(_packageInfo).value;
+      final packageInfo = await _getPackageInfo();
       if (packageInfo != null) {
         final currentAppVersion = packageInfo.version;
         final oldAppVersion = state.value?.appVersion;
         final isUpdated = oldAppVersion != currentAppVersion;
 
         if (isUpdated) {
-          state = AsyncValue.data(state.value!.copyWith(showChangelog: true));
-          await _saveNewSettingsState();
+          final currentState = state.value;
+          if (currentState == null) return;
+          state = AsyncValue.data(currentState.copyWith(showChangelog: true));
         }
       }
     } catch (error) {
@@ -73,7 +73,7 @@ class SettingsNotifier extends AsyncNotifier<SettingsState> {
 
   Future<void> dismissChangelog() async {
     try {
-      final packageInfo = ref.read(_packageInfo).value;
+      final packageInfo = await _getPackageInfo();
       if (packageInfo != null) {
         final currentAppVersion = packageInfo.version;
         final newState = state.value?.copyWith(
@@ -100,15 +100,21 @@ class SettingsNotifier extends AsyncNotifier<SettingsState> {
       final encodedState = json.encode(mappedState);
       await ref.read(offlineDataProvider).saveSettingsState(encodedState);
     } catch (error) {
-      Utilities.showToast(AppStrings.somethingWentWrong);
+      return;
+    }
+  }
+
+  Future<PackageInfo?> _getPackageInfo() async {
+    try {
+      return await PackageInfo.fromPlatform();
+    } catch (e) {
+      return null;
     }
   }
 
   @override
   FutureOr<SettingsState> build() async {
     final storage = ref.read(offlineDataProvider);
-
-    await Future.delayed(const Duration(seconds: 3));
 
     final encodedState = await storage.loadSettingsState();
     if (encodedState == null) {
