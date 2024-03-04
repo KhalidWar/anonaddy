@@ -1,6 +1,5 @@
 import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
 import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,15 +20,11 @@ class SearchHistory extends ConsumerWidget {
         }
 
         return Expanded(
-          child: PlatformScrollbar(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: aliases.length,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return AliasListTile(alias: aliases[index]);
-              },
-            ),
+          child: ListView.builder(
+            itemCount: aliases.length,
+            itemBuilder: (context, index) {
+              return AliasListTile(alias: aliases[index]);
+            },
           ),
         );
       },
