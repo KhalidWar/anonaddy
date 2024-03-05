@@ -27,7 +27,7 @@ class OfflineData {
       if (aliasData == null) return null;
       return aliasData;
     } catch (error) {
-      rethrow;
+      return null;
     }
   }
 
