@@ -111,15 +111,15 @@ class Utilities {
   }) {
     assert(!(showLeading && leadingWidgetOnPress == null));
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dialogBackgroundColor = Theme.of(context).dialogBackgroundColor;
 
     return WoltModalSheetPage.withSingleChild(
       topBarTitle: Text(
         topBarTitle,
         style: Theme.of(context).textTheme.titleMedium,
       ),
-      backgroundColor: isDark ? Colors.black : Colors.white,
-      sabGradientColor: isDark ? Colors.black : Colors.white,
+      backgroundColor: dialogBackgroundColor,
+      sabGradientColor: dialogBackgroundColor,
       isTopBarLayerAlwaysVisible: true,
       pageTitle: pageTitle == null
           ? null
