@@ -84,7 +84,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildNewCreateAliasModal(BuildContext modalSheetContext) {
     final dialogBackgroundColor = Theme.of(context).dialogBackgroundColor;
 
-    return WoltModalSheetPage.withSingleChild(
+    return WoltModalSheetPage(
       backgroundColor: dialogBackgroundColor,
       sabGradientColor: dialogBackgroundColor,
       topBarTitle: Text(

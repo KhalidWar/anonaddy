@@ -113,7 +113,7 @@ class Utilities {
 
     final dialogBackgroundColor = Theme.of(context).dialogBackgroundColor;
 
-    return WoltModalSheetPage.withSingleChild(
+    return WoltModalSheetPage(
       topBarTitle: Text(
         topBarTitle,
         style: Theme.of(context).textTheme.titleMedium,
