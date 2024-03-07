@@ -48,7 +48,7 @@ class _AliasRecipientSelectionState
                     final createAliasState =
                         ref.watch(createAliasNotifierProvider).value!;
                     final verifiedRecipients =
-                        createAliasState.verifiedRecipients!;
+                        createAliasState.verifiedRecipients;
 
                     final createAliasNotifier =
                         ref.read(createAliasNotifierProvider.notifier);
@@ -97,10 +97,10 @@ class _AliasRecipientSelectionState
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ElevatedButton(
-                              style:
-                                  ElevatedButton.styleFrom(primary: Colors.red),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red),
                               child: Text(
-                                createAliasState.selectedRecipients!.isNotEmpty
+                                createAliasState.selectedRecipients.isNotEmpty
                                     ? 'Clear'
                                     : 'Cancel',
                               ),

@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
   # Formatting
-  intl: ^0.18.1
+  intl: ^0.19.0
 
   # Icons
   cupertino_icons: ^1.0.5
@@ -39,7 +39,7 @@ dependencies:
 
   # Security
   secure_application: ^3.8.0
-  local_auth: ^2.1.2
+  local_auth: ^2.2.0
 
   # State Management
   flutter_riverpod: ^2.1.1
@@ -56,7 +56,7 @@ dependencies:
   flutter_native_splash: ^2.2.14
 
   # Platform UI
-  macos_ui: ^1.12.2
+  macos_ui: ^2.0.5
 
 dev_dependencies:
   flutter_test:
