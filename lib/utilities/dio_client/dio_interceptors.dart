@@ -37,18 +37,20 @@ class DioInterceptors extends Interceptor {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     switch (err.type) {
-      case DioErrorType.connectTimeout:
-      case DioErrorType.sendTimeout:
-      case DioErrorType.receiveTimeout:
+      case DioExceptionType.badCertificate:
+      case DioExceptionType.connectionError:
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
         throw 'Connection has timed out, please try again.';
-      case DioErrorType.cancel:
+      case DioExceptionType.cancel:
         break;
-      case DioErrorType.other:
+      case DioExceptionType.unknown:
         throw 'No internet connection, please try again.';
 
-      case DioErrorType.response:
+      case DioExceptionType.badResponse:
         switch (err.response?.statusCode) {
           case 400:
             throw _responseError(err, 'Bad Request -- Your request sucks');
@@ -97,9 +99,9 @@ class DioInterceptors extends Interceptor {
     return handler.next(err);
   }
 
-  DioError _responseError(DioError err, String message) {
-    return DioError(
-      type: DioErrorType.response,
+  DioException _responseError(DioException err, String message) {
+    return DioException(
+      type: err.type,
       requestOptions: err.requestOptions,
       error: message,
     );
