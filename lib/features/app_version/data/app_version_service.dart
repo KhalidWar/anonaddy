@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:anonaddy/features/app_version/domain/app_version.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
@@ -22,8 +23,8 @@ class AppVersionService {
       log('getAppVersionData: ${response.statusCode}');
 
       return appVersion;
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
