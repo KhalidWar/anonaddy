@@ -45,7 +45,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       onModalDismissedWithBarrierTap: Navigator.of(context).pop,
       pageListBuilder: (modalSheetContext) {
         return [
-          WoltModalSheetPage.withSingleChild(
+          WoltModalSheetPage(
             topBarTitle: Text(
               AppStrings.sendFromAlias,
               style: Theme.of(modalSheetContext).textTheme.titleMedium,
@@ -325,7 +325,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     onModalDismissedWithBarrierTap: Navigator.of(context).pop,
                     pageListBuilder: (modalSheetContext) {
                       return [
-                        WoltModalSheetPage.withSingleChild(
+                        WoltModalSheetPage(
                           backgroundColor: isDark ? Colors.black : Colors.white,
                           sabGradientColor:
                               isDark ? Colors.black : Colors.white,
@@ -381,7 +381,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 emailsReplied: 0,
                 emailsSent: 0,
               ),
-              const Divider(height: 24),
+              Divider(height: 24),
               Center(
                 child: PlatformLoadingIndicator(
                   key: AliasScreen.aliasScreenLoadingIndicator,
