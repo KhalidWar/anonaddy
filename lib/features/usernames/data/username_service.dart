@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:anonaddy/features/usernames/data/usernames_data_storage.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
@@ -21,6 +22,7 @@ class UsernameService {
     required this.dio,
     required this.dataStorage,
   });
+
   final Dio dio;
   final UsernamesDataStorage dataStorage;
 
@@ -32,13 +34,13 @@ class UsernameService {
       dataStorage.saveData(response.data);
       final usernames = response.data['data'] as List;
       return usernames.map((username) => Username.fromJson(username)).toList();
-    } on DioError catch (dioError) {
+    } on DioException catch (dioException) {
       /// If offline, load offline data.
-      if (dioError.type == DioErrorType.other) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final usernames = await dataStorage.loadData();
         if (usernames != null) return usernames;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -51,12 +53,12 @@ class UsernameService {
       log('getSpecificUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.other) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final username = await dataStorage.loadSpecificUsername(usernameId);
         return username;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -78,8 +80,8 @@ class UsernameService {
       log('addNewUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -94,8 +96,8 @@ class UsernameService {
       log('updateUsernameDescription: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -106,8 +108,8 @@ class UsernameService {
       final path = '$kUnEncodedBaseURL/usernames/$usernameID';
       final response = await dio.delete(path);
       log('deleteUsername: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -122,8 +124,8 @@ class UsernameService {
       log('updateDefaultRecipient: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -137,8 +139,8 @@ class UsernameService {
       log('activateUsername: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -149,8 +151,8 @@ class UsernameService {
       final path = '$kUnEncodedBaseURL/active-usernames/$usernameID';
       final response = await dio.delete(path);
       log('deactivateUsername: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -164,8 +166,8 @@ class UsernameService {
       log('activateCatchAll: ${response.statusCode}');
       final username = response.data['data'];
       return Username.fromJson(username);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -176,8 +178,8 @@ class UsernameService {
       final path = '$kUnEncodedBaseURL/catch-all-usernames/$usernameID';
       final response = await dio.delete(path);
       log('deactivateCatchAll: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
