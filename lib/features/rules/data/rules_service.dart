@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:anonaddy/features/rules/data/rules_data_storage.dart';
 import 'package:anonaddy/features/rules/domain/rules.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
@@ -31,12 +32,12 @@ class RulesService {
 
       final rules = response.data['data'] as List;
       return rules.map((rule) => Rules.fromJson(rule)).toList();
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.other) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final rules = await dataStorage.loadData();
         if (rules != null) return rules;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
