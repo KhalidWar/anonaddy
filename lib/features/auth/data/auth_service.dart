@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:anonaddy/features/auth/domain/api_token.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
@@ -31,8 +32,8 @@ class AuthService {
       const path = '$kUnEncodedBaseURL/api-token-details';
       final uri = Uri.https(url, path);
       final options = Options(
-        sendTimeout: 5000,
-        receiveTimeout: 5000,
+        sendTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 5),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -45,14 +46,14 @@ class AuthService {
       log('fetchApiTokenData: ${response.statusCode}');
 
       return ApiToken.fromMap(response.data);
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.response) {
-        throw dioError.response == null
-            ? dioError.message
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.badResponse) {
+        throw dioException.response == null
+            ? dioException.message ?? AppStrings.somethingWentWrong
             : ApiErrorMessage.translateStatusCode(
-                dioError.response!.statusCode ?? 0);
+                dioException.response?.statusCode ?? 0);
       }
-      throw dioError.error.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (error) {
       rethrow;
     }
