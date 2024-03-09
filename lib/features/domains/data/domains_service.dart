@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:anonaddy/features/domains/data/domains_data_storage.dart';
 import 'package:anonaddy/features/domains/domain/domain.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
@@ -32,12 +33,12 @@ class DomainsService {
       dataStorage.saveData(response.data);
       final domains = response.data['data'] as List;
       return domains.map((domain) => Domain.fromJson(domain)).toList();
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.other) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final domains = await dataStorage.loadData();
         if (domains != null) return domains;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -50,12 +51,12 @@ class DomainsService {
       log('getSpecificDomain: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.other) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final domain = await dataStorage.loadSpecificDomain(domainId);
         return domain;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -69,8 +70,8 @@ class DomainsService {
       log('addNewDomain: ${response.statusCode}');
       final newDomain = response.data['data'];
       return Domain.fromJson(newDomain);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -85,8 +86,8 @@ class DomainsService {
       log('updateDomainDescription: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -97,8 +98,8 @@ class DomainsService {
       final path = '$kUnEncodedBaseURL/domains/$domainID';
       final response = await dio.delete(path);
       log('deleteDomain: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -113,8 +114,8 @@ class DomainsService {
       log('updateDomainDefaultRecipient: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -128,8 +129,8 @@ class DomainsService {
       log('activateDomain: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -140,8 +141,8 @@ class DomainsService {
       final path = '$kUnEncodedBaseURL/active-domains/$domainID';
       final response = await dio.delete(path);
       log('deactivateDomain: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -155,8 +156,8 @@ class DomainsService {
       log('activateCatchAll: ${response.statusCode}');
       final domain = response.data['data'];
       return Domain.fromJson(domain);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -167,8 +168,8 @@ class DomainsService {
       final path = '$kUnEncodedBaseURL/catch-all-domains/$domainID';
       final response = await dio.delete(path);
       log('deactivateCatchAll: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
