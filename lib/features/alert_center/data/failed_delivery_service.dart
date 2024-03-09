@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:anonaddy/features/alert_center/domain/failed_delivery.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
@@ -25,8 +26,8 @@ class FailedDeliveryService {
       return (deliveries as List).map((delivery) {
         return FailedDelivery.fromJson(delivery);
       }).toList();
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch failed deliveries';
     }
@@ -37,8 +38,8 @@ class FailedDeliveryService {
       final path = '$kUnEncodedBaseURL/failed-deliveries/$failedDeliveryId';
       final response = await dio.delete(path);
       log('deleteFailedDelivery: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw throw 'Failed to delete a failed deliveries';
     }
