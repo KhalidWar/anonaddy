@@ -108,6 +108,7 @@ class Utilities {
     bool showLeading = true,
     Function()? leadingWidgetOnPress,
     String? pageTitle,
+    Widget? stickyActionBar,
   }) {
     assert(!(showLeading && leadingWidgetOnPress == null));
 
@@ -121,6 +122,7 @@ class Utilities {
       backgroundColor: dialogBackgroundColor,
       sabGradientColor: dialogBackgroundColor,
       isTopBarLayerAlwaysVisible: true,
+      stickyActionBar: stickyActionBar,
       pageTitle: pageTitle == null
           ? null
           : Padding(
@@ -136,10 +138,7 @@ class Utilities {
               onPressed: leadingWidgetOnPress,
             )
           : null,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 50),
-        child: child,
-      ),
+      child: child,
     );
   }
 }
