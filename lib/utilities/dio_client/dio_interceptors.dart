@@ -22,18 +22,19 @@ class DioInterceptors extends Interceptor {
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     final user = await authService.getUser();
+    final customOptions = options.copyWith(
+      sendTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
+      baseUrl: 'https://${user?.url}',
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "Accept": "application/json",
+        "Authorization": "Bearer ${user?.token}",
+      },
+    );
 
-    final headers = {
-      "Content-Type": "application/json",
-      "X-Requested-With": "XMLHttpRequest",
-      "Accept": "application/json",
-      "Authorization": "Bearer ${user!.token}",
-    };
-
-    options.baseUrl = 'https://${user.url}';
-    options.headers.addAll(headers);
-
-    return handler.next(options);
+    return handler.next(customOptions);
   }
 
   @override
