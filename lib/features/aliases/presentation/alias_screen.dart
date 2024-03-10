@@ -60,19 +60,11 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       onModalDismissedWithBarrierTap: Navigator.of(context).pop,
       pageListBuilder: (modalSheetContext) {
         return [
-          WoltModalSheetPage(
-            topBarTitle: Text(
-              AppStrings.sendFromAlias,
-              style: Theme.of(modalSheetContext).textTheme.titleMedium,
-            ),
-            isTopBarLayerAlwaysVisible: true,
-            pageTitle: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                AppStrings.sendFromAliasString,
-                style: Theme.of(modalSheetContext).textTheme.bodySmall,
-              ),
-            ),
+          Utilities.buildWoltModalSheetSubPage(
+            context,
+            showLeading: false,
+            topBarTitle: AppStrings.sendFromAlias,
+            pageTitle: AppStrings.sendFromAliasString,
             stickyActionBar: Container(
               padding: const EdgeInsets.all(16),
               width: double.infinity,
