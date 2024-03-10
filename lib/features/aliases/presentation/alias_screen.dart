@@ -38,8 +38,23 @@ class AliasScreen extends ConsumerStatefulWidget {
 
 class _AliasScreenState extends ConsumerState<AliasScreen> {
   final sendFromFormKey = GlobalKey<FormState>();
+  late String destinationEmail;
 
   Future<void> showSendFromDialog(Alias alias) async {
+    Future<void> generateSendFromAddress(
+      BuildContext context, {
+      required Alias alias,
+    }) async {
+      if (sendFromFormKey.currentState!.validate()) {
+        await ref
+            .read(aliasScreenNotifierProvider(alias.id).notifier)
+            .sendFromAlias(destinationEmail)
+            .then((_) {
+          Navigator.pop(context);
+        });
+      }
+    }
+
     await WoltModalSheet.show(
       context: context,
       onModalDismissedWithBarrierTap: Navigator.of(context).pop,
@@ -78,6 +93,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               email: alias.email,
               formKey: sendFromFormKey,
               onFieldSubmitted: (value) async {
+                destinationEmail = value;
                 await generateSendFromAddress(
                   modalSheetContext,
                   alias: alias,
@@ -88,20 +104,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         ];
       },
     );
-  }
-
-  Future<void> generateSendFromAddress(
-    BuildContext context, {
-    required Alias alias,
-  }) async {
-    if (sendFromFormKey.currentState!.validate()) {
-      await ref
-          .read(aliasScreenNotifierProvider(alias.id).notifier)
-          .sendFromAlias(alias.email)
-          .then((_) {
-        Navigator.pop(context);
-      });
-    }
   }
 
   @override
