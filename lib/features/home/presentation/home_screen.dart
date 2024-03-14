@@ -5,6 +5,7 @@ import 'package:anonaddy/features/alert_center/presentation/controller/failed_de
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
+import 'package:anonaddy/features/connectivity/presentation/controller/connectivity_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/create_alias.dart';
 import 'package:anonaddy/features/home/presentation/components/changelog_widget.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
@@ -14,6 +15,7 @@ import 'package:anonaddy/features/settings/presentation/controller/settings_noti
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/theme.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -74,6 +76,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             builder: (context) => const ChangelogWidget(),
+          );
+        }
+      },
+    );
+
+    ref.listen<ConnectivityResult?>(
+      connectivityNotifierProvider
+          .select((connectivityAsync) => connectivityAsync.value),
+      (prev, next) {
+        if (prev == null || next == null) return;
+        if (prev.hasConnection && next.hasNoConnection) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Center(
+                child: Text('No internet connection. Offline mode.'),
+              ),
+            ),
+          );
+        }
+        if (prev.hasNoConnection && next.hasConnection) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.green,
+              content: Center(child: Text('Internet connection restored')),
+            ),
           );
         }
       },
