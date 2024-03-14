@@ -30,7 +30,7 @@ dependencies:
   # Internet Connectivity
   dio: ^5.4.1
   url_launcher: ^6.0.3
-#  connectivity_plus: ^5.0.1
+  connectivity_plus: ^5.0.2
 
   # Storage
   flutter_secure_storage: ^9.0.0
