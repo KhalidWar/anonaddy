@@ -58,51 +58,47 @@ class AliasTabEmailsPieChart extends StatelessWidget {
   static const _pieChartSectionRadius = 50.0;
 
   bool isPieChartEmpty() {
-    if (emailsForwarded == 0 &&
+    return emailsForwarded == 0 &&
         emailsBlocked == 0 &&
         emailsReplied == 0 &&
-        emailsSent == 0) {
-      return true;
-    } else {
-      return false;
-    }
+        emailsSent == 0;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(6),
-      margin: const EdgeInsets.only(bottom: 45),
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 35),
       child: Row(
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 15, 0, 15),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   PieChartIndicator(
                     color: AppColors.firstPieChartColor,
-                    label: 'emails forwarded',
+                    label: 'forwarded',
                     count: emailsForwarded,
                     textColor: Colors.white,
                   ),
                   PieChartIndicator(
                     color: AppColors.secondPieChartColor,
-                    label: 'emails blocked',
+                    label: 'blocked',
                     count: emailsBlocked,
                     textColor: Colors.white,
                   ),
                   PieChartIndicator(
                     color: AppColors.fourthPieChartColor,
-                    label: 'emails replied',
+                    label: 'replied',
                     count: emailsReplied,
                     textColor: Colors.white,
                   ),
                   PieChartIndicator(
                     color: AppColors.thirdPieChartColor,
-                    label: 'emails sent',
+                    label: 'sent',
                     count: emailsSent,
                     textColor: Colors.white,
                   ),
