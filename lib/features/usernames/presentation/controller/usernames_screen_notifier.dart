@@ -146,7 +146,6 @@ class UsernamesScreenNotifier
       activeSwitchLoading: false,
       catchAllSwitchLoading: false,
       updateRecipientLoading: false,
-      isOffline: false,
     );
   }
 }

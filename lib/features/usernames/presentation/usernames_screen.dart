@@ -94,7 +94,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
     return ListView(
       physics: const ClampingScrollPhysics(),
       children: [
-        if (usernameState.isOffline) const OfflineBanner(),
+        const OfflineBanner(),
         Padding(
           padding: EdgeInsets.all(size.height * 0.01),
           child: Row(

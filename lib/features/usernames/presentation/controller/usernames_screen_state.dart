@@ -6,14 +6,12 @@ class UsernamesScreenState {
     required this.activeSwitchLoading,
     required this.catchAllSwitchLoading,
     required this.updateRecipientLoading,
-    required this.isOffline,
   });
 
   final Username username;
   final bool activeSwitchLoading;
   final bool catchAllSwitchLoading;
   final bool updateRecipientLoading;
-  final bool isOffline;
 
   UsernamesScreenState copyWith({
     Username? username,
@@ -30,12 +28,11 @@ class UsernamesScreenState {
           catchAllSwitchLoading ?? this.catchAllSwitchLoading,
       updateRecipientLoading:
           updateRecipientLoading ?? this.updateRecipientLoading,
-      isOffline: isOffline ?? this.isOffline,
     );
   }
 
   @override
   String toString() {
-    return 'UsernamesScreenState{username: $username, activeSwitchLoading: $activeSwitchLoading, catchAllSwitchLoading: $catchAllSwitchLoading, updateRecipientLoading: $updateRecipientLoading, isOffline: $isOffline}';
+    return 'UsernamesScreenState{username: $username, activeSwitchLoading: $activeSwitchLoading, catchAllSwitchLoading: $catchAllSwitchLoading, updateRecipientLoading: $updateRecipientLoading}';
   }
 }
