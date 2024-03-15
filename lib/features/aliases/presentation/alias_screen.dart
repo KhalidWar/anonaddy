@@ -140,7 +140,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             key: AliasScreen.aliasScreenBodyListView,
             physics: const ClampingScrollPhysics(),
             children: [
-              if (aliasState.isOffline) const OfflineBanner(),
+              const OfflineBanner(),
               AliasScreenPieChart(
                 emailsForwarded: aliasState.alias.emailsForwarded,
                 emailsBlocked: aliasState.alias.emailsBlocked,

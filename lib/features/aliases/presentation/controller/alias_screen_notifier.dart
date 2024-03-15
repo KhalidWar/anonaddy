@@ -136,7 +136,6 @@ class AliasScreenNotifier
       isToggleLoading: false,
       deleteAliasLoading: false,
       updateRecipientLoading: false,
-      isOffline: false,
     );
   }
 }
