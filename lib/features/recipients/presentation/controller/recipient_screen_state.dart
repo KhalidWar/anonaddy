@@ -8,7 +8,6 @@ class RecipientScreenState {
     required this.isInlineEncryptionSwitchLoading,
     required this.isProtectedHeaderSwitchLoading,
     required this.isAddRecipientLoading,
-    required this.isOffline,
   });
 
   final Recipient recipient;
@@ -17,7 +16,6 @@ class RecipientScreenState {
   final bool isInlineEncryptionSwitchLoading;
   final bool isProtectedHeaderSwitchLoading;
   final bool isAddRecipientLoading;
-  final bool isOffline;
 
   RecipientScreenState copyWith({
     Recipient? recipient,
@@ -40,12 +38,11 @@ class RecipientScreenState {
           isProtectedHeaderSwitchLoading ?? this.isProtectedHeaderSwitchLoading,
       isAddRecipientLoading:
           isAddRecipientLoading ?? this.isAddRecipientLoading,
-      isOffline: isOffline ?? this.isOffline,
     );
   }
 
   @override
   String toString() {
-    return 'RecipientScreenState{recipient: $recipient, isEncryptionToggleLoading: $isEncryptionToggleLoading, isReplySendAndSwitchLoading: $isReplySendAndSwitchLoading, isInlineEncryptionSwitchLoading: $isInlineEncryptionSwitchLoading, isProtectedHeaderSwitchLoading: $isProtectedHeaderSwitchLoading, isAddRecipientLoading: $isAddRecipientLoading, isOffline: $isOffline}';
+    return 'RecipientScreenState{recipient: $recipient, isEncryptionToggleLoading: $isEncryptionToggleLoading, isReplySendAndSwitchLoading: $isReplySendAndSwitchLoading, isInlineEncryptionSwitchLoading: $isInlineEncryptionSwitchLoading, isProtectedHeaderSwitchLoading: $isProtectedHeaderSwitchLoading, isAddRecipientLoading: $isAddRecipientLoading}';
   }
 }

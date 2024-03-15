@@ -294,7 +294,6 @@ class RecipientScreenNotifier
       isInlineEncryptionSwitchLoading: false,
       isProtectedHeaderSwitchLoading: false,
       isAddRecipientLoading: false,
-      isOffline: false,
     );
   }
 }

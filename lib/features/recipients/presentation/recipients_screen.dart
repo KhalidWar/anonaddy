@@ -115,7 +115,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               return ListView(
                 physics: const ClampingScrollPhysics(),
                 children: [
-                  if (recipientScreenState.isOffline) const OfflineBanner(),
+                  const OfflineBanner(),
                   RecipientScreenUnverifiedWarning(recipientId: recipient.id),
                   AliasScreenPieChart(
                     emailsForwarded: Utilities.reduceListElements(
