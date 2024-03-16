@@ -17,40 +17,28 @@ class RecipientListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return ListTile(
+      dense: true,
       onTap: onPress,
-      child: Container(
-        color: isSelected ? AppColors.accentColor : null,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Icon(Icons.email_outlined),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(recipient.email),
-                recipient.isVerified
-                    ? Text(
-                        AppStrings.verified,
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(color: Colors.green),
-                      )
-                    : Text(
-                        AppStrings.unverified,
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(color: Colors.red),
-                      ),
-              ],
+      selected: isSelected,
+      selectedTileColor: AppColors.primaryColor,
+      leading: const Icon(Icons.email_outlined),
+      title: Text(recipient.email),
+      subtitle: recipient.isVerified
+          ? Text(
+              AppStrings.verified,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: Colors.green),
+            )
+          : Text(
+              AppStrings.unverified,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.copyWith(color: Colors.red),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
