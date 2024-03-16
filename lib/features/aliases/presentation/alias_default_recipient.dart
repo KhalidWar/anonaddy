@@ -37,7 +37,6 @@ class _AliasDefaultRecipientScreenState
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final defaultRecipientAsync =
         ref.watch(defaultRecipientNotifierProvider(widget.aliasId));
     final defaultRecipientNotifier =
@@ -56,7 +55,6 @@ class _AliasDefaultRecipientScreenState
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 width: double.infinity,
-                color: isDark ? Colors.black : Colors.white,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -76,10 +74,7 @@ class _AliasDefaultRecipientScreenState
                       },
                       child: isCTALoading
                           ? const PlatformLoadingIndicator()
-                          : const Text(
-                              'Update Recipients',
-                              style: TextStyle(color: Colors.black),
-                            ),
+                          : const Text('Update Recipients'),
                     ),
                   ],
                 ),
@@ -108,7 +103,6 @@ class _AliasDefaultRecipientScreenState
                       )
                     : ListView.builder(
                         shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
                         itemCount: verifiedRecipients.length,
                         itemBuilder: (context, index) {
                           final verifiedRecipient = verifiedRecipients[index];

@@ -100,7 +100,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final aliasNotifier =
         ref.watch(aliasScreenNotifierProvider(widget.aliasId));
 
@@ -320,15 +319,12 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     pageListBuilder: (modalSheetContext) {
                       return [
                         WoltModalSheetPage(
-                          backgroundColor: isDark ? Colors.black : Colors.white,
-                          sabGradientColor:
-                              isDark ? Colors.black : Colors.white,
+                          isTopBarLayerAlwaysVisible: true,
+                          enableDrag: true,
                           topBarTitle: Text(
                             'Default Recipient${aliasState.alias.recipients.length >= 2 ? 's' : ''}',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          isTopBarLayerAlwaysVisible: true,
-                          enableDrag: true,
                           child: AliasDefaultRecipientScreen(
                             aliasId: aliasState.alias.id,
                           ),
