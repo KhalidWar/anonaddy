@@ -8,10 +8,11 @@ import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/theme.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class AddyLoginScreen extends ConsumerStatefulWidget {
   const AddyLoginScreen({Key? key}) : super(key: key);
@@ -58,7 +59,33 @@ class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
                       TextButton(
                         key: const Key('loginScreenAccessTokenInfoButton'),
                         child: const Text(AppStrings.whatsAccessToken),
-                        onPressed: () => buildAccessTokenInfoSheet(context),
+                        onPressed: () async {
+                          await WoltModalSheet.show(
+                            context: context,
+                            onModalDismissedWithBarrierTap:
+                                Navigator.of(context).pop,
+                            pageListBuilder: (context) {
+                              return [
+                                Utilities.buildWoltModalSheetSubPage(
+                                  context,
+                                  showLeading: false,
+                                  topBarTitle: AppStrings.whatsAccessToken,
+                                  child: const AccessTokenInfo(),
+                                  sabGradientColor: Colors.transparent,
+                                  stickyActionBar: ElevatedButton.icon(
+                                    icon:
+                                        const Icon(Icons.open_in_new_outlined),
+                                    label:
+                                        const Text(AppStrings.getAccessToken),
+                                    onPressed: () {
+                                      Utilities.launchURL(kAnonAddySettingsURL);
+                                    },
+                                  ),
+                                ),
+                              ];
+                            },
+                          );
+                        },
                       ),
                       TextButton(
                         key: const Key('loginScreenChangeInstanceButton'),
@@ -112,17 +139,6 @@ class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Future buildAccessTokenInfoSheet(BuildContext context) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.kBottomSheetBorderRadius),
-      ),
-      builder: (context) => const AccessTokenInfo(),
     );
   }
 }
