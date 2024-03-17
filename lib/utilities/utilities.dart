@@ -109,18 +109,16 @@ class Utilities {
     Function()? leadingWidgetOnPress,
     String? pageTitle,
     Widget? stickyActionBar,
+    Color? sabGradientColor,
   }) {
     assert(!(showLeading && leadingWidgetOnPress == null));
-
-    final dialogBackgroundColor = Theme.of(context).dialogBackgroundColor;
 
     return WoltModalSheetPage(
       topBarTitle: Text(
         topBarTitle,
         style: Theme.of(context).textTheme.titleMedium,
       ),
-      backgroundColor: dialogBackgroundColor,
-      sabGradientColor: dialogBackgroundColor,
+      sabGradientColor: sabGradientColor,
       isTopBarLayerAlwaysVisible: true,
       stickyActionBar: stickyActionBar,
       pageTitle: pageTitle == null
