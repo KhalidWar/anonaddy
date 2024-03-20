@@ -3,6 +3,7 @@ import 'package:anonaddy/features/account/presentation/components/account_popup_
 import 'package:anonaddy/features/account/presentation/components/header_profile.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
@@ -66,50 +67,56 @@ class AccountTabHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final accountState = ref.watch(accountNotifierProvider);
 
-    return accountState.when(
-      data: (account) {
-        return ListView(
-          children: [
-            HeaderProfile(
-              key: AccountTabHeader.accountTabHeaderHeaderProfile,
-              account: account,
-              onPress: () {
-                PlatformAware.platformDialog(
-                  context: context,
-                  child: PlatformInfoDialog(
-                    title: AppStrings.accountBotNavLabel,
-                    buttonLabel: AppStrings.doneText,
-                    content: AccountPopupInfo(account: account),
-                  ),
-                );
-              },
-            ),
-            AccountListTile(
-              title: calculateBandWidth(account),
-              subtitle: AppStrings.monthlyBandwidth,
-              leadingIconData: Icons.speed_outlined,
-            ),
-            AccountListTile(
-              title: calculateRecipientsCount(account),
-              subtitle: AppStrings.recipients,
-              leadingIconData: Icons.email_outlined,
-            ),
-            AccountListTile(
-              title: calculateUsernamesCount(account),
-              subtitle: AppStrings.usernames,
-              leadingIconData: Icons.account_circle_outlined,
-            ),
-          ],
-        );
-      },
-      error: (err, _) => ErrorMessageWidget(
-        key: AccountTabHeader.accountTabHeaderError,
-        message: err.toString(),
-        messageColor: Colors.white,
-      ),
-      loading: () => const Center(
-        child: PlatformLoadingIndicator(
-          key: AccountTabHeader.accountTabHeaderLoading,
+    return Container(
+      color: AppColors.primaryColor,
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 50),
+      child: accountState.when(
+        data: (account) {
+          return Column(
+            children: [
+              HeaderProfile(
+                key: AccountTabHeader.accountTabHeaderHeaderProfile,
+                account: account,
+                onPress: () async {
+                  await PlatformAware.platformDialog(
+                    context: context,
+                    child: PlatformInfoDialog(
+                      title: AppStrings.accountBotNavLabel,
+                      buttonLabel: AppStrings.doneText,
+                      content: AccountPopupInfo(account: account),
+                    ),
+                  );
+                },
+              ),
+              AccountListTile(
+                title: calculateBandWidth(account),
+                subtitle: AppStrings.monthlyBandwidth,
+                icon: Icons.speed_outlined,
+              ),
+              const SizedBox(height: 12),
+              AccountListTile(
+                title: calculateRecipientsCount(account),
+                subtitle: AppStrings.recipients,
+                icon: Icons.email_outlined,
+              ),
+              const SizedBox(height: 12),
+              AccountListTile(
+                title: calculateUsernamesCount(account),
+                subtitle: AppStrings.usernames,
+                icon: Icons.account_circle_outlined,
+              ),
+            ],
+          );
+        },
+        error: (err, _) => ErrorMessageWidget(
+          key: AccountTabHeader.accountTabHeaderError,
+          message: err.toString(),
+          messageColor: Colors.white,
+        ),
+        loading: () => const Center(
+          child: PlatformLoadingIndicator(
+            key: AccountTabHeader.accountTabHeaderLoading,
+          ),
         ),
       ),
     );
