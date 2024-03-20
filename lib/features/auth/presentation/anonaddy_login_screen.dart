@@ -87,7 +87,6 @@ class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
                             return [
                               Utilities.buildWoltModalSheetSubPage(
                                 context,
-                                showLeading: false,
                                 topBarTitle: AppStrings.whatsAccessToken,
                                 child: const AccessTokenInfo(),
                                 sabGradientColor: Colors.transparent,

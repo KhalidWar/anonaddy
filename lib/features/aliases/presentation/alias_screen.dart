@@ -62,7 +62,6 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         return [
           Utilities.buildWoltModalSheetSubPage(
             context,
-            showLeading: false,
             topBarTitle: AppStrings.sendFromAlias,
             pageTitle: AppStrings.sendFromAliasString,
             stickyActionBar: Container(

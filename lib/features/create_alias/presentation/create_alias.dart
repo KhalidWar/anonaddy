@@ -209,6 +209,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildSelectAliasDomain(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Select Alias Domain',
       leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
@@ -254,6 +255,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildSelectAliasFormat(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Select Alias Format',
       leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
@@ -302,6 +304,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildSelectAliasLocalPart(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Enter Local Part',
       leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
@@ -342,6 +345,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildSelectAliasRecipient(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Select Default Recipients',
       pageTitle: AppStrings.updateAliasRecipientNote,
       leadingWidgetOnPress: resetPageIndex,
@@ -391,6 +395,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildAliasDescription(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Enter Description',
       pageTitle:
           'A unique word or two that describe alias. You can also search for aliases by their description.',

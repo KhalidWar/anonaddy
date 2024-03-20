@@ -8,6 +8,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class Utilities {
+  const Utilities._();
+
   static String formatDateTime(BuildContext context, DateTime? dateTime) {
     if (dateTime == null) return '';
 
@@ -105,7 +107,7 @@ class Utilities {
     BuildContext context, {
     required String topBarTitle,
     required Widget child,
-    bool showLeading = true,
+    bool showLeading = false,
     Function()? leadingWidgetOnPress,
     String? pageTitle,
     Widget? stickyActionBar,
