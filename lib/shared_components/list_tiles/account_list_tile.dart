@@ -6,53 +6,41 @@ class AccountListTile extends StatelessWidget {
     Key? key,
     this.title,
     required this.subtitle,
-    required this.leadingIconData,
-    this.trailingIcon,
-    this.onTap,
+    required this.icon,
   }) : super(key: key);
 
   final String? title;
   final String subtitle;
-  final IconData leadingIconData;
-  final Widget? trailingIcon;
-  final Function? onTap;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return InkWell(
-      onTap: onTap as void Function()?,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(leadingIconData, color: Colors.white),
-            SizedBox(width: size.width * 0.04),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title ?? AppStrings.noDefaultSelected,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2!
-                      .copyWith(color: Colors.white),
-                ),
-                Text(
-                  subtitle,
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(color: Colors.white),
-                ),
-              ],
-            ),
-            const Spacer(),
-            IgnorePointer(child: trailingIcon),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 20),
+      child: Row(
+        children: [
+          Icon(icon, size: 28, color: Colors.white),
+          const SizedBox(width: 24),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title ?? AppStrings.noDefaultSelected,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Colors.white),
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: Colors.white),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
