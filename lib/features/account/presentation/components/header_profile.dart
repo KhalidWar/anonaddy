@@ -10,6 +10,7 @@ class HeaderProfile extends StatelessWidget {
     required this.account,
     required this.onPress,
   }) : super(key: key);
+
   final Account account;
   final Function() onPress;
 
@@ -20,7 +21,7 @@ class HeaderProfile extends StatelessWidget {
         backgroundColor: AppColors.accentColor,
         child: Text(
           account.username[0].toUpperCase(),
-          style: Theme.of(context).textTheme.headline5!.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppColors.primaryColor,
               ),
@@ -28,21 +29,11 @@ class HeaderProfile extends StatelessWidget {
       ),
       title: Text(
         Utilities.capitalizeFirstLetter(account.username),
-        style: Theme.of(context)
-            .textTheme
-            .headline6!
-            .copyWith(color: Colors.white),
       ),
       subtitle: Text(
         Utilities.capitalizeFirstLetter(
-          account.subscription.isEmpty
-              ? AppStrings.selfHosted
-              : account.subscription,
+          account.isSelfHosted ? AppStrings.selfHosted : account.subscription,
         ),
-        style: Theme.of(context)
-            .textTheme
-            .bodyText2!
-            .copyWith(color: Colors.white),
       ),
       trailing: const Icon(Icons.error_outline, color: Colors.white),
       onTap: onPress,
