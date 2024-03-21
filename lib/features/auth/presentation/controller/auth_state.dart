@@ -1,3 +1,5 @@
+import 'package:anonaddy/features/auth/domain/user.dart';
+
 /// Manages user flow status
 enum AuthorizationStatus {
   /// When user logs in successfully and/or user account has been fetched from
@@ -30,26 +32,30 @@ class AuthState {
     required this.authorizationStatus,
     required this.authenticationStatus,
     required this.loginLoading,
+    this.user,
   });
 
   final AuthorizationStatus authorizationStatus;
   final AuthenticationStatus authenticationStatus;
   final bool loginLoading;
+  final User? user;
 
   @override
   String toString() {
-    return 'AuthState{authorizationStatus: $authorizationStatus, authenticationStatus: $authenticationStatus, loginLoading: $loginLoading}';
+    return 'AuthState{authorizationStatus: $authorizationStatus, authenticationStatus: $authenticationStatus, loginLoading: $loginLoading, user: $user}';
   }
 
   AuthState copyWith({
     AuthorizationStatus? authorizationStatus,
     AuthenticationStatus? authenticationStatus,
     bool? loginLoading,
+    User? user,
   }) {
     return AuthState(
       authorizationStatus: authorizationStatus ?? this.authorizationStatus,
       authenticationStatus: authenticationStatus ?? this.authenticationStatus,
       loginLoading: loginLoading ?? this.loginLoading,
+      user: user ?? this.user,
     );
   }
 }

@@ -43,6 +43,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       await ref.read(authServiceProvider).saveUser(user);
       state = AsyncData(state.value!.copyWith(
         authorizationStatus: AuthorizationStatus.authorized,
+        user: user,
         loginLoading: false,
       ));
     } catch (error) {
@@ -85,9 +86,8 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   /// Fetches and validates stored login credentials
   /// and returns bool if valid or not
-  Future<bool> _isLoginCredentialValid() async {
+  Future<bool> _isLoginCredentialValid(User? user) async {
     try {
-      final user = await ref.read(authServiceProvider).getUser();
       if (user == null) return false;
       if (user.apiToken.isExpired) return false;
       return true;
@@ -137,7 +137,8 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   @override
   FutureOr<AuthState> build() async {
-    final isLoginCredentialValid = await _isLoginCredentialValid();
+    final user = await ref.read(authServiceProvider).getUser();
+    final isLoginCredentialValid = await _isLoginCredentialValid(user);
     final authStatus = await _getBioAuthState();
 
     if (isLoginCredentialValid) {
@@ -145,6 +146,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
         authorizationStatus: AuthorizationStatus.authorized,
         authenticationStatus: authStatus,
         loginLoading: false,
+        user: user,
       );
     }
 
