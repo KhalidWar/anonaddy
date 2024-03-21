@@ -29,13 +29,24 @@ class HeaderProfile extends StatelessWidget {
       ),
       title: Text(
         Utilities.capitalizeFirstLetter(account.username),
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge
+            ?.copyWith(color: Colors.white),
       ),
       subtitle: Text(
         Utilities.capitalizeFirstLetter(
           account.isSelfHosted ? AppStrings.selfHosted : account.subscription,
         ),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(color: Colors.white),
       ),
-      trailing: const Icon(Icons.error_outline, color: Colors.white),
+      trailing: const Icon(
+        Icons.help_outline_outlined,
+        color: Colors.white,
+      ),
       onTap: onPress,
     );
   }
