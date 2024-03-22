@@ -7,11 +7,11 @@ import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class AccountTabHeader extends ConsumerWidget {
   const AccountTabHeader({Key? key}) : super(key: key);
@@ -78,13 +78,18 @@ class AccountTabHeader extends ConsumerWidget {
                 key: AccountTabHeader.accountTabHeaderHeaderProfile,
                 account: account,
                 onPress: () async {
-                  await PlatformAware.platformDialog(
+                  await WoltModalSheet.show(
                     context: context,
-                    child: PlatformInfoDialog(
-                      title: AppStrings.accountBotNavLabel,
-                      buttonLabel: AppStrings.doneText,
-                      content: AccountPopupInfo(account: account),
-                    ),
+                    onModalDismissedWithBarrierTap: Navigator.of(context).pop,
+                    pageListBuilder: (context) {
+                      return [
+                        Utilities.buildWoltModalSheetSubPage(
+                          context,
+                          topBarTitle: AppStrings.accountBotNavLabel,
+                          child: AccountPopupInfo(account: account),
+                        ),
+                      ];
+                    },
                   );
                 },
               ),
