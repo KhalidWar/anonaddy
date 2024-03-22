@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
-import 'package:anonaddy/features/auth/domain/api_token.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
@@ -89,7 +88,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   Future<bool> _isLoginCredentialValid(User? user) async {
     try {
       if (user == null) return false;
-      if (user.apiToken.isExpired) return false;
+      if (user.hasTokenExpired) return false;
       return true;
     } catch (error) {
       Utilities.showToast(error.toString());

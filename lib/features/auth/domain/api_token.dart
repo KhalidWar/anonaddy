@@ -41,9 +41,3 @@ class ApiToken {
     return 'ApiToken{name: $name, createdAt: $createdAt, expiresAt: $expiresAt}';
   }
 }
-
-extension ApiTokenExtension on ApiToken {
-  bool get isExpired {
-    return expiresAt != null && expiresAt!.isBefore(DateTime.now());
-  }
-}
