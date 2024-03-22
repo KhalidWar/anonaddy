@@ -10,13 +10,19 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 class Utilities {
   const Utilities._();
 
-  static String formatDateTime(BuildContext context, DateTime? dateTime) {
+  static String formatDateTime(
+    BuildContext context,
+    DateTime? dateTime, {
+    bool showTime = true,
+  }) {
     if (dateTime == null) return '';
 
     final locale = Localizations.localeOf(context);
-    final dateFormat = DateFormat.yMMMd(locale.toLanguageTag())..add_jm();
-    final formattedDate = dateFormat.format(dateTime);
-    return formattedDate;
+    final DateFormat dateFormat = showTime
+        ? (DateFormat.yMMMd(locale.toLanguageTag())..add_jm())
+        : DateFormat('MMM dd, yyyy');
+
+    return dateFormat.format(dateTime);
   }
 
   static copyOnTap(String input) async {
