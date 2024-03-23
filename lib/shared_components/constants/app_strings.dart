@@ -14,6 +14,7 @@ class AppStrings {
   static const rules = 'Rules';
   static const selfHosted = 'Self Hosted';
   static const subscriptionEndDate = 'Subscription End Date';
+  static const accessTokenInfo = 'Access Token Info';
   static const subscriptionEndDateNotAvailable = 'Not available';
   static const subscriptionEndDateDoesNotExpire = 'Does not expire';
   static const noDefaultSelected = 'No default selected';
