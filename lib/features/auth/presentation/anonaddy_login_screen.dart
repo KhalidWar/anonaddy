@@ -25,7 +25,9 @@ class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
 
   Future<void> login() async {
     if (_tokenFormKey.currentState!.validate()) {
-      await ref.read(authStateNotifier.notifier).login(kAuthorityURL, _token);
+      await ref
+          .read(authStateNotifier.notifier)
+          .loginWithAccessToken(kAuthorityURL, _token);
     }
   }
 

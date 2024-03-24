@@ -27,7 +27,7 @@ class AuthService {
   final FlutterSecureStorage secureStorage;
   final Dio dio;
 
-  Future<ApiToken> fetchApiTokenData(String url, String token) async {
+  Future<User> loginWithAccessToken(String url, String token) async {
     try {
       const path = '$kUnEncodedBaseURL/api-token-details';
       final uri = Uri.https(url, path);
@@ -43,9 +43,10 @@ class AuthService {
       );
 
       final response = await dio.getUri(uri, options: options);
-      log('fetchApiTokenData: ${response.statusCode}');
+      log('loginWithAccessToken: ${response.statusCode}');
 
-      return ApiToken.fromMap(response.data);
+      final apiToken = ApiToken.fromMap(response.data);
+      return User(url: url, token: token, apiToken: apiToken);
     } on DioException catch (dioException) {
       if (dioException.type == DioExceptionType.badResponse) {
         throw dioException.response == null

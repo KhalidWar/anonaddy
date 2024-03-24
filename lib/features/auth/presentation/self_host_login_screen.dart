@@ -28,7 +28,9 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
   Future<void> login() async {
     if (_urlFormKey.currentState!.validate() &&
         _tokenFormKey.currentState!.validate()) {
-      await ref.read(authStateNotifier.notifier).login(_url, _token);
+      await ref
+          .read(authStateNotifier.notifier)
+          .loginWithAccessToken(_url, _token);
     }
   }
 

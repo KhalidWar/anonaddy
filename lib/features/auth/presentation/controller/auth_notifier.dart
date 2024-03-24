@@ -29,15 +29,14 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     ));
   }
 
-  Future<void> login(String url, String token) async {
+  Future<void> loginWithAccessToken(String url, String token) async {
     if (state.value != null) {
       state = AsyncData(state.value!.copyWith(loginLoading: true));
     }
 
     try {
-      final apiToken =
-          await ref.read(authServiceProvider).fetchApiTokenData(url, token);
-      final user = User(url: url, token: token, apiToken: apiToken);
+      final user =
+          await ref.read(authServiceProvider).loginWithAccessToken(url, token);
 
       await ref.read(authServiceProvider).saveUser(user);
       state = AsyncData(state.value!.copyWith(
@@ -123,9 +122,8 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
       if (url == null || token == null) return false;
 
-      final apiToken =
-          await ref.read(authServiceProvider).fetchApiTokenData(url, token);
-      final user = User(url: url, token: token, apiToken: apiToken);
+      final user =
+          await ref.read(authServiceProvider).loginWithAccessToken(url, token);
       await ref.read(authServiceProvider).saveUser(user);
 
       return true;
