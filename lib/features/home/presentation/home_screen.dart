@@ -17,6 +17,7 @@ import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/theme.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -112,6 +113,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         key: const Key('homeScreenAppBar'),
         elevation: 0,
+        backgroundColor: AppColors.primaryColor,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text(
           AppStrings.appName,
           key: Key('homeScreenAppBarTitle'),
