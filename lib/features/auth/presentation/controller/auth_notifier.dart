@@ -52,6 +52,23 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     }
   }
 
+  Future<void> loginWithUsernameAndPassword(
+      String email, String password) async {
+    try {
+      final user = await ref
+          .read(authServiceProvider)
+          .loginWithUsernameAndPassword(email, password);
+
+      await ref.read(authServiceProvider).saveUser(user);
+      state = AsyncData(state.value!.copyWith(
+        authorizationStatus: AuthorizationStatus.authorized,
+        user: user,
+      ));
+    } catch (error) {
+      Utilities.showToast(error.toString());
+    }
+  }
+
   Future<void> logout(BuildContext context) async {
     try {
       await ref.read(flutterSecureStorage).deleteAll();

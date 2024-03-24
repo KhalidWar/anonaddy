@@ -121,6 +121,23 @@ class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
                           .goToSelfHostedLogin,
                       child: const Text('Self Hosted? Change Instance!'),
                     ),
+                    // TextButton(
+                    //   child: const Text('Log in with email and password'),
+                    //   onPressed: () async {
+                    //     await WoltModalSheet.show(
+                    //       context: context,
+                    //       pageListBuilder: (context) {
+                    //         return [
+                    //           Utilities.buildWoltModalSheetSubPage(
+                    //             context,
+                    //             topBarTitle: 'Username & Password Login',
+                    //             child: const UsernamePasswordLoginScreen(),
+                    //           ),
+                    //         ];
+                    //       },
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ],
