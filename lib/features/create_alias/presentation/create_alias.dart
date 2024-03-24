@@ -104,9 +104,12 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                   onPress: isConfirmButtonLoading ? () {} : createAlias,
                   child: isConfirmButtonLoading
                       ? const PlatformLoadingIndicator()
-                      : const Text(
+                      : Text(
                           AppStrings.createAliasTitle,
-                          style: TextStyle(color: Colors.black),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(color: Colors.black),
                         ),
                 );
               },
@@ -398,21 +401,57 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         builder: (context, ref, _) {
           ref.watch(createAliasNotifierProvider);
 
+          final descriptionFormKey = GlobalKey<FormState>();
+          final descriptionController = TextEditingController();
+
+          void updateDescription(String description) {
+            if (descriptionFormKey.currentState!.validate()) {
+              ref
+                  .read(createAliasNotifierProvider.notifier)
+                  .setDescription(description);
+              resetPageIndex();
+            }
+          }
+
           return Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: TextFormField(
-              autofocus: true,
-              textInputAction: TextInputAction.done,
-              onFieldSubmitted: (input) {
-                ref
-                    .read(createAliasNotifierProvider.notifier)
-                    .setDescription(input);
-                resetPageIndex();
-              },
-              decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                hintText: AppStrings.descriptionFieldHint,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-              ),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Form(
+                  key: descriptionFormKey,
+                  child: TextFormField(
+                    autofocus: true,
+                    controller: descriptionController,
+                    textInputAction: TextInputAction.done,
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return 'Field is required';
+                      }
+                      return null;
+                    },
+                    onFieldSubmitted: updateDescription,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: AppStrings.descriptionFieldHint,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: PlatformButton(
+                    onPress: () =>
+                        updateDescription(descriptionController.text.trim()),
+                    child: Text(
+                      'Add description',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.black),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
