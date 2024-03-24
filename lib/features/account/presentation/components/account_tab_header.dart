@@ -13,13 +13,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class AccountTabHeader extends ConsumerWidget {
-  const AccountTabHeader({Key? key}) : super(key: key);
+class AccountTabHeader extends ConsumerStatefulWidget {
+  const AccountTabHeader({super.key});
 
   static const accountTabHeaderLoading = Key('accountTabHeaderLoading');
   static const accountTabHeaderHeaderProfile =
       Key('accountTabHeaderHeaderProfile');
   static const accountTabHeaderError = Key('accountTabHeaderError');
+
+  @override
+  ConsumerState createState() => _AccountTabHeaderState();
+}
+
+class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
+  final pageIndexNotifier = ValueNotifier(0);
+
+  void changePageIndex(int newIndex) {
+    pageIndexNotifier.value = pageIndexNotifier.value + newIndex;
+  }
+
+  void resetPageIndex() {
+    pageIndexNotifier.value = 0;
+  }
 
   /// addy.io instances always have a [bandwidthLimit] value.
   /// If unlimited, it's "0". If not, it's an int.
@@ -64,7 +79,7 @@ class AccountTabHeader extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final accountState = ref.watch(accountNotifierProvider);
 
     return Container(
@@ -80,7 +95,11 @@ class AccountTabHeader extends ConsumerWidget {
                 onPress: () async {
                   await WoltModalSheet.show(
                     context: context,
-                    onModalDismissedWithBarrierTap: Navigator.of(context).pop,
+                    pageIndexNotifier: pageIndexNotifier,
+                    onModalDismissedWithBarrierTap: () {
+                      Navigator.of(context).pop();
+                      resetPageIndex();
+                    },
                     pageListBuilder: (context) {
                       return [
                         Utilities.buildWoltModalSheetSubPage(
