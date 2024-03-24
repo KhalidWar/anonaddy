@@ -58,8 +58,12 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         onPressed: () {
           WoltModalSheet.show(
             context: context,
+            onModalDismissedWithDrag: resetPageIndex,
+            onModalDismissedWithBarrierTap: () {
+              Navigator.of(context).pop();
+              resetPageIndex();
+            },
             pageIndexNotifier: pageIndexNotifier,
-            // modalBarrierColor: Colors.red,
             pageListBuilder: (modalSheetContext) {
               return [
                 buildNewCreateAliasModal(modalSheetContext),
@@ -70,11 +74,6 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                 buildAliasDescription(modalSheetContext),
               ];
             },
-            onModalDismissedWithBarrierTap: () {
-              Navigator.of(context).pop();
-              resetPageIndex();
-            },
-            onModalDismissedWithDrag: resetPageIndex,
           );
         },
       ),
@@ -92,7 +91,6 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
       stickyActionBar: Container(
         padding: const EdgeInsets.all(16),
         width: double.infinity,
-        // color: isDark ? Colors.black : Colors.white,
         child: Consumer(
           builder: (context, ref, _) {
             final createAliasNotifier = ref.watch(createAliasNotifierProvider);

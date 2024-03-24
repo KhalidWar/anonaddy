@@ -32,7 +32,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
           return [
             Utilities.buildWoltModalSheetSubPage(
               context,
-              topBarTitle: 'Add New Recipient',
+              topBarTitle: AppStrings.addNewRecipient,
               child: const AddNewRecipient(),
             ),
           ];
