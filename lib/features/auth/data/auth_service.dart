@@ -59,6 +59,52 @@ class AuthService {
     }
   }
 
+  Future<User> loginWithUsernameAndPassword(
+    String username,
+    String password, {
+    String? instanceUrl,
+  }) async {
+    try {
+      final url = instanceUrl ?? 'app.addy.io';
+      final baseUrl = 'https://$url';
+
+      final loginResponse = await dio.post(
+        '$baseUrl/api/auth/login',
+        data: jsonEncode({
+          'username': username,
+          'password': password,
+          'device_name': AppStrings.appName,
+        }),
+      );
+
+      final apiKey = loginResponse.data['api_key'];
+      final tokenDetailsResponse = await dio.get(
+        '$baseUrl/api/v1/api-token-details',
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $apiKey",
+          },
+        ),
+      );
+
+      final apiToken = ApiToken.fromMap(tokenDetailsResponse.data);
+      return User(url: url, token: apiKey, apiToken: apiToken);
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.badResponse) {
+        throw dioException.response == null
+            ? dioException.message ?? AppStrings.somethingWentWrong
+            : ApiErrorMessage.translateStatusCode(
+                dioException.response?.statusCode ?? 0);
+      }
+      throw dioException.message ?? AppStrings.somethingWentWrong;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> saveUser(User user) async {
     final encodedUser = jsonEncode(user.toMap());
     await secureStorage.write(key: SecureStorageKeys.user, value: encodedUser);
