@@ -59,7 +59,13 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
             width: double.infinity,
             child: PlatformButton(
               onPress: () => createUsername(),
-              child: const Text(AppStrings.addUsername),
+              child: Text(
+                AppStrings.addUsername,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Colors.black),
+              ),
             ),
           ),
         ],

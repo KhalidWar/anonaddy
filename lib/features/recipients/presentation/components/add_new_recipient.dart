@@ -62,7 +62,13 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
 
                   return addRecipientAsync.when(
                     data: (data) {
-                      return const Text('Add Recipient');
+                      return Text(
+                        'Add Recipient',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: Colors.black),
+                      );
                     },
                     error: (err, stack) => const PlatformLoadingIndicator(),
                     loading: () => const SizedBox.shrink(),
