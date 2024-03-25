@@ -47,7 +47,7 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
             child: TextFormField(
               autofocus: true,
               controller: _textEditController,
-              validator: (input) => FormValidator.validateUsernameInput(input!),
+              validator: FormValidator.requiredField,
               onFieldSubmitted: (toggle) => createUsername(),
               decoration: AppTheme.kTextFormFieldDecoration.copyWith(
                 hintText: 'johndoe',

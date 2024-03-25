@@ -17,12 +17,10 @@ class FormValidator {
     }
   }
 
-  static String? validateUsernameInput(String input) {
-    if (input.isEmpty) {
-      return AppStrings.usernameIsRequired;
-    } else {
-      return null;
-    }
+  static String? requiredField(String? input) {
+    if (input == null) return null;
+    if (input.isEmpty) return AppStrings.fieldCannotBeEmpty;
+    return null;
   }
 
   static String? validateEmailField(String input) {
