@@ -10,7 +10,6 @@ import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -210,35 +209,33 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 subtitle: AppStrings.description,
                 trailing: IconButton(
                   icon: const Icon(Icons.edit_outlined),
-                  onPressed: () {
-                    showModalBottomSheet(
+                  onPressed: () async {
+                    await WoltModalSheet.show(
                       context: context,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(
-                            AppTheme.kBottomSheetBorderRadius,
+                      pageListBuilder: (context) {
+                        return [
+                          Utilities.buildWoltModalSheetSubPage(
+                            context,
+                            topBarTitle: AppStrings.updateDescriptionTitle,
+                            child: UpdateDescriptionWidget(
+                              description: aliasState.alias.description,
+                              updateDescription: (description) async {
+                                await ref
+                                    .read(aliasScreenNotifierProvider(
+                                            aliasState.alias.id)
+                                        .notifier)
+                                    .editDescription(description);
+                              },
+                              removeDescription: () async {
+                                await ref
+                                    .read(aliasScreenNotifierProvider(
+                                            aliasState.alias.id)
+                                        .notifier)
+                                    .editDescription('');
+                              },
+                            ),
                           ),
-                        ),
-                      ),
-                      builder: (context) {
-                        return UpdateDescriptionWidget(
-                          description: aliasState.alias.description,
-                          updateDescription: (description) async {
-                            await ref
-                                .read(aliasScreenNotifierProvider(
-                                        aliasState.alias.id)
-                                    .notifier)
-                                .editDescription(description);
-                          },
-                          removeDescription: () async {
-                            await ref
-                                .read(aliasScreenNotifierProvider(
-                                        aliasState.alias.id)
-                                    .notifier)
-                                .editDescription('');
-                          },
-                        );
+                        ];
                       },
                     );
                   },
