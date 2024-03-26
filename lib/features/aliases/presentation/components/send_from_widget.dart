@@ -1,6 +1,5 @@
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
 
 class SendFromWidget extends StatelessWidget {
@@ -28,15 +27,16 @@ class SendFromWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
-          const Text('Email destination'),
           Form(
             key: formKey,
             child: TextFormField(
               autofocus: true,
-              validator: (input) => FormValidator.validateEmailField(input!),
+              autocorrect: false,
+              validator: FormValidator.validateEmailField,
               onFieldSubmitted: onFieldSubmitted,
-              decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                hintText: 'Enter email...',
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Destination Email Address',
               ),
             ),
           ),
