@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 /// This class is used to display the appropriate widgets for
 /// whatever platform AddyManager is running on.
@@ -61,38 +59,6 @@ abstract class PlatformAware<C extends Widget, M extends Widget>
     } else {
       showDialog(
         context: context,
-        builder: (context) => child,
-      );
-    }
-  }
-
-  /// Displays platform specific modal sheets. iOS sheets expand and cover
-  /// the full height of the screen unlike Android modal sheets.
-  static platformModalSheet(
-      {required BuildContext context, required Widget child}) {
-    if (isIOS()) {
-      return showCupertinoModalBottomSheet(
-        context: context,
-        expand: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
-          ),
-        ),
-        builder: (context) {
-          /// [Material] widget is needed to wrap material input fields
-          return Material(child: child);
-        },
-      );
-    } else {
-      return showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
-          ),
-        ),
         builder: (context) => child,
       );
     }
