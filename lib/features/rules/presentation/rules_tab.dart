@@ -29,24 +29,27 @@ class _RulesTabState extends ConsumerState<RulesTab> {
 
     return rulesState.when(
       data: (rules) {
-        return rules.isEmpty
-            ? Center(
-                child: Text(
-                  AppStrings.noRulesFound,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              )
-            : ListView.builder(
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                itemCount: rules.length,
-                itemBuilder: (context, index) {
-                  return RulesListTile(
-                    rule: rules[index],
-                    onTap: () => Utilities.showToast(AppStrings.comingSoon),
-                  );
-                },
-              );
+        return ListView(
+          children: [
+            rules.isEmpty
+                ? const ListTile(
+                    title: Center(
+                      child: Text(AppStrings.noRulesFound),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: rules.length,
+                    itemBuilder: (context, index) {
+                      return RulesListTile(
+                        rule: rules[index],
+                        onTap: () => Utilities.showToast(AppStrings.comingSoon),
+                      );
+                    },
+                  ),
+          ],
+        );
       },
       error: (error, stack) {
         return ErrorMessageWidget(message: error.toString());

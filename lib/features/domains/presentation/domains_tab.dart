@@ -2,9 +2,9 @@ import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/domains/presentation/components/add_new_domain.dart';
 import 'package:anonaddy/features/domains/presentation/components/domain_list_tile.dart';
-import 'package:anonaddy/features/domains/presentation/components/empty_domain_tile.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_tab_notifier.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/utilities/theme.dart';
@@ -66,7 +66,11 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
           physics: const ClampingScrollPhysics(),
           children: [
             domains.isEmpty
-                ? const EmptyDomainTile()
+                ? const ListTile(
+                    title: Center(
+                      child: Text(AppStrings.noDomainsFound),
+                    ),
+                  )
                 : ListView.builder(
                     shrinkWrap: true,
                     itemCount: domains.length,

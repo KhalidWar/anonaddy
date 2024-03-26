@@ -72,12 +72,9 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
           physics: const ClampingScrollPhysics(),
           children: [
             usernames.isEmpty
-                ? ListTile(
+                ? const ListTile(
                     title: Center(
-                      child: Text(
-                        AppStrings.noAdditionalUsernamesFound,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
+                      child: Text(AppStrings.noAdditionalUsernamesFound),
                     ),
                   )
                 : ListView.builder(

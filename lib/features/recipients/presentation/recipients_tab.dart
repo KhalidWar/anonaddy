@@ -68,12 +68,9 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
           physics: const ClampingScrollPhysics(),
           children: [
             recipients.isEmpty
-                ? ListTile(
+                ? const ListTile(
                     title: Center(
-                      child: Text(
-                        AppStrings.noRecipientsFound,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
+                      child: Text(AppStrings.noRecipientsFound),
                     ),
                   )
                 : ListView.builder(
