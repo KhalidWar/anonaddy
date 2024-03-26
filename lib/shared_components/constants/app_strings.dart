@@ -74,7 +74,7 @@ class AppStrings {
   static const addNewDomain = 'Add New Domain';
   static const addNewUsername = 'Add New Username';
   static const addUsername = 'Add Username';
-  static const noAdditionalUsernamesFound = 'No additional usernames found';
+  static const noAdditionalUsernamesFound = 'No usernames found';
 
   /// Domain
   static const unverifiedDomainWarning = 'Unverified domain';
