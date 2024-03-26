@@ -11,22 +11,24 @@ class UsernameListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(Icons.account_circle_outlined),
-            const SizedBox(width: 15),
+            const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(username.username),
-                const SizedBox(height: 2),
                 Text(
                   username.description == null
                       ? AppStrings.noDescription
                       : username.description!,
-                  style: const TextStyle(color: Colors.grey),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Colors.grey),
                 ),
               ],
             ),
