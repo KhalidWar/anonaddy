@@ -34,9 +34,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void _switchIndex(int index) {
     ref.read(fabVisibilityStateNotifier.notifier).showFab();
+    if (_selectedIndex == 2 && index == 2) {
+      Navigator.pushNamed(context, QuickSearchScreen.routeName);
+    }
+
     setState(() {
       _selectedIndex = index;
     });
+
     if (index == 0) {
       ref.read(accountNotifierProvider.notifier).fetchAccount();
       ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
