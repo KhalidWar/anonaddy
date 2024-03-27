@@ -36,7 +36,13 @@ class AliasScreenNotifier
       await ref
           .read(aliasServiceProvider)
           .deactivateAlias(currentState.alias.id);
-      ref.invalidate(aliasScreenNotifierProvider(arg));
+
+      final alias =
+          await ref.read(aliasServiceProvider).fetchSpecificAlias(arg);
+      state = AsyncData(state.value!.copyWith(
+        isToggleLoading: false,
+        alias: alias,
+      ));
     } catch (error) {
       Utilities.showToast(error.toString());
       state = AsyncData(state.value!.copyWith(isToggleLoading: false));
