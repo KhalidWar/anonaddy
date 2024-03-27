@@ -421,6 +421,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                   key: descriptionFormKey,
                   child: TextFormField(
                     autofocus: true,
+                    autocorrect: false,
                     controller: descriptionController,
                     textInputAction: TextInputAction.done,
                     validator: (input) {
