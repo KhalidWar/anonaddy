@@ -14,11 +14,12 @@ import 'package:anonaddy/features/search/presentation/search_tab.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/theme.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -71,17 +72,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ref.listen<bool>(
       settingsNotifier
           .select((settingState) => settingState.value?.showChangelog ?? false),
-      (_, showChangelog) {
+      (_, showChangelog) async {
         if (showChangelog) {
-          showModalBottomSheet(
+          await WoltModalSheet.show(
             context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
-              ),
-            ),
-            builder: (context) => const ChangelogWidget(),
+            pageListBuilder: (context) {
+              return [
+                Utilities.buildWoltModalSheetSubPage(
+                  context,
+                  topBarTitle: 'What\'s new?',
+                  child: const ChangelogWidget(),
+                ),
+              ];
+            },
           );
         }
       },
