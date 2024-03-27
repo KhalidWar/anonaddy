@@ -9,14 +9,6 @@ class FormValidator {
     }
   }
 
-  static String? validatePGPKeyField(String input) {
-    if (input.isEmpty) {
-      return AppStrings.providePGPKey;
-    } else {
-      return null;
-    }
-  }
-
   static String? requiredField(String? input) {
     if (input == null) return null;
     if (input.isEmpty) return AppStrings.fieldCannotBeEmpty;

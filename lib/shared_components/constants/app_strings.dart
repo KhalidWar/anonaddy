@@ -179,7 +179,6 @@ class AppStrings {
 
   /// Form validation error messages
   static const provideValidAccessToken = 'Provide a valid Access Token';
-  static const providePGPKey = 'Provide a PGP Key';
   static const usernameIsRequired = 'Username is required';
   static const fieldCannotBeEmpty = 'Field can not be empty';
   static const enterValidEmail = 'Enter a valid email';
