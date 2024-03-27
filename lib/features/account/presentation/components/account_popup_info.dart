@@ -43,51 +43,48 @@ class AccountPopupInfo extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InkWell(
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          Utilities.capitalizeFirstLetter(account.username),
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '(${user.url})',
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                    Text(
-                      'Access token: ${user.apiToken.name}',
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Text(
-                      user.isOfficialInstance
-                          ? 'Expires at: ${Utilities.formatDateTime(context, user.apiToken.expiresAt, showTime: false)}'
-                          : '(does not expire)',
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                const Icon(Icons.arrow_forward_ios_outlined),
-              ],
-            ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        Utilities.capitalizeFirstLetter(account.username),
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '(${user.url})',
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    'Access token: ${user.apiToken.name}',
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  Text(
+                    user.isOfficialInstance
+                        ? 'Expires at: ${Utilities.formatDateTime(context, user.apiToken.expiresAt, showTime: false)}'
+                        : 'Token does not expire',
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+              // const Spacer(),
+              // const Icon(Icons.arrow_forward_ios_outlined),
+            ],
           ),
         ),
         ListTile(
