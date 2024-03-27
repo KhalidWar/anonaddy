@@ -3,7 +3,6 @@ import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,8 +49,9 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
                     validator: (input) =>
                         FormValidator.validateEmailField(input!),
                     textInputAction: TextInputAction.next,
-                    decoration: AppTheme.kTextFormFieldDecoration
-                        .copyWith(hintText: 'joedoe@example.com'),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
