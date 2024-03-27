@@ -10,7 +10,7 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
-import 'package:anonaddy/utilities/theme.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -308,6 +308,18 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         builder: (context, ref, _) {
           ref.watch(createAliasNotifierProvider);
 
+          final localPartFormKey = GlobalKey<FormState>();
+          final localPartController = TextEditingController();
+
+          void setLocalPart(String localPart) {
+            if (localPartFormKey.currentState!.validate()) {
+              ref
+                  .read(createAliasNotifierProvider.notifier)
+                  .setLocalPart(localPart);
+              resetPageIndex();
+            }
+          }
+
           return Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -317,18 +329,33 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  autofocus: true,
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (input) {
-                    ref
-                        .read(createAliasNotifierProvider.notifier)
-                        .setLocalPart(input);
-                    resetPageIndex();
-                  },
-                  decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                    hintText: AppStrings.localPartFieldHint,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                Form(
+                  key: localPartFormKey,
+                  child: TextFormField(
+                    autofocus: true,
+                    textInputAction: TextInputAction.done,
+                    controller: localPartController,
+                    validator: FormValidator.requiredField,
+                    onFieldSubmitted: setLocalPart,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: AppStrings.localPartFieldHint,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: PlatformButton(
+                    onPress: () =>
+                        setLocalPart(localPartController.text.trim()),
+                    child: Text(
+                      'Add Local Part',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.black),
+                    ),
                   ),
                 ),
               ],
@@ -424,12 +451,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                     autocorrect: false,
                     controller: descriptionController,
                     textInputAction: TextInputAction.done,
-                    validator: (input) {
-                      if (input == null || input.isEmpty) {
-                        return 'Field is required';
-                      }
-                      return null;
-                    },
+                    validator: FormValidator.requiredField,
                     onFieldSubmitted: updateDescription,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
