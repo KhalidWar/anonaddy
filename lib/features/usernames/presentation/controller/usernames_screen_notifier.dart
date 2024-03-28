@@ -51,18 +51,19 @@ class UsernamesScreenNotifier
     }
   }
 
-  Future updateDefaultRecipient(Username username, String recipientID) async {
+  Future updateDefaultRecipient(Username username, String? recipientID) async {
     try {
       final currentState = state.value!;
 
       state = AsyncData(currentState.copyWith(updateRecipientLoading: true));
-      final newUsername = await ref
+      await ref
           .read(usernameServiceProvider)
           .updateDefaultRecipient(username.id, recipientID);
-      final updatedUsername =
-          username.copyWith(defaultRecipient: newUsername.defaultRecipient);
       Utilities.showToast('Default recipient updated successfully!');
 
+      final updatedUsername = await ref
+          .read(usernameServiceProvider)
+          .fetchSpecificUsername(username.id);
       state = AsyncData(currentState.copyWith(
         username: updatedUsername,
         updateRecipientLoading: false,
