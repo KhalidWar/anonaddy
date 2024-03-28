@@ -74,7 +74,6 @@ void main() async {
         isToggleLoading: false,
         deleteAliasLoading: false,
         updateRecipientLoading: false,
-        isOffline: false,
       );
 
       // Arrange
