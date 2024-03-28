@@ -106,7 +106,7 @@ class DomainsService {
   }
 
   Future<Domain> updateDomainDefaultRecipient(
-      String domainID, String recipientID) async {
+      String domainID, String? recipientID) async {
     try {
       final path = '$kUnEncodedBaseURL/domains/$domainID/default-recipient';
       final data = jsonEncode({"default_recipient": recipientID});
