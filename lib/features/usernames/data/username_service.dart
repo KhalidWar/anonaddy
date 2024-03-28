@@ -116,7 +116,7 @@ class UsernameService {
   }
 
   Future<Username> updateDefaultRecipient(
-      String usernameID, String recipientID) async {
+      String usernameID, String? recipientID) async {
     try {
       final path = '$kUnEncodedBaseURL/usernames/$usernameID/default-recipient';
       final data = jsonEncode({"default_recipient": recipientID});
