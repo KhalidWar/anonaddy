@@ -52,11 +52,9 @@ class _DomainDefaultRecipientState
 
   void _setVerifiedRecipients() {
     final recipients = ref.read(recipientsNotifierProvider).value!;
-    for (Recipient recipient in recipients) {
-      if (recipient.isVerified) {
-        _verifiedRecipients.add(recipient);
-      }
-    }
+    final verifiedRecipients =
+        recipients.where((recipient) => recipient.isVerified).toList();
+    _verifiedRecipients.addAll(verifiedRecipients);
   }
 
   void _setDefaultRecipient() {
@@ -72,29 +70,10 @@ class _DomainDefaultRecipientState
     }
   }
 
-  void _setScrollSheetSizes() {
-    setState(() {
-      if (_verifiedRecipients.length <= 3) {
-        initialChildSize = 0.5;
-        maxChildSize = 0.6;
-      } else if (_verifiedRecipients.length > 3 &&
-          _verifiedRecipients.length <= 6) {
-        initialChildSize = 0.55;
-        maxChildSize = 0.7;
-      } else {
-        initialChildSize = 0.7;
-        maxChildSize = 0.9;
-      }
-    });
-  }
-
   Future<void> updateDefaultRecipient() async {
     await ref
         .read(domainsScreenStateNotifier(widget.domain.id).notifier)
-        .updateDomainDefaultRecipients(
-          widget.domain.id,
-          selectedRecipient == null ? '' : selectedRecipient!.id,
-        );
+        .updateDomainDefaultRecipients(widget.domain.id, selectedRecipient?.id);
     if (mounted) Navigator.pop(context);
   }
 
@@ -103,7 +82,6 @@ class _DomainDefaultRecipientState
     super.initState();
     _setVerifiedRecipients();
     _setDefaultRecipient();
-    _setScrollSheetSizes();
   }
 
   @override
