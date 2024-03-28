@@ -18,8 +18,10 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loadi
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/utilities/theme.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class UsernamesScreen extends ConsumerStatefulWidget {
   const UsernamesScreen({
@@ -222,30 +224,34 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
     );
   }
 
-  Future updateDescriptionDialog(BuildContext context, Username username) {
-    return showModalBottomSheet(
+  Future updateDescriptionDialog(
+    BuildContext context,
+    Username username,
+  ) async {
+    await WoltModalSheet.show(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppTheme.kBottomSheetBorderRadius)),
-      ),
-      builder: (context) {
-        return UpdateDescriptionWidget(
-          description: username.description,
-          updateDescription: (description) {
-            ref
-                .read(
-                    usernamesScreenNotifierProvider(widget.usernameId).notifier)
-                .updateUsernameDescription(username, description);
-          },
-          removeDescription: () {
-            ref
-                .read(
-                    usernamesScreenNotifierProvider(widget.usernameId).notifier)
-                .updateUsernameDescription(username, '');
-          },
-        );
+      pageListBuilder: (context) {
+        return [
+          Utilities.buildWoltModalSheetSubPage(
+            context,
+            topBarTitle: AppStrings.updateDescriptionTitle,
+            child: UpdateDescriptionWidget(
+              description: username.description,
+              updateDescription: (description) {
+                ref
+                    .read(usernamesScreenNotifierProvider(widget.usernameId)
+                        .notifier)
+                    .updateUsernameDescription(username, description);
+              },
+              removeDescription: () {
+                ref
+                    .read(usernamesScreenNotifierProvider(widget.usernameId)
+                        .notifier)
+                    .updateUsernameDescription(username, '');
+              },
+            ),
+          ),
+        ];
       },
     );
   }
