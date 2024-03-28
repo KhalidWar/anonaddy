@@ -7,10 +7,10 @@ import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class DomainsTab extends ConsumerStatefulWidget {
   const DomainsTab({Key? key}) : super(key: key);
@@ -24,16 +24,18 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
     final accountState = ref.read(accountNotifierProvider).value!;
 
     /// Draws UI for adding new recipient
-    Future buildAddNewDomain(BuildContext context) {
-      return showModalBottomSheet(
+    Future buildAddNewDomain(BuildContext context) async {
+      await WoltModalSheet.show(
         context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
-          ),
-        ),
-        builder: (context) => const AddNewDomain(),
+        pageListBuilder: (context) {
+          return [
+            Utilities.buildWoltModalSheetSubPage(
+              context,
+              topBarTitle: 'topBarTitle',
+              child: const AddNewDomain(),
+            ),
+          ];
+        },
       );
     }
 
