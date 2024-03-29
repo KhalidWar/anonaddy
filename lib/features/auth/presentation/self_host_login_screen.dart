@@ -102,8 +102,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                       key: _tokenFormKey,
                       child: TextFormField(
                         key: const Key('selfHostedLoginScreenTokenInputField'),
-                        validator: (input) =>
-                            FormValidator.accessTokenValidator(input!),
+                        validator: FormValidator.requiredField,
                         onChanged: (input) => _token = input,
                         onFieldSubmitted: (input) => login(),
                         textInputAction: TextInputAction.done,

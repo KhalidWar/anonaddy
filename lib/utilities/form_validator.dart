@@ -1,14 +1,6 @@
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 class FormValidator {
-  static String? accessTokenValidator(String input) {
-    if (input.isEmpty) {
-      return AppStrings.provideValidAccessToken;
-    } else {
-      return null;
-    }
-  }
-
   static String? requiredField(String? input) {
     if (input == null) return null;
     if (input.isEmpty) return AppStrings.fieldCannotBeEmpty;

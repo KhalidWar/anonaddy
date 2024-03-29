@@ -56,8 +56,7 @@ class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
                       key: _tokenFormKey,
                       child: TextFormField(
                         key: const Key('loginScreenTextField'),
-                        validator: (input) =>
-                            FormValidator.accessTokenValidator(input!),
+                        validator: FormValidator.requiredField,
                         onChanged: (input) => _token = input,
                         onFieldSubmitted: (input) => login(),
                         textInputAction: TextInputAction.go,
