@@ -4,6 +4,7 @@ import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dar
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/utilities/utilities.dart';
@@ -96,17 +97,19 @@ class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
                                     height: 72,
                                     width: double.infinity,
                                     padding: const EdgeInsets.all(16),
-                                    child: ElevatedButton.icon(
-                                      icon: const Icon(
-                                        Icons.open_in_new_outlined,
+                                    child: PlatformButton(
+                                      child: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.open_in_new_outlined),
+                                          SizedBox(width: 8),
+                                          Text(AppStrings.getAccessToken),
+                                        ],
                                       ),
-                                      label: const Text(
-                                        AppStrings.getAccessToken,
+                                      onPress: () => Utilities.launchURL(
+                                        kAnonAddySettingsURL,
                                       ),
-                                      onPressed: () {
-                                        Utilities.launchURL(
-                                            kAnonAddySettingsURL);
-                                      },
                                     ),
                                   ),
                                 ),
