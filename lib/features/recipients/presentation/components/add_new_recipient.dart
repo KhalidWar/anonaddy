@@ -1,9 +1,7 @@
 import 'package:anonaddy/features/recipients/presentation/controller/add_recipient_notifier.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +16,15 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
   final _textEditController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  Future<void> addRecipient() async {
+    if (_formKey.currentState!.validate()) {
+      await ref
+          .read(addRecipientNotifierProvider.notifier)
+          .addRecipient(_textEditController.text.trim());
+      if (mounted) Navigator.pop(context);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -26,65 +33,53 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Container(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const BottomSheetHeader(headerLabel: 'Add New Recipient'),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
-            child: Column(
-              children: [
-                const Text(AddyString.addRecipientString),
-                SizedBox(height: size.height * 0.02),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    autofocus: true,
-                    controller: _textEditController,
-                    validator: (input) =>
-                        FormValidator.validateEmailField(input!),
-                    textInputAction: TextInputAction.next,
-                    decoration: AppTheme.kTextFormFieldDecoration
-                        .copyWith(hintText: 'joedoe@example.com'),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom().copyWith(
-                    minimumSize: MaterialStateProperty.all(
-                      const Size(200, 50),
-                    ),
-                  ),
-                  child: Consumer(
-                    builder: (context, ref, _) {
-                      final addRecipientAsync =
-                          ref.watch(addRecipientNotifierProvider);
+          const Text(AddyString.addRecipientString),
+          const SizedBox(height: 16),
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              autofocus: true,
+              controller: _textEditController,
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.emailAddress,
+              validator: FormValidator.validateEmailField,
+              onFieldSubmitted: (input) => addRecipient(),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'joedoe@example.com',
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: PlatformButton(
+              onPress: () async => await addRecipient(),
+              child: Consumer(
+                builder: (context, ref, _) {
+                  final addRecipientAsync =
+                      ref.watch(addRecipientNotifierProvider);
 
-                      return addRecipientAsync.when(
-                        data: (data) {
-                          return const Text('Add Recipient');
-                        },
-                        error: (err, stack) => const PlatformLoadingIndicator(),
-                        loading: () => const SizedBox.shrink(),
+                  return addRecipientAsync.when(
+                    data: (data) {
+                      return Text(
+                        'Add Recipient',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: Colors.black),
                       );
                     },
-                  ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await ref
-                          .read(addRecipientNotifierProvider.notifier)
-                          .addRecipient(_textEditController.text.trim());
-                      if (mounted) Navigator.pop(context);
-                    }
-                  },
-                )
-              ],
+                    error: (err, stack) => const PlatformLoadingIndicator(),
+                    loading: () => const SizedBox.shrink(),
+                  );
+                },
+              ),
             ),
           ),
         ],

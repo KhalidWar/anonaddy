@@ -8,13 +8,21 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class Utilities {
-  static String formatDateTime(BuildContext context, DateTime? dateTime) {
+  const Utilities._();
+
+  static String formatDateTime(
+    BuildContext context,
+    DateTime? dateTime, {
+    bool showTime = true,
+  }) {
     if (dateTime == null) return '';
 
     final locale = Localizations.localeOf(context);
-    final dateFormat = DateFormat.yMMMd(locale.toLanguageTag())..add_jm();
-    final formattedDate = dateFormat.format(dateTime);
-    return formattedDate;
+    final DateFormat dateFormat = showTime
+        ? (DateFormat.yMMMd(locale.toLanguageTag())..add_jm())
+        : DateFormat('MMM dd, yyyy');
+
+    return dateFormat.format(dateTime);
   }
 
   static copyOnTap(String input) async {
@@ -105,22 +113,22 @@ class Utilities {
     BuildContext context, {
     required String topBarTitle,
     required Widget child,
-    bool showLeading = true,
+    bool showLeading = false,
     Function()? leadingWidgetOnPress,
     String? pageTitle,
+    Widget? stickyActionBar,
+    Color? sabGradientColor,
   }) {
     assert(!(showLeading && leadingWidgetOnPress == null));
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return WoltModalSheetPage.withSingleChild(
+    return WoltModalSheetPage(
       topBarTitle: Text(
         topBarTitle,
         style: Theme.of(context).textTheme.titleMedium,
       ),
-      backgroundColor: isDark ? Colors.black : Colors.white,
-      sabGradientColor: isDark ? Colors.black : Colors.white,
+      sabGradientColor: sabGradientColor,
       isTopBarLayerAlwaysVisible: true,
+      stickyActionBar: stickyActionBar,
       pageTitle: pageTitle == null
           ? null
           : Padding(
@@ -136,10 +144,7 @@ class Utilities {
               onPressed: leadingWidgetOnPress,
             )
           : null,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 50),
-        child: child,
-      ),
+      child: child,
     );
   }
 }

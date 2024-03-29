@@ -4,13 +4,13 @@ import 'package:anonaddy/features/aliases/presentation/components/alias_screen_l
 import 'package:anonaddy/features/aliases/presentation/components/alias_screen_recipients.dart';
 import 'package:anonaddy/features/aliases/presentation/components/send_from_widget.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/shared_components/shared_components_exports.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,26 +38,32 @@ class AliasScreen extends ConsumerStatefulWidget {
 
 class _AliasScreenState extends ConsumerState<AliasScreen> {
   final sendFromFormKey = GlobalKey<FormState>();
+  late String destinationEmail;
 
   Future<void> showSendFromDialog(Alias alias) async {
+    Future<void> generateSendFromAddress(
+      BuildContext context, {
+      required Alias alias,
+    }) async {
+      if (sendFromFormKey.currentState!.validate()) {
+        await ref
+            .read(aliasScreenNotifierProvider(alias.id).notifier)
+            .sendFromAlias(destinationEmail)
+            .then((_) {
+          Navigator.pop(context);
+        });
+      }
+    }
+
     await WoltModalSheet.show(
       context: context,
       onModalDismissedWithBarrierTap: Navigator.of(context).pop,
       pageListBuilder: (modalSheetContext) {
         return [
-          WoltModalSheetPage.withSingleChild(
-            topBarTitle: Text(
-              AppStrings.sendFromAlias,
-              style: Theme.of(modalSheetContext).textTheme.titleMedium,
-            ),
-            isTopBarLayerAlwaysVisible: true,
-            pageTitle: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                AppStrings.sendFromAliasString,
-                style: Theme.of(modalSheetContext).textTheme.bodySmall,
-              ),
-            ),
+          Utilities.buildWoltModalSheetSubPage(
+            context,
+            topBarTitle: AppStrings.sendFromAlias,
+            pageTitle: AppStrings.sendFromAliasString,
             stickyActionBar: Container(
               padding: const EdgeInsets.all(16),
               width: double.infinity,
@@ -78,6 +84,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               email: alias.email,
               formKey: sendFromFormKey,
               onFieldSubmitted: (value) async {
+                destinationEmail = value;
                 await generateSendFromAddress(
                   modalSheetContext,
                   alias: alias,
@@ -90,23 +97,8 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
     );
   }
 
-  Future<void> generateSendFromAddress(
-    BuildContext context, {
-    required Alias alias,
-  }) async {
-    if (sendFromFormKey.currentState!.validate()) {
-      await ref
-          .read(aliasScreenNotifierProvider(alias.id).notifier)
-          .sendFromAlias(alias.email)
-          .then((_) {
-        Navigator.pop(context);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final aliasNotifier =
         ref.watch(aliasScreenNotifierProvider(widget.aliasId));
 
@@ -146,7 +138,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
             key: AliasScreen.aliasScreenBodyListView,
             physics: const ClampingScrollPhysics(),
             children: [
-              if (aliasState.isOffline) const OfflineBanner(),
+              const OfflineBanner(),
               AliasScreenPieChart(
                 emailsForwarded: aliasState.alias.emailsForwarded,
                 emailsBlocked: aliasState.alias.emailsBlocked,
@@ -218,35 +210,33 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 subtitle: AppStrings.description,
                 trailing: IconButton(
                   icon: const Icon(Icons.edit_outlined),
-                  onPressed: () {
-                    showModalBottomSheet(
+                  onPressed: () async {
+                    await WoltModalSheet.show(
                       context: context,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(
-                            AppTheme.kBottomSheetBorderRadius,
+                      pageListBuilder: (context) {
+                        return [
+                          Utilities.buildWoltModalSheetSubPage(
+                            context,
+                            topBarTitle: AppStrings.updateDescriptionTitle,
+                            child: UpdateDescriptionWidget(
+                              description: aliasState.alias.description,
+                              updateDescription: (description) async {
+                                await ref
+                                    .read(aliasScreenNotifierProvider(
+                                            aliasState.alias.id)
+                                        .notifier)
+                                    .editDescription(description);
+                              },
+                              removeDescription: () async {
+                                await ref
+                                    .read(aliasScreenNotifierProvider(
+                                            aliasState.alias.id)
+                                        .notifier)
+                                    .editDescription('');
+                              },
+                            ),
                           ),
-                        ),
-                      ),
-                      builder: (context) {
-                        return UpdateDescriptionWidget(
-                          description: aliasState.alias.description,
-                          updateDescription: (description) async {
-                            await ref
-                                .read(aliasScreenNotifierProvider(
-                                        aliasState.alias.id)
-                                    .notifier)
-                                .editDescription(description);
-                          },
-                          removeDescription: () async {
-                            await ref
-                                .read(aliasScreenNotifierProvider(
-                                        aliasState.alias.id)
-                                    .notifier)
-                                .editDescription('');
-                          },
-                        );
+                        ];
                       },
                     );
                   },
@@ -325,18 +315,51 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     onModalDismissedWithBarrierTap: Navigator.of(context).pop,
                     pageListBuilder: (modalSheetContext) {
                       return [
-                        WoltModalSheetPage.withSingleChild(
-                          backgroundColor: isDark ? Colors.black : Colors.white,
-                          sabGradientColor:
-                              isDark ? Colors.black : Colors.white,
-                          topBarTitle: Text(
-                            'Default Recipient${aliasState.alias.recipients.length >= 2 ? 's' : ''}',
-                            style: Theme.of(context).textTheme.titleMedium,
+                        Utilities.buildWoltModalSheetSubPage(
+                          context,
+                          topBarTitle: 'Default Recipients',
+                          pageTitle:
+                              '${AppStrings.updateAliasRecipientNote}\n\n${AddyString.updateAliasRecipients}',
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 76),
+                            child: AliasDefaultRecipientScreen(
+                              aliasId: aliasState.alias.id,
+                            ),
                           ),
-                          isTopBarLayerAlwaysVisible: true,
-                          enableDrag: true,
-                          child: AliasDefaultRecipientScreen(
-                            aliasId: aliasState.alias.id,
+                          stickyActionBar: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            child: PlatformButton(
+                              onPress: () => ref
+                                  .read(defaultRecipientNotifierProvider(
+                                          widget.aliasId)
+                                      .notifier)
+                                  .updateAliasDefaultRecipient()
+                                  .whenComplete(() => Navigator.pop(context)),
+                              child: Consumer(
+                                builder: (context, ref, _) {
+                                  final defaultRecipientAsync = ref.watch(
+                                      defaultRecipientNotifierProvider(
+                                          widget.aliasId));
+
+                                  return defaultRecipientAsync.when(
+                                    data: (defaultRecipientState) {
+                                      return defaultRecipientState.isCTALoading
+                                          ? const PlatformLoadingIndicator()
+                                          : const Text('Update Recipients');
+                                    },
+                                    loading: () =>
+                                        const PlatformLoadingIndicator(),
+                                    error: (error, _) => ErrorMessageWidget(
+                                      message: error.toString(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ];
@@ -375,13 +398,14 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         loading: () {
           return ListView(
             children: const [
+              OfflineBanner(),
               AliasScreenPieChart(
                 emailsForwarded: 0,
                 emailsBlocked: 0,
                 emailsReplied: 0,
                 emailsSent: 0,
               ),
-              const Divider(height: 24),
+              Divider(height: 24),
               Center(
                 child: PlatformLoadingIndicator(
                   key: AliasScreen.aliasScreenLoadingIndicator,

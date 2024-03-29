@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
@@ -9,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 /// ConsumerWidget is used to update state using ChangeNotifierProvider
 class App extends ConsumerWidget {
@@ -24,26 +21,6 @@ class App extends ConsumerWidget {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
-
-    if (Platform.isMacOS) {
-      return MacosApp(
-        title: AppStrings.appName,
-        debugShowCheckedModeBanner: false,
-        theme: settingsState?.isDarkTheme ?? false
-            ? AppTheme.macOSThemeDark
-            : AppTheme.macOSThemeLight,
-        darkTheme: AppTheme.macOSThemeDark,
-        themeMode: ThemeMode.light,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: AuthScreen.routeName,
-        locale: const Locale('en', 'US'),
-        localizationsDelegates: const [
-          DefaultMaterialLocalizations.delegate,
-          DefaultCupertinoLocalizations.delegate,
-          DefaultWidgetsLocalizations.delegate,
-        ],
-      );
-    }
 
     return MaterialApp(
       title: AppStrings.appName,

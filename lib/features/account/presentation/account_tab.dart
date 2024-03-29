@@ -34,19 +34,17 @@ class AccountTab extends StatelessWidget {
                 pinned: true,
                 flexibleSpace: const FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
-                  background: AccountTabHeader(
-                    key: accountTabHeader,
-                  ),
+                  background: AccountTabHeader(key: accountTabHeader),
                 ),
                 bottom: const TabBar(
-                  isScrollable: true,
-                  physics: ClampingScrollPhysics(),
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.grey,
                   indicatorColor: AppColors.accentColor,
                   tabs: [
-                    Tab(child: Text(AppStrings.recipients)),
-                    Tab(child: Text(AppStrings.usernames)),
-                    Tab(child: Text(AppStrings.domains)),
-                    Tab(child: Text(AppStrings.rules)),
+                    Tab(text: AppStrings.recipients),
+                    Tab(text: AppStrings.usernames),
+                    Tab(text: AppStrings.domains),
+                    Tab(text: AppStrings.rules),
                   ],
                 ),
               ),

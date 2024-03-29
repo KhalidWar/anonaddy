@@ -32,12 +32,12 @@ class AccountService {
       final account = Account.fromJson(accountData);
       log('fetchAccount: ${response.statusCode}');
       return account;
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.other) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final account = await accountDataStorage.loadData();
         if (account != null) return account;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (error) {
       throw AppStrings.loadAccountDataFailed;
     }

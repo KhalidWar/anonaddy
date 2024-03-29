@@ -1,8 +1,7 @@
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_input_field.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 
 class UpdateDescriptionWidget extends StatefulWidget {
@@ -22,79 +21,72 @@ class UpdateDescriptionWidget extends StatefulWidget {
 }
 
 class _UpdateDescriptionWidgetState extends State<UpdateDescriptionWidget> {
+  final textEditController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  String newDescription = '';
+
+  void addRecipient() {
+    if (formKey.currentState!.validate()) {
+      widget.updateDescription(textEditController.text.trim());
+      if (mounted) Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Container(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const BottomSheetHeader(
-              headerLabel: AppStrings.updateDescriptionTitle),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(AppStrings.updateDescriptionString),
-                SizedBox(height: size.height * 0.02),
-                Form(
-                  key: formKey,
-                  child: PlatformInputField(
-                    placeholder: widget.description ?? 'No description',
-                    onChanged: (input) => newDescription = input,
-                    onFieldSubmitted: (input) {
-                      if (formKey.currentState!.validate()) {
-                        widget.updateDescription(newDescription);
-                        if (mounted) Navigator.pop(context);
-                      }
-                    },
+          const Text(AppStrings.updateDescriptionString),
+          const SizedBox(height: 16),
+          Form(
+            key: formKey,
+            child: TextFormField(
+              autofocus: true,
+              autocorrect: false,
+              controller: textEditController,
+              textInputAction: TextInputAction.done,
+              validator: FormValidator.requiredField,
+              onFieldSubmitted: (input) => addRecipient(),
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                hintText:
+                    (widget.description == null || widget.description!.isEmpty)
+                        ? 'No description'
+                        : widget.description,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: PlatformButton(
+                  color: Colors.redAccent,
+                  onPress: () {
+                    widget.removeDescription();
+                    if (mounted) Navigator.pop(context);
+                  },
+                  child: const Text(
+                    AppStrings.removeDescriptionTitle,
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
-                SizedBox(height: size.height * 0.02),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: PlatformButton(
-                        color: Colors.redAccent,
-                        onPress: () {
-                          widget.removeDescription();
-                          if (mounted) Navigator.pop(context);
-                        },
-                        child: const Text(
-                          AppStrings.removeDescriptionTitle,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: size.width * 0.03),
-                    Expanded(
-                      child: PlatformButton(
-                        onPress: () {
-                          if (formKey.currentState!.validate()) {
-                            widget.updateDescription(newDescription);
-                            if (mounted) Navigator.pop(context);
-                          }
-                        },
-                        color: AppColors.accentColor,
-                        child: const Text(
-                          AppStrings.updateDescriptionTitle,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  ],
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: PlatformButton(
+                  onPress: () => addRecipient(),
+                  color: AppColors.accentColor,
+                  child: const Text(
+                    AppStrings.updateDescriptionTitle,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
-                SizedBox(height: size.height * 0.03),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

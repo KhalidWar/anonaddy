@@ -1,9 +1,8 @@
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_notifier.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +17,15 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
   final _textEditController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  Future<void> createUsername() async {
+    if (_formKey.currentState!.validate()) {
+      await ref
+          .read(usernamesNotifierProvider.notifier)
+          .addNewUsername(_textEditController.text.trim());
+      if (mounted) Navigator.pop(context);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -26,55 +34,38 @@ class _AddNewUserNameState extends ConsumerState<AddNewUsername> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    Future<void> createUsername() async {
-      if (_formKey.currentState!.validate()) {
-        await ref
-            .read(usernamesNotifierProvider.notifier)
-            .addNewUsername(_textEditController.text.trim());
-        if (mounted) Navigator.pop(context);
-      }
-    }
-
-    return Container(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const BottomSheetHeader(
-            headerLabel: AppStrings.addNewUsername,
+          const Text(AddyString.addNewUsernameString),
+          const SizedBox(height: 16),
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              autofocus: true,
+              controller: _textEditController,
+              validator: FormValidator.requiredField,
+              onFieldSubmitted: (toggle) => createUsername(),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'johndoe',
+              ),
+            ),
           ),
-          Container(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
-            child: Column(
-              children: [
-                const Text(AddyString.addNewUsernameString),
-                SizedBox(height: size.height * 0.02),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    autofocus: true,
-                    controller: _textEditController,
-                    validator: (input) =>
-                        FormValidator.validateUsernameInput(input!),
-                    onFieldSubmitted: (toggle) => createUsername(),
-                    decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                      hintText: 'johndoe',
-                    ),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom().copyWith(
-                    minimumSize: MaterialStateProperty.all(const Size(200, 50)),
-                  ),
-                  child: const Text(AppStrings.addUsername),
-                  onPressed: () => createUsername(),
-                ),
-              ],
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: PlatformButton(
+              onPress: () => createUsername(),
+              child: Text(
+                AppStrings.addUsername,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: Colors.black),
+              ),
             ),
           ),
         ],

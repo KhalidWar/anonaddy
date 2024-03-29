@@ -10,7 +10,7 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_scroll_bar.dart';
-import 'package:anonaddy/utilities/theme.dart';
+import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -58,8 +58,12 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         onPressed: () {
           WoltModalSheet.show(
             context: context,
+            onModalDismissedWithDrag: resetPageIndex,
+            onModalDismissedWithBarrierTap: () {
+              Navigator.of(context).pop();
+              resetPageIndex();
+            },
             pageIndexNotifier: pageIndexNotifier,
-            // modalBarrierColor: Colors.red,
             pageListBuilder: (modalSheetContext) {
               return [
                 buildNewCreateAliasModal(modalSheetContext),
@@ -70,11 +74,6 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                 buildAliasDescription(modalSheetContext),
               ];
             },
-            onModalDismissedWithBarrierTap: () {
-              Navigator.of(context).pop();
-              resetPageIndex();
-            },
-            onModalDismissedWithDrag: resetPageIndex,
           );
         },
       ),
@@ -82,11 +81,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   }
 
   WoltModalSheetPage buildNewCreateAliasModal(BuildContext modalSheetContext) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return WoltModalSheetPage.withSingleChild(
-      backgroundColor: isDark ? Colors.black : Colors.white,
-      sabGradientColor: isDark ? Colors.black : Colors.white,
+    return WoltModalSheetPage(
       topBarTitle: Text(
         'Create New Alias',
         style: Theme.of(context).textTheme.titleMedium,
@@ -96,7 +91,6 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
       stickyActionBar: Container(
         padding: const EdgeInsets.all(16),
         width: double.infinity,
-        // color: isDark ? Colors.black : Colors.white,
         child: Consumer(
           builder: (context, ref, _) {
             final createAliasNotifier = ref.watch(createAliasNotifierProvider);
@@ -110,9 +104,12 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                   onPress: isConfirmButtonLoading ? () {} : createAlias,
                   child: isConfirmButtonLoading
                       ? const PlatformLoadingIndicator()
-                      : const Text(
+                      : Text(
                           AppStrings.createAliasTitle,
-                          style: TextStyle(color: Colors.black),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(color: Colors.black),
                         ),
                 );
               },
@@ -209,6 +206,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildSelectAliasDomain(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Select Alias Domain',
       leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
@@ -254,6 +252,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildSelectAliasFormat(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Select Alias Format',
       leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
@@ -302,11 +301,24 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildSelectAliasLocalPart(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Enter Local Part',
       leadingWidgetOnPress: resetPageIndex,
       child: Consumer(
         builder: (context, ref, _) {
           ref.watch(createAliasNotifierProvider);
+
+          final localPartFormKey = GlobalKey<FormState>();
+          final localPartController = TextEditingController();
+
+          void setLocalPart(String localPart) {
+            if (localPartFormKey.currentState!.validate()) {
+              ref
+                  .read(createAliasNotifierProvider.notifier)
+                  .setLocalPart(localPart);
+              resetPageIndex();
+            }
+          }
 
           return Padding(
             padding: const EdgeInsets.all(16),
@@ -317,18 +329,33 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  autofocus: true,
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (input) {
-                    ref
-                        .read(createAliasNotifierProvider.notifier)
-                        .setLocalPart(input);
-                    resetPageIndex();
-                  },
-                  decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                    hintText: AppStrings.localPartFieldHint,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                Form(
+                  key: localPartFormKey,
+                  child: TextFormField(
+                    autofocus: true,
+                    textInputAction: TextInputAction.done,
+                    controller: localPartController,
+                    validator: FormValidator.requiredField,
+                    onFieldSubmitted: setLocalPart,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: AppStrings.localPartFieldHint,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: PlatformButton(
+                    onPress: () =>
+                        setLocalPart(localPartController.text.trim()),
+                    child: Text(
+                      'Add Local Part',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.black),
+                    ),
                   ),
                 ),
               ],
@@ -342,6 +369,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildSelectAliasRecipient(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Select Default Recipients',
       pageTitle: AppStrings.updateAliasRecipientNote,
       leadingWidgetOnPress: resetPageIndex,
@@ -391,6 +419,7 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
   WoltModalSheetPage buildAliasDescription(BuildContext modalSheetContext) {
     return Utilities.buildWoltModalSheetSubPage(
       context,
+      showLeading: true,
       topBarTitle: 'Enter Description',
       pageTitle:
           'A unique word or two that describe alias. You can also search for aliases by their description.',
@@ -399,21 +428,53 @@ class _CreateAliasFABState extends ConsumerState<CreateAlias> {
         builder: (context, ref, _) {
           ref.watch(createAliasNotifierProvider);
 
+          final descriptionFormKey = GlobalKey<FormState>();
+          final descriptionController = TextEditingController();
+
+          void updateDescription(String description) {
+            if (descriptionFormKey.currentState!.validate()) {
+              ref
+                  .read(createAliasNotifierProvider.notifier)
+                  .setDescription(description);
+              resetPageIndex();
+            }
+          }
+
           return Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: TextFormField(
-              autofocus: true,
-              textInputAction: TextInputAction.done,
-              onFieldSubmitted: (input) {
-                ref
-                    .read(createAliasNotifierProvider.notifier)
-                    .setDescription(input);
-                resetPageIndex();
-              },
-              decoration: AppTheme.kTextFormFieldDecoration.copyWith(
-                hintText: AppStrings.descriptionFieldHint,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-              ),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Form(
+                  key: descriptionFormKey,
+                  child: TextFormField(
+                    autofocus: true,
+                    autocorrect: false,
+                    controller: descriptionController,
+                    textInputAction: TextInputAction.done,
+                    validator: FormValidator.requiredField,
+                    onFieldSubmitted: updateDescription,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: AppStrings.descriptionFieldHint,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: PlatformButton(
+                    onPress: () =>
+                        updateDescription(descriptionController.text.trim()),
+                    child: Text(
+                      'Add description',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(color: Colors.black),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },

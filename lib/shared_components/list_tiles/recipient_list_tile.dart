@@ -21,7 +21,7 @@ class RecipientListTile extends StatelessWidget {
       onTap: onPress,
       child: Container(
         color: isSelected ? AppColors.accentColor : null,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -36,14 +36,14 @@ class RecipientListTile extends StatelessWidget {
                         AppStrings.verified,
                         style: Theme.of(context)
                             .textTheme
-                            .caption
+                            .bodySmall
                             ?.copyWith(color: Colors.green),
                       )
                     : Text(
                         AppStrings.unverified,
                         style: Theme.of(context)
                             .textTheme
-                            .caption
+                            .bodySmall
                             ?.copyWith(color: Colors.red),
                       ),
               ],

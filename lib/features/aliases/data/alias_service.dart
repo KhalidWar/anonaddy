@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:anonaddy/features/aliases/data/alias_data_storage.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
@@ -33,12 +34,12 @@ class AliasService {
       final aliases = response.data['data'] as List;
       dataStorage.saveAliases(aliases: aliases, isAvailableAliases: true);
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.other) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final aliases = await dataStorage.loadAliases(isAvailableAliases: true);
         if (aliases != null) return aliases;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch available aliases';
     }
@@ -53,13 +54,13 @@ class AliasService {
       final aliases = response.data['data'] as List;
       dataStorage.saveAliases(aliases: aliases, isAvailableAliases: false);
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.other) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final aliases =
             await dataStorage.loadAliases(isAvailableAliases: false);
         if (aliases != null) return aliases;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch deleted aliases';
     }
@@ -72,8 +73,8 @@ class AliasService {
       log('fetchAssociatedAliases: ${response.statusCode}');
       final aliases = response.data['data'] as List;
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch available aliases';
     }
@@ -105,12 +106,12 @@ class AliasService {
       final response = await dio.get(path);
       log('getSpecificAlias: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.other) {
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
         final alias = await dataStorage.loadSpecificAlias(aliasID);
         if (alias != null) return alias;
       }
-      throw dioError.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch alias';
     }
@@ -135,8 +136,8 @@ class AliasService {
       final response = await dio.post(path, data: data);
       log('createNewAlias: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -150,8 +151,8 @@ class AliasService {
       final alias = Alias.fromJson(response.data['data']);
       log('activateAlias: ${response.statusCode}');
       return alias;
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -162,8 +163,8 @@ class AliasService {
       final path = '$kUnEncodedBaseURL/active-aliases/$aliasId';
       final response = await dio.delete(path);
       log('deactivateAlias: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -176,8 +177,8 @@ class AliasService {
       final response = await dio.patch(path, data: data);
       log('updateAliasDescription: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -188,8 +189,8 @@ class AliasService {
       final path = '$kUnEncodedBaseURL/aliases/$aliasID';
       final response = await dio.delete(path);
       log('deleteAlias: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -201,8 +202,8 @@ class AliasService {
       final response = await dio.patch(path);
       log('restoreAlias: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -217,8 +218,8 @@ class AliasService {
       final response = await dio.post(path, data: data);
       log('updateAliasDefaultRecipient: ${response.statusCode}');
       return Alias.fromJson(response.data['data']);
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
@@ -229,8 +230,8 @@ class AliasService {
       final path = '$kUnEncodedBaseURL/aliases/$aliasID/forget';
       final response = await dio.delete(path);
       log('forgetAlias: ${response.statusCode}');
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }

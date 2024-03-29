@@ -15,10 +15,6 @@ class RecipientsNotifier extends AsyncNotifier<List<Recipient>> {
         () => ref.read(recipientService).fetchRecipients());
   }
 
-  List<Recipient> getVerifiedRecipients() {
-    return state.value!.where((recipient) => recipient.isVerified).toList();
-  }
-
   @override
   FutureOr<List<Recipient>> build() async {
     final service = ref.read(recipientService);

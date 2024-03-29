@@ -4,7 +4,7 @@ class ApiErrorMessage {
       case 400:
         return 'Bad Request -- Your request sucks';
       case 401:
-        return 'Unauthenticated -- Your API key is wrong';
+        return 'Unauthenticated -- Invalid credentials';
       case 403:
         return 'Forbidden -- You do not have permission to access the requested resource';
       case 404:

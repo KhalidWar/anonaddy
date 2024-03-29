@@ -83,15 +83,17 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                 bottom: const TabBar(
                   key: AliasesTab.aliasTabTabBar,
                   indicatorColor: AppColors.accentColor,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.grey,
                   indicatorWeight: 3,
                   tabs: [
                     Tab(
                       key: AliasesTab.aliasTabAvailableAliasesTab,
-                      child: Text('Available Aliases'),
+                      text: 'Available Aliases',
                     ),
                     Tab(
                       key: AliasesTab.aliasTabDeletedAliasesTab,
-                      child: Text('Deleted Aliases'),
+                      text: 'Deleted Aliases',
                     ),
                   ],
                 ),

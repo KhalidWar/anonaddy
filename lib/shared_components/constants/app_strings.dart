@@ -14,6 +14,7 @@ class AppStrings {
   static const rules = 'Rules';
   static const selfHosted = 'Self Hosted';
   static const subscriptionEndDate = 'Subscription End Date';
+  static const accessTokenInfo = 'Access Token Info';
   static const subscriptionEndDateNotAvailable = 'Not available';
   static const subscriptionEndDateDoesNotExpire = 'Does not expire';
   static const noDefaultSelected = 'No default selected';
@@ -73,7 +74,7 @@ class AppStrings {
   static const addNewDomain = 'Add New Domain';
   static const addNewUsername = 'Add New Username';
   static const addUsername = 'Add Username';
-  static const noAdditionalUsernamesFound = 'No additional usernames found';
+  static const noAdditionalUsernamesFound = 'No usernames found';
 
   /// Domain
   static const unverifiedDomainWarning = 'Unverified domain';
@@ -136,9 +137,9 @@ class AppStrings {
   static const accessTokenDefinition =
       'Access Token is a long string of alphanumeric characters used to access an account without giving away the account\'s username and password.';
   static const accessTokenRequired =
-      'To access your addy.io account, you\'ll have to provide your own Access Token.';
+      'To access your Addy.io account, you\'ll have to provide your own Access Token.';
   static const howToGetAccessToken = 'How to get Access Token?';
-  static const howToGetAccessToken1 = '1. Login to your addy.io account';
+  static const howToGetAccessToken1 = '1. Login to your Addy.io account';
   static const howToGetAccessToken2 = '2. Go to Settings';
   static const howToGetAccessToken3 = '3. Scroll down to API section';
   static const howToGetAccessToken4 = '4. Click on Generate New Token';
@@ -178,7 +179,6 @@ class AppStrings {
 
   /// Form validation error messages
   static const provideValidAccessToken = 'Provide a valid Access Token';
-  static const providePGPKey = 'Provide a PGP Key';
   static const usernameIsRequired = 'Username is required';
   static const fieldCannotBeEmpty = 'Field can not be empty';
   static const enterValidEmail = 'Enter a valid email';

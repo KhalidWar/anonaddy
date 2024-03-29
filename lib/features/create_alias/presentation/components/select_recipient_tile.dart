@@ -23,7 +23,9 @@ class SelectRecipientTile extends StatelessWidget {
         onChanged: (value) {},
       ),
       title: Text(verifiedRecipient.email),
-      subtitle: Text('Aliases: ${verifiedRecipient.aliasesCount}'),
+      subtitle: Text(
+        'Aliases count: ${verifiedRecipient.aliasesCount ?? 'unknown'}',
+      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

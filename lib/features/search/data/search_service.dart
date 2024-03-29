@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:anonaddy/features/aliases/domain/alias.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
@@ -31,8 +32,8 @@ class SearchService {
 
       final aliasesList = response.data['data'] as List;
       return aliasesList.map((alias) => Alias.fromJson(alias)).toList();
-    } on DioError catch (dioError) {
-      throw dioError.message;
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }

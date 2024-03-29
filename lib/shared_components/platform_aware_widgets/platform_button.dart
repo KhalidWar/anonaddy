@@ -29,7 +29,7 @@ class PlatformButton extends PlatformAware {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.all(0),
-        primary: color ?? AppColors.accentColor,
+        backgroundColor: color ?? AppColors.accentColor,
       ),
       onPressed: onPress,
       child: child,

@@ -10,17 +10,21 @@ class HeaderProfile extends StatelessWidget {
     required this.account,
     required this.onPress,
   }) : super(key: key);
+
   final Account account;
   final Function() onPress;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      dense: true,
+      contentPadding: const EdgeInsets.only(left: 24, right: 24),
       leading: CircleAvatar(
+        maxRadius: 16,
         backgroundColor: AppColors.accentColor,
         child: Text(
           account.username[0].toUpperCase(),
-          style: Theme.of(context).textTheme.headline5!.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: AppColors.primaryColor,
               ),
@@ -30,21 +34,22 @@ class HeaderProfile extends StatelessWidget {
         Utilities.capitalizeFirstLetter(account.username),
         style: Theme.of(context)
             .textTheme
-            .headline6!
-            .copyWith(color: Colors.white),
+            .bodyLarge
+            ?.copyWith(color: Colors.white),
       ),
       subtitle: Text(
         Utilities.capitalizeFirstLetter(
-          account.subscription.isEmpty
-              ? AppStrings.selfHosted
-              : account.subscription,
+          account.isSelfHosted ? AppStrings.selfHosted : account.subscription,
         ),
         style: Theme.of(context)
             .textTheme
-            .bodyText2!
-            .copyWith(color: Colors.white),
+            .bodyMedium
+            ?.copyWith(color: Colors.white),
       ),
-      trailing: const Icon(Icons.error_outline, color: Colors.white),
+      trailing: const Icon(
+        Icons.help_outline_outlined,
+        color: Colors.white,
+      ),
       onTap: onPress,
     );
   }

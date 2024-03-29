@@ -3,22 +3,38 @@ import 'package:anonaddy/features/account/presentation/components/account_popup_
 import 'package:anonaddy/features/account/presentation/components/header_profile.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
+import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/account_list_tile.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class AccountTabHeader extends ConsumerWidget {
-  const AccountTabHeader({Key? key}) : super(key: key);
+class AccountTabHeader extends ConsumerStatefulWidget {
+  const AccountTabHeader({super.key});
 
   static const accountTabHeaderLoading = Key('accountTabHeaderLoading');
   static const accountTabHeaderHeaderProfile =
       Key('accountTabHeaderHeaderProfile');
   static const accountTabHeaderError = Key('accountTabHeaderError');
+
+  @override
+  ConsumerState createState() => _AccountTabHeaderState();
+}
+
+class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
+  final pageIndexNotifier = ValueNotifier(0);
+
+  void changePageIndex(int newIndex) {
+    pageIndexNotifier.value = pageIndexNotifier.value + newIndex;
+  }
+
+  void resetPageIndex() {
+    pageIndexNotifier.value = 0;
+  }
 
   /// addy.io instances always have a [bandwidthLimit] value.
   /// If unlimited, it's "0". If not, it's an int.
@@ -63,53 +79,67 @@ class AccountTabHeader extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final accountState = ref.watch(accountNotifierProvider);
 
-    return accountState.when(
-      data: (account) {
-        return ListView(
-          children: [
-            HeaderProfile(
-              key: AccountTabHeader.accountTabHeaderHeaderProfile,
-              account: account,
-              onPress: () {
-                PlatformAware.platformDialog(
-                  context: context,
-                  child: PlatformInfoDialog(
-                    title: AppStrings.accountBotNavLabel,
-                    buttonLabel: AppStrings.doneText,
-                    content: AccountPopupInfo(account: account),
-                  ),
-                );
-              },
-            ),
-            AccountListTile(
-              title: calculateBandWidth(account),
-              subtitle: AppStrings.monthlyBandwidth,
-              leadingIconData: Icons.speed_outlined,
-            ),
-            AccountListTile(
-              title: calculateRecipientsCount(account),
-              subtitle: AppStrings.recipients,
-              leadingIconData: Icons.email_outlined,
-            ),
-            AccountListTile(
-              title: calculateUsernamesCount(account),
-              subtitle: AppStrings.usernames,
-              leadingIconData: Icons.account_circle_outlined,
-            ),
-          ],
-        );
-      },
-      error: (err, _) => ErrorMessageWidget(
-        key: AccountTabHeader.accountTabHeaderError,
-        message: err.toString(),
-        messageColor: Colors.white,
-      ),
-      loading: () => const Center(
-        child: PlatformLoadingIndicator(
-          key: AccountTabHeader.accountTabHeaderLoading,
+    return Container(
+      color: AppColors.primaryColor,
+      child: accountState.when(
+        data: (account) {
+          return Column(
+            children: [
+              HeaderProfile(
+                key: AccountTabHeader.accountTabHeaderHeaderProfile,
+                account: account,
+                onPress: () async {
+                  await WoltModalSheet.show(
+                    context: context,
+                    pageIndexNotifier: pageIndexNotifier,
+                    onModalDismissedWithBarrierTap: () {
+                      Navigator.of(context).pop();
+                      resetPageIndex();
+                    },
+                    pageListBuilder: (context) {
+                      return [
+                        Utilities.buildWoltModalSheetSubPage(
+                          context,
+                          topBarTitle: AppStrings.accountBotNavLabel,
+                          child: AccountPopupInfo(account: account),
+                        ),
+                      ];
+                    },
+                  );
+                },
+              ),
+              AccountListTile(
+                title: calculateBandWidth(account),
+                subtitle: AppStrings.monthlyBandwidth,
+                icon: Icons.speed_outlined,
+              ),
+              const SizedBox(height: 8),
+              AccountListTile(
+                title: calculateRecipientsCount(account),
+                subtitle: AppStrings.recipients,
+                icon: Icons.email_outlined,
+              ),
+              const SizedBox(height: 8),
+              AccountListTile(
+                title: calculateUsernamesCount(account),
+                subtitle: AppStrings.usernames,
+                icon: Icons.account_circle_outlined,
+              ),
+            ],
+          );
+        },
+        error: (err, _) => ErrorMessageWidget(
+          key: AccountTabHeader.accountTabHeaderError,
+          message: err.toString(),
+          messageColor: Colors.white,
+        ),
+        loading: () => const Center(
+          child: PlatformLoadingIndicator(
+            key: AccountTabHeader.accountTabHeaderLoading,
+          ),
         ),
       ),
     );

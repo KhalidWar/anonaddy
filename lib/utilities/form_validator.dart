@@ -1,31 +1,15 @@
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 class FormValidator {
-  static String? accessTokenValidator(String input) {
-    if (input.isEmpty) {
-      return AppStrings.provideValidAccessToken;
-    } else {
-      return null;
-    }
+  static String? requiredField(String? input) {
+    if (input == null) return null;
+    if (input.isEmpty) return AppStrings.fieldCannotBeEmpty;
+    return null;
   }
 
-  static String? validatePGPKeyField(String input) {
-    if (input.isEmpty) {
-      return AppStrings.providePGPKey;
-    } else {
-      return null;
-    }
-  }
+  static String? validateEmailField(String? input) {
+    if (input == null) return null;
 
-  static String? validateUsernameInput(String input) {
-    if (input.isEmpty) {
-      return AppStrings.usernameIsRequired;
-    } else {
-      return null;
-    }
-  }
-
-  static String? validateEmailField(String input) {
     const emailPattern = r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)';
     final regExp = RegExp(emailPattern);
 
@@ -53,8 +37,8 @@ class FormValidator {
     }
   }
 
-  static String? validateInstanceURL(String input) {
-    if (input.isEmpty) {
+  static String? validateInstanceURL(String? input) {
+    if (input == null || input.isEmpty) {
       return AppStrings.providerValidUrl;
     } else {
       return null;

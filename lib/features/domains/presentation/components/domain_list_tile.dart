@@ -11,22 +11,24 @@ class DomainListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(Icons.dns_outlined),
-            const SizedBox(width: 15),
+            const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(domain.domain),
-                const SizedBox(height: 2),
                 Text(
                   domain.hasDescription
                       ? domain.description!
                       : AppStrings.noDescription,
-                  style: const TextStyle(color: Colors.grey),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: Colors.grey),
                 ),
               ],
             ),

@@ -32,7 +32,7 @@ class NavigationErrorScreen extends ConsumerWidget {
               width: double.infinity,
               margin: const EdgeInsets.only(top: 10),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.red),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: const Text('logout'),
                 onPressed: () {
                   PlatformAware.platformDialog(

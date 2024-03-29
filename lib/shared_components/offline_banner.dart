@@ -1,29 +1,33 @@
+import 'package:anonaddy/features/connectivity/presentation/controller/connectivity_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_info_dialog.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OfflineBanner extends StatelessWidget {
+class OfflineBanner extends ConsumerWidget {
   const OfflineBanner({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      tileColor: Colors.redAccent,
-      iconColor: Colors.black,
-      minLeadingWidth: 0,
-      title: const Text(AppStrings.noInternetOfflineData),
-      leading: const Icon(Icons.warning_amber_outlined),
-      onTap: () {
-        PlatformAware.platformDialog(
-          context: context,
-          child: const PlatformInfoDialog(
-            title: AppStrings.noInternetDialogTitle,
-            content: Text(AppStrings.noInternetContent),
-            buttonLabel: AppStrings.noInternetDialogButton,
-          ),
-        );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final connectivityAsync = ref.watch(connectivityNotifierProvider);
+
+    return connectivityAsync.when(
+      data: (connectivity) {
+        if (connectivity.hasNoConnection) {
+          return Container(
+            height: 50,
+            alignment: Alignment.center,
+            color: Colors.red,
+            child: Text(
+              AppStrings.noInternetOfflineData,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          );
+        }
+
+        return const SizedBox.shrink();
       },
+      error: (_, __) => const SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
     );
   }
 }

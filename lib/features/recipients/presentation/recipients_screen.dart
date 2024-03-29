@@ -15,10 +15,10 @@ import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart
 import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class RecipientsScreen extends ConsumerStatefulWidget {
   const RecipientsScreen({
@@ -115,7 +115,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               return ListView(
                 physics: const ClampingScrollPhysics(),
                 children: [
-                  if (recipientScreenState.isOffline) const OfflineBanner(),
+                  const OfflineBanner(),
                   RecipientScreenUnverifiedWarning(recipientId: recipient.id),
                   AliasScreenPieChart(
                     emailsForwarded: Utilities.reduceListElements(
@@ -188,19 +188,20 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     trailing: recipient.fingerprint == null
                         ? IconButton(
                             icon: const Icon(Icons.add_circle_outline_outlined),
-                            onPressed: () {
-                              showModalBottomSheet(
+                            onPressed: () async {
+                              await WoltModalSheet.show(
                                 context: context,
-                                isScrollControlled: true,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(
-                                      AppTheme.kBottomSheetBorderRadius,
+                                pageListBuilder: (context) {
+                                  return [
+                                    Utilities.buildWoltModalSheetSubPage(
+                                      context,
+                                      topBarTitle: 'Add GPG Key',
+                                      child: RecipientAddPgpKey(
+                                        recipient: recipient,
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                builder: (context) =>
-                                    RecipientAddPgpKey(recipient: recipient),
+                                  ];
+                                },
                               );
                             },
                           )
@@ -346,6 +347,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               return ListView(
                 physics: const ClampingScrollPhysics(),
                 children: const [
+                  OfflineBanner(),
                   AliasScreenPieChart(
                     emailsForwarded: 0,
                     emailsBlocked: 0,

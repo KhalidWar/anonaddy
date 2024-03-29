@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
-import 'package:anonaddy/features/auth/domain/api_token.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
@@ -30,19 +29,19 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     ));
   }
 
-  Future<void> login(String url, String token) async {
+  Future<void> loginWithAccessToken(String url, String token) async {
     if (state.value != null) {
       state = AsyncData(state.value!.copyWith(loginLoading: true));
     }
 
     try {
-      final apiToken =
-          await ref.read(authServiceProvider).fetchApiTokenData(url, token);
-      final user = User(url: url, token: token, apiToken: apiToken);
+      final user =
+          await ref.read(authServiceProvider).loginWithAccessToken(url, token);
 
       await ref.read(authServiceProvider).saveUser(user);
       state = AsyncData(state.value!.copyWith(
         authorizationStatus: AuthorizationStatus.authorized,
+        user: user,
         loginLoading: false,
       ));
     } catch (error) {
@@ -50,6 +49,23 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       if (state.value != null) {
         state = AsyncData(state.value!.copyWith(loginLoading: false));
       }
+    }
+  }
+
+  Future<void> loginWithUsernameAndPassword(
+      String email, String password) async {
+    try {
+      final user = await ref
+          .read(authServiceProvider)
+          .loginWithUsernameAndPassword(email, password);
+
+      await ref.read(authServiceProvider).saveUser(user);
+      state = AsyncData(state.value!.copyWith(
+        authorizationStatus: AuthorizationStatus.authorized,
+        user: user,
+      ));
+    } catch (error) {
+      Utilities.showToast(error.toString());
     }
   }
 
@@ -85,11 +101,10 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   /// Fetches and validates stored login credentials
   /// and returns bool if valid or not
-  Future<bool> _isLoginCredentialValid() async {
+  Future<bool> _isLoginCredentialValid(User? user) async {
     try {
-      final user = await ref.read(authServiceProvider).getUser();
       if (user == null) return false;
-      if (user.apiToken.isExpired) return false;
+      if (user.hasTokenExpired) return false;
       return true;
     } catch (error) {
       Utilities.showToast(error.toString());
@@ -124,9 +139,8 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
       if (url == null || token == null) return false;
 
-      final apiToken =
-          await ref.read(authServiceProvider).fetchApiTokenData(url, token);
-      final user = User(url: url, token: token, apiToken: apiToken);
+      final user =
+          await ref.read(authServiceProvider).loginWithAccessToken(url, token);
       await ref.read(authServiceProvider).saveUser(user);
 
       return true;
@@ -137,7 +151,8 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   @override
   FutureOr<AuthState> build() async {
-    final isLoginCredentialValid = await _isLoginCredentialValid();
+    final user = await ref.read(authServiceProvider).getUser();
+    final isLoginCredentialValid = await _isLoginCredentialValid(user);
     final authStatus = await _getBioAuthState();
 
     if (isLoginCredentialValid) {
@@ -145,6 +160,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
         authorizationStatus: AuthorizationStatus.authorized,
         authenticationStatus: authStatus,
         loginLoading: false,
+        user: user,
       );
     }
 

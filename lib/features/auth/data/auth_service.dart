@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:anonaddy/features/auth/domain/api_token.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/api_error_message.dart';
@@ -26,13 +27,13 @@ class AuthService {
   final FlutterSecureStorage secureStorage;
   final Dio dio;
 
-  Future<ApiToken> fetchApiTokenData(String url, String token) async {
+  Future<User> loginWithAccessToken(String url, String token) async {
     try {
       const path = '$kUnEncodedBaseURL/api-token-details';
       final uri = Uri.https(url, path);
       final options = Options(
-        sendTimeout: 5000,
-        receiveTimeout: 5000,
+        sendTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 5),
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
@@ -42,17 +43,64 @@ class AuthService {
       );
 
       final response = await dio.getUri(uri, options: options);
-      log('fetchApiTokenData: ${response.statusCode}');
+      log('loginWithAccessToken: ${response.statusCode}');
 
-      return ApiToken.fromMap(response.data);
-    } on DioError catch (dioError) {
-      if (dioError.type == DioErrorType.response) {
-        throw dioError.response == null
-            ? dioError.message
+      final apiToken = ApiToken.fromMap(response.data);
+      return User(url: url, token: token, apiToken: apiToken);
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.badResponse) {
+        throw dioException.response == null
+            ? dioException.message ?? AppStrings.somethingWentWrong
             : ApiErrorMessage.translateStatusCode(
-                dioError.response!.statusCode ?? 0);
+                dioException.response?.statusCode ?? 0);
       }
-      throw dioError.error.message;
+      throw dioException.message ?? AppStrings.somethingWentWrong;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<User> loginWithUsernameAndPassword(
+    String username,
+    String password, {
+    String? instanceUrl,
+  }) async {
+    try {
+      final url = instanceUrl ?? 'app.addy.io';
+      final baseUrl = 'https://$url';
+
+      final loginResponse = await dio.post(
+        '$baseUrl/api/auth/login',
+        data: jsonEncode({
+          'username': username,
+          'password': password,
+          'device_name': AppStrings.appName,
+        }),
+      );
+
+      final apiKey = loginResponse.data['api_key'];
+      final tokenDetailsResponse = await dio.get(
+        '$baseUrl/api/v1/api-token-details',
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            "Accept": "application/json",
+            "Authorization": "Bearer $apiKey",
+          },
+        ),
+      );
+
+      final apiToken = ApiToken.fromMap(tokenDetailsResponse.data);
+      return User(url: url, token: apiKey, apiToken: apiToken);
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.badResponse) {
+        throw dioException.response == null
+            ? dioException.message ?? AppStrings.somethingWentWrong
+            : ApiErrorMessage.translateStatusCode(
+                dioException.response?.statusCode ?? 0);
+      }
+      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (error) {
       rethrow;
     }

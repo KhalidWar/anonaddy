@@ -5,6 +5,7 @@ import 'package:anonaddy/features/alert_center/presentation/controller/failed_de
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
+import 'package:anonaddy/features/connectivity/presentation/controller/connectivity_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/create_alias.dart';
 import 'package:anonaddy/features/home/presentation/components/changelog_widget.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
@@ -13,9 +14,12 @@ import 'package:anonaddy/features/search/presentation/search_tab.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/theme.dart';
+import 'package:anonaddy/utilities/utilities.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -31,9 +35,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void _switchIndex(int index) {
     ref.read(fabVisibilityStateNotifier.notifier).showFab();
+    if (_selectedIndex == 2 && index == 2) {
+      Navigator.pushNamed(context, QuickSearchScreen.routeName);
+    }
+
     setState(() {
       _selectedIndex = index;
     });
+
     if (index == 0) {
       ref.read(accountNotifierProvider.notifier).fetchAccount();
       ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
@@ -63,17 +72,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     ref.listen<bool>(
       settingsNotifier
           .select((settingState) => settingState.value?.showChangelog ?? false),
-      (_, showChangelog) {
+      (_, showChangelog) async {
         if (showChangelog) {
-          showModalBottomSheet(
+          await WoltModalSheet.show(
             context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
+            pageListBuilder: (context) {
+              return [
+                Utilities.buildWoltModalSheetSubPage(
+                  context,
+                  topBarTitle: 'What\'s new?',
+                  child: const ChangelogWidget(),
+                ),
+              ];
+            },
+          );
+        }
+      },
+    );
+
+    ref.listen<ConnectivityResult?>(
+      connectivityNotifierProvider
+          .select((connectivityAsync) => connectivityAsync.value),
+      (prev, next) {
+        if (prev == null || next == null) return;
+        if (prev.hasConnection && next.hasNoConnection) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.red,
+              content: Center(
+                child: Text('No internet connection. Offline mode.'),
               ),
             ),
-            builder: (context) => const ChangelogWidget(),
+          );
+        }
+        if (prev.hasNoConnection && next.hasConnection) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.green,
+              content: Center(child: Text('Internet connection restored')),
+            ),
           );
         }
       },
@@ -84,6 +121,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: AppBar(
         key: const Key('homeScreenAppBar'),
         elevation: 0,
+        backgroundColor: AppColors.primaryColor,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         title: const Text(
           AppStrings.appName,
           key: Key('homeScreenAppBarTitle'),

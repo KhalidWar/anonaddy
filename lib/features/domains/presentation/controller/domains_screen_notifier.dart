@@ -110,22 +110,22 @@ class DomainsScreenNotifier
   }
 
   Future<void> updateDomainDefaultRecipients(
-      String domainId, String recipientId) async {
+      String domainId, String? recipientId) async {
     try {
       state = AsyncData(state.value!.copyWith(updateRecipientLoading: true));
 
-      final newDomain = await ref
+      await ref
           .read(domainService)
           .updateDomainDefaultRecipient(domainId, recipientId);
 
       Utilities.showToast('Default recipient updated successfully!');
 
-      final updatedDomain = state.value!.domain
-          .copyWith(defaultRecipient: newDomain.defaultRecipient);
+      final domain =
+          await ref.read(domainService).fetchSpecificDomain(domainId);
 
       state = AsyncData(state.value!.copyWith(
         updateRecipientLoading: false,
-        domain: updatedDomain,
+        domain: domain,
       ));
     } catch (error) {
       Utilities.showToast(error.toString());

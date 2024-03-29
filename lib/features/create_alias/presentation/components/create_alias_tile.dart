@@ -19,7 +19,6 @@ class CreateAliasTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       dense: true,
-      horizontalTitleGap: 0,
       leading: Icon(iconData),
       title: Text(title),
       subtitle: Text(subtitle),

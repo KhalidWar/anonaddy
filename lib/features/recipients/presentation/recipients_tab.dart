@@ -8,10 +8,10 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/utilities/theme.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class RecipientsTab extends ConsumerStatefulWidget {
   const RecipientsTab({Key? key}) : super(key: key);
@@ -25,16 +25,18 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
     final accountState = ref.read(accountNotifierProvider).value!;
 
     /// Draws UI for adding new recipient
-    Future buildAddNewRecipient() {
-      return showModalBottomSheet(
+    Future<void> buildAddNewRecipient() async {
+      await WoltModalSheet.show(
         context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppTheme.kBottomSheetBorderRadius),
-          ),
-        ),
-        builder: (context) => const AddNewRecipient(),
+        pageListBuilder: (context) {
+          return [
+            Utilities.buildWoltModalSheetSubPage(
+              context,
+              topBarTitle: AppStrings.addNewRecipient,
+              child: const AddNewRecipient(),
+            ),
+          ];
+        },
       );
     }
 
@@ -66,12 +68,9 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
           physics: const ClampingScrollPhysics(),
           children: [
             recipients.isEmpty
-                ? ListTile(
+                ? const ListTile(
                     title: Center(
-                      child: Text(
-                        AppStrings.noRecipientsFound,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
+                      child: Text(AppStrings.noRecipientsFound),
                     ),
                   )
                 : ListView.builder(
