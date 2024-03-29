@@ -55,9 +55,6 @@ dependencies:
   package_info_plus: ^5.0.1
   flutter_native_splash: ^2.3.10
 
-  # Platform UI
-  macos_ui: ^2.0.5
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
