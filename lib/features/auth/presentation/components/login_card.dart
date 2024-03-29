@@ -1,4 +1,5 @@
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
+import 'package:anonaddy/shared_components/platform_aware_widgets/platform_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,9 +41,9 @@ class LoginCard extends StatelessWidget {
             SizedBox(
               height: 48,
               width: double.infinity,
-              child: ElevatedButton(
+              child: PlatformButton(
                 key: const Key('loginFooterLoginButton'),
-                onPressed: footerOnPress,
+                onPress: footerOnPress,
                 child: Consumer(
                   builder: (context, ref, _) {
                     final authAsync = ref.watch(authStateNotifier);
