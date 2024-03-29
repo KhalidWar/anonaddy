@@ -17,7 +17,10 @@ class HeaderProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      dense: true,
+      contentPadding: const EdgeInsets.only(left: 24, right: 24),
       leading: CircleAvatar(
+        maxRadius: 16,
         backgroundColor: AppColors.accentColor,
         child: Text(
           account.username[0].toUpperCase(),

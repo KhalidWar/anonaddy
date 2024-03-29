@@ -16,10 +16,10 @@ class AccountListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(left: 28),
       child: Row(
         children: [
-          Icon(icon, size: 28, color: Colors.white),
+          Icon(icon, size: 20, color: Colors.white),
           const SizedBox(width: 24),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

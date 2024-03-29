@@ -84,7 +84,6 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
 
     return Container(
       color: AppColors.primaryColor,
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 50),
       child: accountState.when(
         data: (account) {
           return Column(
@@ -117,13 +116,13 @@ class _AccountTabHeaderState extends ConsumerState<AccountTabHeader> {
                 subtitle: AppStrings.monthlyBandwidth,
                 icon: Icons.speed_outlined,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               AccountListTile(
                 title: calculateRecipientsCount(account),
                 subtitle: AppStrings.recipients,
                 icon: Icons.email_outlined,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               AccountListTile(
                 title: calculateUsernamesCount(account),
                 subtitle: AppStrings.usernames,
