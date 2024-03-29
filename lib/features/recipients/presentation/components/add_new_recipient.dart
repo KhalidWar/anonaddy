@@ -46,6 +46,7 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
               autofocus: true,
               controller: _textEditController,
               textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.emailAddress,
               validator: FormValidator.validateEmailField,
               onFieldSubmitted: (input) => addRecipient(),
               decoration: const InputDecoration(
