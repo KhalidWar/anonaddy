@@ -1,93 +1,61 @@
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:macos_ui/macos_ui.dart';
 
 class AppTheme {
-  static final ThemeData light = ThemeData.light().copyWith(
-    brightness: Brightness.light,
-    primaryColor: Colors.white,
-    primaryColorLight: Colors.white,
-    primaryColorDark: const Color(0xFFF5F7FA),
-    appBarTheme: _appBarTheme,
-    toggleableActiveColor: AppColors.accentColor,
-    buttonTheme: _buttonThemeData,
-    floatingActionButtonTheme: _fabThemeData,
-    cardTheme: _cardTheme,
-    dialogTheme: _dialogTheme,
-    elevatedButtonTheme: _elevatedButtonThemeData,
-    colorScheme:
-        ColorScheme.fromSwatch().copyWith(secondary: AppColors.accentColor),
-  );
-
-  static final ThemeData dark = ThemeData.dark().copyWith(
-    brightness: Brightness.dark,
-    scaffoldBackgroundColor: Colors.black,
-    primaryColor: Colors.black,
-    primaryColorLight: const Color(0xFF0d0d0d),
-    primaryColorDark: Colors.black,
-    appBarTheme: _appBarTheme,
-    toggleableActiveColor: AppColors.accentColor,
-    dividerColor: Colors.grey[600],
-    buttonTheme: _buttonThemeData,
-    floatingActionButtonTheme: _fabThemeData,
-    cardTheme: _cardTheme.copyWith(color: const Color(0xFF141414)),
-    dialogTheme: _dialogTheme,
-    bottomNavigationBarTheme:
-        const BottomNavigationBarThemeData(backgroundColor: Colors.black),
-    elevatedButtonTheme: _elevatedButtonThemeData,
-    colorScheme:
-        ColorScheme.fromSwatch().copyWith(secondary: AppColors.accentColor),
-  );
-
-  static final macOSThemeLight = MacosThemeData.light();
-
-  static final macOSThemeDark = MacosThemeData.dark();
-
-  static final _elevatedButtonThemeData = ElevatedButtonThemeData(
-    style: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all(Colors.black),
-      overlayColor: MaterialStateProperty.all(AppColors.primaryColor),
-      backgroundColor: MaterialStateProperty.all(AppColors.accentColor),
-      minimumSize: MaterialStateProperty.all(const Size(180, 50)),
-      shape: MaterialStateProperty.all(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      ),
+  static final ThemeData light = ThemeData(
+    colorScheme: const ColorScheme(
+      brightness: Brightness.light,
+      primary: Color(0xFF19216C),
+      onPrimary: Color(0xFFFFFFFF),
+      primaryContainer: Color(0xFFAEB3E6),
+      onPrimaryContainer: Color(0xFF0C1033),
+      secondary: Color(0xFF3AE7E1),
+      onSecondary: Color(0xFFFFFFFF),
+      secondaryContainer: Color(0xFFAFE6E3),
+      onSecondaryContainer: Color(0xFF0D3331),
+      tertiary: Color(0xFFF5F7FA),
+      onTertiary: Color(0xFFFFFFFF),
+      tertiaryContainer: Color(0xFFE4E5E6),
+      onTertiaryContainer: Color(0xFF323233),
+      error: Color(0xFFFF0D00),
+      onError: Color(0xFFFFFFFF),
+      errorContainer: Color(0xFFE6A19D),
+      onErrorContainer: Color(0xFF330300),
+      background: Color(0xFFfbfcfc),
+      onBackground: Color(0xFF313133),
+      surface: Color(0xFFfbfcfc),
+      onSurface: Color(0xFF313133),
+      surfaceVariant: Color(0xFFdadbe6),
+      onSurfaceVariant: Color(0xFF565866),
+      outline: Color(0xFF818499),
     ),
   );
 
-  static final _buttonThemeData = const ButtonThemeData().copyWith(
-    buttonColor: AppColors.accentColor,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(6)),
-    ),
-  );
-
-  static final _cardTheme = const CardTheme().copyWith(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-    margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-  );
-
-  static final _dialogTheme = const DialogTheme().copyWith(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-  );
-
-  static final _appBarTheme = const AppBarTheme().copyWith(
-    color: AppColors.primaryColor,
-    systemOverlayStyle: SystemUiOverlayStyle.light,
-  );
-
-  static final _fabThemeData = const FloatingActionButtonThemeData().copyWith(
-    backgroundColor: AppColors.accentColor,
-    foregroundColor: Colors.black,
-  );
-
-  /// Universal UI Decoration
-  static const kBottomSheetBorderRadius = 12.0;
-  static const kTextFormFieldDecoration = InputDecoration(
-    border: OutlineInputBorder(),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: AppColors.accentColor),
+  static final ThemeData dark = ThemeData(
+    colorScheme: const ColorScheme(
+      brightness: Brightness.dark,
+      primary: Color(0xFF969FE6),
+      onPrimary: Color(0xFF12184C),
+      primaryContainer: Color(0xFF172066),
+      onPrimaryContainer: Color(0xFFAEB3E6),
+      secondary: Color(0xFF99E6E2),
+      onSecondary: Color(0xFF134C4A),
+      secondaryContainer: Color(0xFF1A6663),
+      onSecondaryContainer: Color(0xFFAFE6E3),
+      tertiary: Color(0xFFE3E4E6),
+      onTertiary: Color(0xFF4B4C4C),
+      tertiaryContainer: Color(0xFF646566),
+      onTertiaryContainer: Color(0xFFE4E5E6),
+      error: Color(0xFFE6847F),
+      onError: Color(0xFF4C0400),
+      errorContainer: Color(0xFF660500),
+      onErrorContainer: Color(0xFFE6A19D),
+      background: Color(0xFF000000),
+      onBackground: Color(0xFFe3e3e6),
+      surface: Color(0xFF313133),
+      onSurface: Color(0xFFe3e3e6),
+      surfaceVariant: Color(0xFF565866),
+      onSurfaceVariant: Color(0xFFd6d7e6),
+      outline: Color(0xFFa1a3b3),
     ),
   );
 }
