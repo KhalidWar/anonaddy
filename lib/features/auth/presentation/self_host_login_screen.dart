@@ -20,15 +20,13 @@ class SelfHostLoginScreen extends ConsumerStatefulWidget {
 }
 
 class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
-  final _urlFormKey = GlobalKey<FormState>();
-  final _tokenFormKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   String _url = '';
   String _token = '';
 
   Future<void> login() async {
-    if (_urlFormKey.currentState!.validate() &&
-        _tokenFormKey.currentState!.validate()) {
+    if (formKey.currentState!.validate()) {
       await ref
           .read(authStateNotifier.notifier)
           .loginWithAccessToken(_url, _token);
@@ -48,20 +46,20 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
           body: Center(
             child: LoginCard(
               footerOnPress: login,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Addy.io Instance',
-                        key: Key('selfHostedLoginScreenUrlInputLabel'),
-                      ),
-                      const SizedBox(height: 4),
-                      Form(
-                        key: _urlFormKey,
-                        child: TextFormField(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Addy.io Instance',
+                          key: Key('selfHostedLoginScreenUrlInputLabel'),
+                        ),
+                        const SizedBox(height: 4),
+                        TextFormField(
                           key: const Key('selfHostedLoginScreenUrlInputField'),
                           validator: (input) =>
                               FormValidator.validateInstanceURL(input!),
@@ -78,21 +76,18 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                             hintText: AppUrl.anonAddyAuthority,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Access Token ',
-                        key: Key('selfHostedLoginScreenTokenInputLabel'),
-                      ),
-                      const SizedBox(height: 4),
-                      Form(
-                        key: _tokenFormKey,
-                        child: TextFormField(
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Access Token ',
+                          key: Key('selfHostedLoginScreenTokenInputLabel'),
+                        ),
+                        const SizedBox(height: 4),
+                        TextFormField(
                           key:
                               const Key('selfHostedLoginScreenTokenInputField'),
                           validator: FormValidator.requiredField,
@@ -112,28 +107,29 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                             hintText: AppStrings.enterYourApiToken,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      TextButton(
-                        key: const Key(
-                            'selfHostedLoginScreenSelfHostInfoButton'),
-                        child: const Text('How to self-host addy.io?'),
-                        onPressed: () =>
-                            Utilities.launchURL(kAnonAddySelfHostingURL),
-                      ),
-                      TextButton(
-                        key: const Key(
-                            'selfHostedLoginScreenAnonAddyLoginButton'),
-                        onPressed:
-                            ref.read(authStateNotifier.notifier).goToAddyLogin,
-                        child: const Text('Login with addy.io instead!'),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        TextButton(
+                          key: const Key(
+                              'selfHostedLoginScreenSelfHostInfoButton'),
+                          child: const Text('How to self-host addy.io?'),
+                          onPressed: () =>
+                              Utilities.launchURL(kAnonAddySelfHostingURL),
+                        ),
+                        TextButton(
+                          key: const Key(
+                              'selfHostedLoginScreenAnonAddyLoginButton'),
+                          onPressed: ref
+                              .read(authStateNotifier.notifier)
+                              .goToAddyLogin,
+                          child: const Text('Login with addy.io instead!'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
