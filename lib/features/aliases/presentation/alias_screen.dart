@@ -361,6 +361,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
         loading: () {
           return ListView(
             children: const [
+              OfflineBanner(),
               AliasScreenPieChart(
                 emailsForwarded: 0,
                 emailsBlocked: 0,
