@@ -4,6 +4,7 @@ import 'package:anonaddy/features/aliases/presentation/components/alias_screen_l
 import 'package:anonaddy/features/aliases/presentation/components/alias_screen_recipients.dart';
 import 'package:anonaddy/features/aliases/presentation/components/send_from_widget.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
@@ -314,15 +315,51 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                     onModalDismissedWithBarrierTap: Navigator.of(context).pop,
                     pageListBuilder: (modalSheetContext) {
                       return [
-                        WoltModalSheetPage(
-                          isTopBarLayerAlwaysVisible: true,
-                          enableDrag: true,
-                          topBarTitle: Text(
-                            'Default Recipient${aliasState.alias.recipients.length >= 2 ? 's' : ''}',
-                            style: Theme.of(context).textTheme.titleMedium,
+                        Utilities.buildWoltModalSheetSubPage(
+                          context,
+                          topBarTitle: 'Default Recipients',
+                          pageTitle:
+                              '${AppStrings.updateAliasRecipientNote}\n\n${AddyString.updateAliasRecipients}',
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 76),
+                            child: AliasDefaultRecipientScreen(
+                              aliasId: aliasState.alias.id,
+                            ),
                           ),
-                          child: AliasDefaultRecipientScreen(
-                            aliasId: aliasState.alias.id,
+                          stickyActionBar: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            child: PlatformButton(
+                              onPress: () => ref
+                                  .read(defaultRecipientNotifierProvider(
+                                          widget.aliasId)
+                                      .notifier)
+                                  .updateAliasDefaultRecipient()
+                                  .whenComplete(() => Navigator.pop(context)),
+                              child: Consumer(
+                                builder: (context, ref, _) {
+                                  final defaultRecipientAsync = ref.watch(
+                                      defaultRecipientNotifierProvider(
+                                          widget.aliasId));
+
+                                  return defaultRecipientAsync.when(
+                                    data: (defaultRecipientState) {
+                                      return defaultRecipientState.isCTALoading
+                                          ? const PlatformLoadingIndicator()
+                                          : const Text('Update Recipients');
+                                    },
+                                    loading: () =>
+                                        const PlatformLoadingIndicator(),
+                                    error: (error, _) => ErrorMessageWidget(
+                                      message: error.toString(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ];
