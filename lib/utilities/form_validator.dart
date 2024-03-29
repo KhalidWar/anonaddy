@@ -37,8 +37,8 @@ class FormValidator {
     }
   }
 
-  static String? validateInstanceURL(String input) {
-    if (input.isEmpty) {
+  static String? validateInstanceURL(String? input) {
+    if (input == null || input.isEmpty) {
       return AppStrings.providerValidUrl;
     } else {
       return null;

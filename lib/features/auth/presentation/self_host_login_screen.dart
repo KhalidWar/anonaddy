@@ -61,8 +61,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                         const SizedBox(height: 4),
                         TextFormField(
                           key: const Key('selfHostedLoginScreenUrlInputField'),
-                          validator: (input) =>
-                              FormValidator.validateInstanceURL(input!),
+                          validator: FormValidator.validateInstanceURL,
                           onChanged: (input) => _url = input,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.multiline,
