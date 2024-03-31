@@ -17,7 +17,7 @@ class ErrorMessageWidget extends StatelessWidget {
         message,
         style: Theme.of(context)
             .textTheme
-            .bodyText1
+            .bodyLarge
             ?.copyWith(color: messageColor),
       ),
     );

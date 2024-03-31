@@ -175,7 +175,7 @@ class AppStrings {
       'Are you sure you want to log out?\n\nAll app data will be deleted.';
   static const noDescription = 'No description';
   static const navigationErrorMessage =
-      'Something has gone wrong with the navigation system. Please go back and try again.';
+      'Something has gone wrong with the navigation system.\n\nPlease go back and try again.';
 
   /// Form validation error messages
   static const provideValidAccessToken = 'Provide a valid Access Token';

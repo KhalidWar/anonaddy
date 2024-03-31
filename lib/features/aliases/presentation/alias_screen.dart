@@ -390,9 +390,23 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
           );
         },
         error: (error, stack) {
-          return ErrorMessageWidget(
-            key: AliasScreen.aliasScreenLottieWidget,
-            message: error.toString(),
+          return ListView(
+            children: [
+              const OfflineBanner(),
+              const AliasScreenPieChart(
+                emailsForwarded: 0,
+                emailsBlocked: 0,
+                emailsReplied: 0,
+                emailsSent: 0,
+              ),
+              const Divider(height: 24),
+              Center(
+                child: ErrorMessageWidget(
+                  key: AliasScreen.aliasScreenLottieWidget,
+                  message: error.toString(),
+                ),
+              ),
+            ],
           );
         },
         loading: () {
