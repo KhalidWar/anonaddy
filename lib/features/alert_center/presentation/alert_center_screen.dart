@@ -1,5 +1,4 @@
 import 'package:anonaddy/features/alert_center/presentation/components/alert_header.dart';
-import 'package:anonaddy/features/alert_center/presentation/components/section_separator.dart';
 import 'package:anonaddy/features/alert_center/presentation/failed_deliveries_widget.dart';
 import 'package:anonaddy/features/alert_center/presentation/notifications_widget.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
@@ -31,7 +30,7 @@ class AlertCenterScreen extends StatelessWidget {
             subtitle: AppStrings.notificationsNote,
           ),
           NotificationsWidget(),
-          SectionSeparator(),
+          SizedBox(height: 16),
           AlertHeader(
             title: AppStrings.failedDeliveries,
             subtitle: AppStrings.failedDeliveriesNote,
@@ -40,7 +39,7 @@ class AlertCenterScreen extends StatelessWidget {
             loadingWidget: Center(child: PlatformLoadingIndicator()),
             child: FailedDeliveriesWidget(),
           ),
-          SectionSeparator(),
+          SizedBox(height: 16),
         ],
       ),
     );
