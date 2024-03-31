@@ -21,7 +21,6 @@ class Recipient {
     this.aliases,
   });
 
-  // @HiveField(0)
   final String id;
 
   @JsonKey(name: 'user_id')
