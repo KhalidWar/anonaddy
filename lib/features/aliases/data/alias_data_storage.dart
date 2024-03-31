@@ -61,7 +61,7 @@ class AliasDataStorage {
       final alias = aliases.firstWhere((element) => element?.id == id);
       return alias;
     } catch (error) {
-      rethrow;
+      return null;
     }
   }
 }
