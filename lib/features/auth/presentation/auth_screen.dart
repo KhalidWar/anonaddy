@@ -13,7 +13,7 @@ import 'package:secure_application/secure_application.dart';
 /// This widget manages user authentication and authorization
 /// flow for the whole app.
 class AuthScreen extends ConsumerWidget {
-  const AuthScreen({Key? key}) : super(key: key);
+  const AuthScreen({super.key});
 
   static const routeName = 'authorizationScreen';
 

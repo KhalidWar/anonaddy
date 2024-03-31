@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddNewUsername extends ConsumerStatefulWidget {
-  const AddNewUsername({Key? key}) : super(key: key);
+  const AddNewUsername({super.key});
 
   @override
   ConsumerState createState() => _AddNewUserNameState();

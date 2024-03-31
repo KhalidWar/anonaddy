@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class RecipientListTile extends StatelessWidget {
   const RecipientListTile({
-    Key? key,
+    super.key,
     required this.recipient,
     required this.onPress,
     this.isSelected = false,
-  }) : super(key: key);
+  });
 
   final Recipient recipient;
   final bool isSelected;

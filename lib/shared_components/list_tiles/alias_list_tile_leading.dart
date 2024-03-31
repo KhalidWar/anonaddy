@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class AliasListTileLeading extends StatelessWidget {
   const AliasListTileLeading({
-    Key? key,
+    super.key,
     required this.isDeleted,
     required this.isActive,
-  }) : super(key: key);
+  });
 
   final bool isDeleted, isActive;
 

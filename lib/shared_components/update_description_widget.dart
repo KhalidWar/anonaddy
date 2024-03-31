@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class UpdateDescriptionWidget extends StatefulWidget {
   const UpdateDescriptionWidget({
-    Key? key,
+    super.key,
     required this.description,
     required this.updateDescription,
     required this.removeDescription,
-  }) : super(key: key);
+  });
 
   final String? description;
   final Function(String) updateDescription;

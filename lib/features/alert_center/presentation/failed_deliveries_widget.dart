@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FailedDeliveriesWidget extends ConsumerStatefulWidget {
-  const FailedDeliveriesWidget({Key? key}) : super(key: key);
+  const FailedDeliveriesWidget({super.key});
 
   @override
   ConsumerState createState() => _FailedDeliveriesWidgetState();

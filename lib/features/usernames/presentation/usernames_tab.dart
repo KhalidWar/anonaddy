@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class UsernamesTab extends ConsumerStatefulWidget {
-  const UsernamesTab({Key? key}) : super(key: key);
+  const UsernamesTab({super.key});
 
   @override
   ConsumerState createState() => _UsernamesTabState();

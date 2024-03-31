@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 /// platform specific UI.
 abstract class PlatformAware<C extends Widget, M extends Widget>
     extends StatelessWidget {
-  const PlatformAware({Key? key}) : super(key: key);
+  const PlatformAware({super.key});
 
   C buildCupertinoWidget(BuildContext context);
   M buildMaterialWidget(BuildContext context);

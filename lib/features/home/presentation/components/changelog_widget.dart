@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChangelogWidget extends ConsumerWidget {
-  const ChangelogWidget({Key? key}) : super(key: key);
+  const ChangelogWidget({super.key});
 
   /// header('Fixed', Colors.blue),
   /// header('Added', Colors.green),

@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 
 class PlatformAlertDialog extends PlatformAware {
   const PlatformAlertDialog({
-    Key? key,
+    super.key,
     required this.content,
     required this.method,
     this.title,
     this.approveButton,
     this.cancelButton,
-  }) : super(key: key);
+  });
+
   final String content;
   final Function method;
   final String? title, approveButton, cancelButton;

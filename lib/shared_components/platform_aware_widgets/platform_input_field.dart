@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 
 class PlatformInputField extends PlatformAware {
   const PlatformInputField({
-    Key? key,
+    super.key,
     this.onChanged,
     this.onFieldSubmitted,
     this.placeholder,
-  }) : super(key: key);
+  });
+
   final void Function(String)? onChanged;
   final void Function(String)? onFieldSubmitted;
   final String? placeholder;

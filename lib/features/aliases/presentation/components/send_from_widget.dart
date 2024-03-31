@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class SendFromWidget extends StatelessWidget {
   const SendFromWidget({
-    Key? key,
+    super.key,
     required this.email,
     required this.formKey,
     required this.onFieldSubmitted,
-  }) : super(key: key);
+  });
 
   final String email;
   final GlobalKey<FormState> formKey;

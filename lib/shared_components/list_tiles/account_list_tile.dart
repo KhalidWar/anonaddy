@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class AccountListTile extends StatelessWidget {
   const AccountListTile({
-    Key? key,
+    super.key,
     this.title,
     required this.subtitle,
     required this.icon,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String subtitle;

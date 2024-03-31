@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NoInternetAlert extends StatelessWidget {
-  const NoInternetAlert({Key? key}) : super(key: key);
+  const NoInternetAlert({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class NoInternetAlert extends StatelessWidget {
       child: Center(
         child: Text(
           'No Internet Connection',
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
     );

@@ -22,9 +22,9 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class DomainsScreen extends ConsumerStatefulWidget {
   const DomainsScreen({
-    Key? key,
+    super.key,
     required this.domain,
-  }) : super(key: key);
+  });
 
   final Domain domain;
 

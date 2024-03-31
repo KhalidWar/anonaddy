@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RecipientScreenUnverifiedWarning extends ConsumerWidget {
   const RecipientScreenUnverifiedWarning({
-    Key? key,
+    super.key,
     required this.recipientId,
-  }) : super(key: key);
+  });
 
   final String recipientId;
 
@@ -34,7 +34,7 @@ class RecipientScreenUnverifiedWarning extends ConsumerWidget {
                     AppStrings.unverifiedRecipientNote,
                     style: Theme.of(context)
                         .textTheme
-                        .caption
+                        .bodySmall
                         ?.copyWith(color: Colors.black),
                   ),
                 ),

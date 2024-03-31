@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class DomainsTab extends ConsumerStatefulWidget {
-  const DomainsTab({Key? key}) : super(key: key);
+  const DomainsTab({super.key});
 
   @override
   ConsumerState createState() => _DomainsTabState();

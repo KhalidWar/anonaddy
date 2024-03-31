@@ -14,7 +14,7 @@ class ConnectivityNotifier extends StreamNotifier<ConnectivityResult> {
   Future<ConnectivityResult> initConnectivity() async {
     try {
       return await ref.read(_connectivityServiceProvider).checkConnectivity();
-    } on PlatformException catch (e) {
+    } on PlatformException catch (_) {
       return ConnectivityResult.other;
     } catch (e) {
       return ConnectivityResult.other;

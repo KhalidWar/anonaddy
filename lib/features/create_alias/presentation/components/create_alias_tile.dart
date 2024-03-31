@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class CreateAliasTile extends StatelessWidget {
   const CreateAliasTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.iconData,
     required this.subtitle,
     required this.onPress,
     this.showIcon = true,
-  }) : super(key: key);
+  });
 
   final String title, subtitle;
   final IconData iconData;

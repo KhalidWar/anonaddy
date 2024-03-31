@@ -8,9 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasDefaultRecipientScreen extends ConsumerStatefulWidget {
   const AliasDefaultRecipientScreen({
-    Key? key,
+    super.key,
     required this.aliasId,
-  }) : super(key: key);
+  });
 
   final String aliasId;
 

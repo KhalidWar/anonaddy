@@ -9,7 +9,7 @@ import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loadi
 import 'package:flutter/material.dart';
 
 class AlertCenterScreen extends StatelessWidget {
-  const AlertCenterScreen({Key? key}) : super(key: key);
+  const AlertCenterScreen({super.key});
 
   static const routeName = 'alertCenterScreen';
 

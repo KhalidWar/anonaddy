@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AboutAppScreen extends StatelessWidget {
-  const AboutAppScreen({Key? key}) : super(key: key);
+  const AboutAppScreen({super.key});
 
   static const routeName = 'aboutAppScreen';
 
@@ -119,7 +119,7 @@ class AboutAppScreen extends StatelessWidget {
                   children: [
                     Text(
                       data.appName,
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Text('${data.version} (${data.buildNumber})'),
                   ],

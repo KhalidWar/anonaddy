@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends AppBar {
   CustomAppBar({
-    Key? key,
+    super.key,
     required String title,
     required Function() leadingOnPress,
     required bool showTrailing,
     String? trailingLabel,
     Function(String)? trailingOnPress,
   }) : super(
-          key: key,
           leading: IconButton(
             icon: Icon(
               PlatformAware.isIOS() ? CupertinoIcons.back : Icons.arrow_back,

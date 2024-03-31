@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class RulesListTile extends StatelessWidget {
   const RulesListTile({
-    Key? key,
+    super.key,
     required this.rule,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final Rules rule;
   final Function() onTap;

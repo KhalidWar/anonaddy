@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 class AliasAnimatedList extends StatelessWidget {
   const AliasAnimatedList({
-    Key? key,
+    super.key,
     required this.listKey,
     required this.itemCount,
     required this.itemBuilder,
-  }) : super(key: key);
+  });
+
   final GlobalKey<AnimatedListState> listKey;
   final int itemCount;
   final Widget Function(BuildContext context, int) itemBuilder;

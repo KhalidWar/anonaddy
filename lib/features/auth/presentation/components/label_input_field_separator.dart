@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LabelInputFieldSeparator extends StatelessWidget {
-  const LabelInputFieldSeparator({Key? key}) : super(key: key);
+  const LabelInputFieldSeparator({super.key});
 
   @override
   Widget build(BuildContext context) {

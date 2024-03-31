@@ -23,10 +23,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PaidFeatureBlocker extends ConsumerWidget {
   const PaidFeatureBlocker({
-    Key? key,
+    super.key,
     this.loadingWidget,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget? loadingWidget;
   final Widget child;
@@ -43,7 +43,7 @@ class PaidFeatureBlocker extends ConsumerWidget {
                 child: Text(
                   ToastMessage.onlyAvailableToPaid,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               )
             : child;

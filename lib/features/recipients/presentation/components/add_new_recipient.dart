@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddNewRecipient extends ConsumerStatefulWidget {
-  const AddNewRecipient({Key? key}) : super(key: key);
+  const AddNewRecipient({super.key});
 
   @override
   ConsumerState createState() => _AddNewRecipientState();

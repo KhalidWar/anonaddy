@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 
 class PlatformButton extends PlatformAware {
   const PlatformButton({
-    Key? key,
+    super.key,
     required this.child,
     required this.onPress,
     this.color,
-  }) : super(key: key);
+  });
+
   final Widget child;
   final Function() onPress;
   final Color? color;

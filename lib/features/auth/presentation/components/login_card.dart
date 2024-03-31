@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginCard extends StatelessWidget {
   const LoginCard({
-    Key? key,
+    super.key,
     required this.child,
     required this.footerOnPress,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final Function() footerOnPress;

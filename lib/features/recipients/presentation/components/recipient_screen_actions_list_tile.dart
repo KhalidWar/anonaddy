@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class RecipientScreenActionsListTile extends StatelessWidget {
   const RecipientScreenActionsListTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     this.leadingIconData,
     this.trailing,
     this.leadingIconColor,
-  }) : super(key: key);
+  });
 
   final String title;
   final String subtitle;
@@ -35,7 +35,7 @@ class RecipientScreenActionsListTile extends StatelessWidget {
                 ),
                 Text(
                   subtitle,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),

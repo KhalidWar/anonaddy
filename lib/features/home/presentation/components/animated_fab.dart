@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 class AnimatedFab extends StatefulWidget {
   const AnimatedFab({
-    Key? key,
+    super.key,
     required this.showFab,
     required this.child,
-  }) : super(key: key);
+  });
+
   final bool showFab;
   final Widget child;
 

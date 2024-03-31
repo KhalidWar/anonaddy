@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class NavigationErrorScreen extends ConsumerWidget {
-  const NavigationErrorScreen({Key? key}) : super(key: key);
+  const NavigationErrorScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

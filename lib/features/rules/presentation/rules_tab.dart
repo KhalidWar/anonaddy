@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RulesTab extends ConsumerStatefulWidget {
-  const RulesTab({Key? key}) : super(key: key);
+  const RulesTab({super.key});
 
   @override
   ConsumerState createState() => _RulesTabState();

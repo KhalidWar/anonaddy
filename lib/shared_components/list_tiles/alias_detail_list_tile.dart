@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AliasDetailListTile extends StatelessWidget {
   const AliasDetailListTile({
-    Key? key,
+    super.key,
     required this.subtitle,
     this.trailingIconOnPress,
     this.trailingIconData,
@@ -11,7 +11,7 @@ class AliasDetailListTile extends StatelessWidget {
     this.trailing,
     this.titleTextStyle,
     this.leadingIconColor,
-  }) : super(key: key);
+  });
 
   final Function()? trailingIconOnPress;
   final IconData? trailingIconData, leadingIconData;

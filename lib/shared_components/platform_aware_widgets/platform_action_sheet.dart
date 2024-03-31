@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformActionSheet extends PlatformAware {
-  const PlatformActionSheet({Key? key}) : super(key: key);
+  const PlatformActionSheet({super.key});
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {

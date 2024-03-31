@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 
 class PlatformInfoDialog extends PlatformAware {
   const PlatformInfoDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.buttonLabel,
     required this.content,
-  }) : super(key: key);
+  });
+
   final String title, buttonLabel;
   final Widget content;
 

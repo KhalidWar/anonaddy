@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class AddyLoginScreen extends ConsumerStatefulWidget {
-  const AddyLoginScreen({Key? key}) : super(key: key);
+  const AddyLoginScreen({super.key});
 
   static const routeName = 'loginScreen';
 

@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 class PlatformSwitch extends PlatformAware {
   const PlatformSwitch({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChanged,
-  }) : super(key: key);
+  });
+
   final bool value;
   final Function(bool newValue)? onChanged;
 

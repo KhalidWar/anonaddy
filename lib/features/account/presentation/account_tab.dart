@@ -8,7 +8,7 @@ import 'package:anonaddy/shared_components/paid_feature_blocker.dart';
 import 'package:flutter/material.dart';
 
 class AccountTab extends StatelessWidget {
-  const AccountTab({Key? key}) : super(key: key);
+  const AccountTab({super.key});
 
   static const accountTabScaffold = Key('accountTabScaffold');
   static const accountTabSliverAppBar = Key('accountTabSliverAppBar');

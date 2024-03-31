@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 class PlatformApp extends StatelessWidget {
   const PlatformApp({
-    Key? key,
+    super.key,
     required this.mobileApp,
     required this.desktopApp,
-  }) : super(key: key);
+  });
+
   final Widget mobileApp;
   final Widget desktopApp;
 

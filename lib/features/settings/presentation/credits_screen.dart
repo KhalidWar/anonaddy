@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class CreditsScreen extends StatelessWidget {
-  const CreditsScreen({Key? key}) : super(key: key);
+  const CreditsScreen({super.key});
 
   static const routeName = 'creditsScreen';
 
@@ -88,7 +88,7 @@ class CreditsScreen extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(creator),
                       ],

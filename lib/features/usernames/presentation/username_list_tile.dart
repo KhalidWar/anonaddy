@@ -4,7 +4,11 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class UsernameListTile extends StatelessWidget {
-  const UsernameListTile({Key? key, required this.username}) : super(key: key);
+  const UsernameListTile({
+    super.key,
+    required this.username,
+  });
+
   final Username username;
 
   @override

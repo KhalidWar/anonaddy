@@ -4,7 +4,11 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class DomainListTile extends StatelessWidget {
-  const DomainListTile({Key? key, required this.domain}) : super(key: key);
+  const DomainListTile({
+    super.key,
+    required this.domain,
+  });
+
   final Domain domain;
 
   @override

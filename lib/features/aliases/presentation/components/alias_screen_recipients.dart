@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 
 class AliasScreenRecipients extends StatelessWidget {
   const AliasScreenRecipients({
-    Key? key,
+    super.key,
     required this.recipients,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   final List<Recipient> recipients;
   final Function() onPressed;

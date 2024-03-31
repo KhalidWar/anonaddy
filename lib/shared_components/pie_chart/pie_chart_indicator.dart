@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class PieChartIndicator extends StatelessWidget {
   const PieChartIndicator({
-    Key? key,
+    super.key,
     required this.label,
     required this.color,
     required this.count,
     this.textColor,
-  }) : super(key: key);
+  });
 
   final String label;
   final Color color;
@@ -24,15 +24,16 @@ class PieChartIndicator extends StatelessWidget {
           count.toString(),
           style: Theme.of(context)
               .textTheme
-              .bodyText1!
-              .copyWith(fontWeight: FontWeight.bold, color: textColor),
+              .bodyLarge
+              ?.copyWith(fontWeight: FontWeight.bold, color: textColor),
         ),
         const SizedBox(width: 4),
         Text(
           label,
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                color: textColor,
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: textColor),
         ),
       ],
     );
