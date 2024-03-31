@@ -6,11 +6,13 @@ import 'package:anonaddy/features/aliases/presentation/components/send_from_widg
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/shared_components/created_at_widget.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
+import 'package:anonaddy/shared_components/offline_banner.dart';
 import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
-import 'package:anonaddy/shared_components/shared_components_exports.dart';
+import 'package:anonaddy/shared_components/update_description_widget.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

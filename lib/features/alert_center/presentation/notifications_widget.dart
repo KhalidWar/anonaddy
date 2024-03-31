@@ -1,9 +1,9 @@
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/shared_components/shared_components_exports.dart';
+import 'package:anonaddy/shared_components/lottie_widget.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsWidget extends StatelessWidget {
-  const NotificationsWidget({Key? key}) : super(key: key);
+  const NotificationsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
