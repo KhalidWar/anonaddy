@@ -5,8 +5,6 @@ class ProfileService {
   const ProfileService({required this.secureStorage});
   final FlutterSecureStorage secureStorage;
 
-  // static const _profileStorageKey = 'profileStorageKey';
-
   /// Fetches list of profiles
   Future<List<Profile>> fetchProfiles() async {
     final profiles = <Profile>[];

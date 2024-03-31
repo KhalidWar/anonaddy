@@ -15,7 +15,6 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   const secureStorage = FlutterSecureStorage();
-  await StartupMethods.initHiveAdapters();
   await StartupMethods.handleAppUpdate(secureStorage);
 
   /// Removes SplashScreen

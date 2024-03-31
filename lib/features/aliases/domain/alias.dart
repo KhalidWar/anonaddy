@@ -1,13 +1,10 @@
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
-import 'package:anonaddy/shared_components/constants/hive_type_id.dart';
-import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'alias.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@HiveType(typeId: HiveTypeId.alias)
-class Alias extends HiveObject {
+class Alias {
   Alias({
     this.id = '',
     this.userId = '',
@@ -29,69 +26,51 @@ class Alias extends HiveObject {
     this.deletedAt,
   });
 
-  @HiveField(0)
   final String id;
 
   @JsonKey(name: 'user_id')
-  @HiveField(1)
   final String userId;
 
   @JsonKey(name: 'aliasable_id')
-  @HiveField(2)
   final String aliasableId;
 
   @JsonKey(name: 'aliasable_type')
-  @HiveField(3)
   final String aliasableType;
 
   @JsonKey(name: 'local_part')
-  @HiveField(4)
   final String localPart;
 
-  @HiveField(5)
   final String extension;
 
-  @HiveField(6)
   final String domain;
 
-  @HiveField(7)
   final String email;
 
-  @HiveField(8)
   final bool active;
 
-  @HiveField(9)
   final String description;
 
   @JsonKey(name: 'emails_forwarded')
-  @HiveField(10)
   final int emailsForwarded;
 
   @JsonKey(name: 'emails_blocked')
-  @HiveField(11)
   final int emailsBlocked;
 
   @JsonKey(name: 'emails_replied')
-  @HiveField(12)
   final int emailsReplied;
 
   @JsonKey(name: 'emails_sent')
-  @HiveField(13)
   final int emailsSent;
 
-  @HiveField(14)
   final List<Recipient> recipients;
 
   @JsonKey(name: 'created_at')
-  @HiveField(15)
   final DateTime createdAt;
 
   @JsonKey(name: 'updated_at')
-  @HiveField(16)
   final DateTime updatedAt;
 
   @JsonKey(name: 'deleted_at')
-  @HiveField(17)
   final DateTime? deletedAt;
 
   factory Alias.fromJson(Map<String, dynamic> json) => _$AliasFromJson(json);

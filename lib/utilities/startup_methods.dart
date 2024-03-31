@@ -1,26 +1,9 @@
-import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/features/auth/domain/profile.dart';
-import 'package:anonaddy/features/recipients/domain/recipient.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/shared_components/constants/changelog_storage_key.dart';
 import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class StartupMethods {
-  /// Initializes [Hive] and its adapters.
-  static Future<void> initHiveAdapters() async {
-    try {
-      await Hive.initFlutter();
-
-      Hive.registerAdapter(AliasAdapter());
-      Hive.registerAdapter(RecipientAdapter());
-      Hive.registerAdapter(ProfileAdapter());
-    } catch (error) {
-      return;
-    }
-  }
-
   /// Does housekeeping after app is updated. Does nothing otherwise.
   static Future<void> handleAppUpdate(
       FlutterSecureStorage secureStorage) async {

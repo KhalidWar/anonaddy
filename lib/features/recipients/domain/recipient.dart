@@ -1,13 +1,10 @@
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/shared_components/constants/hive_type_id.dart';
-import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'recipient.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-@HiveType(typeId: HiveTypeId.recipient)
-class Recipient extends HiveObject {
+class Recipient {
   Recipient({
     required this.id,
     required this.userId,
@@ -24,52 +21,40 @@ class Recipient extends HiveObject {
     this.aliases,
   });
 
-  @HiveField(0)
+  // @HiveField(0)
   final String id;
 
   @JsonKey(name: 'user_id')
-  @HiveField(1)
   final String userId;
 
-  @HiveField(2)
   final String email;
 
   @JsonKey(name: 'should_encrypt')
-  @HiveField(3)
   final bool shouldEncrypt;
 
-  @HiveField(4)
   final String? fingerprint;
 
   @JsonKey(name: 'email_verified_at')
-  @HiveField(5)
   final DateTime? emailVerifiedAt;
 
-  @HiveField(6)
   final List<Alias>? aliases;
 
   @JsonKey(name: 'created_at')
-  @HiveField(7)
   final DateTime createdAt;
 
   @JsonKey(name: 'updated_at')
-  @HiveField(8)
   final DateTime updatedAt;
 
   @JsonKey(name: 'can_reply_send')
-  @HiveField(9)
   final bool canReplySend;
 
   @JsonKey(name: 'inline_encryption')
-  @HiveField(10)
   final bool inlineEncryption;
 
   @JsonKey(name: 'protected_headers')
-  @HiveField(11)
   final bool protectedHeaders;
 
   @JsonKey(name: 'aliases_count')
-  @HiveField(12)
   final int? aliasesCount;
 
   factory Recipient.fromJson(Map<String, dynamic> json) =>
