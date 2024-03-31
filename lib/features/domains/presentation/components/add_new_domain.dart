@@ -1,5 +1,4 @@
 import 'package:anonaddy/features/domains/presentation/controller/add_domain_notifier.dart';
-import 'package:anonaddy/shared_components/bottom_sheet_header.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddNewDomain extends ConsumerStatefulWidget {
-  const AddNewDomain({Key? key}) : super(key: key);
+  const AddNewDomain({super.key});
 
   @override
   ConsumerState createState() => _AddNewDomainState();
@@ -33,10 +32,13 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const BottomSheetHeader(headerLabel: 'Add New Recipient'),
           Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 10),
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 0,
+              bottom: 10,
+            ),
             child: Column(
               children: [
                 const Text(AddyString.addRecipientString),
