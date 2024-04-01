@@ -22,7 +22,8 @@ class RecipientsTab extends ConsumerStatefulWidget {
 
 class _RecipientTabState extends ConsumerState<RecipientsTab> {
   void addNewRecipient(BuildContext context) {
-    final accountState = ref.read(accountNotifierProvider).value!;
+    final accountState = ref.read(accountNotifierProvider).value;
+    if (accountState == null) return;
 
     /// Draws UI for adding new recipient
     Future<void> buildAddNewRecipient() async {

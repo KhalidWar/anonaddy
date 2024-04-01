@@ -1,3 +1,4 @@
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/add_recipient_notifier.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
@@ -21,6 +22,7 @@ class _AddNewRecipientState extends ConsumerState<AddNewRecipient> {
       await ref
           .read(addRecipientNotifierProvider.notifier)
           .addRecipient(_textEditController.text.trim());
+      await ref.read(accountNotifierProvider.notifier).fetchAccount();
       if (mounted) Navigator.pop(context);
     }
   }
