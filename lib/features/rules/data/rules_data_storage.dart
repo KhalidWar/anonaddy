@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:anonaddy/features/rules/domain/rules.dart';
+import 'package:anonaddy/features/rules/domain/rule.dart';
 import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
 import 'package:anonaddy/utilities/data_storage.dart';
 import 'package:anonaddy/utilities/flutter_secure_storage.dart';
@@ -29,13 +29,13 @@ class RulesDataStorage extends DataStorage {
   }
 
   @override
-  Future<List<Rules>?> loadData() async {
+  Future<List<Rule>?> loadData() async {
     try {
       final data = await secureStorage.read(key: DataStorageKeys.rulesKey);
       if (data == null) return null;
       final decodedData = jsonDecode(data);
       final rules = (decodedData['data'] as List)
-          .map((rule) => Rules.fromJson(rule))
+          .map((rule) => Rule.fromJson(rule))
           .toList();
       return rules;
     } catch (error) {
@@ -43,7 +43,7 @@ class RulesDataStorage extends DataStorage {
     }
   }
 
-  Future<Rules> loadSpecificRule(String id) async {
+  Future<Rule> loadSpecificRule(String id) async {
     try {
       final rules = await loadData();
       final rule = rules!.firstWhere((element) => element.id == id);

@@ -1,11 +1,15 @@
+import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
 import 'package:anonaddy/features/rules/presentation/rules_list_tile.dart';
+import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class RulesTab extends ConsumerStatefulWidget {
   const RulesTab({super.key});
@@ -15,6 +19,35 @@ class RulesTab extends ConsumerStatefulWidget {
 }
 
 class _RulesTabState extends ConsumerState<RulesTab> {
+  void createNewRule(BuildContext context) {
+    final accountState = ref.read(accountNotifierProvider).value;
+    if (accountState == null) return;
+
+    /// Draws UI for adding new recipient
+    Future<void> buildAddNewRecipient() async {
+      await WoltModalSheet.show(
+        context: context,
+        pageListBuilder: (context) {
+          return [
+            Utilities.buildWoltModalSheetSubPage(
+              context,
+              topBarTitle: AppStrings.addNewRule,
+              child: const SizedBox.shrink(),
+            ),
+          ];
+        },
+      );
+    }
+
+    if (accountState.isSelfHosted) {
+      buildAddNewRecipient();
+    } else {
+      accountState.hasReachedRulesLimit
+          ? Utilities.showToast(AddyString.reachedRulesLimit)
+          : buildAddNewRecipient();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +81,10 @@ class _RulesTabState extends ConsumerState<RulesTab> {
                       );
                     },
                   ),
+            TextButton(
+              child: const Text(AppStrings.addNewRule),
+              onPressed: () => createNewRule(context),
+            ),
           ],
         );
       },

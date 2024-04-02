@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/rules/domain/rules.dart';
+import 'package:anonaddy/features/rules/domain/rule.dart';
 
 enum RulesTabStatus { loading, loaded, failed }
 
@@ -14,7 +14,7 @@ class RulesTabState {
   });
 
   final RulesTabStatus status;
-  final List<Rules> rules;
+  final List<Rule> rules;
   final String errorMessage;
 
   static RulesTabState initialState() {
@@ -27,7 +27,7 @@ class RulesTabState {
 
   RulesTabState copyWith({
     RulesTabStatus? status,
-    List<Rules>? rules,
+    List<Rule>? rules,
     String? errorMessage,
   }) {
     return RulesTabState(

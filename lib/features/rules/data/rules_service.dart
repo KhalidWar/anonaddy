@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:anonaddy/features/rules/data/rules_data_storage.dart';
-import 'package:anonaddy/features/rules/domain/rules.dart';
+import 'package:anonaddy/features/rules/domain/rule.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
 import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
@@ -23,15 +23,15 @@ class RulesService {
   final Dio dio;
   final RulesDataStorage dataStorage;
 
-  Future<List<Rules>> fetchRules() async {
+  Future<List<Rule>> fetchRules() async {
     try {
       const path = '$kUnEncodedBaseURL/rules';
       final response = await dio.get(path);
-      log('fetchAllRules: ${response.statusCode}');
+      log('fetchRules: ${response.statusCode}');
       dataStorage.saveData(response.data);
 
       final rules = response.data['data'] as List;
-      return rules.map((rule) => Rules.fromJson(rule)).toList();
+      return rules.map((rule) => Rule.fromJson(rule)).toList();
     } on DioException catch (dioException) {
       if (dioException.type == DioExceptionType.connectionError) {
         final rules = await dataStorage.loadData();
@@ -43,7 +43,7 @@ class RulesService {
     }
   }
 
-  Future<List<Rules>?> loadRulesFromDisk() async {
+  Future<List<Rule>?> loadRulesFromDisk() async {
     try {
       return await dataStorage.loadData();
     } catch (error) {

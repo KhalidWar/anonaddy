@@ -109,6 +109,11 @@ class Utilities {
     }
   }
 
+  static String pluralize(int count, String singular, [String? plural]) {
+    plural ??= '${singular}s';
+    return count == 1 ? singular : plural;
+  }
+
   static WoltModalSheetPage buildWoltModalSheetSubPage(
     BuildContext context, {
     required String topBarTitle,

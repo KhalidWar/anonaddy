@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:anonaddy/features/rules/data/rules_service.dart';
-import 'package:anonaddy/features/rules/domain/rules.dart';
+import 'package:anonaddy/features/rules/domain/rule.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final rulesTabNotifierProvider =
-    AsyncNotifierProvider<RulesTabNotifier, List<Rules>>(RulesTabNotifier.new);
+    AsyncNotifierProvider<RulesTabNotifier, List<Rule>>(RulesTabNotifier.new);
 
-class RulesTabNotifier extends AsyncNotifier<List<Rules>> {
-  /// Fetch all [Rules]s associated with user's account
+class RulesTabNotifier extends AsyncNotifier<List<Rule>> {
+  /// Fetch all [Rule]s associated with user's account
   Future<void> fetchRules() async {
     try {
       final rules = await ref.read(rulesService).fetchRules();
@@ -28,7 +28,7 @@ class RulesTabNotifier extends AsyncNotifier<List<Rules>> {
   }
 
   @override
-  FutureOr<List<Rules>> build() async {
+  FutureOr<List<Rule>> build() async {
     final service = ref.read(rulesService);
 
     final rules = await service.loadRulesFromDisk();
