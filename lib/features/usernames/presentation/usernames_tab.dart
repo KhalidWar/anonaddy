@@ -5,7 +5,6 @@ import 'package:anonaddy/features/usernames/presentation/controller/usernames_no
 import 'package:anonaddy/features/usernames/presentation/username_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/toast_message.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
 import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
 import 'package:anonaddy/utilities/utilities.dart';
@@ -22,7 +21,8 @@ class UsernamesTab extends ConsumerStatefulWidget {
 
 class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   void addNewUsername(BuildContext context) {
-    final accountState = ref.read(accountNotifierProvider).value!;
+    final accountState = ref.read(accountNotifierProvider).value;
+    if (accountState == null) return;
 
     /// Draws UI for adding new username
     Future<void> buildAddNewUsername(BuildContext context) async {
@@ -43,13 +43,9 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
     if (accountState.isSelfHosted) {
       buildAddNewUsername(context);
     } else {
-      if (accountState.isSubscriptionFree) {
-        Utilities.showToast(ToastMessage.onlyAvailableToPaid);
-      } else {
-        accountState.hasUsernamesReachedLimit
-            ? Utilities.showToast(AddyString.reachedUsernameLimit)
-            : buildAddNewUsername(context);
-      }
+      accountState.hasUsernamesReachedLimit
+          ? Utilities.showToast(AddyString.reachedUsernameLimit)
+          : buildAddNewUsername(context);
     }
   }
 

@@ -54,7 +54,7 @@ class AccountTab extends StatelessWidget {
             physics: ClampingScrollPhysics(),
             children: [
               RecipientsTab(),
-              PaidFeatureBlocker(child: UsernamesTab()),
+              UsernamesTab(),
               PaidFeatureBlocker(child: DomainsTab()),
               PaidFeatureBlocker(child: RulesTab()),
             ],
