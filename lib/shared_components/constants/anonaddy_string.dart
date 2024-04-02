@@ -27,6 +27,7 @@ class AddyString {
       'Are you sure you want to remove the public key for this recipient?\n\nIt will also be removed from any other recipients using the same key.';
   static const reachedRecipientLimit = 'You have reached your recipient limit';
   static const reachedDomainLimit = 'You have reached your domain limit';
+  static const reachedRulesLimit = 'You have reached your rules limit';
 
   /// Username
   static const addNewUsernameString =

@@ -73,7 +73,7 @@ class AppStrings {
   /// Usernames
   static const addNewDomain = 'Add New Domain';
   static const addNewUsername = 'Add New Username';
-  static const addUsername = 'Add Username';
+  static const addUsername = 'Add New Username';
   static const noAdditionalUsernamesFound = 'No usernames found';
 
   /// Domain
@@ -85,6 +85,7 @@ class AppStrings {
   /// Rules
   static const noRulesFound = 'No rules found';
   static const enrollRulesBetaTesting = 'Enroll in Rules BETA testing';
+  static const addNewRule = 'Add New Rule';
 
   /// Search Tab
   static const quickSearch = 'Quick Search';
