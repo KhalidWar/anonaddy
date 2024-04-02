@@ -1,7 +1,7 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
+import 'package:anonaddy/features/rules/presentation/components/rules_list_tile.dart';
 import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
-import 'package:anonaddy/features/rules/presentation/rules_list_tile.dart';
 import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';

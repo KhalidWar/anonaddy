@@ -40,10 +40,10 @@ class RulesListTile extends StatelessWidget {
               child: Center(
                 child: Text(
                   (rule.order + 1).toString(),
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: Colors.black),
                 ),
               ),
             ),
