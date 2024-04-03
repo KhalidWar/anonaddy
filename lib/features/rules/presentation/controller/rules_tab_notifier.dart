@@ -11,7 +11,7 @@ class RulesTabNotifier extends AsyncNotifier<List<Rule>> {
   /// Fetch all [Rule]s associated with user's account
   Future<void> fetchRules() async {
     try {
-      final rules = await ref.read(rulesService).fetchRules();
+      final rules = await ref.read(rulesServiceProvider).fetchRules();
 
       state = AsyncData(rules);
     } catch (error) {
@@ -29,7 +29,7 @@ class RulesTabNotifier extends AsyncNotifier<List<Rule>> {
 
   @override
   FutureOr<List<Rule>> build() async {
-    final service = ref.read(rulesService);
+    final service = ref.read(rulesServiceProvider);
 
     final rules = await service.loadRulesFromDisk();
     if (rules == null) return await service.fetchRules();

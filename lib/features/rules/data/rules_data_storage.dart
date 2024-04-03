@@ -43,13 +43,14 @@ class RulesDataStorage extends DataStorage {
     }
   }
 
-  Future<Rule> loadSpecificRule(String id) async {
+  Future<Rule?> loadSpecificRule(String id) async {
     try {
       final rules = await loadData();
-      final rule = rules!.firstWhere((element) => element.id == id);
-      return rule;
+      if (rules == null) return null;
+
+      return rules.firstWhere((element) => element.id == id);
     } catch (error) {
-      rethrow;
+      return null;
     }
   }
 }

@@ -8,7 +8,7 @@ import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final rulesService = Provider<RulesService>((ref) {
+final rulesServiceProvider = Provider<RulesService>((ref) {
   return RulesService(
     dio: ref.read(dioProvider),
     dataStorage: ref.read(rulesDataStorageProvider),
@@ -36,6 +36,24 @@ class RulesService {
       if (dioException.type == DioExceptionType.connectionError) {
         final rules = await dataStorage.loadData();
         if (rules != null) return rules;
+      }
+      throw dioException.message ?? AppStrings.somethingWentWrong;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Rule> fetchSpecificRule(String ruleId) async {
+    try {
+      final path = '$kUnEncodedBaseURL/rules/$ruleId';
+      final response = await dio.get(path);
+      log('fetchSpecificRule: ${response.statusCode}');
+
+      return Rule.fromJson(response.data['data']);
+    } on DioException catch (dioException) {
+      if (dioException.type == DioExceptionType.connectionError) {
+        final rule = await dataStorage.loadSpecificRule(ruleId);
+        if (rule != null) return rule;
       }
       throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
