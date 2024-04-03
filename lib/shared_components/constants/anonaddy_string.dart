@@ -45,6 +45,10 @@ class AddyString {
   static const updateDomainDefaultRecipient =
       'Select the default recipient for this domain. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
 
+  /// Rules
+  static const addNewRuleString =
+      'Rules work on all emails, including replies and also send froms. New conditions and actions will be added over time. ';
+
   /// Alias Format
   static const aliasFormatUUID = 'uuid';
   static const aliasFormatRandomChars = 'random_characters';
