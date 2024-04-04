@@ -13,44 +13,33 @@ class RuleActionListTile extends StatelessWidget {
   final bool isFirst;
   final Function() onPress;
 
+  Widget buildChip(BuildContext context, String value) {
+    return Chip(
+      label: Text(value),
+      visualDensity: VisualDensity.compact,
+      backgroundColor: Theme.of(context).cardColor,
+      padding: const EdgeInsets.all(0),
+      labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+
   Widget buildValue(BuildContext context) {
     switch ((action.runtimeType)) {
       case RuleActionSubject:
         final subject = action as RuleActionSubject;
-        return Chip(
-          label: Text(subject.value),
-          visualDensity: VisualDensity.compact,
-          backgroundColor: Theme.of(context).cardColor,
-          padding: const EdgeInsets.all(0),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-        );
+        return buildChip(context, subject.value);
+
       case RuleActionDisplayFrom:
         final displayFrom = action as RuleActionDisplayFrom;
-        return Chip(
-          label: Text(displayFrom.value),
-          visualDensity: VisualDensity.compact,
-          backgroundColor: Theme.of(context).cardColor,
-          padding: const EdgeInsets.all(0),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-        );
+        return buildChip(context, displayFrom.value);
+
       case RuleActionBanner:
         final banner = action as RuleActionBanner;
-        return Chip(
-          label: Text(banner.bannerLocation.value),
-          backgroundColor: Theme.of(context).cardColor,
-          visualDensity: VisualDensity.compact,
-          padding: const EdgeInsets.all(0),
-          labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-        );
+        return buildChip(context, banner.bannerLocation.value);
+
       default:
         return const SizedBox.shrink();
     }
