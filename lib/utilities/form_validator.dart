@@ -2,8 +2,10 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 
 class FormValidator {
   static String? requiredField(String? input) {
-    if (input == null) return null;
-    if (input.isEmpty) return AppStrings.fieldCannotBeEmpty;
+    final regex = RegExp(r'^\s+$');
+    if (input == null || regex.hasMatch(input)) {
+      return AppStrings.fieldCannotBeEmpty;
+    }
     return null;
   }
 
