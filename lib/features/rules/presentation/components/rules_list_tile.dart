@@ -48,18 +48,23 @@ class RulesListTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(rule.name),
-                Text(
-                  '$conditionsLength ${Utilities.pluralize(conditionsLength, 'condition')}, $actionsLength ${Utilities.pluralize(actionsLength, 'action')}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: Colors.grey),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    rule.name,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '$conditionsLength ${Utilities.pluralize(conditionsLength, 'condition')}, $actionsLength ${Utilities.pluralize(actionsLength, 'action')}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: Colors.grey),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
