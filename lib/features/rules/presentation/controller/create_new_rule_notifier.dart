@@ -32,11 +32,14 @@ class CreateNewRuleNotifier
 
     return CreateNewRuleState(
       rule: rule,
+      ruleName: rule.name,
       conditions: rule.conditions,
       actions: rule.actions,
+      operator: rule.operator,
       forwards: rule.forwards,
       replies: rule.replies,
       sends: rule.sends,
+      isLoading: false,
     );
   }
 }
