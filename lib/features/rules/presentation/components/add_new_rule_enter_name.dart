@@ -52,8 +52,8 @@ class _AddNewRuleEnterNameState extends ConsumerState<AddNewRuleEnterName> {
                   autocorrect: false,
                   controller: _textEditController,
                   textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.emailAddress,
                   validator: FormValidator.requiredField,
+                  maxLength: 50,
                   onFieldSubmitted: (input) => addNewRule(),
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
