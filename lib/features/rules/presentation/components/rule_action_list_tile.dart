@@ -51,7 +51,7 @@ class RuleActionListTile extends StatelessWidget {
       onTap: onPress,
       child: Container(
         padding: const EdgeInsets.all(4),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        margin: const EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(4),
