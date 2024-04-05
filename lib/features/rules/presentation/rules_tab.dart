@@ -1,6 +1,7 @@
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/rules/presentation/components/add_new_rule.dart';
+import 'package:anonaddy/features/rules/presentation/components/add_new_rule_condition.dart';
 import 'package:anonaddy/features/rules/presentation/components/add_new_rule_enter_name.dart';
 import 'package:anonaddy/features/rules/presentation/components/rules_list_tile.dart';
 import 'package:anonaddy/features/rules/presentation/controller/create_new_rule_notifier.dart';
@@ -44,8 +45,8 @@ class _RulesTabState extends ConsumerState<RulesTab> {
               pageTitle: AddyString.addNewRuleString,
               child: AddNewRule(
                 ruleId: ruleId,
-                onPress: () =>
-                    pageIndexNotifier.value = pageIndexNotifier.value + 1,
+                ruleNameOnPress: () {},
+                conditionTileOnPress: () {},
               ),
             ),
           ];
@@ -110,8 +111,10 @@ class _RulesTabState extends ConsumerState<RulesTab> {
                               pageTitle: AddyString.addNewRuleString,
                               child: AddNewRule(
                                 ruleId: rule.id,
-                                onPress: () => pageIndexNotifier.value =
-                                    pageIndexNotifier.value + 1,
+                                ruleNameOnPress: () =>
+                                    Utilities.showToast(AppStrings.comingSoon),
+                                conditionTileOnPress: () =>
+                                    Utilities.showToast(AppStrings.comingSoon),
                               ),
                             ),
                             Utilities.buildWoltModalSheetSubPage(
@@ -120,10 +123,9 @@ class _RulesTabState extends ConsumerState<RulesTab> {
                               pageTitle:
                                   'Provide a unique memorable description',
                               topBarTitle: AppStrings.addNewRule,
-                              leadingWidgetOnPress: () => pageIndexNotifier
-                                  .value = pageIndexNotifier.value - 1,
+                              leadingWidgetOnPress: resetPageIndex,
                               child: AddNewRuleEnterName(
-                                ruleId: rules[index].id,
+                                ruleId: rule.id,
                                 onPress: (name) async {
                                   await ref
                                       .read(
@@ -132,6 +134,17 @@ class _RulesTabState extends ConsumerState<RulesTab> {
                                       .updateRuleName(name);
                                   resetPageIndex();
                                 },
+                              ),
+                            ),
+                            Utilities.buildWoltModalSheetSubPage(
+                              context,
+                              showLeading: true,
+                              topBarTitle: 'Add condition',
+                              leadingWidgetOnPress: resetPageIndex,
+                              child: AddNewRuleCondition(
+                                ruleId: rule.id,
+                                onPress: () =>
+                                    Utilities.showToast(AppStrings.comingSoon),
                               ),
                             ),
                           ];
@@ -143,7 +156,8 @@ class _RulesTabState extends ConsumerState<RulesTab> {
               ),
             TextButton(
               child: const Text(AppStrings.addNewRule),
-              onPressed: () => createNewRule(context, rules.first.id),
+              onPressed: () => Utilities.showToast(AppStrings.comingSoon),
+              // onPressed: () => createNewRule(context, rules.first.id),
             ),
           ],
         );
