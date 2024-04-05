@@ -1,6 +1,4 @@
-import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/components/create_alias_error_widget.dart';
-import 'package:anonaddy/features/recipients/presentation/controller/add_recipient_notifier.dart';
 import 'package:anonaddy/features/rules/presentation/controller/create_new_rule_notifier.dart';
 import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:anonaddy/utilities/form_validator.dart';
@@ -11,9 +9,11 @@ class AddNewRuleEnterName extends ConsumerStatefulWidget {
   const AddNewRuleEnterName({
     super.key,
     required this.ruleId,
+    required this.onPress,
   });
 
   final String ruleId;
+  final Function(String) onPress;
 
   @override
   ConsumerState createState() => _AddNewRuleEnterNameState();
@@ -25,11 +25,7 @@ class _AddNewRuleEnterNameState extends ConsumerState<AddNewRuleEnterName> {
 
   Future<void> addNewRule() async {
     if (_formKey.currentState!.validate()) {
-      await ref
-          .read(addRecipientNotifierProvider.notifier)
-          .addRecipient(_textEditController.text.trim());
-      await ref.read(accountNotifierProvider.notifier).fetchAccount();
-      if (mounted) Navigator.pop(context);
+      widget.onPress(_textEditController.text.trim());
     }
   }
 
@@ -53,14 +49,15 @@ class _AddNewRuleEnterNameState extends ConsumerState<AddNewRuleEnterName> {
                 key: _formKey,
                 child: TextFormField(
                   autofocus: true,
+                  autocorrect: false,
                   controller: _textEditController,
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.emailAddress,
-                  validator: FormValidator.validateEmailField,
+                  validator: FormValidator.requiredField,
                   onFieldSubmitted: (input) => addNewRule(),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter Name',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: createAliasState.ruleName ?? 'Enter Name',
                   ),
                 ),
               ),
@@ -69,25 +66,12 @@ class _AddNewRuleEnterNameState extends ConsumerState<AddNewRuleEnterName> {
                 width: double.infinity,
                 child: PlatformButton(
                   onPress: () async => await addNewRule(),
-                  child: Consumer(
-                    builder: (context, ref, _) {
-                      final addRecipientAsync =
-                          ref.watch(addRecipientNotifierProvider);
-
-                      return addRecipientAsync.when(
-                        data: (data) {
-                          return Text(
-                            'Add Name',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge
-                                ?.copyWith(color: Colors.black),
-                          );
-                        },
-                        error: (err, stack) => const PlatformLoadingIndicator(),
-                        loading: () => const SizedBox.shrink(),
-                      );
-                    },
+                  child: Text(
+                    'Add Name',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(color: Colors.black),
                   ),
                 ),
               ),
@@ -95,9 +79,7 @@ class _AddNewRuleEnterNameState extends ConsumerState<AddNewRuleEnterName> {
           ),
         );
       },
-      error: (error, _) {
-        return CreateAliasErrorWidget(message: error.toString());
-      },
+      error: (error, _) => CreateAliasErrorWidget(message: error.toString()),
       loading: () => SizedBox(
         height: MediaQuery.of(context).size.height * .4,
         width: double.infinity,

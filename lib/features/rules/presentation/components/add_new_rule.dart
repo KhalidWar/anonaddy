@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:anonaddy/features/create_alias/presentation/components/create_alias_error_widget.dart';
-import 'package:anonaddy/features/recipients/presentation/controller/add_recipient_notifier.dart';
 import 'package:anonaddy/features/rules/presentation/components/rule_action_list_tile.dart';
 import 'package:anonaddy/features/rules/presentation/components/rule_checkbox.dart';
 import 'package:anonaddy/features/rules/presentation/components/rule_condition_list_tile.dart';
@@ -34,13 +33,13 @@ class _AddNewRuleState extends ConsumerState<AddNewRule> {
     return Consumer(
       builder: (context, ref, _) {
         return ruleAsync.when(
-          data: (ruleState) {
+          data: (createRuleState) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
                   dense: true,
-                  title: Text(ruleState.rule.name),
+                  title: Text(createRuleState.ruleName),
                   subtitle: const Text('Rule Name'),
                   trailing: const Icon(Icons.arrow_forward_ios_rounded),
                   onTap: widget.onPress,
@@ -58,10 +57,9 @@ class _AddNewRuleState extends ConsumerState<AddNewRule> {
                 ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: ruleState.rule.conditions.length,
+                  itemCount: createRuleState.conditions.length,
                   itemBuilder: (context, index) {
-                    final condition = ruleState.rule.conditions[index];
-
+                    final condition = createRuleState.conditions[index];
                     return RuleConditionListTile(
                       condition: condition,
                       onPress: () {
@@ -71,7 +69,7 @@ class _AddNewRuleState extends ConsumerState<AddNewRule> {
                   },
                   separatorBuilder: (context, index) {
                     return Text(
-                      ruleState.rule.operator.name.toUpperCase(),
+                      createRuleState.operator.name.toUpperCase(),
                       textAlign: TextAlign.center,
                     );
                   },
@@ -89,10 +87,9 @@ class _AddNewRuleState extends ConsumerState<AddNewRule> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: ruleState.rule.actions.length,
+                  itemCount: createRuleState.actions.length,
                   itemBuilder: (context, index) {
-                    final action = ruleState.rule.actions[index];
-
+                    final action = createRuleState.actions[index];
                     return RuleActionListTile(
                       action: action,
                       isFirst: index == 0,
@@ -108,17 +105,17 @@ class _AddNewRuleState extends ConsumerState<AddNewRule> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RuleCheckbox(
-                        value: ruleState.forwards,
+                        value: createRuleState.forwards,
                         title: 'Forward',
                         onChanged: notifier.toggleForwards,
                       ),
                       RuleCheckbox(
-                        value: ruleState.replies,
+                        value: createRuleState.replies,
                         title: 'Replies',
                         onChanged: notifier.toggleReplies,
                       ),
                       RuleCheckbox(
-                        value: ruleState.sends,
+                        value: createRuleState.sends,
                         title: 'Sends',
                         onChanged: notifier.toggleSends,
                       ),
@@ -129,35 +126,29 @@ class _AddNewRuleState extends ConsumerState<AddNewRule> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   child: PlatformButton(
-                    onPress: () {},
-                    child: Consumer(
-                      builder: (context, ref, _) {
-                        final addRecipientAsync =
-                            ref.watch(addRecipientNotifierProvider);
-
-                        return addRecipientAsync.when(
-                          data: (data) {
-                            return Text(
-                              'Add New Rule',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge
-                                  ?.copyWith(color: Colors.black),
-                            );
-                          },
-                          error: (err, stack) => const SizedBox.shrink(),
-                          loading: () => const PlatformLoadingIndicator(),
-                        );
-                      },
-                    ),
+                    onPress: () async {
+                      await ref
+                          .read(createNewRuleNotifierProvider(widget.ruleId)
+                              .notifier)
+                          .updateRule();
+                      if (mounted) Navigator.of(context).pop();
+                    },
+                    child: createRuleState.isLoading
+                        ? const PlatformLoadingIndicator()
+                        : Text(
+                            'Add New Rule',
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: Colors.black),
+                          ),
                   ),
                 ),
               ],
             );
           },
-          error: (error, _) {
-            return CreateAliasErrorWidget(message: error.toString());
-          },
+          error: (error, _) =>
+              CreateAliasErrorWidget(message: error.toString()),
           loading: () => SizedBox(
             height: MediaQuery.of(context).size.height * .4,
             width: double.infinity,
