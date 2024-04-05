@@ -41,6 +41,8 @@ abstract class RuleAction {
         return RuleActionBlock(value: json['value'] as bool);
     }
   }
+
+  Map<String, dynamic> toMap();
 }
 
 class RuleActionSubject extends RuleAction {
@@ -50,6 +52,14 @@ class RuleActionSubject extends RuleAction {
   });
 
   final String value;
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.name,
+      'value': value,
+    };
+  }
 }
 
 class RuleActionDisplayFrom extends RuleAction {
@@ -59,6 +69,14 @@ class RuleActionDisplayFrom extends RuleAction {
   });
 
   final String value;
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.name,
+      'value': value,
+    };
+  }
 }
 
 class RuleActionEncryption extends RuleAction {
@@ -68,6 +86,14 @@ class RuleActionEncryption extends RuleAction {
   });
 
   final bool value;
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.name,
+      'value': value,
+    };
+  }
 }
 
 class RuleActionBanner extends RuleAction {
@@ -77,6 +103,14 @@ class RuleActionBanner extends RuleAction {
   });
 
   final BannerLocation bannerLocation;
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.name,
+      'value': bannerLocation.name,
+    };
+  }
 }
 
 class RuleActionBlock extends RuleAction {
@@ -86,4 +120,12 @@ class RuleActionBlock extends RuleAction {
   });
 
   final bool value;
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.name,
+      'value': value,
+    };
+  }
 }

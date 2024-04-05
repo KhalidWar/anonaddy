@@ -41,4 +41,12 @@ class RuleCondition {
       values: (json['values'] as List).map((e) => e as String).toList(),
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'type': type.name,
+      'match': match.value,
+      'values': values,
+    };
+  }
 }

@@ -1,7 +1,8 @@
 import 'package:anonaddy/features/rules/domain/rule_action.dart';
 import 'package:anonaddy/features/rules/domain/rule_condition.dart';
-import 'package:anonaddy/features/rules/domain/rule_operator.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+enum RuleOperator { and, or }
 
 class Rule {
   const Rule({
