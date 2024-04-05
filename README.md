@@ -11,8 +11,6 @@ Your support will help the continuous development of this project. Click on QR c
 
 [<img src="assets/screenshots/bmc.png" width="250">](https://www.buymeacoffee.com/khalidwar)
 
-[<img src="assets/crypto_wallets/btc.png" width="200">](https://www.blockchain.com/btc/address/bc1qr6455yefsgua0w2l5wq97rntzsegsd6cnpayar) [<img src="assets/crypto_wallets/eth.png" width="200">](https://www.blockchain.com/eth/address/0xbDAc17f1b735BF6680D9861de9db65B40485576E) [<img src="assets/crypto_wallets/doge.png" width="200">](https://dogeblocks.com/address/DBgGAWh77vTgzJcvr7QeaAi93ZT2xE6hrv)
-
 
 ## Screenshots
 <img src="assets/screenshots/account.jpg" width="200"> <img src="assets/screenshots/aliases.jpg" width="200"> <img src="assets/screenshots/search.jpg" width="200"> 
