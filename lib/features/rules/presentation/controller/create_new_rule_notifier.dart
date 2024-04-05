@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:anonaddy/features/rules/data/rules_service.dart';
 import 'package:anonaddy/features/rules/presentation/controller/create_new_rule_state.dart';
+import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final createNewRuleNotifierProvider = AsyncNotifierProvider.family
@@ -10,6 +11,31 @@ final createNewRuleNotifierProvider = AsyncNotifierProvider.family
 
 class CreateNewRuleNotifier
     extends AutoDisposeFamilyAsyncNotifier<CreateNewRuleState, String> {
+  Future<void> updateRule() async {
+    final currentState = state.value!;
+    state = AsyncData(currentState.copyWith(isLoading: true));
+
+    final ruleData = {
+      'name': currentState.ruleName,
+      'conditions': currentState.conditions.map((e) => e.toMap()).toList(),
+      'actions': currentState.actions.map((e) => e.toMap()).toList(),
+      'operator': currentState.operator.name.toUpperCase(),
+      'forwards': currentState.forwards,
+      'replies': currentState.replies,
+      'sends': currentState.sends,
+    };
+
+    final updatedRule = await ref
+        .read(rulesServiceProvider)
+        .updateRule(currentState.rule.id, ruleData);
+    await ref.read(rulesTabNotifierProvider.notifier).fetchRules();
+  }
+
+  Future<void> updateRuleName(String ruleName) async {
+    final currentState = state.value!;
+    state = AsyncData(currentState.copyWith(ruleName: ruleName));
+  }
+
   void toggleForwards(bool? forwards) {
     final currentState = state.value!;
     state = AsyncData(currentState.copyWith(forwards: forwards));

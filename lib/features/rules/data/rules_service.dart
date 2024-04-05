@@ -48,13 +48,25 @@ class RulesService {
       final path = '$kUnEncodedBaseURL/rules/$ruleId';
       final response = await dio.get(path);
       log('fetchSpecificRule: ${response.statusCode}');
-
       return Rule.fromJson(response.data['data']);
     } on DioException catch (dioException) {
       if (dioException.type == DioExceptionType.connectionError) {
         final rule = await dataStorage.loadSpecificRule(ruleId);
         if (rule != null) return rule;
       }
+      throw dioException.message ?? AppStrings.somethingWentWrong;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Rule> updateRule(String ruleId, Map<String, dynamic> data) async {
+    try {
+      final path = '$kUnEncodedBaseURL/rules/$ruleId';
+      final response = await dio.patch(path, data: data);
+      log('updateRule: ${response.statusCode}');
+      return Rule.fromJson(response.data['data']);
+    } on DioException catch (dioException) {
       throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
