@@ -3,7 +3,7 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 class FormValidator {
   static String? requiredField(String? input) {
     final regex = RegExp(r'^\s+$');
-    if (input == null || regex.hasMatch(input)) {
+    if (input == null || !regex.hasMatch(input)) {
       return AppStrings.fieldCannotBeEmpty;
     }
     return null;
