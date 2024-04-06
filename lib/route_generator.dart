@@ -1,6 +1,6 @@
 import 'package:anonaddy/features/alert_center/presentation/alert_center_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
-import 'package:anonaddy/features/auth/presentation/anonaddy_login_screen.dart';
+import 'package:anonaddy/features/auth/presentation/addy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
 import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';

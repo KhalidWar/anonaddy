@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/auth/presentation/anonaddy_login_screen.dart';
+import 'package:anonaddy/features/auth/presentation/addy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/error_screen.dart';
