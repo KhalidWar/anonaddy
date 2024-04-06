@@ -53,6 +53,10 @@ dependencies:
   package_info_plus: ^6.0.0
   flutter_native_splash: ^2.4.0
 
+  # Monetization
+  purchases_flutter: ^6.25.0
+  purchases_ui_flutter: ^6.25.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
