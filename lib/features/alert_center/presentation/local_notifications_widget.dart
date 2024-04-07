@@ -24,7 +24,20 @@ class _LocalNotificationsWidgetState
           );
         }
 
-        return Container();
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: localNotifications.length,
+          itemBuilder: (context, index) {
+            final notification = localNotifications[index];
+            return ListTile(
+              contentPadding: const EdgeInsets.all(0),
+              leading: const Icon(Icons.notifications),
+              title: Text(notification.title),
+              subtitle: Text(notification.subtitle),
+            );
+          },
+        );
       },
       error: (err, stack) => Container(),
       loading: () => Container(),
