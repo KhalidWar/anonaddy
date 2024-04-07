@@ -1,6 +1,6 @@
 import 'package:anonaddy/features/alert_center/presentation/components/alert_header.dart';
 import 'package:anonaddy/features/alert_center/presentation/failed_deliveries_widget.dart';
-import 'package:anonaddy/features/alert_center/presentation/notifications_widget.dart';
+import 'package:anonaddy/features/alert_center/presentation/local_notifications_widget.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/shared_components/custom_app_bar.dart';
 import 'package:anonaddy/shared_components/paid_feature_blocker.dart';
@@ -29,7 +29,7 @@ class AlertCenterScreen extends StatelessWidget {
             title: AppStrings.notifications,
             subtitle: AppStrings.notificationsNote,
           ),
-          NotificationsWidget(),
+          LocalNotificationsWidget(),
           SizedBox(height: 16),
           AlertHeader(
             title: AppStrings.failedDeliveries,
