@@ -78,6 +78,8 @@ class _RulesTabState extends ConsumerState<RulesTab> {
     return rulesState.when(
       data: (rules) {
         return ListView(
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
           children: [
             if (rules.isEmpty)
               const ListTile(
