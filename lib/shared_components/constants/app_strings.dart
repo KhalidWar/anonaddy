@@ -186,4 +186,8 @@ class AppStrings {
   static const provideValidLocalPart = 'Provide a valid local part';
   static const providerValidUrl = 'Provide a valid URL';
   static const keywordMustBe3CharsLong = 'Keyword must be 3 characters long';
+
+  /// Monetization
+  static const failedToLoadSubscriptionData =
+      'Failed to load subscription data';
 }
