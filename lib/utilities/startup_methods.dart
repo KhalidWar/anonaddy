@@ -46,9 +46,9 @@ class StartupMethods {
 
       PurchasesConfiguration? configuration;
 
-      // if (Platform.isAndroid) {
-      //   configuration = PurchasesConfiguration(androidApiKey);
-      // }
+      if (Platform.isAndroid) {
+        configuration = PurchasesConfiguration(androidApiKey);
+      }
 
       if (Platform.isIOS) {
         configuration = PurchasesConfiguration(iOSApiKey);
