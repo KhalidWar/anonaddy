@@ -10,10 +10,7 @@ class NotificationsWidget extends StatelessWidget {
     return Container(
       color: Colors.white,
       margin: const EdgeInsets.all(20),
-      child: const LottieWidget(
-        lottie: LottieImages.comingSoon,
-        repeat: true,
-      ),
+      child: Container(),
     );
   }
 }

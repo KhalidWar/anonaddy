@@ -46,13 +46,6 @@ class CreditsScreen extends StatelessWidget {
             lottieURL:
                 'https://lottiefiles.com/8185-biometrics-android-animation',
           ),
-          buildTile(
-            context: context,
-            lottieFile: LottieImages.comingSoon,
-            title: 'Coming Soon',
-            creator: 'Arno M. Scharinger',
-            lottieURL: 'https://lottiefiles.com/34957-coming-soon',
-          ),
         ],
       ),
     );
