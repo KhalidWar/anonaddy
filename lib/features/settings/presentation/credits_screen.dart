@@ -26,13 +26,6 @@ class CreditsScreen extends StatelessWidget {
           const Divider(height: 0),
           buildTile(
             context: context,
-            lottieFile: LottieImages.errorCone,
-            title: 'Error Cone',
-            creator: 'Fernando Ron Pedrique',
-            lottieURL: 'https://lottiefiles.com/38064-error-cone',
-          ),
-          buildTile(
-            context: context,
             lottieFile: LottieImages.emptyResult,
             title: 'Empty',
             creator: '张先生',

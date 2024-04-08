@@ -1,11 +1,6 @@
 ///
 /// Central location for all lottie images used in this project.
 class LottieImages {
-  // title: Error Cone,
-  // creator: Fernando Ron Pedrique,
-  // lottieURL: https://lottiefiles.com/38064-error-cone,
-  static const errorCone = 'assets/lottie/errorCone.json';
-
   // title: Biometric Animation,
   // creator: Clément Boissy,
   // lottieURL: https://lottiefiles.com/8185-biometrics-android-animation,
