@@ -7,6 +7,7 @@ import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart'
 import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
 import 'package:anonaddy/features/home/presentation/home_screen.dart';
+import 'package:anonaddy/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
 import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
@@ -70,6 +71,10 @@ class RouteGenerator {
       /// Logout Screen
       case LogoutScreen.routeName:
         return PlatformAware.customPageRoute(const LogoutScreen());
+
+      /// Onboarding Screen
+      case OnboardingScreen.routeName:
+        return PlatformAware.customPageRoute(const OnboardingScreen());
 
       /// Show ErrorScreen if screen doesn't exist or something goes wrong
       default:
