@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:anonaddy/route_generator.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
@@ -29,7 +29,7 @@ class App extends ConsumerWidget {
           settingsState?.isDarkTheme ?? false ? AppTheme.dark : AppTheme.light,
       darkTheme: AppTheme.dark,
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: OnboardingScreen.routeName,
+      initialRoute: AuthScreen.routeName,
       locale: const Locale('en', 'US'),
       localizationsDelegates: const [
         DefaultMaterialLocalizations.delegate,
