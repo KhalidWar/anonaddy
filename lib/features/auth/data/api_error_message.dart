@@ -1,5 +1,5 @@
 class ApiErrorMessage {
-  static String translateStatusCode(int statusCode) {
+  static String translateStatusCode(int? statusCode) {
     switch (statusCode) {
       case 400:
         return 'Bad Request -- Your request sucks';

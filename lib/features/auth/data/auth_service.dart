@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:anonaddy/features/auth/data/api_error_message.dart';
 import 'package:anonaddy/features/auth/domain/api_token.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
 import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/api_error_message.dart';
 import 'package:anonaddy/utilities/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,10 +20,11 @@ final authServiceProvider = Provider<AuthService>((ref) {
 });
 
 class AuthService {
-  AuthService({
+  const AuthService({
     required this.secureStorage,
     required this.dio,
   });
+
   final FlutterSecureStorage secureStorage;
   final Dio dio;
 
@@ -48,13 +49,10 @@ class AuthService {
       final apiToken = ApiToken.fromMap(response.data);
       return User(url: url, token: token, apiToken: apiToken);
     } on DioException catch (dioException) {
-      if (dioException.type == DioExceptionType.badResponse) {
-        throw dioException.response == null
-            ? dioException.message ?? AppStrings.somethingWentWrong
-            : ApiErrorMessage.translateStatusCode(
-                dioException.response?.statusCode ?? 0);
-      }
-      throw dioException.message ?? AppStrings.somethingWentWrong;
+      throw dioException.response == null
+          ? dioException.message ?? AppStrings.somethingWentWrong
+          : ApiErrorMessage.translateStatusCode(
+              dioException.response?.statusCode);
     } catch (error) {
       rethrow;
     }
@@ -68,7 +66,6 @@ class AuthService {
     try {
       final url = instanceUrl ?? 'app.addy.io';
       final baseUrl = 'https://$url';
-
       final loginResponse = await dio.post(
         '$baseUrl/api/auth/login',
         data: jsonEncode({
@@ -94,13 +91,10 @@ class AuthService {
       final apiToken = ApiToken.fromMap(tokenDetailsResponse.data);
       return User(url: url, token: apiKey, apiToken: apiToken);
     } on DioException catch (dioException) {
-      if (dioException.type == DioExceptionType.badResponse) {
-        throw dioException.response == null
-            ? dioException.message ?? AppStrings.somethingWentWrong
-            : ApiErrorMessage.translateStatusCode(
-                dioException.response?.statusCode ?? 0);
-      }
-      throw dioException.message ?? AppStrings.somethingWentWrong;
+      throw dioException.response == null
+          ? dioException.message ?? AppStrings.somethingWentWrong
+          : ApiErrorMessage.translateStatusCode(
+              dioException.response?.statusCode);
     } catch (error) {
       rethrow;
     }
@@ -118,14 +112,13 @@ class AuthService {
 
       final decodedDate = jsonDecode(userData);
       final user = User.fromMap(decodedDate);
-
       return User(
-        url: user.url == 'app.anonaddy.com' ? 'app.addy.io' : user.url,
+        url: user.url,
         token: user.token,
         apiToken: user.apiToken,
       );
     } catch (error) {
-      rethrow;
+      return null;
     }
   }
 }
