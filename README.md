@@ -37,7 +37,7 @@ Your access token is NOT sent to us or any third party server. However, access t
 
 
 ## Privacy
-AddyManager is free and open source software licensed under [MIT](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). Free as in free of charge, ads, analytics, and trackers. What's yours is yours.
+AddyManager is free and open source software licensed under [MIT](https://github.com/KhalidWar/anonaddy/blob/master/LICENSE). Free as in free of ads, analytics, and trackers. What's yours is yours.
 
 Your account data, aliases, recipients, domains, search history...etc. do NOT leave your device and are DELETED upon log out. Again, what's yours is yours.
 
