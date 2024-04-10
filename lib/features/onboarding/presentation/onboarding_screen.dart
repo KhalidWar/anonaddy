@@ -45,7 +45,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 return [
                   Utilities.buildWoltModalSheetSubPage(
                     context,
-                    topBarTitle: 'AddyManager',
+                    topBarTitle: 'Addy.io Login',
                     pageTitle: AppStrings.accessTokenRequired,
                     child: const AddyLoginScreen(),
                   ),
@@ -62,7 +62,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 return [
                   Utilities.buildWoltModalSheetSubPage(
                     context,
-                    topBarTitle: 'AddyManager',
+                    topBarTitle: 'Self Hosted Instance Login',
                     pageTitle: AppStrings.accessTokenRequired,
                     child: const SelfHostLoginScreen(),
                   ),
