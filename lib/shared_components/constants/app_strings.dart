@@ -135,16 +135,14 @@ class AppStrings {
   /// Login Screen
   static const enterAccessToken = 'Enter Access Token';
   static const whatsAccessToken = 'What is Access Token?';
-  static const accessTokenDefinition =
-      'Access Token is a long string of alphanumeric characters used to access an account without giving away the account\'s username and password.';
   static const accessTokenRequired =
-      'To access your Addy.io account, you\'ll have to provide your own Access Token.';
+      'To access your Addy.io account, you\'ll have to provide your own Access Token which is a long string of alphanumeric characters used to access an account without giving away the account\'s username and password.';
   static const howToGetAccessToken = 'How to get Access Token?';
   static const howToGetAccessToken1 = '1. Login to your Addy.io account';
   static const howToGetAccessToken2 = '2. Go to Settings';
   static const howToGetAccessToken3 = '3. Scroll down to API section';
   static const howToGetAccessToken4 = '4. Click on Generate New Token';
-  static const howToGetAccessToken5 = '5. Paste it as is in Login field';
+  static const howToGetAccessToken5 = '5. Copy the generated access token';
   static const accessTokenSecurityNotice =
       'Security Notice: do NOT re-use Access Tokens. Make sure to generate a new token for every service you use.';
   static const getAccessToken = 'Get Access Token';

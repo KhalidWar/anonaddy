@@ -1,10 +1,14 @@
+import 'package:anonaddy/features/auth/presentation/addy_login_screen.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_description.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_image.dart';
 import 'package:anonaddy/features/onboarding/presentation/onboarding_pages.dart';
+import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/utilities/theme.dart';
+import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -25,11 +29,29 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           speed: 1.8,
           centerBackground: true,
           headerBackgroundColor: Colors.white,
-          // leading: const Text('Leading'),
           controllerColor: Theme.of(context).primaryColor,
-          finishButtonText: 'Login with API Token',
-          onFinish: () {
-            // Navigator.of(context).pushNamed(LoginScreen.routeName);
+          finishButtonText: 'Login',
+          // finishButtonTextStyle: Theme.of(context).textTheme.labelLarge!,
+          finishButtonStyle: FinishButtonStyle(
+            backgroundColor: Theme.of(context).primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          onFinish: () async {
+            await WoltModalSheet.show(
+              context: context,
+              pageListBuilder: (context) {
+                return [
+                  Utilities.buildWoltModalSheetSubPage(
+                    context,
+                    topBarTitle: 'AddyManager',
+                    pageTitle: AppStrings.accessTokenRequired,
+                    child: const AddyLoginScreen(),
+                  ),
+                ];
+              },
+            );
           },
           skipTextButton: const Text('Skip'),
           trailing: const Text('Self Hosting?'),

@@ -1,4 +1,3 @@
-import 'package:anonaddy/features/auth/presentation/addy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/error_screen.dart';
@@ -6,6 +5,7 @@ import 'package:anonaddy/features/auth/presentation/loading_screen.dart';
 import 'package:anonaddy/features/auth/presentation/lock_screen.dart';
 import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
 import 'package:anonaddy/features/home/presentation/home_screen.dart';
+import 'package:anonaddy/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:secure_application/secure_application.dart';
@@ -96,7 +96,7 @@ class AuthScreen extends ConsumerWidget {
 
           /// Manages when a user has logged out or no logged in user found.
           case AuthorizationStatus.addyLogin:
-            return const AddyLoginScreen(key: authScreenAnonAddyLoginScreen);
+            return const OnboardingScreen(key: authScreenAnonAddyLoginScreen);
 
           /// Manages when a user has logged out or no logged in user found.
           case AuthorizationStatus.selfHostedLogin:

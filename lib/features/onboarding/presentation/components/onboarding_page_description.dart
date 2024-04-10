@@ -20,7 +20,7 @@ class OnboardingPageDescription extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          const SizedBox(height: 320),
+          const SizedBox(height: 360),
           Text(
             title,
             textAlign: TextAlign.center,
