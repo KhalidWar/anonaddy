@@ -1,9 +1,7 @@
 import 'package:anonaddy/features/alert_center/presentation/alert_center_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
-import 'package:anonaddy/features/auth/presentation/addy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
 import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
-import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
 import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
 import 'package:anonaddy/features/home/presentation/home_screen.dart';
@@ -61,12 +59,6 @@ class RouteGenerator {
       case DomainsScreen.routeName:
         return PlatformAware.customPageRoute(
             DomainsScreen(domain: argument as Domain));
-
-      /// Login Screen
-      case AddyLoginScreen.routeName:
-        return PlatformAware.customPageRoute(const AddyLoginScreen());
-      case SelfHostLoginScreen.routeName:
-        return PlatformAware.customPageRoute(const SelfHostLoginScreen());
 
       /// Logout Screen
       case LogoutScreen.routeName:

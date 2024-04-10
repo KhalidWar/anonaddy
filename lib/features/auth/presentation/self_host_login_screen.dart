@@ -10,8 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SelfHostLoginScreen extends ConsumerStatefulWidget {
   const SelfHostLoginScreen({super.key});
 
-  static const routeName = 'selfHostedScreen';
-
   @override
   ConsumerState createState() => _SelfHostLoginScreenState();
 }

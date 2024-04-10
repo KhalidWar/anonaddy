@@ -12,8 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AddyLoginScreen extends ConsumerWidget {
   const AddyLoginScreen({super.key});
 
-  static const routeName = 'loginScreen';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Theme(
