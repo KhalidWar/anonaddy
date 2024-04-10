@@ -1,4 +1,5 @@
 import 'package:anonaddy/features/auth/presentation/addy_login_screen.dart';
+import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_description.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_image.dart';
 import 'package:anonaddy/features/onboarding/presentation/onboarding_pages.dart';
@@ -54,8 +55,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           },
           skipTextButton: const Text('Skip'),
           trailing: const Text('Self Hosting?'),
-          trailingFunction: () {
-            // Navigator.of(context).pushNamed(LoginScreen.routeName);
+          trailingFunction: () async {
+            await WoltModalSheet.show(
+              context: context,
+              pageListBuilder: (context) {
+                return [
+                  Utilities.buildWoltModalSheetSubPage(
+                    context,
+                    topBarTitle: 'AddyManager',
+                    pageTitle: AppStrings.accessTokenRequired,
+                    child: const SelfHostLoginScreen(),
+                  ),
+                ];
+              },
+            );
           },
           background: OnboardingPages.values.map((page) {
             return OnboardingPageImage(svgPath: page.path);
