@@ -31,7 +31,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           headerBackgroundColor: Colors.white,
           controllerColor: Theme.of(context).primaryColor,
           finishButtonText: 'Login',
-          // finishButtonTextStyle: Theme.of(context).textTheme.labelLarge!,
           finishButtonStyle: FinishButtonStyle(
             backgroundColor: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(

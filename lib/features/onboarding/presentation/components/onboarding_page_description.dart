@@ -61,7 +61,7 @@ class OnboardingPageDescription extends StatelessWidget {
           if (showDisclaimer) ...[
             const SizedBox(height: 16),
             Text(
-              'To sustain AddyManager\'s development, some power user features are now paid only, and your AddyManager subscription is completely separate from your Addy.io\'s account.',
+              'To sustain AddyManager\'s development, some power user features are now paid only, and your AddyManager subscription is separate from your Addy.io\'s account.',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodySmall,
             ),
