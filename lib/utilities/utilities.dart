@@ -137,7 +137,7 @@ class Utilities {
       pageTitle: pageTitle == null
           ? null
           : Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Text(
                 pageTitle,
                 style: Theme.of(context).textTheme.bodySmall,
