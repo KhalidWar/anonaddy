@@ -7,12 +7,14 @@ class OnboardingPageDescription extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
-    required this.showButton,
+    required this.showAddyManagerLinks,
+    required this.showDisclaimer,
   });
 
   final String title;
   final String subtitle;
-  final bool showButton;
+  final bool showAddyManagerLinks;
+  final bool showDisclaimer;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +36,8 @@ class OnboardingPageDescription extends StatelessWidget {
             subtitle,
             textAlign: TextAlign.center,
           ),
-          if (showButton) ...[
+          if (showAddyManagerLinks) ...[
             const SizedBox(height: 16),
-            TextButton(
-              child: const Text('Source Code'),
-              onPressed: () => Utilities.launchURL(kAddyManagerRepoURL),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -54,6 +52,18 @@ class OnboardingPageDescription extends StatelessWidget {
                       Utilities.launchURL(kAddyManagerTermsAndConditions),
                 ),
               ],
+            ),
+            TextButton(
+              child: const Text('Source Code'),
+              onPressed: () => Utilities.launchURL(kAddyManagerRepoURL),
+            ),
+          ],
+          if (showDisclaimer) ...[
+            const SizedBox(height: 16),
+            Text(
+              'To sustain AddyManager\'s development, some power user features are now paid only, and your AddyManager subscription is completely separate from your Addy.io\'s account.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ],

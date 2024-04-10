@@ -22,8 +22,9 @@ enum OnboardingPages {
   ),
   login(
     'assets/images/register.svg',
-    'Multiple Login Options',
-    'Anonymous',
+    'AddyManager. Secure. Private.',
+    'AddyManager is free and open source, MIT-licensed software. Free as in free of ads, analytics, and trackers. What is yours is yours.',
+    showDisclaimer: true,
   );
 
   const OnboardingPages(
@@ -31,10 +32,12 @@ enum OnboardingPages {
     this.title,
     this.subtitle, {
     this.showAddyManagerLinks = false,
+    this.showDisclaimer = false,
   });
 
   final String path;
   final String title;
   final String subtitle;
   final bool showAddyManagerLinks;
+  final bool showDisclaimer;
 }

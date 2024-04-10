@@ -78,7 +78,7 @@ class _AddyLoginScreenState extends ConsumerState<AddyLoginScreen> {
                                   key: Key('loginFooterLoginButtonLoading'),
                                 )
                               : Text(
-                                  'Paste & Log in',
+                                  'Log in with copied Access Token',
                                   key: const Key('loginFooterLoginButtonLabel'),
                                   style: Theme.of(context).textTheme.labelLarge,
                                 );

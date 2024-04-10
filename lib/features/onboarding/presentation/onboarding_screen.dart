@@ -66,7 +66,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             return OnboardingPageDescription(
               title: page.title,
               subtitle: page.subtitle,
-              showButton: page.showAddyManagerLinks,
+              showAddyManagerLinks: page.showAddyManagerLinks,
+              showDisclaimer: page.showDisclaimer,
             );
           }).toList(),
         ),
