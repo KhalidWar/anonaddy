@@ -17,53 +17,39 @@ final authStateNotifier =
     AsyncNotifierProvider<AuthNotifier, AuthState>(AuthNotifier.new);
 
 class AuthNotifier extends AsyncNotifier<AuthState> {
-  void goToAddyLogin() {
-    state = AsyncData(state.value!.copyWith(
-      authorizationStatus: AuthorizationStatus.addyLogin,
-    ));
-  }
-
-  void goToSelfHostedLogin() {
-    state = AsyncData(state.value!.copyWith(
-      authorizationStatus: AuthorizationStatus.selfHostedLogin,
-    ));
-  }
-
   Future<void> loginWithAccessToken(String url, String token) async {
-    if (state.value != null) {
-      state = AsyncData(state.value!.copyWith(loginLoading: true));
-    }
-
+    final currentState = state.value!;
     try {
+      state = AsyncData(currentState.copyWith(loginLoading: true));
+
       final user =
           await ref.read(authServiceProvider).loginWithAccessToken(url, token);
-
       await ref.read(authServiceProvider).saveUser(user);
-      state = AsyncData(state.value!.copyWith(
-        authorizationStatus: AuthorizationStatus.authorized,
-        user: user,
-        loginLoading: false,
-      ));
+
+      state = AsyncData(
+        currentState.copyWith(
+          isLoggedIn: true,
+          user: user,
+          loginLoading: false,
+        ),
+      );
     } catch (error) {
       Utilities.showToast(error.toString());
-      if (state.value != null) {
-        state = AsyncData(state.value!.copyWith(loginLoading: false));
-      }
+      state = AsyncData(state.value!.copyWith(loginLoading: false));
     }
   }
 
   Future<void> loginWithUsernameAndPassword(
-      String email, String password) async {
+    String email,
+    String password,
+  ) async {
     try {
       final user = await ref
           .read(authServiceProvider)
           .loginWithUsernameAndPassword(email, password);
 
       await ref.read(authServiceProvider).saveUser(user);
-      state = AsyncData(state.value!.copyWith(
-        authorizationStatus: AuthorizationStatus.authorized,
-        user: user,
-      ));
+      state = AsyncData(state.value!.copyWith(isLoggedIn: true, user: user));
     } catch (error) {
       Utilities.showToast(error.toString());
     }
@@ -87,7 +73,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
           await ref.read(biometricAuthServiceProvider).authenticate();
       if (didAuth) {
         state = AsyncData(state.value!.copyWith(
-          authorizationStatus: state.value!.authorizationStatus,
+          isLoggedIn: state.value!.isLoggedIn,
           authenticationStatus: AuthenticationStatus.disabled,
         ));
         return;
@@ -128,27 +114,6 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     }
   }
 
-  Future<bool> _doesOldLoginExist() async {
-    try {
-      final url = await ref
-          .read(flutterSecureStorage)
-          .read(key: SecureStorageKeys.instanceURLKey);
-      final token = await ref
-          .read(flutterSecureStorage)
-          .read(key: SecureStorageKeys.accessTokenKey);
-
-      if (url == null || token == null) return false;
-
-      final user =
-          await ref.read(authServiceProvider).loginWithAccessToken(url, token);
-      await ref.read(authServiceProvider).saveUser(user);
-
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
   @override
   FutureOr<AuthState> build() async {
     final user = await ref.read(authServiceProvider).getUser();
@@ -157,24 +122,15 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
     if (isLoginCredentialValid) {
       return AuthState(
-        authorizationStatus: AuthorizationStatus.authorized,
+        isLoggedIn: true,
         authenticationStatus: authStatus,
         loginLoading: false,
         user: user,
       );
     }
 
-    final oldLoginCredentialExists = await _doesOldLoginExist();
-    if (oldLoginCredentialExists) {
-      return AuthState(
-        authorizationStatus: AuthorizationStatus.authorized,
-        authenticationStatus: authStatus,
-        loginLoading: false,
-      );
-    }
-
     return AuthState(
-      authorizationStatus: AuthorizationStatus.addyLogin,
+      isLoggedIn: false,
       authenticationStatus: authStatus,
       loginLoading: false,
     );

@@ -3,7 +3,6 @@ import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/error_screen.dart';
 import 'package:anonaddy/features/auth/presentation/loading_screen.dart';
 import 'package:anonaddy/features/auth/presentation/lock_screen.dart';
-import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
 import 'package:anonaddy/features/home/presentation/home_screen.dart';
 import 'package:anonaddy/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,75 +32,64 @@ class AuthScreen extends ConsumerWidget {
 
     return authNotifier.when(
       data: (authState) {
-        switch (authState.authorizationStatus) {
-          /// [SecureApplication] package isn't available for MacOS.
-          ///
-          /// Manages when a logged in user is found
-          case AuthorizationStatus.authorized:
-            switch (authState.authenticationStatus) {
-              case AuthenticationStatus.enabled:
+        if (!authState.isLoggedIn) {
+          return const OnboardingScreen(key: authScreenAnonAddyLoginScreen);
+        }
 
-                /// Enables app security
-                /// Disables screenshot and blocks app view on Recent Apps
-                return SecureApplication(
-                  nativeRemoveDelay: 0,
-                  child: Builder(
-                    builder: (context) {
-                      /// Access secureApp provider to control its state
-                      final secureAppProvider =
-                          SecureApplicationProvider.of(context)!;
+        switch (authState.authenticationStatus) {
+          case AuthenticationStatus.enabled:
 
-                      /// Blocks app view on Recent Apps and prevents screenshot/screen recording
-                      secureAppProvider.secure();
+            /// Enables app security
+            /// Disables screenshot and blocks app view on Recent Apps
+            return SecureApplication(
+              nativeRemoveDelay: 0,
+              child: Builder(
+                builder: (context) {
+                  /// Access secureApp provider to control its state
+                  final secureAppProvider =
+                      SecureApplicationProvider.of(context)!;
 
-                      /// Prevents app from locking if users switches to another app and comes back
-                      secureAppProvider.pause();
+                  /// Blocks app view on Recent Apps and prevents screenshot/screen recording
+                  secureAppProvider.secure();
 
-                      /// Locks app and requires authentication
-                      secureAppProvider.lock();
+                  /// Prevents app from locking if users switches to another app and comes back
+                  secureAppProvider.pause();
 
-                      return SecureGate(
-                        blurr: 20,
-                        opacity: 0.6,
-                        child: const LockScreen(),
-                        lockedBuilder: (context, secureNotifier) {
-                          return const LockScreen();
-                        },
-                      );
+                  /// Locks app and requires authentication
+                  secureAppProvider.lock();
+
+                  return SecureGate(
+                    blurr: 20,
+                    opacity: 0.6,
+                    child: const LockScreen(),
+                    lockedBuilder: (context, secureNotifier) {
+                      return const LockScreen();
                     },
-                  ),
-                );
+                  );
+                },
+              ),
+            );
 
-              case AuthenticationStatus.disabled:
+          case AuthenticationStatus.disabled:
 
-                /// Enables app security
-                /// Disables screenshot and blocks app view on Recent Apps
-                return SecureApplication(
-                  nativeRemoveDelay: 0,
-                  child: Builder(
-                    builder: (context) {
-                      /// Access secureApp provider to control its state
-                      final secureAppProvider =
-                          SecureApplicationProvider.of(context)!;
-                      secureAppProvider.secure();
-                      secureAppProvider.pause();
-                      return const HomeScreen();
-                    },
-                  ),
-                );
+            /// Enables app security
+            /// Disables screenshot and blocks app view on Recent Apps
+            return SecureApplication(
+              nativeRemoveDelay: 0,
+              child: Builder(
+                builder: (context) {
+                  /// Access secureApp provider to control its state
+                  final secureAppProvider =
+                      SecureApplicationProvider.of(context)!;
+                  secureAppProvider.secure();
+                  secureAppProvider.pause();
+                  return const HomeScreen();
+                },
+              ),
+            );
 
-              case AuthenticationStatus.unavailable:
-                return const HomeScreen(key: authScreenHomeScreen);
-            }
-
-          /// Manages when a user has logged out or no logged in user found.
-          case AuthorizationStatus.addyLogin:
-            return const OnboardingScreen(key: authScreenAnonAddyLoginScreen);
-
-          /// Manages when a user has logged out or no logged in user found.
-          case AuthorizationStatus.selfHostedLogin:
-            return const SelfHostLoginScreen(
-                key: authScreenSelfHostedLoginScreen);
+          case AuthenticationStatus.unavailable:
+            return const HomeScreen(key: authScreenHomeScreen);
         }
       },
       error: (error, _) {

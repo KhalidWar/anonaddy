@@ -1,18 +1,5 @@
 import 'package:anonaddy/features/auth/domain/user.dart';
 
-/// Manages user flow status
-enum AuthorizationStatus {
-  /// When user logs in successfully and/or user account has been fetched from
-  /// device storage.
-  authorized,
-
-  /// When user decides to log in with addy.io account.
-  addyLogin,
-
-  /// When user decides to log in with a self hosted instance.
-  selfHostedLogin,
-}
-
 /// Manages app biometric authentication lock status.
 enum AuthenticationStatus {
   /// When user has enabled biometric auth and app requires biometric
@@ -29,30 +16,30 @@ enum AuthenticationStatus {
 
 class AuthState {
   const AuthState({
-    required this.authorizationStatus,
+    required this.isLoggedIn,
     required this.authenticationStatus,
     required this.loginLoading,
     this.user,
   });
 
-  final AuthorizationStatus authorizationStatus;
+  final bool isLoggedIn;
   final AuthenticationStatus authenticationStatus;
   final bool loginLoading;
   final User? user;
 
   @override
   String toString() {
-    return 'AuthState{authorizationStatus: $authorizationStatus, authenticationStatus: $authenticationStatus, loginLoading: $loginLoading, user: $user}';
+    return 'AuthState{isLoggedIn: $isLoggedIn, authenticationStatus: $authenticationStatus, loginLoading: $loginLoading, user: $user}';
   }
 
   AuthState copyWith({
-    AuthorizationStatus? authorizationStatus,
+    bool? isLoggedIn,
     AuthenticationStatus? authenticationStatus,
     bool? loginLoading,
     User? user,
   }) {
     return AuthState(
-      authorizationStatus: authorizationStatus ?? this.authorizationStatus,
+      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
       authenticationStatus: authenticationStatus ?? this.authenticationStatus,
       loginLoading: loginLoading ?? this.loginLoading,
       user: user ?? this.user,

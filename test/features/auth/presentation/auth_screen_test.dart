@@ -33,7 +33,7 @@ void main() {
     'Then display LoadingScreen.',
     (tester) async {
       const authState = AuthState(
-        authorizationStatus: AuthorizationStatus.addyLogin,
+        isLoggedIn: AuthorizationStatus.addyLogin,
         authenticationStatus: AuthenticationStatus.disabled,
         loginLoading: false,
       );
@@ -57,7 +57,7 @@ void main() {
     'Then display AnonAddyLoginScreen.',
     (WidgetTester tester) async {
       const authState = AuthState(
-        authorizationStatus: AuthorizationStatus.selfHostedLogin,
+        isLoggedIn: AuthorizationStatus.selfHostedLogin,
         authenticationStatus: AuthenticationStatus.disabled,
         loginLoading: false,
       );
