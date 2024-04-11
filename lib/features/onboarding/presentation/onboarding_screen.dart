@@ -1,5 +1,6 @@
 import 'package:anonaddy/features/auth/presentation/addy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
+import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_description.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_image.dart';
 import 'package:anonaddy/features/onboarding/presentation/onboarding_pages.dart';
@@ -63,8 +64,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   Utilities.buildWoltModalSheetSubPage(
                     context,
                     topBarTitle: 'Self Hosted Instance Login',
-                    pageTitle: AppStrings.accessTokenRequired,
-                    child: const SelfHostLoginScreen(),
+                    pageTitle:
+                        'AddyManager fully supports self-hosted instances',
+                    child: const MonetizationPaywall(
+                      showListTimeShimmer: false,
+                      child: SelfHostLoginScreen(),
+                    ),
                   ),
                 ];
               },

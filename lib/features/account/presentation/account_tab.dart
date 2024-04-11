@@ -1,5 +1,6 @@
 import 'package:anonaddy/features/account/presentation/components/account_tab_header.dart';
 import 'package:anonaddy/features/domains/presentation/domains_tab.dart';
+import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:anonaddy/features/recipients/presentation/recipients_tab.dart';
 import 'package:anonaddy/features/rules/presentation/rules_tab.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_tab.dart';
@@ -56,7 +57,9 @@ class AccountTab extends StatelessWidget {
               RecipientsTab(),
               UsernamesTab(),
               PaidFeatureBlocker(child: DomainsTab()),
-              PaidFeatureBlocker(child: RulesTab()),
+              PaidFeatureBlocker(
+                child: MonetizationPaywall(child: RulesTab()),
+              ),
             ],
           ),
         ),
