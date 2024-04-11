@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:anonaddy/features/monetization/presentation/controller/monetization_notifier.dart';
 import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:anonaddy/shared_components/error_message_widget.dart';
@@ -12,11 +10,11 @@ class MonetizationPaywall extends ConsumerStatefulWidget {
   const MonetizationPaywall({
     super.key,
     required this.child,
-    this.loadingWidget,
+    this.showListTimeShimmer = true,
   });
 
   final Widget child;
-  final Widget? loadingWidget;
+  final bool showListTimeShimmer;
 
   @override
   ConsumerState createState() => _MonetizationPaywallState();
@@ -30,31 +28,36 @@ class _MonetizationPaywallState extends ConsumerState<MonetizationPaywall> {
     return monetizationAsync.when(
       data: (showPaywall) {
         if (showPaywall) {
-          return Stack(
-            fit: StackFit.loose,
-            children: [
-              Positioned.fill(
-                child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                  child: IgnorePointer(child: widget.child),
+          return Container(
+            height: 240,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Please upgrade to unlock this premium feature.\nYour subscriptions will help us maintain and improve this app. Thank you!',
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              Center(
-                child: SizedBox(
-                  height: 50,
-                  width: 200,
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: 160,
                   child: PlatformButton(
-                    child: Text(
-                      'Show Paywall',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    onPress: () => ref
+                    onPress: ref
                         .read(monetizationNotifierProvider.notifier)
-                        .showPaywall(),
+                        .showPaywall,
+                    child: Text(
+                      'Upgrade now!',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }
 
@@ -64,7 +67,13 @@ class _MonetizationPaywallState extends ConsumerState<MonetizationPaywall> {
         message: AppStrings.failedToLoadSubscriptionData,
       ),
       loading: () {
-        return widget.loadingWidget ?? const RecipientsShimmerLoading();
+        return widget.showListTimeShimmer
+            ? const RecipientsShimmerLoading()
+            : const SizedBox(
+                height: 200,
+                width: 200,
+                child: PlatformLoadingIndicator(),
+              );
       },
     );
   }
