@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:anonaddy/features/monetization/data/monetization_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:purchases_ui_flutter/paywall_result.dart';
 
 final monetizationNotifierProvider =
     AsyncNotifierProvider.autoDispose<MonetizationNotifier, bool>(
@@ -14,8 +15,19 @@ class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
     await service.showPaywallIfNeeded('monthly');
   }
 
-  Future<void> showPaywall() async {
-    await ref.read(monetizationServiceProvider).showPaywall();
+  Future<bool> showPaywall() async {
+    try {
+      final paymentResult =
+          await ref.read(monetizationServiceProvider).showPaywall();
+
+      if (paymentResult == PaywallResult.purchased ||
+          paymentResult == PaywallResult.restored) {
+        return false;
+      }
+      return true;
+    } catch (_) {
+      return true;
+    }
   }
 
   @override
@@ -31,8 +43,7 @@ class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
     log('customerInfo: $customerInfo');
 
     if (customerInfo.entitlements.active.isEmpty) {
-      await showPaywall();
-      return true;
+      return await showPaywall();
     }
 
     /// Whether to show the paywall or not.
