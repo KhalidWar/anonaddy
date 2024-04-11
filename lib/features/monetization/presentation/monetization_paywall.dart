@@ -49,10 +49,10 @@ class _MonetizationPaywallState extends ConsumerState<MonetizationPaywall> {
                         .showPaywall,
                     child: Text(
                       'Upgrade now!',
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                     ),
                   ),
                 ),
