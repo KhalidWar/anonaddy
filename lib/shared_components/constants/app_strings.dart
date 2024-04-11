@@ -115,13 +115,14 @@ class AppStrings {
       'Addy.io\'s terminologies...etc.';
   static const settingsAddyFAQ = 'Addy.io FAQ';
   static const settingsAddyFAQSubtitle = 'Learn more about addy.io';
-  static const settingsAboutApp = 'About App';
-  static const settingsAboutAppSubtitle = 'View AddyManager details';
+  static const settingsAboutApp = 'About AddyManager';
+  static const settingsAboutAppSubtitle =
+      'App version, links, privacy report, etc.';
   static const settingsEnjoyingApp = 'Enjoying AddyManager?';
   static const settingsEnjoyingAppSubtitle = 'Tap to rate it on the App Store';
   static const settingsLogout = 'Logout';
   static const settingsLogoutSubtitle = 'All app data will be deleted';
-  static const appVersion = 'App Version';
+  static const appVersion = 'Your self-hosted instance version';
 
   /// Alert Center
   static const alertCenter = 'Alert Center';
