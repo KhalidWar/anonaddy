@@ -24,6 +24,7 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
       await ref
           .read(authStateNotifier.notifier)
           .loginWithAccessToken(_url, _token);
+      if (mounted) Navigator.of(context).pop();
     }
   }
 
@@ -47,11 +48,12 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                   ),
                   const SizedBox(height: 4),
                   TextFormField(
+                    autofillHints: const [AutofillHints.url],
                     key: const Key('selfHostedLoginScreenUrlInputField'),
                     validator: FormValidator.requiredField,
                     onChanged: (input) => _url = input,
                     textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.multiline,
+                    keyboardType: TextInputType.url,
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -69,12 +71,13 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
                   ),
                   const SizedBox(height: 4),
                   TextFormField(
+                    obscureText: true,
+                    autofillHints: const [AutofillHints.password],
                     key: const Key('selfHostedLoginScreenTokenInputField'),
                     validator: FormValidator.requiredField,
                     onChanged: (input) => _token = input,
                     onFieldSubmitted: (input) => login(),
                     textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
