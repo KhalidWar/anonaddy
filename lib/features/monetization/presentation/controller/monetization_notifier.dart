@@ -15,18 +15,19 @@ class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
     await service.showPaywallIfNeeded('monthly');
   }
 
-  Future<bool> showPaywall() async {
+  Future<void> showPaywall() async {
     try {
       final paymentResult =
           await ref.read(monetizationServiceProvider).showPaywall();
 
       if (paymentResult == PaywallResult.purchased ||
           paymentResult == PaywallResult.restored) {
-        return false;
+        state = const AsyncData(false);
+        return;
       }
-      return true;
+      state = const AsyncData(true);
     } catch (_) {
-      return true;
+      state = const AsyncData(true);
     }
   }
 
@@ -43,7 +44,16 @@ class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
     log('customerInfo: $customerInfo');
 
     if (customerInfo.entitlements.active.isEmpty) {
-      return await showPaywall();
+      return await ref
+          .read(monetizationServiceProvider)
+          .showPaywall()
+          .then((paymentResult) {
+        if (paymentResult == PaywallResult.purchased ||
+            paymentResult == PaywallResult.restored) {
+          return false;
+        }
+        return true;
+      });
     }
 
     /// Whether to show the paywall or not.
