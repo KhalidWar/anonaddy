@@ -37,6 +37,6 @@ class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
 
     /// Whether to show the paywall or not.
     /// Default is to not show the paywall.
-    return true;
+    return false;
   }
 }
