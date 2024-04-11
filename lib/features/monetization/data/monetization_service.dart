@@ -15,9 +15,7 @@ enum RevenueCatEntitlements {
 
 enum RevenueCatProducts {
   iOSMonthly('monthly'),
-  iOSAnnually('annually'),
-  androidMonthly('monthly:monthly'),
-  androidAnnually('annually:annually');
+  iOSAnnually('annually');
 
   const RevenueCatProducts(this.value);
   final String value;
