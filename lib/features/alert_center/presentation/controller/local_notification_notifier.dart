@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:anonaddy/features/alert_center/domain/local_notification.dart';
+import 'package:anonaddy/features/app_version/data/app_version_service.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,8 +11,8 @@ final localNotificationNotifierProvider = AsyncNotifierProvider.autoDispose<
 
 class LocalNotificationNotifier
     extends AutoDisposeAsyncNotifier<List<LocalNotification>> {
-  Future<LocalNotification?> checkAccessTokenExpiration() async {
-    final user = ref.watch(authStateNotifier).value!.user!;
+  Future<LocalNotification?> getAccessTokenExpiryNotification() async {
+    final user = ref.read(authStateNotifier).value!.user!;
     final apiTokenExpirationDate = user.apiToken.expiresAt;
 
     if (apiTokenExpirationDate == null) return null;
@@ -32,12 +33,36 @@ class LocalNotificationNotifier
     return null;
   }
 
+  Future<LocalNotification?> getAppVersionNotification() async {
+    final latestAppVersion =
+        await ref.read(appVersionService).fetchLatestAddyAppVersion();
+    final currentAppVersion =
+        await ref.read(appVersionService).getAppVersionData();
+    final formattedCurrentVersion = 'v${currentAppVersion.version}';
+
+    if (formattedCurrentVersion != latestAppVersion) {
+      return LocalNotification(
+        title: 'Self-hosted instance version is available!',
+        subtitle: 'Update to latest version ',
+        payload: '',
+        dismissable: false,
+      );
+    }
+    return null;
+  }
+
   @override
   FutureOr<List<LocalNotification>> build() async {
-    final tokenExpirationNotification = await checkAccessTokenExpiration();
+    final locationNotifications = <LocalNotification>[];
 
-    if (tokenExpirationNotification == null) return [];
+    final tokenExpiryNotification = await getAccessTokenExpiryNotification();
+    final appVersionNotification = await getAppVersionNotification();
 
-    return [tokenExpirationNotification];
+    locationNotifications.addAll([
+      if (tokenExpiryNotification != null) tokenExpiryNotification,
+      if (appVersionNotification != null) appVersionNotification,
+    ]);
+
+    return locationNotifications;
   }
 }
