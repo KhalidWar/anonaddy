@@ -29,8 +29,7 @@ class User {
 }
 
 extension UserExtension on User {
-  bool get isOfficialInstance =>
-      url == 'app.anonaddy.com' || url == 'app.addy.io';
+  bool get isSelfHosting => url != 'app.addy.io';
 
   bool get hasTokenExpired =>
       apiToken.expiresAt != null &&
