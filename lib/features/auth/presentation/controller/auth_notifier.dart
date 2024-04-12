@@ -5,6 +5,7 @@ import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
+import 'package:anonaddy/features/monetization/presentation/controller/monetization_notifier.dart';
 import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
 import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:anonaddy/utilities/flutter_secure_storage.dart';
@@ -121,6 +122,17 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     final authStatus = await _getBioAuthState();
 
     if (isLoginCredentialValid) {
+      if (user!.isSelfHosting) {
+        final showPaywall = await ref.read(monetizationNotifierProvider.future);
+        if (showPaywall) {
+          return AuthState(
+            isLoggedIn: false,
+            authenticationStatus: authStatus,
+            loginLoading: false,
+          );
+        }
+      }
+
       return AuthState(
         isLoggedIn: true,
         authenticationStatus: authStatus,
