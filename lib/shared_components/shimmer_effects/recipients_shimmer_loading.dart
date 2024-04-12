@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class RecipientsShimmerLoading extends StatelessWidget {
-  const RecipientsShimmerLoading({Key? key}) : super(key: key);
+  const RecipientsShimmerLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Shimmer.fromColors(
@@ -16,7 +15,7 @@ class RecipientsShimmerLoading extends StatelessWidget {
       child: ListView.builder(
         padding: const EdgeInsets.all(0),
         physics: const ClampingScrollPhysics(),
-        itemCount: 12,
+        itemCount: 8,
         itemBuilder: (_, __) {
           return ListTile(
             dense: true,
@@ -41,9 +40,7 @@ class RecipientsShimmerLoading extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: size.width * 0.2),
-                ),
+                const Padding(padding: EdgeInsets.only(left: 16)),
               ],
             ),
             subtitle: Row(
@@ -54,9 +51,7 @@ class RecipientsShimmerLoading extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(left: size.width * 0.45),
-                ),
+                const Padding(padding: EdgeInsets.only(left: 120)),
               ],
             ),
           );

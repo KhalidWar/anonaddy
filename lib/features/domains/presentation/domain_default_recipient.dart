@@ -10,9 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DomainDefaultRecipient extends ConsumerStatefulWidget {
   const DomainDefaultRecipient({
-    Key? key,
+    super.key,
     required this.domain,
-  }) : super(key: key);
+  });
+
   final Domain domain;
 
   @override

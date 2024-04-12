@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class RecipientsTab extends ConsumerStatefulWidget {
-  const RecipientsTab({Key? key}) : super(key: key);
+  const RecipientsTab({super.key});
 
   @override
   ConsumerState createState() => _RecipientTabState();
@@ -22,7 +22,8 @@ class RecipientsTab extends ConsumerStatefulWidget {
 
 class _RecipientTabState extends ConsumerState<RecipientsTab> {
   void addNewRecipient(BuildContext context) {
-    final accountState = ref.read(accountNotifierProvider).value!;
+    final accountState = ref.read(accountNotifierProvider).value;
+    if (accountState == null) return;
 
     /// Draws UI for adding new recipient
     Future<void> buildAddNewRecipient() async {

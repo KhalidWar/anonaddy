@@ -2,7 +2,7 @@ import 'package:anonaddy/shared_components/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class EmptyListAliasTabWidget extends StatelessWidget {
-  const EmptyListAliasTabWidget({Key? key}) : super(key: key);
+  const EmptyListAliasTabWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class EmptyListAliasTabWidget extends StatelessWidget {
     return Center(
       child: Text(
         'It doesn\'t look like you have any aliases yet!',
-        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: isDark ? Colors.white : AppColors.primaryColor,
             ),
       ),

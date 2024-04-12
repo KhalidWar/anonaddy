@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class AliasScreenListTile extends StatelessWidget {
   const AliasScreenListTile({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     required this.leadingIconData,
     required this.trailing,
-  }) : super(key: key);
+  });
 
   final String title;
   final String subtitle;
@@ -29,7 +29,7 @@ class AliasScreenListTile extends StatelessWidget {
                 Text(title),
                 Text(
                   subtitle,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),

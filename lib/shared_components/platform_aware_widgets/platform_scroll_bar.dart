@@ -3,7 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PlatformScrollbar extends PlatformAware {
-  const PlatformScrollbar({Key? key, required this.child}) : super(key: key);
+  const PlatformScrollbar({
+    super.key,
+    required this.child,
+  });
+
   final Widget child;
 
   @override

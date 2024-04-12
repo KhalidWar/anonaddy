@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class AlertHeader extends StatelessWidget {
   const AlertHeader({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
-  }) : super(key: key);
+  });
+
   final String title;
   final String subtitle;
 
@@ -16,12 +17,12 @@ class AlertHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const Divider(),
         Text(
           subtitle,
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 10),
       ],

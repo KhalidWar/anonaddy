@@ -2,7 +2,7 @@ import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class RecipientsNote extends StatelessWidget {
-  const RecipientsNote({Key? key}) : super(key: key);
+  const RecipientsNote({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class RecipientsNote extends StatelessWidget {
           SizedBox(height: size.height * 0.01),
           Text(
             AppStrings.updateAliasRecipientNote,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),

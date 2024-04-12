@@ -24,9 +24,9 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class UsernamesScreen extends ConsumerStatefulWidget {
   const UsernamesScreen({
-    Key? key,
+    super.key,
     required this.usernameId,
-  }) : super(key: key);
+  });
 
   final String usernameId;
 
@@ -109,8 +109,8 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
                 username.username,
                 style: Theme.of(context)
                     .textTheme
-                    .headline6!
-                    .copyWith(fontWeight: FontWeight.bold),
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -159,7 +159,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
                 children: [
                   Text(
                     'Default Recipient',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   IconButton(
                     icon: const Icon(Icons.edit_outlined),

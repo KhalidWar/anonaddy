@@ -11,8 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class QuickSearchScreen extends ConsumerStatefulWidget {
   const QuickSearchScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static const routeName = 'quickSearchScreen';
 
@@ -139,12 +139,10 @@ class _QuickSearchScreenState extends ConsumerState<QuickSearchScreen> {
 
 class _SearchAppBar extends AppBar {
   _SearchAppBar({
-    Key? key,
     required this.inputField,
     required Function() leadingOnPress,
     required Widget trailing,
   }) : super(
-          key: key,
           title: inputField,
           backgroundColor: AppColors.primaryColor,
           elevation: 0,

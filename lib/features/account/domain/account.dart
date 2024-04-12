@@ -5,7 +5,7 @@ part 'account.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Account {
-  Account({
+  const Account({
     this.id = '',
     this.username = '',
     this.fromName = '',
@@ -26,6 +26,8 @@ class Account {
     this.activeDomainLimit = 0,
     this.aliasCount = 0,
     this.aliasLimit = 0,
+    this.activeRuleCount = 0,
+    this.activeRuleLimit = 0,
     this.totalEmailsForwarded = 0,
     this.totalEmailsBlocked = 0,
     this.totalEmailsReplied = 0,
@@ -89,6 +91,12 @@ class Account {
   @JsonKey(name: 'active_shared_domain_alias_limit')
   final int aliasLimit;
 
+  @JsonKey(name: 'active_rule_count')
+  final int activeRuleCount;
+
+  @JsonKey(name: 'active_rule_limit')
+  final int activeRuleLimit;
+
   @JsonKey(name: 'total_emails_forwarded')
   final int totalEmailsForwarded;
 
@@ -137,6 +145,8 @@ class Account {
           activeDomainLimit == other.activeDomainLimit &&
           aliasCount == other.aliasCount &&
           aliasLimit == other.aliasLimit &&
+          activeRuleCount == other.activeRuleCount &&
+          activeRuleLimit == other.activeRuleLimit &&
           totalEmailsForwarded == other.totalEmailsForwarded &&
           totalEmailsBlocked == other.totalEmailsBlocked &&
           totalEmailsReplied == other.totalEmailsReplied &&
@@ -166,6 +176,8 @@ class Account {
       activeDomainLimit.hashCode ^
       aliasCount.hashCode ^
       aliasLimit.hashCode ^
+      activeRuleCount.hashCode ^
+      activeRuleLimit.hashCode ^
       totalEmailsForwarded.hashCode ^
       totalEmailsBlocked.hashCode ^
       totalEmailsReplied.hashCode ^
@@ -175,7 +187,7 @@ class Account {
 
   @override
   String toString() {
-    return 'Account{id: $id, username: $username, fromName: $fromName, emailSubject: $emailSubject, bannerLocation: $bannerLocation, bandwidth: $bandwidth, bandwidthLimit: $bandwidthLimit, usernameCount: $usernameCount, usernameLimit: $usernameLimit, defaultRecipientId: $defaultRecipientId, defaultAliasDomain: $defaultAliasDomain, defaultAliasFormat: $defaultAliasFormat, subscription: $subscription, subscriptionEndAt: $subscriptionEndAt, recipientCount: $recipientCount, recipientLimit: $recipientLimit, activeDomainCount: $activeDomainCount, activeDomainLimit: $activeDomainLimit, aliasCount: $aliasCount, aliasLimit: $aliasLimit, totalEmailsForwarded: $totalEmailsForwarded, totalEmailsBlocked: $totalEmailsBlocked, totalEmailsReplied: $totalEmailsReplied, totalEmailsSent: $totalEmailsSent, createdAt: $createdAt, lastUpdated: $updatedAt}';
+    return 'Account{id: $id, username: $username, fromName: $fromName, emailSubject: $emailSubject, bannerLocation: $bannerLocation, bandwidth: $bandwidth, bandwidthLimit: $bandwidthLimit, usernameCount: $usernameCount, usernameLimit: $usernameLimit, defaultRecipientId: $defaultRecipientId, defaultAliasDomain: $defaultAliasDomain, defaultAliasFormat: $defaultAliasFormat, subscription: $subscription, subscriptionEndAt: $subscriptionEndAt, recipientCount: $recipientCount, recipientLimit: $recipientLimit, activeDomainCount: $activeDomainCount, activeDomainLimit: $activeDomainLimit, aliasCount: $aliasCount, aliasLimit: $aliasLimit, activeRuleCount: $activeRuleCount, activeRuleLimit: $activeRuleLimit, totalEmailsForwarded: $totalEmailsForwarded, totalEmailsBlocked: $totalEmailsBlocked, totalEmailsReplied: $totalEmailsReplied, totalEmailsSent: $totalEmailsSent, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }
 
@@ -189,4 +201,6 @@ extension AccountExtension on Account {
   bool get hasUsernamesReachedLimit => usernameCount == usernameLimit;
 
   bool get hasDomainsReachedLimit => recipientCount == recipientLimit;
+
+  bool get hasReachedRulesLimit => activeRuleCount == activeRuleLimit;
 }

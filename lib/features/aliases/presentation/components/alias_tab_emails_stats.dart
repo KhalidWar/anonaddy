@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasTabEmailsStats extends ConsumerWidget {
-  const AliasTabEmailsStats({Key? key}) : super(key: key);
+  const AliasTabEmailsStats({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,12 +43,12 @@ class AliasTabEmailsStats extends ConsumerWidget {
 
 class AliasTabEmailsPieChart extends StatelessWidget {
   const AliasTabEmailsPieChart({
-    Key? key,
+    super.key,
     required this.emailsForwarded,
     required this.emailsBlocked,
     required this.emailsReplied,
     required this.emailsSent,
-  }) : super(key: key);
+  });
 
   final int emailsForwarded;
   final int emailsBlocked;

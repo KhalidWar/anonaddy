@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ErrorMessageWidget extends StatelessWidget {
   const ErrorMessageWidget({
-    Key? key,
+    super.key,
     required this.message,
     this.messageColor,
-  }) : super(key: key);
+  });
 
   final String message;
   final Color? messageColor;
@@ -17,7 +17,7 @@ class ErrorMessageWidget extends StatelessWidget {
         message,
         style: Theme.of(context)
             .textTheme
-            .bodyText1
+            .bodyLarge
             ?.copyWith(color: messageColor),
       ),
     );

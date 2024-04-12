@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoadingScreen extends ConsumerStatefulWidget {
-  const LoadingScreen({Key? key}) : super(key: key);
+  const LoadingScreen({super.key});
 
   static const loadingScreenScaffold = Key('loadingScreenScaffold');
   static const loadingScreenAppLogo = Key('loadingScreenAppLogo');
@@ -74,7 +74,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen> {
                       const SizedBox(height: 10),
                       Text(
                         errorNote,
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
                       Container(

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AppVersion extends ConsumerWidget {
-  const AppVersion({Key? key}) : super(key: key);
+  const AppVersion({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +26,7 @@ class AppVersion extends ConsumerWidget {
                     dense: true,
                     title: Text(
                       'v${appData.version}',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     subtitle: const Text(AppStrings.appVersion),
                     trailing: const Icon(Icons.info_outlined),

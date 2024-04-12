@@ -11,9 +11,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UsernameDefaultRecipientScreen extends ConsumerStatefulWidget {
   const UsernameDefaultRecipientScreen({
-    Key? key,
+    super.key,
     required this.username,
-  }) : super(key: key);
+  });
+
   final Username username;
 
   @override

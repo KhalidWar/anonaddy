@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 
 class RecipientScreenTrailingLoadingSwitch extends StatelessWidget {
   const RecipientScreenTrailingLoadingSwitch({
-    Key? key,
+    super.key,
     required this.isLoading,
     required this.switchValue,
     this.onPress,
-  }) : super(key: key);
+  });
+
   final bool isLoading;
   final bool switchValue;
   final Function(bool)? onPress;

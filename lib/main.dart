@@ -8,6 +8,10 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+const revenueCatAndroidAPIKey =
+    String.fromEnvironment('revenue-cat-android-api-key');
+const revenueCatIOSAPIKey = String.fromEnvironment('revenue-cat-ios-api-key');
+
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
@@ -15,8 +19,11 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   const secureStorage = FlutterSecureStorage();
-  await StartupMethods.initHiveAdapters();
   await StartupMethods.handleAppUpdate(secureStorage);
+  await StartupMethods.configureRevenueCat(
+    androidApiKey: revenueCatAndroidAPIKey,
+    iOSApiKey: revenueCatIOSAPIKey,
+  );
 
   /// Removes SplashScreen
   FlutterNativeSplash.remove();

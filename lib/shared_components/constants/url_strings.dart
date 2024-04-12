@@ -14,6 +14,10 @@ const kAddyManagerAppStoreURL =
 
 /// AddyManager URLs
 const kAddyManagerRepoURL = 'https://github.com/KhalidWar/anonaddy';
+const kAddyManagerPrivacyPolicy =
+    'https://github.com/KhalidWar/anonaddy/blob/master/privacy_policy.md';
+const kAddyManagerTermsAndConditions =
+    'https://github.com/KhalidWar/anonaddy/blob/master/terms_and_conditions.md';
 const kAddyManagerIssuesURL = 'https://github.com/KhalidWar/anonaddy/issues';
 const kAddyManagerLicenseURL =
     'https://github.com/KhalidWar/anonaddy/blob/master/LICENSE';

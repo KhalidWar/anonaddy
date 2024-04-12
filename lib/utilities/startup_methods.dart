@@ -1,29 +1,16 @@
-import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/features/auth/domain/profile.dart';
-import 'package:anonaddy/features/recipients/domain/recipient.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'dart:io';
+
+import 'package:anonaddy/shared_components/constants/changelog_storage_key.dart';
 import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 class StartupMethods {
-  /// Initializes [Hive] and its adapters.
-  static Future<void> initHiveAdapters() async {
-    try {
-      await Hive.initFlutter();
-
-      Hive.registerAdapter(AliasAdapter());
-      Hive.registerAdapter(RecipientAdapter());
-      Hive.registerAdapter(ProfileAdapter());
-    } catch (error) {
-      return;
-    }
-  }
-
   /// Does housekeeping after app is updated. Does nothing otherwise.
   static Future<void> handleAppUpdate(
-      FlutterSecureStorage secureStorage) async {
+    FlutterSecureStorage secureStorage,
+  ) async {
     /// Fetch stored old app version from device storage.
     final oldAppVersion = await _getOldAppVersion(secureStorage);
 
@@ -47,6 +34,31 @@ class StartupMethods {
       /// Deletes stored offline data after an app has been updated.
       /// This is to prevent bugs that may arise from conflicting stored data scheme.
       await _deleteOfflineData(secureStorage);
+    }
+  }
+
+  static Future<void> configureRevenueCat({
+    required String androidApiKey,
+    required String iOSApiKey,
+  }) async {
+    try {
+      await Purchases.setLogLevel(LogLevel.debug);
+
+      PurchasesConfiguration? configuration;
+
+      if (Platform.isAndroid) {
+        configuration = PurchasesConfiguration(androidApiKey);
+      }
+
+      if (Platform.isIOS) {
+        configuration = PurchasesConfiguration(iOSApiKey);
+      }
+
+      if (configuration != null) {
+        await Purchases.configure(configuration);
+      }
+    } catch (_) {
+      return;
     }
   }
 

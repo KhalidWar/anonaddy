@@ -22,9 +22,9 @@ import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class RecipientsScreen extends ConsumerStatefulWidget {
   const RecipientsScreen({
-    Key? key,
+    super.key,
     required this.recipient,
-  }) : super(key: key);
+  });
   final Recipient recipient;
 
   static const routeName = 'recipientDetailedScreen';
@@ -136,7 +136,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       'Actions',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   RecipientScreenActionsListTile(
@@ -176,7 +176,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Text(
                       'Encryption',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   RecipientScreenActionsListTile(

@@ -109,6 +109,11 @@ class Utilities {
     }
   }
 
+  static String pluralize(int count, String singular, [String? plural]) {
+    plural ??= '${singular}s';
+    return count == 1 ? singular : plural;
+  }
+
   static WoltModalSheetPage buildWoltModalSheetSubPage(
     BuildContext context, {
     required String topBarTitle,
@@ -132,7 +137,7 @@ class Utilities {
       pageTitle: pageTitle == null
           ? null
           : Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Text(
                 pageTitle,
                 style: Theme.of(context).textTheme.bodySmall,

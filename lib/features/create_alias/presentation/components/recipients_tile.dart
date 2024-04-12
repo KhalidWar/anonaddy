@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class RecipientsTile extends StatelessWidget {
   const RecipientsTile({
-    Key? key,
+    super.key,
     required this.email,
     required this.isSelected,
     required this.onPress,
-  }) : super(key: key);
+  });
   final String email;
   final bool isSelected;
   final Function onPress;
@@ -23,7 +23,7 @@ class RecipientsTile extends StatelessWidget {
         style: TextStyle(
           color: isSelected
               ? Colors.black
-              : Theme.of(context).textTheme.bodyText1!.color,
+              : Theme.of(context).textTheme.bodyLarge?.color,
         ),
       ),
       onTap: () => onPress(),

@@ -73,7 +73,7 @@ class AppStrings {
   /// Usernames
   static const addNewDomain = 'Add New Domain';
   static const addNewUsername = 'Add New Username';
-  static const addUsername = 'Add Username';
+  static const addUsername = 'Add New Username';
   static const noAdditionalUsernamesFound = 'No usernames found';
 
   /// Domain
@@ -85,6 +85,7 @@ class AppStrings {
   /// Rules
   static const noRulesFound = 'No rules found';
   static const enrollRulesBetaTesting = 'Enroll in Rules BETA testing';
+  static const addNewRule = 'Add New Rule';
 
   /// Search Tab
   static const quickSearch = 'Quick Search';
@@ -114,13 +115,14 @@ class AppStrings {
       'Addy.io\'s terminologies...etc.';
   static const settingsAddyFAQ = 'Addy.io FAQ';
   static const settingsAddyFAQSubtitle = 'Learn more about addy.io';
-  static const settingsAboutApp = 'About App';
-  static const settingsAboutAppSubtitle = 'View AddyManager details';
+  static const settingsAboutApp = 'About AddyManager';
+  static const settingsAboutAppSubtitle =
+      'App version, links, privacy report, etc.';
   static const settingsEnjoyingApp = 'Enjoying AddyManager?';
   static const settingsEnjoyingAppSubtitle = 'Tap to rate it on the App Store';
   static const settingsLogout = 'Logout';
   static const settingsLogoutSubtitle = 'All app data will be deleted';
-  static const appVersion = 'App Version';
+  static const appVersion = 'Your self-hosted instance version';
 
   /// Alert Center
   static const alertCenter = 'Alert Center';
@@ -134,16 +136,14 @@ class AppStrings {
   /// Login Screen
   static const enterAccessToken = 'Enter Access Token';
   static const whatsAccessToken = 'What is Access Token?';
-  static const accessTokenDefinition =
-      'Access Token is a long string of alphanumeric characters used to access an account without giving away the account\'s username and password.';
   static const accessTokenRequired =
-      'To access your Addy.io account, you\'ll have to provide your own Access Token.';
+      'To access your Addy.io account, you\'ll have to provide your own Access Token which is a long string of alphanumeric characters used to access an account without giving away the account\'s username and password.';
   static const howToGetAccessToken = 'How to get Access Token?';
   static const howToGetAccessToken1 = '1. Login to your Addy.io account';
   static const howToGetAccessToken2 = '2. Go to Settings';
   static const howToGetAccessToken3 = '3. Scroll down to API section';
   static const howToGetAccessToken4 = '4. Click on Generate New Token';
-  static const howToGetAccessToken5 = '5. Paste it as is in Login field';
+  static const howToGetAccessToken5 = '5. Copy the generated access token';
   static const accessTokenSecurityNotice =
       'Security Notice: do NOT re-use Access Tokens. Make sure to generate a new token for every service you use.';
   static const getAccessToken = 'Get Access Token';
@@ -175,7 +175,7 @@ class AppStrings {
       'Are you sure you want to log out?\n\nAll app data will be deleted.';
   static const noDescription = 'No description';
   static const navigationErrorMessage =
-      'Something has gone wrong with the navigation system. Please go back and try again.';
+      'Something has gone wrong with the navigation system.\n\nPlease go back and try again.';
 
   /// Form validation error messages
   static const provideValidAccessToken = 'Provide a valid Access Token';
@@ -185,4 +185,8 @@ class AppStrings {
   static const provideValidLocalPart = 'Provide a valid local part';
   static const providerValidUrl = 'Provide a valid URL';
   static const keywordMustBe3CharsLong = 'Keyword must be 3 characters long';
+
+  /// Monetization
+  static const failedToLoadSubscriptionData =
+      'Failed to load subscription data';
 }

@@ -1,5 +1,6 @@
 import 'package:anonaddy/features/account/presentation/components/account_tab_header.dart';
 import 'package:anonaddy/features/domains/presentation/domains_tab.dart';
+import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:anonaddy/features/recipients/presentation/recipients_tab.dart';
 import 'package:anonaddy/features/rules/presentation/rules_tab.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_tab.dart';
@@ -8,7 +9,7 @@ import 'package:anonaddy/shared_components/paid_feature_blocker.dart';
 import 'package:flutter/material.dart';
 
 class AccountTab extends StatelessWidget {
-  const AccountTab({Key? key}) : super(key: key);
+  const AccountTab({super.key});
 
   static const accountTabScaffold = Key('accountTabScaffold');
   static const accountTabSliverAppBar = Key('accountTabSliverAppBar');
@@ -54,9 +55,11 @@ class AccountTab extends StatelessWidget {
             physics: ClampingScrollPhysics(),
             children: [
               RecipientsTab(),
-              PaidFeatureBlocker(child: UsernamesTab()),
+              UsernamesTab(),
               PaidFeatureBlocker(child: DomainsTab()),
-              PaidFeatureBlocker(child: RulesTab()),
+              PaidFeatureBlocker(
+                child: MonetizationPaywall(child: RulesTab()),
+              ),
             ],
           ),
         ),

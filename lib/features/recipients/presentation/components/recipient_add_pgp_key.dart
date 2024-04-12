@@ -9,8 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class RecipientAddPgpKey extends ConsumerStatefulWidget {
   const RecipientAddPgpKey({
     required this.recipient,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Recipient recipient;
 

@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 
 class HeaderProfile extends StatelessWidget {
   const HeaderProfile({
-    Key? key,
+    super.key,
     required this.account,
     required this.onPress,
-  }) : super(key: key);
+  });
 
   final Account account;
   final Function() onPress;

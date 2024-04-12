@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LogoutScreen extends ConsumerStatefulWidget {
-  const LogoutScreen({Key? key}) : super(key: key);
+  const LogoutScreen({super.key});
 
   static const routeName = 'logoutScreen';
 

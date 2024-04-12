@@ -8,9 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AccountPopupInfo extends ConsumerWidget {
   const AccountPopupInfo({
-    Key? key,
+    super.key,
     required this.account,
-  }) : super(key: key);
+  });
 
   final Account account;
 

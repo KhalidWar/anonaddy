@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AliasesTab extends ConsumerStatefulWidget {
-  const AliasesTab({Key? key}) : super(key: key);
+  const AliasesTab({super.key});
 
   static const aliasTabScaffold = Key('aliasScreenScaffold');
   static const aliasTabScrollView = Key('aliasTabScrollView');

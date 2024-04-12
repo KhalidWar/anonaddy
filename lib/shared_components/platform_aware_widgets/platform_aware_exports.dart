@@ -1,6 +1,5 @@
 export 'dialogs/platform_alert_dialog.dart';
 export 'dialogs/platform_info_dialog.dart';
-export 'platform_action_sheet.dart';
 export 'platform_aware.dart';
 export 'platform_button.dart';
 export 'platform_home_screen.dart';

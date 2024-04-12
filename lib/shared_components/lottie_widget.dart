@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 
 class LottieWidget extends StatelessWidget {
   const LottieWidget({
-    Key? key,
+    super.key,
     this.label,
     this.iconData,
     this.buttonLabel,
@@ -15,7 +15,7 @@ class LottieWidget extends StatelessWidget {
     this.lottieHeight,
     this.showLoading,
     this.repeat,
-  }) : super(key: key);
+  });
 
   final String? label, buttonLabel, lottie;
   final IconData? iconData;
@@ -52,8 +52,8 @@ class LottieWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText2!
-                    .copyWith(fontWeight: FontWeight.normal),
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.normal),
               ),
           ],
         ),

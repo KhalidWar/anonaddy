@@ -9,9 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ErrorScreen extends ConsumerWidget {
   const ErrorScreen({
-    Key? key,
+    super.key,
     required this.errorMessage,
-  }) : super(key: key);
+  });
 
   final String errorMessage;
 

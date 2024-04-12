@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class CreatedAtWidget extends StatelessWidget {
   const CreatedAtWidget({
-    Key? key,
+    super.key,
     required this.label,
     required this.dateTime,
-  }) : super(key: key);
+  });
 
   final String label;
   final DateTime? dateTime;
@@ -24,12 +24,12 @@ class CreatedAtWidget extends StatelessWidget {
             Utilities.formatDateTime(context, dateTime),
             style: Theme.of(context)
                 .textTheme
-                .caption
+                .bodySmall
                 ?.copyWith(color: isDark ? Colors.white70 : Colors.black87),
           ),
           Text(
             label,
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),

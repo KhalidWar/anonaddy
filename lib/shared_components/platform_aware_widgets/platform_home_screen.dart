@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class PlatformHomeScreen extends PlatformAware {
   const PlatformHomeScreen({
-    Key? key,
+    super.key,
     required this.fab,
     required this.child,
     required this.actions,
@@ -16,7 +16,7 @@ class PlatformHomeScreen extends PlatformAware {
     required this.currentIndex,
     required this.androidOnTap,
     required this.iosOnTap,
-  }) : super(key: key);
+  });
 
   final Widget fab;
   final Widget child;

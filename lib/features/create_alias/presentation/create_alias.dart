@@ -17,7 +17,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class CreateAlias extends ConsumerStatefulWidget {
-  const CreateAlias({Key? key}) : super(key: key);
+  const CreateAlias({super.key});
 
   @override
   ConsumerState createState() => _CreateAliasFABState();

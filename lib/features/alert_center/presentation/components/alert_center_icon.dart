@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AlertCenterIcon extends StatelessWidget {
-  const AlertCenterIcon({Key? key}) : super(key: key);
+  const AlertCenterIcon({super.key});
 
   @override
   Widget build(BuildContext context) {

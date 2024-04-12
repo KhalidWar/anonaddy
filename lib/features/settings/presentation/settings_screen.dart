@@ -13,9 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({
-    Key? key,
-  }) : super(key: key);
+  const SettingsScreen({super.key});
 
   static const routeName = 'settingsScreen';
 
@@ -39,7 +37,7 @@ class SettingsScreen extends ConsumerWidget {
                 dense: true,
                 title: Text(
                   AppStrings.settingsDarkTheme,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: const Text(AppStrings.settingsDarkThemeSubtitle),
                 trailing: PlatformSwitch(
@@ -53,7 +51,7 @@ class SettingsScreen extends ConsumerWidget {
                 dense: true,
                 title: Text(
                   AppStrings.settingsAutoCopyEmail,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: const Text(AppStrings.settingsAutoCopyEmailSubtitle),
                 trailing: PlatformSwitch(
@@ -67,7 +65,7 @@ class SettingsScreen extends ConsumerWidget {
                 dense: true,
                 title: Text(
                   AppStrings.settingsBiometricAuth,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: const Text(AppStrings.settingsBiometricAuthSubtitle),
                 trailing: PlatformSwitch(
@@ -82,7 +80,7 @@ class SettingsScreen extends ConsumerWidget {
                 dense: true,
                 title: Text(
                   AppStrings.settingsAddyHelpCenter,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: const Text(AppStrings.settingsAddyHelpCenterSubtitle),
                 trailing: const Icon(Icons.open_in_new_outlined),
@@ -92,7 +90,7 @@ class SettingsScreen extends ConsumerWidget {
                 dense: true,
                 title: Text(
                   AppStrings.settingsAddyFAQ,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: const Text(AppStrings.settingsAddyFAQSubtitle),
                 trailing: const Icon(Icons.open_in_new_outlined),
@@ -104,7 +102,7 @@ class SettingsScreen extends ConsumerWidget {
                 dense: true,
                 title: Text(
                   AppStrings.settingsAboutApp,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: const Text(AppStrings.settingsAboutAppSubtitle),
                 trailing: const Icon(Icons.help_outline),
@@ -116,7 +114,7 @@ class SettingsScreen extends ConsumerWidget {
                 dense: true,
                 title: Text(
                   AppStrings.settingsEnjoyingApp,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: const Text(AppStrings.settingsEnjoyingAppSubtitle),
                 trailing: const Icon(Icons.help_outline),
@@ -134,7 +132,7 @@ class SettingsScreen extends ConsumerWidget {
                   AppStrings.settingsLogout,
                   style: Theme.of(context)
                       .textTheme
-                      .button
+                      .labelLarge
                       ?.copyWith(color: Colors.red),
                   textAlign: TextAlign.left,
                 ),

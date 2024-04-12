@@ -29,4 +29,19 @@ class AppVersionService {
       rethrow;
     }
   }
+
+  Future<String> fetchLatestAddyAppVersion() async {
+    try {
+      const urlPath = 'https://api.github.com/repos/anonaddy/anonaddy/releases';
+      final response = await Dio().get(urlPath);
+      final latestAppVersion = (response.data as List).first;
+      log('fetchLatestAddyAppVersion: ${response.statusCode}');
+
+      return latestAppVersion['tag_name'];
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

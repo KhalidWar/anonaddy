@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/usernames/data/username_service.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/utilities/utilities.dart';
@@ -24,6 +25,7 @@ class UsernamesNotifier extends AsyncNotifier<List<Username>> {
     try {
       await ref.read(usernameServiceProvider).addNewUsername(username);
       Utilities.showToast('Username added successfully!');
+      ref.read(accountNotifierProvider.notifier).fetchAccount();
       ref.read(usernamesNotifierProvider.notifier).fetchUsernames();
     } catch (error) {
       Utilities.showToast(error.toString());

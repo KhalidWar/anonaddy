@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 
 class AliasListTile extends StatelessWidget {
   const AliasListTile({
-    Key? key,
+    super.key,
     required this.alias,
-  }) : super(key: key);
+  });
 
   final Alias alias;
 
@@ -34,7 +34,7 @@ class AliasListTile extends StatelessWidget {
                     alias.email,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: alias.isDeleted
                               ? Colors.grey
                               : isDark
@@ -48,7 +48,7 @@ class AliasListTile extends StatelessWidget {
                         : alias.description,
                     softWrap: false,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),

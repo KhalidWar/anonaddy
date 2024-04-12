@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LockScreen extends ConsumerStatefulWidget {
-  const LockScreen({Key? key}) : super(key: key);
+  const LockScreen({super.key});
 
   @override
   ConsumerState createState() => _LockScreenState();
@@ -35,7 +35,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
                 'Logout',
                 style: Theme.of(context)
                     .textTheme
-                    .caption
+                    .bodySmall
                     ?.copyWith(color: Colors.red),
               ),
             ),
@@ -71,7 +71,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
               child: Center(
                 child: Text(
                   'Unlock',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
               onPressed: () =>

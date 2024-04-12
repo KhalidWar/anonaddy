@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChangelogWidget extends ConsumerWidget {
-  const ChangelogWidget({Key? key}) : super(key: key);
+  const ChangelogWidget({super.key});
 
   /// header('Fixed', Colors.blue),
   /// header('Added', Colors.green),
@@ -46,13 +46,17 @@ class ChangelogWidget extends ConsumerWidget {
               );
             },
           ),
-          header(context, 'Fixed', Colors.blue),
-          label(context, '1. Fixed minor functionality bugs.'),
-          label(context, '2. Fixed several UI bugs.'),
+          header(context, 'Introducing AddyManager 3.0', Colors.blue),
+          header(context, 'Added', Colors.green),
+          label(context, '1. Added in-app notifications.'),
+          label(context, '2. Added onboarding flow.'),
+          label(context, '3. Added Rules (read only).'),
+          label(context, '3. Added subscriptions to support app development.'),
           header(context, 'Improved', Colors.orange),
-          label(context, '1. Improved UX in many parts of the app.'),
-          label(context, '2. Improved performance.'),
-          label(context, '3. Improved validation logic.'),
+          label(context, '1. Improved login flow.'),
+          label(context, '2. Improved UX in many parts of the app.'),
+          header(context, 'Fixed', Colors.blue),
+          label(context, '1. Fixed some UI bugs.'),
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,

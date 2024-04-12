@@ -27,6 +27,7 @@ class AddyString {
       'Are you sure you want to remove the public key for this recipient?\n\nIt will also be removed from any other recipients using the same key.';
   static const reachedRecipientLimit = 'You have reached your recipient limit';
   static const reachedDomainLimit = 'You have reached your domain limit';
+  static const reachedRulesLimit = 'You have reached your rules limit';
 
   /// Username
   static const addNewUsernameString =
@@ -43,6 +44,10 @@ class AddyString {
       'Are you sure you want to delete this domain?\n\nThis will also delete all aliases associated with this domain.\n\nYou will no longer be able to receive any emails at this domain.';
   static const updateDomainDefaultRecipient =
       'Select the default recipient for this domain. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
+
+  /// Rules
+  static const addNewRuleString =
+      'Rules work on all emails, including replies and also send froms. New conditions and actions will be added over time. ';
 
   /// Alias Format
   static const aliasFormatUUID = 'uuid';

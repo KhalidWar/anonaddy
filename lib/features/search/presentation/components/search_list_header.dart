@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class SearchListHeader extends StatelessWidget {
   const SearchListHeader({
-    Key? key,
+    super.key,
     required this.title,
     required this.buttonLabel,
     required this.onPress,
     this.buttonTextColor,
-  }) : super(key: key);
+  });
 
   final String title, buttonLabel;
   final Function() onPress;
@@ -26,7 +26,7 @@ class SearchListHeader extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               TextButton(
                 onPressed: onPress,

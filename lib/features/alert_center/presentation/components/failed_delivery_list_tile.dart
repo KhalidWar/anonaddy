@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 
 class FailedDeliveryListTile extends StatelessWidget {
   const FailedDeliveryListTile({
-    Key? key,
+    super.key,
     required this.delivery,
     required this.onPress,
-  }) : super(key: key);
+  });
+
   final FailedDelivery delivery;
   final Function() onPress;
 
@@ -18,11 +19,11 @@ class FailedDeliveryListTile extends StatelessWidget {
       iconColor: Colors.red,
       title: Text(
         delivery.aliasEmail ?? 'Unknown alias',
-        style: Theme.of(context).textTheme.bodyText2,
+        style: Theme.of(context).textTheme.bodyMedium,
       ),
       subtitle: Text(
         'Tap to expand',
-        style: Theme.of(context).textTheme.caption,
+        style: Theme.of(context).textTheme.bodySmall,
       ),
       trailing: IconButton(
         icon: const Icon(Icons.delete_outline),

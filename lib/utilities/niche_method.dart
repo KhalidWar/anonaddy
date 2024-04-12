@@ -21,12 +21,22 @@ class NicheMethod {
     }
   }
 
-  static copyOnTap(String input) async {
+  static Future<void> copyOnTap(String input) async {
     try {
       await Clipboard.setData(ClipboardData(text: input));
       showToast(ToastMessage.copiedToClipboard);
     } catch (_) {
       showToast(ToastMessage.failedToCopy);
+    }
+  }
+
+  static Future<String?> pasteFromClipboard() async {
+    try {
+      final clipboardData = await Clipboard.getData('text/plain');
+      return clipboardData?.text;
+    } catch (_) {
+      showToast(ToastMessage.failedToCopy);
+      return null;
     }
   }
 

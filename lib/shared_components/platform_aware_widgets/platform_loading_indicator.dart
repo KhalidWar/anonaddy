@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 
 class PlatformLoadingIndicator extends PlatformAware {
   const PlatformLoadingIndicator({
-    Key? key,
+    super.key,
     this.color,
     this.size,
-  }) : super(key: key);
+  });
+
   final Color? color;
   final double? size;
 
