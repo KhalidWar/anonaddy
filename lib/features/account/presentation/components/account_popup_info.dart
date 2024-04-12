@@ -74,9 +74,9 @@ class AccountPopupInfo extends ConsumerWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
-                    user.isOfficialInstance
-                        ? 'Expires at: ${Utilities.formatDateTime(context, user.apiToken.expiresAt, showTime: false)}'
-                        : 'Token does not expire',
+                    user.isSelfHosting
+                        ? 'Token does not expire'
+                        : 'Expires at: ${Utilities.formatDateTime(context, user.apiToken.expiresAt, showTime: false)}',
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
