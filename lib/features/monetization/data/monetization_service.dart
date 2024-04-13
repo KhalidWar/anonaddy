@@ -21,25 +21,11 @@ enum RevenueCatProducts {
   final String value;
 }
 
-final monetizationServiceProvider = Provider<MonetizationService>((ref) {
-  return const MonetizationService();
-});
+final monetizationServiceProvider =
+    Provider<MonetizationService>((ref) => const MonetizationService());
 
 class MonetizationService {
   const MonetizationService();
-
-  Future<PaywallResult> showPaywallIfNeeded(
-    String entitlementIdentifier,
-  ) async {
-    try {
-      final paywallResult =
-          await RevenueCatUI.presentPaywallIfNeeded(entitlementIdentifier);
-      log(paywallResult.toString());
-      return paywallResult;
-    } catch (e) {
-      rethrow;
-    }
-  }
 
   Future<PaywallResult> showPaywall({bool showCloseButton = true}) async {
     try {
@@ -53,29 +39,9 @@ class MonetizationService {
     }
   }
 
-  Future<List<StoreProduct>> getProducts() async {
-    try {
-      final productIdentifiers =
-          RevenueCatProducts.values.map((e) => e.value).toList();
-      final products = await Purchases.getProducts(productIdentifiers);
-      return products;
-    } on PlatformException catch (_) {
-      rethrow;
-    }
-  }
-
   Future<CustomerInfo> getCustomerInfo() async {
     try {
       return await Purchases.getCustomerInfo();
-    } on PlatformException catch (_) {
-      rethrow;
-    }
-  }
-
-  Future<Offerings> getOfferings() async {
-    try {
-      final offerings = await Purchases.getOfferings();
-      return offerings;
     } on PlatformException catch (_) {
       rethrow;
     }
