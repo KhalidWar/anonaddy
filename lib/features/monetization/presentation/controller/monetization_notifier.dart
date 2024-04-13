@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:anonaddy/features/monetization/data/monetization_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_ui_flutter/paywall_result.dart';
 
@@ -27,6 +28,11 @@ class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
 
   @override
   FutureOr<bool> build() async {
+    if (kDebugMode) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      return false;
+    }
+
     final service = ref.read(monetizationServiceProvider);
 
     final customerInfo = await service.getCustomerInfo();
