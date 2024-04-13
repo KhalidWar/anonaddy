@@ -1,5 +1,5 @@
-import 'package:anonaddy/features/auth/presentation/addy_login_screen.dart';
-import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
+import 'package:anonaddy/features/auth/presentation/components/addy_login_screen.dart';
+import 'package:anonaddy/features/auth/presentation/components/self_host_login_screen.dart';
 import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_description.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_image.dart';
