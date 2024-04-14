@@ -32,6 +32,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
             Utilities.buildWoltModalSheetSubPage(
               context,
               topBarTitle: 'Add New Domain',
+              pageTitle: AddyString.addNewDomainString,
               child: const AddNewDomain(),
             ),
           ];

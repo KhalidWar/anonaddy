@@ -44,6 +44,8 @@ class AddyString {
       'Are you sure you want to delete this domain?\n\nThis will also delete all aliases associated with this domain.\n\nYou will no longer be able to receive any emails at this domain.';
   static const updateDomainDefaultRecipient =
       'Select the default recipient for this domain. This overrides the default recipient in your account settings.\n\nLeave it empty if you would like to use the default recipient in your account settings.';
+  static const addNewDomainString =
+      'To verify ownership of the domain, please add the following TXT record and then click Add Domain below. Once you\'ve added the domain you can safely remove this TXT record.';
 
   /// Rules
   static const addNewRuleString =
