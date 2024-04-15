@@ -2,7 +2,7 @@ import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/error_message_widget.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/common/shimmer_effects/recipients_shimmer_loading.dart';
+import 'package:anonaddy/common/shimmer_effects/shimmering_list_tile.dart';
 import 'package:anonaddy/features/monetization/presentation/controller/monetization_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,7 +69,7 @@ class _MonetizationPaywallState extends ConsumerState<MonetizationPaywall> {
       ),
       loading: () {
         return widget.showListTimeShimmer
-            ? const RecipientsShimmerLoading()
+            ? const ShimmeringListTile()
             : const SizedBox(
                 height: 200,
                 width: 200,

@@ -1,7 +1,7 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/constants/toast_message.dart';
 import 'package:anonaddy/common/error_message_widget.dart';
-import 'package:anonaddy/common/shimmer_effects/recipients_shimmer_loading.dart';
+import 'package:anonaddy/common/shimmer_effects/shimmering_list_tile.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/domains/presentation/domains_tab.dart';
@@ -51,7 +51,7 @@ class PaidFeatureBlocker extends ConsumerWidget {
       error: (_, __) => const ErrorMessageWidget(
         message: AppStrings.loadAccountDataFailed,
       ),
-      loading: () => loadingWidget ?? const RecipientsShimmerLoading(),
+      loading: () => loadingWidget ?? const ShimmeringListTile(),
     );
   }
 }
