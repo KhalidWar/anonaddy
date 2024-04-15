@@ -1,5 +1,5 @@
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_switch.dart';
 import 'package:flutter/material.dart';
 
 class RecipientScreenTrailingLoadingSwitch extends StatelessWidget {

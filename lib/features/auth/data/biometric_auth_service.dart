@@ -1,6 +1,7 @@
 import 'dart:developer';
 
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/toast_message.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;

@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/constants/toast_message.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/data/account_service.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/aliases/data/alias_service.dart';
@@ -9,9 +12,6 @@ import 'package:anonaddy/features/domain_options/data/domain_options_service.dar
 import 'package:anonaddy/features/recipients/data/recipient_service.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// This is the most complex part of this whole project.

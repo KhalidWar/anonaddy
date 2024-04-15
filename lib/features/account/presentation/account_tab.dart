@@ -1,11 +1,12 @@
+import 'package:anonaddy/common/constants/app_colors.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/paid_feature_blocker.dart';
 import 'package:anonaddy/features/account/presentation/components/account_tab_header.dart';
 import 'package:anonaddy/features/domains/presentation/domains_tab.dart';
 import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:anonaddy/features/recipients/presentation/recipients_tab.dart';
 import 'package:anonaddy/features/rules/presentation/rules_tab.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_tab.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/shared_components/paid_feature_blocker.dart';
 import 'package:flutter/material.dart';
 
 class AccountTab extends StatelessWidget {

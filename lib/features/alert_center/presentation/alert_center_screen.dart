@@ -1,11 +1,11 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/custom_app_bar.dart';
+import 'package:anonaddy/common/paid_feature_blocker.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/features/alert_center/presentation/components/alert_header.dart';
 import 'package:anonaddy/features/alert_center/presentation/failed_deliveries_widget.dart';
 import 'package:anonaddy/features/alert_center/presentation/local_notifications_widget.dart';
 import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/shared_components/paid_feature_blocker.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:flutter/material.dart';
 
 class AlertCenterScreen extends StatelessWidget {

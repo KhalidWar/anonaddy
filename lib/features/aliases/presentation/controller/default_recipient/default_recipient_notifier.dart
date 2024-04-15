@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/aliases/data/alias_service.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_state.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final defaultRecipientNotifierProvider = AsyncNotifierProvider.family

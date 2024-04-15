@@ -1,6 +1,6 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_screen.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class UsernameListTile extends StatelessWidget {

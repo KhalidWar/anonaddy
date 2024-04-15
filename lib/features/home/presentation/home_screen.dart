@@ -1,3 +1,6 @@
+import 'package:anonaddy/common/constants/app_colors.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/presentation/account_tab.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/alert_center/presentation/components/alert_center_icon.dart';
@@ -13,8 +16,6 @@ import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
 import 'package:anonaddy/features/search/presentation/search_tab.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

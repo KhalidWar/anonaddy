@@ -1,14 +1,15 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/custom_app_bar.dart';
+import 'package:anonaddy/common/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_switch.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
 import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
 import 'package:anonaddy/features/settings/presentation/about_app_screen.dart';
 import 'package:anonaddy/features/settings/presentation/components/app_version.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_switch.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,6 +1,7 @@
+import 'package:anonaddy/common/constants/app_colors.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/features/search/presentation/components/search_history.dart';
 import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

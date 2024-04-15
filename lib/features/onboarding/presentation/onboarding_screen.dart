@@ -1,12 +1,12 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/auth/presentation/components/addy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/components/self_host_login_screen.dart';
 import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_description.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_image.dart';
 import 'package:anonaddy/features/onboarding/presentation/onboarding_pages.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/utilities/theme.dart';
-import 'package:anonaddy/utilities/utilities.dart';
+import 'package:anonaddy/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

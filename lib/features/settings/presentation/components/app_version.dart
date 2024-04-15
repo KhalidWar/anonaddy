@@ -1,8 +1,9 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/toast_message.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/app_version/presentation/controller/app_version_notifier.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

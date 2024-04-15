@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/constants/toast_message.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/domains/data/domains_service.dart';
 import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_state.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsScreenStateNotifier = AsyncNotifierProvider.family

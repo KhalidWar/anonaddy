@@ -1,12 +1,12 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/create_alias/presentation/components/create_alias_error_widget.dart';
 import 'package:anonaddy/features/rules/presentation/components/add_new_rule_section_header.dart';
 import 'package:anonaddy/features/rules/presentation/components/rule_action_list_tile.dart';
 import 'package:anonaddy/features/rules/presentation/components/rule_checkbox.dart';
 import 'package:anonaddy/features/rules/presentation/components/rule_condition_list_tile.dart';
 import 'package:anonaddy/features/rules/presentation/controller/create_new_rule_notifier.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

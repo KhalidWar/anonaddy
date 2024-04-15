@@ -1,8 +1,9 @@
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/form_validator.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/add_recipient_notifier.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

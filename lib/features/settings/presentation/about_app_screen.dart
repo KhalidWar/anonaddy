@@ -1,8 +1,8 @@
+import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/custom_app_bar.dart';
+import 'package:anonaddy/common/package_info_service.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/settings/presentation/credits_screen.dart';
-import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/utilities/package_info_service.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

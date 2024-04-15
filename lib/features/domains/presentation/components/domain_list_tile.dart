@@ -1,6 +1,6 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class DomainListTile extends StatelessWidget {

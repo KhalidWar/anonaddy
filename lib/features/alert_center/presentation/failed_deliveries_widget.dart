@@ -1,9 +1,9 @@
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/features/alert_center/presentation/components/failed_delivery_list_tile.dart';
 import 'package:anonaddy/features/alert_center/presentation/controller/failed_delivery_notifier.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

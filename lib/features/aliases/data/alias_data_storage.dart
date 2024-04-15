@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:anonaddy/common/constants/data_storage_keys.dart';
+import 'package:anonaddy/common/flutter_secure_storage.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
-import 'package:anonaddy/utilities/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 

@@ -1,3 +1,5 @@
+import 'package:anonaddy/common/navigation_error/navigation_error_screen.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/features/alert_center/presentation/alert_center_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
@@ -13,8 +15,6 @@ import 'package:anonaddy/features/settings/presentation/about_app_screen.dart';
 import 'package:anonaddy/features/settings/presentation/credits_screen.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_screen.dart';
-import 'package:anonaddy/shared_components/navigation_error/navigation_error_screen.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

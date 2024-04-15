@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
+import 'package:anonaddy/common/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class EmptyListAliasTabWidget extends StatelessWidget {

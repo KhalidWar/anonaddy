@@ -1,8 +1,8 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,10 +1,12 @@
+import 'package:anonaddy/common/constants/app_colors.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/list_tiles/alias_list_tile.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_scroll_bar.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/search/presentation/controller/quick_search_notifier.dart';
 import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

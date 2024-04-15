@@ -1,3 +1,8 @@
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/shimmer_effects/recipients_shimmer_loading.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/rules/presentation/components/add_new_rule.dart';
@@ -6,11 +11,6 @@ import 'package:anonaddy/features/rules/presentation/components/add_new_rule_ent
 import 'package:anonaddy/features/rules/presentation/components/rules_list_tile.dart';
 import 'package:anonaddy/features/rules/presentation/controller/create_new_rule_notifier.dart';
 import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
-import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';

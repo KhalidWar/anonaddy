@@ -1,5 +1,5 @@
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/utilities/utilities.dart';
+import 'package:anonaddy/common/constants/lottie_images.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

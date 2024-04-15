@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/secure_storage_keys.dart';
+import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/flutter_secure_storage.dart';
 import 'package:anonaddy/features/auth/data/api_error_message.dart';
 import 'package:anonaddy/features/auth/domain/api_token.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/secure_storage_keys.dart';
-import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

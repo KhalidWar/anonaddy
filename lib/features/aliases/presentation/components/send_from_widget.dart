@@ -1,5 +1,5 @@
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/form_validator.dart';
 import 'package:flutter/material.dart';
 
 class SendFromWidget extends StatelessWidget {

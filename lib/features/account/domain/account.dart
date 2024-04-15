@@ -1,4 +1,4 @@
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'account.g.dart';

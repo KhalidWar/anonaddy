@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/settings/data/offline_data_storage.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_state.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 

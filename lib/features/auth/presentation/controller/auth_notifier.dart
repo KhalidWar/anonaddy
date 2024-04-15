@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/flutter_secure_storage.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
@@ -7,9 +10,6 @@ import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
 import 'package:anonaddy/features/monetization/presentation/controller/monetization_notifier.dart';
 import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/flutter_secure_storage.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
