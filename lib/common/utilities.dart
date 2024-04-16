@@ -34,6 +34,16 @@ class Utilities {
     }
   }
 
+  static Future<String?> pasteFromClipboard() async {
+    try {
+      final clipboardData = await Clipboard.getData('text/plain');
+      return clipboardData?.text;
+    } catch (_) {
+      showToast(ToastMessage.failedToCopy);
+      return null;
+    }
+  }
+
   static showToastWithContext(BuildContext context, String message) async {
     try {
       final flutterToast = FToast();

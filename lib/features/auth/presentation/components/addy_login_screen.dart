@@ -1,7 +1,6 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/constants/toast_message.dart';
 import 'package:anonaddy/common/constants/url_strings.dart';
-import 'package:anonaddy/common/niche_method.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
@@ -47,8 +46,7 @@ class AddyLoginScreen extends ConsumerWidget {
                 child: PlatformButton(
                   key: const Key('loginFooterLoginButton'),
                   onPress: () async {
-                    final clipboardText =
-                        await NicheMethod.pasteFromClipboard();
+                    final clipboardText = await Utilities.pasteFromClipboard();
                     if (clipboardText == null || clipboardText.isEmpty) {
                       await Utilities.showToast(ToastMessage.failedToCopy);
                       return;
