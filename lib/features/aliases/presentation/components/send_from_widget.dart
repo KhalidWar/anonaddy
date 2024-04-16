@@ -1,18 +1,25 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/form_validator.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
 import 'package:flutter/material.dart';
 
-class SendFromWidget extends StatelessWidget {
+class SendFromWidget extends StatefulWidget {
   const SendFromWidget({
     super.key,
     required this.email,
-    required this.formKey,
-    required this.onFieldSubmitted,
+    required this.onSubmitted,
   });
 
   final String email;
-  final GlobalKey<FormState> formKey;
-  final Function(String) onFieldSubmitted;
+  final Function(String) onSubmitted;
+
+  @override
+  State<SendFromWidget> createState() => _SendFromWidgetState();
+}
+
+class _SendFromWidgetState extends State<SendFromWidget> {
+  final formKey = GlobalKey<FormState>();
+  final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +30,7 @@ class SendFromWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            email,
+            widget.email,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
@@ -33,7 +40,8 @@ class SendFromWidget extends StatelessWidget {
               autofocus: true,
               autocorrect: false,
               validator: FormValidator.validateEmailField,
-              onFieldSubmitted: onFieldSubmitted,
+              controller: controller,
+              onFieldSubmitted: widget.onSubmitted,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Destination Email Address',
@@ -45,7 +53,21 @@ class SendFromWidget extends StatelessWidget {
             AppStrings.sendFromAliasNote,
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          const SizedBox(height: 90),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: PlatformButton(
+              child: const Text(
+                'Generate address',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPress: () {
+                if (formKey.currentState!.validate()) {
+                  widget.onSubmitted(controller.text.trim());
+                }
+              },
+            ),
+          )
         ],
       ),
     );

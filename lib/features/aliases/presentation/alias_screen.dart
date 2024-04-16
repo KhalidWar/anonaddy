@@ -44,66 +44,6 @@ class AliasScreen extends ConsumerStatefulWidget {
 }
 
 class _AliasScreenState extends ConsumerState<AliasScreen> {
-  final sendFromFormKey = GlobalKey<FormState>();
-  late String destinationEmail;
-
-  Future<void> showSendFromDialog(Alias alias) async {
-    Future<void> generateSendFromAddress(
-      BuildContext context, {
-      required Alias alias,
-    }) async {
-      if (sendFromFormKey.currentState!.validate()) {
-        await ref
-            .read(aliasScreenNotifierProvider(alias.id).notifier)
-            .sendFromAlias(destinationEmail)
-            .then((_) {
-          Navigator.pop(context);
-        });
-      }
-    }
-
-    await WoltModalSheet.show(
-      context: context,
-      onModalDismissedWithBarrierTap: Navigator.of(context).pop,
-      pageListBuilder: (modalSheetContext) {
-        return [
-          Utilities.buildWoltModalSheetSubPage(
-            context,
-            topBarTitle: AppStrings.sendFromAlias,
-            pageTitle: AppStrings.sendFromAliasString,
-            stickyActionBar: Container(
-              padding: const EdgeInsets.all(16),
-              width: double.infinity,
-              child: PlatformButton(
-                child: const Text(
-                  'Generate address',
-                  style: TextStyle(color: Colors.black),
-                ),
-                onPress: () async {
-                  await generateSendFromAddress(
-                    modalSheetContext,
-                    alias: alias,
-                  );
-                },
-              ),
-            ),
-            child: SendFromWidget(
-              email: alias.email,
-              formKey: sendFromFormKey,
-              onFieldSubmitted: (value) async {
-                destinationEmail = value;
-                await generateSendFromAddress(
-                  modalSheetContext,
-                  alias: alias,
-                );
-              },
-            ),
-          ),
-        ];
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final aliasNotifier =
@@ -175,7 +115,34 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 subtitle: 'Send from',
                 trailing: IconButton(
                   icon: const Icon(Icons.send_outlined),
-                  onPressed: () => showSendFromDialog(aliasState.alias),
+                  onPressed: () async {
+                    await WoltModalSheet.show(
+                      context: context,
+                      onModalDismissedWithBarrierTap: Navigator.of(context).pop,
+                      pageListBuilder: (modalSheetContext) {
+                        return [
+                          Utilities.buildWoltModalSheetSubPage(
+                            context,
+                            topBarTitle: AppStrings.sendFromAlias,
+                            pageTitle: AppStrings.sendFromAliasString,
+                            child: SendFromWidget(
+                              email: aliasState.alias.email,
+                              onSubmitted: (value) async {
+                                await ref
+                                    .read(aliasScreenNotifierProvider(
+                                            aliasState.alias.id)
+                                        .notifier)
+                                    .sendFromAlias(value)
+                                    .then((_) {
+                                  Navigator.pop(context);
+                                });
+                              },
+                            ),
+                          ),
+                        ];
+                      },
+                    );
+                  },
                 ),
               ),
               AliasScreenListTile(
