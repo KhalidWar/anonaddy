@@ -12,43 +12,52 @@ final localNotificationNotifierProvider = AsyncNotifierProvider.autoDispose<
 class LocalNotificationNotifier
     extends AutoDisposeAsyncNotifier<List<LocalNotification>> {
   Future<LocalNotification?> getAccessTokenExpiryNotification() async {
-    final user = ref.read(authStateNotifier).value!.user!;
-    final apiTokenExpirationDate = user.apiToken.expiresAt;
+    try {
+      final user = ref.read(authStateNotifier).value!.user!;
+      final apiTokenExpirationDate = user.apiToken.expiresAt;
+      if (apiTokenExpirationDate == null) return null;
 
-    if (apiTokenExpirationDate == null) return null;
+      final weekFromNow = DateTime.now().add(const Duration(days: 7));
+      final remainingDays =
+          apiTokenExpirationDate.difference(DateTime.now()).inDays;
 
-    final weekFromNow = DateTime.now().add(const Duration(days: 7));
-    final remainingDays =
-        apiTokenExpirationDate.difference(DateTime.now()).inDays;
-
-    if (apiTokenExpirationDate.isBefore(weekFromNow)) {
-      return LocalNotification(
-        title: 'API Token Expires in $remainingDays days',
-        subtitle: 'To avoid interruptions, please login again.',
-        payload: '',
-        dismissable: false,
-      );
+      if (apiTokenExpirationDate.isBefore(weekFromNow)) {
+        return LocalNotification(
+          title: 'API Token Expires in $remainingDays days',
+          subtitle: 'To avoid interruptions, please login again.',
+          payload: '',
+          dismissable: false,
+        );
+      }
+      return null;
+    } catch (_) {
+      return null;
     }
-
-    return null;
   }
 
   Future<LocalNotification?> getAppVersionNotification() async {
-    final latestAppVersion =
-        await ref.read(appVersionService).fetchLatestAddyAppVersion();
-    final currentAppVersion =
-        await ref.read(appVersionService).getAppVersionData();
-    final formattedCurrentVersion = 'v${currentAppVersion.version}';
+    try {
+      final user = ref.read(authStateNotifier).value!.user!;
+      if (!user.isSelfHosting) return null;
 
-    if (formattedCurrentVersion != latestAppVersion) {
-      return LocalNotification(
-        title: 'Self-hosted instance version is available!',
-        subtitle: 'Update to latest version ',
-        payload: '',
-        dismissable: false,
-      );
+      final latestAppVersion =
+          await ref.read(appVersionService).fetchLatestAddyAppVersion();
+      final currentAppVersion =
+          await ref.read(appVersionService).getAppVersionData();
+      final formattedCurrentVersion = 'v${currentAppVersion.version}';
+
+      if (formattedCurrentVersion != latestAppVersion) {
+        return LocalNotification(
+          title: 'Self-hosted instance version is available!',
+          subtitle: 'Update to latest version ',
+          payload: '',
+          dismissable: false,
+        );
+      }
+      return null;
+    } catch (_) {
+      return null;
     }
-    return null;
   }
 
   @override
