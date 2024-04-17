@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmeringListTile extends StatelessWidget {
-  const ShimmeringListTile({super.key});
+  const ShimmeringListTile({
+    super.key,
+    this.itemCount = 8,
+  });
+
+  final int itemCount;
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +20,18 @@ class ShimmeringListTile extends StatelessWidget {
       child: ListView.builder(
         padding: const EdgeInsets.all(0),
         physics: const ClampingScrollPhysics(),
-        itemCount: 8,
+        itemCount: itemCount,
         itemBuilder: (_, __) {
           return ListTile(
             dense: true,
             horizontalTitleGap: 8,
             minVerticalPadding: 0,
-            contentPadding:
-                const EdgeInsets.only(left: 16, right: 40, top: 0, bottom: 0),
+            contentPadding: const EdgeInsets.only(
+              left: 16,
+              right: 40,
+              top: 0,
+              bottom: 0,
+            ),
             leading: Container(
               width: 30.0,
               height: 25.0,
