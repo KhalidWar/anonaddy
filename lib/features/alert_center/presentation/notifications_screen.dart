@@ -7,10 +7,10 @@ import 'package:anonaddy/features/monetization/presentation/monetization_paywall
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AlertCenterScreen extends ConsumerWidget {
-  const AlertCenterScreen({super.key});
+class NotificationsScreen extends ConsumerWidget {
+  const NotificationsScreen({super.key});
 
-  static const routeName = 'alertCenterScreen';
+  static const routeName = 'notificationsScreen';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

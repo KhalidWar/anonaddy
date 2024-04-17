@@ -1,7 +1,7 @@
 import 'package:anonaddy/common/constants/app_colors.dart';
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
-import 'package:anonaddy/features/alert_center/presentation/alert_center_screen.dart';
+import 'package:anonaddy/features/alert_center/presentation/notifications_screen.dart';
 import 'package:anonaddy/features/settings/presentation/settings_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +72,7 @@ class PlatformHomeScreen extends PlatformAware {
         leading: IconButton(
           icon: const Icon(Icons.error_outline),
           onPressed: () {
-            Navigator.pushNamed(context, AlertCenterScreen.routeName);
+            Navigator.pushNamed(context, NotificationsScreen.routeName);
           },
         ),
         actions: [
