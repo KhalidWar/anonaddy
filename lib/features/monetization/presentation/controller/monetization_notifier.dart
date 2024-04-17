@@ -35,6 +35,12 @@ class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
 
     final service = ref.read(monetizationServiceProvider);
 
+    /// RevenueCat fails to configure on some devices which causes the app to crash.
+    /// This is a workaround to prevent that.
+    /// Would rather not show the paywall than crash the app.
+    final isConfigured = await service.isConfigured();
+    if (!isConfigured) return false;
+
     final customerInfo = await service.getCustomerInfo();
 
     if (customerInfo.entitlements.active.isEmpty) {

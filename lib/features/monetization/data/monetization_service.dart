@@ -27,6 +27,14 @@ final monetizationServiceProvider =
 class MonetizationService {
   const MonetizationService();
 
+  Future<bool> isConfigured() async {
+    try {
+      return await Purchases.isConfigured;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<PaywallResult> showPaywall({bool showCloseButton = true}) async {
     try {
       final paywallResult = await RevenueCatUI.presentPaywall(
