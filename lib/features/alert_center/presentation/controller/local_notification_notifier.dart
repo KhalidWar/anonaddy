@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:anonaddy/features/alert_center/data/failed_delivery_service.dart';
 import 'package:anonaddy/features/alert_center/domain/local_notification.dart';
 import 'package:anonaddy/features/app_version/data/app_version_service.dart';
+import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,6 +13,27 @@ final localNotificationNotifierProvider = AsyncNotifierProvider.autoDispose<
 
 class LocalNotificationNotifier
     extends AutoDisposeAsyncNotifier<List<LocalNotification>> {
+  Future<List<LocalNotification>?> getFailedDeliveries() async {
+    try {
+      final failedDeliveries =
+          await ref.read(failedDeliveryService).getFailedDeliveries();
+
+      if (failedDeliveries.isNotEmpty) {
+        return failedDeliveries.map((delivery) {
+          return LocalNotification(
+            title: 'Failed Delivery',
+            subtitle: delivery.recipientEmail ?? 'Unknown Recipient',
+            payload: delivery.id,
+            dismissable: false,
+          );
+        }).toList();
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<LocalNotification?> getAccessTokenExpiryNotification() async {
     try {
       final user = ref.read(authStateNotifier).value!.user!;
@@ -64,10 +87,12 @@ class LocalNotificationNotifier
   FutureOr<List<LocalNotification>> build() async {
     final locationNotifications = <LocalNotification>[];
 
+    final failedDeliveriesNotification = await getFailedDeliveries();
     final tokenExpiryNotification = await getAccessTokenExpiryNotification();
     final appVersionNotification = await getAppVersionNotification();
 
     locationNotifications.addAll([
+      if (failedDeliveriesNotification != null) ...failedDeliveriesNotification,
       if (tokenExpiryNotification != null) tokenExpiryNotification,
       if (appVersionNotification != null) appVersionNotification,
     ]);
