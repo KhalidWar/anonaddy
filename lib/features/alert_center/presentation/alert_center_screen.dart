@@ -1,48 +1,54 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/custom_app_bar.dart';
-import 'package:anonaddy/common/paid_feature_blocker.dart';
-import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/features/alert_center/presentation/components/alert_header.dart';
-import 'package:anonaddy/features/alert_center/presentation/failed_deliveries_widget.dart';
-import 'package:anonaddy/features/alert_center/presentation/local_notifications_widget.dart';
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/shimmer_effects/shimmering_list_tile.dart';
+import 'package:anonaddy/features/alert_center/presentation/controller/local_notification_notifier.dart';
 import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AlertCenterScreen extends StatelessWidget {
+class AlertCenterScreen extends ConsumerWidget {
   const AlertCenterScreen({super.key});
 
   static const routeName = 'alertCenterScreen';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localNotifications = ref.watch(localNotificationNotifierProvider);
+
     return Scaffold(
       appBar: CustomAppBar(
-        title: AppStrings.alertCenter,
+        title: AppStrings.notifications,
         leadingOnPress: () => Navigator.pop(context),
         showTrailing: false,
       ),
       body: MonetizationPaywall(
-        child: ListView(
-          shrinkWrap: true,
-          physics: const ClampingScrollPhysics(),
-          padding: const EdgeInsets.all(10),
-          children: const [
-            AlertHeader(
-              title: AppStrings.notifications,
-              subtitle: AppStrings.notificationsNote,
-            ),
-            LocalNotificationsWidget(),
-            SizedBox(height: 16),
-            AlertHeader(
-              title: AppStrings.failedDeliveries,
-              subtitle: AppStrings.failedDeliveriesNote,
-            ),
-            PaidFeatureBlocker(
-              loadingWidget: Center(child: PlatformLoadingIndicator()),
-              child: FailedDeliveriesWidget(),
-            ),
-            SizedBox(height: 16),
-          ],
+        child: localNotifications.when(
+          data: (localNotifications) {
+            if (localNotifications.isEmpty) {
+              return const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('Nothing to see here!'),
+              );
+            }
+
+            return ListView.builder(
+              physics: const ClampingScrollPhysics(),
+              itemCount: localNotifications.length,
+              itemBuilder: (context, index) {
+                final notification = localNotifications[index];
+                return ListTile(
+                  dense: true,
+                  leading: const Icon(Icons.notifications),
+                  title: Text(notification.title),
+                  subtitle: Text(notification.subtitle),
+                  onTap: notification.payload == null ? null : () {},
+                );
+              },
+            );
+          },
+          error: (error, __) => ErrorMessageWidget(message: error.toString()),
+          loading: () => const ShimmeringListTile(),
         ),
       ),
     );
