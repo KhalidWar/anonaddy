@@ -1,5 +1,5 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
-import 'package:anonaddy/features/alert_center/presentation/controller/failed_delivery_notifier.dart';
+import 'package:anonaddy/features/alert_center/presentation/controller/local_notification_notifier.dart';
 import 'package:anonaddy/features/alert_center/presentation/notifications_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,9 +24,10 @@ class AlertCenterIcon extends StatelessWidget {
         ),
         Consumer(
           builder: (_, ref, __) {
-            final failedDeliveries = ref.watch(failedDeliveriesNotifier);
+            final localNotificationAsync =
+                ref.watch(localNotificationNotifierProvider);
 
-            return failedDeliveries.when(
+            return localNotificationAsync.when(
               data: (failedDeliveries) {
                 if (failedDeliveries.isNotEmpty) {
                   return Positioned(
@@ -43,10 +44,10 @@ class AlertCenterIcon extends StatelessWidget {
                   );
                 }
 
-                return Container();
+                return const SizedBox.shrink();
               },
-              error: (_, __) => Container(),
-              loading: () => Container(),
+              error: (_, __) => const SizedBox.shrink(),
+              loading: () => const SizedBox.shrink(),
             );
           },
         )
