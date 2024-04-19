@@ -28,8 +28,8 @@ class AlertCenterIcon extends StatelessWidget {
                 ref.watch(localNotificationNotifierProvider);
 
             return localNotificationAsync.when(
-              data: (failedDeliveries) {
-                if (failedDeliveries.isNotEmpty) {
+              data: (localNotifications) {
+                if (localNotifications.isNotEmpty) {
                   return Positioned(
                     top: 12,
                     left: 12,
