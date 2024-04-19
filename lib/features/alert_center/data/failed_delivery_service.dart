@@ -16,10 +16,10 @@ class FailedDeliveryService {
   const FailedDeliveryService({required this.dio});
   final Dio dio;
 
-  Future<List<FailedDelivery>> getFailedDeliveries([String? path]) async {
+  Future<List<FailedDelivery>> getFailedDeliveries() async {
     try {
       const urlPath = '$kUnEncodedBaseURL/failed-deliveries';
-      final response = await dio.get(path ?? urlPath);
+      final response = await dio.get(urlPath);
       final deliveries = response.data['data'];
       log('getFailedDeliveries: ${response.statusCode}');
 
@@ -30,6 +30,20 @@ class FailedDeliveryService {
       throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch failed deliveries';
+    }
+  }
+
+  Future<FailedDelivery> getSpecificFailedDelivery(String id) async {
+    try {
+      final urlPath = '$kUnEncodedBaseURL/failed-deliveries/$id';
+      final response = await dio.get(urlPath);
+      final failedDelivery = response.data['data'];
+      log('getSpecificFailedDelivery: ${response.statusCode}');
+      return FailedDelivery.fromJson(failedDelivery);
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
+    } catch (e) {
+      throw 'Failed to fetch failed delivery';
     }
   }
 
