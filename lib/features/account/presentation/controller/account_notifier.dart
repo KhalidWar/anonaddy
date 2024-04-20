@@ -21,8 +21,9 @@ class AccountNotifier extends AsyncNotifier<Account> {
   Future<Account> build() async {
     final accountService = ref.read(accountServiceProvider);
 
-    final account = await accountService.loadAccountFromDisk();
-    if (account == null) return await accountService.fetchAccount();
-    return account;
+    final account = await accountService.loadCachedData();
+    if (account != null) return account;
+
+    return await accountService.fetchAccount();
   }
 }
