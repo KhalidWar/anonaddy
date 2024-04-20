@@ -34,7 +34,7 @@ class AccountService extends BaseService {
     try {
       final accountData = await loadData();
       if (accountData == null) return null;
-      return Account.fromJson(accountData);
+      return Account.fromJson(accountData['data']);
     } catch (error) {
       return null;
     }
