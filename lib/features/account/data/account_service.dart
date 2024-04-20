@@ -24,7 +24,7 @@ class AccountService extends BaseService {
     try {
       const urlPath = '$kUnEncodedBaseURL/account-details';
       final accountData = await get(path: urlPath);
-      return Account.fromJson(accountData);
+      return Account.fromJson(accountData['data']);
     } catch (error) {
       rethrow;
     }

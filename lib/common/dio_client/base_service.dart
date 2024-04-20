@@ -21,7 +21,7 @@ abstract class BaseService {
       final response = await dio.get(path);
       log('BaseService getData(): statusCode ${response.statusCode}');
 
-      final responseData = response.data['data'];
+      final responseData = response.data;
       await _saveData(responseData);
       return responseData;
     } on DioException catch (dioException) {
