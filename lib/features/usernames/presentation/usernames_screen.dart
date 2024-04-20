@@ -181,7 +181,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
                   Navigator.pushNamed(
                     context,
                     RecipientsScreen.routeName,
-                    arguments: username.defaultRecipient!,
+                    arguments: username.defaultRecipient!.id,
                   );
                 },
               ),

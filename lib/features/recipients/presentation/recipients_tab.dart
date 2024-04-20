@@ -86,7 +86,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                           Navigator.pushNamed(
                             context,
                             RecipientsScreen.routeName,
-                            arguments: recipient,
+                            arguments: recipient.id,
                           );
                         },
                       );

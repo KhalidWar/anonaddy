@@ -243,7 +243,7 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
                         Navigator.pushNamed(
                           context,
                           RecipientsScreen.routeName,
-                          arguments: domain.defaultRecipient!,
+                          arguments: domain.defaultRecipient!.id,
                         );
                       },
                     ),

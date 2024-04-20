@@ -58,7 +58,7 @@ class AliasScreenRecipients extends StatelessWidget {
                   Navigator.pushNamed(
                     context,
                     RecipientsScreen.routeName,
-                    arguments: recipient,
+                    arguments: recipient.id,
                   );
                 },
               );

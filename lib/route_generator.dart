@@ -8,7 +8,6 @@ import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
 import 'package:anonaddy/features/home/presentation/home_screen.dart';
 import 'package:anonaddy/features/onboarding/presentation/onboarding_screen.dart';
-import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
 import 'package:anonaddy/features/search/presentation/quick_search_screen.dart';
 import 'package:anonaddy/features/settings/presentation/about_app_screen.dart';
@@ -52,7 +51,7 @@ class RouteGenerator {
       /// Account Tab
       case RecipientsScreen.routeName:
         return PlatformAware.customPageRoute(
-            RecipientsScreen(recipient: argument as Recipient));
+            RecipientsScreen(recipientId: argument as String));
       case UsernamesScreen.routeName:
         return PlatformAware.customPageRoute(
             UsernamesScreen(usernameId: argument as String));
