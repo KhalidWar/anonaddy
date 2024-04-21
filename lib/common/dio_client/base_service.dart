@@ -50,6 +50,8 @@ abstract class BaseService {
       log('BaseService post($path): statusCode ${response.statusCode}');
 
       final responseData = response.data;
+      if (responseData.isEmpty) return {};
+
       return responseData;
     } catch (error) {
       rethrow;
