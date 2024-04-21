@@ -133,37 +133,32 @@ class RecipientScreenNotifier
     }
   }
 
-  Future<void> enableReplyAndSend() async {
+  Future<void> toggleReplyAndSend() async {
     try {
       final currentState = state.value!;
+      final canReplySend = currentState.recipient.canReplySend;
+
       state =
           AsyncData(currentState.copyWith(isReplySendAndSwitchLoading: true));
+
+      if (canReplySend) {
+        await ref
+            .read(recipientScreenService)
+            .disableReplyAndSend(currentState.recipient.id);
+
+        state = AsyncData(currentState.copyWith(
+          recipient: currentState.recipient.copyWith(canReplySend: false),
+          isReplySendAndSwitchLoading: false,
+        ));
+        return;
+      }
+
       final recipient = await ref
           .read(recipientService)
           .enableReplyAndSend(currentState.recipient.id);
 
       state = AsyncData(currentState.copyWith(
         recipient: recipient,
-        isReplySendAndSwitchLoading: false,
-      ));
-    } catch (error) {
-      Utilities.showToast(error.toString());
-      state =
-          AsyncData(state.value!.copyWith(isReplySendAndSwitchLoading: false));
-    }
-  }
-
-  Future disableReplyAndSend() async {
-    try {
-      final currentState = state.value!;
-      state =
-          AsyncData(currentState.copyWith(isReplySendAndSwitchLoading: true));
-      await ref
-          .read(recipientService)
-          .disableReplyAndSend(currentState.recipient.id);
-
-      state = AsyncData(currentState.copyWith(
-        recipient: currentState.recipient.copyWith(canReplySend: false),
         isReplySendAndSwitchLoading: false,
       ));
     } catch (error) {
