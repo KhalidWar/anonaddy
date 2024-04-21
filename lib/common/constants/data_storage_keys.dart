@@ -1,4 +1,6 @@
 class DataStorageKeys {
+  const DataStorageKeys._();
+
   static const accountKey = 'accountKey';
   static const recipientKey = 'recipientKey';
   static const usernameKey = 'usernameKey';
