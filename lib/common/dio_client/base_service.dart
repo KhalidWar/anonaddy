@@ -35,7 +35,23 @@ abstract class BaseService {
     }
   }
 
-  Future<Map<String, dynamic>?> loadData() async {
+  Future<Map<String, dynamic>> post(
+    String path, {
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      final encodedData = jsonEncode(data);
+      final response = await dio.post(path, data: encodedData);
+      log('BaseService post($path): statusCode ${response.statusCode}');
+
+      final responseData = response.data;
+      return responseData;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>?> loadData([String? childId]) async {
     try {
       final data = await secureStorage.read(key: storageKey);
       log('BaseService loadData()');
