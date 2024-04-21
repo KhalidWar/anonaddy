@@ -19,8 +19,9 @@ class RecipientsNotifier extends AsyncNotifier<List<Recipient>> {
   FutureOr<List<Recipient>> build() async {
     final service = ref.read(recipientService);
 
-    final recipients = await service.loadRecipientsFromDisk();
-    if (recipients == null) return await service.fetchRecipients();
-    return recipients;
+    final recipients = await service.loadCachedData();
+    if (recipients != null) return recipients;
+
+    return await service.fetchRecipients();
   }
 }

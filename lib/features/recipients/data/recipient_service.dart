@@ -1,129 +1,50 @@
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/data_storage_keys.dart';
 import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/dio_client/base_service.dart';
 import 'package:anonaddy/common/dio_client/dio_client.dart';
-import 'package:anonaddy/features/recipients/data/recipient_data_storage.dart';
+import 'package:anonaddy/common/flutter_secure_storage.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientService = Provider<RecipientService>((ref) {
   return RecipientService(
     dio: ref.read(dioProvider),
-    recipientDataStorage: ref.read(recipientDataStorageProvider),
+    secureStorage: ref.read(flutterSecureStorage),
   );
 });
 
-class RecipientService {
+class RecipientService extends BaseService {
   const RecipientService({
-    required this.dio,
-    required this.recipientDataStorage,
+    required super.dio,
+    required super.secureStorage,
+    super.storageKey = DataStorageKeys.recipientKey,
   });
-  final Dio dio;
-  final RecipientDataStorage recipientDataStorage;
 
   Future<List<Recipient>> fetchRecipients() async {
     try {
       const path = '$kUnEncodedBaseURL/recipients';
-      final response = await dio.get(path);
-      log('fetchRecipients: ${response.statusCode}');
-      recipientDataStorage.saveData(response.data);
-      final recipientData = response.data['data'];
+      final response = await get(path);
+
+      final recipientData = response['data'];
       final recipients = (recipientData as List)
           .map((recipient) => Recipient.fromJson(recipient))
           .toList();
       return recipients;
-    } on DioException catch (dioException) {
-      if (dioException.type == DioExceptionType.connectionError) {
-        final recipients = await recipientDataStorage.loadData();
-        if (recipients != null) return recipients;
-      }
-      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<List<Recipient>?> loadRecipientsFromDisk() async {
+  Future<List<Recipient>?> loadCachedData() async {
     try {
-      final recipients = await recipientDataStorage.loadData();
+      final recipientsData = await loadData();
+      if (recipientsData == null) return null;
+
+      final recipients = (recipientsData['data'] as List)
+          .map((recipient) => Recipient.fromJson(recipient))
+          .toList();
       return recipients;
     } catch (error) {
-      rethrow;
-    }
-  }
-
-  Future<Recipient> fetchSpecificRecipient(String recipientId) async {
-    try {
-      final path = '$kUnEncodedBaseURL/recipients/$recipientId';
-      final response = await dio.get(path);
-      log('getSpecificRecipient: ${response.statusCode}');
-      final recipient = response.data['data'];
-      return Recipient.fromJson(recipient);
-    } on DioException catch (dioException) {
-      if (dioException.type == DioExceptionType.connectionError) {
-        final recipient =
-            await recipientDataStorage.loadSpecificRecipient(recipientId);
-        return recipient;
-      }
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Recipient> enableEncryption(String recipientID) async {
-    try {
-      const path = '$kUnEncodedBaseURL/encrypted-recipients';
-      final data = json.encode({"id": recipientID});
-      final response = await dio.post(path, data: data);
-      log('enableEncryption: ${response.statusCode}');
-      final recipient = response.data['data'];
-      return Recipient.fromJson(recipient);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> disableEncryption(String recipientID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/encrypted-recipients/$recipientID';
-      final response = await dio.delete(path);
-      log('disableEncryption: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Recipient> addPublicGPGKey(String recipientID, String keyData) async {
-    try {
-      final path = '$kUnEncodedBaseURL/recipient-keys/$recipientID';
-      final data = jsonEncode({"key_data": keyData});
-      final response = await dio.patch(path, data: data);
-      log('addPublicGPGKey: ${response.statusCode}');
-      final recipient = response.data['data'];
-      return Recipient.fromJson(recipient);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> removePublicGPGKey(String recipientID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/recipient-keys/$recipientID';
-      final response = await dio.delete(path);
-      log('removePublicGPGKey: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
       rethrow;
     }
   }
@@ -131,121 +52,8 @@ class RecipientService {
   Future<Recipient> addRecipient(String email) async {
     try {
       const path = '$kUnEncodedBaseURL/recipients';
-      final data = jsonEncode({"email": email});
-      final response = await dio.post(path, data: data);
-      log('addRecipient: ${response.statusCode}');
-      final recipient = response.data['data'];
-      return Recipient.fromJson(recipient);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> removeRecipient(String recipientID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/recipients/$recipientID';
-      final response = await dio.delete(path);
-      log('removeRecipient: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> resendVerificationEmail(String recipientID) async {
-    try {
-      const path = '$kUnEncodedBaseURL/recipients/email/resend';
-      final data = json.encode({"recipient_id": recipientID});
-      final response = await dio.post(path, data: data);
-      log('resendVerificationEmail: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Recipient> enableReplyAndSend(String recipientId) async {
-    try {
-      const path = '$kUnEncodedBaseURL/allowed-recipients';
-      final data = json.encode({"id": recipientId});
-      final response = await dio.post(path, data: data);
-      log('enableReplyAndSend: ${response.statusCode}');
-      final recipient = response.data['data'];
-      return Recipient.fromJson(recipient);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> disableReplyAndSend(String recipientId) async {
-    try {
-      final path = '$kUnEncodedBaseURL/allowed-recipients/$recipientId';
-      final response = await dio.delete(path);
-      log('disableReplyAndSend: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Recipient> enableInlineEncryption(String recipientId) async {
-    try {
-      const path = '$kUnEncodedBaseURL/inline-encrypted-recipients';
-      final data = json.encode({"id": recipientId});
-      final response = await dio.post(path, data: data);
-      log('enableInlineEncryption: ${response.statusCode}');
-      final recipient = response.data['data'];
-      return Recipient.fromJson(recipient);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> disableInlineEncryption(String recipientId) async {
-    try {
-      final path =
-          '$kUnEncodedBaseURL/inline-encrypted-recipients/$recipientId';
-      final response = await dio.delete(path);
-      log('disableInlineEncryption: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Recipient> enableProtectedHeader(String recipientId) async {
-    try {
-      const path = '$kUnEncodedBaseURL/protected-headers-recipients';
-      final data = json.encode({"id": recipientId});
-      final response = await dio.post(path, data: data);
-      log('enableProtectedHeader: ${response.statusCode}');
-      final recipient = response.data['data'];
-      return Recipient.fromJson(recipient);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> disableProtectedHeader(String recipientId) async {
-    try {
-      final path =
-          '$kUnEncodedBaseURL/protected-headers-recipients/$recipientId';
-      final response = await dio.delete(path);
-      log('disableProtectedHeader: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
+      final response = await post(path, data: {"email": email});
+      return Recipient.fromJson(response['data']);
     } catch (e) {
       rethrow;
     }
