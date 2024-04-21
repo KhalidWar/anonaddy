@@ -56,6 +56,31 @@ abstract class BaseService {
     }
   }
 
+  Future<void> delete(String path) async {
+    try {
+      final response = await dio.delete(path);
+      log('BaseService post($path): statusCode ${response.statusCode}');
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> patch(
+    String path, {
+    required Map<String, dynamic> data,
+  }) async {
+    try {
+      final encodedData = jsonEncode(data);
+      final response = await dio.patch(path, data: encodedData);
+      log('BaseService patch($path): statusCode ${response.statusCode}');
+
+      final responseData = response.data;
+      return responseData;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<Map<String, dynamic>?> loadData([String? childId]) async {
     try {
       final allData = await secureStorage.readAll();
