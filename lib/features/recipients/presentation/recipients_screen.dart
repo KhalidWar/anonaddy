@@ -142,17 +142,10 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
                 trailing: RecipientScreenTrailingLoadingSwitch(
                   isLoading: recipientScreenState.isReplySendAndSwitchLoading,
                   switchValue: recipientScreenState.recipient.canReplySend,
-                  onPress: (toggle) async {
-                    recipient.canReplySend
-                        ? await ref
-                            .read(recipientScreenNotifierProvider(recipient.id)
-                                .notifier)
-                            .disableReplyAndSend()
-                        : await ref
-                            .read(recipientScreenNotifierProvider(recipient.id)
-                                .notifier)
-                            .enableReplyAndSend();
-                  },
+                  onPress: (toggle) async => await ref
+                      .read(recipientScreenNotifierProvider(recipient.id)
+                          .notifier)
+                      .toggleReplyAndSend(),
                 ),
               ),
               const Divider(height: 24),
