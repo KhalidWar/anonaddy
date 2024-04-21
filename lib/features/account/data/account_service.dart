@@ -23,7 +23,7 @@ class AccountService extends BaseService {
   Future<Account> fetchAccount() async {
     try {
       const urlPath = '$kUnEncodedBaseURL/account-details';
-      final accountData = await get(path: urlPath);
+      final accountData = await get(urlPath);
       return Account.fromJson(accountData['data']);
     } catch (error) {
       rethrow;
