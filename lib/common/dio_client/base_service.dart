@@ -10,23 +10,28 @@ abstract class BaseService {
     required this.dio,
     required this.secureStorage,
     required this.storageKey,
-  });
+    this.parentStorageKey,
+  }) : assert(!(storageKey == '' && parentStorageKey == null));
 
   final Dio dio;
   final FlutterSecureStorage secureStorage;
   final String storageKey;
+  final String? parentStorageKey;
 
-  Future<Map<String, dynamic>> get({required String path}) async {
+  Future<Map<String, dynamic>> get(
+    String path, {
+    String? childId,
+  }) async {
     try {
       final response = await dio.get(path);
-      log('BaseService getData(): statusCode ${response.statusCode}');
+      log('BaseService getData($path): statusCode ${response.statusCode}');
 
       final responseData = response.data;
-      await _saveData(responseData);
+      if (storageKey.isNotEmpty) await _saveData(responseData);
       return responseData;
     } on DioException catch (dioException) {
       if (dioException.type == DioExceptionType.connectionError) {
-        final loadedData = await loadData();
+        final loadedData = await loadData(childId);
         if (loadedData != null) return loadedData;
       }
       throw dioException.message ?? AppStrings.somethingWentWrong;
@@ -53,12 +58,22 @@ abstract class BaseService {
 
   Future<Map<String, dynamic>?> loadData([String? childId]) async {
     try {
-      final data = await secureStorage.read(key: storageKey);
-      log('BaseService loadData()');
+      final allData = await secureStorage.readAll();
 
-      if (data == null) return null;
+      if (parentStorageKey != null && childId != null) {
+        final parentData = allData[parentStorageKey];
+        if (parentData == null) return null;
 
-      return jsonDecode(data);
+        final decodedParentData = jsonDecode(parentData);
+        final childData = (decodedParentData['data'] as List)
+            .firstWhere((element) => element['id'] == childId);
+        return {'data': childData};
+      }
+
+      final accessedData = allData[storageKey];
+      if (accessedData == null) return null;
+
+      return jsonDecode(accessedData);
     } catch (_) {
       return null;
     }
