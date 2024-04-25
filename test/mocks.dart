@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:anonaddy/features/account/data/account_data_storage.dart';
 import 'package:anonaddy/features/account/data/account_service.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
@@ -132,8 +131,6 @@ class MockAliasScreenNotifier extends AliasScreenNotifier {
 }
 
 class MockAccountService extends Mock implements AccountService {}
-
-class MockAccountDataStorage extends Mock implements AccountDataStorage {}
 
 class MockDataStorage extends Mock implements AliasDataStorage {}
 
