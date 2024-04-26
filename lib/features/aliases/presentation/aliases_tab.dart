@@ -54,6 +54,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final aliasTabState = ref.watch(aliasesNotifierProvider);
 
     return Scaffold(
       key: AliasesTab.aliasTabScaffold,
@@ -100,90 +101,83 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
               ),
             ];
           },
-          body: Consumer(
-            builder: (_, ref, __) {
-              final aliasTabState = ref.watch(aliasesNotifierProvider);
+          body: aliasTabState.when(
+            data: (aliases) {
+              final availableAliasList = aliases.availableAliases;
+              final deletedAliasList = aliases.deletedAliases;
 
-              return aliasTabState.when(
-                data: (aliases) {
-                  final availableAliasList = aliases.availableAliases;
-                  final deletedAliasList = aliases.deletedAliases;
+              return TabBarView(
+                key: AliasesTab.aliasTabLoadedTabBarView,
+                children: [
+                  /// Available aliases list
+                  RefreshIndicator(
+                    color: AppColors.accentColor,
+                    displacement: 20,
+                    onRefresh: () async {
+                      await ref
+                          .read(aliasesNotifierProvider.notifier)
+                          .fetchAliases();
+                    },
+                    child: availableAliasList.isEmpty
+                        ? const EmptyListAliasTabWidget()
+                        : PlatformScrollbar(
+                            child: ListView.builder(
+                              itemCount: availableAliasList.length,
+                              itemBuilder: (context, index) {
+                                return AliasListTile(
+                                  key:
+                                      AliasesTab.aliasTabAvailableAliasListTile,
+                                  alias: availableAliasList[index],
+                                );
+                              },
+                            ),
+                          ),
+                  ),
 
-                  return TabBarView(
-                    key: AliasesTab.aliasTabLoadedTabBarView,
-                    children: [
-                      /// Available aliases list
-                      RefreshIndicator(
-                        color: AppColors.accentColor,
-                        displacement: 20,
-                        onRefresh: () async {
-                          await ref
-                              .read(aliasesNotifierProvider.notifier)
-                              .fetchAliases();
-                        },
-                        child: availableAliasList.isEmpty
-                            ? const EmptyListAliasTabWidget()
-                            : PlatformScrollbar(
-                                child: ListView.builder(
-                                  itemCount: availableAliasList.length,
-                                  itemBuilder: (context, index) {
-                                    return AliasListTile(
-                                      key: AliasesTab
-                                          .aliasTabAvailableAliasListTile,
-                                      alias: availableAliasList[index],
-                                    );
-                                  },
-                                ),
-                              ),
-                      ),
-
-                      /// Deleted aliases list
-                      RefreshIndicator(
-                        onRefresh: () async {
-                          await ref
-                              .read(aliasesNotifierProvider.notifier)
-                              .fetchAliases();
-                        },
-                        child: deletedAliasList.isEmpty
-                            ? const EmptyListAliasTabWidget()
-                            : PlatformScrollbar(
-                                child: ListView.builder(
-                                  itemCount: deletedAliasList.length,
-                                  itemBuilder: (context, index) {
-                                    return AliasListTile(
-                                      key: AliasesTab
-                                          .aliasTabDeletedAliasListTile,
-                                      alias: deletedAliasList[index],
-                                    );
-                                  },
-                                ),
-                              ),
-                      ),
-                    ],
-                  );
-                },
-                error: (error, _) {
-                  return TabBarView(
-                    key: AliasesTab.aliasTabFailedTabBarView,
-                    children: [
-                      ErrorMessageWidget(message: error.toString()),
-                      ErrorMessageWidget(message: error.toString()),
-                    ],
-                  );
-                },
-                loading: () {
-                  return const TabBarView(
-                    key: AliasesTab.aliasTabLoadingTabBarView,
-                    children: [
-                      AliasShimmerLoading(
-                        key: AliasesTab.aliasTabAvailableAliasesLoading,
-                      ),
-                      AliasShimmerLoading(
-                        key: AliasesTab.aliasTabDeletedAliasesLoading,
-                      ),
-                    ],
-                  );
-                },
+                  /// Deleted aliases list
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      await ref
+                          .read(aliasesNotifierProvider.notifier)
+                          .fetchAliases();
+                    },
+                    child: deletedAliasList.isEmpty
+                        ? const EmptyListAliasTabWidget()
+                        : PlatformScrollbar(
+                            child: ListView.builder(
+                              itemCount: deletedAliasList.length,
+                              itemBuilder: (context, index) {
+                                return AliasListTile(
+                                  key: AliasesTab.aliasTabDeletedAliasListTile,
+                                  alias: deletedAliasList[index],
+                                );
+                              },
+                            ),
+                          ),
+                  ),
+                ],
+              );
+            },
+            error: (error, _) {
+              return TabBarView(
+                key: AliasesTab.aliasTabFailedTabBarView,
+                children: [
+                  ErrorMessageWidget(message: error.toString()),
+                  ErrorMessageWidget(message: error.toString()),
+                ],
+              );
+            },
+            loading: () {
+              return const TabBarView(
+                key: AliasesTab.aliasTabLoadingTabBarView,
+                children: [
+                  AliasShimmerLoading(
+                    key: AliasesTab.aliasTabAvailableAliasesLoading,
+                  ),
+                  AliasShimmerLoading(
+                    key: AliasesTab.aliasTabDeletedAliasesLoading,
+                  ),
+                ],
               );
             },
           ),
