@@ -22,6 +22,7 @@ class AliasService {
     required this.dio,
     required this.dataStorage,
   });
+
   final Dio dio;
   final AliasDataStorage dataStorage;
 
@@ -100,23 +101,6 @@ class AliasService {
     }
   }
 
-  Future<Alias> fetchSpecificAlias(String aliasID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
-      final response = await dio.get(path);
-      log('getSpecificAlias: ${response.statusCode}');
-      return Alias.fromJson(response.data['data']);
-    } on DioException catch (dioException) {
-      if (dioException.type == DioExceptionType.connectionError) {
-        final alias = await dataStorage.loadSpecificAlias(aliasID);
-        if (alias != null) return alias;
-      }
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      throw 'Failed to fetch alias';
-    }
-  }
-
   Future<Alias> createNewAlias({
     required String desc,
     required String localPart,
@@ -143,72 +127,6 @@ class AliasService {
     }
   }
 
-  Future<Alias> activateAlias(String aliasId) async {
-    try {
-      const path = '$kUnEncodedBaseURL/active-aliases';
-      final data = json.encode({"id": aliasId});
-      final response = await dio.post(path, data: data);
-      final alias = Alias.fromJson(response.data['data']);
-      log('activateAlias: ${response.statusCode}');
-      return alias;
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> deactivateAlias(String aliasId) async {
-    try {
-      final path = '$kUnEncodedBaseURL/active-aliases/$aliasId';
-      final response = await dio.delete(path);
-      log('deactivateAlias: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Alias> updateAliasDescription(String aliasID, String newDesc) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
-      final data = jsonEncode({"description": newDesc});
-      final response = await dio.patch(path, data: data);
-      log('updateAliasDescription: ${response.statusCode}');
-      return Alias.fromJson(response.data['data']);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> deleteAlias(String aliasID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
-      final response = await dio.delete(path);
-      log('deleteAlias: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Alias> restoreAlias(String aliasID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID/restore';
-      final response = await dio.patch(path);
-      log('restoreAlias: ${response.statusCode}');
-      return Alias.fromJson(response.data['data']);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future<Alias> updateAliasDefaultRecipient(
       String aliasID, List<String> recipientId) async {
     try {
@@ -223,28 +141,5 @@ class AliasService {
     } catch (e) {
       rethrow;
     }
-  }
-
-  Future<void> forgetAlias(String aliasID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID/forget';
-      final response = await dio.delete(path);
-      log('forgetAlias: ${response.statusCode}');
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  String generateSendFromAlias(String aliasEmail, String destinationEmail) {
-    /// https://addy.io/help/sending-email-from-an-alias/
-    final leftPartOfAlias = aliasEmail.split('@')[0];
-    final rightPartOfAlias = aliasEmail.split('@')[1];
-    final recipientEmail = destinationEmail.replaceAll('@', '=');
-    final generatedAddress =
-        '$leftPartOfAlias+$recipientEmail@$rightPartOfAlias';
-
-    return generatedAddress;
   }
 }
