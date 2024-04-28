@@ -134,7 +134,7 @@ class MockAccountService extends Mock implements AccountService {}
 
 class MockDataStorage extends Mock implements AliasDataStorage {}
 
-class MockAliasService extends Mock implements AliasService {}
+class MockAliasService extends Mock implements AliasesService {}
 
 class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 

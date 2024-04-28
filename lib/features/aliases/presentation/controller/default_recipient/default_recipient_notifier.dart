@@ -34,7 +34,7 @@ class DefaultRecipientNotifier
       final defaultRecipients =
           currentState.defaultRecipients.map((e) => e.id).toList();
       await ref
-          .read(aliasServiceProvider)
+          .read(aliasesServiceProvider)
           .updateAliasDefaultRecipient(arg, defaultRecipients);
 
       /// Refreshes [AliasScreen] to reflect latest recipients.

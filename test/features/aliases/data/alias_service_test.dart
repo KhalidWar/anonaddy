@@ -10,12 +10,12 @@ import '../../../test_data/alias_test_data.dart';
 void main() async {
   late MockDio mockDio;
   late MockDataStorage mockDataStorage;
-  late AliasService aliasService;
+  late AliasesService aliasService;
 
   setUp(() {
     mockDio = MockDio();
     mockDataStorage = MockDataStorage();
-    aliasService = AliasService(dio: mockDio, dataStorage: mockDataStorage);
+    aliasService = AliasesService(dio: mockDio, dataStorage: mockDataStorage);
   });
 
   group('aliasService.fetchSpecificAlias tests ', () {

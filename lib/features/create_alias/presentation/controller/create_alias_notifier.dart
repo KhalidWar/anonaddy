@@ -48,15 +48,16 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
     state = AsyncData(currentState.copyWith(isConfirmButtonLoading: true));
 
     try {
-      final createdAlias = await ref.read(aliasServiceProvider).createNewAlias(
-            domain: currentState.selectedAliasDomain!,
-            format: currentState.selectedAliasFormat!,
-            desc: currentState.description,
-            localPart: currentState.localPart,
-            recipients: currentState.selectedRecipients
-                .map((recipient) => recipient.id)
-                .toList(),
-          );
+      final createdAlias =
+          await ref.read(aliasesServiceProvider).createNewAlias(
+                domain: currentState.selectedAliasDomain!,
+                format: currentState.selectedAliasFormat!,
+                desc: currentState.description,
+                localPart: currentState.localPart,
+                recipients: currentState.selectedRecipients
+                    .map((recipient) => recipient.id)
+                    .toList(),
+              );
 
       if (isAutoCopy) {
         await Utilities.copyOnTap(createdAlias.email);

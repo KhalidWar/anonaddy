@@ -12,7 +12,7 @@ class AssociatedAliasesNotifier
     extends AutoDisposeFamilyAsyncNotifier<List<Alias>?, Map<String, String>> {
   @override
   FutureOr<List<Alias>?> build(Map<String, String> arg) async {
-    final aliasesService = ref.read(aliasServiceProvider);
+    final aliasesService = ref.read(aliasesServiceProvider);
     return await aliasesService.fetchAssociatedAliases(arg);
   }
 }

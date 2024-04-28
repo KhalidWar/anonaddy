@@ -3,70 +3,64 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/data_storage_keys.dart';
 import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/dio_client/base_service.dart';
 import 'package:anonaddy/common/dio_client/dio_client.dart';
-import 'package:anonaddy/features/aliases/data/alias_data_storage.dart';
+import 'package:anonaddy/common/flutter_secure_storage.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final aliasServiceProvider = Provider<AliasService>((ref) {
-  return AliasService(
+final aliasesServiceProvider = Provider<AliasesService>((ref) {
+  return AliasesService(
     dio: ref.read(dioProvider),
-    dataStorage: ref.read(aliasDataStorageProvider),
+    secureStorage: ref.read(flutterSecureStorage),
   );
 });
 
-class AliasService {
-  const AliasService({
-    required this.dio,
-    required this.dataStorage,
+class AliasesService extends BaseService {
+  const AliasesService({
+    required super.dio,
+    required super.secureStorage,
+    super.storageKey = DataStorageKeys.aliasesKey,
   });
-
-  final Dio dio;
-  final AliasDataStorage dataStorage;
 
   Future<List<Alias>> fetchAliases() async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
       final params = {'with': 'recipients'};
-      final response = await dio.get(path, queryParameters: params);
+      final response = await get(path, queryParameters: params);
 
-      log('fetchAliases: ${response.statusCode}');
-      final aliases = response.data['data'] as List;
-      dataStorage.saveAliases(aliases: aliases);
+      final aliases = response['data'] as List;
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } on DioException catch (dioException) {
-      if (dioException.type == DioExceptionType.connectionError) {
-        final aliases = await dataStorage.loadAliases();
-        if (aliases != null) return aliases;
-      }
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      throw 'Failed to fetch available aliases';
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<List<Alias>?> loadCachedData() async {
+    try {
+      final aliasesData = await loadData();
+      if (aliasesData == null) return null;
+
+      final aliases = (aliasesData['data'] as List)
+          .map((recipient) => Alias.fromJson(recipient))
+          .toList();
+      return aliases;
+    } catch (error) {
+      rethrow;
     }
   }
 
   Future<List<Alias>> fetchAssociatedAliases(Map<String, String> params) async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
-      final response = await dio.get(path, queryParameters: params);
-      log('fetchAssociatedAliases: ${response.statusCode}');
-      final aliases = response.data['data'] as List;
+      final response = await get(path, queryParameters: params);
+      final aliases = response['data'] as List;
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch available aliases';
-    }
-  }
-
-  Future<List<Alias>?> loadAliasesFromDisk() async {
-    try {
-      final availableAliases = await dataStorage.loadAliases();
-      return availableAliases;
-    } catch (e) {
-      rethrow;
     }
   }
 
@@ -97,7 +91,9 @@ class AliasService {
   }
 
   Future<Alias> updateAliasDefaultRecipient(
-      String aliasID, List<String> recipientId) async {
+    String aliasID,
+    List<String> recipientId,
+  ) async {
     try {
       const path = '$kUnEncodedBaseURL/alias-recipients';
       final data =

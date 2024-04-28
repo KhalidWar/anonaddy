@@ -10,15 +10,15 @@ final aliasesNotifierProvider =
 class AliasesNotifier extends AsyncNotifier<List<Alias>> {
   Future<void> fetchAliases() async {
     state = await AsyncValue.guard(
-      () => ref.read(aliasServiceProvider).fetchAliases(),
+      () => ref.read(aliasesServiceProvider).fetchAliases(),
     );
   }
 
   @override
   FutureOr<List<Alias>> build() async {
-    final aliasesService = ref.read(aliasServiceProvider);
+    final aliasesService = ref.read(aliasesServiceProvider);
 
-    final cachedAliases = await aliasesService.loadAliasesFromDisk();
+    final cachedAliases = await aliasesService.loadCachedData();
 
     if (cachedAliases != null) {
       return cachedAliases;
