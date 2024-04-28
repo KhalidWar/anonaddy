@@ -19,13 +19,13 @@ class AliasScreenService extends BaseService {
     required super.dio,
     required super.secureStorage,
     super.storageKey = '',
-    super.parentStorageKey = DataStorageKeys.availableAliasesKey,
+    super.parentStorageKey = DataStorageKeys.aliasesKey,
   });
 
   Future<Alias> fetchSpecificAlias(String aliasID) async {
     try {
       final path = '$kUnEncodedBaseURL/aliases/$aliasID';
-      final response = await get(path);
+      final response = await get(path, childId: aliasID);
       return Alias.fromJson(response['data']);
     } catch (e) {
       rethrow;
