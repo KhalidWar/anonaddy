@@ -65,7 +65,7 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
         Utilities.showToast(ToastMessage.createAliasSuccess);
       }
 
-      aliasTabNotifier.addAlias(createdAlias);
+      ref.invalidate(aliasesNotifierProvider);
     } catch (error) {
       Utilities.showToast(error.toString());
     }

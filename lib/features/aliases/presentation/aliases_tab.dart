@@ -62,7 +62,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
       /// [DefaultTabController] is required when using [TabBar]s without
       /// a custom [TabController]
       body: DefaultTabController(
-        length: 2,
+        length: 1,
         child: NestedScrollView(
           key: AliasesTab.aliasTabScrollView,
           controller:
@@ -90,11 +90,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                   tabs: [
                     Tab(
                       key: AliasesTab.aliasTabAvailableAliasesTab,
-                      text: 'Available Aliases',
-                    ),
-                    Tab(
-                      key: AliasesTab.aliasTabDeletedAliasesTab,
-                      text: 'Deleted Aliases',
+                      text: 'Aliases (active & inactive)',
                     ),
                   ],
                 ),
@@ -103,13 +99,9 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
           },
           body: aliasTabState.when(
             data: (aliases) {
-              final availableAliasList = aliases.availableAliases;
-              final deletedAliasList = aliases.deletedAliases;
-
               return TabBarView(
                 key: AliasesTab.aliasTabLoadedTabBarView,
                 children: [
-                  /// Available aliases list
                   RefreshIndicator(
                     color: AppColors.accentColor,
                     displacement: 20,
@@ -118,38 +110,17 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                           .read(aliasesNotifierProvider.notifier)
                           .fetchAliases();
                     },
-                    child: availableAliasList.isEmpty
+                    child: aliases.isEmpty
                         ? const EmptyListAliasTabWidget()
                         : PlatformScrollbar(
                             child: ListView.builder(
-                              itemCount: availableAliasList.length,
+                              itemCount: aliases.length,
+                              physics: const ClampingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return AliasListTile(
                                   key:
                                       AliasesTab.aliasTabAvailableAliasListTile,
-                                  alias: availableAliasList[index],
-                                );
-                              },
-                            ),
-                          ),
-                  ),
-
-                  /// Deleted aliases list
-                  RefreshIndicator(
-                    onRefresh: () async {
-                      await ref
-                          .read(aliasesNotifierProvider.notifier)
-                          .fetchAliases();
-                    },
-                    child: deletedAliasList.isEmpty
-                        ? const EmptyListAliasTabWidget()
-                        : PlatformScrollbar(
-                            child: ListView.builder(
-                              itemCount: deletedAliasList.length,
-                              itemBuilder: (context, index) {
-                                return AliasListTile(
-                                  key: AliasesTab.aliasTabDeletedAliasListTile,
-                                  alias: deletedAliasList[index],
+                                  alias: aliases[index],
                                 );
                               },
                             ),
@@ -161,10 +132,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
             error: (error, _) {
               return TabBarView(
                 key: AliasesTab.aliasTabFailedTabBarView,
-                children: [
-                  ErrorMessageWidget(message: error.toString()),
-                  ErrorMessageWidget(message: error.toString()),
-                ],
+                children: [ErrorMessageWidget(message: error.toString())],
               );
             },
             loading: () {
@@ -173,9 +141,6 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                 children: [
                   AliasShimmerLoading(
                     key: AliasesTab.aliasTabAvailableAliasesLoading,
-                  ),
-                  AliasShimmerLoading(
-                    key: AliasesTab.aliasTabDeletedAliasesLoading,
                   ),
                 ],
               );

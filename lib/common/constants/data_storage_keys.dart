@@ -8,8 +8,7 @@ class DataStorageKeys {
   static const rulesKey = 'rulesKey';
   static const domainOptionsKey = 'domainOptionsKey';
 
-  static const availableAliasesKey = 'availableAliasesKey';
-  static const deletedAliasesKey = 'deletedAliasesKey';
+  static const aliasesKey = 'aliasesKey';
 
   static const searchHistoryKey = 'searchHistoryKey';
 }

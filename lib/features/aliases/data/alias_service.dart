@@ -26,44 +26,24 @@ class AliasService {
   final Dio dio;
   final AliasDataStorage dataStorage;
 
-  Future<List<Alias>> fetchAvailableAliases() async {
+  Future<List<Alias>> fetchAliases() async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
       final params = {'with': 'recipients'};
       final response = await dio.get(path, queryParameters: params);
-      log('fetchAvailableAliases: ${response.statusCode}');
+
+      log('fetchAliases: ${response.statusCode}');
       final aliases = response.data['data'] as List;
-      dataStorage.saveAliases(aliases: aliases, isAvailableAliases: true);
+      dataStorage.saveAliases(aliases: aliases);
       return aliases.map((alias) => Alias.fromJson(alias)).toList();
     } on DioException catch (dioException) {
       if (dioException.type == DioExceptionType.connectionError) {
-        final aliases = await dataStorage.loadAliases(isAvailableAliases: true);
+        final aliases = await dataStorage.loadAliases();
         if (aliases != null) return aliases;
       }
       throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch available aliases';
-    }
-  }
-
-  Future<List<Alias>> fetchDeletedAliases() async {
-    try {
-      const path = '$kUnEncodedBaseURL/aliases';
-      final params = {'deleted': 'only', 'with': 'recipients'};
-      final response = await dio.get(path, queryParameters: params);
-      log('fetchDeletedAliases: ${response.statusCode}');
-      final aliases = response.data['data'] as List;
-      dataStorage.saveAliases(aliases: aliases, isAvailableAliases: false);
-      return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } on DioException catch (dioException) {
-      if (dioException.type == DioExceptionType.connectionError) {
-        final aliases =
-            await dataStorage.loadAliases(isAvailableAliases: false);
-        if (aliases != null) return aliases;
-      }
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      throw 'Failed to fetch deleted aliases';
     }
   }
 
@@ -81,21 +61,10 @@ class AliasService {
     }
   }
 
-  Future<List<Alias>?> loadAvailableAliasesFromDisk() async {
+  Future<List<Alias>?> loadAliasesFromDisk() async {
     try {
-      final availableAliases =
-          await dataStorage.loadAliases(isAvailableAliases: true);
+      final availableAliases = await dataStorage.loadAliases();
       return availableAliases;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<List<Alias>?> loadDeletedAliasesFromDisk() async {
-    try {
-      final deletedAliases =
-          await dataStorage.loadAliases(isAvailableAliases: false);
-      return deletedAliases;
     } catch (e) {
       rethrow;
     }

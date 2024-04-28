@@ -15,16 +15,11 @@ class AliasDataStorage {
   const AliasDataStorage({required this.secureStorage});
   final FlutterSecureStorage secureStorage;
 
-  Future<void> saveAliases({
-    required List aliases,
-    required bool isAvailableAliases,
-  }) async {
+  Future<void> saveAliases({required List aliases}) async {
     try {
       final encodedAliases = jsonEncode(aliases);
       await secureStorage.write(
-        key: isAvailableAliases
-            ? DataStorageKeys.availableAliasesKey
-            : DataStorageKeys.deletedAliasesKey,
+        key: DataStorageKeys.aliasesKey,
         value: encodedAliases,
       );
     } catch (_) {
@@ -32,13 +27,9 @@ class AliasDataStorage {
     }
   }
 
-  Future<List<Alias>?> loadAliases({required bool isAvailableAliases}) async {
+  Future<List<Alias>?> loadAliases() async {
     try {
-      final data = await secureStorage.read(
-        key: isAvailableAliases
-            ? DataStorageKeys.availableAliasesKey
-            : DataStorageKeys.deletedAliasesKey,
-      );
+      final data = await secureStorage.read(key: DataStorageKeys.aliasesKey);
 
       if (data == null) return null;
 
@@ -48,19 +39,6 @@ class AliasDataStorage {
           .toList();
       return aliases;
     } catch (_) {
-      return [];
-    }
-  }
-
-  Future<Alias?> loadSpecificAlias(String id) async {
-    try {
-      final availableAliases = await loadAliases(isAvailableAliases: true);
-      final deletedAliases = await loadAliases(isAvailableAliases: false);
-
-      final List<Alias?> aliases = [...?availableAliases, ...?deletedAliases];
-      final alias = aliases.firstWhere((element) => element?.id == id);
-      return alias;
-    } catch (error) {
       return null;
     }
   }
