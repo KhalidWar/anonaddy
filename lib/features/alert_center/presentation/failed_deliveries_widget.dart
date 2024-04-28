@@ -2,6 +2,7 @@ import 'package:anonaddy/common/error_message_widget.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/features/alert_center/presentation/controller/failed_delivery_notifier.dart';
+import 'package:anonaddy/features/alert_center/presentation/controller/local_notification_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -73,7 +74,10 @@ class FailedDeliveriesWidget extends ConsumerWidget {
                     await ref
                         .read(failedDeliveryNotifier(failedDeliveryId).notifier)
                         .deleteFailedDelivery()
-                        .whenComplete(() => Navigator.pop(context));
+                        .whenComplete(() {
+                      ref.invalidate(localNotificationNotifierProvider);
+                      Navigator.pop(context);
+                    });
                   },
                 ),
               ),
