@@ -20,11 +20,12 @@ abstract class BaseService {
 
   Future<Map<String, dynamic>> get(
     String path, {
+    Map<String, dynamic>? queryParameters,
     String? childId,
   }) async {
     try {
-      final response = await dio.get(path);
-      log('BaseService getData($path): statusCode ${response.statusCode}');
+      final response = await dio.get(path, queryParameters: queryParameters);
+      log('BaseService get($path): statusCode ${response.statusCode}');
 
       final responseData = response.data;
       if (storageKey.isNotEmpty) await _saveData(responseData);
@@ -61,7 +62,7 @@ abstract class BaseService {
   Future<void> delete(String path) async {
     try {
       final response = await dio.delete(path);
-      log('BaseService post($path): statusCode ${response.statusCode}');
+      log('BaseService delete($path): statusCode ${response.statusCode}');
     } catch (error) {
       rethrow;
     }
