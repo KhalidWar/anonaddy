@@ -1,4 +1,4 @@
-import 'package:anonaddy/features/aliases/data/alias_service.dart';
+import 'package:anonaddy/features/aliases/data/aliases_service.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
