@@ -26,10 +26,15 @@ class AliasesService extends BaseService {
     super.storageKey = DataStorageKeys.aliasesKey,
   });
 
-  Future<List<Alias>> fetchAliases() async {
+  Future<List<Alias>> fetchAliases({
+    bool onlyDeletedAliases = false,
+  }) async {
     try {
       const path = '$kUnEncodedBaseURL/aliases';
-      final params = {'with': 'recipients'};
+      final params = {
+        'with': 'recipients',
+        if (onlyDeletedAliases) "filter[deleted]": "only",
+      };
       final response = await get(path, queryParameters: params);
 
       final aliases = response['data'] as List;
