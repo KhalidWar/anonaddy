@@ -6,6 +6,7 @@ import 'package:anonaddy/features/aliases/presentation/components/alias_shimmer_
 import 'package:anonaddy/features/aliases/presentation/components/alias_tab_emails_stats.dart';
 import 'package:anonaddy/features/aliases/presentation/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/deleted_aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,6 +38,15 @@ class AliasesTab extends ConsumerStatefulWidget {
 }
 
 class _AlisTabState extends ConsumerState<AliasesTab> {
+  void _handleTabChange(int index) {
+    if (index == 0) {
+      ref.read(aliasesNotifierProvider.notifier).fetchAliases();
+    }
+    if (index == 1) {
+      ref.read(deletedAliasesNotifierProvider.notifier).fetchDeletedAliases();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,7 +64,9 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final aliasTabState = ref.watch(aliasesNotifierProvider);
+
+    final availableAliasesAsync = ref.watch(aliasesNotifierProvider);
+    final deletedAliasesAsync = ref.watch(deletedAliasesNotifierProvider);
 
     return Scaffold(
       key: AliasesTab.aliasTabScaffold,
@@ -62,7 +74,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
       /// [DefaultTabController] is required when using [TabBar]s without
       /// a custom [TabController]
       body: DefaultTabController(
-        length: 1,
+        length: 2,
         child: NestedScrollView(
           key: AliasesTab.aliasTabScrollView,
           controller:
@@ -81,70 +93,102 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                     key: AliasesTab.aliasTabEmailsStats,
                   ),
                 ),
-                bottom: const TabBar(
+                bottom: TabBar(
                   key: AliasesTab.aliasTabTabBar,
                   indicatorColor: AppColors.accentColor,
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.grey,
                   indicatorWeight: 3,
-                  tabs: [
+                  onTap: _handleTabChange,
+                  tabs: const [
                     Tab(
                       key: AliasesTab.aliasTabAvailableAliasesTab,
-                      text: 'Aliases (active & inactive)',
+                      text: 'Available Aliases',
+                    ),
+                    Tab(
+                      key: AliasesTab.aliasTabDeletedAliasesTab,
+                      text: 'Deleted Aliases',
                     ),
                   ],
                 ),
               ),
             ];
           },
-          body: aliasTabState.when(
-            data: (aliases) {
-              return TabBarView(
-                key: AliasesTab.aliasTabLoadedTabBarView,
-                children: [
+          body: TabBarView(
+            key: AliasesTab.aliasTabLoadedTabBarView,
+            children: availableAliasesAsync.when(
+              data: (availableAliases) {
+                return [
                   RefreshIndicator(
                     color: AppColors.accentColor,
                     displacement: 20,
-                    onRefresh: () async {
-                      await ref
-                          .read(aliasesNotifierProvider.notifier)
-                          .fetchAliases();
-                    },
-                    child: aliases.isEmpty
+                    onRefresh:
+                        ref.read(aliasesNotifierProvider.notifier).fetchAliases,
+                    child: availableAliases.isEmpty
                         ? const EmptyListAliasTabWidget()
                         : PlatformScrollbar(
                             child: ListView.builder(
-                              itemCount: aliases.length,
+                              itemCount: availableAliases.length,
                               physics: const ClampingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return AliasListTile(
                                   key:
                                       AliasesTab.aliasTabAvailableAliasListTile,
-                                  alias: aliases[index],
+                                  alias: availableAliases[index],
                                 );
                               },
                             ),
                           ),
                   ),
-                ],
-              );
-            },
-            error: (error, _) {
-              return TabBarView(
-                key: AliasesTab.aliasTabFailedTabBarView,
-                children: [ErrorMessageWidget(message: error.toString())],
-              );
-            },
-            loading: () {
-              return const TabBarView(
-                key: AliasesTab.aliasTabLoadingTabBarView,
-                children: [
-                  AliasShimmerLoading(
-                    key: AliasesTab.aliasTabAvailableAliasesLoading,
+                  deletedAliasesAsync.when(
+                    data: (deletedAliases) {
+                      if (deletedAliases == null) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return RefreshIndicator(
+                        color: AppColors.accentColor,
+                        displacement: 20,
+                        onRefresh: ref
+                            .read(deletedAliasesNotifierProvider.notifier)
+                            .fetchDeletedAliases,
+                        child: deletedAliases.isEmpty
+                            ? const EmptyListAliasTabWidget()
+                            : PlatformScrollbar(
+                                child: ListView.builder(
+                                  itemCount: deletedAliases.length,
+                                  physics: const ClampingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return AliasListTile(
+                                      key: AliasesTab
+                                          .aliasTabDeletedAliasListTile,
+                                      alias: deletedAliases[index],
+                                    );
+                                  },
+                                ),
+                              ),
+                      );
+                    },
+                    loading: () => const AliasShimmerLoading(),
+                    error: (error, _) {
+                      return ErrorMessageWidget(message: error.toString());
+                    },
                   ),
-                ],
-              );
-            },
+                ];
+              },
+              error: (error, _) {
+                return [
+                  ErrorMessageWidget(message: error.toString()),
+                  ErrorMessageWidget(message: error.toString()),
+                ];
+              },
+              loading: () {
+                return const [
+                  AliasShimmerLoading(),
+                  AliasShimmerLoading(),
+                ];
+              },
+            ),
           ),
         ),
       ),
