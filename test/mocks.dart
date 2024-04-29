@@ -7,8 +7,8 @@ import 'package:anonaddy/features/aliases/data/alias_data_storage.dart';
 import 'package:anonaddy/features/aliases/data/aliases_service.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_state.dart';
-import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_state.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
@@ -76,7 +76,7 @@ class MockDomainOptionsNotifier extends DomainOptionsNotifier {
   }
 }
 
-class MockAliasesNotifier extends AliasesNotifier {
+class MockAliasesNotifier extends AvailableAliasesNotifier {
   MockAliasesNotifier({
     required this.aliasesState,
     this.throwError = false,

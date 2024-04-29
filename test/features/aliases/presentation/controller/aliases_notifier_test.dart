@@ -1,15 +1,15 @@
-import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../mocks.dart';
 
 void main() {
   late MockAliasService aliasService;
-  late AliasesNotifier aliasTabNotifier;
+  late AvailableAliasesNotifier aliasTabNotifier;
 
   setUp(() {
     aliasService = MockAliasService();
-    aliasTabNotifier = AliasesNotifier(
+    aliasTabNotifier = AvailableAliasesNotifier(
         // aliasService: aliasService,
         );
   });

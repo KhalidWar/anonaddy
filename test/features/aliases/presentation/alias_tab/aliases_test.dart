@@ -1,8 +1,8 @@
 import 'package:anonaddy/common/error_message_widget.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
-import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/aliases_state.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

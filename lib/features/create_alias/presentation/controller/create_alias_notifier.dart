@@ -6,7 +6,7 @@ import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/data/account_service.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/aliases/data/aliases_service.dart';
-import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_state.dart';
 import 'package:anonaddy/features/domain_options/data/domain_options_service.dart';
 import 'package:anonaddy/features/recipients/data/recipient_service.dart';

@@ -5,7 +5,7 @@ import 'package:anonaddy/common/platform_aware_widgets/platform_scroll_bar.dart'
 import 'package:anonaddy/features/aliases/presentation/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/features/aliases/presentation/components/alias_tab_emails_stats.dart';
 import 'package:anonaddy/features/aliases/presentation/components/empty_list_alias_tab.dart';
-import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/deleted_aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
 import 'package:flutter/material.dart';

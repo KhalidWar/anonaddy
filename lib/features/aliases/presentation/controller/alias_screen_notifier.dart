@@ -5,7 +5,7 @@ import 'package:anonaddy/common/constants/toast_message.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/aliases/data/alias_screen_service.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_state.dart';
-import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

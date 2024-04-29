@@ -5,7 +5,7 @@ import 'package:anonaddy/features/account/presentation/account_tab.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/alert_center/presentation/components/alert_center_icon.dart';
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
-import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
 import 'package:anonaddy/features/connectivity/presentation/controller/connectivity_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/create_alias.dart';
