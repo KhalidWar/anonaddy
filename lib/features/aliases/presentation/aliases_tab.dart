@@ -134,6 +134,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                                 return AliasListTile(
                                   key:
                                       AliasesTab.aliasTabAvailableAliasListTile,
+                                  showDeleteRestore: true,
                                   alias: availableAliases[index],
                                 );
                               },
@@ -162,6 +163,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                                     return AliasListTile(
                                       key: AliasesTab
                                           .aliasTabDeletedAliasListTile,
+                                      showDeleteRestore: true,
                                       alias: deletedAliases[index],
                                     );
                                   },
