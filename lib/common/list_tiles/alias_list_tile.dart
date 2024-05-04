@@ -35,7 +35,9 @@ class AliasListTile extends ConsumerWidget {
     await ref
         .read(aliasScreenServiceProvider)
         .deleteAlias(alias.id)
-        .whenComplete(ref.read(aliasesNotifierProvider.notifier).fetchAliases)
+        .whenComplete(
+          ref.read(availableAliasesNotifierProvider.notifier).fetchAliases,
+        )
         .catchError((e) => Utilities.showToast(e.toString()));
   }
 

@@ -49,7 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     if (index == 1) {
-      ref.read(aliasesNotifierProvider.notifier).fetchAliases();
+      ref.read(availableAliasesNotifierProvider.notifier).fetchAliases();
     }
   }
 

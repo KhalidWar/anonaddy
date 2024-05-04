@@ -40,7 +40,7 @@ class AliasesTab extends ConsumerStatefulWidget {
 class _AlisTabState extends ConsumerState<AliasesTab> {
   void _handleTabChange(int index) {
     if (index == 0) {
-      ref.read(aliasesNotifierProvider.notifier).fetchAliases();
+      ref.read(availableAliasesNotifierProvider.notifier).fetchAliases();
     }
     if (index == 1) {
       ref.read(deletedAliasesNotifierProvider.notifier).fetchDeletedAliases();
@@ -56,7 +56,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
       // ref.read(aliasesNotifierProvider.notifier).loadDataFromStorage();
 
       /// Fetch the latest Aliases data from server
-      ref.read(aliasesNotifierProvider.notifier).fetchAliases();
+      ref.read(availableAliasesNotifierProvider.notifier).fetchAliases();
       // ref.read(aliasesNotifierProvider.notifier).fetchDeletedAliases();
     });
   }
@@ -65,7 +65,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    final availableAliasesAsync = ref.watch(aliasesNotifierProvider);
+    final availableAliasesAsync = ref.watch(availableAliasesNotifierProvider);
     final deletedAliasesAsync = ref.watch(deletedAliasesNotifierProvider);
 
     return Scaffold(
@@ -122,8 +122,9 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
                   RefreshIndicator(
                     color: AppColors.accentColor,
                     displacement: 20,
-                    onRefresh:
-                        ref.read(aliasesNotifierProvider.notifier).fetchAliases,
+                    onRefresh: ref
+                        .read(availableAliasesNotifierProvider.notifier)
+                        .fetchAliases,
                     child: availableAliases.isEmpty
                         ? const EmptyListAliasTabWidget()
                         : PlatformScrollbar(

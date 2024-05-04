@@ -78,7 +78,7 @@ class AliasScreenNotifier
           .deleteAlias(currentState.alias.id);
       Utilities.showToast(ToastMessage.deleteAliasSuccess);
 
-      await ref.read(aliasesNotifierProvider.notifier).fetchAliases();
+      await ref.read(availableAliasesNotifierProvider.notifier).fetchAliases();
     } catch (error) {
       Utilities.showToast(error.toString());
       state = AsyncData(state.value!.copyWith(deleteAliasLoading: false));
@@ -100,7 +100,7 @@ class AliasScreenNotifier
         deleteAliasLoading: false,
         alias: newAlias,
       ));
-      await ref.read(aliasesNotifierProvider.notifier).fetchAliases();
+      await ref.read(availableAliasesNotifierProvider.notifier).fetchAliases();
     } catch (error) {
       Utilities.showToast(error.toString());
       state = AsyncData(state.value!.copyWith(deleteAliasLoading: false));
@@ -117,7 +117,7 @@ class AliasScreenNotifier
           .read(aliasScreenServiceProvider)
           .forgetAlias(state.value!.alias.id);
       Utilities.showToast(ToastMessage.forgetAliasSuccess);
-      await ref.read(aliasesNotifierProvider.notifier).fetchAliases();
+      await ref.read(availableAliasesNotifierProvider.notifier).fetchAliases();
     } catch (error) {
       Utilities.showToast(error.toString());
     }

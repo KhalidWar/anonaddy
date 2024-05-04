@@ -28,7 +28,8 @@ final createAliasNotifierProvider =
 class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
   Future<void> createNewAlias() async {
     final isAutoCopy = ref.read(settingsNotifier).value!.isAutoCopyEnabled;
-    final aliasTabNotifier = ref.read(aliasesNotifierProvider.notifier);
+    final aliasTabNotifier =
+        ref.read(availableAliasesNotifierProvider.notifier);
 
     final currentState = state.value!;
 
@@ -66,7 +67,7 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
         Utilities.showToast(ToastMessage.createAliasSuccess);
       }
 
-      ref.invalidate(aliasesNotifierProvider);
+      ref.invalidate(availableAliasesNotifierProvider);
     } catch (error) {
       Utilities.showToast(error.toString());
     }
