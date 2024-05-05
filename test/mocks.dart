@@ -5,8 +5,11 @@ import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/aliases/data/alias_data_storage.dart';
 import 'package:anonaddy/features/aliases/data/aliases_service.dart';
+import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_state.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/deleted_aliases_notifier.dart';
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
@@ -111,6 +114,30 @@ class MockAliasScreenNotifier extends AliasScreenNotifier {
 class MockAccountService extends Mock implements AccountService {}
 
 class MockDataStorage extends Mock implements AliasDataStorage {}
+
+class MockAvailableAliasesNotifier extends Mock
+    implements AvailableAliasesNotifier {
+  MockAvailableAliasesNotifier(this.aliases);
+
+  final List<Alias> aliases;
+
+  @override
+  FutureOr<List<Alias>> build() async {
+    return aliases;
+  }
+}
+
+class MockDeletedAliasesNotifier extends Mock
+    implements DeletedAliasesNotifier {
+  MockDeletedAliasesNotifier(this.aliases);
+
+  final List<Alias> aliases;
+
+  @override
+  FutureOr<List<Alias>> build() async {
+    return aliases;
+  }
+}
 
 class MockAliasService extends Mock implements AliasesService {}
 
