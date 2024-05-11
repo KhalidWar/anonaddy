@@ -113,8 +113,6 @@ class MockAliasScreenNotifier extends AliasScreenNotifier {
 
 class MockAccountService extends Mock implements AccountService {}
 
-class MockDataStorage extends Mock implements AliasDataStorage {}
-
 class MockAvailableAliasesNotifier extends Mock
     implements AvailableAliasesNotifier {
   MockAvailableAliasesNotifier(this.aliases);
