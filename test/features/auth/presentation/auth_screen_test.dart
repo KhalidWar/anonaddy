@@ -29,11 +29,11 @@ void main() {
 
   testWidgets(
     'Given AuthorizationScreen is constructed, '
-    'When auth status is [AuthorizationStatus.anonAddyLogin], '
+    'When auth status is not logged in, '
     'Then display LoadingScreen.',
     (tester) async {
       const authState = AuthState(
-        isLoggedIn: AuthorizationStatus.addyLogin,
+        isLoggedIn: false,
         authenticationStatus: AuthenticationStatus.disabled,
         loginLoading: false,
       );
@@ -57,7 +57,7 @@ void main() {
     'Then display AnonAddyLoginScreen.',
     (WidgetTester tester) async {
       const authState = AuthState(
-        isLoggedIn: AuthorizationStatus.selfHostedLogin,
+        isLoggedIn: false,
         authenticationStatus: AuthenticationStatus.disabled,
         loginLoading: false,
       );

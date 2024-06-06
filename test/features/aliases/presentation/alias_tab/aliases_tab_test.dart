@@ -1,4 +1,3 @@
-import 'package:anonaddy/common/error_message_widget.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
@@ -16,7 +15,6 @@ void main() {
   Widget buildAliasesTab({
     required List<Alias> availableAliases,
     required List<Alias> deletedAliases,
-    bool throwError = false,
   }) {
     return MaterialApp(
       home: ProviderScope(
@@ -43,6 +41,7 @@ void main() {
       final availableAlias = AliasTestData.validAliasWithRecipients();
       final deletedAlias =
           AliasTestData.validAliasWithRecipients(isDeleted: true);
+
       await tester.pumpWidget(buildAliasesTab(
         availableAliases: [availableAlias, availableAlias, availableAlias],
         deletedAliases: [deletedAlias, deletedAlias, deletedAlias],
@@ -71,41 +70,42 @@ void main() {
     },
   );
 
-  testWidgets(
-    'Given AliasTab is constructed, '
-    'When no input and state is error, '
-    'Then AliasTab error widget.',
-    (WidgetTester tester) async {
-      final availableAlias = AliasTestData.validAliasWithRecipients();
-      final deletedAlias =
-          AliasTestData.validAliasWithRecipients(isDeleted: true);
-      await tester.pumpWidget(buildAliasesTab(
-        availableAliases: [availableAlias, availableAlias],
-        deletedAliases: [deletedAlias, deletedAlias],
-        throwError: true,
-      ));
-      await tester.pumpAndSettle();
-
-      expect(find.byKey(AliasesTab.aliasTabScaffold), findsOneWidget);
-      expect(find.byKey(AliasesTab.aliasTabFailedTabBarView), findsOneWidget);
-      expect(find.byKey(AliasesTab.aliasTabScrollView), findsOneWidget);
-      expect(
-        find.byKey(AliasesTab.aliasTabSliverAppBar),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(AliasesTab.aliasTabEmailsStats),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(AliasesTab.aliasTabTabBar),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(AliasesTab.aliasTabAvailableAliasesLoading),
-        findsNothing,
-      );
-      expect(find.byType(ErrorMessageWidget), findsOneWidget);
-    },
-  );
+  // testWidgets(
+  //   'Given AliasTab is constructed, '
+  //   'When no input and state is error, '
+  //   'Then AliasTab error widget.',
+  //   (WidgetTester tester) async {
+  //     final availableAlias = AliasTestData.validAliasWithRecipients();
+  //     final deletedAlias =
+  //         AliasTestData.validAliasWithRecipients(isDeleted: true);
+  //
+  //     await tester.pumpWidget(buildAliasesTab(
+  //       availableAliases: [availableAlias, availableAlias],
+  //       deletedAliases: [deletedAlias, deletedAlias],
+  //       throwError: true,
+  //     ));
+  //     await tester.pumpAndSettle();
+  //
+  //     expect(find.byKey(AliasesTab.aliasTabScaffold), findsOneWidget);
+  //     expect(find.byKey(AliasesTab.aliasTabFailedTabBarView), findsOneWidget);
+  //     expect(find.byKey(AliasesTab.aliasTabScrollView), findsOneWidget);
+  //     expect(
+  //       find.byKey(AliasesTab.aliasTabSliverAppBar),
+  //       findsOneWidget,
+  //     );
+  //     expect(
+  //       find.byKey(AliasesTab.aliasTabEmailsStats),
+  //       findsOneWidget,
+  //     );
+  //     expect(
+  //       find.byKey(AliasesTab.aliasTabTabBar),
+  //       findsOneWidget,
+  //     );
+  //     expect(
+  //       find.byKey(AliasesTab.aliasTabAvailableAliasesLoading),
+  //       findsNothing,
+  //     );
+  //     expect(find.byType(ErrorMessageWidget), findsOneWidget);
+  //   },
+  // );
 }

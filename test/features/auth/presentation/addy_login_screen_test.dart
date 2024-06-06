@@ -1,5 +1,5 @@
+import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/features/auth/presentation/components/addy_login_screen.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
