@@ -15,15 +15,15 @@ dependencies:
   intl: ^0.19.0
 
   # Icons
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
 
   # UI Components
   flutter_svg: ^2.0.10+1
-  lottie: ^3.1.0
+  lottie: ^3.1.2
   shimmer: ^3.0.0
-  fluttertoast: ^8.2.4
-  fl_chart: ^0.67.0
-  wolt_modal_sheet: ^0.5.0
+  fluttertoast: ^8.2.6
+  fl_chart: ^0.68.0
+  wolt_modal_sheet: ^0.6.1
   flutter_onboarding_slider: ^1.0.11
 
   # Internet Connectivity
@@ -32,7 +32,7 @@ dependencies:
   connectivity_plus: ^5.0.2
 
   # Storage
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^9.2.2
 
   # Security
   secure_application: ^4.0.0
@@ -62,7 +62,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.2
+  flutter_lints: ^4.0.0
 
 flutter_native_splash:
   color: "#19216C"
