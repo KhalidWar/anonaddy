@@ -1,5 +1,4 @@
 import 'package:anonaddy/common/constants/changelog_storage_key.dart';
-import 'package:anonaddy/common/constants/offline_data_key.dart';
 import 'package:anonaddy/common/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,9 +13,11 @@ class OfflineData {
 
   final FlutterSecureStorage secureStorage;
 
+  static const _settings = 'settingsDataKey';
+
   Future<void> saveSettingsState(String data) async {
     try {
-      await secureStorage.write(key: OfflineDataKey.settings, value: data);
+      await secureStorage.write(key: _settings, value: data);
     } catch (error) {
       rethrow;
     }
@@ -24,7 +25,7 @@ class OfflineData {
 
   Future<String?> loadSettingsState() async {
     try {
-      final aliasData = await secureStorage.read(key: OfflineDataKey.settings);
+      final aliasData = await secureStorage.read(key: _settings);
       if (aliasData == null) return null;
       return aliasData;
     } catch (error) {
