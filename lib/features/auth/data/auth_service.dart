@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:anonaddy/common/constants/app_strings.dart';
-import 'package:anonaddy/common/constants/secure_storage_keys.dart';
 import 'package:anonaddy/common/constants/url_strings.dart';
 import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/features/auth/data/api_error_message.dart';
@@ -27,6 +26,8 @@ class AuthService {
 
   final FlutterSecureStorage secureStorage;
   final Dio dio;
+
+  static const _user = 'user';
 
   Future<User> loginWithAccessToken(String url, String token) async {
     try {
@@ -102,12 +103,12 @@ class AuthService {
 
   Future<void> saveUser(User user) async {
     final encodedUser = jsonEncode(user.toMap());
-    await secureStorage.write(key: SecureStorageKeys.user, value: encodedUser);
+    await secureStorage.write(key: _user, value: encodedUser);
   }
 
   Future<User?> getUser() async {
     try {
-      final userData = await secureStorage.read(key: SecureStorageKeys.user);
+      final userData = await secureStorage.read(key: _user);
       if (userData == null) return null;
 
       final decodedDate = jsonDecode(userData);
