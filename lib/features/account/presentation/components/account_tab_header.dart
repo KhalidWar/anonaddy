@@ -1,10 +1,10 @@
 import 'package:anonaddy/common/constants/app_colors.dart';
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/error_message_widget.dart';
-import 'package:anonaddy/common/list_tiles/account_list_tile.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/components/account_list_tile.dart';
 import 'package:anonaddy/features/account/presentation/components/account_popup_info.dart';
 import 'package:anonaddy/features/account/presentation/components/header_profile.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';

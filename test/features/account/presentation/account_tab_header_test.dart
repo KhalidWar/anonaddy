@@ -1,5 +1,5 @@
-import 'package:anonaddy/common/list_tiles/account_list_tile.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
+import 'package:anonaddy/features/account/presentation/components/account_list_tile.dart';
 import 'package:anonaddy/features/account/presentation/components/account_tab_header.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:flutter/material.dart';
