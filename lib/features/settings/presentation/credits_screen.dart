@@ -10,8 +10,6 @@ class CreditsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Credits')),
       body: Column(
@@ -22,7 +20,7 @@ class CreditsScreen extends StatelessWidget {
               'Listed below are third party assets used in AddyManager.',
             ),
           ),
-          SizedBox(height: size.height * 0.02),
+          const SizedBox(height: 16),
           const Divider(height: 0),
           buildTile(
             context: context,
