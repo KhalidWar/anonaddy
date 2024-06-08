@@ -3,13 +3,13 @@ import 'package:anonaddy/common/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-final offlineDataProvider = Provider<OfflineData>((ref) {
+final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   final secureStorage = ref.read(flutterSecureStorageProvider);
-  return OfflineData(secureStorage);
+  return SettingsRepository(secureStorage);
 });
 
-class OfflineData {
-  const OfflineData(this.secureStorage);
+class SettingsRepository {
+  const SettingsRepository(this.secureStorage);
 
   final FlutterSecureStorage secureStorage;
 

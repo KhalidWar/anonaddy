@@ -1,5 +1,5 @@
 class SettingsState {
-  SettingsState({
+  const SettingsState({
     required this.isAutoCopyEnabled,
     required this.isDarkTheme,
     required this.isBiometricEnabled,

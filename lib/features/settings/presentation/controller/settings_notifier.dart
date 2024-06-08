@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/utilities.dart';
-import 'package:anonaddy/features/settings/data/offline_data_storage.dart';
+import 'package:anonaddy/features/settings/data/settings_repository.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -85,7 +85,7 @@ class SettingsNotifier extends AsyncNotifier<SettingsState> {
         }
 
         await ref
-            .read(offlineDataProvider)
+            .read(settingsRepositoryProvider)
             .saveCurrentAppVersion(currentAppVersion);
         await _saveNewSettingsState();
       }
@@ -98,7 +98,9 @@ class SettingsNotifier extends AsyncNotifier<SettingsState> {
     try {
       final mappedState = state.value!.toMap();
       final encodedState = json.encode(mappedState);
-      await ref.read(offlineDataProvider).saveSettingsState(encodedState);
+      await ref
+          .read(settingsRepositoryProvider)
+          .saveSettingsState(encodedState);
     } catch (error) {
       return;
     }
@@ -114,11 +116,11 @@ class SettingsNotifier extends AsyncNotifier<SettingsState> {
 
   @override
   FutureOr<SettingsState> build() async {
-    final storage = ref.read(offlineDataProvider);
+    final repo = ref.read(settingsRepositoryProvider);
 
-    final encodedState = await storage.loadSettingsState();
+    final encodedState = await repo.loadSettingsState();
     if (encodedState == null) {
-      return SettingsState(
+      return const SettingsState(
         isAutoCopyEnabled: true,
         isDarkTheme: false,
         isBiometricEnabled: false,
