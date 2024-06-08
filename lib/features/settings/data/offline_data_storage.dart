@@ -1,16 +1,17 @@
 import 'package:anonaddy/common/constants/changelog_storage_key.dart';
 import 'package:anonaddy/common/constants/offline_data_key.dart';
-import 'package:anonaddy/common/flutter_secure_storage.dart';
+import 'package:anonaddy/common/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final offlineDataProvider = Provider<OfflineData>((ref) {
-  final secureStorage = ref.read(flutterSecureStorage);
+  final secureStorage = ref.read(flutterSecureStorageProvider);
   return OfflineData(secureStorage);
 });
 
 class OfflineData {
-  OfflineData(this.secureStorage);
+  const OfflineData(this.secureStorage);
+
   final FlutterSecureStorage secureStorage;
 
   Future<void> saveSettingsState(String data) async {

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:anonaddy/common/constants/app_strings.dart';
-import 'package:anonaddy/common/flutter_secure_storage.dart';
+import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
@@ -58,7 +58,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
   Future<void> logout(BuildContext context) async {
     try {
-      await ref.read(flutterSecureStorage).deleteAll();
+      await ref.read(flutterSecureStorageProvider).deleteAll();
       await ref
           .read(searchHistoryNotifierProvider.notifier)
           .clearSearchHistory();
@@ -103,7 +103,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
     try {
       const bioAuthKey = BiometricNotifier.biometricAuthKey;
       final bioAuthValue =
-          await ref.read(flutterSecureStorage).read(key: bioAuthKey);
+          await ref.read(flutterSecureStorageProvider).read(key: bioAuthKey);
 
       if (bioAuthValue == null) return AuthenticationStatus.disabled;
 

@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/constants/secure_storage_keys.dart';
 import 'package:anonaddy/common/constants/url_strings.dart';
-import 'package:anonaddy/common/flutter_secure_storage.dart';
+import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/features/auth/data/api_error_message.dart';
 import 'package:anonaddy/features/auth/domain/api_token.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
@@ -14,7 +14,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService(
-    secureStorage: ref.read(flutterSecureStorage),
+    secureStorage: ref.read(flutterSecureStorageProvider),
     dio: Dio(),
   );
 });

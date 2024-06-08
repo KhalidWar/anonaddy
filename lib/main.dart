@@ -1,5 +1,5 @@
 import 'package:anonaddy/app.dart';
-import 'package:anonaddy/common/flutter_secure_storage.dart';
+import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/common/startup_methods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ void main() async {
       /// Riverpod base widget to store provider state
       child: ProviderScope(
         overrides: [
-          flutterSecureStorage.overrideWithValue(secureStorage),
+          flutterSecureStorageProvider.overrideWithValue(secureStorage),
           // settingsNotifier.overrideWith(
           //   await SettingsNotifier.loadSettingsState(secureStorage),
           // ),

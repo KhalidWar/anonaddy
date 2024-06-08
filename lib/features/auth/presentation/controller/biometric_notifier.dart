@@ -1,4 +1,4 @@
-import 'package:anonaddy/common/flutter_secure_storage.dart';
+import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:flutter/foundation.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 final biometricNotifier = ChangeNotifierProvider<BiometricNotifier>((ref) {
   return BiometricNotifier(
     biometricService: ref.read(biometricAuthServiceProvider),
-    secureStorage: ref.read(flutterSecureStorage),
+    secureStorage: ref.read(flutterSecureStorageProvider),
   );
 });
 
