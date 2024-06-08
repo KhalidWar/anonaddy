@@ -2,6 +2,7 @@ import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/auth/presentation/components/addy_login_screen.dart';
 import 'package:anonaddy/features/auth/presentation/components/self_host_login_screen.dart';
+import 'package:anonaddy/features/monetization/presentation/controller/monetization_notifier.dart';
 import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_description.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_image.dart';
@@ -40,6 +41,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
           ),
           onFinish: () async {
+            ref.read(monetizationNotifierProvider.notifier).showPaywall();
+
             await WoltModalSheet.show(
               context: context,
               pageListBuilder: (context) {
