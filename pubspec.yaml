@@ -20,11 +20,9 @@ dependencies:
   # UI Components
   flutter_svg: ^2.0.10+1
   lottie: ^3.1.0
-  animations: ^2.0.11
   shimmer: ^3.0.0
   fluttertoast: ^8.2.4
   fl_chart: ^0.67.0
-  modal_bottom_sheet: ^3.0.0
   wolt_modal_sheet: ^0.5.0
   flutter_onboarding_slider: ^1.0.11
 
@@ -44,9 +42,6 @@ dependencies:
   flutter_riverpod: ^2.5.1
   flutter_phoenix: ^1.1.1
 
-  # Data Modeling
-  json_annotation: ^4.8.1
-
   # Testing
   mocktail: ^1.0.3
 
@@ -61,9 +56,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  build_runner: ^2.4.9
-  json_serializable: ^6.7.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -84,30 +76,3 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
-  #   - images/a_dot_ham.jpeg
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
