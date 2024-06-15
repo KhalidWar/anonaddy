@@ -6,25 +6,34 @@ import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SelfHostLoginScreen extends ConsumerStatefulWidget {
-  const SelfHostLoginScreen({super.key});
+class SelfHostLogin extends ConsumerStatefulWidget {
+  const SelfHostLogin({super.key});
 
   @override
   ConsumerState createState() => _SelfHostLoginScreenState();
 }
 
-class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
+class _SelfHostLoginScreenState extends ConsumerState<SelfHostLogin> {
   final formKey = GlobalKey<FormState>();
+
+  bool showLoading = false;
 
   String _url = '';
   String _token = '';
 
+  void toggleLoading(bool isLoading) {
+    setState(() {
+      showLoading = isLoading;
+    });
+  }
+
   Future<void> login() async {
     if (formKey.currentState!.validate()) {
+      toggleLoading(true);
       await ref
-          .read(authStateNotifier.notifier)
-          .loginWithAccessToken(_url, _token);
-      if (mounted) Navigator.of(context).pop();
+          .read(authNotifierProvider.notifier)
+          .loginWithAccessToken(_url, _token)
+          .then((_) => toggleLoading(false));
     }
   }
 
@@ -102,27 +111,18 @@ class _SelfHostLoginScreenState extends ConsumerState<SelfHostLoginScreen> {
               child: PlatformButton(
                 key: const Key('loginFooterLoginButton'),
                 onPress: login,
-                child: Consumer(
-                  builder: (context, ref, _) {
-                    final authAsync = ref.watch(authStateNotifier);
-                    return authAsync.when(
-                      data: (authState) {
-                        return authState.loginLoading
-                            ? const CircularProgressIndicator(
-                                key: Key('loginFooterLoginButtonLoading'),
-                              )
-                            : Text('Log in',
-                                key: const Key('loginFooterLoginButtonLabel'),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge
-                                    ?.copyWith(color: Colors.black));
-                      },
-                      error: (_, __) => const SizedBox.shrink(),
-                      loading: () => const SizedBox.shrink(),
-                    );
-                  },
-                ),
+                child: showLoading
+                    ? const CircularProgressIndicator(
+                        key: Key('loginFooterLoginButtonLoading'),
+                      )
+                    : Text(
+                        'Log in',
+                        key: const Key('loginFooterLoginButtonLabel'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: Colors.black),
+                      ),
               ),
             ),
           ],
