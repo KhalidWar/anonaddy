@@ -1,16 +1,51 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:anonaddy/common/constants/changelog_storage_key.dart';
 import 'package:anonaddy/common/constants/data_storage_keys.dart';
+import 'package:anonaddy/common/secure_storage.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
+import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-class StartupMethods {
+const revenueCatAndroidAPIKey =
+    String.fromEnvironment('revenue-cat-android-api-key');
+const revenueCatIOSAPIKey = String.fromEnvironment('revenue-cat-ios-api-key');
+
+final appStartupProvider =
+    AsyncNotifierProvider<AppStartupNotifier, void>(AppStartupNotifier.new);
+
+class AppStartupNotifier extends AsyncNotifier<void> {
+  Future<void> _configureRevenueCat({
+    required String androidApiKey,
+    required String iOSApiKey,
+  }) async {
+    try {
+      await Purchases.setLogLevel(LogLevel.debug);
+
+      PurchasesConfiguration? configuration;
+
+      if (Platform.isAndroid) {
+        configuration = PurchasesConfiguration(androidApiKey);
+      }
+
+      if (Platform.isIOS) {
+        configuration = PurchasesConfiguration(iOSApiKey);
+      }
+
+      if (configuration != null) {
+        await Purchases.configure(configuration);
+      }
+    } catch (_) {
+      return;
+    }
+  }
+
   /// Does housekeeping after app is updated. Does nothing otherwise.
-  static Future<void> handleAppUpdate(
-    FlutterSecureStorage secureStorage,
-  ) async {
+  Future<void> _handleAppUpdate(FlutterSecureStorage secureStorage) async {
     /// Fetch stored old app version from device storage.
     final oldAppVersion = await _getOldAppVersion(secureStorage);
 
@@ -37,32 +72,7 @@ class StartupMethods {
     }
   }
 
-  static Future<void> configureRevenueCat({
-    required String androidApiKey,
-    required String iOSApiKey,
-  }) async {
-    try {
-      await Purchases.setLogLevel(LogLevel.debug);
-
-      PurchasesConfiguration? configuration;
-
-      if (Platform.isAndroid) {
-        configuration = PurchasesConfiguration(androidApiKey);
-      }
-
-      if (Platform.isIOS) {
-        configuration = PurchasesConfiguration(iOSApiKey);
-      }
-
-      if (configuration != null) {
-        await Purchases.configure(configuration);
-      }
-    } catch (_) {
-      return;
-    }
-  }
-
-  static Future<String?> _getCurrentAppVersion() async {
+  Future<String?> _getCurrentAppVersion() async {
     try {
       final appVersion = await PackageInfo.fromPlatform();
       return appVersion.version;
@@ -71,8 +81,10 @@ class StartupMethods {
     }
   }
 
-  static Future<void> _saveCurrentAppVersion(
-      FlutterSecureStorage secureStorage, String currentAppVersion) async {
+  Future<void> _saveCurrentAppVersion(
+    FlutterSecureStorage secureStorage,
+    String currentAppVersion,
+  ) async {
     try {
       await secureStorage.write(
         key: ChangelogStorageKey.appVersionKey,
@@ -83,8 +95,7 @@ class StartupMethods {
     }
   }
 
-  static Future<String?> _getOldAppVersion(
-      FlutterSecureStorage secureStorage) async {
+  Future<String?> _getOldAppVersion(FlutterSecureStorage secureStorage) async {
     try {
       const key = ChangelogStorageKey.appVersionKey;
       final version = await secureStorage.read(key: key);
@@ -94,8 +105,7 @@ class StartupMethods {
     }
   }
 
-  static Future<void> _deleteChangelog(
-      FlutterSecureStorage secureStorage) async {
+  Future<void> _deleteChangelog(FlutterSecureStorage secureStorage) async {
     try {
       await secureStorage.delete(key: ChangelogStorageKey.changelogKey);
     } catch (error) {
@@ -103,8 +113,7 @@ class StartupMethods {
     }
   }
 
-  static Future<void> _deleteOfflineData(
-      FlutterSecureStorage secureStorage) async {
+  Future<void> _deleteOfflineData(FlutterSecureStorage secureStorage) async {
     try {
       await secureStorage.delete(key: DataStorageKeys.aliasesKey);
       await secureStorage.delete(key: DataStorageKeys.accountKey);
@@ -117,5 +126,42 @@ class StartupMethods {
     } catch (error) {
       return;
     }
+  }
+
+  Future<void> logout() async {
+    try {
+      await ref.read(flutterSecureStorageProvider).deleteAll();
+      ref.invalidateSelf();
+    } catch (error) {
+      return;
+    }
+  }
+
+  Future<void> refresh() async {
+    try {
+      state = const AsyncError('Refreshing...', StackTrace.empty);
+    } catch (error) {
+      return;
+    }
+  }
+
+  @override
+  FutureOr<void> build() async {
+    ref.onDispose(() async {
+      ref.invalidate(flutterSecureStorageProvider);
+      ref.invalidate(settingsNotifier);
+      ref.invalidate(authNotifierProvider);
+    });
+
+    final secureStorage = ref.read(flutterSecureStorageProvider);
+
+    await _handleAppUpdate(secureStorage);
+    await _configureRevenueCat(
+      androidApiKey: revenueCatAndroidAPIKey,
+      iOSApiKey: revenueCatIOSAPIKey,
+    );
+
+    await ref.read(settingsNotifier.future);
+    await ref.read(authNotifierProvider.future);
   }
 }
