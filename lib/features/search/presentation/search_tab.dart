@@ -35,8 +35,7 @@ class SearchTab extends ConsumerWidget {
               Icons.search,
               color: Colors.white,
             ),
-            onPressed: () =>
-                context.router.push(const QuickSearchScreenRoute()),
+            onPressed: () => context.pushRoute(const QuickSearchScreenRoute()),
           ),
           IconButton(
             key: const Key('homeScreenAppBarTrailing'),
@@ -45,7 +44,7 @@ class SearchTab extends ConsumerWidget {
               Icons.settings,
               color: Colors.white,
             ),
-            onPressed: () => context.router.push(const SettingsScreenRoute()),
+            onPressed: () => context.pushRoute(const SettingsScreenRoute()),
           ),
         ],
       ),

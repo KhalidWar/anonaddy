@@ -95,8 +95,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
               Icons.search,
               color: Colors.white,
             ),
-            onPressed: () =>
-                context.router.push(const QuickSearchScreenRoute()),
+            onPressed: () => context.pushRoute(const QuickSearchScreenRoute()),
           ),
           IconButton(
             key: const Key('homeScreenAppBarTrailing'),
@@ -105,7 +104,7 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
               Icons.settings,
               color: Colors.white,
             ),
-            onPressed: () => context.router.push(const SettingsScreenRoute()),
+            onPressed: () => context.pushRoute(const SettingsScreenRoute()),
           ),
         ],
       ),

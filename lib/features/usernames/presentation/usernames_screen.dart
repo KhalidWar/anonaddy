@@ -180,7 +180,7 @@ class _UsernameScreenState extends ConsumerState<UsernameScreen> {
               RecipientListTile(
                 recipient: username.defaultRecipient!,
                 onPress: () {
-                  context.router.push(RecipientsScreenRoute(
+                  context.pushRoute(RecipientsScreenRoute(
                     id: username.defaultRecipient!.id,
                   ));
                 },

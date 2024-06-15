@@ -107,7 +107,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 subtitle: const Text(AppStrings.settingsAboutAppSubtitle),
                 trailing: const Icon(Icons.help_outline),
-                onTap: () => context.router.push(const AboutAppScreenRoute()),
+                onTap: () => context.pushRoute(const AboutAppScreenRoute()),
               ),
               ListTile(
                 dense: true,

@@ -107,7 +107,7 @@ class _QuickSearchScreenState extends ConsumerState<QuickSearchScreen> {
                             .addAliasToSearchHistory(alias);
 
                         /// Navigate to Alias Screen
-                        context.router.push(AliasScreenRoute(id: alias.id));
+                        context.pushRoute(AliasScreenRoute(id: alias.id));
                       },
                     );
                   },

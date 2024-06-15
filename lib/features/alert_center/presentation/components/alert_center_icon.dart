@@ -19,8 +19,7 @@ class AlertCenterIcon extends StatelessWidget {
             Icons.error_outline,
             color: Colors.white,
           ),
-          onPressed: () =>
-              context.router.push(const NotificationsScreenRoute()),
+          onPressed: () => context.pushRoute(const NotificationsScreenRoute()),
         ),
         Consumer(
           builder: (_, ref, __) {

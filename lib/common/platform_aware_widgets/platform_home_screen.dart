@@ -72,14 +72,14 @@ class PlatformHomeScreen extends PlatformAware {
         leading: IconButton(
           icon: const Icon(Icons.error_outline),
           onPressed: () {
-            context.router.push(const NotificationsScreenRoute());
+            context.pushRoute(const NotificationsScreenRoute());
           },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              context.router.push(const SettingsScreenRoute());
+              context.pushRoute(const SettingsScreenRoute());
             },
           ),
         ],

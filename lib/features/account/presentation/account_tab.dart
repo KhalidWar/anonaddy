@@ -114,7 +114,7 @@ class AccountTab extends StatelessWidget {
                   color: Colors.white,
                 ),
                 onPressed: () =>
-                    context.router.push(const QuickSearchScreenRoute()),
+                    context.pushRoute(const QuickSearchScreenRoute()),
               ),
               IconButton(
                 key: const Key('homeScreenAppBarTrailing'),
@@ -123,8 +123,7 @@ class AccountTab extends StatelessWidget {
                   Icons.settings,
                   color: Colors.white,
                 ),
-                onPressed: () =>
-                    context.router.push(const SettingsScreenRoute()),
+                onPressed: () => context.pushRoute(const SettingsScreenRoute()),
               ),
             ],
             bottom: TabBar(

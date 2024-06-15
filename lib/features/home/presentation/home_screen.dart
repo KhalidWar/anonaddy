@@ -31,7 +31,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     /// Tapping on [SearchTab] again navigates to search screen.
     if (tabsRouter.activeIndex == 2 && index == 2) {
-      context.router.push(const QuickSearchScreenRoute());
+      context.pushRoute(const QuickSearchScreenRoute());
     }
 
     if (index == 0) {

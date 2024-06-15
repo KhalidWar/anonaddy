@@ -239,7 +239,7 @@ class _DomainsScreenState extends ConsumerState<DomainScreen> {
                     RecipientListTile(
                       recipient: domain.defaultRecipient!,
                       onPress: () {
-                        context.router.push(RecipientsScreenRoute(
+                        context.pushRoute(RecipientsScreenRoute(
                           id: domain.defaultRecipient!.id,
                         ));
                       },

@@ -90,7 +90,7 @@ class AliasListTile extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        context.router.push(AliasScreenRoute(id: alias.id));
+        context.pushRoute(AliasScreenRoute(id: alias.id));
       },
     );
   }

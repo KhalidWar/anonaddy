@@ -90,7 +90,7 @@ class AboutAppScreen extends StatelessWidget {
             subtitle: const Text('Credits for assets in AddyManager'),
             trailing: const Icon(Icons.image_outlined),
             onTap: () {
-              context.router.push(const CreditsScreenRoute());
+              context.pushRoute(const CreditsScreenRoute());
             },
           ),
           const Divider(height: 0),

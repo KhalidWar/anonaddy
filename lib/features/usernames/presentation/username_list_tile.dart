@@ -40,7 +40,7 @@ class UsernameListTile extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => context.router.push(UsernamesScreenRoute(id: username.id)),
+      onTap: () => context.pushRoute(UsernamesScreenRoute(id: username.id)),
     );
   }
 }

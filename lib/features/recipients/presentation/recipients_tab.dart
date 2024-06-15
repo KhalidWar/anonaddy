@@ -85,7 +85,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                       return RecipientListTile(
                         recipient: recipient,
                         onPress: () {
-                          context.router.push(
+                          context.pushRoute(
                             RecipientsScreenRoute(id: recipient.id),
                           );
                         },
