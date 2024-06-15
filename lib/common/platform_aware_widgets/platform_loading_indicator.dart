@@ -15,7 +15,7 @@ class PlatformLoadingIndicator extends PlatformAware {
 
   @override
   Widget buildCupertinoWidget(BuildContext context) {
-    return const CupertinoActivityIndicator();
+    return CupertinoActivityIndicator(color: color);
   }
 
   @override

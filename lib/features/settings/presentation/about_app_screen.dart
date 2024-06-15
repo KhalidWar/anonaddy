@@ -2,14 +2,14 @@ import 'package:anonaddy/common/constants/url_strings.dart';
 import 'package:anonaddy/common/custom_app_bar.dart';
 import 'package:anonaddy/common/package_info_service.dart';
 import 'package:anonaddy/common/utilities.dart';
-import 'package:anonaddy/features/settings/presentation/credits_screen.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+@RoutePage(name: 'AboutAppScreenRoute')
 class AboutAppScreen extends StatelessWidget {
   const AboutAppScreen({super.key});
-
-  static const routeName = 'aboutAppScreen';
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,7 @@ class AboutAppScreen extends StatelessWidget {
             subtitle: const Text('Credits for assets in AddyManager'),
             trailing: const Icon(Icons.image_outlined),
             onTap: () {
-              Navigator.pushNamed(context, CreditsScreen.routeName);
+              context.router.push(const CreditsScreenRoute());
             },
           ),
           const Divider(height: 0),

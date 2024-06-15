@@ -1,6 +1,7 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/features/router/app_router.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
-import 'package:anonaddy/features/usernames/presentation/usernames_screen.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class UsernameListTile extends StatelessWidget {
@@ -39,13 +40,7 @@ class UsernameListTile extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          UsernamesScreen.routeName,
-          arguments: username.id,
-        );
-      },
+      onTap: () => context.router.push(UsernamesScreenRoute(id: username.id)),
     );
   }
 }

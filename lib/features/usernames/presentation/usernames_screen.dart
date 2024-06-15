@@ -12,37 +12,37 @@ import 'package:anonaddy/common/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/common/update_description_widget.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/associated_aliases/presentation/associated_aliases.dart';
-import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
+import 'package:anonaddy/features/router/app_router.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/components/alias_detail_list_tile.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_state.dart';
 import 'package:anonaddy/features/usernames/presentation/username_default_recipient.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class UsernamesScreen extends ConsumerStatefulWidget {
-  const UsernamesScreen({
+@RoutePage(name: 'UsernamesScreenRoute')
+class UsernameScreen extends ConsumerStatefulWidget {
+  const UsernameScreen({
     super.key,
-    required this.usernameId,
+    required this.id,
   });
 
-  final String usernameId;
-
-  static const routeName = 'usernameDetailedScreen';
+  final String id;
 
   @override
   ConsumerState createState() => _UsernameScreenState();
 }
 
-class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
+class _UsernameScreenState extends ConsumerState<UsernameScreen> {
   @override
   void initState() {
     super.initState();
-    // ref
-    //     .read(usernamesScreenNotifierProvider(widget.usernameId).notifier)
-    //     .fetchSpecificUsername(widget.usernameId);
+    ref
+        .read(usernamesScreenNotifierProvider(widget.id).notifier)
+        .fetchSpecificUsername(widget.id);
   }
 
   @override
@@ -52,7 +52,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
       body: Consumer(
         builder: (context, ref, _) {
           final usernameAsync =
-              ref.watch(usernamesScreenNotifierProvider(widget.usernameId));
+              ref.watch(usernamesScreenNotifierProvider(widget.id));
 
           return usernameAsync.when(
             data: (usernameState) {
@@ -78,7 +78,7 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
 
     final username = usernameState.username;
     final usernameStateProvider =
-        ref.read(usernamesScreenNotifierProvider(widget.usernameId).notifier);
+        ref.read(usernamesScreenNotifierProvider(widget.id).notifier);
 
     Future<void> toggleActivity() async {
       username.active
@@ -178,11 +178,9 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
               RecipientListTile(
                 recipient: username.defaultRecipient!,
                 onPress: () {
-                  Navigator.pushNamed(
-                    context,
-                    RecipientsScreen.routeName,
-                    arguments: username.defaultRecipient!.id,
-                  );
+                  context.router.push(RecipientsScreenRoute(
+                    id: username.defaultRecipient!.id,
+                  ));
                 },
               ),
           ],
@@ -238,14 +236,12 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
               description: username.description,
               updateDescription: (description) {
                 ref
-                    .read(usernamesScreenNotifierProvider(widget.usernameId)
-                        .notifier)
+                    .read(usernamesScreenNotifierProvider(widget.id).notifier)
                     .updateUsernameDescription(username, description);
               },
               removeDescription: () {
                 ref
-                    .read(usernamesScreenNotifierProvider(widget.usernameId)
-                        .notifier)
+                    .read(usernamesScreenNotifierProvider(widget.id).notifier)
                     .updateUsernameDescription(username, '');
               },
             ),
@@ -283,9 +279,8 @@ class _UsernameScreenState extends ConsumerState<UsernamesScreen> {
           content: AddyString.deleteUsernameConfirmation,
           method: () async {
             await ref
-                .read(
-                    usernamesScreenNotifierProvider(widget.usernameId).notifier)
-                .deleteUsername(widget.usernameId);
+                .read(usernamesScreenNotifierProvider(widget.id).notifier)
+                .deleteUsername(widget.id);
 
             /// Dismisses this dialog
             if (mounted) Navigator.pop(context);

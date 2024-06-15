@@ -1,16 +1,22 @@
 import 'package:anonaddy/common/constants/app_colors.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/error_message_widget.dart';
 import 'package:anonaddy/common/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_scroll_bar.dart';
+import 'package:anonaddy/features/alert_center/presentation/components/alert_center_icon.dart';
 import 'package:anonaddy/features/aliases/presentation/components/alias_shimmer_loading.dart';
 import 'package:anonaddy/features/aliases/presentation/components/alias_tab_emails_stats.dart';
 import 'package:anonaddy/features/aliases/presentation/components/empty_list_alias_tab.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/deleted_aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility_state.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+@RoutePage(name: 'AliasesTabRoute')
 class AliasesTab extends ConsumerStatefulWidget {
   const AliasesTab({super.key});
 
@@ -70,6 +76,39 @@ class _AlisTabState extends ConsumerState<AliasesTab> {
 
     return Scaffold(
       key: AliasesTab.aliasTabScaffold,
+      appBar: AppBar(
+        backgroundColor: AppColors.primaryColor,
+        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        title: const Text(
+          AppStrings.appName,
+          key: Key('homeScreenAppBarTitle'),
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
+        leading: const AlertCenterIcon(),
+        actions: [
+          IconButton(
+            key: const Key('homeScreenQuickSearchTrailing'),
+            tooltip: AppStrings.quickSearch,
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            onPressed: () =>
+                context.router.push(const QuickSearchScreenRoute()),
+          ),
+          IconButton(
+            key: const Key('homeScreenAppBarTrailing'),
+            tooltip: AppStrings.settings,
+            icon: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () => context.router.push(const SettingsScreenRoute()),
+          ),
+        ],
+      ),
 
       /// [DefaultTabController] is required when using [TabBar]s without
       /// a custom [TabController]

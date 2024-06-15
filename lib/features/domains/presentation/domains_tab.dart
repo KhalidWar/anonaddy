@@ -8,10 +8,12 @@ import 'package:anonaddy/features/account/presentation/controller/account_notifi
 import 'package:anonaddy/features/domains/presentation/components/add_new_domain.dart';
 import 'package:anonaddy/features/domains/presentation/components/domain_list_tile.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_tab_notifier.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'DomainsTabRoute')
 class DomainsTab extends ConsumerStatefulWidget {
   const DomainsTab({super.key});
 

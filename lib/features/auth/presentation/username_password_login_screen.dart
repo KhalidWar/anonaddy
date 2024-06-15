@@ -61,7 +61,7 @@ class _UsernamePasswordLoginScreenState
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => ref
-                .read(authStateNotifier.notifier)
+                .read(authNotifierProvider.notifier)
                 .loginWithUsernameAndPassword(email, password),
             child: Text(
               'Log in',

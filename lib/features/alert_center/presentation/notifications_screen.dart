@@ -6,14 +6,14 @@ import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/alert_center/presentation/controller/local_notification_notifier.dart';
 import 'package:anonaddy/features/alert_center/presentation/failed_deliveries_widget.dart';
 import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'NotificationsScreenRoute')
 class NotificationsScreen extends ConsumerWidget {
   const NotificationsScreen({super.key});
-
-  static const routeName = 'notificationsScreen';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

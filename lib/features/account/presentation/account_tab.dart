@@ -9,6 +9,7 @@ import 'package:anonaddy/features/rules/presentation/rules_tab.dart';
 import 'package:anonaddy/features/usernames/presentation/usernames_tab.dart';
 import 'package:flutter/material.dart';
 
+@RoutePage(name: 'AccountTabRoute')
 class AccountTab extends StatelessWidget {
   const AccountTab({super.key});
 

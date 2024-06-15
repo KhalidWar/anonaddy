@@ -5,9 +5,10 @@ import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/aliases/data/alias_screen_service.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/deleted_aliases_notifier.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -88,11 +89,9 @@ class AliasListTile extends ConsumerWidget {
           ),
         ],
       ),
-      onTap: () => Navigator.pushNamed(
-        context,
-        AliasScreen.routeName,
-        arguments: alias.id,
-      ),
+      onTap: () {
+        context.router.push(AliasScreenRoute(id: alias.id));
+      },
     );
   }
 }

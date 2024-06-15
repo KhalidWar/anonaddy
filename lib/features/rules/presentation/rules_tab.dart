@@ -11,10 +11,12 @@ import 'package:anonaddy/features/rules/presentation/components/add_new_rule_ent
 import 'package:anonaddy/features/rules/presentation/components/rules_list_tile.dart';
 import 'package:anonaddy/features/rules/presentation/controller/create_new_rule_notifier.dart';
 import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'RulesTabRoute')
 class RulesTab extends ConsumerStatefulWidget {
   const RulesTab({super.key});
 
