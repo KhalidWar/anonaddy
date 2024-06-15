@@ -1,22 +1,22 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/utilities.dart';
-import 'package:anonaddy/features/auth/presentation/components/addy_login_screen.dart';
-import 'package:anonaddy/features/auth/presentation/components/self_host_login_screen.dart';
 import 'package:anonaddy/features/monetization/presentation/controller/monetization_notifier.dart';
 import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
+import 'package:anonaddy/features/onboarding/presentation/components/addy_login.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_description.dart';
 import 'package:anonaddy/features/onboarding/presentation/components/onboarding_page_image.dart';
+import 'package:anonaddy/features/onboarding/presentation/components/self_host_login.dart';
 import 'package:anonaddy/features/onboarding/presentation/onboarding_pages.dart';
 import 'package:anonaddy/theme.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'OnboardingScreenRoute')
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
-
-  static const routeName = 'onboardingScreen';
 
   @override
   ConsumerState createState() => _OnboardingScreenState();
@@ -51,7 +51,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     context,
                     topBarTitle: 'Addy.io Login',
                     pageTitle: AppStrings.accessTokenRequired,
-                    child: const AddyLoginScreen(),
+                    child: const AddyLogin(),
                   ),
                 ];
               },
@@ -71,7 +71,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         'AddyManager fully supports self-hosted instances',
                     child: const MonetizationPaywall(
                       showListTimeShimmer: false,
-                      child: SelfHostLoginScreen(),
+                      child: SelfHostLogin(),
                     ),
                   ),
                 ];
