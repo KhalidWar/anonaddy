@@ -114,32 +114,14 @@ class AppRouter extends _$AppRouter implements AutoRouteGuard {
               AutoRoute(
                 page: AppRoutes.usernames.page,
                 path: AppRoutes.usernames.path,
-                children: [
-                  AutoRoute(
-                    page: AppRoutes.username.page,
-                    path: AppRoutes.username.path,
-                  ),
-                ],
               ),
               AutoRoute(
                 page: AppRoutes.domains.page,
                 path: AppRoutes.domains.path,
-                children: [
-                  AutoRoute(
-                    page: AppRoutes.domain.page,
-                    path: AppRoutes.domain.path,
-                  ),
-                ],
               ),
               AutoRoute(
                 page: AppRoutes.rules.page,
                 path: AppRoutes.rules.path,
-                // children: [
-                //   AutoRoute(
-                //     page: AppRoutes.rule.page,
-                //     path: AppRoutes.rule.path,
-                //   ),
-                // ],
               ),
             ],
           ),
@@ -166,6 +148,18 @@ class AppRouter extends _$AppRouter implements AutoRouteGuard {
         page: AppRoutes.recipient.page,
         path: AppRoutes.recipient.path,
       ),
+      AutoRoute(
+        page: AppRoutes.username.page,
+        path: AppRoutes.username.path,
+      ),
+      AutoRoute(
+        page: AppRoutes.domain.page,
+        path: AppRoutes.domain.path,
+      ),
+      // AutoRoute(
+      //   page: AppRoutes.rule.page,
+      //   path: AppRoutes.rule.path,
+      // ),
       AutoRoute(
         page: AppRoutes.notifications.page,
         path: AppRoutes.notifications.path,

@@ -26,9 +26,9 @@ enum AppRoutes {
   recipients('recipients', RecipientsTabRoute.page),
   recipient('/:id', RecipientsScreenRoute.page),
   usernames('usernames', UsernamesTabRoute.page),
-  username(':id', UsernamesScreenRoute.page),
+  username('/:id', UsernamesScreenRoute.page),
   domains('domains', DomainsTabRoute.page),
-  domain(':id', DomainScreenRoute.page),
+  domain('/:id', DomainScreenRoute.page),
   rules('rules', RulesTabRoute.page),
   // rule('/:id', RuleScreenRoute.page),
 

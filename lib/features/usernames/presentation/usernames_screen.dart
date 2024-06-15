@@ -40,9 +40,11 @@ class _UsernameScreenState extends ConsumerState<UsernameScreen> {
   @override
   void initState() {
     super.initState();
-    ref
-        .read(usernamesScreenNotifierProvider(widget.id).notifier)
-        .fetchSpecificUsername(widget.id);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(usernamesScreenNotifierProvider(widget.id).notifier)
+          .fetchSpecificUsername(widget.id);
+    });
   }
 
   @override
