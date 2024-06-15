@@ -37,7 +37,7 @@ class AccountPopupInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authStateNotifier).value!.user!;
+    final user = ref.watch(authNotifierProvider).value!.user!;
 
     return Column(
       mainAxisSize: MainAxisSize.min,

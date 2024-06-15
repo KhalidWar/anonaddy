@@ -36,7 +36,7 @@ class LocalNotificationNotifier
 
   Future<LocalNotification?> getAccessTokenExpiryNotification() async {
     try {
-      final user = ref.read(authStateNotifier).value!.user!;
+      final user = ref.read(authNotifierProvider).value!.user!;
       final apiTokenExpirationDate = user.apiToken.expiresAt;
       if (apiTokenExpirationDate == null) return null;
 
@@ -60,7 +60,7 @@ class LocalNotificationNotifier
 
   Future<LocalNotification?> getAppVersionNotification() async {
     try {
-      final user = ref.read(authStateNotifier).value!.user!;
+      final user = ref.read(authNotifierProvider).value!.user!;
       if (!user.isSelfHosting) return null;
 
       final latestAppVersion =
