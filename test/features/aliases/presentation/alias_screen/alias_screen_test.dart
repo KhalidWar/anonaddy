@@ -27,7 +27,7 @@ void main() async {
           }),
         ],
         child: MaterialApp(
-          home: AliasScreen(aliasId: initialState.alias.id),
+          home: AliasScreen(id: initialState.alias.id),
         ),
       );
     }
