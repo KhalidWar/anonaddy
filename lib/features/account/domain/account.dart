@@ -26,6 +26,10 @@ class Account {
     this.activeDomainLimit = 0,
     this.aliasCount = 0,
     this.aliasLimit = 0,
+    this.totalAliases = 0,
+    this.totalActiveAliases = 0,
+    this.totalInactiveAliases = 0,
+    this.totalDeletedAliases = 0,
     this.activeRuleCount = 0,
     this.activeRuleLimit = 0,
     this.totalEmailsForwarded = 0,
@@ -91,6 +95,18 @@ class Account {
   @JsonKey(name: 'active_shared_domain_alias_limit')
   final int aliasLimit;
 
+  @JsonKey(name: 'total_aliases')
+  final int totalAliases;
+
+  @JsonKey(name: 'total_active_aliases')
+  final int totalActiveAliases;
+
+  @JsonKey(name: 'total_inactive_aliases')
+  final int totalInactiveAliases;
+
+  @JsonKey(name: 'total_deleted_aliases')
+  final int totalDeletedAliases;
+
   @JsonKey(name: 'active_rule_count')
   final int activeRuleCount;
 
@@ -145,6 +161,7 @@ class Account {
           activeDomainLimit == other.activeDomainLimit &&
           aliasCount == other.aliasCount &&
           aliasLimit == other.aliasLimit &&
+          totalAliases == other.totalAliases &&
           activeRuleCount == other.activeRuleCount &&
           activeRuleLimit == other.activeRuleLimit &&
           totalEmailsForwarded == other.totalEmailsForwarded &&
@@ -176,6 +193,7 @@ class Account {
       activeDomainLimit.hashCode ^
       aliasCount.hashCode ^
       aliasLimit.hashCode ^
+      totalAliases.hashCode ^
       activeRuleCount.hashCode ^
       activeRuleLimit.hashCode ^
       totalEmailsForwarded.hashCode ^
@@ -187,7 +205,7 @@ class Account {
 
   @override
   String toString() {
-    return 'Account{id: $id, username: $username, fromName: $fromName, emailSubject: $emailSubject, bannerLocation: $bannerLocation, bandwidth: $bandwidth, bandwidthLimit: $bandwidthLimit, usernameCount: $usernameCount, usernameLimit: $usernameLimit, defaultRecipientId: $defaultRecipientId, defaultAliasDomain: $defaultAliasDomain, defaultAliasFormat: $defaultAliasFormat, subscription: $subscription, subscriptionEndAt: $subscriptionEndAt, recipientCount: $recipientCount, recipientLimit: $recipientLimit, activeDomainCount: $activeDomainCount, activeDomainLimit: $activeDomainLimit, aliasCount: $aliasCount, aliasLimit: $aliasLimit, activeRuleCount: $activeRuleCount, activeRuleLimit: $activeRuleLimit, totalEmailsForwarded: $totalEmailsForwarded, totalEmailsBlocked: $totalEmailsBlocked, totalEmailsReplied: $totalEmailsReplied, totalEmailsSent: $totalEmailsSent, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'Account{id: $id, username: $username, fromName: $fromName, emailSubject: $emailSubject, bannerLocation: $bannerLocation, bandwidth: $bandwidth, bandwidthLimit: $bandwidthLimit, usernameCount: $usernameCount, usernameLimit: $usernameLimit, defaultRecipientId: $defaultRecipientId, defaultAliasDomain: $defaultAliasDomain, defaultAliasFormat: $defaultAliasFormat, subscription: $subscription, subscriptionEndAt: $subscriptionEndAt, recipientCount: $recipientCount, recipientLimit: $recipientLimit, activeDomainCount: $activeDomainCount, activeDomainLimit: $activeDomainLimit, aliasCount: $aliasCount, aliasLimit: $aliasLimit, totalAliases: $totalAliases, activeRuleCount: $activeRuleCount, activeRuleLimit: $activeRuleLimit, totalEmailsForwarded: $totalEmailsForwarded, totalEmailsBlocked: $totalEmailsBlocked, totalEmailsReplied: $totalEmailsReplied, totalEmailsSent: $totalEmailsSent, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }
 

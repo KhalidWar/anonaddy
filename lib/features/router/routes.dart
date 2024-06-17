@@ -23,6 +23,7 @@ enum AppRoutes {
 
   /// Account Tab
   account('account', AccountTabRoute.page),
+  accountInfo('account-info', AccountInfoRoute.page),
   recipients('recipients', RecipientsTabRoute.page),
   recipient('/:id', RecipientsScreenRoute.page),
   usernames('usernames', UsernamesTabRoute.page),

@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AboutAppScreen(),
       );
     },
+    AccountInfoRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const AccountInfo(),
+      );
+    },
     AccountTabRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -170,6 +176,20 @@ class AboutAppScreenRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'AboutAppScreenRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AccountInfo]
+class AccountInfoRoute extends PageRouteInfo<void> {
+  const AccountInfoRoute({List<PageRouteInfo>? children})
+      : super(
+          AccountInfoRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AccountInfoRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

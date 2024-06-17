@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:anonaddy/features/account/presentation/account_tab.dart';
+import 'package:anonaddy/features/account/presentation/components/account_info.dart';
 import 'package:anonaddy/features/alert_center/presentation/notifications_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/aliases/presentation/aliases_tab.dart';
@@ -107,9 +108,13 @@ class AppRouter extends _$AppRouter implements AutoRouteGuard {
             path: AppRoutes.account.path,
             children: [
               AutoRoute(
+                page: AppRoutes.accountInfo.page,
+                path: AppRoutes.accountInfo.path,
+                initial: true,
+              ),
+              AutoRoute(
                 page: AppRoutes.recipients.page,
                 path: AppRoutes.recipients.path,
-                initial: true,
               ),
               AutoRoute(
                 page: AppRoutes.usernames.page,
