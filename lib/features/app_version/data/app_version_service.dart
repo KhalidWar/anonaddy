@@ -15,10 +15,10 @@ class AppVersionService {
   const AppVersionService({required this.dio});
   final Dio dio;
 
-  Future<AppVersion> getAppVersionData([String? path]) async {
+  Future<AppVersion> getAppVersionData() async {
     try {
       const urlPath = '$kUnEncodedBaseURL/app-version';
-      final response = await dio.get(path ?? urlPath);
+      final response = await dio.get(urlPath);
       final appVersion = AppVersion.fromJson(response.data);
       log('getAppVersionData: ${response.statusCode}');
 
