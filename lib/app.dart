@@ -14,7 +14,7 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     /// Use [watch] method to access different providers
-    final isDarkTheme = ref.watch(settingsNotifier
+    final isDarkTheme = ref.watch(settingsNotifierProvider
         .select((settingsAsync) => settingsAsync.value?.isDarkTheme));
     final appRouter = ref.watch(appRouterProvider);
 

@@ -27,7 +27,8 @@ final createAliasNotifierProvider =
 
 class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
   Future<void> createNewAlias() async {
-    final isAutoCopy = ref.read(settingsNotifier).value!.isAutoCopyEnabled;
+    final isAutoCopy =
+        ref.read(settingsNotifierProvider).requireValue.isAutoCopyEnabled;
 
     final currentState = state.value!;
 

@@ -54,14 +54,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
 
     /// Show [ChangelogWidget] in [HomeScreen] if app has updated
-    ref.read(settingsNotifier.notifier).showChangelogIfAppUpdated();
+    ref.read(settingsNotifierProvider.notifier).showChangelogIfAppUpdated();
   }
 
   @override
   Widget build(BuildContext context) {
     /// Show [ChangelogWidget] if app has been updated
     ref.listen<bool>(
-      settingsNotifier
+      settingsNotifierProvider
           .select((settingState) => settingState.value?.showChangelog ?? false),
       (_, showChangelog) async {
         if (showChangelog) {

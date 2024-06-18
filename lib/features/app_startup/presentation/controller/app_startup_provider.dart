@@ -149,7 +149,7 @@ class AppStartupNotifier extends AsyncNotifier<void> {
   FutureOr<void> build() async {
     ref.onDispose(() async {
       ref.invalidate(flutterSecureStorageProvider);
-      ref.invalidate(settingsNotifier);
+      ref.invalidate(settingsNotifierProvider);
       ref.invalidate(authNotifierProvider);
     });
 
@@ -161,7 +161,7 @@ class AppStartupNotifier extends AsyncNotifier<void> {
       iOSApiKey: revenueCatIOSAPIKey,
     );
 
-    await ref.read(settingsNotifier.future);
+    await ref.read(settingsNotifierProvider.future);
     await ref.read(authNotifierProvider.future);
   }
 }

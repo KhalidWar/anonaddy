@@ -20,7 +20,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settingsState = ref.watch(settingsNotifier);
+    final settingsState = ref.watch(settingsNotifierProvider);
     final biometric = ref.watch(biometricNotifier);
 
     return Scaffold(
@@ -44,7 +44,7 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: PlatformSwitch(
                   value: settings.isDarkTheme,
                   onChanged: (toggle) {
-                    ref.read(settingsNotifier.notifier).toggleTheme();
+                    ref.read(settingsNotifierProvider.notifier).toggleTheme();
                   },
                 ),
               ),
@@ -58,7 +58,9 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: PlatformSwitch(
                   value: settings.isAutoCopyEnabled,
                   onChanged: (toggle) {
-                    ref.read(settingsNotifier.notifier).toggleAutoCopy();
+                    ref
+                        .read(settingsNotifierProvider.notifier)
+                        .toggleAutoCopy();
                   },
                 ),
               ),

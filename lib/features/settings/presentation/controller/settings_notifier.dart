@@ -8,7 +8,7 @@ import 'package:anonaddy/features/settings/presentation/controller/settings_stat
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-final settingsNotifier =
+final settingsNotifierProvider =
     AsyncNotifierProvider.autoDispose<SettingsNotifier, SettingsState>(
         SettingsNotifier.new);
 
