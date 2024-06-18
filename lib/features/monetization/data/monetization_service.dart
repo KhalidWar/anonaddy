@@ -5,22 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
-enum RevenueCatEntitlements {
-  monthly('Monthly'),
-  yearly('Yearly');
-
-  const RevenueCatEntitlements(this.value);
-  final String value;
-}
-
-enum RevenueCatProducts {
-  iOSMonthly('monthly'),
-  iOSAnnually('annually');
-
-  const RevenueCatProducts(this.value);
-  final String value;
-}
-
 final monetizationServiceProvider =
     Provider<MonetizationService>((ref) => const MonetizationService());
 
