@@ -58,8 +58,9 @@ final appRouterProvider = Provider((ref) {
       /// It's safe to call [.requireValue] because [appStartupProvider]
       /// preloaded [authNotifierProvider] and and handles error cases.
       final authState = ref.watch(authNotifierProvider).requireValue;
+      final isLoggedIn = authState.user != null;
 
-      if (authState.isLoggedIn) {
+      if (isLoggedIn) {
         if (authState.isBiometricLocked) {
           if (resolver.route.name == LockScreenRoute.name) {
             return resolver.next();
@@ -72,7 +73,7 @@ final appRouterProvider = Provider((ref) {
         return resolver.next();
       }
 
-      if (!authState.isLoggedIn) {
+      if (!isLoggedIn) {
         if (resolver.route.name == OnboardingScreenRoute.name) {
           return resolver.next();
         }

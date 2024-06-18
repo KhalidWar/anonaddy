@@ -23,9 +23,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
           await ref.read(authServiceProvider).loginWithAccessToken(url, token);
       await ref.read(authServiceProvider).saveUser(user);
 
-      state = AsyncData(
-        currentState.copyWith(isLoggedIn: true, user: user),
-      );
+      state = AsyncData(currentState.copyWith(user: user));
       return true;
     } catch (error) {
       Utilities.showToast(error.toString());
@@ -44,12 +42,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
 
       await ref.read(authServiceProvider).saveUser(user);
 
-      state = AsyncData(
-        state.value!.copyWith(
-          isLoggedIn: true,
-          user: user,
-        ),
-      );
+      state = AsyncData(state.value!.copyWith(user: user));
     } catch (error) {
       Utilities.showToast(error.toString());
       return;
@@ -73,12 +66,7 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       if (didAuthenticate) {
         final currentState = state.value!;
 
-        state = AsyncData(
-          currentState.copyWith(
-            isLoggedIn: currentState.isLoggedIn,
-            isBiometricLocked: false,
-          ),
-        );
+        state = AsyncData(currentState.copyWith(isBiometricLocked: false));
         return;
       }
 
@@ -139,7 +127,6 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       /// check whether biometric authentication is enabled
       /// and proceed to the app.
       return AuthState(
-        isLoggedIn: true,
         isBiometricLocked: await _getBioAuthState(),
         user: user,
       );
