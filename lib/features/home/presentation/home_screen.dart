@@ -6,7 +6,6 @@ import 'package:anonaddy/features/aliases/presentation/controller/fab_visibility
 import 'package:anonaddy/features/connectivity/presentation/controller/connectivity_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/create_alias.dart';
 import 'package:anonaddy/features/home/presentation/components/changelog_widget.dart';
-import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/features/router/app_router.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
 import 'package:auto_route/auto_route.dart';
@@ -36,7 +35,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     if (index == 0) {
       ref.read(accountNotifierProvider.notifier).fetchAccount();
-      ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
     }
 
     if (index == 1) {
