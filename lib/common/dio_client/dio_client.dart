@@ -1,4 +1,5 @@
-import 'package:anonaddy/features/auth/data/auth_service.dart';
+import 'package:anonaddy/features/auth/domain/user.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,29 +11,27 @@ final dioProvider = Provider.autoDispose<Dio>((ref) {
 });
 
 final _dioInterceptorProvider = Provider.autoDispose<DioInterceptors>((ref) {
-  //TODO: Replace with [authNotifierProvider]
-  final accessTokenService = ref.read(authServiceProvider);
-  return DioInterceptors(authService: accessTokenService);
+  final authState = ref.read(authNotifierProvider).requireValue;
+  return DioInterceptors(user: authState.user!);
 });
 
 class DioInterceptors extends Interceptor {
-  DioInterceptors({required this.authService});
+  DioInterceptors({required this.user});
 
-  final AuthService authService;
+  final User user;
 
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final user = await authService.getUser();
     final customOptions = options.copyWith(
       sendTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
-      baseUrl: 'https://${user?.url}',
+      baseUrl: 'https://${user.url}',
       headers: {
         "Content-Type": "application/json",
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "application/json",
-        "Authorization": "Bearer ${user?.token}",
+        "Authorization": "Bearer ${user.token}",
       },
     );
 
