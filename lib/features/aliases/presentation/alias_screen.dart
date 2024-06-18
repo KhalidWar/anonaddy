@@ -297,7 +297,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 76),
                             child: AliasDefaultRecipientScreen(
-                              aliasId: aliasState.alias.id,
+                              id: aliasState.alias.id,
                             ),
                           ),
                           stickyActionBar: Container(
