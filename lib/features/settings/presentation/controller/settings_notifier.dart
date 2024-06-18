@@ -8,10 +8,11 @@ import 'package:anonaddy/features/settings/presentation/controller/settings_stat
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-final settingsNotifier = AsyncNotifierProvider<SettingsNotifier, SettingsState>(
-    SettingsNotifier.new);
+final settingsNotifier =
+    AsyncNotifierProvider.autoDispose<SettingsNotifier, SettingsState>(
+        SettingsNotifier.new);
 
-class SettingsNotifier extends AsyncNotifier<SettingsState> {
+class SettingsNotifier extends AutoDisposeAsyncNotifier<SettingsState> {
   Future<void> toggleTheme() async {
     try {
       final currentState = state.value!;

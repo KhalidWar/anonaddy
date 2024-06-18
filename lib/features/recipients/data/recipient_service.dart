@@ -6,7 +6,7 @@ import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final recipientService = Provider<RecipientService>((ref) {
+final recipientService = Provider.autoDispose<RecipientService>((ref) {
   return RecipientService(
     dio: ref.read(dioProvider),
     secureStorage: ref.read(flutterSecureStorageProvider),

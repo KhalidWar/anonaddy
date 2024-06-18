@@ -8,7 +8,7 @@ import 'package:anonaddy/features/domain_options/domain/domain_options.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final domainOptionsService = Provider<DomainOptionsService>((ref) {
+final domainOptionsService = Provider.autoDispose<DomainOptionsService>((ref) {
   return DomainOptionsService(dio: ref.read(dioProvider));
 });
 
@@ -16,6 +16,7 @@ class DomainOptionsService {
   const DomainOptionsService({
     required this.dio,
   });
+
   final Dio dio;
 
   Future<DomainOptions> fetchDomainOptions() async {

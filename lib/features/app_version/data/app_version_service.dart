@@ -7,12 +7,13 @@ import 'package:anonaddy/features/app_version/domain/app_version.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final appVersionService = Provider<AppVersionService>((ref) {
+final appVersionService = Provider.autoDispose<AppVersionService>((ref) {
   return AppVersionService(dio: ref.read(dioProvider));
 });
 
 class AppVersionService {
   const AppVersionService({required this.dio});
+
   final Dio dio;
 
   Future<AppVersion> getAppVersionData() async {

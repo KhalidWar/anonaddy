@@ -7,12 +7,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
 
-final biometricAuthServiceProvider = Provider<BiometricAuthService>((ref) {
-  return BiometricAuthService(localAuth: LocalAuthentication());
+final biometricAuthServiceProvider =
+    Provider.autoDispose<BiometricAuthService>((ref) {
+  return BiometricAuthService(
+    localAuth: LocalAuthentication(),
+  );
 });
 
 class BiometricAuthService {
   const BiometricAuthService({required this.localAuth});
+
   final LocalAuthentication localAuth;
 
   Future<bool> authenticate() async {

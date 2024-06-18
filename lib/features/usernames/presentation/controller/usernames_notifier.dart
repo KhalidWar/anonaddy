@@ -7,10 +7,10 @@ import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernamesNotifierProvider =
-    AsyncNotifierProvider<UsernamesNotifier, List<Username>>(
+    AsyncNotifierProvider.autoDispose<UsernamesNotifier, List<Username>>(
         UsernamesNotifier.new);
 
-class UsernamesNotifier extends AsyncNotifier<List<Username>> {
+class UsernamesNotifier extends AutoDisposeAsyncNotifier<List<Username>> {
   Future<void> fetchUsernames() async {
     try {
       final usernames =

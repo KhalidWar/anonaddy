@@ -6,7 +6,7 @@ import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final accountServiceProvider = Provider<AccountService>((ref) {
+final accountServiceProvider = Provider.autoDispose<AccountService>((ref) {
   return AccountService(
     dio: ref.read(dioProvider),
     secureStorage: ref.read(flutterSecureStorageProvider),

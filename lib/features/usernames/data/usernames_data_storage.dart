@@ -7,13 +7,15 @@ import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-final usernameDataStorageProvider = Provider<UsernamesDataStorage>((ref) {
+final usernameDataStorageProvider =
+    Provider.autoDispose<UsernamesDataStorage>((ref) {
   return UsernamesDataStorage(
-      secureStorage: ref.read(flutterSecureStorageProvider));
+    secureStorage: ref.read(flutterSecureStorageProvider),
+  );
 });
 
 class UsernamesDataStorage extends DataStorage {
-  UsernamesDataStorage({required this.secureStorage});
+  const UsernamesDataStorage({required this.secureStorage});
 
   final FlutterSecureStorage secureStorage;
 

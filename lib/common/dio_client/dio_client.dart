@@ -2,20 +2,22 @@ import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final dioProvider = Provider<Dio>((ref) {
+final dioProvider = Provider.autoDispose<Dio>((ref) {
   final dio = Dio();
   final interceptors = ref.read(_dioInterceptorProvider);
   dio.interceptors.add(interceptors);
   return dio;
 });
 
-final _dioInterceptorProvider = Provider<DioInterceptors>((ref) {
+final _dioInterceptorProvider = Provider.autoDispose<DioInterceptors>((ref) {
+  //TODO: Replace with [authNotifierProvider]
   final accessTokenService = ref.read(authServiceProvider);
   return DioInterceptors(authService: accessTokenService);
 });
 
 class DioInterceptors extends Interceptor {
   DioInterceptors({required this.authService});
+
   final AuthService authService;
 
   @override
