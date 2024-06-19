@@ -15,18 +15,19 @@ import 'package:anonaddy/features/recipients/presentation/components/recipient_s
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_trailing_loading_switch.dart';
 import 'package:anonaddy/features/recipients/presentation/components/recipient_screen_unverified_warning.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_notifier.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'RecipientsScreenRoute')
 class RecipientsScreen extends ConsumerStatefulWidget {
   const RecipientsScreen({
     super.key,
-    required this.recipientId,
+    required this.id,
   });
-  final String recipientId;
 
-  static const routeName = 'recipientDetailedScreen';
+  final String id;
 
   @override
   ConsumerState createState() => _RecipientsScreenState();
@@ -64,7 +65,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
   @override
   Widget build(BuildContext context) {
     final recipientScreenAsync =
-        ref.watch(recipientScreenNotifierProvider(widget.recipientId));
+        ref.watch(recipientScreenNotifierProvider(widget.id));
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -81,8 +82,7 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
               content: AddyString.deleteRecipientConfirmation,
               method: () async {
                 await ref
-                    .read(recipientScreenNotifierProvider(widget.recipientId)
-                        .notifier)
+                    .read(recipientScreenNotifierProvider(widget.id).notifier)
                     .removeRecipient();
 
                 /// Dismisses this dialog

@@ -2,7 +2,8 @@ import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_screen.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
-import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class AliasScreenRecipients extends StatelessWidget {
@@ -54,13 +55,8 @@ class AliasScreenRecipients extends StatelessWidget {
               final recipient = recipients[index];
               return RecipientListTile(
                 recipient: recipient,
-                onPress: () {
-                  Navigator.pushNamed(
-                    context,
-                    RecipientsScreen.routeName,
-                    arguments: recipient.id,
-                  );
-                },
+                onPress: () => context.router
+                    .push(RecipientsScreenRoute(id: recipient.id)),
               );
             },
           ),

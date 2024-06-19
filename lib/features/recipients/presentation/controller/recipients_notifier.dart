@@ -5,10 +5,10 @@ import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final recipientsNotifierProvider =
-    AsyncNotifierProvider<RecipientsNotifier, List<Recipient>>(
+    AsyncNotifierProvider.autoDispose<RecipientsNotifier, List<Recipient>>(
         RecipientsNotifier.new);
 
-class RecipientsNotifier extends AsyncNotifier<List<Recipient>> {
+class RecipientsNotifier extends AutoDisposeAsyncNotifier<List<Recipient>> {
   Future<void> fetchRecipients({bool showLoading = false}) async {
     if (showLoading) state = const AsyncLoading();
     state = await AsyncValue.guard(

@@ -62,7 +62,7 @@ class ChangelogWidget extends ConsumerWidget {
             width: double.infinity,
             child: PlatformButton(
               onPress: () {
-                ref.read(settingsNotifier.notifier).dismissChangelog();
+                ref.read(settingsNotifierProvider.notifier).dismissChangelog();
                 Navigator.pop(context);
               },
               child: Text(

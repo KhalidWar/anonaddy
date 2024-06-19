@@ -16,7 +16,7 @@ void main() {
   }) {
     return ProviderScope(
       overrides: [
-        authStateNotifier
+        authNotifierProvider
             .overrideWith(() => MockAuthNotifier(authState: authState)),
         domainOptionsNotifierProvider.overrideWith(
             () => MockDomainOptionsNotifier(domainOptions: domainOptions)),

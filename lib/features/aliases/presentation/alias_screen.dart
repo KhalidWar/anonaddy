@@ -19,18 +19,19 @@ import 'package:anonaddy/features/aliases/presentation/components/alias_screen_r
 import 'package:anonaddy/features/aliases/presentation/components/send_from_widget.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_notifier.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'AliasScreenRoute')
 class AliasScreen extends ConsumerStatefulWidget {
   const AliasScreen({
     super.key,
-    required this.aliasId,
+    required this.id,
   });
-  final String aliasId;
 
-  static const routeName = 'aliasDetailedScreen';
+  final String id;
 
   static const aliasScreenScaffold = Key('aliasScreenScaffold');
   static const aliasScreenAppBar = Key('aliasScreenAppBar');
@@ -46,8 +47,7 @@ class AliasScreen extends ConsumerStatefulWidget {
 class _AliasScreenState extends ConsumerState<AliasScreen> {
   @override
   Widget build(BuildContext context) {
-    final aliasNotifier =
-        ref.watch(aliasScreenNotifierProvider(widget.aliasId));
+    final aliasNotifier = ref.watch(aliasScreenNotifierProvider(widget.id));
 
     return Scaffold(
       key: AliasScreen.aliasScreenScaffold,
@@ -66,7 +66,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               content: AddyString.forgetAliasConfirmation,
               method: () async {
                 await ref
-                    .read(aliasScreenNotifierProvider(widget.aliasId).notifier)
+                    .read(aliasScreenNotifierProvider(widget.id).notifier)
                     .forgetAlias()
                     .then((_) {
                   Navigator.pop(context);
@@ -297,7 +297,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 76),
                             child: AliasDefaultRecipientScreen(
-                              aliasId: aliasState.alias.id,
+                              id: aliasState.alias.id,
                             ),
                           ),
                           stickyActionBar: Container(
@@ -309,7 +309,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                             child: PlatformButton(
                               onPress: () => ref
                                   .read(defaultRecipientNotifierProvider(
-                                          widget.aliasId)
+                                          widget.id)
                                       .notifier)
                                   .updateAliasDefaultRecipient()
                                   .whenComplete(() => Navigator.pop(context)),
@@ -317,7 +317,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                                 builder: (context, ref, _) {
                                   final defaultRecipientAsync = ref.watch(
                                       defaultRecipientNotifierProvider(
-                                          widget.aliasId));
+                                          widget.id));
 
                                   return defaultRecipientAsync.when(
                                     data: (defaultRecipientState) {

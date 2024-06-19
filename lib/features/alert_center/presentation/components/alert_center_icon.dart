@@ -1,6 +1,7 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/features/alert_center/presentation/controller/local_notification_notifier.dart';
-import 'package:anonaddy/features/alert_center/presentation/notifications_screen.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,9 +19,7 @@ class AlertCenterIcon extends StatelessWidget {
             Icons.error_outline,
             color: Colors.white,
           ),
-          onPressed: () {
-            Navigator.pushNamed(context, NotificationsScreen.routeName);
-          },
+          onPressed: () => context.pushRoute(const NotificationsScreenRoute()),
         ),
         Consumer(
           builder: (_, ref, __) {

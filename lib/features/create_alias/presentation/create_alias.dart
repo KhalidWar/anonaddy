@@ -12,10 +12,12 @@ import 'package:anonaddy/features/create_alias/presentation/components/select_re
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_state.dart';
 import 'package:anonaddy/features/home/presentation/components/animated_fab.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'CreateAliasRoute')
 class CreateAlias extends ConsumerStatefulWidget {
   const CreateAlias({super.key});
 

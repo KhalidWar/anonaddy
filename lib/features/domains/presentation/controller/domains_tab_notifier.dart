@@ -5,10 +5,10 @@ import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainsNotifierProvider =
-    AsyncNotifierProvider<DomainsTabNotifier, List<Domain>>(
+    AsyncNotifierProvider.autoDispose<DomainsTabNotifier, List<Domain>>(
         DomainsTabNotifier.new);
 
-class DomainsTabNotifier extends AsyncNotifier<List<Domain>> {
+class DomainsTabNotifier extends AutoDisposeAsyncNotifier<List<Domain>> {
   Future<void> fetchDomains({bool showLoading = false}) async {
     try {
       if (showLoading) state = const AsyncLoading();

@@ -3,7 +3,7 @@ import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
-import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
+import 'package:anonaddy/features/app_startup/presentation/controller/app_startup_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,27 +21,52 @@ class ErrorScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      persistentFooterButtons: [
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: PlatformButton(
+      appBar: AppBar(
+        backgroundColor: AppColors.primaryColor,
+        elevation: 0,
+        title: Text(
+          AppStrings.appName,
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(color: Colors.white),
+        ),
+        actions: [
+          TextButton(
             key: logoutButton,
-            color: Colors.red,
-            child: const Text('Logout'),
-            onPress: () {
+            onPressed: () {
               /// Show platform dialog
               PlatformAware.platformDialog(
                 context: context,
                 child: PlatformAlertDialog(
-                  title: 'Logout',
+                  title: 'Log out',
                   content: AppStrings.logOutAlertDialog,
-                  method: () async {
-                    await ref.read(authStateNotifier.notifier).logout(context);
-                  },
+                  method: ref.read(appStartupProvider.notifier).logout,
                 ),
               );
             },
+            child: Text(
+              'Log out',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+      persistentFooterButtons: [
+        SizedBox(
+          width: double.infinity,
+          child: PlatformButton(
+            child: Text(
+              'Retry',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(color: Colors.black),
+            ),
+            onPress: () => ref.invalidate(appStartupProvider),
           ),
         ),
       ],

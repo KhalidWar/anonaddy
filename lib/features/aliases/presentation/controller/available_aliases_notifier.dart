@@ -5,10 +5,10 @@ import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final availableAliasesNotifierProvider =
-    AsyncNotifierProvider<AvailableAliasesNotifier, List<Alias>>(
+    AsyncNotifierProvider.autoDispose<AvailableAliasesNotifier, List<Alias>>(
         AvailableAliasesNotifier.new);
 
-class AvailableAliasesNotifier extends AsyncNotifier<List<Alias>> {
+class AvailableAliasesNotifier extends AutoDisposeAsyncNotifier<List<Alias>> {
   Future<void> fetchAliases() async {
     state = await AsyncValue.guard(
       () => ref.read(aliasesServiceProvider).fetchAliases(),

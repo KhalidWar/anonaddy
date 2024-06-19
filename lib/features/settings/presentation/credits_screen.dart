@@ -1,12 +1,12 @@
 import 'package:anonaddy/common/constants/lottie_images.dart';
 import 'package:anonaddy/common/utilities.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+@RoutePage(name: 'CreditsScreenRoute')
 class CreditsScreen extends StatelessWidget {
   const CreditsScreen({super.key});
-
-  static const routeName = 'creditsScreen';
 
   @override
   Widget build(BuildContext context) {

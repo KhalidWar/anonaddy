@@ -1,47 +1,32 @@
 import 'package:anonaddy/features/auth/domain/user.dart';
 
-/// Manages app biometric authentication lock status.
-enum AuthenticationStatus {
-  /// When user has enabled biometric auth and app requires biometric
-  /// unlock at next app startup.
-  enabled,
-
-  /// When user hasn't set up or enabled biometric authentication
-  disabled,
-
-  /// When current platform doesn't support biometric authentication.
-  /// At the moment, local auth doesn't support MacOS.
-  unavailable,
-}
-
 class AuthState {
   const AuthState({
-    required this.isLoggedIn,
-    required this.authenticationStatus,
-    required this.loginLoading,
+    required this.isBiometricLocked,
     this.user,
   });
 
-  final bool isLoggedIn;
-  final AuthenticationStatus authenticationStatus;
-  final bool loginLoading;
+  factory AuthState.initial() {
+    return const AuthState(
+      isBiometricLocked: false,
+      user: null,
+    );
+  }
+
+  final bool isBiometricLocked;
   final User? user;
 
   @override
   String toString() {
-    return 'AuthState{isLoggedIn: $isLoggedIn, authenticationStatus: $authenticationStatus, loginLoading: $loginLoading, user: $user}';
+    return 'AuthState{isBiometricLocked: $isBiometricLocked, user: $user}';
   }
 
   AuthState copyWith({
-    bool? isLoggedIn,
-    AuthenticationStatus? authenticationStatus,
-    bool? loginLoading,
+    bool? isBiometricLocked,
     User? user,
   }) {
     return AuthState(
-      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
-      authenticationStatus: authenticationStatus ?? this.authenticationStatus,
-      loginLoading: loginLoading ?? this.loginLoading,
+      isBiometricLocked: isBiometricLocked ?? this.isBiometricLocked,
       user: user ?? this.user,
     );
   }

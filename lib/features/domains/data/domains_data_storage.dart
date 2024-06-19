@@ -7,13 +7,16 @@ import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-final domainsDataStorageProvider = Provider<DomainsDataStorage>((ref) {
+final domainsDataStorageProvider =
+    Provider.autoDispose<DomainsDataStorage>((ref) {
   return DomainsDataStorage(
-      secureStorage: ref.read(flutterSecureStorageProvider));
+    secureStorage: ref.read(flutterSecureStorageProvider),
+  );
 });
 
 class DomainsDataStorage extends DataStorage {
   DomainsDataStorage({required this.secureStorage});
+
   final FlutterSecureStorage secureStorage;
 
   @override

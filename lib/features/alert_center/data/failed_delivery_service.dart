@@ -8,12 +8,14 @@ import 'package:anonaddy/features/alert_center/domain/failed_delivery.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final failedDeliveryService = Provider<FailedDeliveryService>((ref) {
+final failedDeliveryService =
+    Provider.autoDispose<FailedDeliveryService>((ref) {
   return FailedDeliveryService(dio: ref.read(dioProvider));
 });
 
 class FailedDeliveryService {
   const FailedDeliveryService({required this.dio});
+
   final Dio dio;
 
   Future<List<FailedDelivery>> getFailedDeliveries() async {

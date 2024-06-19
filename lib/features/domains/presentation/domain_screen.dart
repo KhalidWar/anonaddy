@@ -15,26 +15,26 @@ import 'package:anonaddy/features/associated_aliases/presentation/associated_ali
 import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_notifier.dart';
 import 'package:anonaddy/features/domains/presentation/domain_default_recipient.dart';
-import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class DomainsScreen extends ConsumerStatefulWidget {
-  const DomainsScreen({
+@RoutePage(name: 'DomainScreenRoute')
+class DomainScreen extends ConsumerStatefulWidget {
+  const DomainScreen({
     super.key,
-    required this.domain,
+    required this.id,
   });
 
-  final Domain domain;
-
-  static const routeName = 'domainDetailedScreen';
+  final Domain id;
 
   @override
   ConsumerState createState() => _DomainsScreenState();
 }
 
-class _DomainsScreenState extends ConsumerState<DomainsScreen> {
+class _DomainsScreenState extends ConsumerState<DomainScreen> {
   Future<void> deleteDomain() async {
     PlatformAware.platformDialog(
       context: context,
@@ -43,8 +43,8 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
         content: AddyString.deleteDomainConfirmation,
         method: () async {
           await ref
-              .read(domainsScreenStateNotifier(widget.domain.id).notifier)
-              .deleteDomain(widget.domain.id);
+              .read(domainsScreenStateNotifier(widget.id.id).notifier)
+              .deleteDomain(widget.id.id);
           if (mounted) {
             Navigator.pop(context);
             Navigator.pop(context);
@@ -59,18 +59,17 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
-          .read(domainsScreenStateNotifier(widget.domain.id).notifier)
-          .fetchDomain(widget.domain);
+          .read(domainsScreenStateNotifier(widget.id.id).notifier)
+          .fetchDomain(widget.id);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final domainsAsync =
-        ref.watch(domainsScreenStateNotifier(widget.domain.id));
+    final domainsAsync = ref.watch(domainsScreenStateNotifier(widget.id.id));
 
     final domainNotifier =
-        ref.read(domainsScreenStateNotifier(widget.domain.id).notifier);
+        ref.read(domainsScreenStateNotifier(widget.id.id).notifier);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -135,16 +134,16 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
                               description: domain.description,
                               updateDescription: (description) async {
                                 await ref
-                                    .read(domainsScreenStateNotifier(
-                                            widget.domain.id)
-                                        .notifier)
+                                    .read(
+                                        domainsScreenStateNotifier(widget.id.id)
+                                            .notifier)
                                     .editDescription(domain.id, description);
                               },
                               removeDescription: () async {
                                 await ref
-                                    .read(domainsScreenStateNotifier(
-                                            widget.domain.id)
-                                        .notifier)
+                                    .read(
+                                        domainsScreenStateNotifier(widget.id.id)
+                                            .notifier)
                                     .editDescription(domain.id, '');
                               },
                             ),
@@ -240,11 +239,9 @@ class _DomainsScreenState extends ConsumerState<DomainsScreen> {
                     RecipientListTile(
                       recipient: domain.defaultRecipient!,
                       onPress: () {
-                        Navigator.pushNamed(
-                          context,
-                          RecipientsScreen.routeName,
-                          arguments: domain.defaultRecipient!.id,
-                        );
+                        context.pushRoute(RecipientsScreenRoute(
+                          id: domain.defaultRecipient!.id,
+                        ));
                       },
                     ),
                 ],

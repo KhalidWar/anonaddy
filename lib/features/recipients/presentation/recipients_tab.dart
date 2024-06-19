@@ -8,11 +8,13 @@ import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/components/add_new_recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'RecipientsTabRoute')
 class RecipientsTab extends ConsumerStatefulWidget {
   const RecipientsTab({super.key});
 
@@ -83,10 +85,8 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                       return RecipientListTile(
                         recipient: recipient,
                         onPress: () {
-                          Navigator.pushNamed(
-                            context,
-                            RecipientsScreen.routeName,
-                            arguments: recipient.id,
+                          context.pushRoute(
+                            RecipientsScreenRoute(id: recipient.id),
                           );
                         },
                       );

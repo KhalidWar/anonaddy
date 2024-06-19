@@ -23,8 +23,6 @@ class _AddNewRuleConditionState extends ConsumerState<AddNewRuleCondition> {
   @override
   Widget build(BuildContext context) {
     final ruleAsync = ref.watch(createNewRuleNotifierProvider(widget.ruleId));
-    final notifier =
-        ref.read(createNewRuleNotifierProvider(widget.ruleId).notifier);
 
     return Consumer(
       builder: (context, ref, _) {

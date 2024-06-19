@@ -28,34 +28,40 @@ dependencies:
 
   # Internet Connectivity
   dio: ^5.4.2+1
-  url_launcher: ^6.2.5
+  url_launcher: ^6.3.0
   connectivity_plus: ^5.0.2
 
   # Storage
   flutter_secure_storage: ^9.2.2
 
   # Security
-  secure_application: ^4.0.0
+  secure_application: ^4.0.1
   local_auth: ^2.2.0
 
   # State Management
   flutter_riverpod: ^2.5.1
-  flutter_phoenix: ^1.1.1
 
   # Testing
-  mocktail: ^1.0.3
+  mocktail: ^1.0.4
 
   # App Package
-  package_info_plus: ^6.0.0
+  package_info_plus: ^8.0.0
   flutter_native_splash: ^2.4.0
 
   # Monetization
   purchases_flutter: ^6.25.0
   purchases_ui_flutter: ^6.25.0
 
+  # Routing
+  auto_route: ^8.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  auto_route_generator: ^8.0.0
+  build_runner: ^2.4.11
+  json_serializable: ^6.8.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

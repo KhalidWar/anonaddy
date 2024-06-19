@@ -7,20 +7,22 @@ class AppStrings {
   static const searchBotNavLabel = 'History';
 
   /// Account Tab
-  static const monthlyBandwidth = 'Monthly Bandwidth';
+  static const account = 'Account';
   static const recipients = 'Recipients';
   static const usernames = 'Usernames';
   static const domains = 'Domains';
   static const rules = 'Rules';
+  static const aliases = 'Aliases';
   static const selfHosted = 'Self Hosted';
   static const subscriptionEndDate = 'Subscription End Date';
   static const accessTokenInfo = 'Access Token Info';
   static const subscriptionEndDateNotAvailable = 'Not available';
-  static const subscriptionEndDateDoesNotExpire = 'Does not expire';
+  static const subscriptionEndDateDoesNotExpire = 'does not expire';
+  static const noSubscription = 'no subscription';
   static const noDefaultSelected = 'No default selected';
   static const defaultAliasFormat = 'Default Alias Format';
   static const defaultAliasDomain = 'Default Alias Domain';
-  static const unlimited = 'Unlimited';
+  static const unlimited = 'unlimited';
   static const addNewRecipient = 'Add New Recipient';
 
   /// Aliases Tab

@@ -1,36 +1,37 @@
-import 'package:anonaddy/features/auth/data/auth_service.dart';
+import 'package:anonaddy/features/auth/domain/user.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final dioProvider = Provider<Dio>((ref) {
+final dioProvider = Provider.autoDispose<Dio>((ref) {
   final dio = Dio();
   final interceptors = ref.read(_dioInterceptorProvider);
   dio.interceptors.add(interceptors);
   return dio;
 });
 
-final _dioInterceptorProvider = Provider<DioInterceptors>((ref) {
-  final accessTokenService = ref.read(authServiceProvider);
-  return DioInterceptors(authService: accessTokenService);
+final _dioInterceptorProvider = Provider.autoDispose<DioInterceptors>((ref) {
+  final authState = ref.read(authNotifierProvider).requireValue;
+  return DioInterceptors(user: authState.user!);
 });
 
 class DioInterceptors extends Interceptor {
-  DioInterceptors({required this.authService});
-  final AuthService authService;
+  DioInterceptors({required this.user});
+
+  final User user;
 
   @override
   void onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
-    final user = await authService.getUser();
     final customOptions = options.copyWith(
       sendTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
-      baseUrl: 'https://${user?.url}',
+      baseUrl: 'https://${user.url}',
       headers: {
         "Content-Type": "application/json",
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "application/json",
-        "Authorization": "Bearer ${user?.token}",
+        "Authorization": "Bearer ${user.token}",
       },
     );
 

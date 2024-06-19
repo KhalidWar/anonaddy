@@ -10,7 +10,7 @@ import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final usernameServiceProvider = Provider<UsernameService>((ref) {
+final usernameServiceProvider = Provider.autoDispose<UsernameService>((ref) {
   return UsernameService(
     dio: ref.read(dioProvider),
     dataStorage: ref.read(usernameDataStorageProvider),

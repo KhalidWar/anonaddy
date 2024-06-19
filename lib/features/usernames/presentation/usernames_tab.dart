@@ -8,10 +8,12 @@ import 'package:anonaddy/features/account/presentation/controller/account_notifi
 import 'package:anonaddy/features/usernames/presentation/components/add_new_username.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/username_list_tile.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'UsernamesTabRoute')
 class UsernamesTab extends ConsumerStatefulWidget {
   const UsernamesTab({super.key});
 

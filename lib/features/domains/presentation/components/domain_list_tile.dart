@@ -1,6 +1,7 @@
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/features/domains/domain/domain.dart';
-import 'package:anonaddy/features/domains/presentation/domains_screen.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class DomainListTile extends StatelessWidget {
@@ -39,13 +40,7 @@ class DomainListTile extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () {
-        Navigator.pushNamed(
-          context,
-          DomainsScreen.routeName,
-          arguments: domain,
-        );
-      },
+      onTap: () => context.pushRoute(DomainScreenRoute(id: domain)),
     );
   }
 }

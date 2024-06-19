@@ -5,22 +5,22 @@ import 'package:anonaddy/common/platform_aware_widgets/dialogs/platform_alert_di
 import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/common/utilities.dart';
+import 'package:anonaddy/features/auth/presentation/controller/auth_notifier.dart';
 import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
-import 'package:anonaddy/features/auth/presentation/logout_screen.dart';
-import 'package:anonaddy/features/settings/presentation/about_app_screen.dart';
+import 'package:anonaddy/features/router/app_router.dart';
 import 'package:anonaddy/features/settings/presentation/components/app_version.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+@RoutePage(name: 'SettingsScreenRoute')
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static const routeName = 'settingsScreen';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settingsState = ref.watch(settingsNotifier);
+    final settingsState = ref.watch(settingsNotifierProvider);
     final biometric = ref.watch(biometricNotifier);
 
     return Scaffold(
@@ -44,7 +44,7 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: PlatformSwitch(
                   value: settings.isDarkTheme,
                   onChanged: (toggle) {
-                    ref.read(settingsNotifier.notifier).toggleTheme();
+                    ref.read(settingsNotifierProvider.notifier).toggleTheme();
                   },
                 ),
               ),
@@ -58,7 +58,9 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: PlatformSwitch(
                   value: settings.isAutoCopyEnabled,
                   onChanged: (toggle) {
-                    ref.read(settingsNotifier.notifier).toggleAutoCopy();
+                    ref
+                        .read(settingsNotifierProvider.notifier)
+                        .toggleAutoCopy();
                   },
                 ),
               ),
@@ -107,9 +109,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 subtitle: const Text(AppStrings.settingsAboutAppSubtitle),
                 trailing: const Icon(Icons.help_outline),
-                onTap: () {
-                  Navigator.pushNamed(context, AboutAppScreen.routeName);
-                },
+                onTap: () => context.pushRoute(const AboutAppScreenRoute()),
               ),
               ListTile(
                 dense: true,
@@ -143,10 +143,7 @@ class SettingsScreen extends ConsumerWidget {
                     child: PlatformAlertDialog(
                       title: AppStrings.settingsLogout,
                       content: AppStrings.logOutAlertDialog,
-                      method: () {
-                        Navigator.pushReplacementNamed(
-                            context, LogoutScreen.routeName);
-                      },
+                      method: ref.read(authNotifierProvider.notifier).logout,
                     ),
                   );
                 },

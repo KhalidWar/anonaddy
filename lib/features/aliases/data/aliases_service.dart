@@ -12,7 +12,7 @@ import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final aliasesServiceProvider = Provider<AliasesService>((ref) {
+final aliasesServiceProvider = Provider.autoDispose<AliasesService>((ref) {
   return AliasesService(
     dio: ref.read(dioProvider),
     secureStorage: ref.read(flutterSecureStorageProvider),

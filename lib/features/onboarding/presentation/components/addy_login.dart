@@ -8,11 +8,40 @@ import 'package:anonaddy/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddyLoginScreen extends ConsumerWidget {
-  const AddyLoginScreen({super.key});
+class AddyLogin extends ConsumerStatefulWidget {
+  const AddyLogin({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AddyLogin> createState() => _AddyLoginScreenState();
+}
+
+class _AddyLoginScreenState extends ConsumerState<AddyLogin> {
+  bool showLoading = false;
+
+  void toggleLoading(bool isLoading) {
+    setState(() {
+      showLoading = isLoading;
+    });
+  }
+
+  Future<void> login() async {
+    toggleLoading(true);
+
+    final clipboardText = await Utilities.pasteFromClipboard();
+    if (clipboardText == null || clipboardText.isEmpty) {
+      await Utilities.showToast(ToastMessage.failedToCopy);
+      toggleLoading(false);
+      return;
+    }
+
+    await ref
+        .read(authNotifierProvider.notifier)
+        .loginWithAccessToken(kAuthorityURL, clipboardText)
+        .then((_) => toggleLoading(false));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Theme(
       data: AppTheme.light,
       child: GestureDetector(
@@ -45,38 +74,16 @@ class AddyLoginScreen extends ConsumerWidget {
                 width: double.infinity,
                 child: PlatformButton(
                   key: const Key('loginFooterLoginButton'),
-                  onPress: () async {
-                    final clipboardText = await Utilities.pasteFromClipboard();
-                    if (clipboardText == null || clipboardText.isEmpty) {
-                      await Utilities.showToast(ToastMessage.failedToCopy);
-                      return;
-                    }
-
-                    await ref
-                        .read(authStateNotifier.notifier)
-                        .loginWithAccessToken(kAuthorityURL, clipboardText)
-                        .whenComplete(() => Navigator.of(context).pop());
-                  },
-                  child: Consumer(
-                    builder: (context, ref, _) {
-                      final authAsync = ref.watch(authStateNotifier);
-                      return authAsync.when(
-                        data: (authState) {
-                          return authState.loginLoading
-                              ? const CircularProgressIndicator(
-                                  key: Key('loginFooterLoginButtonLoading'),
-                                )
-                              : Text(
-                                  'Log in with copied Access Token',
-                                  key: const Key('loginFooterLoginButtonLabel'),
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                );
-                        },
-                        error: (_, __) => const SizedBox.shrink(),
-                        loading: () => const SizedBox.shrink(),
-                      );
-                    },
-                  ),
+                  onPress: login,
+                  child: showLoading
+                      ? const CircularProgressIndicator(
+                          key: Key('loginFooterLoginButtonLoading'),
+                        )
+                      : Text(
+                          'Log in with copied Access Token',
+                          key: const Key('loginFooterLoginButtonLabel'),
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
                 ),
               ),
             ],

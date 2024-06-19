@@ -58,7 +58,7 @@ class _AddNewRuleEnterNameState extends ConsumerState<AddNewRuleEnterName> {
                   onFieldSubmitted: (input) => addNewRule(),
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    hintText: createAliasState.ruleName ?? 'Enter Name',
+                    hintText: createAliasState.ruleName,
                   ),
                 ),
               ),

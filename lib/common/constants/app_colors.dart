@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 /// Collection of all colors associated with this project
 class AppColors {
+  const AppColors._();
+
   /// Official addy.io Colors
   static const primaryColor = Color(0xFF19216C);
   static const accentColor = Color(0xFF62F4EB);

@@ -7,13 +7,12 @@ import 'package:anonaddy/features/usernames/presentation/controller/usernames_no
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final usernamesScreenNotifierProvider = AsyncNotifierProvider.family<
-    UsernamesScreenNotifier,
-    UsernamesScreenState,
-    String>(UsernamesScreenNotifier.new);
+final usernamesScreenNotifierProvider = AsyncNotifierProvider.autoDispose
+    .family<UsernamesScreenNotifier, UsernamesScreenState, String>(
+        UsernamesScreenNotifier.new);
 
 class UsernamesScreenNotifier
-    extends FamilyAsyncNotifier<UsernamesScreenState, String> {
+    extends AutoDisposeFamilyAsyncNotifier<UsernamesScreenState, String> {
   Future<void> fetchSpecificUsername(String id) async {
     try {
       final currentState = state.value!;
