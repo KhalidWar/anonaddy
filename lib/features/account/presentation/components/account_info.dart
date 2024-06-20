@@ -180,16 +180,16 @@ class _AccountInfoState extends ConsumerState<AccountInfo> {
                   },
                 ),
               ),
-              Row(
-                children: [
-                  AccountInfoTile(
-                    title: getAccessTokenInfo(authState.user!),
-                    subtitle: 'Access Token',
-                  ),
-                ],
-              ),
-              const Divider(height: 40),
-              // const SizedBox(height: 16),
+              // Row(
+              //   children: [
+              //     AccountInfoTile(
+              //       title: getAccessTokenInfo(authState.user!),
+              //       subtitle: 'Access Token',
+              //     ),
+              //   ],
+              // ),
+              // const Divider(height: 40),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
