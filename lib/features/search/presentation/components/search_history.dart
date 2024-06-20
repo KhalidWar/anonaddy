@@ -21,6 +21,7 @@ class SearchHistory extends ConsumerWidget {
 
         return Expanded(
           child: ListView.builder(
+            physics: const ClampingScrollPhysics(),
             itemCount: aliases.length,
             itemBuilder: (context, index) {
               return AliasListTile(alias: aliases[index]);
