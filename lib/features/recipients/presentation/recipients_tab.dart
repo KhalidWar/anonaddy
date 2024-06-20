@@ -15,15 +15,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 @RoutePage(name: 'RecipientsTabRoute')
-class RecipientsTab extends ConsumerStatefulWidget {
+class RecipientsTab extends ConsumerWidget {
   const RecipientsTab({super.key});
 
-  @override
-  ConsumerState createState() => _RecipientTabState();
-}
-
-class _RecipientTabState extends ConsumerState<RecipientsTab> {
-  void addNewRecipient(BuildContext context) {
+  void addNewRecipient(BuildContext context, WidgetRef ref) {
     final accountState = ref.read(accountNotifierProvider).value;
     if (accountState == null) return;
 
@@ -53,15 +48,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final recipientsState = ref.watch(recipientsNotifierProvider);
 
     return recipientsState.when(
@@ -94,7 +81,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                   ),
             TextButton(
               child: const Text(AppStrings.addNewRecipient),
-              onPressed: () => addNewRecipient(context),
+              onPressed: () => addNewRecipient(context, ref),
             ),
           ],
         );

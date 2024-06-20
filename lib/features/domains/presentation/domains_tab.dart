@@ -14,15 +14,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 @RoutePage(name: 'DomainsTabRoute')
-class DomainsTab extends ConsumerStatefulWidget {
+class DomainsTab extends ConsumerWidget {
   const DomainsTab({super.key});
 
-  @override
-  ConsumerState createState() => _DomainsTabState();
-}
-
-class _DomainsTabState extends ConsumerState<DomainsTab> {
-  void addNewDomain(BuildContext context) {
+  void addNewDomain(BuildContext context, WidgetRef ref) {
     final accountState = ref.read(accountNotifierProvider).value!;
 
     /// Draws UI for adding new recipient
@@ -33,7 +28,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
           return [
             Utilities.buildWoltModalSheetSubPage(
               context,
-              topBarTitle: 'Add New Domain',
+              topBarTitle: 'Add Domain',
               pageTitle: AddyString.addNewDomainString,
               child: const AddNewDomain(),
             ),
@@ -52,16 +47,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      /// Fetch domains from server
-      ref.watch(domainsNotifierProvider.notifier).fetchDomains();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final domainsAsync = ref.watch(domainsNotifierProvider);
 
     return domainsAsync.when(

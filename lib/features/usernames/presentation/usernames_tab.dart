@@ -14,15 +14,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 @RoutePage(name: 'UsernamesTabRoute')
-class UsernamesTab extends ConsumerStatefulWidget {
+class UsernamesTab extends ConsumerWidget {
   const UsernamesTab({super.key});
 
-  @override
-  ConsumerState createState() => _UsernamesTabState();
-}
-
-class _UsernamesTabState extends ConsumerState<UsernamesTab> {
-  void addNewUsername(BuildContext context) {
+  void addNewUsername(BuildContext context, WidgetRef ref) {
     final accountState = ref.read(accountNotifierProvider).value;
     if (accountState == null) return;
 
@@ -52,15 +47,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(usernamesNotifierProvider.notifier).fetchUsernames();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final usernamesAsync = ref.watch(usernamesNotifierProvider);
 
     return usernamesAsync.when(
@@ -86,7 +73,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
                   ),
             TextButton(
               child: const Text(AppStrings.addNewUsername),
-              onPressed: () => addNewUsername(context),
+              onPressed: () => addNewUsername(context, ref),
             ),
           ],
         );

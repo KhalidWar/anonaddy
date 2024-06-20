@@ -1,6 +1,5 @@
 import 'package:anonaddy/common/constants/app_colors.dart';
 import 'package:anonaddy/common/constants/app_strings.dart';
-import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/alert_center/presentation/components/alert_center_icon.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_tab_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
@@ -22,9 +21,6 @@ class AccountTab extends ConsumerWidget {
 
   void refreshData(WidgetRef ref, int index) {
     switch (index) {
-      case 0:
-        ref.read(accountNotifierProvider.notifier).fetchAccount();
-        break;
       case 1:
         ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
         break;

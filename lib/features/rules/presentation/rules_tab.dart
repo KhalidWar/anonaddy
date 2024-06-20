@@ -66,14 +66,6 @@ class _RulesTabState extends ConsumerState<RulesTab> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(rulesTabNotifierProvider.notifier).fetchRules();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final rulesState = ref.watch(rulesTabNotifierProvider);
 
