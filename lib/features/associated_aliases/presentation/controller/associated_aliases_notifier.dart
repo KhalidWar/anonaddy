@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:anonaddy/features/aliases/data/alias_service.dart';
+import 'package:anonaddy/features/aliases/data/aliases_service.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,7 +12,7 @@ class AssociatedAliasesNotifier
     extends AutoDisposeFamilyAsyncNotifier<List<Alias>?, Map<String, String>> {
   @override
   FutureOr<List<Alias>?> build(Map<String, String> arg) async {
-    final aliasesService = ref.read(aliasServiceProvider);
+    final aliasesService = ref.read(aliasesServiceProvider);
     return await aliasesService.fetchAssociatedAliases(arg);
   }
 }

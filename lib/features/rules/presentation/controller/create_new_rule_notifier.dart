@@ -25,7 +25,7 @@ class CreateNewRuleNotifier
       'sends': currentState.sends,
     };
 
-    final updatedRule = await ref
+    await ref
         .read(rulesServiceProvider)
         .updateRule(currentState.rule.id, ruleData);
     await ref.read(rulesTabNotifierProvider.notifier).fetchRules();

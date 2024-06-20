@@ -1,7 +1,8 @@
+import 'package:anonaddy/common/form_validator.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/domains/presentation/controller/add_domain_notifier.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +17,16 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
   final _textEditController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  Future<void> addNewDomain() async {
+    if (_formKey.currentState!.validate()) {
+      await ref
+          .read(addDomainNotifierProvider.notifier)
+          .addDomain(_textEditController.text.trim());
+      await ref.read(accountNotifierProvider.notifier).fetchAccount();
+      if (mounted) Navigator.pop(context);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -24,69 +35,49 @@ class _AddNewDomainState extends ConsumerState<AddNewDomain> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return Container(
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+    return Padding(
+      padding: const EdgeInsets.all(16),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 0,
-              bottom: 10,
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              autofocus: true,
+              controller: _textEditController,
+              validator: (input) => FormValidator.validateEmailField(input!),
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (input) => addNewDomain(),
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'example.com',
+              ),
             ),
-            child: Column(
-              children: [
-                const Text(AddyString.addRecipientString),
-                SizedBox(height: size.height * 0.02),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    autofocus: true,
-                    controller: _textEditController,
-                    validator: (input) =>
-                        FormValidator.validateEmailField(input!),
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom().copyWith(
-                    minimumSize: MaterialStateProperty.all(
-                      const Size(200, 50),
-                    ),
-                  ),
-                  child: Consumer(
-                    builder: (context, ref, _) {
-                      final addDomainAsync =
-                          ref.watch(addDomainNotifierProvider);
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: PlatformButton(
+              onPress: addNewDomain,
+              child: Consumer(
+                builder: (context, ref, _) {
+                  final addRecipientAsync =
+                      ref.watch(addDomainNotifierProvider);
 
-                      return addDomainAsync.when(
-                        data: (data) {
-                          return const Text('Add Domain');
-                        },
-                        error: (err, stack) => const PlatformLoadingIndicator(),
-                        loading: () => const SizedBox.shrink(),
+                  return addRecipientAsync.when(
+                    data: (data) {
+                      return Text(
+                        'Add Domain',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: Colors.black),
                       );
                     },
-                  ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await ref
-                          .read(addDomainNotifierProvider.notifier)
-                          .addDomain(_textEditController.text.trim());
-                      if (mounted) Navigator.pop(context);
-                    }
-                  },
-                ),
-              ],
+                    error: (err, stack) => const PlatformLoadingIndicator(),
+                    loading: () => const SizedBox.shrink(),
+                  );
+                },
+              ),
             ),
           ),
         ],

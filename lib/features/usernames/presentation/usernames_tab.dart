@@ -1,26 +1,23 @@
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/shimmer_effects/shimmering_list_tile.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/components/add_new_username.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/username_list_tile.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
-import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/utilities/utilities.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class UsernamesTab extends ConsumerStatefulWidget {
+@RoutePage(name: 'UsernamesTabRoute')
+class UsernamesTab extends ConsumerWidget {
   const UsernamesTab({super.key});
 
-  @override
-  ConsumerState createState() => _UsernamesTabState();
-}
-
-class _UsernamesTabState extends ConsumerState<UsernamesTab> {
-  void addNewUsername(BuildContext context) {
+  void addNewUsername(BuildContext context, WidgetRef ref) {
     final accountState = ref.read(accountNotifierProvider).value;
     if (accountState == null) return;
 
@@ -50,15 +47,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(usernamesNotifierProvider.notifier).fetchUsernames();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final usernamesAsync = ref.watch(usernamesNotifierProvider);
 
     return usernamesAsync.when(
@@ -84,7 +73,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
                   ),
             TextButton(
               child: const Text(AppStrings.addNewUsername),
-              onPressed: () => addNewUsername(context),
+              onPressed: () => addNewUsername(context, ref),
             ),
           ],
         );
@@ -93,7 +82,7 @@ class _UsernamesTabState extends ConsumerState<UsernamesTab> {
         return ErrorMessageWidget(message: error.toString());
       },
       loading: () {
-        return const RecipientsShimmerLoading();
+        return const ShimmeringListTile();
       },
     );
   }

@@ -1,17 +1,17 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/constants/toast_message.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/data/account_service.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
-import 'package:anonaddy/features/aliases/data/alias_service.dart';
-import 'package:anonaddy/features/aliases/presentation/controller/aliases_notifier.dart';
+import 'package:anonaddy/features/aliases/data/aliases_service.dart';
+import 'package:anonaddy/features/aliases/presentation/controller/available_aliases_notifier.dart';
 import 'package:anonaddy/features/create_alias/presentation/controller/create_alias_state.dart';
 import 'package:anonaddy/features/domain_options/data/domain_options_service.dart';
 import 'package:anonaddy/features/recipients/data/recipient_service.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// This is the most complex part of this whole project.
@@ -27,8 +27,8 @@ final createAliasNotifierProvider =
 
 class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
   Future<void> createNewAlias() async {
-    final isAutoCopy = ref.read(settingsNotifier).value!.isAutoCopyEnabled;
-    final aliasTabNotifier = ref.read(aliasesNotifierProvider.notifier);
+    final isAutoCopy =
+        ref.read(settingsNotifierProvider).requireValue.isAutoCopyEnabled;
 
     final currentState = state.value!;
 
@@ -48,15 +48,18 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
     state = AsyncData(currentState.copyWith(isConfirmButtonLoading: true));
 
     try {
-      final createdAlias = await ref.read(aliasServiceProvider).createNewAlias(
-            domain: currentState.selectedAliasDomain!,
-            format: currentState.selectedAliasFormat!,
-            desc: currentState.description,
-            localPart: currentState.localPart,
-            recipients: currentState.selectedRecipients
-                .map((recipient) => recipient.id)
-                .toList(),
-          );
+      final createdAlias =
+          await ref.read(aliasesServiceProvider).createNewAlias(
+                domain: currentState.selectedAliasDomain!,
+                format: currentState.selectedAliasFormat!,
+                desc: currentState.description,
+                localPart: currentState.localPart,
+                recipients: currentState.selectedRecipients
+                    .map((recipient) => recipient.id)
+                    .toList(),
+              );
+
+      ref.read(availableAliasesNotifierProvider.notifier).fetchAliases();
 
       if (isAutoCopy) {
         await Utilities.copyOnTap(createdAlias.email);
@@ -64,8 +67,6 @@ class CreateAliasNotifier extends AutoDisposeAsyncNotifier<CreateAliasState> {
       } else {
         Utilities.showToast(ToastMessage.createAliasSuccess);
       }
-
-      aliasTabNotifier.addAlias(createdAlias);
     } catch (error) {
       Utilities.showToast(error.toString());
     }

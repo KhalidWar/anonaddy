@@ -1,17 +1,15 @@
-import 'package:anonaddy/shared_components/constants/lottie_images.dart';
-import 'package:anonaddy/utilities/utilities.dart';
+import 'package:anonaddy/common/constants/lottie_images.dart';
+import 'package:anonaddy/common/utilities.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+@RoutePage(name: 'CreditsScreenRoute')
 class CreditsScreen extends StatelessWidget {
   const CreditsScreen({super.key});
 
-  static const routeName = 'creditsScreen';
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Credits')),
       body: Column(
@@ -22,7 +20,7 @@ class CreditsScreen extends StatelessWidget {
               'Listed below are third party assets used in AddyManager.',
             ),
           ),
-          SizedBox(height: size.height * 0.02),
+          const SizedBox(height: 16),
           const Divider(height: 0),
           buildTile(
             context: context,

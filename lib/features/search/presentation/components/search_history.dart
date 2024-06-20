@@ -1,5 +1,5 @@
+import 'package:anonaddy/common/list_tiles/alias_list_tile.dart';
 import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +21,7 @@ class SearchHistory extends ConsumerWidget {
 
         return Expanded(
           child: ListView.builder(
+            physics: const ClampingScrollPhysics(),
             itemCount: aliases.length,
             itemBuilder: (context, index) {
               return AliasListTile(alias: aliases[index]);

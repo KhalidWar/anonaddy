@@ -1,7 +1,8 @@
+import 'package:anonaddy/common/form_validator.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/features/create_alias/presentation/components/create_alias_error_widget.dart';
 import 'package:anonaddy/features/rules/presentation/controller/create_new_rule_notifier.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
-import 'package:anonaddy/utilities/form_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,7 +58,7 @@ class _AddNewRuleEnterNameState extends ConsumerState<AddNewRuleEnterName> {
                   onFieldSubmitted: (input) => addNewRule(),
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    hintText: createAliasState.ruleName ?? 'Enter Name',
+                    hintText: createAliasState.ruleName,
                   ),
                 ),
               ),

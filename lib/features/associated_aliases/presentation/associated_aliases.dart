@@ -1,7 +1,7 @@
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/list_tiles/alias_list_tile.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/features/associated_aliases/presentation/controller/associated_aliases_notifier.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
-import 'package:anonaddy/shared_components/list_tiles/alias_list_tile.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,16 +1,16 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/usernames/data/username_service.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final usernamesNotifierProvider =
-    AsyncNotifierProvider<UsernamesNotifier, List<Username>>(
+    AsyncNotifierProvider.autoDispose<UsernamesNotifier, List<Username>>(
         UsernamesNotifier.new);
 
-class UsernamesNotifier extends AsyncNotifier<List<Username>> {
+class UsernamesNotifier extends AutoDisposeAsyncNotifier<List<Username>> {
   Future<void> fetchUsernames() async {
     try {
       final usernames =

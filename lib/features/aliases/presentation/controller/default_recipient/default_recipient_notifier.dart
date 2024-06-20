@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:anonaddy/features/aliases/data/alias_service.dart';
+import 'package:anonaddy/common/utilities.dart';
+import 'package:anonaddy/features/aliases/data/aliases_service.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_state.dart';
+import 'package:anonaddy/features/recipients/data/recipient_service.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
-import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final defaultRecipientNotifierProvider = AsyncNotifierProvider.family
@@ -34,7 +34,7 @@ class DefaultRecipientNotifier
       final defaultRecipients =
           currentState.defaultRecipients.map((e) => e.id).toList();
       await ref
-          .read(aliasServiceProvider)
+          .read(aliasesServiceProvider)
           .updateAliasDefaultRecipient(arg, defaultRecipients);
 
       /// Refreshes [AliasScreen] to reflect latest recipients.
@@ -45,13 +45,6 @@ class DefaultRecipientNotifier
       Utilities.showToast(error.toString());
       state = AsyncData(state.value!.copyWith(isCTALoading: false));
     }
-  }
-
-  /// Checks if recipient is [aliasState.aliasId]'s default recipients
-  bool isRecipientDefault(Recipient recipient) {
-    return state.value!.defaultRecipients
-        .map((recipient) => recipient.id)
-        .contains(recipient.id);
   }
 
   /// Extracts verified recipients from all recipients.
@@ -88,17 +81,14 @@ class DefaultRecipientNotifier
 
   @override
   FutureOr<DefaultRecipientState> build(String arg) async {
-    final recipients = ref.read(recipientsNotifierProvider).value;
-    final alias = ref.read(aliasScreenNotifierProvider(arg)).value?.alias;
-
-    if (recipients == null || alias == null) {
-      throw 'Failed to load data';
-    }
+    final aliasState = ref.read(aliasScreenNotifierProvider(arg)).requireValue;
+    final recipients = await ref.read(recipientService).fetchRecipients();
 
     final verifiedRecipients = _getVerifiedRecipients(recipients);
+
     final defaultRecipients = _getDefaultRecipients(
       verifiedRecipients: verifiedRecipients,
-      aliasRecipients: alias.recipients,
+      aliasRecipients: aliasState.alias.recipients,
     );
 
     return DefaultRecipientState(

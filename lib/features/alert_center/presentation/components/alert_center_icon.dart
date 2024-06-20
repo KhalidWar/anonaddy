@@ -1,6 +1,7 @@
-import 'package:anonaddy/features/alert_center/presentation/alert_center_screen.dart';
-import 'package:anonaddy/features/alert_center/presentation/controller/failed_delivery_notifier.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/features/alert_center/presentation/controller/local_notification_notifier.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,17 +19,16 @@ class AlertCenterIcon extends StatelessWidget {
             Icons.error_outline,
             color: Colors.white,
           ),
-          onPressed: () {
-            Navigator.pushNamed(context, AlertCenterScreen.routeName);
-          },
+          onPressed: () => context.pushRoute(const NotificationsScreenRoute()),
         ),
         Consumer(
           builder: (_, ref, __) {
-            final failedDeliveries = ref.watch(failedDeliveriesNotifier);
+            final localNotificationAsync =
+                ref.watch(localNotificationNotifierProvider);
 
-            return failedDeliveries.when(
-              data: (failedDeliveries) {
-                if (failedDeliveries.isNotEmpty) {
+            return localNotificationAsync.when(
+              data: (localNotifications) {
+                if (localNotifications.isNotEmpty) {
                   return Positioned(
                     top: 12,
                     left: 12,
@@ -43,10 +43,10 @@ class AlertCenterIcon extends StatelessWidget {
                   );
                 }
 
-                return Container();
+                return const SizedBox.shrink();
               },
-              error: (_, __) => Container(),
-              loading: () => Container(),
+              error: (_, __) => const SizedBox.shrink(),
+              loading: () => const SizedBox.shrink(),
             );
           },
         )

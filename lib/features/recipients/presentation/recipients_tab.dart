@@ -1,27 +1,24 @@
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/list_tiles/recipient_list_tile.dart';
+import 'package:anonaddy/common/shimmer_effects/shimmering_list_tile.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/recipients/presentation/components/add_new_recipient.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/features/recipients/presentation/recipients_screen.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
-import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
-import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/utilities/utilities.dart';
+import 'package:anonaddy/features/router/app_router.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class RecipientsTab extends ConsumerStatefulWidget {
+@RoutePage(name: 'RecipientsTabRoute')
+class RecipientsTab extends ConsumerWidget {
   const RecipientsTab({super.key});
 
-  @override
-  ConsumerState createState() => _RecipientTabState();
-}
-
-class _RecipientTabState extends ConsumerState<RecipientsTab> {
-  void addNewRecipient(BuildContext context) {
+  void addNewRecipient(BuildContext context, WidgetRef ref) {
     final accountState = ref.read(accountNotifierProvider).value;
     if (accountState == null) return;
 
@@ -51,15 +48,7 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final recipientsState = ref.watch(recipientsNotifierProvider);
 
     return recipientsState.when(
@@ -83,10 +72,8 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                       return RecipientListTile(
                         recipient: recipient,
                         onPress: () {
-                          Navigator.pushNamed(
-                            context,
-                            RecipientsScreen.routeName,
-                            arguments: recipient,
+                          context.pushRoute(
+                            RecipientsScreenRoute(id: recipient.id),
                           );
                         },
                       );
@@ -94,13 +81,13 @@ class _RecipientTabState extends ConsumerState<RecipientsTab> {
                   ),
             TextButton(
               child: const Text(AppStrings.addNewRecipient),
-              onPressed: () => addNewRecipient(context),
+              onPressed: () => addNewRecipient(context, ref),
             ),
           ],
         );
       },
       error: (err, _) => ErrorMessageWidget(message: err.toString()),
-      loading: () => const RecipientsShimmerLoading(),
+      loading: () => const ShimmeringListTile(),
     );
   }
 }

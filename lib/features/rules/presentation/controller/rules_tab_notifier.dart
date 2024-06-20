@@ -5,9 +5,10 @@ import 'package:anonaddy/features/rules/domain/rule.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final rulesTabNotifierProvider =
-    AsyncNotifierProvider<RulesTabNotifier, List<Rule>>(RulesTabNotifier.new);
+    AsyncNotifierProvider.autoDispose<RulesTabNotifier, List<Rule>>(
+        RulesTabNotifier.new);
 
-class RulesTabNotifier extends AsyncNotifier<List<Rule>> {
+class RulesTabNotifier extends AutoDisposeAsyncNotifier<List<Rule>> {
   /// Fetch all [Rule]s associated with user's account
   Future<void> fetchRules() async {
     try {

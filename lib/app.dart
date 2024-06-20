@@ -1,8 +1,7 @@
-import 'package:anonaddy/features/auth/presentation/auth_screen.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/features/router/app_router.dart';
 import 'package:anonaddy/features/settings/presentation/controller/settings_notifier.dart';
-import 'package:anonaddy/route_generator.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/utilities/theme.dart';
+import 'package:anonaddy/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,21 +14,21 @@ class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     /// Use [watch] method to access different providers
-    final settingsState = ref.watch(settingsNotifier).value;
+    final isDarkTheme = ref.watch(settingsNotifierProvider
+        .select((settingsAsync) => settingsAsync.value?.isDarkTheme));
+    final appRouter = ref.watch(appRouterProvider);
 
     /// Sets StatusBarColor for the whole app
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
 
-    return MaterialApp(
+    return MaterialApp.router(
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
-      theme:
-          settingsState?.isDarkTheme ?? false ? AppTheme.dark : AppTheme.light,
+      theme: isDarkTheme ?? false ? AppTheme.dark : AppTheme.light,
       darkTheme: AppTheme.dark,
-      onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: AuthScreen.routeName,
+      routerConfig: appRouter.config(),
       locale: const Locale('en', 'US'),
       localizationsDelegates: const [
         DefaultMaterialLocalizations.delegate,

@@ -1,26 +1,23 @@
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/shimmer_effects/shimmering_list_tile.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/domains/presentation/components/add_new_domain.dart';
 import 'package:anonaddy/features/domains/presentation/components/domain_list_tile.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_tab_notifier.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
-import 'package:anonaddy/shared_components/shimmer_effects/recipients_shimmer_loading.dart';
-import 'package:anonaddy/utilities/utilities.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class DomainsTab extends ConsumerStatefulWidget {
+@RoutePage(name: 'DomainsTabRoute')
+class DomainsTab extends ConsumerWidget {
   const DomainsTab({super.key});
 
-  @override
-  ConsumerState createState() => _DomainsTabState();
-}
-
-class _DomainsTabState extends ConsumerState<DomainsTab> {
-  void addNewDomain(BuildContext context) {
+  void addNewDomain(BuildContext context, WidgetRef ref) {
     final accountState = ref.read(accountNotifierProvider).value!;
 
     /// Draws UI for adding new recipient
@@ -31,7 +28,8 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
           return [
             Utilities.buildWoltModalSheetSubPage(
               context,
-              topBarTitle: 'Add New Domain',
+              topBarTitle: 'Add Domain',
+              pageTitle: AddyString.addNewDomainString,
               child: const AddNewDomain(),
             ),
           ];
@@ -49,16 +47,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      /// Fetch domains from server
-      ref.watch(domainsNotifierProvider.notifier).fetchDomains();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final domainsAsync = ref.watch(domainsNotifierProvider);
 
     return domainsAsync.when(
@@ -93,7 +82,7 @@ class _DomainsTabState extends ConsumerState<DomainsTab> {
         return ErrorMessageWidget(message: error.toString());
       },
       loading: () {
-        return const RecipientsShimmerLoading();
+        return const ShimmeringListTile();
       },
     );
   }

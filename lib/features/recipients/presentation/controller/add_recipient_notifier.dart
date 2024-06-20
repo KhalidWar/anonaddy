@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/recipients/data/recipient_service.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final addRecipientNotifierProvider =

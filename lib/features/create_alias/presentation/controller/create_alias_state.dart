@@ -1,7 +1,7 @@
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/domain_options/domain/domain_options.dart';
 import 'package:anonaddy/features/recipients/domain/recipient.dart';
-import 'package:anonaddy/shared_components/constants/anonaddy_string.dart';
 
 class CreateAliasState {
   CreateAliasState({

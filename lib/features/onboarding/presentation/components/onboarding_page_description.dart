@@ -1,5 +1,5 @@
-import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/utilities.dart';
+import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingPageDescription extends StatelessWidget {

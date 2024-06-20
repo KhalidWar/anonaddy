@@ -1,6 +1,6 @@
+import 'package:anonaddy/common/constants/app_colors.dart';
+import 'package:anonaddy/common/pie_chart/pie_chart_indicator.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
-import 'package:anonaddy/shared_components/constants/app_colors.dart';
-import 'package:anonaddy/shared_components/pie_chart/pie_chart_indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,42 +68,39 @@ class AliasTabEmailsPieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.primaryColor,
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 50),
+      padding: const EdgeInsets.fromLTRB(24, 4, 8, 48),
       child: Row(
         children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PieChartIndicator(
-                    color: AppColors.firstPieChartColor,
-                    label: 'forwarded',
-                    count: emailsForwarded,
-                    textColor: Colors.white,
-                  ),
-                  PieChartIndicator(
-                    color: AppColors.secondPieChartColor,
-                    label: 'blocked',
-                    count: emailsBlocked,
-                    textColor: Colors.white,
-                  ),
-                  PieChartIndicator(
-                    color: AppColors.fourthPieChartColor,
-                    label: 'replied',
-                    count: emailsReplied,
-                    textColor: Colors.white,
-                  ),
-                  PieChartIndicator(
-                    color: AppColors.thirdPieChartColor,
-                    label: 'sent',
-                    count: emailsSent,
-                    textColor: Colors.white,
-                  ),
-                ],
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PieChartIndicator(
+                  color: AppColors.firstPieChartColor,
+                  label: 'forwarded',
+                  count: emailsForwarded,
+                  textColor: Colors.white,
+                ),
+                PieChartIndicator(
+                  color: AppColors.secondPieChartColor,
+                  label: 'blocked',
+                  count: emailsBlocked,
+                  textColor: Colors.white,
+                ),
+                PieChartIndicator(
+                  color: AppColors.fourthPieChartColor,
+                  label: 'replied',
+                  count: emailsReplied,
+                  textColor: Colors.white,
+                ),
+                PieChartIndicator(
+                  color: AppColors.thirdPieChartColor,
+                  label: 'sent',
+                  count: emailsSent,
+                  textColor: Colors.white,
+                ),
+              ],
             ),
           ),
           Expanded(

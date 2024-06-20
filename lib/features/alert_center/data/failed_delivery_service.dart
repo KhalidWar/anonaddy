@@ -1,25 +1,27 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/dio_client/dio_client.dart';
 import 'package:anonaddy/features/alert_center/domain/failed_delivery.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final failedDeliveryService = Provider<FailedDeliveryService>((ref) {
+final failedDeliveryService =
+    Provider.autoDispose<FailedDeliveryService>((ref) {
   return FailedDeliveryService(dio: ref.read(dioProvider));
 });
 
 class FailedDeliveryService {
   const FailedDeliveryService({required this.dio});
+
   final Dio dio;
 
-  Future<List<FailedDelivery>> getFailedDeliveries([String? path]) async {
+  Future<List<FailedDelivery>> getFailedDeliveries() async {
     try {
       const urlPath = '$kUnEncodedBaseURL/failed-deliveries';
-      final response = await dio.get(path ?? urlPath);
+      final response = await dio.get(urlPath);
       final deliveries = response.data['data'];
       log('getFailedDeliveries: ${response.statusCode}');
 
@@ -30,6 +32,20 @@ class FailedDeliveryService {
       throw dioException.message ?? AppStrings.somethingWentWrong;
     } catch (e) {
       throw 'Failed to fetch failed deliveries';
+    }
+  }
+
+  Future<FailedDelivery> getSpecificFailedDelivery(String id) async {
+    try {
+      final urlPath = '$kUnEncodedBaseURL/failed-deliveries/$id';
+      final response = await dio.get(urlPath);
+      final failedDelivery = response.data['data'];
+      log('getSpecificFailedDelivery: ${response.statusCode}');
+      return FailedDelivery.fromJson(failedDelivery);
+    } on DioException catch (dioException) {
+      throw dioException.message ?? AppStrings.somethingWentWrong;
+    } catch (e) {
+      throw 'Failed to fetch failed delivery';
     }
   }
 

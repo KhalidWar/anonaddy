@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:anonaddy/common/constants/data_storage_keys.dart';
+import 'package:anonaddy/common/secure_storage.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
-import 'package:anonaddy/utilities/secure_storage.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final searchHistoryNotifierProvider =

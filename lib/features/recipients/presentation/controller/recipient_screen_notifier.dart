@@ -1,42 +1,26 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/toast_message.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
-import 'package:anonaddy/features/recipients/data/recipient_service.dart';
-import 'package:anonaddy/features/recipients/domain/recipient.dart';
+import 'package:anonaddy/features/recipients/data/recipient_screen_service.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipient_screen_state.dart';
 import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/toast_message.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final recipientScreenNotifierProvider = AsyncNotifierProvider.family<
-    RecipientScreenNotifier,
-    RecipientScreenState,
-    String>(RecipientScreenNotifier.new);
+final recipientScreenNotifierProvider = AsyncNotifierProvider.family
+    .autoDispose<RecipientScreenNotifier, RecipientScreenState, String>(
+        RecipientScreenNotifier.new);
 
 class RecipientScreenNotifier
-    extends FamilyAsyncNotifier<RecipientScreenState, String> {
-  Future<void> fetchSpecificRecipient(Recipient recipient) async {
-    try {
-      /// Initially set RecipientScreen to loading
-      state = const AsyncLoading();
-      final newRecipient =
-          await ref.read(recipientService).fetchSpecificRecipient(recipient.id);
-
-      /// Assign newly fetched recipient data to RecipientScreen state
-      state = AsyncData(state.value!.copyWith(recipient: newRecipient));
-    } catch (error) {
-      state = AsyncError(error.toString(), StackTrace.empty);
-    }
-  }
-
+    extends AutoDisposeFamilyAsyncNotifier<RecipientScreenState, String> {
   Future enableEncryption() async {
     try {
       final currentState = state.value!;
       state = AsyncData(currentState.copyWith(isEncryptionToggleLoading: true));
       final newRecipient = await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .enableEncryption(currentState.recipient.id);
       final updateRecipient = currentState.recipient
           .copyWith(shouldEncrypt: newRecipient.shouldEncrypt);
@@ -57,7 +41,7 @@ class RecipientScreenNotifier
       final currentState = state.value!;
       state = AsyncData(currentState.copyWith(isEncryptionToggleLoading: true));
       await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .disableEncryption(currentState.recipient.id);
 
       final updatedRecipient =
@@ -78,7 +62,7 @@ class RecipientScreenNotifier
     try {
       final currentState = state.value!;
       final newRecipient = await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .addPublicGPGKey(currentState.recipient.id, keyData);
       final updatedRecipient = currentState.recipient.copyWith(
           fingerprint: newRecipient.fingerprint,
@@ -94,7 +78,7 @@ class RecipientScreenNotifier
     try {
       final currentState = state.value!;
       await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .removePublicGPGKey(currentState.recipient.id);
       Utilities.showToast(ToastMessage.deleteGPGKeySuccess);
 
@@ -113,7 +97,7 @@ class RecipientScreenNotifier
   Future<void> removeRecipient() async {
     try {
       await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .removeRecipient(state.value!.recipient.id);
       Utilities.showToast('Recipient deleted successfully!');
       _refreshRecipientAndAccountData();
@@ -125,7 +109,7 @@ class RecipientScreenNotifier
   Future<void> resendVerificationEmail() async {
     try {
       await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .resendVerificationEmail(state.value!.recipient.id);
       Utilities.showToast('Verification email is sent');
     } catch (error) {
@@ -133,37 +117,32 @@ class RecipientScreenNotifier
     }
   }
 
-  Future<void> enableReplyAndSend() async {
+  Future<void> toggleReplyAndSend() async {
     try {
       final currentState = state.value!;
+      final canReplySend = currentState.recipient.canReplySend;
+
       state =
           AsyncData(currentState.copyWith(isReplySendAndSwitchLoading: true));
+
+      if (canReplySend) {
+        await ref
+            .read(recipientScreenService)
+            .disableReplyAndSend(currentState.recipient.id);
+
+        state = AsyncData(currentState.copyWith(
+          recipient: currentState.recipient.copyWith(canReplySend: false),
+          isReplySendAndSwitchLoading: false,
+        ));
+        return;
+      }
+
       final recipient = await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .enableReplyAndSend(currentState.recipient.id);
 
       state = AsyncData(currentState.copyWith(
         recipient: recipient,
-        isReplySendAndSwitchLoading: false,
-      ));
-    } catch (error) {
-      Utilities.showToast(error.toString());
-      state =
-          AsyncData(state.value!.copyWith(isReplySendAndSwitchLoading: false));
-    }
-  }
-
-  Future disableReplyAndSend() async {
-    try {
-      final currentState = state.value!;
-      state =
-          AsyncData(currentState.copyWith(isReplySendAndSwitchLoading: true));
-      await ref
-          .read(recipientService)
-          .disableReplyAndSend(currentState.recipient.id);
-
-      state = AsyncData(currentState.copyWith(
-        recipient: currentState.recipient.copyWith(canReplySend: false),
         isReplySendAndSwitchLoading: false,
       ));
     } catch (error) {
@@ -185,7 +164,7 @@ class RecipientScreenNotifier
         currentState.copyWith(isInlineEncryptionSwitchLoading: true),
       );
       final recipient = await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .enableInlineEncryption(currentState.recipient.id);
       state = AsyncData(currentState.copyWith(
         recipient: recipient,
@@ -207,7 +186,7 @@ class RecipientScreenNotifier
       );
 
       await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .disableInlineEncryption(currentState.recipient.id);
       final updatedRecipient =
           currentState.recipient.copyWith(inlineEncryption: false);
@@ -235,7 +214,7 @@ class RecipientScreenNotifier
         currentState.copyWith(isProtectedHeaderSwitchLoading: true),
       );
       final recipient = await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .enableProtectedHeader(currentState.recipient.id);
       state = AsyncData(currentState.copyWith(
         recipient: recipient,
@@ -257,7 +236,7 @@ class RecipientScreenNotifier
       );
 
       await ref
-          .read(recipientService)
+          .read(recipientScreenService)
           .disableProtectedHeader(currentState.recipient.id);
 
       final updatedRecipient =
@@ -284,8 +263,8 @@ class RecipientScreenNotifier
 
   @override
   FutureOr<RecipientScreenState> build(String arg) async {
-    final service = ref.read(recipientService);
-    final recipient = await service.fetchSpecificRecipient(arg);
+    final service = ref.read(recipientScreenService);
+    final recipient = await service.fetchRecipient(arg);
 
     return RecipientScreenState(
       recipient: recipient,

@@ -1,42 +1,33 @@
 import 'dart:async';
 
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/secure_storage.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/auth/data/auth_service.dart';
 import 'package:anonaddy/features/auth/data/biometric_auth_service.dart';
 import 'package:anonaddy/features/auth/domain/user.dart';
 import 'package:anonaddy/features/auth/presentation/controller/auth_state.dart';
 import 'package:anonaddy/features/auth/presentation/controller/biometric_notifier.dart';
 import 'package:anonaddy/features/monetization/presentation/controller/monetization_notifier.dart';
-import 'package:anonaddy/features/search/presentation/controller/search_history_notifier.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/utilities/flutter_secure_storage.dart';
-import 'package:anonaddy/utilities/utilities.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final authStateNotifier =
+final authNotifierProvider =
     AsyncNotifierProvider<AuthNotifier, AuthState>(AuthNotifier.new);
 
 class AuthNotifier extends AsyncNotifier<AuthState> {
-  Future<void> loginWithAccessToken(String url, String token) async {
-    final currentState = state.value!;
+  Future<bool> loginWithAccessToken(String url, String token) async {
     try {
-      state = AsyncData(currentState.copyWith(loginLoading: true));
+      final currentState = state.value!;
 
       final user =
           await ref.read(authServiceProvider).loginWithAccessToken(url, token);
       await ref.read(authServiceProvider).saveUser(user);
 
-      state = AsyncData(
-        currentState.copyWith(
-          isLoggedIn: true,
-          user: user,
-          loginLoading: false,
-        ),
-      );
+      state = AsyncData(currentState.copyWith(user: user));
+      return true;
     } catch (error) {
       Utilities.showToast(error.toString());
-      state = AsyncData(state.value!.copyWith(loginLoading: false));
+      return false;
     }
   }
 
@@ -50,39 +41,39 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
           .loginWithUsernameAndPassword(email, password);
 
       await ref.read(authServiceProvider).saveUser(user);
-      state = AsyncData(state.value!.copyWith(isLoggedIn: true, user: user));
+
+      state = AsyncData(state.value!.copyWith(user: user));
     } catch (error) {
       Utilities.showToast(error.toString());
+      return;
     }
   }
 
-  Future<void> logout(BuildContext context) async {
+  Future<void> logout() async {
     try {
-      await ref.read(flutterSecureStorage).deleteAll();
-      await ref
-          .read(searchHistoryNotifierProvider.notifier)
-          .clearSearchHistory();
-      if (context.mounted) Phoenix.rebirth(context);
+      await ref.read(flutterSecureStorageProvider).deleteAll();
+      state = AsyncData(AuthState.initial());
     } catch (error) {
       Utilities.showToast(error.toString());
+      return;
     }
   }
 
   Future<void> authenticate() async {
     try {
-      final didAuth =
+      final didAuthenticate =
           await ref.read(biometricAuthServiceProvider).authenticate();
-      if (didAuth) {
-        state = AsyncData(state.value!.copyWith(
-          isLoggedIn: state.value!.isLoggedIn,
-          authenticationStatus: AuthenticationStatus.disabled,
-        ));
+      if (didAuthenticate) {
+        final currentState = state.value!;
+
+        state = AsyncData(currentState.copyWith(isBiometricLocked: false));
         return;
       }
 
       Utilities.showToast(AppStrings.failedToAuthenticate);
     } catch (error) {
       Utilities.showToast(error.toString());
+      return;
     }
   }
 
@@ -95,23 +86,21 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
       return true;
     } catch (error) {
       Utilities.showToast(error.toString());
-      rethrow;
+      return false;
     }
   }
 
-  Future<AuthenticationStatus> _getBioAuthState() async {
+  Future<bool> _getBioAuthState() async {
     try {
       const bioAuthKey = BiometricNotifier.biometricAuthKey;
       final bioAuthValue =
-          await ref.read(flutterSecureStorage).read(key: bioAuthKey);
+          await ref.read(flutterSecureStorageProvider).read(key: bioAuthKey);
 
-      if (bioAuthValue == null) return AuthenticationStatus.disabled;
+      if (bioAuthValue == null) return false;
 
-      return bioAuthValue == 'true'
-          ? AuthenticationStatus.enabled
-          : AuthenticationStatus.disabled;
+      return bioAuthValue == 'true';
     } catch (error) {
-      return AuthenticationStatus.disabled;
+      return false;
     }
   }
 
@@ -119,32 +108,31 @@ class AuthNotifier extends AsyncNotifier<AuthState> {
   FutureOr<AuthState> build() async {
     final user = await ref.read(authServiceProvider).getUser();
     final isLoginCredentialValid = await _isLoginCredentialValid(user);
-    final authStatus = await _getBioAuthState();
 
+    /// When user is logged in and token is not expired
     if (isLoginCredentialValid) {
+      /// If user is self-hosting, check whether they have a subscription
       if (user!.isSelfHosting) {
         final showPaywall = await ref.read(monetizationNotifierProvider.future);
+
+        /// If self-hosted user has no subscription, log them out
+        /// so that they can buy subscription when logging in.
         if (showPaywall) {
-          return AuthState(
-            isLoggedIn: false,
-            authenticationStatus: authStatus,
-            loginLoading: false,
-          );
+          return AuthState.initial();
         }
       }
 
+      /// If user is logged in and token is not expired
+      /// or user is self-hosting and has a subscription
+      /// check whether biometric authentication is enabled
+      /// and proceed to the app.
       return AuthState(
-        isLoggedIn: true,
-        authenticationStatus: authStatus,
-        loginLoading: false,
+        isBiometricLocked: await _getBioAuthState(),
         user: user,
       );
     }
 
-    return AuthState(
-      isLoggedIn: false,
-      authenticationStatus: authStatus,
-      loginLoading: false,
-    );
+    /// If user is not logged in or token is expired
+    return AuthState.initial();
   }
 }

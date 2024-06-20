@@ -1,52 +1,40 @@
-import 'dart:developer';
-
-import 'package:anonaddy/features/account/data/account_data_storage.dart';
+import 'package:anonaddy/common/constants/data_storage_keys.dart';
+import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/dio_client/base_service.dart';
+import 'package:anonaddy/common/dio_client/dio_client.dart';
+import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final accountServiceProvider = Provider<AccountService>((ref) {
+final accountServiceProvider = Provider.autoDispose<AccountService>((ref) {
   return AccountService(
     dio: ref.read(dioProvider),
-    accountDataStorage: ref.read(accountDataStorageProvider),
+    secureStorage: ref.read(flutterSecureStorageProvider),
   );
 });
 
-class AccountService {
+class AccountService extends BaseService {
   const AccountService({
-    required this.dio,
-    required this.accountDataStorage,
+    required super.dio,
+    required super.secureStorage,
+    super.storageKey = DataStorageKeys.accountKey,
   });
-  final Dio dio;
-  final AccountDataStorage accountDataStorage;
 
   Future<Account> fetchAccount() async {
     try {
       const urlPath = '$kUnEncodedBaseURL/account-details';
-      final response = await dio.get(urlPath);
-      final accountData = response.data['data'];
-      await accountDataStorage.saveData(accountData);
-      final account = Account.fromJson(accountData);
-      log('fetchAccount: ${response.statusCode}');
-      return account;
-    } on DioException catch (dioException) {
-      if (dioException.type == DioExceptionType.connectionError) {
-        final account = await accountDataStorage.loadData();
-        if (account != null) return account;
-      }
-      throw dioException.message ?? AppStrings.somethingWentWrong;
+      final accountData = await get(urlPath);
+      return Account.fromJson(accountData['data']);
     } catch (error) {
-      throw AppStrings.loadAccountDataFailed;
+      rethrow;
     }
   }
 
-  Future<Account?> loadAccountFromDisk() async {
+  Future<Account?> loadCachedData() async {
     try {
-      final account = await accountDataStorage.loadData();
-      return account;
+      final accountData = await loadData();
+      if (accountData == null) return null;
+      return Account.fromJson(accountData['data']);
     } catch (error) {
       return null;
     }

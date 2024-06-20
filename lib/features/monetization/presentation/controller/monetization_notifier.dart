@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:anonaddy/features/monetization/data/monetization_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_ui_flutter/paywall_result.dart';
 
@@ -10,11 +10,6 @@ final monetizationNotifierProvider =
         MonetizationNotifier.new);
 
 class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
-  Future<void> showPaywallIfNeeded() async {
-    final service = ref.read(monetizationServiceProvider);
-    await service.showPaywallIfNeeded('monthly');
-  }
-
   Future<void> showPaywall() async {
     try {
       final paymentResult =
@@ -33,15 +28,20 @@ class MonetizationNotifier extends AutoDisposeAsyncNotifier<bool> {
 
   @override
   FutureOr<bool> build() async {
+    if (kDebugMode) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      return false;
+    }
+
     final service = ref.read(monetizationServiceProvider);
 
-    final products = await service.getProducts();
-    final offerings = await service.getOfferings();
-    final customerInfo = await service.getCustomerInfo();
+    /// RevenueCat fails to configure on some devices which causes the app to crash.
+    /// This is a workaround to prevent that.
+    /// Would rather not show the paywall than crash the app.
+    final isConfigured = await service.isConfigured();
+    if (!isConfigured) return false;
 
-    log('products: $products');
-    log('offerings: $offerings');
-    log('customerInfo: $customerInfo');
+    final customerInfo = await service.getCustomerInfo();
 
     if (customerInfo.entitlements.active.isEmpty) {
       return await ref

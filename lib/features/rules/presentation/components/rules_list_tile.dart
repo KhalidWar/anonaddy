@@ -1,5 +1,5 @@
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/rules/domain/rule.dart';
-import 'package:anonaddy/utilities/utilities.dart';
 import 'package:flutter/material.dart';
 
 class RulesListTile extends StatelessWidget {

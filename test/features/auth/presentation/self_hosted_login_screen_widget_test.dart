@@ -1,6 +1,6 @@
-import 'package:anonaddy/features/auth/presentation/self_host_login_screen.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/app_url.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/app_url.dart';
+import 'package:anonaddy/features/onboarding/presentation/components/self_host_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,7 +9,7 @@ void main() async {
   Widget buildSelfHostedScreen() {
     return const ProviderScope(
       child: MaterialApp(
-        home: SelfHostLoginScreen(),
+        home: SelfHostLogin(),
       ),
     );
   }

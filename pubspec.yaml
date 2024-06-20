@@ -2,7 +2,7 @@ name: anonaddy
 description: A new Flutter application.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 3.0.0+60
+version: 3.1.0+61
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -15,62 +15,60 @@ dependencies:
   intl: ^0.19.0
 
   # Icons
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
 
   # UI Components
   flutter_svg: ^2.0.10+1
-  lottie: ^3.1.0
-  animations: ^2.0.11
+  lottie: ^3.1.2
   shimmer: ^3.0.0
-  fluttertoast: ^8.2.4
-  fl_chart: ^0.67.0
-  modal_bottom_sheet: ^3.0.0
-  wolt_modal_sheet: ^0.5.0
+  fluttertoast: ^8.2.6
+  fl_chart: ^0.68.0
+  wolt_modal_sheet: ^0.6.1
   flutter_onboarding_slider: ^1.0.11
 
   # Internet Connectivity
   dio: ^5.4.2+1
-  url_launcher: ^6.2.5
+  url_launcher: ^6.3.0
   connectivity_plus: ^5.0.2
 
   # Storage
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^9.2.2
 
   # Security
-  secure_application: ^4.0.0
+  secure_application: ^4.0.1
   local_auth: ^2.2.0
 
   # State Management
   flutter_riverpod: ^2.5.1
-  flutter_phoenix: ^1.1.1
-
-  # Data Modeling
-  json_annotation: ^4.8.1
 
   # Testing
-  mocktail: ^1.0.3
+  mocktail: ^1.0.4
 
   # App Package
-  package_info_plus: ^6.0.0
+  package_info_plus: ^8.0.0
   flutter_native_splash: ^2.4.0
 
   # Monetization
   purchases_flutter: ^6.25.0
   purchases_ui_flutter: ^6.25.0
 
+  # Routing
+  auto_route: ^8.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^2.4.9
-  json_serializable: ^6.7.1
+  auto_route_generator: ^8.0.0
+  build_runner: ^2.4.11
+  json_serializable: ^6.8.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.2
+  flutter_lints: ^4.0.0
 
 flutter_native_splash:
   color: "#19216C"
@@ -84,30 +82,3 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
-  #   - images/a_dot_ham.jpeg
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages

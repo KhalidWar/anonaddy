@@ -1,3 +1,17 @@
+import 'package:anonaddy/common/constants/anonaddy_string.dart';
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/created_at_widget.dart';
+import 'package:anonaddy/common/custom_app_bar.dart';
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/offline_banner.dart';
+import 'package:anonaddy/common/pie_chart/alias_screen_pie_chart.dart';
+import 'package:anonaddy/common/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_button.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_switch.dart';
+import 'package:anonaddy/common/update_description_widget.dart';
+import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
 import 'package:anonaddy/features/aliases/presentation/alias_default_recipient.dart';
 import 'package:anonaddy/features/aliases/presentation/components/alias_screen_list_tile.dart';
@@ -5,27 +19,19 @@ import 'package:anonaddy/features/aliases/presentation/components/alias_screen_r
 import 'package:anonaddy/features/aliases/presentation/components/send_from_widget.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/alias_screen_notifier.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_notifier.dart';
-import 'package:anonaddy/shared_components/constants/constants_exports.dart';
-import 'package:anonaddy/shared_components/created_at_widget.dart';
-import 'package:anonaddy/shared_components/custom_app_bar.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
-import 'package:anonaddy/shared_components/offline_banner.dart';
-import 'package:anonaddy/shared_components/pie_chart/alias_screen_pie_chart.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_aware_exports.dart';
-import 'package:anonaddy/shared_components/update_description_widget.dart';
-import 'package:anonaddy/utilities/utilities.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
+@RoutePage(name: 'AliasScreenRoute')
 class AliasScreen extends ConsumerStatefulWidget {
   const AliasScreen({
     super.key,
-    required this.aliasId,
+    required this.id,
   });
-  final String aliasId;
 
-  static const routeName = 'aliasDetailedScreen';
+  final String id;
 
   static const aliasScreenScaffold = Key('aliasScreenScaffold');
   static const aliasScreenAppBar = Key('aliasScreenAppBar');
@@ -39,70 +45,9 @@ class AliasScreen extends ConsumerStatefulWidget {
 }
 
 class _AliasScreenState extends ConsumerState<AliasScreen> {
-  final sendFromFormKey = GlobalKey<FormState>();
-  late String destinationEmail;
-
-  Future<void> showSendFromDialog(Alias alias) async {
-    Future<void> generateSendFromAddress(
-      BuildContext context, {
-      required Alias alias,
-    }) async {
-      if (sendFromFormKey.currentState!.validate()) {
-        await ref
-            .read(aliasScreenNotifierProvider(alias.id).notifier)
-            .sendFromAlias(destinationEmail)
-            .then((_) {
-          Navigator.pop(context);
-        });
-      }
-    }
-
-    await WoltModalSheet.show(
-      context: context,
-      onModalDismissedWithBarrierTap: Navigator.of(context).pop,
-      pageListBuilder: (modalSheetContext) {
-        return [
-          Utilities.buildWoltModalSheetSubPage(
-            context,
-            topBarTitle: AppStrings.sendFromAlias,
-            pageTitle: AppStrings.sendFromAliasString,
-            stickyActionBar: Container(
-              padding: const EdgeInsets.all(16),
-              width: double.infinity,
-              child: PlatformButton(
-                child: const Text(
-                  'Generate address',
-                  style: TextStyle(color: Colors.black),
-                ),
-                onPress: () async {
-                  await generateSendFromAddress(
-                    modalSheetContext,
-                    alias: alias,
-                  );
-                },
-              ),
-            ),
-            child: SendFromWidget(
-              email: alias.email,
-              formKey: sendFromFormKey,
-              onFieldSubmitted: (value) async {
-                destinationEmail = value;
-                await generateSendFromAddress(
-                  modalSheetContext,
-                  alias: alias,
-                );
-              },
-            ),
-          ),
-        ];
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final aliasNotifier =
-        ref.watch(aliasScreenNotifierProvider(widget.aliasId));
+    final aliasNotifier = ref.watch(aliasScreenNotifierProvider(widget.id));
 
     return Scaffold(
       key: AliasScreen.aliasScreenScaffold,
@@ -121,7 +66,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
               content: AddyString.forgetAliasConfirmation,
               method: () async {
                 await ref
-                    .read(aliasScreenNotifierProvider(widget.aliasId).notifier)
+                    .read(aliasScreenNotifierProvider(widget.id).notifier)
                     .forgetAlias()
                     .then((_) {
                   Navigator.pop(context);
@@ -170,7 +115,34 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                 subtitle: 'Send from',
                 trailing: IconButton(
                   icon: const Icon(Icons.send_outlined),
-                  onPressed: () => showSendFromDialog(aliasState.alias),
+                  onPressed: () async {
+                    await WoltModalSheet.show(
+                      context: context,
+                      onModalDismissedWithBarrierTap: Navigator.of(context).pop,
+                      pageListBuilder: (modalSheetContext) {
+                        return [
+                          Utilities.buildWoltModalSheetSubPage(
+                            context,
+                            topBarTitle: AppStrings.sendFromAlias,
+                            pageTitle: AppStrings.sendFromAliasString,
+                            child: SendFromWidget(
+                              email: aliasState.alias.email,
+                              onSubmitted: (value) async {
+                                await ref
+                                    .read(aliasScreenNotifierProvider(
+                                            aliasState.alias.id)
+                                        .notifier)
+                                    .sendFromAlias(value)
+                                    .then((_) {
+                                  Navigator.pop(context);
+                                });
+                              },
+                            ),
+                          ),
+                        ];
+                      },
+                    );
+                  },
                 ),
               ),
               AliasScreenListTile(
@@ -325,7 +297,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 76),
                             child: AliasDefaultRecipientScreen(
-                              aliasId: aliasState.alias.id,
+                              id: aliasState.alias.id,
                             ),
                           ),
                           stickyActionBar: Container(
@@ -337,7 +309,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                             child: PlatformButton(
                               onPress: () => ref
                                   .read(defaultRecipientNotifierProvider(
-                                          widget.aliasId)
+                                          widget.id)
                                       .notifier)
                                   .updateAliasDefaultRecipient()
                                   .whenComplete(() => Navigator.pop(context)),
@@ -345,7 +317,7 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
                                 builder: (context, ref, _) {
                                   final defaultRecipientAsync = ref.watch(
                                       defaultRecipientNotifierProvider(
-                                          widget.aliasId));
+                                          widget.id));
 
                                   return defaultRecipientAsync.when(
                                     data: (defaultRecipientState) {

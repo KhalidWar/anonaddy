@@ -1,43 +1,22 @@
+import 'package:anonaddy/common/error_message_widget.dart';
+import 'package:anonaddy/common/list_tiles/recipient_list_tile.dart';
+import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/features/aliases/presentation/controller/default_recipient/default_recipient_notifier.dart';
-import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
-import 'package:anonaddy/shared_components/error_message_widget.dart';
-import 'package:anonaddy/shared_components/list_tiles/recipient_list_tile.dart';
-import 'package:anonaddy/shared_components/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AliasDefaultRecipientScreen extends ConsumerStatefulWidget {
+class AliasDefaultRecipientScreen extends ConsumerWidget {
   const AliasDefaultRecipientScreen({
     super.key,
-    required this.aliasId,
+    required this.id,
   });
 
-  final String aliasId;
+  final String id;
 
   @override
-  ConsumerState createState() => _AliasDefaultRecipientScreenState();
-}
-
-class _AliasDefaultRecipientScreenState
-    extends ConsumerState<AliasDefaultRecipientScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    /// After widgets are built, fetch recipients and display verified ones.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(recipientsNotifierProvider.notifier)
-          .fetchRecipients(showLoading: true);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final defaultRecipientAsync =
-        ref.watch(defaultRecipientNotifierProvider(widget.aliasId));
-    final defaultRecipientNotifier =
-        ref.read(defaultRecipientNotifierProvider(widget.aliasId).notifier);
+        ref.watch(defaultRecipientNotifierProvider(id));
 
     return defaultRecipientAsync.when(
       data: (defaultRecipientState) {
@@ -61,13 +40,16 @@ class _AliasDefaultRecipientScreenState
                 itemCount: verifiedRecipients.length,
                 itemBuilder: (context, index) {
                   final verifiedRecipient = verifiedRecipients[index];
+                  final isSelected = defaultRecipientState.defaultRecipients
+                      .map((recipient) => recipient.id)
+                      .contains(verifiedRecipient.id);
 
                   return RecipientListTile(
                     recipient: verifiedRecipient,
-                    isSelected: defaultRecipientNotifier
-                        .isRecipientDefault(verifiedRecipient),
+                    isSelected: isSelected,
                     onPress: () {
-                      defaultRecipientNotifier
+                      ref
+                          .read(defaultRecipientNotifierProvider(id).notifier)
                           .toggleRecipient(verifiedRecipient);
                     },
                   );

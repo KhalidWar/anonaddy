@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/dio_client/dio_client.dart';
 import 'package:anonaddy/features/domains/data/domains_data_storage.dart';
 import 'package:anonaddy/features/domains/domain/domain.dart';
-import 'package:anonaddy/shared_components/constants/app_strings.dart';
-import 'package:anonaddy/shared_components/constants/url_strings.dart';
-import 'package:anonaddy/utilities/dio_client/dio_interceptors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final domainService = Provider<DomainsService>((ref) {
+final domainService = Provider.autoDispose<DomainsService>((ref) {
   return DomainsService(
     dio: ref.read(dioProvider),
     dataStorage: ref.read(domainsDataStorageProvider),
@@ -22,6 +22,7 @@ class DomainsService {
     required this.dio,
     required this.dataStorage,
   });
+
   final Dio dio;
   final DomainsDataStorage dataStorage;
 

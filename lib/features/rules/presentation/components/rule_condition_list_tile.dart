@@ -20,7 +20,10 @@ class RuleConditionListTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(4),
-          border: Border.all(color: Theme.of(context).colorScheme.primary),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.primary,
+            width: 0.5,
+          ),
         ),
         child: Row(
           children: [
@@ -33,17 +36,11 @@ class RuleConditionListTile extends StatelessWidget {
                       const Text('If '),
                       Text(
                         '${condition.type.value} ',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                       Text(
                         '${condition.match.value}:',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),

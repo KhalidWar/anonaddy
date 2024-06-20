@@ -1,18 +1,20 @@
 import 'dart:convert';
 
+import 'package:anonaddy/common/constants/data_storage_keys.dart';
+import 'package:anonaddy/common/data_storage.dart';
+import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/features/rules/domain/rule.dart';
-import 'package:anonaddy/shared_components/constants/data_storage_keys.dart';
-import 'package:anonaddy/utilities/data_storage.dart';
-import 'package:anonaddy/utilities/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final rulesDataStorageProvider = Provider<RulesDataStorage>((ref) {
-  return RulesDataStorage(secureStorage: ref.read(flutterSecureStorage));
+  return RulesDataStorage(
+      secureStorage: ref.read(flutterSecureStorageProvider));
 });
 
 class RulesDataStorage extends DataStorage {
   RulesDataStorage({required this.secureStorage});
+
   final FlutterSecureStorage secureStorage;
 
   @override
