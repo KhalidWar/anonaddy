@@ -1,21 +1,47 @@
 import 'package:anonaddy/common/constants/app_colors.dart';
 import 'package:anonaddy/common/constants/app_strings.dart';
+import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
 import 'package:anonaddy/features/alert_center/presentation/components/alert_center_icon.dart';
+import 'package:anonaddy/features/domains/presentation/controller/domains_tab_notifier.dart';
+import 'package:anonaddy/features/recipients/presentation/controller/recipients_notifier.dart';
 import 'package:anonaddy/features/router/app_router.dart';
+import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
+import 'package:anonaddy/features/usernames/presentation/controller/usernames_notifier.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage(name: 'AccountTabRoute')
-class AccountTab extends StatelessWidget {
+class AccountTab extends ConsumerWidget {
   const AccountTab({super.key});
 
   static const accountTabScaffold = Key('accountTabScaffold');
   static const accountTabSliverAppBar = Key('accountTabSliverAppBar');
   static const accountTabHeader = Key('accountTabHeader');
 
+  void refreshData(WidgetRef ref, int index) {
+    switch (index) {
+      case 0:
+        ref.read(accountNotifierProvider.notifier).fetchAccount();
+        break;
+      case 1:
+        ref.read(recipientsNotifierProvider.notifier).fetchRecipients();
+        break;
+      case 2:
+        ref.read(usernamesNotifierProvider.notifier).fetchUsernames();
+        break;
+      case 3:
+        ref.read(domainsNotifierProvider.notifier).fetchDomains();
+        break;
+      case 4:
+        ref.read(rulesTabNotifierProvider.notifier).fetchRules();
+        break;
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AutoTabsRouter.tabBar(
       routes: const [
         AccountInfoRoute(),
@@ -25,6 +51,8 @@ class AccountTab extends StatelessWidget {
         RulesTabRoute(),
       ],
       builder: (context, child, controller) {
+        refreshData(ref, controller.index);
+
         return Scaffold(
           body: child,
           appBar: AppBar(
