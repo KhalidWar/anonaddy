@@ -23,7 +23,7 @@ class AppStrings {
   static const defaultAliasFormat = 'Default Alias Format';
   static const defaultAliasDomain = 'Default Alias Domain';
   static const unlimited = 'unlimited';
-  static const addNewRecipient = 'Add New Recipient';
+  static const addNewRecipient = 'Add Recipient';
 
   /// Aliases Tab
   static const updateAliasRecipientNote =
@@ -73,9 +73,9 @@ class AppStrings {
       'You need to disable protected headers (hide subject) before you can enable inline encryption';
 
   /// Usernames
-  static const addNewDomain = 'Add New Domain';
-  static const addNewUsername = 'Add New Username';
-  static const addUsername = 'Add New Username';
+  static const addNewDomain = 'Add Domain';
+  static const addNewUsername = 'Add Username';
+  static const addUsername = 'Add Username';
   static const noAdditionalUsernamesFound = 'No usernames found';
 
   /// Domain
@@ -87,7 +87,7 @@ class AppStrings {
   /// Rules
   static const noRulesFound = 'No rules found';
   static const enrollRulesBetaTesting = 'Enroll in Rules BETA testing';
-  static const addNewRule = 'Add New Rule';
+  static const addNewRule = 'Add Rule';
 
   /// Search Tab
   static const quickSearch = 'Quick Search';
