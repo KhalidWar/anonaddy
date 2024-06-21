@@ -5,6 +5,7 @@ import 'package:anonaddy/common/shimmer_effects/shimmering_list_tile.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/account/domain/account.dart';
 import 'package:anonaddy/features/account/presentation/controller/account_notifier.dart';
+import 'package:anonaddy/features/monetization/presentation/monetization_paywall.dart';
 import 'package:anonaddy/features/rules/presentation/components/add_new_rule.dart';
 import 'package:anonaddy/features/rules/presentation/components/add_new_rule_condition.dart';
 import 'package:anonaddy/features/rules/presentation/components/add_new_rule_enter_name.dart';
@@ -69,97 +70,101 @@ class _RulesTabState extends ConsumerState<RulesTab> {
   Widget build(BuildContext context) {
     final rulesState = ref.watch(rulesTabNotifierProvider);
 
-    return rulesState.when(
-      data: (rules) {
-        return ListView(
-          shrinkWrap: true,
-          physics: const ClampingScrollPhysics(),
-          children: [
-            if (rules.isEmpty)
-              const ListTile(
-                title: Center(
-                  child: Text(AppStrings.noRulesFound),
+    return MonetizationPaywall(
+      showListTimeShimmer: true,
+      child: rulesState.when(
+        data: (rules) {
+          return ListView(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            children: [
+              if (rules.isEmpty)
+                const ListTile(
+                  title: Center(
+                    child: Text(AppStrings.noRulesFound),
+                  ),
+                )
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: rules.length,
+                  itemBuilder: (context, index) {
+                    final rule = rules[index];
+                    return RulesListTile(
+                      rule: rule,
+                      onTap: () async {
+                        await WoltModalSheet.show(
+                          context: context,
+                          onModalDismissedWithDrag: resetPageIndex,
+                          onModalDismissedWithBarrierTap: () {
+                            Navigator.of(context).pop();
+                            resetPageIndex();
+                          },
+                          pageIndexNotifier: pageIndexNotifier,
+                          pageListBuilder: (context) {
+                            return [
+                              Utilities.buildWoltModalSheetSubPage(
+                                context,
+                                topBarTitle: AppStrings.addNewRule,
+                                pageTitle: AddyString.addNewRuleString,
+                                child: AddNewRule(
+                                  ruleId: rule.id,
+                                  ruleNameOnPress: () => Utilities.showToast(
+                                      AppStrings.comingSoon),
+                                  conditionTileOnPress: () =>
+                                      Utilities.showToast(
+                                          AppStrings.comingSoon),
+                                ),
+                              ),
+                              Utilities.buildWoltModalSheetSubPage(
+                                context,
+                                showLeading: true,
+                                pageTitle:
+                                    'Provide a unique memorable description',
+                                topBarTitle: AppStrings.addNewRule,
+                                leadingWidgetOnPress: resetPageIndex,
+                                child: AddNewRuleEnterName(
+                                  ruleId: rule.id,
+                                  onPress: (name) async {
+                                    await ref
+                                        .read(createNewRuleNotifierProvider(
+                                                rule.id)
+                                            .notifier)
+                                        .updateRuleName(name);
+                                    resetPageIndex();
+                                  },
+                                ),
+                              ),
+                              Utilities.buildWoltModalSheetSubPage(
+                                context,
+                                showLeading: true,
+                                topBarTitle: 'Add condition',
+                                leadingWidgetOnPress: resetPageIndex,
+                                child: AddNewRuleCondition(
+                                  ruleId: rule.id,
+                                  onPress: () => Utilities.showToast(
+                                      AppStrings.comingSoon),
+                                ),
+                              ),
+                            ];
+                          },
+                        );
+                      },
+                    );
+                  },
                 ),
-              )
-            else
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                itemCount: rules.length,
-                itemBuilder: (context, index) {
-                  final rule = rules[index];
-                  return RulesListTile(
-                    rule: rule,
-                    onTap: () async {
-                      await WoltModalSheet.show(
-                        context: context,
-                        onModalDismissedWithDrag: resetPageIndex,
-                        onModalDismissedWithBarrierTap: () {
-                          Navigator.of(context).pop();
-                          resetPageIndex();
-                        },
-                        pageIndexNotifier: pageIndexNotifier,
-                        pageListBuilder: (context) {
-                          return [
-                            Utilities.buildWoltModalSheetSubPage(
-                              context,
-                              topBarTitle: AppStrings.addNewRule,
-                              pageTitle: AddyString.addNewRuleString,
-                              child: AddNewRule(
-                                ruleId: rule.id,
-                                ruleNameOnPress: () =>
-                                    Utilities.showToast(AppStrings.comingSoon),
-                                conditionTileOnPress: () =>
-                                    Utilities.showToast(AppStrings.comingSoon),
-                              ),
-                            ),
-                            Utilities.buildWoltModalSheetSubPage(
-                              context,
-                              showLeading: true,
-                              pageTitle:
-                                  'Provide a unique memorable description',
-                              topBarTitle: AppStrings.addNewRule,
-                              leadingWidgetOnPress: resetPageIndex,
-                              child: AddNewRuleEnterName(
-                                ruleId: rule.id,
-                                onPress: (name) async {
-                                  await ref
-                                      .read(
-                                          createNewRuleNotifierProvider(rule.id)
-                                              .notifier)
-                                      .updateRuleName(name);
-                                  resetPageIndex();
-                                },
-                              ),
-                            ),
-                            Utilities.buildWoltModalSheetSubPage(
-                              context,
-                              showLeading: true,
-                              topBarTitle: 'Add condition',
-                              leadingWidgetOnPress: resetPageIndex,
-                              child: AddNewRuleCondition(
-                                ruleId: rule.id,
-                                onPress: () =>
-                                    Utilities.showToast(AppStrings.comingSoon),
-                              ),
-                            ),
-                          ];
-                        },
-                      );
-                    },
-                  );
-                },
+              TextButton(
+                child: const Text(AppStrings.addNewRule),
+                onPressed: () => Utilities.showToast(AppStrings.comingSoon),
+                // onPressed: () => createNewRule(context, rules.first.id),
               ),
-            TextButton(
-              child: const Text(AppStrings.addNewRule),
-              onPressed: () => Utilities.showToast(AppStrings.comingSoon),
-              // onPressed: () => createNewRule(context, rules.first.id),
-            ),
-          ],
-        );
-      },
-      loading: () => const ShimmeringListTile(),
-      error: (error, _) => ErrorMessageWidget(message: error.toString()),
+            ],
+          );
+        },
+        loading: () => const ShimmeringListTile(),
+        error: (error, _) => ErrorMessageWidget(message: error.toString()),
+      ),
     );
   }
 }
