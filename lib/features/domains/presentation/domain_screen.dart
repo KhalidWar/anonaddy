@@ -4,6 +4,7 @@ import 'package:anonaddy/common/created_at_widget.dart';
 import 'package:anonaddy/common/custom_app_bar.dart';
 import 'package:anonaddy/common/error_message_widget.dart';
 import 'package:anonaddy/common/list_tiles/recipient_list_tile.dart';
+import 'package:anonaddy/common/offline_banner.dart';
 import 'package:anonaddy/common/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
@@ -66,6 +67,7 @@ class DomainScreen extends ConsumerWidget {
           return ListView(
             physics: const ClampingScrollPhysics(),
             children: [
+              const OfflineBanner(),
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Row(
