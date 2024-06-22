@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:anonaddy/common/constants/toast_message.dart';
 import 'package:anonaddy/common/utilities.dart';
-import 'package:anonaddy/features/domains/data/domains_service.dart';
+import 'package:anonaddy/features/domains/data/domain_screen_service.dart';
 import 'package:anonaddy/features/domains/domain/domain.dart';
 import 'package:anonaddy/features/domains/presentation/controller/domains_screen_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +17,7 @@ class DomainsScreenNotifier
     try {
       state = const AsyncLoading();
       final updatedDomain =
-          await ref.read(domainService).fetchSpecificDomain(domain.id);
+          await ref.read(domainScreenService).fetchSpecificDomain(domain.id);
 
       state = AsyncData(state.value!.copyWith(domain: updatedDomain));
     } catch (error) {
@@ -28,7 +28,7 @@ class DomainsScreenNotifier
   Future editDescription(String domainId, newDescription) async {
     try {
       final updatedDomain = await ref
-          .read(domainService)
+          .read(domainScreenService)
           .updateDomainDescription(domainId, newDescription);
       Utilities.showToast(ToastMessage.editDescriptionSuccess);
       state = AsyncData(state.value!.copyWith(domain: updatedDomain));
@@ -40,7 +40,8 @@ class DomainsScreenNotifier
   Future<void> activateDomain(String domainId) async {
     try {
       state = AsyncData(state.value!.copyWith(activeSwitchLoading: true));
-      final newDomain = await ref.read(domainService).activateDomain(domainId);
+      final newDomain =
+          await ref.read(domainScreenService).activateDomain(domainId);
       final updatedDomain =
           state.value!.domain.copyWith(active: newDomain.active);
 
@@ -57,7 +58,7 @@ class DomainsScreenNotifier
   Future<void> deactivateDomain(String domainId) async {
     state = AsyncData(state.value!.copyWith(activeSwitchLoading: true));
     try {
-      await ref.read(domainService).deactivateDomain(domainId);
+      await ref.read(domainScreenService).deactivateDomain(domainId);
 
       final updatedDomain = state.value!.domain.copyWith(active: false);
 
@@ -76,7 +77,7 @@ class DomainsScreenNotifier
 
     try {
       final newDomain =
-          await ref.read(domainService).activateCatchAll(domainId);
+          await ref.read(domainScreenService).activateCatchAll(domainId);
 
       final updatedDomain =
           state.value!.domain.copyWith(catchAll: newDomain.catchAll);
@@ -95,7 +96,7 @@ class DomainsScreenNotifier
     state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: true));
 
     try {
-      await ref.read(domainService).deactivateCatchAll(domainId);
+      await ref.read(domainScreenService).deactivateCatchAll(domainId);
 
       final updatedDomain = state.value!.domain.copyWith(catchAll: false);
 
@@ -115,13 +116,13 @@ class DomainsScreenNotifier
       state = AsyncData(state.value!.copyWith(updateRecipientLoading: true));
 
       await ref
-          .read(domainService)
+          .read(domainScreenService)
           .updateDomainDefaultRecipient(domainId, recipientId);
 
       Utilities.showToast('Default recipient updated successfully!');
 
       final domain =
-          await ref.read(domainService).fetchSpecificDomain(domainId);
+          await ref.read(domainScreenService).fetchSpecificDomain(domainId);
 
       state = AsyncData(state.value!.copyWith(
         updateRecipientLoading: false,
@@ -135,7 +136,7 @@ class DomainsScreenNotifier
 
   Future<void> deleteDomain(String domainId) async {
     try {
-      await ref.read(domainService).deleteDomain(domainId);
+      await ref.read(domainScreenService).deleteDomain(domainId);
       Utilities.showToast('Domain deleted successfully!');
     } catch (error) {
       Utilities.showToast(error.toString());
@@ -144,9 +145,8 @@ class DomainsScreenNotifier
 
   @override
   FutureOr<DomainsScreenState> build(String arg) async {
-    final aliasService = ref.read(domainService);
-
-    final domain = await aliasService.fetchSpecificDomain(arg);
+    final domainService = ref.read(domainScreenService);
+    final domain = await domainService.fetchSpecificDomain(arg);
 
     return DomainsScreenState(
       domain: domain,

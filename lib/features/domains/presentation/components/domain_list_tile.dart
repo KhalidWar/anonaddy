@@ -40,7 +40,7 @@ class DomainListTile extends StatelessWidget {
           ],
         ),
       ),
-      onTap: () => context.pushRoute(DomainScreenRoute(id: domain)),
+      onTap: () => context.pushRoute(DomainScreenRoute(id: domain.id)),
     );
   }
 }
