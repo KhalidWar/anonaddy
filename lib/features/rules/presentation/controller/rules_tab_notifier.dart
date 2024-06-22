@@ -10,29 +10,17 @@ final rulesTabNotifierProvider =
 
 class RulesTabNotifier extends AutoDisposeAsyncNotifier<List<Rule>> {
   /// Fetch all [Rule]s associated with user's account
-  Future<void> fetchRules() async {
-    try {
-      final rules = await ref.read(rulesServiceProvider).fetchRules();
-
-      state = AsyncData(rules);
-    } catch (error) {
-      state = AsyncError(error.toString(), StackTrace.empty);
-      await _retryOnError();
-    }
-  }
-
-  Future _retryOnError() async {
-    if (state is AsyncError) {
-      await Future.delayed(const Duration(seconds: 5));
-      await fetchRules();
-    }
+  Future<void> fetchRules({bool showLoading = false}) async {
+    if (showLoading) state = const AsyncLoading();
+    state = await AsyncValue.guard(
+        () => ref.read(rulesServiceProvider).fetchRules());
   }
 
   @override
   FutureOr<List<Rule>> build() async {
     final service = ref.read(rulesServiceProvider);
 
-    final rules = await service.loadRulesFromDisk();
+    final rules = await service.loadCachedData();
     if (rules == null) return await service.fetchRules();
     return rules;
   }

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:anonaddy/features/rules/data/rules_service.dart';
+import 'package:anonaddy/features/rules/data/rule_screen_service.dart';
 import 'package:anonaddy/features/rules/presentation/controller/create_new_rule_state.dart';
 import 'package:anonaddy/features/rules/presentation/controller/rules_tab_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +26,7 @@ class CreateNewRuleNotifier
     };
 
     await ref
-        .read(rulesServiceProvider)
+        .read(ruleScreenServiceProvider)
         .updateRule(currentState.rule.id, ruleData);
     await ref.read(rulesTabNotifierProvider.notifier).fetchRules();
   }
@@ -53,7 +53,7 @@ class CreateNewRuleNotifier
 
   @override
   FutureOr<CreateNewRuleState> build(String arg) async {
-    final service = ref.read(rulesServiceProvider);
+    final service = ref.read(ruleScreenServiceProvider);
     final rule = await service.fetchSpecificRule(arg);
 
     return CreateNewRuleState(
