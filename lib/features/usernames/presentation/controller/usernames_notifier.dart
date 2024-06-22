@@ -36,8 +36,9 @@ class UsernamesNotifier extends AutoDisposeAsyncNotifier<List<Username>> {
   FutureOr<List<Username>> build() async {
     final service = ref.read(usernameServiceProvider);
 
-    final usernames = await service.loadUsernameFromDisk();
-    if (usernames == null) return await service.fetchUsernames();
-    return usernames;
+    final usernames = await service.loadCachedData();
+    if (usernames != null) return usernames;
+
+    return await service.fetchUsernames();
   }
 }

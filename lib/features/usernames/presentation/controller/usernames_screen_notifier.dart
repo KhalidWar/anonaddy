@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:anonaddy/common/utilities.dart';
-import 'package:anonaddy/features/usernames/data/username_service.dart';
+import 'package:anonaddy/features/usernames/data/username_screen_service.dart';
 import 'package:anonaddy/features/usernames/domain/username.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_notifier.dart';
 import 'package:anonaddy/features/usernames/presentation/controller/usernames_screen_state.dart';
@@ -17,8 +17,9 @@ class UsernamesScreenNotifier
     try {
       final currentState = state.value!;
       state = const AsyncLoading();
-      final updatedUsername =
-          await ref.read(usernameServiceProvider).fetchSpecificUsername(id);
+      final updatedUsername = await ref
+          .read(usernameScreenServiceProvider)
+          .fetchSpecificUsername(id);
       state = AsyncData(currentState.copyWith(username: updatedUsername));
     } catch (error) {
       state = AsyncError(error.toString(), StackTrace.empty);
@@ -27,7 +28,7 @@ class UsernamesScreenNotifier
 
   Future<void> deleteUsername(String usernameId) async {
     try {
-      await ref.read(usernameServiceProvider).deleteUsername(usernameId);
+      await ref.read(usernameScreenServiceProvider).deleteUsername(usernameId);
       Utilities.showToast('Username deleted successfully!');
       ref.read(usernamesNotifierProvider.notifier).fetchUsernames();
     } catch (error) {
@@ -36,10 +37,12 @@ class UsernamesScreenNotifier
   }
 
   Future updateUsernameDescription(
-      Username username, String description) async {
+    Username username,
+    String description,
+  ) async {
     try {
       final newUsername = await ref
-          .read(usernameServiceProvider)
+          .read(usernameScreenServiceProvider)
           .updateUsernameDescription(username.id, description);
       final updatedUsername =
           username.copyWith(description: newUsername.description);
@@ -56,12 +59,12 @@ class UsernamesScreenNotifier
 
       state = AsyncData(currentState.copyWith(updateRecipientLoading: true));
       await ref
-          .read(usernameServiceProvider)
+          .read(usernameScreenServiceProvider)
           .updateDefaultRecipient(username.id, recipientID);
       Utilities.showToast('Default recipient updated successfully!');
 
       final updatedUsername = await ref
-          .read(usernameServiceProvider)
+          .read(usernameScreenServiceProvider)
           .fetchSpecificUsername(username.id);
       state = AsyncData(currentState.copyWith(
         username: updatedUsername,
@@ -76,8 +79,9 @@ class UsernamesScreenNotifier
   Future<void> activateUsername(Username username) async {
     try {
       state = AsyncData(state.value!.copyWith(activeSwitchLoading: true));
-      final newUsername =
-          await ref.read(usernameServiceProvider).activateUsername(username.id);
+      final newUsername = await ref
+          .read(usernameScreenServiceProvider)
+          .activateUsername(username.id);
       final updatedUsername = username.copyWith(active: newUsername.active);
       state = AsyncData(state.value!.copyWith(
         username: updatedUsername,
@@ -92,7 +96,9 @@ class UsernamesScreenNotifier
   Future<void> deactivateUsername(Username username) async {
     try {
       state = AsyncData(state.value!.copyWith(activeSwitchLoading: true));
-      await ref.read(usernameServiceProvider).deactivateUsername(username.id);
+      await ref
+          .read(usernameScreenServiceProvider)
+          .deactivateUsername(username.id);
       final updatedUsername = username.copyWith(active: false);
       state = AsyncData(state.value!.copyWith(
         username: updatedUsername,
@@ -107,8 +113,9 @@ class UsernamesScreenNotifier
   Future<void> activateCatchAll(Username username) async {
     try {
       state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: true));
-      final newUsername =
-          await ref.read(usernameServiceProvider).activateCatchAll(username.id);
+      final newUsername = await ref
+          .read(usernameScreenServiceProvider)
+          .activateCatchAll(username.id);
       final updatedUsername = username.copyWith(catchAll: newUsername.catchAll);
       state = AsyncData(state.value!.copyWith(
         username: updatedUsername,
@@ -123,7 +130,9 @@ class UsernamesScreenNotifier
   Future<void> deactivateCatchAll(Username username) async {
     try {
       state = AsyncData(state.value!.copyWith(catchAllSwitchLoading: true));
-      await ref.read(usernameServiceProvider).deactivateCatchAll(username.id);
+      await ref
+          .read(usernameScreenServiceProvider)
+          .deactivateCatchAll(username.id);
       final updatedUsername = username.copyWith(catchAll: false);
       state = AsyncData(state.value!.copyWith(
         username: updatedUsername,
@@ -137,7 +146,7 @@ class UsernamesScreenNotifier
 
   @override
   FutureOr<UsernamesScreenState> build(String arg) async {
-    final service = ref.read(usernameServiceProvider);
+    final service = ref.read(usernameScreenServiceProvider);
 
     final username = await service.fetchSpecificUsername(arg);
 
