@@ -307,7 +307,7 @@ class CreditsScreenRoute extends PageRouteInfo<void> {
 class DomainScreenRoute extends PageRouteInfo<DomainScreenRouteArgs> {
   DomainScreenRoute({
     Key? key,
-    required Domain id,
+    required String id,
     List<PageRouteInfo>? children,
   }) : super(
           DomainScreenRoute.name,
@@ -332,7 +332,7 @@ class DomainScreenRouteArgs {
 
   final Key? key;
 
-  final Domain id;
+  final String id;
 
   @override
   String toString() {
