@@ -22,54 +22,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 @RoutePage(name: 'DomainScreenRoute')
-class DomainScreen extends ConsumerStatefulWidget {
+class DomainScreen extends ConsumerWidget {
   const DomainScreen({
     super.key,
     required this.id,
   });
 
-  final Domain id;
+  final String id;
 
   @override
-  ConsumerState createState() => _DomainsScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final domainsAsync = ref.watch(domainsScreenStateNotifier(id));
 
-class _DomainsScreenState extends ConsumerState<DomainScreen> {
-  Future<void> deleteDomain() async {
-    PlatformAware.platformDialog(
-      context: context,
-      child: PlatformAlertDialog(
-        title: 'Delete Domain',
-        content: AddyString.deleteDomainConfirmation,
-        method: () async {
-          await ref
-              .read(domainsScreenStateNotifier(widget.id.id).notifier)
-              .deleteDomain(widget.id.id);
-          if (mounted) {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          }
-        },
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(domainsScreenStateNotifier(widget.id.id).notifier)
-          .fetchDomain(widget.id);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final domainsAsync = ref.watch(domainsScreenStateNotifier(widget.id.id));
-
-    final domainNotifier =
-        ref.read(domainsScreenStateNotifier(widget.id.id).notifier);
+    final domainNotifier = ref.read(domainsScreenStateNotifier(id).notifier);
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -77,7 +42,22 @@ class _DomainsScreenState extends ConsumerState<DomainScreen> {
         leadingOnPress: () => Navigator.pop(context),
         showTrailing: true,
         trailingLabel: 'Delete Domain',
-        trailingOnPress: (choice) => deleteDomain(),
+        trailingOnPress: (choice) {
+          PlatformAware.platformDialog(
+            context: context,
+            child: PlatformAlertDialog(
+              title: 'Delete Domain',
+              content: AddyString.deleteDomainConfirmation,
+              method: () async {
+                await ref
+                    .read(domainsScreenStateNotifier(id).notifier)
+                    .deleteDomain(id);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          );
+        },
       ),
       body: domainsAsync.when(
         data: (domainsState) {
@@ -103,9 +83,15 @@ class _DomainsScreenState extends ConsumerState<DomainScreen> {
                 ),
               ),
               if (domain.isVerified)
-                buildUnverifiedEmailWarning(AppStrings.unverifiedDomainWarning),
+                buildUnverifiedEmailWarning(
+                  context,
+                  AppStrings.unverifiedDomainWarning,
+                ),
               if (domain.isMXValidated)
-                buildUnverifiedEmailWarning(AppStrings.invalidDomainMXWarning),
+                buildUnverifiedEmailWarning(
+                  context,
+                  AppStrings.invalidDomainMXWarning,
+                ),
               const Divider(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -135,15 +121,13 @@ class _DomainsScreenState extends ConsumerState<DomainScreen> {
                               updateDescription: (description) async {
                                 await ref
                                     .read(
-                                        domainsScreenStateNotifier(widget.id.id)
-                                            .notifier)
+                                        domainsScreenStateNotifier(id).notifier)
                                     .editDescription(domain.id, description);
                               },
                               removeDescription: () async {
                                 await ref
                                     .read(
-                                        domainsScreenStateNotifier(widget.id.id)
-                                            .notifier)
+                                        domainsScreenStateNotifier(id).notifier)
                                     .editDescription(domain.id, '');
                               },
                             ),
@@ -278,7 +262,7 @@ class _DomainsScreenState extends ConsumerState<DomainScreen> {
     );
   }
 
-  Widget buildUnverifiedEmailWarning(String label) {
+  Widget buildUnverifiedEmailWarning(BuildContext context, String label) {
     return Container(
       width: double.infinity,
       color: Colors.amber,
