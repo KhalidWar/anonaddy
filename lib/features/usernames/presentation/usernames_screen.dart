@@ -108,7 +108,7 @@ class UsernameScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Additional Username',
+        title: 'Username',
         leadingOnPress: () => Navigator.pop(context),
         showTrailing: true,
         trailingLabel: 'Delete Username',
