@@ -22,133 +22,79 @@ class RecipientScreenService extends BaseService {
   });
 
   Future<Recipient> fetchRecipient(String recipientId) async {
-    try {
-      final path = '$kUnEncodedBaseURL/recipients/$recipientId';
-      final response = await get(path, childId: recipientId);
-      final recipient = response['data'];
-      return Recipient.fromJson(recipient);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/recipients/$recipientId';
+    final response = await get(path, childId: recipientId);
+    final recipient = response['data'];
+    return Recipient.fromJson(recipient);
   }
 
   Future<Recipient> enableEncryption(String recipientID) async {
-    try {
-      const path = '$kUnEncodedBaseURL/encrypted-recipients';
-      final response = await post(path, data: {"id": recipientID});
-      final recipient = response['data'];
-      return Recipient.fromJson(recipient);
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/encrypted-recipients';
+    final response = await post(path, data: {"id": recipientID});
+    final recipient = response['data'];
+    return Recipient.fromJson(recipient);
   }
 
   Future<void> disableEncryption(String recipientID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/encrypted-recipients/$recipientID';
-      await delete(path);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/encrypted-recipients/$recipientID';
+    await delete(path);
   }
 
   Future<Recipient> addPublicGPGKey(String recipientID, String keyData) async {
-    try {
-      final path = '$kUnEncodedBaseURL/recipient-keys/$recipientID';
-      final response = await patch(path, data: {"key_data": keyData});
-      final recipient = response['data'];
-      return Recipient.fromJson(recipient);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/recipient-keys/$recipientID';
+    final response = await patch(path, data: {"key_data": keyData});
+    final recipient = response['data'];
+    return Recipient.fromJson(recipient);
   }
 
   Future<void> removePublicGPGKey(String recipientID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/recipient-keys/$recipientID';
-      await delete(path);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/recipient-keys/$recipientID';
+    await delete(path);
   }
 
   Future<void> removeRecipient(String recipientID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/recipients/$recipientID';
-      await delete(path);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/recipients/$recipientID';
+    await delete(path);
   }
 
   Future<void> resendVerificationEmail(String recipientID) async {
-    try {
-      const path = '$kUnEncodedBaseURL/recipients/email/resend';
-      await post(path, data: {"recipient_id": recipientID});
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/recipients/email/resend';
+    await post(path, data: {"recipient_id": recipientID});
   }
 
   Future<Recipient> enableReplyAndSend(String recipientId) async {
-    try {
-      const path = '$kUnEncodedBaseURL/allowed-recipients';
-      final response = await post(path, data: {"id": recipientId});
-      final recipient = response['data'];
-      return Recipient.fromJson(recipient);
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/allowed-recipients';
+    final response = await post(path, data: {"id": recipientId});
+    final recipient = response['data'];
+    return Recipient.fromJson(recipient);
   }
 
   Future<void> disableReplyAndSend(String recipientId) async {
-    try {
-      final path = '$kUnEncodedBaseURL/allowed-recipients/$recipientId';
-      await delete(path);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/allowed-recipients/$recipientId';
+    await delete(path);
   }
 
   Future<Recipient> enableInlineEncryption(String recipientId) async {
-    try {
-      const path = '$kUnEncodedBaseURL/inline-encrypted-recipients';
-      final response = await post(path, data: {"id": recipientId});
-      final recipient = response['data'];
-      return Recipient.fromJson(recipient);
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/inline-encrypted-recipients';
+    final response = await post(path, data: {"id": recipientId});
+    final recipient = response['data'];
+    return Recipient.fromJson(recipient);
   }
 
   Future<void> disableInlineEncryption(String recipientId) async {
-    try {
-      final path =
-          '$kUnEncodedBaseURL/inline-encrypted-recipients/$recipientId';
-      await delete(path);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/inline-encrypted-recipients/$recipientId';
+    await delete(path);
   }
 
   Future<Recipient> enableProtectedHeader(String recipientId) async {
-    try {
-      const path = '$kUnEncodedBaseURL/protected-headers-recipients';
-      final response = await post(path, data: {"id": recipientId});
-      final recipient = response['data'];
-      return Recipient.fromJson(recipient);
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/protected-headers-recipients';
+    final response = await post(path, data: {"id": recipientId});
+    final recipient = response['data'];
+    return Recipient.fromJson(recipient);
   }
 
   Future<void> disableProtectedHeader(String recipientId) async {
-    try {
-      await delete(
-        '$kUnEncodedBaseURL/protected-headers-recipients/$recipientId',
-      );
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/protected-headers-recipients/$recipientId';
+    await delete(path);
   }
 }

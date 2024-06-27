@@ -1,15 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
-import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/constants/data_storage_keys.dart';
 import 'package:anonaddy/common/constants/url_strings.dart';
 import 'package:anonaddy/common/dio_client/base_service.dart';
 import 'package:anonaddy/common/dio_client/dio_client.dart';
 import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/features/aliases/domain/alias.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final aliasesServiceProvider = Provider.autoDispose<AliasesService>((ref) {
@@ -29,44 +25,31 @@ class AliasesService extends BaseService {
   Future<List<Alias>> fetchAliases({
     bool onlyDeletedAliases = false,
   }) async {
-    try {
-      const path = '$kUnEncodedBaseURL/aliases';
-      final params = {
-        'with': 'recipients',
-        if (onlyDeletedAliases) "filter[deleted]": "only",
-      };
-      final response = await get(path, queryParameters: params);
+    const path = '$kUnEncodedBaseURL/aliases';
+    final params = {
+      'with': 'recipients',
+      if (onlyDeletedAliases) "filter[deleted]": "only",
+    };
+    final response = await get(path, queryParameters: params);
 
-      final aliases = response['data'] as List;
-      return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } catch (_) {
-      rethrow;
-    }
+    final aliases = response['data'] as List;
+    return aliases.map((alias) => Alias.fromJson(alias)).toList();
   }
 
   Future<List<Alias>?> loadCachedData() async {
-    try {
-      final aliasesData = await loadData();
-      if (aliasesData == null) return null;
+    final aliasesData = await loadData();
+    if (aliasesData == null) return null;
 
-      final aliases = (aliasesData['data'] as List)
-          .map((recipient) => Alias.fromJson(recipient))
-          .toList();
-      return aliases;
-    } catch (error) {
-      rethrow;
-    }
+    return (aliasesData['data'] as List)
+        .map((recipient) => Alias.fromJson(recipient))
+        .toList();
   }
 
   Future<List<Alias>> fetchAssociatedAliases(Map<String, String> params) async {
-    try {
-      const path = '$kUnEncodedBaseURL/aliases';
-      final response = await get(path, queryParameters: params);
-      final aliases = response['data'] as List;
-      return aliases.map((alias) => Alias.fromJson(alias)).toList();
-    } catch (e) {
-      throw 'Failed to fetch available aliases';
-    }
+    const path = '$kUnEncodedBaseURL/aliases';
+    final response = await get(path, queryParameters: params);
+    final aliases = response['data'] as List;
+    return aliases.map((alias) => Alias.fromJson(alias)).toList();
   }
 
   Future<Alias> createNewAlias({
@@ -76,40 +59,25 @@ class AliasesService extends BaseService {
     required String format,
     required List<String> recipients,
   }) async {
-    try {
-      const path = '$kUnEncodedBaseURL/aliases';
-      final data = json.encode({
-        "domain": domain,
-        "format": format,
-        "description": desc,
-        "recipient_ids": recipients,
-        if (format == 'custom') "local_part": localPart,
-      });
-      final response = await dio.post(path, data: data);
-      log('createNewAlias: ${response.statusCode}');
-      return Alias.fromJson(response.data['data']);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/aliases';
+    final data = {
+      "domain": domain,
+      "format": format,
+      "description": desc,
+      "recipient_ids": recipients,
+      if (format == 'custom') "local_part": localPart,
+    };
+    final response = await post(path, data: data);
+    return Alias.fromJson(response['data']);
   }
 
   Future<Alias> updateAliasDefaultRecipient(
     String aliasID,
     List<String> recipientId,
   ) async {
-    try {
-      const path = '$kUnEncodedBaseURL/alias-recipients';
-      final data =
-          jsonEncode({"alias_id": aliasID, "recipient_ids": recipientId});
-      final response = await dio.post(path, data: data);
-      log('updateAliasDefaultRecipient: ${response.statusCode}');
-      return Alias.fromJson(response.data['data']);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/alias-recipients';
+    final data = {"alias_id": aliasID, "recipient_ids": recipientId};
+    final response = await post(path, data: data);
+    return Alias.fromJson(response['data']);
   }
 }

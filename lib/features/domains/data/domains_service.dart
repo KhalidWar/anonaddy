@@ -23,17 +23,13 @@ class DomainsService extends BaseService {
   });
 
   Future<List<Domain>> fetchDomains() async {
-    try {
-      const path = '$kUnEncodedBaseURL/domains';
-      final response = await get(path);
+    const path = '$kUnEncodedBaseURL/domains';
+    final response = await get(path);
 
-      final domainData = response['data'] as List;
-      final domains =
-          domainData.map((domain) => Domain.fromJson(domain)).toList();
-      return domains;
-    } catch (e) {
-      rethrow;
-    }
+    final domainData = response['data'] as List;
+    final domains =
+        domainData.map((domain) => Domain.fromJson(domain)).toList();
+    return domains;
   }
 
   Future<Domain> addNewDomain(String domain) async {

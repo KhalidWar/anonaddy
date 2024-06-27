@@ -23,70 +23,42 @@ class AliasScreenService extends BaseService {
   });
 
   Future<Alias> fetchSpecificAlias(String aliasID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
-      final response = await get(path, childId: aliasID);
-      return Alias.fromJson(response['data']);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/aliases/$aliasID';
+    final response = await get(path, childId: aliasID);
+    return Alias.fromJson(response['data']);
   }
 
   Future<Alias> activateAlias(String aliasId) async {
-    try {
-      const path = '$kUnEncodedBaseURL/active-aliases';
-      final response = await post(path, data: {"id": aliasId});
-      return Alias.fromJson(response['data']);
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/active-aliases';
+    final response = await post(path, data: {"id": aliasId});
+    return Alias.fromJson(response['data']);
   }
 
   Future<void> deactivateAlias(String aliasId) async {
-    try {
-      final path = '$kUnEncodedBaseURL/active-aliases/$aliasId';
-      await delete(path);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/active-aliases/$aliasId';
+    await delete(path);
   }
 
   Future<Alias> updateAliasDescription(String aliasID, String newDesc) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
-      final response = await patch(path, data: {"description": newDesc});
-      return Alias.fromJson(response['data']);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/aliases/$aliasID';
+    final response = await patch(path, data: {"description": newDesc});
+    return Alias.fromJson(response['data']);
   }
 
   Future<void> deleteAlias(String aliasID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID';
-      await delete(path);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/aliases/$aliasID';
+    await delete(path);
   }
 
   Future<Alias> restoreAlias(String aliasID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID/restore';
-      final response = await patch(path, data: {});
-      return Alias.fromJson(response['data']);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/aliases/$aliasID/restore';
+    final response = await patch(path, data: {});
+    return Alias.fromJson(response['data']);
   }
 
   Future<void> forgetAlias(String aliasID) async {
-    try {
-      final path = '$kUnEncodedBaseURL/aliases/$aliasID/forget';
-      await delete(path);
-    } catch (e) {
-      rethrow;
-    }
+    final path = '$kUnEncodedBaseURL/aliases/$aliasID/forget';
+    await delete(path);
   }
 
   String generateSendFromAlias(String aliasEmail, String destinationEmail) {

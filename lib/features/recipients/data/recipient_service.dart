@@ -21,41 +21,27 @@ class RecipientService extends BaseService {
   });
 
   Future<List<Recipient>> fetchRecipients() async {
-    try {
-      const path = '$kUnEncodedBaseURL/recipients';
-      final response = await get(path);
+    const path = '$kUnEncodedBaseURL/recipients';
+    final response = await get(path);
 
-      final recipientData = response['data'];
-      final recipients = (recipientData as List)
-          .map((recipient) => Recipient.fromJson(recipient))
-          .toList();
-      return recipients;
-    } catch (e) {
-      rethrow;
-    }
+    final recipientData = response['data'];
+    return (recipientData as List)
+        .map((recipient) => Recipient.fromJson(recipient))
+        .toList();
   }
 
   Future<List<Recipient>?> loadCachedData() async {
-    try {
-      final recipientsData = await loadData();
-      if (recipientsData == null) return null;
+    final recipientsData = await loadData();
+    if (recipientsData == null) return null;
 
-      final recipients = (recipientsData['data'] as List)
-          .map((recipient) => Recipient.fromJson(recipient))
-          .toList();
-      return recipients;
-    } catch (error) {
-      rethrow;
-    }
+    return (recipientsData['data'] as List)
+        .map((recipient) => Recipient.fromJson(recipient))
+        .toList();
   }
 
   Future<Recipient> addRecipient(String email) async {
-    try {
-      const path = '$kUnEncodedBaseURL/recipients';
-      final response = await post(path, data: {"email": email});
-      return Recipient.fromJson(response['data']);
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/recipients';
+    final response = await post(path, data: {"email": email});
+    return Recipient.fromJson(response['data']);
   }
 }
