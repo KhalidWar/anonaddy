@@ -10,12 +10,8 @@ final accountNotifierProvider =
 
 class AccountNotifier extends AutoDisposeAsyncNotifier<Account> {
   Future<void> fetchAccount() async {
-    try {
-      final accountService = ref.read(accountServiceProvider);
-      state = await AsyncValue.guard(() => accountService.fetchAccount());
-    } catch (error) {
-      rethrow;
-    }
+    final accountService = ref.read(accountServiceProvider);
+    state = await AsyncValue.guard(() => accountService.fetchAccount());
   }
 
   @override
