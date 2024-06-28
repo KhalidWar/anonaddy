@@ -18,8 +18,8 @@ class UsernameScreenService extends BaseService {
   const UsernameScreenService({
     required super.dio,
     required super.secureStorage,
-    super.storageKey = '',
-    super.parentStorageKey = DataStorageKeys.usernameKey,
+    super.storageKey = DataStorageKeys.usernameKey,
+    super.isDetailedScreen = true,
   });
 
   Future<Username> fetchSpecificUsername(String usernameId) async {

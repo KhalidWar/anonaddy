@@ -17,8 +17,8 @@ class RecipientScreenService extends BaseService {
   const RecipientScreenService({
     required super.dio,
     required super.secureStorage,
-    super.storageKey = '',
-    super.parentStorageKey = DataStorageKeys.recipientKey,
+    super.storageKey = DataStorageKeys.recipientKey,
+    super.isDetailedScreen = true,
   });
 
   Future<Recipient> fetchRecipient(String recipientId) async {

@@ -18,8 +18,8 @@ class AliasScreenService extends BaseService {
   const AliasScreenService({
     required super.dio,
     required super.secureStorage,
-    super.storageKey = '',
-    super.parentStorageKey = DataStorageKeys.aliasesKey,
+    super.storageKey = DataStorageKeys.aliasesKey,
+    super.isDetailedScreen = true,
   });
 
   Future<Alias> fetchSpecificAlias(String aliasID) async {

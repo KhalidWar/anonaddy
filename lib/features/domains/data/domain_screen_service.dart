@@ -17,8 +17,8 @@ class DomainScreenService extends BaseService {
   DomainScreenService({
     required super.dio,
     required super.secureStorage,
-    super.storageKey = '',
-    super.parentStorageKey = DataStorageKeys.domainKey,
+    super.storageKey = DataStorageKeys.domainKey,
+    super.isDetailedScreen = true,
   });
 
   Future<Domain> fetchSpecificDomain(String domainId) async {

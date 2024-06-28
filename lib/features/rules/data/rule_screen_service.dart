@@ -17,8 +17,8 @@ class RuleScreenService extends BaseService {
   RuleScreenService({
     required super.dio,
     required super.secureStorage,
-    super.storageKey = '',
-    super.parentStorageKey = DataStorageKeys.rulesKey,
+    super.storageKey = DataStorageKeys.rulesKey,
+    super.isDetailedScreen = true,
   });
 
   Future<Rule> fetchSpecificRule(String ruleId) async {
