@@ -1,34 +1,28 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/constants/url_strings.dart';
+import 'package:anonaddy/common/dio_client/base_service.dart';
 import 'package:anonaddy/common/dio_client/dio_client.dart';
+import 'package:anonaddy/common/secure_storage.dart';
 import 'package:anonaddy/features/domain_options/domain/domain_options.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final domainOptionsService = Provider.autoDispose<DomainOptionsService>((ref) {
-  return DomainOptionsService(dio: ref.read(dioProvider));
+  return DomainOptionsService(
+    dio: ref.read(dioProvider),
+    secureStorage: ref.read(flutterSecureStorageProvider),
+  );
 });
 
-class DomainOptionsService {
+class DomainOptionsService extends BaseService {
   const DomainOptionsService({
-    required this.dio,
+    required super.dio,
+    required super.secureStorage,
   });
 
-  final Dio dio;
-
   Future<DomainOptions> fetchDomainOptions() async {
-    try {
-      const path = '$kUnEncodedBaseURL/domain-options';
-      final response = await dio.get(path);
-      log('fetchDomainOptions: ${response.statusCode}');
-      return DomainOptions.fromJson(response.data);
-    } on DioException catch (dioException) {
-      throw dioException.message ?? AppStrings.somethingWentWrong;
-    } catch (e) {
-      rethrow;
-    }
+    const path = '$kUnEncodedBaseURL/domain-options';
+    final response = await get(path);
+    return DomainOptions.fromJson(response);
   }
 }
