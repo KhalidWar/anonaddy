@@ -15,6 +15,7 @@ abstract class PlatformAware<C extends Widget, M extends Widget>
   const PlatformAware({super.key});
 
   C buildCupertinoWidget(BuildContext context);
+
   M buildMaterialWidget(BuildContext context);
 
   /// This function's main use is to simplify development.
@@ -23,24 +24,14 @@ abstract class PlatformAware<C extends Widget, M extends Widget>
   /// iOS UI if you don't have an iOS device when developing.
   static bool isIOS() {
     // return true;
-    if (Platform.isIOS) {
-      return true;
-    } else {
-      return false;
-    }
+    return Platform.isIOS;
   }
 
   /// Custom page route animation
   static customPageRoute(Widget child) {
-    if (isIOS()) {
-      return CupertinoPageRoute(
-        builder: (BuildContext context) => child,
-      );
-    } else {
-      return MaterialPageRoute(
-        builder: (BuildContext context) => child,
-      );
-    }
+    return isIOS()
+        ? CupertinoPageRoute(builder: (BuildContext context) => child)
+        : MaterialPageRoute(builder: (BuildContext context) => child);
   }
 
   /// Shows platform base dialog that can contain other dialogs such as
@@ -49,27 +40,25 @@ abstract class PlatformAware<C extends Widget, M extends Widget>
   ///
   /// For example, iOS dialogs don't dismiss when tapped outside
   /// the dialog container. That's not the case for Android dialogs.
-  static platformDialog(
-      {required BuildContext context, required Widget child}) {
-    if (isIOS()) {
-      showCupertinoDialog(
-        context: context,
-        builder: (context) => child,
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => child,
-      );
-    }
+  static Future<void> platformDialog({
+    required BuildContext context,
+    required Widget child,
+  }) async {
+    return isIOS()
+        ? await showCupertinoDialog(
+            context: context,
+            builder: (context) => child,
+          )
+        : await showDialog(
+            context: context,
+            builder: (context) => child,
+          );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isIOS()) {
-      return buildCupertinoWidget(context);
-    } else {
-      return buildMaterialWidget(context);
-    }
+    return isIOS()
+        ? buildCupertinoWidget(context)
+        : buildMaterialWidget(context);
   }
 }
