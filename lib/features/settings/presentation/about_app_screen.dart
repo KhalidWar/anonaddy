@@ -16,11 +16,7 @@ class AboutAppScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'About App',
-        leadingOnPress: () => Navigator.pop(context),
-        showTrailing: false,
-      ),
+      appBar: CustomAppBar(context, label: 'About App'),
       body: ListView(
         physics: const ClampingScrollPhysics(),
         padding: EdgeInsets.symmetric(vertical: size.height * 0.02),

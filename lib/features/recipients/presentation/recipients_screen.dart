@@ -70,30 +70,25 @@ class _RecipientsScreenState extends ConsumerState<RecipientsScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: 'Recipient',
-        leadingOnPress: () => Navigator.pop(context),
-        showTrailing: true,
-        trailingLabel: 'Delete Recipient',
-        trailingOnPress: (choice) {
-          PlatformAware.platformDialog(
-            context: context,
-            child: PlatformAlertDialog(
-              title: 'Delete Recipient',
-              content: AddyString.deleteRecipientConfirmation,
-              method: () async {
-                await ref
-                    .read(recipientScreenNotifierProvider(widget.id).notifier)
-                    .removeRecipient();
+        context,
+        label: 'Recipient',
+        dropdownOptions: [
+          AppBarDropdownOption(
+            label: 'Delete Recipient',
+            content: AddyString.deleteRecipientConfirmation,
+            onTap: () async {
+              await ref
+                  .read(recipientScreenNotifierProvider(widget.id).notifier)
+                  .removeRecipient();
 
-                /// Dismisses this dialog
-                if (mounted) Navigator.pop(context);
+              /// Dismisses this dialog
+              if (mounted) Navigator.pop(context);
 
-                /// Dismisses [RecipientScreen] after recipient deletion
-                if (mounted) Navigator.pop(context);
-              },
-            ),
-          );
-        },
+              /// Dismisses [RecipientScreen] after recipient deletion
+              if (mounted) Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: recipientScreenAsync.when(
         data: (recipientScreenState) {

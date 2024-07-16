@@ -5,8 +5,6 @@ import 'package:anonaddy/common/custom_app_bar.dart';
 import 'package:anonaddy/common/error_message_widget.dart';
 import 'package:anonaddy/common/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/common/offline_banner.dart';
-import 'package:anonaddy/common/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
-import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_switch.dart';
 import 'package:anonaddy/common/update_description_widget.dart';
@@ -39,26 +37,21 @@ class DomainScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Domain',
-        leadingOnPress: () => Navigator.pop(context),
-        showTrailing: true,
-        trailingLabel: 'Delete Domain',
-        trailingOnPress: (choice) {
-          PlatformAware.platformDialog(
-            context: context,
-            child: PlatformAlertDialog(
-              title: 'Delete Domain',
-              content: AddyString.deleteDomainConfirmation,
-              method: () async {
-                await ref
-                    .read(domainsScreenStateNotifier(id).notifier)
-                    .deleteDomain(id);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
-          );
-        },
+        context,
+        label: 'Domain',
+        dropdownOptions: [
+          AppBarDropdownOption(
+            label: 'Delete Domain',
+            content: AddyString.deleteDomainConfirmation,
+            onTap: () async {
+              await ref
+                  .read(domainsScreenStateNotifier(id).notifier)
+                  .deleteDomain(id);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: domainsAsync.when(
         data: (domainsState) {

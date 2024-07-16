@@ -53,29 +53,24 @@ class _AliasScreenState extends ConsumerState<AliasScreen> {
       key: AliasScreen.aliasScreenScaffold,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
+        context,
         key: AliasScreen.aliasScreenAppBar,
-        title: 'Alias',
-        leadingOnPress: () => Navigator.pop(context),
-        showTrailing: true,
-        trailingLabel: 'Forget Alias',
-        trailingOnPress: (choice) {
-          PlatformAware.platformDialog(
-            context: context,
-            child: PlatformAlertDialog(
-              title: AppStrings.forgetAlias,
-              content: AddyString.forgetAliasConfirmation,
-              method: () async {
-                await ref
-                    .read(aliasScreenNotifierProvider(widget.id).notifier)
-                    .forgetAlias()
-                    .then((_) {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                });
-              },
-            ),
-          );
-        },
+        label: 'Alias',
+        dropdownOptions: [
+          AppBarDropdownOption(
+            label: 'Forget Alias',
+            content: AddyString.forgetAliasConfirmation,
+            onTap: () async {
+              await ref
+                  .read(aliasScreenNotifierProvider(widget.id).notifier)
+                  .forgetAlias()
+                  .then((_) {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              });
+            },
+          ),
+        ],
       ),
       body: aliasNotifier.when(
         data: (aliasState) {

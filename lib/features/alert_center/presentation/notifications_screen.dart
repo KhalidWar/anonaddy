@@ -20,11 +20,7 @@ class NotificationsScreen extends ConsumerWidget {
     final localNotifications = ref.watch(localNotificationNotifierProvider);
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: AppStrings.notifications,
-        leadingOnPress: () => Navigator.pop(context),
-        showTrailing: false,
-      ),
+      appBar: CustomAppBar(context, label: AppStrings.notifications),
       body: MonetizationPaywall(
         child: localNotifications.when(
           data: (localNotifications) {

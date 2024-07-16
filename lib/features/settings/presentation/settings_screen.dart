@@ -24,11 +24,7 @@ class SettingsScreen extends ConsumerWidget {
     final biometric = ref.watch(biometricNotifier);
 
     return Scaffold(
-      appBar: CustomAppBar(
-        title: AppStrings.settings,
-        leadingOnPress: () => Navigator.pop(context),
-        showTrailing: false,
-      ),
+      appBar: CustomAppBar(context, label: AppStrings.settings),
       body: settingsState.when(
         data: (settings) {
           return ListView(

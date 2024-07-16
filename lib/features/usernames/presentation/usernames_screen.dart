@@ -5,8 +5,6 @@ import 'package:anonaddy/common/custom_app_bar.dart';
 import 'package:anonaddy/common/error_message_widget.dart';
 import 'package:anonaddy/common/list_tiles/recipient_list_tile.dart';
 import 'package:anonaddy/common/offline_banner.dart';
-import 'package:anonaddy/common/platform_aware_widgets/dialogs/platform_alert_dialog.dart';
-import 'package:anonaddy/common/platform_aware_widgets/platform_aware.dart';
 import 'package:anonaddy/common/platform_aware_widgets/platform_loading_indicator.dart';
 import 'package:anonaddy/common/update_description_widget.dart';
 import 'package:anonaddy/common/utilities.dart';
@@ -30,27 +28,6 @@ class UsernameScreen extends ConsumerWidget {
   });
 
   final String id;
-
-  Future<void> deleteUsername(BuildContext context, WidgetRef ref) async {
-    PlatformAware.platformDialog(
-      context: context,
-      child: PlatformAlertDialog(
-        title: 'Delete Username',
-        content: AddyString.deleteUsernameConfirmation,
-        method: () async {
-          await ref
-              .read(usernamesScreenNotifierProvider(id).notifier)
-              .deleteUsername(id);
-
-          /// Dismisses this dialog
-          Navigator.pop(context);
-
-          /// Dismisses [UsernamesScreen] after deletion
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
 
   Future<void> updateDescriptionDialog(
     BuildContext context,
@@ -108,11 +85,25 @@ class UsernameScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Username',
-        leadingOnPress: () => Navigator.pop(context),
-        showTrailing: true,
-        trailingLabel: 'Delete Username',
-        trailingOnPress: (choice) => deleteUsername(context, ref),
+        context,
+        label: 'Username',
+        dropdownOptions: [
+          AppBarDropdownOption(
+            label: 'Delete Username',
+            content: AddyString.deleteUsernameConfirmation,
+            onTap: () async {
+              await ref
+                  .read(usernamesScreenNotifierProvider(id).notifier)
+                  .deleteUsername(id);
+
+              /// Dismisses this dialog
+              Navigator.pop(context);
+
+              /// Dismisses [UsernamesScreen] after deletion
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Consumer(
         builder: (context, ref, _) {

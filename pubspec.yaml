@@ -25,6 +25,7 @@ dependencies:
   fl_chart: ^0.68.0
   wolt_modal_sheet: ^0.6.1
   flutter_onboarding_slider: ^1.0.11
+  pull_down_button: ^0.9.4
 
   # Internet Connectivity
   dio: ^5.4.2+1
