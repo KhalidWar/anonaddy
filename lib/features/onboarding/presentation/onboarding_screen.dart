@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:anonaddy/common/constants/app_strings.dart';
 import 'package:anonaddy/common/utilities.dart';
 import 'package:anonaddy/features/monetization/presentation/controller/monetization_notifier.dart';
@@ -41,7 +43,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             ),
           ),
           onFinish: () async {
-            ref.read(monetizationNotifierProvider.notifier).showPaywall();
+            if (Platform.isIOS) {
+              ref.read(monetizationNotifierProvider.notifier).showPaywall();
+            }
 
             await WoltModalSheet.show(
               context: context,
